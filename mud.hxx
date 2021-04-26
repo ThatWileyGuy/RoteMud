@@ -37,6 +37,10 @@
  *                                                                                  *
  ***********************************************************************************/
 
+#ifdef WIN32
+#include <SDKDDKVer.h>
+#endif
+
 #include <limits>
 #include <cmath>
 #include <chrono>
