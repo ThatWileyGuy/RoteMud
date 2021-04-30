@@ -2635,7 +2635,7 @@ void reboot_check(time_t reset)
 
 	if ((current_time % 1800) == 0)
 	{
-		sprintf_s(buf, "%.24s: %d players", ctime(&current_time), num_descriptors);
+		sprintf_s(buf, "%.24s: %d players", ctime(&current_time), -1); // TODO num_descriptors ded :(
 		append_to_file(USAGE_FILE, buf);
 	}
 

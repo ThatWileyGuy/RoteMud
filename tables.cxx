@@ -65,9 +65,20 @@ SKILLTYPE* herb_table[MAX_HERB];
 
 const char* skill_tname[] = { "unknown", "Spell", "Skill", "Weapon", "Tongue", "Herb" };
 
-SPELL_FUN* spell_function(char* name)
+void* find_symbol(const char* name)
 {
-	/*
+#ifdef WIN32
+	auto module = GetModuleHandle(nullptr);
+	auto proc = GetProcAddress(module, name);
+
+	if (proc == nullptr)
+	{
+		bug("Error locating %s in symbol table: %d", name, GetLastError());
+		return (DO_FUN*)skill_notfound;
+	}
+
+	return proc;
+#else
    void *funHandle;
    const char *error;
 
@@ -78,27 +89,17 @@ SPELL_FUN* spell_function(char* name)
 	  return (SPELL_FUN *) spell_notfound;
    }
    return (SPELL_FUN *) funHandle;
-   */
+#endif
+}
 
-	throw std::logic_error("tried to invoke spell_function");
+SPELL_FUN* spell_function(char* name)
+{
+	return (SPELL_FUN*)find_symbol(name);
 }
 
 DO_FUN* skill_function(char* name)
 {
-	/*
-   void *funHandle;
-   const char *error;
-
-   funHandle = dlsym( sysdata.dlHandle, name );
-   if( ( error = dlerror() ) != NULL )
-   {
-	bug( "Error locating %s in symbol table. %s", name, error );
-	return (DO_FUN *) skill_notfound;
-   }
-   return (DO_FUN *) funHandle;
-   */
-
-	throw std::logic_error("tried to invoke skill_function");
+	return (DO_FUN*)find_symbol(name);
 }
 
 /*

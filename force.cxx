@@ -57,7 +57,7 @@ void save_forcehelp(FORCE_HELP* fhelp);
 void write_forcehelp_list();
 bool load_forcehelp(char const* forcehelpfile);
 void fread_forcehelp(FORCE_HELP* fhelp, FILE* fp);
-int check_force_skill args((CHAR_DATA* ch, char* command, char* argument));
+int check_force_skill args((CHAR_DATA* ch, const char* command, char* argument));
 void load_force_skills args((void));
 void load_force_help args((void));
 DO_FUN* get_force_skill_function args((char* name));
@@ -68,7 +68,7 @@ CHAR_DATA* force_get_victim args((CHAR_DATA* ch, char* argument, int loc));
 const char* force_get_possessive(CHAR_DATA* ch);
 const char* force_get_objective(CHAR_DATA* ch);
 const char* force_get_pronoun(CHAR_DATA* ch);
-const char* force_parse_string(CHAR_DATA* ch, CHAR_DATA* victim, char* msg);
+const char* force_parse_string(CHAR_DATA* ch, CHAR_DATA* victim, const char* msg);
 void force_learn_from_failure args((CHAR_DATA* ch, FORCE_SKILL* fskill));
 void force_learn_from_success args((CHAR_DATA* ch, FORCE_SKILL* fskill));
 FORCE_SKILL* force_test_skill_use args((const char* skill_name, CHAR_DATA* ch, int skill_type));
@@ -77,8 +77,14 @@ int force_promote_ready(CHAR_DATA* ch);
 void draw_force_line(CHAR_DATA* ch, int length);
 void update_force args((void));
 
+FORCE_SKILL* first_force_skill;
+FORCE_SKILL* last_force_skill;
 
-int check_force_skill(CHAR_DATA* ch, char* command, char* argument)
+FORCE_HELP* first_force_help;
+FORCE_HELP* last_force_help;
+
+
+int check_force_skill(CHAR_DATA* ch, const char* command, char* argument)
 {
 	FORCE_SKILL* fskill;
 	bool SKILL_FOUND = FALSE;
@@ -1382,7 +1388,7 @@ void do_fhset(CHAR_DATA* ch, char* argument)
 	}
 }
 
-FORCE_HELP* get_force_help(char* fname, char* type)
+FORCE_HELP* get_force_help(const char* fname, char* type)
 {
 	FORCE_HELP* fhelp = nullptr;
 	FORCE_HELP* ghelp = nullptr;

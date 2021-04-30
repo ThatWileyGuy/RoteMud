@@ -57,8 +57,8 @@ extern char bname[MAX_STRING_LENGTH];
 char* primary_beam_name    args((SHIP_DATA* ship));
 char* secondary_beam_name  args((SHIP_DATA* ship));
 #ifdef USECARGO
-extern char* const cargo_names[CARGO_MAX];
-extern char* const cargo_names_lower[CARGO_MAX];
+extern const char* cargo_names[CARGO_MAX];
+extern const char* cargo_names_lower[CARGO_MAX];
 #endif
 
 int bus_pos = 0;
@@ -140,9 +140,6 @@ bool    autofly(SHIP_DATA* ship);
 bool is_facing(SHIP_DATA* ship, SHIP_DATA* target);
 void sound_to_ship(SHIP_DATA* ship, char* argument);
 int	get_shipflag(char* flag);
-
-/* from comm.c */
-bool    write_to_descriptor     args((int desc, char* txt, int length));
 
 ROOM_INDEX_DATA* generate_exit(ROOM_INDEX_DATA* in_room, EXIT_DATA** pexit);
 
@@ -2416,7 +2413,7 @@ void echo_to_cockpit(int color, SHIP_DATA* ship, const char* argument)
 
 }
 
-void echo_to_system(int color, SHIP_DATA* ship, char* argument, SHIP_DATA* ignore)
+void echo_to_system(int color, SHIP_DATA* ship, const char* argument, SHIP_DATA* ignore)
 {
 	SHIP_DATA* target;
 

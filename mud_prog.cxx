@@ -2445,7 +2445,7 @@ bool oprog_percent_check(CHAR_DATA* mob, CHAR_DATA* actor, OBJ_DATA* obj,
  * Triggers follow
  */
 
-int oprog_custom_trigger(char* command, char* argument, CHAR_DATA* ch)
+int oprog_custom_trigger(const char* command, const char* argument, CHAR_DATA* ch)
 {
 	ROOM_INDEX_DATA* room = nullptr;
 	MPROG_DATA* mprg = nullptr;
@@ -2527,7 +2527,7 @@ int oprog_custom_trigger(char* command, char* argument, CHAR_DATA* ch)
 	return 1;
 }
 
-int mprog_custom_trigger(char* command, char* argument, CHAR_DATA* ch)
+int mprog_custom_trigger(const char* command, const char* argument, CHAR_DATA* ch)
 {
 	ROOM_INDEX_DATA* room = nullptr;
 	MPROG_DATA* mprg = nullptr;;
@@ -2572,7 +2572,7 @@ int mprog_custom_trigger(char* command, char* argument, CHAR_DATA* ch)
 	return 1;
 }
 
-int rprog_custom_trigger(char* command, char* argument, CHAR_DATA* ch)
+int rprog_custom_trigger(const char* command, const char* argument, CHAR_DATA* ch)
 {
 	ROOM_INDEX_DATA* room;
 	MPROG_DATA* mprg;

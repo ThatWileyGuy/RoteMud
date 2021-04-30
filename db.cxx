@@ -112,8 +112,6 @@ MAP_INDEX_DATA* first_map;	/* maps */
 
 AUCTION_DATA* auction;	/* auctions */
 
-FILE* fpLOG;
-
 
 /* criminals */
 sh_int   gsn_torture;
@@ -344,6 +342,7 @@ sh_int			gsn_first_weapon;
 sh_int			gsn_first_tongue;
 sh_int			gsn_top_sn;
 
+bool MOBtrigger;
 
 /*
  * Locals.
@@ -628,9 +627,9 @@ void boot_db(bool fCopyOver)
 	 */
 	{
 		log_string("Assigning gsn's");
-		ASSIGN_GSN(gsn_split_s, "split s");
+		ASSIGN_GSN(gsn_split_s, "split_s");
 		ASSIGN_GSN(gsn_eliteguard, "elite_guard");
-		ASSIGN_GSN(gsn_addpatrol, "addpatrol");
+		ASSIGN_GSN(gsn_addpatrol, "add_patrol");
 		ASSIGN_GSN(gsn_gather_intelligence, "gather_intelligence");
 		ASSIGN_GSN(gsn_specialforces, "special_forces");
 		ASSIGN_GSN(gsn_jail, "jail");
@@ -907,11 +906,14 @@ void boot_db(bool fCopyOver)
 		make_random_marketlist();
 
 		MOBtrigger = TRUE;
+		// TODO copyover is dead
+		/*
 		if (fCopyOver)
 		{
 			log_string("Running copyover_recover.");
 			copyover_recover();
 		}
+		*/
 
 	}
 
@@ -3520,7 +3522,7 @@ void do_memory(CHAR_DATA* ch, char* argument)
 	ch_printf(ch, "Rooms   %5d    VRooms  %5d\n\r", top_room, top_vroom);
 	ch_printf(ch, "Shops   %5d    RepShps %5d\n\r", top_shop, top_repair);
 	ch_printf(ch, "CurOq's %5d    CurCq's %5d\n\r", cur_qobjs, cur_qchars);
-	ch_printf(ch, "Players %5d    Maxplrs %5d\n\r", num_descriptors, sysdata.maxplayers);
+	ch_printf(ch, "Players %5d    Maxplrs %5d\n\r", -1, sysdata.maxplayers); // TODO num_descriptors ded :(
 	ch_printf(ch, "MaxEver %5d    Topsn   %5d (%d)\n\r", sysdata.alltimemax, top_sn, MAX_SKILL);
 	ch_printf(ch, "MaxEver time recorded at:   %s\n\r", sysdata.time_of_max);
 	if (!str_cmp(arg, "check"))
@@ -3734,7 +3736,7 @@ void hide_tilde(char* str)
 	return;
 }
 
-char* show_tilde(char* str)
+char* show_tilde(const char* str)
 {
 	static char buf[MAX_STRING_LENGTH];
 	char* bufptr;
@@ -3957,7 +3959,6 @@ void append_file(CHAR_DATA* ch, const char* file, char* str)
 	if (IS_NPC(ch) || str[0] == '\0')
 		return;
 
-	fclose(fpLOG);
 	if ((fp = fopen(file, "a")) == NULL)
 	{
 		send_to_char("Could not open the file!\n\r", ch);
@@ -3969,7 +3970,6 @@ void append_file(CHAR_DATA* ch, const char* file, char* str)
 		fclose(fp);
 	}
 
-	fpLOG = fopen(NULL_FILE, "r");
 	return;
 }
 
@@ -4064,13 +4064,11 @@ void bug(const char* str, ...)
 	}
 	log_string(buf);
 
-	fclose(fpLOG);
 	if ((fp = fopen(BUG_FILE, "a")) != NULL)
 	{
 		fprintf(fp, "%s\n", buf);
 		fclose(fp);
 	}
-	fpLOG = fopen(NULL_FILE, "r");
 
 	return;
 }
@@ -4090,13 +4088,11 @@ void boot_log(const char* str, ...)
 	va_end(param);
 	log_string(buf);
 
-	fclose(fpLOG);
 	if ((fp = fopen(BOOTLOG_FILE, "a")) != NULL)
 	{
 		fprintf(fp, "%s\n", buf);
 		fclose(fp);
 	}
-	fpLOG = fopen(NULL_FILE, "r");
 
 	return;
 }
@@ -5707,11 +5703,13 @@ void load_area_file(AREA_DATA* tarea, char* filename)
 			else
 			{
 				fclose(fpArea);
+				fpArea = nullptr;
 				return;
 			}
 		}
 	}
 	fclose(fpArea);
+	fpArea = nullptr;
 	if (tarea)
 	{
 		if (fBootDb)
@@ -6593,7 +6591,7 @@ void do_check_vnums(CHAR_DATA* ch, char* argument)
 }
 
 /* little proggy to center text with whitespace in between. */
-char* centertext(char* text, int size)
+char* centertext(const char* text, int size)
 {
 	char buf[MAX_STRING_LENGTH] = {};
 	char* sent;
@@ -6608,7 +6606,10 @@ char* centertext(char* text, int size)
 	}
 
 	if (size == strlen(remand(text)))
-		return text;
+	{
+		strcpy_s(buf, text);
+		return buf;
+	}
 
 	for (i = 0; i < filler; i++)
 		strcat_s(buf, " ");

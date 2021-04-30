@@ -48,8 +48,7 @@
  * Externals
  */
 
-bool	check_social	args((CHAR_DATA* ch, char* command,
-	char* argument));
+bool	check_social	args((CHAR_DATA* ch, const char* command, const char* argument));
 
 
 /*
@@ -436,12 +435,10 @@ void interpret(CHAR_DATA* ch, char* argument)
 	tail_chain();
 }
 
-CMDTYPE* find_command(char* command)
+CMDTYPE* find_command(const char* command)
 {
 	CMDTYPE* cmd;
-	int hash;
-
-	hash = LOWER(command[0]) % 126;
+	int hash = LOWER(command[0]) % 126;
 
 	for (cmd = command_hash[hash]; cmd; cmd = cmd->next)
 		if (!str_prefix(command, cmd->name))
@@ -450,7 +447,7 @@ CMDTYPE* find_command(char* command)
 	return NULL;
 }
 
-SOCIALTYPE* find_social(char* command)
+SOCIALTYPE* find_social(const char* command)
 {
 	SOCIALTYPE* social;
 	int hash;
@@ -467,7 +464,7 @@ SOCIALTYPE* find_social(char* command)
 	return NULL;
 }
 
-bool check_social(CHAR_DATA* ch, char* command, char* argument)
+bool check_social(CHAR_DATA* ch, const char* command, const char* argument)
 {
 	char arg[MAX_INPUT_LENGTH];
 	CHAR_DATA* victim;
@@ -584,7 +581,7 @@ bool check_social(CHAR_DATA* ch, char* command, char* argument)
 /*
  * Return true if an argument is completely numeric.
  */
-bool is_number(char* arg)
+bool is_number(const char* arg)
 {
 	if (*arg == '\0')
 		return FALSE;
@@ -666,11 +663,16 @@ const char* one_argument(const char* argument, char* arg_first)
 	return argument;
 }
 
+char* one_argument(char* argument, char* arg_first)
+{
+	return const_cast<char*>(one_argument(const_cast<const char*>(argument), arg_first));
+}
+
 /*
  * Pick off one argument from a string and return the rest.
  * Understands quotes.  Delimiters = { ' ', '-' }
  */
-char* one_argument2(char* argument, char* arg_first)
+const char* one_argument2(const char* argument, char* arg_first)
 {
 	char cEnd;
 	sh_int count;
@@ -701,6 +703,11 @@ char* one_argument2(char* argument, char* arg_first)
 		argument++;
 
 	return argument;
+}
+
+char* one_argument2(char* argument, char* arg_first)
+{
+	return const_cast<char*>(one_argument2(const_cast<const char*>(argument), arg_first));
 }
 
 void do_timecmd(CHAR_DATA* ch, char* argument)

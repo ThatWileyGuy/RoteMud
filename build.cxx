@@ -282,7 +282,7 @@ const char* mprog_flags[] =
 };
 
 
-char* flag_string(int bitvector, char* const flagarray[])
+char* flag_string(int bitvector, const char* flagarray[])
 {
 	static char buf[MAX_STRING_LENGTH];
 	int x;
@@ -1021,7 +1021,7 @@ void do_makefree(CHAR_DATA* ch, char* argument)
 	return;
 }
 
-void do_mset(CHAR_DATA* ch, const char* argument)
+void do_mset(CHAR_DATA* ch, char* argument)
 {
 	char arg1[MAX_INPUT_LENGTH];
 	char arg2[MAX_INPUT_LENGTH];
@@ -1034,7 +1034,7 @@ void do_mset(CHAR_DATA* ch, const char* argument)
 	int value;
 	int minattr, maxattr;
 	bool lockvictim;
-	const char* origarg = argument;
+	char* origarg = argument;
 
 	if (IS_NPC(ch))
 	{
@@ -2868,7 +2868,7 @@ void do_mset(CHAR_DATA* ch, const char* argument)
 }
 
 
-void do_oset(CHAR_DATA* ch, const char* argument)
+void do_oset(CHAR_DATA* ch, char* argument)
 {
 	char arg1[MAX_INPUT_LENGTH];
 	char arg2[MAX_INPUT_LENGTH];
@@ -2878,7 +2878,7 @@ void do_oset(CHAR_DATA* ch, const char* argument)
 	OBJ_DATA* obj, * tmpobj;
 	EXTRA_DESCR_DATA* ed;
 	bool lockobj;
-	const char* origarg = argument;
+	char* origarg = argument;
 
 	int value, tmp;
 
@@ -5603,7 +5603,7 @@ bool DelOExtraProto(OBJ_INDEX_DATA* obj, const char* keywords)
 	return TRUE;
 }
 
-void fold_area(AREA_DATA* tarea, const char* filename, bool install)
+void fold_area(AREA_DATA* tarea, char* filename, bool install)
 {
 	RESET_DATA* pReset, * tReset, * gReset;
 	ROOM_INDEX_DATA* room;

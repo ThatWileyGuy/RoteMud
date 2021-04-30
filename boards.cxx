@@ -397,7 +397,7 @@ void do_mailroom(CHAR_DATA* ch, char* argument)
 	}
 }
 
-void do_note(CHAR_DATA* ch, const char* arg_passed, bool IS_MAIL)
+void do_note(CHAR_DATA* ch, char* arg_passed, bool IS_MAIL)
 {
 	char buf[MAX_STRING_LENGTH];
 	char arg[MAX_INPUT_LENGTH];

@@ -82,59 +82,59 @@ const char *const_color_align( const char *argument, int size, int align );
 #define ALIGN_RIGHT	3
 
 /* These are the ANSI codes for foreground text colors */
-#define ANSI_BLACK    	"\e[0;30m"
-#define ANSI_DRED    	"\e[0;31m"
-#define ANSI_DGREEN     "\e[0;32m"
-#define ANSI_ORANGE    	"\e[0;33m"
-#define ANSI_DBLUE    	"\e[0;34m"
-#define ANSI_PURPLE    	"\e[0;35m"
-#define ANSI_CYAN	"\e[0;36m"
-#define ANSI_GREY	"\e[1;37m"
-#define ANSI_DGREY	"\e[1;30m"
-#define ANSI_RED	"\e[1;31m"
-#define ANSI_GREEN	"\e[1;32m"
-#define ANSI_YELLOW   	"\e[1;33m"
-#define ANSI_BLUE	"\e[1;34m"
-#define ANSI_PINK	"\e[1;35m"
-#define ANSI_LBLUE   	"\e[1;36m"
-#define ANSI_WHITE      "\e[0;37m"
-#define ANSI_RESET	"\e[0m"
+#define ANSI_BLACK    	"\x1b[0;30m"
+#define ANSI_DRED    	"\x1b[0;31m"
+#define ANSI_DGREEN     "\x1b[0;32m"
+#define ANSI_ORANGE    	"\x1b[0;33m"
+#define ANSI_DBLUE    	"\x1b[0;34m"
+#define ANSI_PURPLE    	"\x1b[0;35m"
+#define ANSI_CYAN	"\x1b[0;36m"
+#define ANSI_GREY	"\x1b[1;37m"
+#define ANSI_DGREY	"\x1b[1;30m"
+#define ANSI_RED	"\x1b[1;31m"
+#define ANSI_GREEN	"\x1b[1;32m"
+#define ANSI_YELLOW   	"\x1b[1;33m"
+#define ANSI_BLUE	"\x1b[1;34m"
+#define ANSI_PINK	"\x1b[1;35m"
+#define ANSI_LBLUE   	"\x1b[1;36m"
+#define ANSI_WHITE      "\x1b[0;37m"
+#define ANSI_RESET	"\x1b[0m"
 
 /* These are the ANSI codes for blinking foreground text colors */
-#define BLINK_BLACK		"\e[0;5;30m"
-#define BLINK_DRED		"\e[0;5;31m"
-#define BLINK_DGREEN		"\e[0;5;32m"
-#define BLINK_ORANGE		"\e[0;5;33m"
-#define BLINK_DBLUE		"\e[0;5;34m"
-#define BLINK_PURPLE		"\e[0;5;35m"
-#define BLINK_CYAN		"\e[0;5;36m"
-#define BLINK_GREY		"\e[0;5;37m"
-#define BLINK_DGREY		"\e[1;5;30m"
-#define BLINK_RED			"\e[1;5;31m"
-#define BLINK_GREEN		"\e[1;5;32m"
-#define BLINK_YELLOW		"\e[1;5;33m"
-#define BLINK_BLUE		"\e[1;5;34m"
-#define BLINK_PINK		"\e[1;5;35m"
-#define BLINK_LBLUE		"\e[1;5;36m"
-#define BLINK_WHITE		"\e[1;5;37m"
+#define BLINK_BLACK		"\x1b[0;5;30m"
+#define BLINK_DRED		"\x1b[0;5;31m"
+#define BLINK_DGREEN		"\x1b[0;5;32m"
+#define BLINK_ORANGE		"\x1b[0;5;33m"
+#define BLINK_DBLUE		"\x1b[0;5;34m"
+#define BLINK_PURPLE		"\x1b[0;5;35m"
+#define BLINK_CYAN		"\x1b[0;5;36m"
+#define BLINK_GREY		"\x1b[0;5;37m"
+#define BLINK_DGREY		"\x1b[1;5;30m"
+#define BLINK_RED			"\x1b[1;5;31m"
+#define BLINK_GREEN		"\x1b[1;5;32m"
+#define BLINK_YELLOW		"\x1b[1;5;33m"
+#define BLINK_BLUE		"\x1b[1;5;34m"
+#define BLINK_PINK		"\x1b[1;5;35m"
+#define BLINK_LBLUE		"\x1b[1;5;36m"
+#define BLINK_WHITE		"\x1b[1;5;37m"
 
 /* These are the ANSI codes for background colors */
-#define BACK_BLACK 	"\e[40m"
-#define BACK_DRED  	"\e[41m"
-#define BACK_DGREEN	"\e[42m"
-#define BACK_ORANGE     "\e[43m"
-#define BACK_DBLUE      "\e[44m"
-#define BACK_PURPLE     "\e[45m"
-#define BACK_CYAN       "\e[46m"
-#define BACK_GREY       "\e[47m"
+#define BACK_BLACK 	"\x1b[40m"
+#define BACK_DRED  	"\x1b[41m"
+#define BACK_DGREEN	"\x1b[42m"
+#define BACK_ORANGE     "\x1b[43m"
+#define BACK_DBLUE      "\x1b[44m"
+#define BACK_PURPLE     "\x1b[45m"
+#define BACK_CYAN       "\x1b[46m"
+#define BACK_GREY       "\x1b[47m"
 
 /* Other miscelaneous ANSI tags that can be used */
-#define ANSI_BOLD		"\e[1m" /* For bright color stuff */
-#define ANSI_ITALIC	"\e[3m" /* Italic text */
-#define ANSI_UNDERLINE  "\e[4m" /* Underline text */
-#define ANSI_BLINK	"\e[5m" /* Blinking text */
-#define ANSI_REVERSE    "\e[7m" /* Reverse colors */
-#define ANSI_STRIKEOUT  "\e[9m" /* Overstrike line */
+#define ANSI_BOLD		"\x1b[1m" /* For bright color stuff */
+#define ANSI_ITALIC	"\x1b[3m" /* Italic text */
+#define ANSI_UNDERLINE  "\x1b[4m" /* Underline text */
+#define ANSI_BLINK	"\x1b[5m" /* Blinking text */
+#define ANSI_REVERSE    "\x1b[7m" /* Reverse colors */
+#define ANSI_STRIKEOUT  "\x1b[9m" /* Overstrike line */
 
 #define AT_BLACK    	0
 #define AT_BLOOD    	1

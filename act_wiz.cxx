@@ -51,10 +51,6 @@
 const char* save_flag[] =
 { "death", "kill", "passwd", "drop", "put", "give", "auto", "zap", "auction", "get", "receive", "idle", "backup", "r13", "r14", "r15", "r16", "r17", "r18", "r19", "r20", "r21", "r22", "r23", "r24", "r25", "r26", "r27", "r28", "r29", "r30", "r31" };
 
-
-/* from comm.c */
-bool	write_to_descriptor	args((int desc, char* txt, int length));
-
 /* from db.c */
 void save_sysdata  args((SYSTEM_DATA sys));
 
@@ -4140,8 +4136,6 @@ void do_loadup(CHAR_DATA* ch, char* argument)
 		d->next = NULL;
 		d->prev = NULL;
 		d->connected = CON_GET_NAME;
-		d->outsize = 2000;
-		CREATE(d->outbuf, char, d->outsize);
 
 		loaded = load_char_obj(d, name, FALSE);
 		add_char(d->character);
@@ -4158,7 +4152,6 @@ void do_loadup(CHAR_DATA* ch, char* argument)
 		d->character->desc = NULL;
 		d->character->retran = old_room_vnum;
 		d->character = NULL;
-		DISPOSE(d->outbuf);
 		DISPOSE(d);
 		ch_printf(ch, "Player %s loaded from room %d.\n\r", capitalize(name), old_room_vnum);
 		sprintf_s(buf, "%s appears from nowhere, eyes glazed over.\n\r", capitalize(name));

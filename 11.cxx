@@ -46,15 +46,6 @@
 #include <time.h>
 #include "mud.hxx"
 
-SHIP_DATA* first_ship;
-SHIP_DATA* last_ship;
-
-MISSILE_DATA* first_missile;
-MISSILE_DATA* last_missile;
-
-SPACE_DATA* first_starsystem;
-SPACE_DATA* last_starsystem;
-
 void explode_emissile   args((CHAR_DATA* ch, ROOM_INDEX_DATA* proom, int mindam, int maxdam, bool incendiary));
 void do_makegoggles		args((CHAR_DATA* ch, char* argument));
 extern int top_affect;
@@ -70,7 +61,7 @@ void do_barrel_roll		args((CHAR_DATA* ch, char* argument));
 void do_juke			args((CHAR_DATA* ch, char* argument));
 
 
-char const* primary_beam_name(SHIP_DATA* ship)
+char* primary_beam_name(SHIP_DATA* ship)
 {
 
 	if (ship->primaryCount != 0)
@@ -102,7 +93,7 @@ char const* primary_beam_name(SHIP_DATA* ship)
 		return "None.";
 }
 
-char const* secondary_beam_name(SHIP_DATA* ship)
+char* secondary_beam_name(SHIP_DATA* ship)
 {
 
 	if (ship->secondaryCount != 0)

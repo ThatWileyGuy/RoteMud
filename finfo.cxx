@@ -97,7 +97,7 @@ void fread_forcehelp(FORCE_HELP* fhelp, FILE* fp)
 	}
 }
 
-bool load_forcehelp(char* forcehelpfile)
+bool load_forcehelp(const char* forcehelpfile)
 {
 	char filename[256];
 	FORCE_HELP* fhelp;

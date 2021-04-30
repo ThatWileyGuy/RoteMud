@@ -55,8 +55,6 @@ void sportschan(char*);
 /*
  * Local functions.
  */
-void	talk_channel	args((CHAR_DATA* ch, char* argument,
-	int channel, const char* verb));
 
 char* scramble        args((const char* argument, int modifier));
 char * drunk_speech    args((const char* argument, CHAR_DATA* ch));

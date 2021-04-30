@@ -50,24 +50,18 @@ void write_area_list();
 void write_starsystem_list();
 extern const   char* sector_name[SECT_MAX];
 
-PLANET_DATA* first_planet;
-PLANET_DATA* last_planet;
-
-GUARD_DATA* first_guard;
-GUARD_DATA* last_guard;
-
 /* local routines */
 void	fread_planet	args((PLANET_DATA* planet, FILE* fp));
 bool	load_planet_file	args((char* planetfile));
 void	write_planet_list	args((void));
 
 #ifdef USECARGO
-char* const cargo_names[CARGO_MAX] =
+const char* cargo_names[CARGO_MAX] =
 {
   "None", "Food","Water","Medical","Metals",
   "Rare Metals", "Electronics","Products"
 };
-char* const cargo_names_lower[CARGO_MAX] =
+const char* cargo_names_lower[CARGO_MAX] =
 {
 	"none","food","water","medical","metals",
 	"rare metals","electronics","products"
@@ -1007,7 +1001,6 @@ long get_taxes(PLANET_DATA* planet)
 	return gain;
 }
 
-#ifdef USECARGO
 void do_imports(CHAR_DATA* ch, char* argument)
 {
 	PLANET_DATA* planet;
@@ -1034,4 +1027,3 @@ void do_imports(CHAR_DATA* ch, char* argument)
 			cargo_names[i], planet->price[i]);
 	return;
 }
-#endif

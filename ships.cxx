@@ -46,9 +46,6 @@
 #include <errno.h>
 #include "mud.hxx"
 
-BMARKET_DATA* first_market_ship;
-BMARKET_DATA* last_market_ship;
-
 #if defined(KEY)
 #undef KEY
 #endif
@@ -148,7 +145,7 @@ struct prototype_room
 PROTO_ROOM* first_prototype_room;
 PROTO_ROOM* last_prototype_room;
 
-void instaroom(AREA_DATA* pArea, ROOM_INDEX_DATA* pRoom, bool dodoors);
+void instaroom(ROOM_INDEX_DATA* pRoom, bool dodoors);
 void shiplist(CHAR_DATA* ch);
 const char* primary_beam_name_proto(int shiptype);
 const char* secondary_beam_name_proto(int shiptype);
@@ -1266,7 +1263,7 @@ int make_prototype_rooms(int ship_type, int vnum, AREA_DATA* tarea, char* Sname)
 					}
 				}
 			}
-			instaroom(tarea, newroom, TRUE);
+			instaroom(newroom, TRUE);
 		}
 	}
 	for (proom = first_prototype_room; proom; proom = proom->next)

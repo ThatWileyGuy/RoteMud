@@ -141,7 +141,7 @@ char* strlinwrp(char* src, int length)
 	return str_dup(newstr);
 }
 
-char* remand(char* arg)
+char* remand(const char* arg)
 {
 	static char ret[MAX_STRING_LENGTH];
 	char* retptr;
@@ -167,7 +167,7 @@ char* remand(char* arg)
 	return ret;
 }
 
-char* rembg(char* src)
+char* rembg(const char* src)
 {
 	static char ret[MAX_STRING_LENGTH];
 	char* retptr;

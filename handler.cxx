@@ -514,7 +514,7 @@ bool is_name_prefix(const char* str, char* namelist)
  * See if a string is one of the names of an object.		-Thoric
  * Treats a dash as a word delimiter as well as a space
  */
-bool is_name2(const char* str, char* namelist)
+bool is_name2(const char* str, const char* namelist)
 {
 	char name[MAX_INPUT_LENGTH];
 
@@ -528,7 +528,7 @@ bool is_name2(const char* str, char* namelist)
 	}
 }
 
-bool is_name2_prefix(const char* str, char* namelist)
+bool is_name2_prefix(const char* str, const char* namelist)
 {
 	char name[MAX_INPUT_LENGTH];
 
@@ -545,7 +545,7 @@ bool is_name2_prefix(const char* str, char* namelist)
 /*								-Thoric
  * Checks if str is a name in namelist supporting multiple keywords
  */
-bool nifty_is_name(char* str, char* namelist)
+bool nifty_is_name(const char* str, const char* namelist)
 {
 	char name[MAX_INPUT_LENGTH];
 
@@ -562,7 +562,7 @@ bool nifty_is_name(char* str, char* namelist)
 	}
 }
 
-bool nifty_is_name_prefix(char* str, char* namelist)
+bool nifty_is_name_prefix(const char* str, const char* namelist)
 {
 	char name[MAX_INPUT_LENGTH];
 
@@ -1661,7 +1661,7 @@ void extract_char(CHAR_DATA* ch, bool fPull)
 /*
  * Find a char in the room.
  */
-CHAR_DATA* get_char_room(CHAR_DATA* ch, char* argument)
+CHAR_DATA* get_char_room(CHAR_DATA* ch, const char* argument)
 {
 	char arg[MAX_INPUT_LENGTH];
 	char fix[MAX_STRING_LENGTH];
@@ -1811,7 +1811,7 @@ CHAR_DATA* get_char_world(CHAR_DATA* ch, const char* argument)
 }
 
 /* Find a character by name, no PERS */
-CHAR_DATA* get_char_world_ooc(CHAR_DATA* ch, char* argument)
+CHAR_DATA* get_char_world_ooc(CHAR_DATA* ch, const char* argument)
 {
 	char arg[MAX_INPUT_LENGTH];
 	CHAR_DATA* wch;
@@ -1903,7 +1903,7 @@ CHAR_DATA* get_char_world_ooc(CHAR_DATA* ch, char* argument)
  * Find a char by comfreq
  */
 
-CHAR_DATA* get_char_from_comfreq(CHAR_DATA* ch, char* argument)
+CHAR_DATA* get_char_from_comfreq(CHAR_DATA* ch, const char* argument)
 {
 	CHAR_DATA* wch;
 
@@ -1935,7 +1935,7 @@ CHAR_DATA* get_char_from_comfreq(CHAR_DATA* ch, char* argument)
 /*
  * Find an obj in a list.
  */
-OBJ_DATA* get_obj_list(CHAR_DATA* ch, char* argument, OBJ_DATA* list)
+OBJ_DATA* get_obj_list(CHAR_DATA* ch, const char* argument, OBJ_DATA* list)
 {
 	char arg[MAX_INPUT_LENGTH];
 	OBJ_DATA* obj;
@@ -1965,7 +1965,7 @@ OBJ_DATA* get_obj_list(CHAR_DATA* ch, char* argument, OBJ_DATA* list)
 /*
  * Find an obj in a list...going the other way			-Thoric
  */
-OBJ_DATA* get_obj_list_rev(CHAR_DATA* ch, char* argument, OBJ_DATA* list)
+OBJ_DATA* get_obj_list_rev(CHAR_DATA* ch, const char* argument, OBJ_DATA* list)
 {
 	char arg[MAX_INPUT_LENGTH];
 	OBJ_DATA* obj;
@@ -1997,7 +1997,7 @@ OBJ_DATA* get_obj_list_rev(CHAR_DATA* ch, char* argument, OBJ_DATA* list)
 /*
  * Find an obj in player's inventory.
  */
-OBJ_DATA* get_obj_carry(CHAR_DATA* ch, char* argument)
+OBJ_DATA* get_obj_carry(CHAR_DATA* ch, const char* argument)
 {
 	char arg[MAX_INPUT_LENGTH];
 	OBJ_DATA* obj;
@@ -2040,7 +2040,7 @@ OBJ_DATA* get_obj_carry(CHAR_DATA* ch, char* argument)
 /*
  * Find an obj in player's equipment.
  */
-OBJ_DATA* get_obj_wear(CHAR_DATA* ch, char* argument)
+OBJ_DATA* get_obj_wear(CHAR_DATA* ch, const char* argument)
 {
 	char arg[MAX_INPUT_LENGTH];
 	OBJ_DATA* obj;
@@ -2089,7 +2089,7 @@ OBJ_DATA* get_obj_wear(CHAR_DATA* ch, char* argument)
 /*
  * Find an obj in the room or in inventory.
  */
-OBJ_DATA* get_obj_here(CHAR_DATA* ch, char* argument)
+OBJ_DATA* get_obj_here(CHAR_DATA* ch, const char* argument)
 {
 	OBJ_DATA* obj;
 
@@ -2114,7 +2114,7 @@ OBJ_DATA* get_obj_here(CHAR_DATA* ch, char* argument)
 /*
  * Find an obj in the world.
  */
-OBJ_DATA* get_obj_world(CHAR_DATA* ch, char* argument)
+OBJ_DATA* get_obj_world(CHAR_DATA* ch, const char* argument)
 {
 	char arg[MAX_INPUT_LENGTH];
 	OBJ_DATA* obj;

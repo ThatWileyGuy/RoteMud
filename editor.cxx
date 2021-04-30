@@ -123,7 +123,7 @@ char* strlinwrp(char* src, int length);
 
 /* simple functions to set a description for what's currently
  * being edited */
-void set_editor_desc(CHAR_DATA* ch, char* new_desc);
+void set_editor_desc(CHAR_DATA* ch, const char* new_desc);
 void editor_desc_printf(CHAR_DATA* ch, const char* desc_fmt, ...);
 
 /* the main editor functions visible to the rest of the code */
@@ -131,10 +131,10 @@ void start_editing_nolimit(CHAR_DATA* ch, char* old_text, sh_int max_total);
 char* copy_buffer(CHAR_DATA* ch);
 void stop_editing(CHAR_DATA* ch);
 /* main editing function */
-void edit_buffer(CHAR_DATA* ch, const char* argument);
+void edit_buffer(CHAR_DATA* ch, char* argument);
 
 /* misc functions */
-char* finer_one_argument(char* argument, char* arg_first);
+const char* finer_one_argument(const char* argument, char* arg_first);
 char* text_replace(char* src, char* word_src, char* word_dst, sh_int* pnew_size, sh_int* prepl_count);
 
 /* editor sub functions */
@@ -147,7 +147,7 @@ void editor_delete_line(CHAR_DATA* ch, EDITOR_DATA* edd, const char* argument);
 void editor_goto_line(CHAR_DATA* ch, EDITOR_DATA* edd, const char* argument);
 void editor_list(CHAR_DATA* ch, EDITOR_DATA* edd, const char* argument);
 void editor_abort(CHAR_DATA* ch, EDITOR_DATA* edd, const char* argument);
-void editor_escaped_cmd(CHAR_DATA* ch, EDITOR_DATA* edd, const char* argument);
+void editor_escaped_cmd(CHAR_DATA* ch, EDITOR_DATA* edd, char* argument);
 void editor_save(CHAR_DATA* ch, EDITOR_DATA* edd, const char* argument);
 void editor_format_lines(CHAR_DATA* ch, EDITOR_DATA* edd);
 
@@ -354,7 +354,7 @@ char* editdata_to_str(EDITOR_DATA* edd)
  * Main editor functions
  */
 
-void set_editor_desc(CHAR_DATA* ch, char* new_desc)
+void set_editor_desc(CHAR_DATA* ch, const char* new_desc)
 {
 	if (!ch || !ch->editor)
 		return;
@@ -436,7 +436,7 @@ void stop_editing(CHAR_DATA* ch)
 	ch->desc->connected = CON_PLAYING;
 }
 
-void edit_buffer(CHAR_DATA* ch, const char* argument)
+void edit_buffer(CHAR_DATA* ch, char* argument)
 {
 	DESCRIPTOR_DATA* d;
 	EDITOR_DATA* edd;
@@ -615,7 +615,7 @@ void editor_format_lines(CHAR_DATA* ch, EDITOR_DATA* edd)
 
 
 
-void editor_print_info(CHAR_DATA* ch, EDITOR_DATA* edd, char* argument)
+void editor_print_info(CHAR_DATA* ch, EDITOR_DATA* edd, const char* argument)
 {
 	sh_int i;
 	EDITOR_LINE* eline;
@@ -701,7 +701,7 @@ void editor_help(CHAR_DATA* ch, EDITOR_DATA* edd, const char* argument)
 		send_to_char(editor_help[i], ch);
 }
 
-void editor_clear_buf(CHAR_DATA* ch, EDITOR_DATA* edd, char* argument)
+void editor_clear_buf(CHAR_DATA* ch, EDITOR_DATA* edd, const char* argument)
 {
 	char* desc;
 	sh_int max_size;
@@ -714,7 +714,7 @@ void editor_clear_buf(CHAR_DATA* ch, EDITOR_DATA* edd, char* argument)
 }
 
 
-void editor_search_and_replace(CHAR_DATA* ch, EDITOR_DATA* edd, char* argument)
+void editor_search_and_replace(CHAR_DATA* ch, EDITOR_DATA* edd, const char* argument)
 {
 	char word_src[MAX_INPUT_LENGTH];
 	char word_dst[MAX_INPUT_LENGTH];
@@ -780,7 +780,7 @@ void editor_search_and_replace(CHAR_DATA* ch, EDITOR_DATA* edd, char* argument)
 
 
 
-void editor_insert_line(CHAR_DATA* ch, EDITOR_DATA* edd, char* argument)
+void editor_insert_line(CHAR_DATA* ch, EDITOR_DATA* edd, const char* argument)
 {
 	sh_int lineindex, num;
 	EDITOR_LINE* eline, * newline;
@@ -822,7 +822,7 @@ void editor_insert_line(CHAR_DATA* ch, EDITOR_DATA* edd, char* argument)
 	ch_printf(ch, "Inserted line at %d.\n\r", lineindex);
 }
 
-void editor_delete_line(CHAR_DATA* ch, EDITOR_DATA* edd, char* argument)
+void editor_delete_line(CHAR_DATA* ch, EDITOR_DATA* edd, const char* argument)
 {
 	sh_int lineindex, num;
 	EDITOR_LINE* prev_line, * del_line;
@@ -889,7 +889,7 @@ void editor_delete_line(CHAR_DATA* ch, EDITOR_DATA* edd, char* argument)
 	ch_printf(ch, "Deleted line %d.\n\r", lineindex);
 }
 
-void editor_goto_line(CHAR_DATA* ch, EDITOR_DATA* edd, char* argument)
+void editor_goto_line(CHAR_DATA* ch, EDITOR_DATA* edd, const char* argument)
 {
 	sh_int lineindex, num;
 
@@ -917,7 +917,7 @@ void editor_goto_line(CHAR_DATA* ch, EDITOR_DATA* edd, char* argument)
 	ch_printf(ch, "On line %d.\n\r", lineindex);
 }
 
-void editor_list(CHAR_DATA* ch, EDITOR_DATA* edd, char* argument)
+void editor_list(CHAR_DATA* ch, EDITOR_DATA* edd, const char* argument)
 {
 	EDITOR_LINE* eline;
 	sh_int line_num;
@@ -951,7 +951,7 @@ void editor_list(CHAR_DATA* ch, EDITOR_DATA* edd, char* argument)
 	send_to_pager("------------------\n\r", ch);
 }
 
-void editor_abort(CHAR_DATA* ch, EDITOR_DATA* edd, char* argument)
+void editor_abort(CHAR_DATA* ch, EDITOR_DATA* edd, const char* argument)
 {
 	send_to_char("\n\rAborting... ", ch);
 	stop_editing(ch);
@@ -1051,7 +1051,7 @@ char* text_replace(char* src, char* word_src, char* word_dst, sh_int* pnew_size,
  * convert to lowercase, and it can handle the (') character
  * when it's escaped inside '.
  */
-char* finer_one_argument(char* argument, char* arg_first)
+const char* finer_one_argument(const char* argument, char* arg_first)
 {
 	char cEnd;
 	sh_int count;

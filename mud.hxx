@@ -46,14 +46,17 @@
 #include <chrono>
 #include <memory>
 #include <boost/asio/ip/tcp.hpp>
+#include <boost/circular_buffer.hpp>
+
+#define USECARGO
 
 typedef	int				ch_ret;
 typedef	int				obj_ret;
 
 #define args( list )			list
-#define DECLARE_DO_FUN( fun )		DO_FUN    fun
-#define DECLARE_SPEC_FUN( fun )		SPEC_FUN  fun
-#define DECLARE_SPELL_FUN( fun )	SPELL_FUN fun
+#define DECLARE_DO_FUN( fun )		extern "C" __declspec(dllexport) DO_FUN    fun
+#define DECLARE_SPEC_FUN( fun )		extern "C" __declspec(dllexport) SPEC_FUN  fun
+#define DECLARE_SPELL_FUN( fun )	extern "C" __declspec(dllexport) SPELL_FUN fun
 
 /* Stuff from newarena.c */
 void show_jack_pot();
@@ -70,6 +73,7 @@ void load_hall_of_fame(void);
  * Short scalar types.
  * Diavolo reports AIX compiler has bugs with short types.
  */
+ // TODO all of these should go away
 #if	!defined(FALSE)
 #define FALSE	 0
 #endif
@@ -78,6 +82,7 @@ void load_hall_of_fame(void);
 #define TRUE	 1
 #endif
 
+// TODO this needs to go away very rapidly
 #if	!defined(BERR)
 #define BERR	 255
 #endif
@@ -167,7 +172,7 @@ typedef struct  membersort_data         MS_DATA;     /* List for sorted roster l
 /*
  * Function types.
  */
-typedef	void	DO_FUN		args((CHAR_DATA* ch, const char* argument));
+typedef	void	DO_FUN		args((CHAR_DATA* ch, char* argument));
 typedef bool	SPEC_FUN	args((CHAR_DATA* ch));
 typedef ch_ret	SPELL_FUN	args((int sn, int level, CHAR_DATA* ch, void* vo));
 
@@ -215,6 +220,7 @@ typedef ch_ret	SPELL_FUN	args((int sn, int level, CHAR_DATA* ch, void* vo));
 #define MAX_STRING_LENGTH	 4096  /* buf */ // TODO this needs to go away
 #define MAX_INPUT_LENGTH	 1024  /* arg */
 #define MAX_INBUF_SIZE		 1024
+#define MAX_OUTPUT_SIZE    4096
 #define LAST_FILE_SIZE            500  //max entries in the last file
 #define MSL			MAX_STRING_LENGTH
 #define MIL			MAX_INPUT_LENGTH
@@ -376,8 +382,8 @@ struct force_skills_struct
 	FORCE_SKILL* prev;
 };
 
-FORCE_SKILL* first_force_skill;
-FORCE_SKILL* last_force_skill;
+extern FORCE_SKILL* first_force_skill;
+extern FORCE_SKILL* last_force_skill;
 
 #define MAX_FORCE_ALIGN 100
 #define MIN_FORCE_ALIGN -100
@@ -395,8 +401,8 @@ struct force_help_struct
 	FORCE_HELP* prev;
 };
 
-FORCE_HELP* first_force_help;
-FORCE_HELP* last_force_help;
+extern FORCE_HELP* first_force_help;
+extern FORCE_HELP* last_force_help;
 
 /* End force defines */
 
@@ -503,7 +509,7 @@ typedef enum
 	CON_GET_NEW_EMAIL, CON_GET_MSP, CON_GET_NEW_CLASS,
 	CON_GET_NEW_SECOND, CON_ROLL_STATS, CON_STATS_OK,
 	CON_COPYOVER_RECOVER, CON_GET_PUEBLO, CON_GET_HEIGHT, CON_GET_BUILD,
-	CON_GET_DROID
+	CON_GET_DROID, CON_DISCONNECTING
 } connection_types;
 
 /*
@@ -543,13 +549,14 @@ struct	descriptor_data
 	sh_int		lines;
 	sh_int		scrlen;
 	bool		fcommand;
-	char		inbuf[MAX_INBUF_SIZE];
-	char		incomm[MAX_INPUT_LENGTH];
-	char		inlast[MAX_INPUT_LENGTH];
+	char		incomm[MAX_INPUT_LENGTH]; // a single line that's about to be run as a command
+	char		inlast[MAX_INPUT_LENGTH]; // the last line that was run as a command
 	int			repeat;
-	char* outbuf;
-	unsigned long	outsize;
-	int			outtop;
+	/*
+	char* outbuf; // buffered socket output
+	unsigned long	outsize; // size of outbuf
+	int			outtop; // currently used size of outbuf
+	*/
 	char* pagebuf;
 	unsigned long	pagesize;
 	int			pagetop;
@@ -560,6 +567,12 @@ struct	descriptor_data
 	int 		atimes;
 	int			newstate;
 	unsigned char	prevcolor;
+	boost::circular_buffer<char> input_buffer;
+	std::array<char, MAX_INPUT_LENGTH> socket_input_buffer;
+	boost::circular_buffer<char> output_buffer;
+	std::array<char, MAX_OUTPUT_SIZE> socket_output_buffer;
+	bool output_io_pending;
+	bool input_io_pending;
 };
 
 
@@ -839,7 +852,7 @@ struct mpsleep_data
 };
 
 
-bool	MOBtrigger;
+extern bool	MOBtrigger;
 
 /* race dedicated stuff */
 struct	race_type
@@ -3989,7 +4002,6 @@ extern MPSLEEP_DATA* current_mpwait; /* - */
 extern	int	numobjsloaded;
 extern	int	nummobsloaded;
 extern	int	physicalobjects;
-extern	int	num_descriptors;
 extern	struct	system_data		sysdata;
 extern	int	top_sn;
 extern	int	top_vroom;
@@ -4072,7 +4084,6 @@ extern		char			bug_buf[];
 extern		time_t			current_time;
 extern		bool			fLogAll;
 extern		bool			fLogPC;
-extern		FILE* fpLOG;
 extern		char			log_buf[2 * MAX_INPUT_LENGTH];
 extern		TIME_INFO_DATA		time_info;
 extern		WEATHER_DATA		weather_info;
@@ -4194,7 +4205,6 @@ char* crypt		args((const char* key, const char* salt));
 #define CORPSE_DIR	"../corpses/"	/* Corpses			*/
 #define PROFILE_DIR	"../../public_html/profiles/"	/* Player
 Profiles */
-#define NULL_FILE	"/dev/null"	/* To reserve one stream	*/ // TODO this needs to go away
 #define AREA_LIST	"area.lst"	/* List of areas		*/
 #define BAN_LIST        "ban.lst"       /* List of bans                 */
 #define CLAN_LIST	"clan.lst"	/* List of clans		*/
@@ -4258,7 +4268,6 @@ output file      */
 #define RID	ROOM_INDEX_DATA
 #define SF	SPEC_FUN
 #define BD	BOARD_DATA
-#define CL	CLAN_DATA
 #define EDD	EXTRA_DESCR_DATA
 #define RD	RESET_DATA
 #define ED	EXIT_DATA
@@ -4354,11 +4363,11 @@ void	free_note	args((NOTE_DATA* pnote));
 
 /* build.c */
 char* flag_string	args((int bitvector, const char* flagarray[]));
-int	get_mpflag	args((char* flag));
+int	get_mpflag	args((const char* flag));
 int	get_dir		args((char* txt));
 char* strip_cr	args((char* str));
-int     get_vip_flag    args((char* flag));
-int     get_wanted_flag args((char* flag));
+int     get_vip_flag    args((const char* flag));
+int     get_wanted_flag args((const char* flag));
 
 /* changes.c */
 void    load_changes            args((void));
@@ -4366,7 +4375,7 @@ void    save_changes            args((void));
 void    delete_change           args((int num));
 
 /* clans.c */
-CL* get_clan		args((char* name));
+CLAN_DATA* get_clan		args((const char* name));
 void	load_clans		args((void));
 void	save_clan		args((CLAN_DATA* clan));
 void	load_senate		args((void));
@@ -4398,7 +4407,7 @@ void save_forcehelp(FORCE_HELP* fhelp);
 void write_forcehelp_list();
 bool load_forcehelp(char const* forcehelpfile);
 void fread_forcehelp(FORCE_HELP* fhelp, FILE* fp);
-int check_force_skill args((CHAR_DATA* ch, char* command, char* argument));
+int check_force_skill args((CHAR_DATA* ch, const char* command, char* argument));
 void load_force_skills args((void));
 void load_force_help args((void));
 DO_FUN* get_force_skill_function args((char* name));
@@ -4427,7 +4436,7 @@ void         placeships        	    args((void));
 void         save_ship      	    args((SHIP_DATA* ship));
 void         load_space             args((void));
 void         save_starsystem        args((SPACE_DATA* starsystem));
-SPACE_DATA* starsystem_from_name   args((char* name));
+SPACE_DATA* starsystem_from_name   args((const char* name));
 SPACE_DATA* starsystem_from_room   args((ROOM_INDEX_DATA* room));
 SHIP_DATA* ship_from_entrance     args((int vnum));
 SHIP_DATA* ship_from_room         args((int vnum));
@@ -4534,8 +4543,8 @@ int	number_bits	args((int width));
 int	number_mm	args((void));
 int	dice		args((int number, int size));
 int	interpolate	args((int level, int value_00, int value_32));
-void	smash_tilde	args((const char* str));
-void	hide_tilde	args((const char* str));
+void	smash_tilde	args((char* str));
+void	hide_tilde	args((char* str));
 char* show_tilde	args((const char* str));
 bool	str_cmp		args((const char* astr, const char* bstr));
 bool	str_prefix	args((const char* astr, const char* bstr));
@@ -4679,7 +4688,7 @@ void	mpsleep_update		args(());
 void	set_title	args((CHAR_DATA* ch, char* title));
 
 /* skills.c */
-bool	check_skill		args((CHAR_DATA* ch, char* command, char* argument));
+bool	check_skill		args((CHAR_DATA* ch, const char* command, char* argument));
 void	learn_from_success	args((CHAR_DATA* ch, int sn));
 void	learn_from_failure	args((CHAR_DATA* ch, int sn));
 bool	check_parry		args((CHAR_DATA* ch, CHAR_DATA* victim));
@@ -4812,11 +4821,13 @@ int	times_killed	args((CHAR_DATA* ch, CHAR_DATA* mob));
 
 /* interp.c */
 bool	check_pos	args((CHAR_DATA* ch, sh_int position));
-void	interpret	args((CHAR_DATA* ch, const char* argument));
+void	interpret	args((CHAR_DATA* ch, char* argument));
 bool	is_number	args((const char* arg));
-int	number_argument	args((const char* argument, const char* arg));
-char* one_argument	args((const char* argument, const char* arg_first));
-char* one_argument2	args((const char* argument, const char* arg_first));
+int	number_argument	args((const char* argument, char* arg));
+const char* one_argument(const char* argument, char* arg_first);
+char* one_argument	args((char* argument, char* arg_first));
+const char* one_argument2	args((const char* argument, char* arg_first));
+char* one_argument2	args((char* argument, char* arg_first));
 ST* find_social	args((const char* command));
 CMDTYPE* find_command	args((const char* command));
 void	hash_commands	args(());
@@ -4945,8 +4956,8 @@ void	   load_ship_prototypes	        args((void));
 char* strrep                         args((const char* src, const char* sch, const char* rep));
 char* strlinwrp args((char* src, int length));
 char* line(int num, char inp);
-char* remand(char* arg);
-char* rembg(char* arg);
+char* remand(const char* arg);
+char* rembg(const char* arg);
 const char* htmlcolor(const char* arg);
 char* format_str(char* src, int len);
 int strlen_color(char* argument);
@@ -4966,7 +4977,6 @@ const char* get_race 	args((CHAR_DATA* ch));
 #undef	RID
 #undef	SF
 #undef	BD
-#undef	CL
 #undef	EDD
 #undef	RD
 #undef	ED
@@ -4978,7 +4988,7 @@ void save_market_list  args((void));
 void add_market_ship  args((SHIP_DATA* ship));
 void remove_market_ship     args((BMARKET_DATA* marketship));
 void make_random_marketlist args((void));
-void talk_channel	    args((CHAR_DATA* ch, char* argument, int channel, const char* verb));
+void talk_channel	    args((CHAR_DATA* ch, const char* argument, int channel, const char* verb));
 
 
 /*
@@ -5177,9 +5187,9 @@ char* oprog_type_to_name(int type);
  * MUD_PROGS START HERE
  * (object stuff)
  */
-int rprog_custom_trigger(char* command, char* argument, CHAR_DATA* ch);
-int mprog_custom_trigger(char* command, char* argument, CHAR_DATA* ch);
-int oprog_custom_trigger(char* command, char* argument, CHAR_DATA* ch);
+int rprog_custom_trigger(const char* command, const char* argument, CHAR_DATA* ch);
+int mprog_custom_trigger(const char* command, const char* argument, CHAR_DATA* ch);
+int oprog_custom_trigger(const char* command, const char* argument, CHAR_DATA* ch);
 void oprog_greet_trigger(CHAR_DATA* ch);
 void oprog_speech_trigger(char* txt, CHAR_DATA* ch);
 void oprog_random_trigger(OBJ_DATA* obj);

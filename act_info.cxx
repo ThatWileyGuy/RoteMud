@@ -42,6 +42,7 @@
 #include <string.h>
 #include <time.h>
 #include "mud.hxx"
+#include "do_fun.hxx"
 
 
 ROOM_INDEX_DATA* generate_exit(ROOM_INDEX_DATA* in_room, EXIT_DATA** pexit);
@@ -1959,7 +1960,7 @@ sh_int str_similarity(const char* astr, const char* bstr)
 	return matches;
 }
 
-void similar_help_files(CHAR_DATA* ch, char* argument)
+void similar_help_files(CHAR_DATA* ch, const char* argument)
 {
 	HELP_DATA* pHelp = NULL;
 	char buf[MAX_STRING_LENGTH];
