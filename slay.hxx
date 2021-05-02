@@ -1,4 +1,4 @@
- /*********************************************************************************** 
+/***********************************************************************************
  *                                                                                  *
  *          _______.____    __    ____       _______                 _______        *
  *         /       )\   \  /  \  /   /  _   |   ____)         __    |   ____)       *
@@ -36,7 +36,6 @@
  *                                                                                  *
  ***********************************************************************************/
 
-
 /****************************************************************************
  *                   ^     +----- |  / ^     ^ |     | +-\                  *
  *                  / \    |      | /  |\   /| |     | |  \                 *
@@ -61,22 +60,22 @@
 
 /* Capability to create, edit and delete slaytypes added to original code by Samson 8-3-98 */
 
-typedef struct	slay_data	SLAY_DATA;
+typedef struct slay_data SLAY_DATA;
 
-extern	SLAY_DATA	*first_slay;
-extern	SLAY_DATA	*last_slay;
+extern SLAY_DATA *first_slay;
+extern SLAY_DATA *last_slay;
 
 /* Improved data structure for online slay editing - Samson 8-3-98 */
 struct slay_data
 {
-   SLAY_DATA *next;
-   SLAY_DATA *prev;
-   char *owner;
-   char *type;
-   int color;
-   char *cmsg;
-   char *vmsg;
-   char *rmsg;
+    SLAY_DATA *next;
+    SLAY_DATA *prev;
+    char *owner;
+    char *type;
+    int color;
+    char *cmsg;
+    char *vmsg;
+    char *rmsg;
 };
 
 #define SLAY_FILE SYSTEM_DIR "slay.dat" /* Slay data file for online editing - Samson 8-3-98 */
@@ -84,5 +83,4 @@ struct slay_data
 /* Maxslaytypes variable - 50 should be WAY more than enough :P */
 #define MAX_SLAY_TYPES 50
 
-
-void load_slays( void );
+void load_slays(void);

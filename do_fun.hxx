@@ -1,51 +1,48 @@
 /***********************************************************************************
-*                                                                                  *
-*          _______.____    __    ____       _______                  _______       *
-*         /       |\   \  /  \  /   /  _   |   ____|          __    |   ____|      *
-*        |   (----` \   \/    \/   /  (_)  |  |__    ____   _/  |_  |  |__         *
-*         \   \      \            /    _   |   __|  /  _ \  \   __\ |   __|        *
-*     .----)   |      \    /\    /    (_)  |  |    (  <_> )  |  |   |  |____       *
-*     |_______/        \__/  \__/          |__|     \____/   |__|   |_______|      *
-*                                                                                  *
-* SWFotE v2.0 (FotE v1.1 cleaned up and considerably modded)  by:                  *
-* Greg (Keberus) Mosley                                                            *
-* Roman (Trelar) Arnold                                                            *
-*                                                                                  *
-* SWFotE v1 & v1.1 copyright (c) 2002 was created by                               *
-* Chris 'Tawnos' Dary (cadary@uwm.edu),                                            *
-* Korey 'Eleven' King (no email),                                                  *
-* Matt 'Trillen' White (mwhite17@ureach.com),                                      *
-* Daniel 'Danimal' Berrill (danimal924@yahoo.com),                                 *
-* Richard 'Bambua' Berrill (email unknown),                                        *
-* Stuart 'Ackbar' Unknown (email unknown)                                          *
-*                                                                                  *
-* SWR 1.0 copyright (c) 1997, 1998 was created by Sean Cooper                      *
-* based on a concept and ideas from the original SWR immortals:                    *
-* Himself (Durga), Mark Matt (Merth), Jp Coldarone (Exar), Greg Baily (Thrawn),    *
-* Ackbar, Satin, Streen and Bib as well as much input from our other builders      *
-* and players.                                                                     *
-*                                                                                  *
-* Original SMAUG 1.4a written by Thoric (Derek Snider) with Altrag,                *
-* Blodkai, Haus, Narn, Scryn, Swordbearer, Tricops, Gorog, Rennard,                *
-* Grishnakh, Fireblade, and Nivek.                                                 *
-*                                                                                  *
-* Original MERC 2.1 code by Hatchet, Furey, and Kahn.                              *
-*                                                                                  *
-* Original DikuMUD code by: Hans Staerfeldt, Katja Nyboe, Tom Madsen,              *
-* Michael Seifert, and Sebastian Hammer.                                           *
-*                                                                                  *
-***********************************************************************************/
+ *                                                                                  *
+ *          _______.____    __    ____       _______                  _______       *
+ *         /       |\   \  /  \  /   /  _   |   ____|          __    |   ____|      *
+ *        |   (----` \   \/    \/   /  (_)  |  |__    ____   _/  |_  |  |__         *
+ *         \   \      \            /    _   |   __|  /  _ \  \   __\ |   __|        *
+ *     .----)   |      \    /\    /    (_)  |  |    (  <_> )  |  |   |  |____       *
+ *     |_______/        \__/  \__/          |__|     \____/   |__|   |_______|      *
+ *                                                                                  *
+ * SWFotE v2.0 (FotE v1.1 cleaned up and considerably modded)  by:                  *
+ * Greg (Keberus) Mosley                                                            *
+ * Roman (Trelar) Arnold                                                            *
+ *                                                                                  *
+ * SWFotE v1 & v1.1 copyright (c) 2002 was created by                               *
+ * Chris 'Tawnos' Dary (cadary@uwm.edu),                                            *
+ * Korey 'Eleven' King (no email),                                                  *
+ * Matt 'Trillen' White (mwhite17@ureach.com),                                      *
+ * Daniel 'Danimal' Berrill (danimal924@yahoo.com),                                 *
+ * Richard 'Bambua' Berrill (email unknown),                                        *
+ * Stuart 'Ackbar' Unknown (email unknown)                                          *
+ *                                                                                  *
+ * SWR 1.0 copyright (c) 1997, 1998 was created by Sean Cooper                      *
+ * based on a concept and ideas from the original SWR immortals:                    *
+ * Himself (Durga), Mark Matt (Merth), Jp Coldarone (Exar), Greg Baily (Thrawn),    *
+ * Ackbar, Satin, Streen and Bib as well as much input from our other builders      *
+ * and players.                                                                     *
+ *                                                                                  *
+ * Original SMAUG 1.4a written by Thoric (Derek Snider) with Altrag,                *
+ * Blodkai, Haus, Narn, Scryn, Swordbearer, Tricops, Gorog, Rennard,                *
+ * Grishnakh, Fireblade, and Nivek.                                                 *
+ *                                                                                  *
+ * Original MERC 2.1 code by Hatchet, Furey, and Kahn.                              *
+ *                                                                                  *
+ * Original DikuMUD code by: Hans Staerfeldt, Katja Nyboe, Tom Madsen,              *
+ * Michael Seifert, and Sebastian Hammer.                                           *
+ *                                                                                  *
+ ***********************************************************************************/
 
+// Seperated Do Functions in hopes to clean things up -KeB
+// No more need for tables.c since Trax's and Samson's Dynamic command support
 
-//Seperated Do Functions in hopes to clean things up -KeB
-//No more need for tables.c since Trax's and Samson's Dynamic command support
-
-//Order
-//Do functions
-//Force functions
-//Spell functions
-
-
+// Order
+// Do functions
+// Force functions
+// Spell functions
 
 /*Do Functions List*/
 DECLARE_DO_FUN(do_aaccept);
@@ -234,7 +231,7 @@ DECLARE_DO_FUN(do_follow);
 DECLARE_DO_FUN(do_for);
 DECLARE_DO_FUN(do_force);
 DECLARE_DO_FUN(do_forceclose);
-DECLARE_DO_FUN(do_fquit);     /* Gorog */
+DECLARE_DO_FUN(do_fquit); /* Gorog */
 DECLARE_DO_FUN(do_freeship);
 DECLARE_DO_FUN(do_freeze);
 DECLARE_DO_FUN(do_fset);
@@ -713,10 +710,7 @@ DECLARE_DO_FUN(do_zap);
 DECLARE_DO_FUN(do_zecho);
 DECLARE_DO_FUN(do_zones);
 
-
-
-
-//Force skills
+// Force skills
 DECLARE_DO_FUN(fskill_awareness);
 DECLARE_DO_FUN(fskill_convert);
 DECLARE_DO_FUN(fskill_fdisguise);
@@ -739,9 +733,6 @@ DECLARE_DO_FUN(fskill_squeeze);
 DECLARE_DO_FUN(fskill_student);
 DECLARE_DO_FUN(fskill_whirlwind);
 DECLARE_DO_FUN(skill_notfound);
-
-
-
 
 /* Spells and such*/
 DECLARE_SPELL_FUN(spell_acetum_primus);
@@ -839,4 +830,3 @@ DECLARE_SPELL_FUN(spell_transport);
 DECLARE_SPELL_FUN(spell_ventriloquate);
 DECLARE_SPELL_FUN(spell_weaken);
 DECLARE_SPELL_FUN(spell_word_of_recall);
-

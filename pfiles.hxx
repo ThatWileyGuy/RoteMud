@@ -1,4 +1,4 @@
- /*********************************************************************************** 
+/***********************************************************************************
  *                                                                                  *
  *          _______.____    __    ____       _______                  _______       *
  *         /       |\   \  /  \  /   /  _   |   ____|          __    |   ____|      *
@@ -36,7 +36,6 @@
  *                                                                                  *
  ***********************************************************************************/
 
-
 /****************************************************************************
  *                   ^     +----- |  / ^     ^ |     | +-\                  *
  *                  / \    |      | /  |\   /| |     | |  \                 *
@@ -63,7 +62,9 @@
 #define PFILECODE
 
 #ifndef FCLOSE
-#define FCLOSE(fp)  fclose(fp); fp=NULL;
+#define FCLOSE(fp)                                                                                                     \
+    fclose(fp);                                                                                                        \
+    fp = NULL;
 #endif
 
 #ifndef MSL
@@ -80,7 +81,7 @@ extern struct tm *new_pfile_time;
 extern time_t new_pfile_time_t;
 extern short num_pfiles;
 
-void check_pfiles args( ( time_t reset ) );
-void init_pfile_scan_time args( ( void ) );
+void check_pfiles args((time_t reset));
+void init_pfile_scan_time args((void));
 
-DECLARE_DO_FUN( do_pfiles );
+DECLARE_DO_FUN(do_pfiles);
