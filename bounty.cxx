@@ -49,8 +49,8 @@ BOUNTY_DATA *last_bounty;
 BOUNTY_DATA *first_disintegration;
 BOUNTY_DATA *last_disintegration;
 
-void disintegration args((CHAR_DATA * ch, CHAR_DATA *victim, long amount));
-void nodisintegration args((CHAR_DATA * ch, CHAR_DATA *victim, long amount));
+void disintegration(CHAR_DATA *ch, CHAR_DATA *victim, long amount);
+void nodisintegration(CHAR_DATA *ch, CHAR_DATA *victim, long amount);
 int xp_compute(CHAR_DATA *ch, CHAR_DATA *victim);
 
 void save_disintegrations()

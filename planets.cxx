@@ -51,9 +51,9 @@ void write_starsystem_list();
 extern const char *sector_name[SECT_MAX];
 
 /* local routines */
-void fread_planet args((PLANET_DATA * planet, FILE *fp));
-bool load_planet_file args((char *planetfile));
-void write_planet_list args((void));
+void fread_planet(PLANET_DATA *planet, FILE *fp);
+bool load_planet_file(char *planetfile);
+void write_planet_list(void);
 
 #ifdef USECARGO
 const char *cargo_names[CARGO_MAX] = {"None",   "Food",        "Water",       "Medical",

@@ -48,9 +48,9 @@ extern int top_reset;
 extern int top_ed;
 extern bool fBootDb;
 
-int generate_hp args((int level, int num, int size, int plus));
-char *sprint_reset args((RESET_DATA * pReset, short *num));
-void fix_exits args((void));
+int generate_hp(int level, int num, int size, int plus);
+char *sprint_reset(RESET_DATA *pReset, short *num);
+void fix_exits(void);
 
 /* planet constants for vip and wanted flags */
 

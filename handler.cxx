@@ -132,7 +132,7 @@ void room_explode_1(OBJ_DATA *obj, CHAR_DATA *xch, ROOM_INDEX_DATA *room, int bl
     {
         rnext = rch->next_in_room;
         //'act( AT_WHITE, "The shockwave from a massive explosion rips through your body!", room->first_person , obj,
-        //NULL, TO_ROOM );
+        // NULL, TO_ROOM );
 
         dam = number_range(obj->value[0], obj->value[1]);
         damage(rch, rch, dam, TYPE_UNDEFINED);
@@ -1311,7 +1311,7 @@ void unequip_char(CHAR_DATA *ch, OBJ_DATA *obj)
 /*
  * Move an obj out of a room.
  */
-void write_corpses args((CHAR_DATA * ch, char *name));
+void write_corpses(CHAR_DATA *ch, char *name);
 
 int falling;
 

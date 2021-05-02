@@ -46,7 +46,7 @@
 
 #define ROOM_JAIL_CORUSCANT 0
 
-bool remove_obj args((CHAR_DATA * ch, int iWear, bool fReplace));
+bool remove_obj(CHAR_DATA *ch, int iWear, bool fReplace);
 
 /*
  * The following special functions are available for mobiles.

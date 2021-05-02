@@ -54,18 +54,18 @@ const char *save_flag[] = {"death",   "kill", "passwd",  "drop", "put",    "give
                            "r24",     "r25",  "r26",     "r27",  "r28",    "r29",  "r30",  "r31"};
 
 /* from db.c */
-void save_sysdata args((SYSTEM_DATA sys));
+void save_sysdata(SYSTEM_DATA sys);
 
 /* from space.c */
-void remship args((SHIP_DATA * ship));
+void remship(SHIP_DATA *ship);
 
 /*
  * Local functions.
  */
-ROOM_INDEX_DATA *find_location args((CHAR_DATA * ch, char *arg));
-void save_banlist args((void));
-void close_area args((AREA_DATA * pArea));
-void ostat_plus args((CHAR_DATA * ch, OBJ_DATA *obj));
+ROOM_INDEX_DATA *find_location(CHAR_DATA *ch, char *arg);
+void save_banlist(void);
+void close_area(AREA_DATA *pArea);
+void ostat_plus(CHAR_DATA *ch, OBJ_DATA *obj);
 int get_color(char *argument); /* function proto */
 
 /*

@@ -55,8 +55,8 @@
 /*
  * Globals
  */
-char *current_date args((void));
-int num_changes args((void));
+char *current_date(void);
+int num_changes(void);
 
 /*
  * Local Functions

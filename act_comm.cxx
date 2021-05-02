@@ -58,10 +58,10 @@ void sportschan(char *);
  * Local functions.
  */
 
-char *scramble args((const char *argument, int modifier));
-char *drunk_speech args((const char *argument, CHAR_DATA *ch));
-void generate_com_freq args((CHAR_DATA * ch));
-void show_spys args((CHAR_DATA * ch, CHAR_DATA *victim, char *tell));
+char *scramble(const char *argument, int modifier);
+char *drunk_speech(const char *argument, CHAR_DATA *ch);
+void generate_com_freq(CHAR_DATA *ch);
+void show_spys(CHAR_DATA *ch, CHAR_DATA *victim, char *tell);
 
 void generate_com_freq(CHAR_DATA *ch)
 {
@@ -2411,7 +2411,9 @@ void do_quit(CHAR_DATA *ch, char *argument)
 
 std::string file_to_string(std::string_view path)
 {
-    auto file = std::ifstream(std::string(path), std::ios::in | std::ios::binary); // TODO does this need to be binary to keep Windows from being dumb?
+    auto file = std::ifstream(
+        std::string(path),
+        std::ios::in | std::ios::binary); // TODO does this need to be binary to keep Windows from being dumb?
     const auto file_size = std::filesystem::file_size(RIPSCREEN_FILE);
 
     auto content = std::string(file_size + 1, '\0');

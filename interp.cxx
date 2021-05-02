@@ -48,7 +48,7 @@
  * Externals
  */
 
-bool check_social args((CHAR_DATA * ch, const char *command, const char *argument));
+bool check_social(CHAR_DATA *ch, const char *command, const char *argument);
 
 /*
  * Log-all switch.

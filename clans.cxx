@@ -60,10 +60,10 @@ GUARD_DATA *first_guard;
 GUARD_DATA *last_guard;
 
 /* local routines */
-void fread_clan args((CLAN_DATA * clan, FILE *fp));
-bool load_clan_file args((char *clanfile));
-void write_clan_list args((void));
-bool load_planet_file args((char *planetfile));
+void fread_clan(CLAN_DATA *clan, FILE *fp);
+bool load_clan_file(char *clanfile);
+void write_clan_list(void);
+bool load_planet_file(char *planetfile);
 
 /*
  * Get pointer to clan structure from clan name.

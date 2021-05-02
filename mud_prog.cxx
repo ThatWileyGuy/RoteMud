@@ -83,17 +83,15 @@ MPSLEEP_DATA *current_mpsleep = NULL;
  * Local function prototypes
  */
 
-char *mprog_next_command args((char *clist));
-bool mprog_seval args((const char *lhs, const char *opr, const char *rhs, CHAR_DATA *mob));
-bool mprog_veval args((int lhs, const char *opr, int rhs, CHAR_DATA *mob));
-int mprog_do_ifcheck args((const char *ifcheck, CHAR_DATA *mob, CHAR_DATA *actor, OBJ_DATA *obj, void *vo,
-                           CHAR_DATA *rndm));
-void mprog_translate args((char ch, const char *t, CHAR_DATA *mob, CHAR_DATA *actor, OBJ_DATA *obj, void *vo,
-                           CHAR_DATA *rndm));
-void mprog_driver args((const char *com_list, CHAR_DATA *mob, CHAR_DATA *actor, OBJ_DATA *obj, void *vo,
-                        bool single_step));
+char *mprog_next_command(char *clist);
+bool mprog_seval(const char *lhs, const char *opr, const char *rhs, CHAR_DATA *mob);
+bool mprog_veval(int lhs, const char *opr, int rhs, CHAR_DATA *mob);
+int mprog_do_ifcheck(const char *ifcheck, CHAR_DATA *mob, CHAR_DATA *actor, OBJ_DATA *obj, void *vo, CHAR_DATA *rndm);
+void mprog_translate(char ch, const char *t, CHAR_DATA *mob, CHAR_DATA *actor, OBJ_DATA *obj, void *vo,
+                     CHAR_DATA *rndm);
+void mprog_driver(const char *com_list, CHAR_DATA *mob, CHAR_DATA *actor, OBJ_DATA *obj, void *vo, bool single_step);
 
-bool mprog_keyword_check args((const char *argu, const char *argl));
+bool mprog_keyword_check(const char *argu, const char *argl);
 
 void oprog_wordlist_check(char *arg, CHAR_DATA *mob, CHAR_DATA *actor, OBJ_DATA *obj, void *vo, int type,
                           OBJ_DATA *iobj);

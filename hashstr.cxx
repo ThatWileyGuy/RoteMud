@@ -55,7 +55,7 @@
 
 struct HASHSTR_DATA
 {
-    HASHSTR_DATA *next; /* next hash element */
+    HASHSTR_DATA *next;        /* next hash element */
     unsigned short int links;  /* number of links to this string */
     unsigned short int length; /* length of string */
 };
@@ -262,7 +262,7 @@ void show_high_hash(int top)
         for (ptr = string_hash[x]; ptr; ptr = ptr->next)
             if (ptr->links >= top)
             {
-                str = ((char*)ptr) + psize;
+                str = ((char *)ptr) + psize;
                 fprintf(stderr, "Links: %5d  String: >%s<\n\r", ptr->links, str);
             }
 }

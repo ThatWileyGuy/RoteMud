@@ -54,8 +54,8 @@ SPACE_DATA *first_starsystem;
 SPACE_DATA *last_starsystem;
 
 extern char bname[MAX_STRING_LENGTH];
-char *primary_beam_name args((SHIP_DATA * ship));
-char *secondary_beam_name args((SHIP_DATA * ship));
+char *primary_beam_name(SHIP_DATA *ship);
+char *secondary_beam_name(SHIP_DATA *ship);
 #ifdef USECARGO
 extern const char *cargo_names[CARGO_MAX];
 extern const char *cargo_names_lower[CARGO_MAX];
@@ -109,18 +109,18 @@ int get_shipflag(char *flag)
 }
 
 /* local routines */
-void fread_ship args((SHIP_DATA * ship, FILE *fp));
-bool load_ship_file args((char *shipfile));
-void write_ship_list args((void));
-void fread_starsystem args((SPACE_DATA * starsystem, FILE *fp));
-bool load_starsystem args((char *starsystemfile));
-void write_starsystem_list args((void));
-void resetship args((SHIP_DATA * ship));
-void landship args((SHIP_DATA * ship, char *arg));
-void launchship args((SHIP_DATA * ship));
-bool land_bus args((SHIP_DATA * ship, int destination));
-void launch_bus args((SHIP_DATA * ship));
-void echo_to_room_dnr args((int ecolor, ROOM_INDEX_DATA *room, const char *argument));
+void fread_ship(SHIP_DATA *ship, FILE *fp);
+bool load_ship_file(char *shipfile);
+void write_ship_list(void);
+void fread_starsystem(SPACE_DATA *starsystem, FILE *fp);
+bool load_starsystem(char *starsystemfile);
+void write_starsystem_list(void);
+void resetship(SHIP_DATA *ship);
+void landship(SHIP_DATA *ship, char *arg);
+void launchship(SHIP_DATA *ship);
+bool land_bus(SHIP_DATA *ship, int destination);
+void launch_bus(SHIP_DATA *ship);
+void echo_to_room_dnr(int ecolor, ROOM_INDEX_DATA *room, const char *argument);
 ch_ret drive_ship(CHAR_DATA *ch, SHIP_DATA *ship, EXIT_DATA *exit, int fall);
 bool autofly(SHIP_DATA *ship);
 bool is_facing(SHIP_DATA *ship, SHIP_DATA *target);

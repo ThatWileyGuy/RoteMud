@@ -48,14 +48,14 @@
 /*
  * External functions
  */
-void write_corpses args((CHAR_DATA * ch, char *name));
-void show_list_to_char args((OBJ_DATA * list, CHAR_DATA *ch, bool fShort, bool fShowNothing));
+void write_corpses(CHAR_DATA *ch, char *name);
+void show_list_to_char(OBJ_DATA *list, CHAR_DATA *ch, bool fShort, bool fShowNothing);
 /*
  * Local functions.
  */
-void get_obj args((CHAR_DATA * ch, OBJ_DATA *obj, OBJ_DATA *container));
-bool remove_obj args((CHAR_DATA * ch, int iWear, bool fReplace));
-void wear_obj args((CHAR_DATA * ch, OBJ_DATA *obj, bool fReplace, sh_int wear_bit));
+void get_obj(CHAR_DATA *ch, OBJ_DATA *obj, OBJ_DATA *container);
+bool remove_obj(CHAR_DATA *ch, int iWear, bool fReplace);
+void wear_obj(CHAR_DATA *ch, OBJ_DATA *obj, bool fReplace, sh_int wear_bit);
 
 /*
  * how resistant an object is to damage				-Thoric

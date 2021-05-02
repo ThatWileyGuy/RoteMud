@@ -57,18 +57,18 @@ void lost_arena(CHAR_DATA *ch);
 void remship(SHIP_DATA *ship);
 
 /* From comm.c */
-void name_log args((const char *str, ...));
+void name_log(const char *str, ...);
 
 /*
  * Local functions.
  */
-void dam_message args((CHAR_DATA * ch, CHAR_DATA *victim, int dam, int dt));
-void death_cry args((CHAR_DATA * ch));
-void group_gain args((CHAR_DATA * ch, CHAR_DATA *victim));
-int xp_compute args((CHAR_DATA * gch, CHAR_DATA *victim));
-int align_compute args((CHAR_DATA * gch, CHAR_DATA *victim));
-ch_ret one_hit args((CHAR_DATA * ch, CHAR_DATA *victim, int dt));
-int obj_hitroll args((OBJ_DATA * obj));
+void dam_message(CHAR_DATA *ch, CHAR_DATA *victim, int dam, int dt);
+void death_cry(CHAR_DATA *ch);
+void group_gain(CHAR_DATA *ch, CHAR_DATA *victim);
+int xp_compute(CHAR_DATA *gch, CHAR_DATA *victim);
+int align_compute(CHAR_DATA *gch, CHAR_DATA *victim);
+ch_ret one_hit(CHAR_DATA *ch, CHAR_DATA *victim, int dt);
+int obj_hitroll(OBJ_DATA *obj);
 bool get_cover(CHAR_DATA *ch);
 bool dual_flip = FALSE;
 
@@ -242,13 +242,11 @@ void violence_update(void)
         if (!ch->in_room || !ch->name)
         {
             log_string("violence_update: bad ch record!  (Shortcutting.)");
-            sprintf_s(buf, "ch: %p  ch->in_room: %p  ch->prev: %p  ch->next: %p", ch, ch->in_room,
-                      ch->prev, ch->next);
+            sprintf_s(buf, "ch: %p  ch->in_room: %p  ch->prev: %p  ch->next: %p", ch, ch->in_room, ch->prev, ch->next);
             log_string(buf);
             log_string(lastplayercmd);
             if (lst_ch)
-                sprintf_s(buf, "lst_ch: %p  lst_ch->prev: %p  lst_ch->next: %p", lst_ch, lst_ch->prev,
-                          lst_ch->next);
+                sprintf_s(buf, "lst_ch: %p  lst_ch->prev: %p  lst_ch->next: %p", lst_ch, lst_ch->prev, lst_ch->next);
             else
                 strcpy_s(buf, "lst_ch: NULL");
             log_string(buf);

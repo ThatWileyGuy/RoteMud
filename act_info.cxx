@@ -60,13 +60,13 @@ const char *where_name[] = {
 /*
  * Local functions.
  */
-void show_char_to_char_0 args((CHAR_DATA * victim, CHAR_DATA *ch));
-void show_char_to_char_1 args((CHAR_DATA * victim, CHAR_DATA *ch));
-void show_char_to_char args((CHAR_DATA * list, CHAR_DATA *ch));
-void show_char_to_char args((CHAR_DATA * list, CHAR_DATA *ch));
-void show_ships_to_char args((SHIP_DATA * ship, CHAR_DATA *ch));
-bool check_blind args((CHAR_DATA * ch));
-void show_condition args((CHAR_DATA * ch, CHAR_DATA *victim));
+void show_char_to_char_0(CHAR_DATA *victim, CHAR_DATA *ch);
+void show_char_to_char_1(CHAR_DATA *victim, CHAR_DATA *ch);
+void show_char_to_char(CHAR_DATA *list, CHAR_DATA *ch);
+void show_char_to_char(CHAR_DATA *list, CHAR_DATA *ch);
+void show_ships_to_char(SHIP_DATA *ship, CHAR_DATA *ch);
+bool check_blind(CHAR_DATA *ch);
+void show_condition(CHAR_DATA *ch, CHAR_DATA *victim);
 
 char *format_obj_to_char(OBJ_DATA *obj, CHAR_DATA *ch, bool fShort)
 {
@@ -2721,8 +2721,9 @@ void do_who(CHAR_DATA *ch, char *argument)
     if (!ch)
     {
         //	fprintf( whoout, "%s", htmlcolor("&z( &R%d &rvisible &zplayer%s. &R%d &rtotal&z player%s.
-        //)&R-_&r-^^-_-&R^^&r-_-^^-_-^^&R-_-^^&r-_-^^-_-^^-&R^^-\n"), 		sMatch, sMatch == 1 ? "" : "s", nMatch, nMatch ==
-        //1 ? "" : "s" );
+        //)&R-_&r-^^-_-&R^^&r-_-^^-_-^^&R-_-^^&r-_-^^-_-^^-&R^^-\n"), 		sMatch, sMatch == 1 ? "" : "s", nMatch,
+        // nMatch
+        //== 1 ? "" : "s" );
         char *time_string = ctime(&current_time);
         fprintf(whoout, "<div style='position: absolute; color: white; top: 5px; right: 5px;'>%s</div></font>",
                 time_string);
@@ -3213,7 +3214,7 @@ void do_practice(CHAR_DATA *ch, char *argument)
         //	set_pager_color( AT_MAGIC, ch );
 
         //		      send_to_pager("&G------------------------------------&B[&WSpells&B]&G------------------------------------\n\r",
-        //ch);
+        // ch);
 
         for (sn = 0; sn < top_sn; sn++)
         {

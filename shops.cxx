@@ -47,10 +47,10 @@
  */
 
 #define CD CHAR_DATA
-CD *find_keeper args((CHAR_DATA * ch));
-CD *find_fixer args((CHAR_DATA * ch));
-int get_cost args((CHAR_DATA * ch, CHAR_DATA *keeper, OBJ_DATA *obj, bool fBuy));
-int get_repaircost args((CHAR_DATA * keeper, OBJ_DATA *obj));
+CD *find_keeper(CHAR_DATA *ch);
+CD *find_fixer(CHAR_DATA *ch);
+int get_cost(CHAR_DATA *ch, CHAR_DATA *keeper, OBJ_DATA *obj, bool fBuy);
+int get_repaircost(CHAR_DATA *keeper, OBJ_DATA *obj);
 #undef CD
 
 /*

@@ -46,19 +46,19 @@
 #include <time.h>
 #include "mud.hxx"
 
-void explode_emissile args((CHAR_DATA * ch, ROOM_INDEX_DATA *proom, int mindam, int maxdam, bool incendiary));
-void do_makegoggles args((CHAR_DATA * ch, char *argument));
+void explode_emissile(CHAR_DATA *ch, ROOM_INDEX_DATA *proom, int mindam, int maxdam, bool incendiary);
+void do_makegoggles(CHAR_DATA *ch, char *argument);
 extern int top_affect;
-void do_makemissile args((CHAR_DATA * ch, char *argument));
-void do_launch2 args((CHAR_DATA * ch, char *argument));
-void do_load args((CHAR_DATA * ch, char *argument));
-void do_unload args((CHAR_DATA * ch, char *argument));
-void do_link args((CHAR_DATA * ch, char *argument));
-SHIP_DATA *ship_from_gunseat args((int vnum));
-SHIP_DATA *ship_from_cockpit args((int vnum));
+void do_makemissile(CHAR_DATA *ch, char *argument);
+void do_launch2(CHAR_DATA *ch, char *argument);
+void do_load(CHAR_DATA *ch, char *argument);
+void do_unload(CHAR_DATA *ch, char *argument);
+void do_link(CHAR_DATA *ch, char *argument);
+SHIP_DATA *ship_from_gunseat(int vnum);
+SHIP_DATA *ship_from_cockpit(int vnum);
 extern char bname[MAX_STRING_LENGTH];
-void do_barrel_roll args((CHAR_DATA * ch, char *argument));
-void do_juke args((CHAR_DATA * ch, char *argument));
+void do_barrel_roll(CHAR_DATA *ch, char *argument);
+void do_juke(CHAR_DATA *ch, char *argument);
 
 char *primary_beam_name(SHIP_DATA *ship)
 {

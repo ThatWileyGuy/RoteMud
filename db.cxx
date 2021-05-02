@@ -47,7 +47,7 @@
 #include <filesystem>
 #include "mud.hxx"
 
-extern int _filbuf args((FILE *));
+extern int _filbuf(FILE *);
 
 #if defined(KEY)
 #undef KEY
@@ -383,53 +383,53 @@ char bname[MAX_STRING_LENGTH];
 /*
  * Local booting procedures.
  */
-void init_mm args((void));
+void init_mm(void);
 
-void boot_log args((const char *str, ...));
-void load_area args((FILE * fp));
-void load_author args((AREA_DATA * tarea, FILE *fp));
-void load_economy args((AREA_DATA * tarea, FILE *fp));
-void load_resetmsg args((AREA_DATA * tarea, FILE *fp)); /* Rennard */
-void load_flags args((AREA_DATA * tarea, FILE *fp));
-void load_helps args((AREA_DATA * tarea, FILE *fp));
-void load_mobiles args((AREA_DATA * tarea, FILE *fp));
-void load_objects args((AREA_DATA * tarea, FILE *fp));
-void load_resets args((AREA_DATA * tarea, FILE *fp));
-void load_rooms args((AREA_DATA * tarea, FILE *fp));
-void load_shops args((AREA_DATA * tarea, FILE *fp));
-void load_repairs args((AREA_DATA * tarea, FILE *fp));
-void load_specials args((AREA_DATA * tarea, FILE *fp));
-void load_ranges args((AREA_DATA * tarea, FILE *fp));
-void load_buildlist args((void));
-bool load_systemdata args((SYSTEM_DATA * sys));
-void load_banlist args((void));
-void initialize_economy args((void));
+void boot_log(const char *str, ...);
+void load_area(FILE *fp);
+void load_author(AREA_DATA *tarea, FILE *fp);
+void load_economy(AREA_DATA *tarea, FILE *fp);
+void load_resetmsg(AREA_DATA *tarea, FILE *fp); /* Rennard */
+void load_flags(AREA_DATA *tarea, FILE *fp);
+void load_helps(AREA_DATA *tarea, FILE *fp);
+void load_mobiles(AREA_DATA *tarea, FILE *fp);
+void load_objects(AREA_DATA *tarea, FILE *fp);
+void load_resets(AREA_DATA *tarea, FILE *fp);
+void load_rooms(AREA_DATA *tarea, FILE *fp);
+void load_shops(AREA_DATA *tarea, FILE *fp);
+void load_repairs(AREA_DATA *tarea, FILE *fp);
+void load_specials(AREA_DATA *tarea, FILE *fp);
+void load_ranges(AREA_DATA *tarea, FILE *fp);
+void load_buildlist(void);
+bool load_systemdata(SYSTEM_DATA *sys);
+void load_banlist(void);
+void initialize_economy(void);
 
-void fix_exits args((void));
+void fix_exits(void);
 
 /*
  * External booting function
  */
-void load_corpses args((void));
-void renumber_put_resets args((ROOM_INDEX_DATA * room));
-void wipe_resets args((ROOM_INDEX_DATA * room));
+void load_corpses(void);
+void renumber_put_resets(ROOM_INDEX_DATA *room);
+void wipe_resets(ROOM_INDEX_DATA *room);
 
 /*
  * MUDprogram locals
  */
 
-int mprog_name_to_type args((char *name));
-MPROG_DATA *mprog_file_read args((char *f, MPROG_DATA *mprg, MOB_INDEX_DATA *pMobIndex));
-/* int 		oprog_name_to_type	args ( ( char* name ) ); */
-MPROG_DATA *oprog_file_read args((char *f, MPROG_DATA *mprg, OBJ_INDEX_DATA *pObjIndex));
-/* int 		rprog_name_to_type	args ( ( char* name ) ); */
-MPROG_DATA *rprog_file_read args((char *f, MPROG_DATA *mprg, ROOM_INDEX_DATA *pRoomIndex));
-void load_mudprogs args((AREA_DATA * tarea, FILE *fp));
-void load_objprogs args((AREA_DATA * tarea, FILE *fp));
-void load_roomprogs args((AREA_DATA * tarea, FILE *fp));
-void mprog_read_programs args((FILE * fp, MOB_INDEX_DATA *pMobIndex));
-void oprog_read_programs args((FILE * fp, OBJ_INDEX_DATA *pObjIndex));
-void rprog_read_programs args((FILE * fp, ROOM_INDEX_DATA *pRoomIndex));
+int mprog_name_to_type(char *name);
+MPROG_DATA *mprog_file_read(char *f, MPROG_DATA *mprg, MOB_INDEX_DATA *pMobIndex);
+/* int 		oprog_name_to_type	( char* name ); */
+MPROG_DATA *oprog_file_read(char *f, MPROG_DATA *mprg, OBJ_INDEX_DATA *pObjIndex);
+/* int 		rprog_name_to_type	( char* name ); */
+MPROG_DATA *rprog_file_read(char *f, MPROG_DATA *mprg, ROOM_INDEX_DATA *pRoomIndex);
+void load_mudprogs(AREA_DATA *tarea, FILE *fp);
+void load_objprogs(AREA_DATA *tarea, FILE *fp);
+void load_roomprogs(AREA_DATA *tarea, FILE *fp);
+void mprog_read_programs(FILE *fp, MOB_INDEX_DATA *pMobIndex);
+void oprog_read_programs(FILE *fp, OBJ_INDEX_DATA *pObjIndex);
+void rprog_read_programs(FILE *fp, ROOM_INDEX_DATA *pRoomIndex);
 
 void shutdown_mud(char const *reason)
 {

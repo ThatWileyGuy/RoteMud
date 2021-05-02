@@ -52,29 +52,29 @@ extern int ppl_challenged;
 extern int num_in_arena();
 
 /* from swskills.c */
-void add_reinforcements args((CHAR_DATA * ch));
+void add_reinforcements(CHAR_DATA *ch);
 
 /*ships.c*/
-void make_random_marketlist args((void));
+void make_random_marketlist(void);
 
 /*
  * Local functions.
  */
-int hit_gain args((CHAR_DATA * ch));
-int mana_gain args((CHAR_DATA * ch));
-int move_gain args((CHAR_DATA * ch));
-void gain_addiction args((CHAR_DATA * ch));
-void mobile_update args((void));
-void weather_update args((void));
-void update_taxes args((void));
-void char_update args((void));
-void obj_update args((void));
-void aggr_update args((void));
-void room_act_update args((void));
-void obj_act_update args((void));
-void char_check args((void));
-void drunk_randoms args((CHAR_DATA * ch));
-void halucinations args((CHAR_DATA * ch));
+int hit_gain(CHAR_DATA *ch);
+int mana_gain(CHAR_DATA *ch);
+int move_gain(CHAR_DATA *ch);
+void gain_addiction(CHAR_DATA *ch);
+void mobile_update(void);
+void weather_update(void);
+void update_taxes(void);
+void char_update(void);
+void obj_update(void);
+void aggr_update(void);
+void room_act_update(void);
+void obj_act_update(void);
+void char_check(void);
+void drunk_randoms(CHAR_DATA *ch);
+void halucinations(CHAR_DATA *ch);
 
 /*
  * Global Variables
@@ -2371,7 +2371,7 @@ void aggr_update(void)
 }
 
 /* From interp.c */
-bool check_social args((CHAR_DATA * ch, const char *command, const char *argument));
+bool check_social(CHAR_DATA *ch, const char *command, const char *argument);
 
 /*
  * drunk randoms	- Tricops

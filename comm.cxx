@@ -76,17 +76,17 @@ const char echo_off_str[] = {telnet::IAC, telnet::WILL, telnet::option::ECHO, '\
 const char echo_on_str[] = {telnet::IAC, telnet::WONT, telnet::option::ECHO, '\0'};
 const char go_ahead_str[] = {telnet::IAC, telnet::GA, '\0'};
 
-void save_sysdata args((SYSTEM_DATA sys));
-void write_ship_list args((void));
-void arms args((DESCRIPTOR_DATA * d, char *argument));
-void send_main_mail_menu args((DESCRIPTOR_DATA * d));
+void save_sysdata(SYSTEM_DATA sys);
+void write_ship_list(void);
+void arms(DESCRIPTOR_DATA *d, char *argument);
+void send_main_mail_menu(DESCRIPTOR_DATA *d);
 /*  from act_info?  */
 void show_condition(CHAR_DATA *ch, CHAR_DATA *victim);
 void generate_com_freq(CHAR_DATA *ch);
 
 // planets.c
 
-void write_planet_list args((void));
+void write_planet_list(void);
 
 /*
  * Global variables.
@@ -111,8 +111,8 @@ std::optional<boost::asio::ip::tcp::acceptor> control; /* Controlling descriptor
 /*
  * OS-dependent local functions.
  */
-void game_loop args(());
-boost::asio::ip::tcp::acceptor init_socket args((int port));
+void game_loop();
+boost::asio::ip::tcp::acceptor init_socket(int port);
 void handle_new_socket(const boost::system::error_code &error);
 void handle_descriptor_error(DESCRIPTOR_DATA *d, const boost::system::error_code &error);
 void handle_descriptor_read(DESCRIPTOR_DATA *d, size_t read);
@@ -120,23 +120,23 @@ void handle_descriptor_read(DESCRIPTOR_DATA *d, size_t read);
 /*
  * Other local functions (OS-independent).
  */
-bool check_parse_name args((char *name));
-bool check_reconnect args((DESCRIPTOR_DATA * d, char *name, bool fConn));
-bool check_playing args((DESCRIPTOR_DATA * d, char *name, bool kick));
-bool check_multi args((DESCRIPTOR_DATA * d, char *name));
-int main args((int argc, char **argv));
-void nanny args((DESCRIPTOR_DATA * d, char *argument));
-void flush_buffer args((DESCRIPTOR_DATA * d, bool fPrompt));
-void read_from_buffer args((DESCRIPTOR_DATA * d));
-void stop_idling args((CHAR_DATA * ch));
-void free_desc args((DESCRIPTOR_DATA * d));
-void display_prompt args((DESCRIPTOR_DATA * d));
-int make_color_sequence args((const char *col, char *buf, DESCRIPTOR_DATA *d));
-int make_color_sequence_desc args((const char *col, char *buf, DESCRIPTOR_DATA *d));
-void set_pager_input args((DESCRIPTOR_DATA * d, char *argument));
-void pager_output args((DESCRIPTOR_DATA * d));
+bool check_parse_name(char *name);
+bool check_reconnect(DESCRIPTOR_DATA *d, char *name, bool fConn);
+bool check_playing(DESCRIPTOR_DATA *d, char *name, bool kick);
+bool check_multi(DESCRIPTOR_DATA *d, char *name);
+int main(int argc, char **argv);
+void nanny(DESCRIPTOR_DATA *d, char *argument);
+void flush_buffer(DESCRIPTOR_DATA *d, bool fPrompt);
+void read_from_buffer(DESCRIPTOR_DATA *d);
+void stop_idling(CHAR_DATA *ch);
+void free_desc(DESCRIPTOR_DATA *d);
+void display_prompt(DESCRIPTOR_DATA *d);
+int make_color_sequence(const char *col, char *buf, DESCRIPTOR_DATA *d);
+int make_color_sequence_desc(const char *col, char *buf, DESCRIPTOR_DATA *d);
+void set_pager_input(DESCRIPTOR_DATA *d, char *argument);
+void pager_output(DESCRIPTOR_DATA *d);
 
-void mail_count args((CHAR_DATA * ch));
+void mail_count(CHAR_DATA *ch);
 
 std::unique_ptr<boost::asio::ip::tcp::socket> new_socket;
 
@@ -1049,7 +1049,7 @@ void write_to_buffer(DESCRIPTOR_DATA *d, std::string_view string)
     return;
 }
 
-void write_to_buffer(DESCRIPTOR_DATA *d, const char* string, size_t length)
+void write_to_buffer(DESCRIPTOR_DATA *d, const char *string, size_t length)
 {
     if (length <= 0)
     {

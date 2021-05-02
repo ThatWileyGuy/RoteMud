@@ -68,7 +68,7 @@ bool check_illegal_psteal(CHAR_DATA *ch, CHAR_DATA *victim);
 /* from magic.c */
 void failed_casting(SKILL_TYPE *skill, CHAR_DATA *ch, CHAR_DATA *victim, OBJ_DATA *obj);
 
-int xp_compute args((CHAR_DATA * gch, CHAR_DATA *victim));
+int xp_compute(CHAR_DATA *gch, CHAR_DATA *victim);
 
 ROOM_INDEX_DATA *generate_exit(ROOM_INDEX_DATA *in_room, EXIT_DATA **pexit);
 
@@ -3562,7 +3562,7 @@ void do_berserk(CHAR_DATA *ch, char *argument)
 }
 
 /* External from fight.c */
-ch_ret one_hit args((CHAR_DATA * ch, CHAR_DATA *victim, int dt));
+ch_ret one_hit(CHAR_DATA *ch, CHAR_DATA *victim, int dt);
 void do_hitall(CHAR_DATA *ch, char *argument)
 {
     CHAR_DATA *vch;
