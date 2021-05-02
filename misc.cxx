@@ -2185,7 +2185,7 @@ void do_smoke(CHAR_DATA *ch, char *argument)
         if (IS_VALID_HERB(pipe->value[2]) && pipe->value[2] < top_herb)
         {
             int sn = pipe->value[2] + TYPE_HERB;
-            SKILLTYPE *skill = get_skilltype(sn);
+            SKILL_TYPE *skill = get_skilltype(sn);
 
             WAIT_STATE(ch, skill->beats);
             if (skill->spell_fun)

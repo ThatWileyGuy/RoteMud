@@ -59,14 +59,9 @@
  ****************************************************************************/
 
 /* Capability to create, edit and delete slaytypes added to original code by Samson 8-3-98 */
-
-typedef struct slay_data SLAY_DATA;
-
-extern SLAY_DATA *first_slay;
-extern SLAY_DATA *last_slay;
-
 /* Improved data structure for online slay editing - Samson 8-3-98 */
-struct slay_data
+
+struct SLAY_DATA
 {
     SLAY_DATA *next;
     SLAY_DATA *prev;
@@ -77,6 +72,9 @@ struct slay_data
     char *vmsg;
     char *rmsg;
 };
+
+extern SLAY_DATA *first_slay;
+extern SLAY_DATA *last_slay;
 
 #define SLAY_FILE SYSTEM_DIR "slay.dat" /* Slay data file for online editing - Samson 8-3-98 */
 

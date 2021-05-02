@@ -53,9 +53,9 @@
 
 #define STR_HASH_SIZE 1024
 
-struct hashstr_data
+struct HASHSTR_DATA
 {
-    struct hashstr_data *next; /* next hash element */
+    HASHSTR_DATA *next; /* next hash element */
     unsigned short int links;  /* number of links to this string */
     unsigned short int length; /* length of string */
 };
@@ -66,7 +66,7 @@ int str_free(char *str);
 void show_hash(int count);
 char *hash_stats(void);
 
-struct hashstr_data *string_hash[STR_HASH_SIZE];
+HASHSTR_DATA *string_hash[STR_HASH_SIZE];
 
 /*
  * Check hash table for existing occurance of string.
@@ -76,10 +76,10 @@ struct hashstr_data *string_hash[STR_HASH_SIZE];
 char *str_alloc(char const *str)
 {
     int len, hash, psize;
-    struct hashstr_data *ptr;
+    HASHSTR_DATA *ptr;
 
     len = strlen(str);
-    psize = sizeof(struct hashstr_data);
+    psize = sizeof(HASHSTR_DATA);
     hash = len % STR_HASH_SIZE;
     for (ptr = string_hash[hash]; ptr; ptr = ptr->next)
         if (len == ptr->length && !strcmp(str, (char *)ptr + psize))
@@ -88,7 +88,7 @@ char *str_alloc(char const *str)
                 ++ptr->links;
             return (char *)ptr + psize;
         }
-    ptr = (struct hashstr_data *)malloc(len + psize + 1);
+    ptr = (HASHSTR_DATA *)malloc(len + psize + 1);
     ptr->links = 1;
     ptr->length = len;
     if (len)
@@ -108,9 +108,9 @@ char *str_alloc(char const *str)
  */
 char *quick_link(char *str)
 {
-    struct hashstr_data *ptr;
+    HASHSTR_DATA *ptr;
 
-    ptr = (struct hashstr_data *)(str - sizeof(struct hashstr_data));
+    ptr = (HASHSTR_DATA *)(str - sizeof(HASHSTR_DATA));
     if (ptr->links == 0)
     {
         fprintf(stderr, "quick_link: bad pointer\n");
@@ -130,10 +130,10 @@ char *quick_link(char *str)
 int str_free(char *str)
 {
     int len, hash;
-    struct hashstr_data *ptr, *ptr2, *ptr2_next;
+    HASHSTR_DATA *ptr, *ptr2, *ptr2_next;
     len = strlen(str);
     hash = len % STR_HASH_SIZE;
-    ptr = (struct hashstr_data *)(str - sizeof(struct hashstr_data));
+    ptr = (HASHSTR_DATA *)(str - sizeof(HASHSTR_DATA));
     if (ptr->links == 65535) /* permanent */
         return ptr->links;
     if (ptr->links == 0)
@@ -167,7 +167,7 @@ int str_free(char *str)
 
 void show_hash(int count)
 {
-    struct hashstr_data *ptr;
+    HASHSTR_DATA *ptr;
     int x, c;
 
     for (x = 0; x < count; x++)
@@ -181,7 +181,7 @@ void show_hash(int count)
 
 void hash_dump(int hash)
 {
-    struct hashstr_data *ptr;
+    HASHSTR_DATA *ptr;
     char *str;
     int c, psize;
 
@@ -190,7 +190,7 @@ void hash_dump(int hash)
         fprintf(stderr, "hash_dump: invalid hash size\n\r");
         return;
     }
-    psize = sizeof(struct hashstr_data);
+    psize = sizeof(HASHSTR_DATA);
     for (c = 0, ptr = string_hash[hash]; ptr; ptr = ptr->next, c++)
     {
         str = ((char *)ptr) + psize;
@@ -203,11 +203,11 @@ char *check_hash(char *str)
 {
     static char buf[1024];
     int len, hash, psize, p, c;
-    struct hashstr_data *ptr, *fnd;
+    HASHSTR_DATA *ptr, *fnd;
 
     buf[0] = '\0';
     len = strlen(str);
-    psize = sizeof(struct hashstr_data);
+    psize = sizeof(HASHSTR_DATA);
     hash = len % STR_HASH_SIZE;
     for (fnd = NULL, ptr = string_hash[hash], c = 0; ptr; ptr = ptr->next, c++)
         if (len == ptr->length && !strcmp(str, (char *)ptr + psize))
@@ -226,7 +226,7 @@ char *check_hash(char *str)
 char *hash_stats(void)
 {
     static char buf[1024];
-    struct hashstr_data *ptr;
+    HASHSTR_DATA *ptr;
     int x, c, total, totlinks, unique, bytesused, wouldhave, hilink;
 
     totlinks = unique = total = bytesused = wouldhave = hilink = 0;
@@ -240,8 +240,8 @@ char *hash_stats(void)
             if (ptr->links > hilink)
                 hilink = ptr->links;
             totlinks += ptr->links;
-            bytesused += (ptr->length + 1 + sizeof(struct hashstr_data));
-            wouldhave += (sizeof(struct hashstr_data) + (ptr->links * (ptr->length + 1)));
+            bytesused += (ptr->length + 1 + sizeof(HASHSTR_DATA));
+            wouldhave += (sizeof(HASHSTR_DATA) + (ptr->links * (ptr->length + 1)));
         }
     }
     sprintf_s(buf,
@@ -253,11 +253,11 @@ char *hash_stats(void)
 
 void show_high_hash(int top)
 {
-    struct hashstr_data *ptr;
+    HASHSTR_DATA *ptr;
     int x, psize;
     char *str;
 
-    psize = sizeof(struct hashstr_data);
+    psize = sizeof(HASHSTR_DATA);
     for (x = 0; x < STR_HASH_SIZE; x++)
         for (ptr = string_hash[x]; ptr; ptr = ptr->next)
             if (ptr->links >= top)
@@ -270,10 +270,10 @@ void show_high_hash(int top)
 bool in_hash_table(char *str)
 {
     int len, hash, psize;
-    struct hashstr_data *ptr;
+    HASHSTR_DATA *ptr;
 
     len = strlen(str);
-    psize = sizeof(struct hashstr_data);
+    psize = sizeof(HASHSTR_DATA);
     hash = len % STR_HASH_SIZE;
     for (ptr = string_hash[hash]; ptr; ptr = ptr->next)
         if (len == ptr->length && str == ((char *)ptr + psize))

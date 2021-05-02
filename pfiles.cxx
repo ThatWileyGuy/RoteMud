@@ -70,8 +70,8 @@
 time_t pfile_time;
 HOUR_MIN_SEC set_pfile_time_struct;
 HOUR_MIN_SEC *set_pfile_time;
-struct tm *new_pfile_time;
-struct tm new_pfile_struct;
+tm *new_pfile_time;
+tm new_pfile_struct;
 time_t new_pfile_time_t;
 short num_pfiles; /* Count up number of pfiles */
 sh_int jcount, scount;

@@ -74,7 +74,7 @@ int get_color(char *argument); /* function proto */
 
 char reboot_time[50];
 time_t new_boot_time_t;
-extern struct tm new_boot_struct;
+extern tm new_boot_struct;
 extern OBJ_INDEX_DATA *obj_index_hash[MAX_KEY_HASH];
 extern MOB_INDEX_DATA *mob_index_hash[MAX_KEY_HASH];
 extern ROOM_INDEX_DATA *room_index_hash[MAX_KEY_HASH];
@@ -1204,7 +1204,7 @@ void do_mstat(CHAR_DATA *ch, char *argument)
     char langbuf[MAX_STRING_LENGTH];
     AFFECT_DATA *paf;
     CHAR_DATA *victim;
-    SKILLTYPE *skill;
+    SKILL_TYPE *skill;
     int x, ability;
 
     set_char_color(AT_PLAIN, ch);
@@ -1404,7 +1404,7 @@ void do_oldmstat(CHAR_DATA *ch, char *argument)
     char arg[MAX_INPUT_LENGTH];
     AFFECT_DATA *paf;
     CHAR_DATA *victim;
-    SKILLTYPE *skill;
+    SKILL_TYPE *skill;
     int x;
 
     set_char_color(AT_PLAIN, ch);
@@ -4323,7 +4323,7 @@ void do_bestow(CHAR_DATA *ch, char *argument)
     send_to_char("Done.\n\r", ch);
 }
 
-struct tm *update_time(struct tm *old_time)
+tm *update_time(tm *old_time)
 {
     time_t time;
 
@@ -4353,7 +4353,7 @@ void do_set_boot_time(CHAR_DATA *ch, char *argument)
 
     if (!str_cmp(arg, "time"))
     {
-        struct tm *now_time;
+        tm *now_time;
 
         argument = one_argument(argument, arg);
         argument = one_argument(argument, arg1);
@@ -5251,7 +5251,7 @@ void do_hell(CHAR_DATA *ch, char *argument)
     char arg[MAX_INPUT_LENGTH];
     sh_int time;
     bool h_d = FALSE;
-    struct tm *tms;
+    tm *tms;
 
     argument = one_argument(argument, arg);
     if (!*arg)
@@ -6078,7 +6078,7 @@ void do_restorefile(CHAR_DATA *ch, char *argument)
     char buf2[MAX_STRING_LENGTH];
     char fname[MAX_STRING_LENGTH];
     char arg[MAX_INPUT_LENGTH];
-    struct stat fst;
+    struct stat fst = {};
 
     one_argument(argument, arg);
 
@@ -6215,7 +6215,7 @@ void do_fslay(CHAR_DATA *ch, char *argument)
 
 void ostat_plus(CHAR_DATA *ch, OBJ_DATA *obj)
 {
-    SKILLTYPE *sktmp;
+    SKILL_TYPE *sktmp;
     int dam;
     char buf[MAX_STRING_LENGTH];
     int x;

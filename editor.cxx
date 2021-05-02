@@ -59,8 +59,6 @@
  * Data types and other definitions
  */
 
-typedef struct editor_line EDITOR_LINE;
-
 #define CHAR_BLOCK (80)
 
 #define BLOCK_ROUNDUP(size) (((size) + CHAR_BLOCK - 1) / CHAR_BLOCK * CHAR_BLOCK)
@@ -76,7 +74,7 @@ typedef struct editor_line EDITOR_LINE;
         (buf_size) += added_size;                                                                                      \
     }
 
-struct editor_line
+struct EDITOR_LINE
 {
     char *line;       /* line text */
     sh_int line_size; /* size allocated in "line" */
@@ -84,7 +82,7 @@ struct editor_line
     EDITOR_LINE *next;
 };
 
-struct editor_data
+struct EDITOR_DATA
 {
     EDITOR_LINE *first_line; /* list of lines */
     sh_int line_count;       /* number of lines allocated */

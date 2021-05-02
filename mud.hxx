@@ -161,73 +161,25 @@ typedef short int sh_int;
 /*
  * Structure types.
  */
-typedef struct affect_data AFFECT_DATA;
-typedef struct area_data AREA_DATA;
-typedef struct auction_data AUCTION_DATA; /* auction data */
-typedef struct ban_data BAN_DATA;
-typedef struct extracted_char_data EXTRACT_CHAR_DATA;
-typedef struct bug_data BUG_DATA;
-typedef struct contract_data CONTRACT_DATA;
-typedef struct fellow_data FELLOW_DATA;
-typedef struct char_data CHAR_DATA;
-typedef struct hunt_hate_fear HHF_DATA;
-typedef struct fighting_data FIGHT_DATA;
-typedef struct descriptor_data DESCRIPTOR_DATA;
-typedef struct exit_data EXIT_DATA;
-typedef struct extra_descr_data EXTRA_DESCR_DATA;
-typedef struct help_data HELP_DATA;
-typedef struct menu_data MENU_DATA;
-typedef struct mob_index_data MOB_INDEX_DATA;
-typedef struct note_data NOTE_DATA;
-typedef struct comment_data COMMENT_DATA;
-typedef struct board_data BOARD_DATA;
-typedef struct obj_data OBJ_DATA;
-typedef struct obj_index_data OBJ_INDEX_DATA;
-typedef struct pc_data PC_DATA;
-typedef struct reset_data RESET_DATA;
-typedef struct map_index_data MAP_INDEX_DATA; /* maps */
-typedef struct map_data MAP_DATA;             /* maps */
-typedef struct room_index_data ROOM_INDEX_DATA;
-typedef struct shop_data SHOP_DATA;
-typedef struct repairshop_data REPAIR_DATA;
-typedef struct time_info_data TIME_INFO_DATA;
-typedef struct hour_min_sec HOUR_MIN_SEC;
-typedef struct weather_data WEATHER_DATA;
-typedef struct bounty_data BOUNTY_DATA;
-typedef struct blackmarket_data BMARKET_DATA;
-typedef struct cargo_data CARGO_DATA;
-typedef struct planet_data PLANET_DATA;
-typedef struct storeroom STOREROOM;
-typedef struct guard_data GUARD_DATA;
-typedef struct space_data SPACE_DATA;
-typedef struct clan_data CLAN_DATA;
-typedef struct senate_data SENATE_DATA;
-typedef struct ship_data SHIP_DATA;
-typedef struct module_data MODULE_DATA;
-typedef struct hanger_data HANGER_DATA;
-typedef struct turret_data TURRET_DATA;
-typedef struct ship_prototype_data SHIP_PROTOTYPE;
-typedef struct missile_data MISSILE_DATA;
-typedef struct tourney_data TOURNEY_DATA;
-typedef struct mob_prog_data MPROG_DATA;
-typedef struct mob_prog_act_list MPROG_ACT_LIST;
-typedef struct mpsleep_data MPSLEEP_DATA;
-typedef struct editor_data EDITOR_DATA;
-typedef struct teleport_data TELEPORT_DATA;
-typedef struct timer_data TIMER;
-typedef struct godlist_data GOD_DATA;
-typedef struct system_data SYSTEM_DATA;
-typedef struct smaug_affect SMAUG_AFF;
-typedef struct who_data WHO_DATA;
-typedef struct skill_type SKILLTYPE;
-typedef struct social_type SOCIALTYPE;
-typedef struct cmd_type CMDTYPE;
-typedef struct killed_data KILLED_DATA;
-typedef struct changes_data CHANGE_DATA;
-typedef struct wizent WIZENT;
-typedef struct member_data MEMBER_DATA; /* Individual member data */
-typedef struct member_list MEMBER_LIST; /* List of members in clan */
-typedef struct membersort_data MS_DATA; /* List for sorted roster list */
+struct AREA_DATA;
+struct BUG_DATA;
+struct CHAR_DATA;
+struct CLAN_DATA;
+struct CONTRACT_DATA;
+struct EDITOR_DATA;
+struct FELLOW_DATA;
+struct GUARD_DATA;
+struct HHF_DATA;
+struct HOUR_MIN_SEC;
+struct MAP_DATA;
+struct MISSILE_DATA;
+struct OBJ_DATA;
+struct PC_DATA;
+struct ROOM_INDEX_DATA;
+struct SKILL_TYPE;
+struct SHIP_DATA;
+struct SHIP_PROTOTYPE;
+struct SPACE_DATA;
 
 /*
  * Function types.
@@ -464,9 +416,7 @@ typedef enum
 
 #define MAX_FORCE_SKILL 24
 
-typedef struct force_skills_struct FORCE_SKILL;
-
-struct force_skills_struct
+struct FORCE_SKILL
 {
     int type;
     int index;
@@ -495,9 +445,7 @@ extern FORCE_SKILL *last_force_skill;
 #define MAX_FORCE_ALIGN 100
 #define MIN_FORCE_ALIGN -100
 
-typedef struct force_help_struct FORCE_HELP;
-
-struct force_help_struct
+struct FORCE_HELP
 {
     char *name;
     int status;
@@ -527,7 +475,7 @@ extern FORCE_HELP *last_force_help;
 /*
  * do_who output structure -- Narn
  */
-struct who_data
+struct WHO_DATA
 {
     WHO_DATA *prev;
     WHO_DATA *next;
@@ -538,7 +486,7 @@ struct who_data
 /*
  * Site ban structure.
  */
-struct ban_data
+struct BAN_DATA
 {
     BAN_DATA *next;
     BAN_DATA *prev;
@@ -566,7 +514,7 @@ typedef enum
     SKY_LIGHTNING
 } sky_conditions;
 
-struct time_info_data
+struct TIME_INFO_DATA
 {
     int hour;
     int day;
@@ -574,7 +522,7 @@ struct time_info_data
     int year;
 };
 
-struct hour_min_sec
+struct HOUR_MIN_SEC
 {
     int hour;
     int min;
@@ -582,7 +530,7 @@ struct hour_min_sec
     int manual;
 };
 
-struct weather_data
+struct WEATHER_DATA
 {
     int mmhg;
     int change;
@@ -593,7 +541,7 @@ struct weather_data
 /*
  * Structure used to build wizlist
  */
-struct wizent
+struct WIZENT
 {
     WIZENT *next;
     WIZENT *last;
@@ -699,7 +647,7 @@ typedef enum
 /*
  * Descriptor (channel) structure.
  */
-struct descriptor_data
+struct DESCRIPTOR_DATA
 {
     DESCRIPTOR_DATA *next;
     DESCRIPTOR_DATA *prev;
@@ -744,7 +692,7 @@ struct descriptor_data
 /*
  * Attribute bonus structures.
  */
-struct str_app_type
+struct STR_APP_TYPE
 {
     sh_int tohit;
     sh_int todam;
@@ -752,38 +700,38 @@ struct str_app_type
     sh_int wield;
 };
 
-struct int_app_type
+struct INT_APP_TYPE
 {
     sh_int learn;
 };
 
-struct wis_app_type
+struct WIS_APP_TYPE
 {
     sh_int practice;
 };
 
-struct dex_app_type
+struct DEX_APP_TYPE
 {
     sh_int defensive;
 };
 
-struct con_app_type
+struct CON_APP_TYPE
 {
     sh_int hitp;
     sh_int shock;
 };
 
-struct cha_app_type
+struct CHA_APP_TYPE
 {
     sh_int charm;
 };
 
-struct lck_app_type
+struct LCK_APP_TYPE
 {
     sh_int luck;
 };
 
-struct frc_app_type
+struct FRC_APP_TYPE
 {
     sh_int force;
 };
@@ -905,7 +853,7 @@ struct frc_app_type
 /*
  * Help table types.
  */
-struct help_data
+struct HELP_DATA
 {
     HELP_DATA *next;
     HELP_DATA *prev;
@@ -919,7 +867,7 @@ struct help_data
  */
 #define MAX_TRADE 5
 
-struct shop_data
+struct SHOP_DATA
 {
     SHOP_DATA *next;            /* Next shop in list		*/
     SHOP_DATA *prev;            /* Previous shop in list	*/
@@ -935,7 +883,7 @@ struct shop_data
 #define SHOP_FIX 1
 #define SHOP_RECHARGE 2
 
-struct repairshop_data
+struct REPAIR_DATA
 {
     REPAIR_DATA *next;        /* Next shop in list		*/
     REPAIR_DATA *prev;        /* Previous shop in list	*/
@@ -959,13 +907,13 @@ struct repairshop_data
 
 #define MAX_PROG_NEST 20
 
-struct act_prog_data
+struct ACT_PROG_DATA
 {
-    struct act_prog_data *next;
+    ACT_PROG_DATA *next;
     void *vo;
 };
 
-struct mob_prog_act_list
+struct MPROG_ACT_LIST
 {
     MPROG_ACT_LIST *next;
     char *buf;
@@ -974,7 +922,7 @@ struct mob_prog_act_list
     void *vo;
 };
 
-struct mob_prog_data
+struct MPROG_DATA
 {
     MPROG_DATA *next;
     int type;
@@ -991,7 +939,8 @@ typedef enum
     MP_ROOM,
     MP_OBJ
 } mp_types;
-struct mpsleep_data
+
+struct MPSLEEP_DATA
 {
     MPSLEEP_DATA *next;
     MPSLEEP_DATA *prev;
@@ -1017,7 +966,7 @@ struct mpsleep_data
 extern bool MOBtrigger;
 
 /* race dedicated stuff */
-struct race_type
+struct RACE_TYPE
 {
     char race_name[16]; /* Race name			*/
     int affected;       /* Default affect bitvectors	*/
@@ -1131,7 +1080,7 @@ typedef enum
 #define CARGO_PRODUCTS 7
 #define CARGO_MAX 8
 
-struct planet_data
+struct PLANET_DATA
 {
     PLANET_DATA *next;
     PLANET_DATA *prev;
@@ -1166,7 +1115,7 @@ struct planet_data
     int controls;
 };
 
-struct cargo_data
+struct CARGO_DATA
 {
     int cargo0;
     int cargo1;
@@ -1201,7 +1150,7 @@ struct cargo_data
     bool smug;
 };
 
-struct space_data
+struct SPACE_DATA
 {
     SPACE_DATA *next;
     SPACE_DATA *prev;
@@ -1272,7 +1221,7 @@ struct space_data
     int crash;
 };
 
-struct bounty_data
+struct BOUNTY_DATA
 {
     BOUNTY_DATA *next;
     BOUNTY_DATA *prev;
@@ -1280,7 +1229,7 @@ struct bounty_data
     long int amount;
 };
 
-struct blackmarket_data
+struct BMARKET_DATA
 {
     BMARKET_DATA *next;
     BMARKET_DATA *prev;
@@ -1288,7 +1237,7 @@ struct blackmarket_data
     int quantity;
 };
 
-struct guard_data
+struct GUARD_DATA
 {
     GUARD_DATA *next;
     GUARD_DATA *prev;
@@ -1299,7 +1248,7 @@ struct guard_data
     PLANET_DATA *planet;
 };
 
-struct senate_data
+struct SENATE_DATA
 {
     SENATE_DATA *next;
     SENATE_DATA *prev;
@@ -1308,7 +1257,7 @@ struct senate_data
 
 #define PLANET_NOCAPTURE BV00
 
-struct clan_data
+struct CLAN_DATA
 {
     CLAN_DATA *next; /* next clan in list			*/
     CLAN_DATA *prev; /* previous clan in list		*/
@@ -1350,59 +1299,7 @@ struct clan_data
     char *tmpstr;
 };
 
-struct ship_prototype_data
-{
-    SHIP_PROTOTYPE *next;
-    SHIP_PROTOTYPE *prev;
-    char *filename;
-    char *name;
-    char *description;
-    sh_int clazz;
-    sh_int model;
-    sh_int hyperspeed;
-    sh_int realspeed;
-    sh_int maxbombs;
-    sh_int maxmissiles;
-    sh_int maxtorpedos;
-    sh_int maxrockets;
-    int max_modules; // This is used to set what the maximum number of upgrade modules is. If none is set 10 is.
-    sh_int lasers;
-    CLAN_DATA *clan; // This is used to limit certain prototypes to a specific clan.
-    sh_int tractorbeam;
-    sh_int manuever;
-    int weight;
-    int maxenergy;
-    int maxshield;
-    int maxhull;
-    sh_int maxchaff;
-    sh_int maxmods;
-    int upengint;
-    int upengmax;
-    int upengcost;
-    int hyperinstallable;
-    int hypercost;
-    int uphullint;
-    int uphullmax;
-    int uphullcost;
-    int uppcountmax;
-    int uppcountcost;
-    int upptypemax;
-    int upptypecost;
-    int upscountmax;
-    int upscountcost;
-    int upstypemax;
-    int upstypecost;
-    int tractorinstallable;
-    int tractorcost;
-    int upshieldmax;
-    int upshieldint;
-    int upshieldcost;
-    int upenergymax;
-    int upenergyint;
-    int upenergycost;
-};
-
-struct turret_data
+struct TURRET_DATA
 {
     TURRET_DATA *next;
     TURRET_DATA *prev;
@@ -1411,7 +1308,7 @@ struct turret_data
     sh_int laserstate;
 };
 
-struct hanger_data
+struct HANGER_DATA
 {
     HANGER_DATA *next;
     HANGER_DATA *prev;
@@ -1420,14 +1317,14 @@ struct hanger_data
     int type;
 };
 
-struct module_data
+struct MODULE_DATA
 {
     MODULE_DATA *next;
     MODULE_DATA *prev;
     int affect;  // What item is it going to affect.
     int ammount; // How much is it going to affect it.
 };
-struct ship_data
+struct SHIP_DATA
 {
     SHIP_DATA *next;
     SHIP_DATA *prev;
@@ -1620,7 +1517,7 @@ struct ship_data
     int cargotype;
 };
 
-struct missile_data
+struct MISSILE_DATA
 {
     MISSILE_DATA *next;
     MISSILE_DATA *prev;
@@ -1636,7 +1533,7 @@ struct missile_data
     int mx, my, mz;
 };
 
-struct tourney_data
+struct TOURNEY_DATA
 {
     int open;
     int low_level;
@@ -1646,7 +1543,7 @@ struct tourney_data
 /*
  * Data structure for notes.
  */
-struct note_data
+struct NOTE_DATA
 {
     NOTE_DATA *next;
     NOTE_DATA *prev;
@@ -1661,7 +1558,7 @@ struct note_data
     char *text;
 };
 
-struct board_data
+struct BOARD_DATA
 {
     BOARD_DATA *next;        /* Next board in list		   */
     BOARD_DATA *prev;        /* Previous board in list	   */
@@ -1684,7 +1581,7 @@ struct board_data
 /*
  * An affect.
  */
-struct affect_data
+struct AFFECT_DATA // TODO effect?
 {
     AFFECT_DATA *next;
     AFFECT_DATA *prev;
@@ -1698,7 +1595,7 @@ struct affect_data
 /*
  * A SMAUG spell
  */
-struct smaug_affect
+struct SMAUG_AFF
 {
     SMAUG_AFF *next;
     char *duration;
@@ -2915,7 +2812,7 @@ typedef enum
     TIMER_PKILLED
 } timer_types;
 
-struct timer_data
+struct TIMER
 {
     TIMER *prev;
     TIMER *next;
@@ -2974,7 +2871,7 @@ struct timer_data
  * Prototype for a mob.
  * This is the in-memory version of #MOBILES.
  */
-struct mob_index_data
+struct MOB_INDEX_DATA
 {
     MOB_INDEX_DATA *next;
     MOB_INDEX_DATA *next_sort;
@@ -3038,13 +2935,14 @@ struct mob_index_data
     int vip_flags;
 };
 
-struct hunt_hate_fear
+// hunt-hate-fear data
+struct HHF_DATA
 {
     char *name;
     CHAR_DATA *who;
 };
 
-struct fighting_data
+struct FIGHT_DATA
 {
     CHAR_DATA *who;
     int xp;
@@ -3053,7 +2951,7 @@ struct fighting_data
     sh_int timeskilled;
 };
 
-struct extracted_char_data
+struct EXTRACT_CHAR_DATA
 {
     EXTRACT_CHAR_DATA *next;
     CHAR_DATA *ch;
@@ -3067,7 +2965,7 @@ struct extracted_char_data
  * (Shouldn't most of that build interface stuff use substate, dest_buf,
  * spare_ptr and tempnum?  Seems a little redundant)
  */
-struct char_data
+struct CHAR_DATA
 {
     CHAR_DATA *next;
     CHAR_DATA *prev;
@@ -3239,29 +3137,28 @@ struct char_data
     CHAR_DATA *aiming_at;
 };
 
-struct killed_data
+struct KILLED_DATA
 {
     int vnum;
     char count;
 };
 
-struct changes_data
+struct CHANGE_DATA
 {
-
     char *change;
     char *coder;
     char *date;
     time_t mudtime;
 };
 
-struct bug_data
+struct BUG_DATA
 {
     char *name;
     BUG_DATA *next_in_bug;
     BUG_DATA *prev_in_bug;
 };
 
-struct contract_data
+struct CONTRACT_DATA
 {
     char *target;
     int amount;
@@ -3269,7 +3166,7 @@ struct contract_data
     CONTRACT_DATA *prev_in_contract;
 };
 
-struct fellow_data
+struct FELLOW_DATA
 {
 
     char *victim;
@@ -3281,7 +3178,7 @@ struct fellow_data
 /*
  * Data which only PC's have.
  */
-struct pc_data
+struct PC_DATA
 {
     CLAN_DATA *clan;
     AREA_DATA *area;
@@ -3337,7 +3234,7 @@ struct pc_data
     char *helled_by;
     char *bio;                    /* Personal Bio */
     char *authed_by;              /* what crazy imm authed this name ;) */
-    SKILLTYPE *special_skills[5]; /* personalized skills/spells */
+    SKILL_TYPE *special_skills[5]; /* personalized skills/spells */
     char *prompt;                 /* User config prompts */
     char *subprompt;              /* Substate prompt */
     sh_int pagerlen;              /* For pager (NOT menus) */
@@ -3357,7 +3254,7 @@ struct pc_data
 #define LIQ_WATER 0
 #define LIQ_MAX 19
 
-struct liq_type
+struct LIQ_TYPE
 {
     const char *liq_name;
     const char *liq_color;
@@ -3367,7 +3264,7 @@ struct liq_type
 /*
  * Extra description data for a room or object.
  */
-struct extra_descr_data
+struct EXTRA_DESCR_DATA
 {
     EXTRA_DESCR_DATA *next; /* Next in list                     */
     EXTRA_DESCR_DATA *prev; /* Previous in list                 */
@@ -3378,7 +3275,7 @@ struct extra_descr_data
 /*
  * Prototype for an object.
  */
-struct obj_index_data
+struct OBJ_INDEX_DATA
 {
     OBJ_INDEX_DATA *next;
     OBJ_INDEX_DATA *next_sort;
@@ -3410,7 +3307,7 @@ struct obj_index_data
 /*
  * One object.
  */
-struct obj_data
+struct OBJ_DATA
 {
     OBJ_DATA *next;
     OBJ_DATA *prev;
@@ -3453,7 +3350,7 @@ struct obj_data
 /*
  * Exit data.
  */
-struct exit_data
+struct EXIT_DATA
 {
     EXIT_DATA *prev;          /* previous exit in linked list	*/
     EXIT_DATA *next;          /* next exit in linked list	*/
@@ -3489,7 +3386,7 @@ struct exit_data
 /*
  * Area-reset definition.
  */
-struct reset_data
+struct RESET_DATA
 {
     RESET_DATA *next;
     RESET_DATA *prev;
@@ -3519,7 +3416,7 @@ struct reset_data
 /*
  * Area definition.
  */
-struct area_data
+struct AREA_DATA
 {
     AREA_DATA *next;
     AREA_DATA *prev;
@@ -3563,7 +3460,7 @@ struct area_data
 /*
  * Load in the gods building data. -- Altrag
  */
-struct godlist_data
+struct GOD_DATA
 {
     GOD_DATA *next;
     GOD_DATA *prev;
@@ -3579,7 +3476,7 @@ struct godlist_data
 /*
  * Used to keep track of system settings and statistics		-Thoric
  */
-struct system_data
+struct SYSTEM_DATA
 {
     int maxplayers;                /* Maximum players this boot   */
     int alltimemax;                /* Maximum players ever	  */
@@ -3623,7 +3520,7 @@ struct system_data
 /*
  * Room type.
  */
-struct room_index_data
+struct ROOM_INDEX_DATA
 {
     ROOM_INDEX_DATA *next;
     ROOM_INDEX_DATA *next_sort;
@@ -3670,7 +3567,7 @@ struct room_index_data
 /*
  * Delayed teleport type.
  */
-struct teleport_data
+struct TELEPORT_DATA
 {
     TELEPORT_DATA *next;
     TELEPORT_DATA *prev;
@@ -3711,7 +3608,7 @@ typedef enum
     SKILL_HERB
 } skill_types;
 
-struct timerset
+struct TIMERSET
 {
     int num_uses;
     std::chrono::steady_clock::duration total_time;
@@ -3722,7 +3619,7 @@ struct timerset
 /*
  * Skills include spells as a particular case.
  */
-struct skill_type
+struct SKILL_TYPE
 {
     char *name;              /* Name of skill		*/
     SPELL_FUN *spell_fun;    /* Spell pointer (for spells)	*/
@@ -3760,11 +3657,11 @@ struct skill_type
     char *components;        /* Spell components, if any	*/
     char *teachers;          /* Skill requires a special teacher */
     char participants;       /* # of required participants	*/
-    struct timerset userec;  /* Usage record			*/
+    TIMERSET userec;  /* Usage record			*/
     int alignment;           /* for jedi powers */
 };
 
-struct auction_data
+struct AUCTION_DATA
 {
     OBJ_DATA *item;    /* a pointer to the item */
     CHAR_DATA *seller; /* a pointer to the seller - which may NOT quit */
@@ -4302,7 +4199,7 @@ extern sh_int gsn_droid;
 /*
  * Structure for a command in the command lookup table.
  */
-struct cmd_type
+struct CMDTYPE
 {
     CMDTYPE *next;
     char *name;
@@ -4312,13 +4209,13 @@ struct cmd_type
     sh_int level;
     sh_int log;
     sh_int ooc;
-    struct timerset userec;
+    TIMERSET userec;
 };
 
 /*
  * Structure for a social in the socials table.
  */
-struct social_type
+struct SOCIALTYPE
 {
     SOCIALTYPE *next;
     char *name;
@@ -4337,19 +4234,19 @@ struct social_type
 extern time_t last_restore_all_time;
 extern time_t boot_time; /* this should be moved down */
 extern HOUR_MIN_SEC *set_boot_time;
-extern struct tm *new_boot_time;
+extern tm *new_boot_time;
 extern time_t new_boot_time_t;
 
-extern const struct str_app_type str_app[26];
-extern const struct int_app_type int_app[26];
-extern const struct wis_app_type wis_app[26];
-extern const struct dex_app_type dex_app[30];
-extern const struct con_app_type con_app[26];
-extern const struct cha_app_type cha_app[26];
-extern const struct lck_app_type lck_app[26];
-extern const struct frc_app_type frc_app[26];
-extern const struct race_type race_table[MAX_RACE];
-extern const struct liq_type liq_table[LIQ_MAX];
+extern const STR_APP_TYPE str_app[26];
+extern const INT_APP_TYPE int_app[26];
+extern const WIS_APP_TYPE wis_app[26];
+extern const DEX_APP_TYPE dex_app[30];
+extern const CON_APP_TYPE con_app[26];
+extern const CHA_APP_TYPE cha_app[26];
+extern const LCK_APP_TYPE lck_app[26];
+extern const FRC_APP_TYPE frc_app[26];
+extern const RACE_TYPE race_table[MAX_RACE];
+extern const LIQ_TYPE liq_table[LIQ_MAX];
 extern const char *attack_table[13];
 extern const char *ability_name[MAX_ABILITY];
 extern const char *height_name[4];
@@ -4402,20 +4299,20 @@ extern MPSLEEP_DATA *current_mpwait; /* - */
 extern int numobjsloaded;
 extern int nummobsloaded;
 extern int physicalobjects;
-extern struct system_data sysdata;
+extern SYSTEM_DATA sysdata;
 extern int top_sn;
 extern int top_vroom;
 extern int top_herb;
 
 extern CMDTYPE *command_hash[126];
 
-extern SKILLTYPE *skill_table[MAX_SKILL];
+extern SKILL_TYPE *skill_table[MAX_SKILL];
 extern SOCIALTYPE *social_index[27];
 extern CHAR_DATA *cur_char;
 extern ROOM_INDEX_DATA *cur_room;
 extern bool cur_char_died;
 extern ch_ret global_retcode;
-extern SKILLTYPE *herb_table[MAX_HERB];
+extern SKILL_TYPE *herb_table[MAX_HERB];
 
 extern int cur_obj;
 extern int cur_obj_serial;
@@ -4445,8 +4342,6 @@ extern GUARD_DATA *first_guard;
 extern GUARD_DATA *last_guard;
 extern SHIP_DATA *first_ship;
 extern SHIP_DATA *last_ship;
-extern SHIP_PROTOTYPE *first_ship_prototype;
-extern SHIP_PROTOTYPE *last_ship_prototype;
 extern SPACE_DATA *first_starsystem;
 extern SPACE_DATA *last_starsystem;
 extern PLANET_DATA *first_planet;
@@ -4488,7 +4383,7 @@ extern char log_buf[2 * MAX_INPUT_LENGTH];
 extern TIME_INFO_DATA time_info;
 extern WEATHER_DATA weather_info;
 extern AUCTION_DATA *auction;
-extern struct act_prog_data *mob_act_list;
+extern ACT_PROG_DATA *mob_act_list;
 
 extern BMARKET_DATA *first_market_ship;
 extern BMARKET_DATA *last_market_ship;
@@ -4603,7 +4498,7 @@ output file      */
 #define ST SOCIALTYPE
 #define CO COUNCIL_DATA
 #define DE DEITY_DATA
-#define SK SKILLTYPE
+#define SK SKILL_TYPE
 #define SH SHIP_DATA
 
 /* editor.c cronel new editor */
@@ -4676,7 +4571,7 @@ void    echo_to_room    args((sh_int AT_COLOR, ROOM_INDEX_DATA* room, const char
 void	echo_to_all	args((sh_int AT_COLOR, const char* argument,
 	sh_int tar));
 void   	get_reboot_string args((void));
-struct tm* update_time  args((struct tm* old_time));
+tm* update_time  args((struct tm* old_time));
 void	free_social	args((SOCIALTYPE* social));
 void	add_social	args((SOCIALTYPE* social));
 void	free_command	args((CMDTYPE* command));
@@ -5051,12 +4946,12 @@ bool	is_name		args((const char* str, const char* namelist));
 bool	is_name_prefix	args((const char* str, const char* namelist));
 bool	nifty_is_name	args((const char* str, const char* namelist));
 bool	nifty_is_name_prefix args((const char* str, const char* namelist));
-void	affect_modify	args((CHAR_DATA* ch, AFFECT_DATA* paf, bool fAdd));
-void	affect_to_char	args((CHAR_DATA* ch, AFFECT_DATA* paf));
-void	affect_remove	args((CHAR_DATA* ch, AFFECT_DATA* paf));
+void affect_modify args((CHAR_DATA * ch, AFFECT_DATA *paf, bool fAdd));
+void affect_to_char args((CHAR_DATA * ch, AFFECT_DATA *paf));
+void affect_remove args((CHAR_DATA * ch, AFFECT_DATA *paf));
 void	affect_strip	args((CHAR_DATA* ch, int sn));
 bool	is_affected	args((CHAR_DATA* ch, int sn));
-void	affect_join	args((CHAR_DATA* ch, AFFECT_DATA* paf));
+void affect_join args((CHAR_DATA * ch, AFFECT_DATA *paf));
 void	char_from_room	args((CHAR_DATA* ch));
 void	char_to_room	args((CHAR_DATA* ch, ROOM_INDEX_DATA* pRoomIndex));
 OD* obj_to_char	args((OBJ_DATA* obj, CHAR_DATA* ch));
@@ -5111,7 +5006,7 @@ OD* get_trap	args((OBJ_DATA* obj));
 ch_ret	spring_trap     args((CHAR_DATA* ch, OBJ_DATA* obj));
 void	name_stamp_stats args((CHAR_DATA* ch));
 void	fix_char	args((CHAR_DATA* ch));
-void	showaffect	args((CHAR_DATA* ch, AFFECT_DATA* paf));
+void showaffect args((CHAR_DATA * ch, AFFECT_DATA *paf));
 void	set_cur_obj	args((OBJ_DATA* obj));
 bool	obj_extracted	args((OBJ_DATA* obj));
 void	queue_extracted_obj	args((OBJ_DATA* obj));
@@ -5159,9 +5054,9 @@ char* one_argument2	args((char* argument, char* arg_first));
 ST* find_social	args((const char* command));
 CMDTYPE* find_command	args((const char* command));
 void	hash_commands	args(());
-void	send_timer	args((struct timerset* vtime, CHAR_DATA* ch));
+void	send_timer	args((TIMERSET* vtime, CHAR_DATA* ch));
 void	update_userec	args((std::chrono::steady_clock::duration time_used,
-	struct timerset* userec));
+	TIMERSET* userec));
 
 /* magic.c */
 bool	process_spell_components args((CHAR_DATA* ch, int sn));
@@ -5329,7 +5224,7 @@ void talk_channel	    args((CHAR_DATA* ch, const char* argument, int channel, co
  /*
   *  Data for a menu page
   */
-struct	menu_data
+struct MENU_DATA
 {
     char *sectionNum;
     char *charChoice;
@@ -5471,7 +5366,7 @@ extern	const   char    control_help_page[];
 DECLARE_DO_FUN(do_mapout);
 DECLARE_DO_FUN(do_lookmap);
 
-struct  map_data	/* contains per-room data */
+struct MAP_DATA	/* contains per-room data */
 {
     int vnum;   /* which map this room belongs to */
     int x;      /* horizontal coordinate */
@@ -5480,7 +5375,7 @@ struct  map_data	/* contains per-room data */
 };
 
 
-struct  map_index_data
+struct MAP_INDEX_DATA
 {
     MAP_INDEX_DATA *next;
     int vnum;                 /* vnum of the map */

@@ -66,8 +66,8 @@ void shutdown_mud(char const *reason);
 int top_sn;
 int top_herb;
 
-SKILLTYPE *skill_table[MAX_SKILL];
-SKILLTYPE *herb_table[MAX_HERB];
+SKILL_TYPE *skill_table[MAX_SKILL];
+SKILL_TYPE *herb_table[MAX_HERB];
 
 const char *skill_tname[] = {"unknown", "Spell", "Skill", "Weapon", "Tongue", "Herb"};
 
@@ -139,10 +139,10 @@ DO_FUN *skill_function(char *name)
 /*
  * Function used by qsort to sort skills
  */
-int skill_comp(SKILLTYPE **sk1, SKILLTYPE **sk2)
+int skill_comp(SKILL_TYPE **sk1, SKILL_TYPE **sk2)
 {
-    SKILLTYPE *skill1 = (*sk1);
-    SKILLTYPE *skill2 = (*sk2);
+    SKILL_TYPE *skill1 = (*sk1);
+    SKILL_TYPE *skill2 = (*sk2);
 
     if (!skill1 && skill2)
         return 1;
@@ -163,13 +163,13 @@ int skill_comp(SKILLTYPE **sk1, SKILLTYPE **sk2)
 void sort_skill_table()
 {
     log_string("Sorting skill table...");
-    qsort(&skill_table[1], top_sn - 1, sizeof(SKILLTYPE *), (int (*)(const void *, const void *))skill_comp);
+    qsort(&skill_table[1], top_sn - 1, sizeof(SKILL_TYPE *), (int (*)(const void *, const void *))skill_comp);
 }
 
 /*
  * Write skill data to a file
  */
-void fwrite_skill(FILE *fpout, SKILLTYPE *skill)
+void fwrite_skill(FILE *fpout, SKILL_TYPE *skill)
 {
     SMAUG_AFF *aff;
 
@@ -408,14 +408,14 @@ void save_commands()
     fclose(fpout);
 }
 
-SKILLTYPE *fread_skill(FILE *fp)
+SKILL_TYPE *fread_skill(FILE *fp)
 {
     char buf[MAX_STRING_LENGTH];
     const char *word;
     bool fMatch;
-    SKILLTYPE *skill;
+    SKILL_TYPE *skill;
 
-    CREATE(skill, SKILLTYPE, 1);
+    CREATE(skill, SKILL_TYPE, 1);
 
     skill->guild = -1;
 
@@ -992,7 +992,7 @@ void read_last_file(CHAR_DATA *ch, int count, char *name)
     char *ln;
     char *c;
     char d, e;
-    struct tm *tme;
+    tm *tme;
     time_t now;
     char day[MAX_INPUT_LENGTH];
     char sday[5];

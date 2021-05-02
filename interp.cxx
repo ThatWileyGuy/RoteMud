@@ -732,7 +732,7 @@ void do_timecmd(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void send_timer(struct timerset *vtime, CHAR_DATA *ch)
+void send_timer(TIMERSET *vtime, CHAR_DATA *ch)
 {
     using namespace std::chrono;
 
@@ -750,7 +750,7 @@ void send_timer(struct timerset *vtime, CHAR_DATA *ch)
     return;
 }
 
-void update_userec(std::chrono::steady_clock::duration time_used, struct timerset *userec)
+void update_userec(std::chrono::steady_clock::duration time_used, TIMERSET *userec)
 {
     userec->num_uses++;
     if (userec->num_uses == 1 || time_used < userec->min_time)

@@ -85,7 +85,7 @@ typedef enum
     SP_OTHER
 } ship_proto_room_types;
 
-struct ship_prototypes_struct
+struct SHIP_PROTOTYPE
 {
     char *name;
     char *sname;
@@ -137,12 +137,10 @@ struct ship_prototypes_struct
     // int         plasma;
 };
 
-struct ship_prototypes_struct ship_prototypes[256];
+SHIP_PROTOTYPE ship_prototypes[256];
 int NUM_PROTOTYPES;
 
-typedef struct prototype_room PROTO_ROOM;
-
-struct prototype_room
+struct PROTO_ROOM
 {
     int what_prototype;
     PROTO_ROOM *next;

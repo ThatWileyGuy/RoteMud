@@ -77,7 +77,7 @@
 
 extern time_t pfile_time;
 extern HOUR_MIN_SEC *set_pfile_time;
-extern struct tm *new_pfile_time;
+extern tm *new_pfile_time;
 extern time_t new_pfile_time_t;
 extern short num_pfiles;
 

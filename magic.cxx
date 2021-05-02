@@ -160,7 +160,7 @@ int skill_lookup(const char *name)
  * Return a skilltype pointer based on sn			-Thoric
  * Returns NULL if bad, unused or personal sn.
  */
-SKILLTYPE *get_skilltype(int sn)
+SKILL_TYPE *get_skilltype(int sn)
 {
     if (sn >= TYPE_PERSONAL)
         return NULL;
@@ -302,7 +302,7 @@ int slot_lookup(int slot)
 /*
  * Fancy message handling for a successful casting		-Thoric
  */
-void successful_casting(SKILLTYPE *skill, CHAR_DATA *ch, CHAR_DATA *victim, OBJ_DATA *obj)
+void successful_casting(SKILL_TYPE *skill, CHAR_DATA *ch, CHAR_DATA *victim, OBJ_DATA *obj)
 {
     sh_int chitroom = (skill->type == SKILL_SPELL ? AT_MAGIC : AT_ACTION);
     sh_int chit = (skill->type == SKILL_SPELL ? AT_MAGIC : AT_HIT);
@@ -337,7 +337,7 @@ void successful_casting(SKILLTYPE *skill, CHAR_DATA *ch, CHAR_DATA *victim, OBJ_
 /*
  * Fancy message handling for a failed casting			-Thoric
  */
-void failed_casting(SKILLTYPE *skill, CHAR_DATA *ch, CHAR_DATA *victim, OBJ_DATA *obj)
+void failed_casting(SKILL_TYPE *skill, CHAR_DATA *ch, CHAR_DATA *victim, OBJ_DATA *obj)
 {
     sh_int chitroom = (skill->type == SKILL_SPELL ? AT_MAGIC : AT_ACTION);
     sh_int chit = (skill->type == SKILL_SPELL ? AT_MAGIC : AT_HIT);
@@ -377,7 +377,7 @@ void failed_casting(SKILLTYPE *skill, CHAR_DATA *ch, CHAR_DATA *victim, OBJ_DATA
 /*
  * Fancy message handling for being immune to something		-Thoric
  */
-void immune_casting(SKILLTYPE *skill, CHAR_DATA *ch, CHAR_DATA *victim, OBJ_DATA *obj)
+void immune_casting(SKILL_TYPE *skill, CHAR_DATA *ch, CHAR_DATA *victim, OBJ_DATA *obj)
 {
     sh_int chitroom = (skill->type == SKILL_SPELL ? AT_MAGIC : AT_ACTION);
     sh_int chit = (skill->type == SKILL_SPELL ? AT_MAGIC : AT_HIT);
@@ -704,7 +704,7 @@ bool saves_spell_staff(int level, CHAR_DATA *victim)
  */
 bool process_spell_components(CHAR_DATA *ch, int sn)
 {
-    SKILLTYPE *skill = get_skilltype(sn);
+    SKILL_TYPE *skill = get_skilltype(sn);
     char *comp = skill->components;
     char *check;
     char arg[MAX_INPUT_LENGTH];
@@ -901,7 +901,7 @@ int pAbort;
  */
 void *locate_targets(CHAR_DATA *ch, char *arg, int sn, CHAR_DATA **victim, OBJ_DATA **obj)
 {
-    SKILLTYPE *skill = get_skilltype(sn);
+    SKILL_TYPE *skill = get_skilltype(sn);
     void *vo = NULL;
 
     *victim = NULL;
@@ -1042,7 +1042,7 @@ void do_cast(CHAR_DATA *ch, char *argument)
     int sn;
     ch_ret retcode;
     bool dont_wait = FALSE;
-    SKILLTYPE *skill = NULL;
+    SKILL_TYPE *skill = NULL;
     std::chrono::steady_clock::duration time_used;
 
     retcode = rNONE;
@@ -1430,7 +1430,7 @@ ch_ret obj_cast_spell(int sn, int level, CHAR_DATA *ch, CHAR_DATA *victim, OBJ_D
     void *vo;
     ch_ret retcode = rNONE;
     int levdiff = ch->top_level - level;
-    SKILLTYPE *skill = get_skilltype(sn);
+    SKILL_TYPE *skill = get_skilltype(sn);
     std::chrono::steady_clock::duration time_used;
 
     if (sn == -1)
@@ -1598,7 +1598,7 @@ ch_ret spell_blindness(int sn, int level, CHAR_DATA *ch, void *vo)
     CHAR_DATA *victim = (CHAR_DATA *)vo;
     AFFECT_DATA af;
     int tmp;
-    SKILLTYPE *skill = get_skilltype(sn);
+    SKILL_TYPE *skill = get_skilltype(sn);
 
     if (SPELL_FLAG(skill, SF_PKSENSITIVE) && !IS_NPC(ch) && !IS_NPC(victim))
         tmp = level;
@@ -1747,7 +1747,7 @@ ch_ret spell_change_sex(int sn, int level, CHAR_DATA *ch, void *vo)
 {
     CHAR_DATA *victim = (CHAR_DATA *)vo;
     AFFECT_DATA af;
-    SKILLTYPE *skill = get_skilltype(sn);
+    SKILL_TYPE *skill = get_skilltype(sn);
 
     if (IS_SET(victim->immune, RIS_MAGIC))
     {
@@ -1778,7 +1778,7 @@ ch_ret spell_charm_person(int sn, int level, CHAR_DATA *ch, void *vo)
     AFFECT_DATA af;
     int chance;
     char buf[MAX_STRING_LENGTH];
-    SKILLTYPE *skill = get_skilltype(sn);
+    SKILL_TYPE *skill = get_skilltype(sn);
 
     if (victim == ch)
     {
@@ -1896,7 +1896,7 @@ ch_ret spell_colour_spray(int sn, int level, CHAR_DATA *ch, void *vo)
 
 ch_ret spell_control_weather(int sn, int level, CHAR_DATA *ch, void *vo)
 {
-    SKILLTYPE *skill = get_skilltype(sn);
+    SKILL_TYPE *skill = get_skilltype(sn);
 
     if (!str_cmp(target_name, "better"))
         weather_info.change += dice(level / 3, 4);
@@ -1964,7 +1964,7 @@ ch_ret spell_create_water(int sn, int level, CHAR_DATA *ch, void *vo)
 ch_ret spell_cure_blindness(int sn, int level, CHAR_DATA *ch, void *vo)
 {
     CHAR_DATA *victim = (CHAR_DATA *)vo;
-    SKILLTYPE *skill = get_skilltype(sn);
+    SKILL_TYPE *skill = get_skilltype(sn);
 
     if (IS_SET(victim->immune, RIS_MAGIC))
     {
@@ -1994,7 +1994,7 @@ ch_ret spell_cure_blindness(int sn, int level, CHAR_DATA *ch, void *vo)
 ch_ret spell_cure_poison(int sn, int level, CHAR_DATA *ch, void *vo)
 {
     CHAR_DATA *victim = (CHAR_DATA *)vo;
-    SKILLTYPE *skill = get_skilltype(sn);
+    SKILL_TYPE *skill = get_skilltype(sn);
 
     if (IS_SET(victim->immune, RIS_MAGIC))
     {
@@ -2028,7 +2028,7 @@ ch_ret spell_curse(int sn, int level, CHAR_DATA *ch, void *vo)
 {
     CHAR_DATA *victim = (CHAR_DATA *)vo;
     AFFECT_DATA af;
-    SKILLTYPE *skill = get_skilltype(sn);
+    SKILL_TYPE *skill = get_skilltype(sn);
 
     if (IS_SET(victim->immune, RIS_MAGIC))
     {
@@ -2088,7 +2088,7 @@ ch_ret spell_dispel_evil(int sn, int level, CHAR_DATA *ch, void *vo)
 {
     CHAR_DATA *victim = (CHAR_DATA *)vo;
     int dam;
-    SKILLTYPE *skill = get_skilltype(sn);
+    SKILL_TYPE *skill = get_skilltype(sn);
 
     if (!IS_NPC(ch) && IS_EVIL(ch))
         victim = ch;
@@ -2121,7 +2121,7 @@ ch_ret spell_dispel_magic(int sn, int level, CHAR_DATA *ch, void *vo)
 {
     CHAR_DATA *victim = (CHAR_DATA *)vo;
     int affected_by, cnt;
-    SKILLTYPE *skill = get_skilltype(sn);
+    SKILL_TYPE *skill = get_skilltype(sn);
 
     if (IS_SET(victim->immune, RIS_MAGIC))
     {
@@ -2175,7 +2175,7 @@ ch_ret spell_earthquake(int sn, int level, CHAR_DATA *ch, void *vo)
     CHAR_DATA *vch_next;
     bool ch_died;
     ch_ret retcode;
-    SKILLTYPE *skill = get_skilltype(sn);
+    SKILL_TYPE *skill = get_skilltype(sn);
 
     ch_died = FALSE;
     retcode = rNONE;
@@ -2289,7 +2289,7 @@ ch_ret spell_energy_drain(int sn, int level, CHAR_DATA *ch, void *vo)
     CHAR_DATA *victim = (CHAR_DATA *)vo;
     int dam;
     int chance;
-    SKILLTYPE *skill = get_skilltype(sn);
+    SKILL_TYPE *skill = get_skilltype(sn);
 
     if (IS_SET(victim->immune, RIS_MAGIC))
     {
@@ -2366,7 +2366,7 @@ ch_ret spell_faerie_fire(int sn, int level, CHAR_DATA *ch, void *vo)
 {
     CHAR_DATA *victim = (CHAR_DATA *)vo;
     AFFECT_DATA af;
-    SKILLTYPE *skill = get_skilltype(sn);
+    SKILL_TYPE *skill = get_skilltype(sn);
 
     if (IS_SET(victim->immune, RIS_MAGIC))
     {
@@ -2462,7 +2462,7 @@ ch_ret spell_injure(int sn, int level, CHAR_DATA *ch, void *vo)
 {
     CHAR_DATA *victim = (CHAR_DATA *)vo;
     int dam, chance;
-    SKILLTYPE *skill = get_skilltype(sn);
+    SKILL_TYPE *skill = get_skilltype(sn);
     AFFECT_DATA af;
 
     if (IS_SET(victim->immune, RIS_MAGIC))
@@ -2518,8 +2518,8 @@ ch_ret spell_identify(int sn, int level, CHAR_DATA *ch, void *vo)
     OBJ_DATA *obj;
     CHAR_DATA *victim;
     AFFECT_DATA *paf;
-    SKILLTYPE *sktmp;
-    SKILLTYPE *skill = get_skilltype(sn);
+    SKILL_TYPE *sktmp;
+    SKILL_TYPE *skill = get_skilltype(sn);
 
     if (target_name[0] == '\0')
     {
@@ -2705,7 +2705,7 @@ ch_ret spell_identify(int sn, int level, CHAR_DATA *ch, void *vo)
 ch_ret spell_invis(int sn, int level, CHAR_DATA *ch, void *vo)
 {
     CHAR_DATA *victim;
-    SKILLTYPE *skill = get_skilltype(sn);
+    SKILL_TYPE *skill = get_skilltype(sn);
 
     /* Modifications on 1/2/96 to work on player/object - Scryn */
 
@@ -2768,7 +2768,7 @@ ch_ret spell_know_alignment(int sn, int level, CHAR_DATA *ch, void *vo)
     CHAR_DATA *victim = (CHAR_DATA *)vo;
     const char *msg;
     int ap;
-    SKILLTYPE *skill = get_skilltype(sn);
+    SKILL_TYPE *skill = get_skilltype(sn);
 
     if (!victim)
     {
@@ -2910,7 +2910,7 @@ ch_ret spell_pass_door(int sn, int level, CHAR_DATA *ch, void *vo)
 {
     CHAR_DATA *victim = (CHAR_DATA *)vo;
     AFFECT_DATA af;
-    SKILLTYPE *skill = get_skilltype(sn);
+    SKILL_TYPE *skill = get_skilltype(sn);
 
     if (IS_SET(victim->immune, RIS_MAGIC))
     {
@@ -2976,7 +2976,7 @@ ch_ret spell_remove_trap(int sn, int level, CHAR_DATA *ch, void *vo)
     OBJ_DATA *trap;
     bool found;
     int retcode;
-    SKILLTYPE *skill = get_skilltype(sn);
+    SKILL_TYPE *skill = get_skilltype(sn);
 
     if (!target_name || target_name[0] == '\0')
     {
@@ -3055,7 +3055,7 @@ ch_ret spell_sleep(int sn, int level, CHAR_DATA *ch, void *vo)
     int chance;
     int tmp;
     CHAR_DATA *victim;
-    SKILLTYPE *skill = get_skilltype(sn);
+    SKILL_TYPE *skill = get_skilltype(sn);
 
     if ((victim = get_char_room(ch, target_name)) == NULL)
     {
@@ -3164,7 +3164,7 @@ ch_ret spell_weaken(int sn, int level, CHAR_DATA *ch, void *vo)
 {
     CHAR_DATA *victim = (CHAR_DATA *)vo;
     AFFECT_DATA af;
-    SKILLTYPE *skill = get_skilltype(sn);
+    SKILL_TYPE *skill = get_skilltype(sn);
 
     if (IS_SET(victim->immune, RIS_MAGIC))
     {
@@ -3474,7 +3474,7 @@ ch_ret spell_farsight(int sn, int level, CHAR_DATA *ch, void *vo)
     ROOM_INDEX_DATA *location;
     ROOM_INDEX_DATA *original;
     CHAR_DATA *victim;
-    SKILLTYPE *skill = get_skilltype(sn);
+    SKILL_TYPE *skill = get_skilltype(sn);
 
     /* The spell fails if the victim isn't playing, the victim is the caster,
        the target room has private, solitary, noastral, death or proto flags,
@@ -3594,7 +3594,7 @@ ch_ret spell_solar_flight(int sn, int level, CHAR_DATA *ch, void *vo)
 ch_ret spell_remove_invis(int sn, int level, CHAR_DATA *ch, void *vo)
 {
     OBJ_DATA *obj;
-    SKILLTYPE *skill = get_skilltype(sn);
+    SKILL_TYPE *skill = get_skilltype(sn);
 
     if (target_name[0] == '\0')
     {
@@ -3693,7 +3693,7 @@ ch_ret spell_animate_dead(int sn, int level, CHAR_DATA *ch, void *vo)
     MOB_INDEX_DATA *pMobIndex;
     AFFECT_DATA af;
     char buf[MAX_STRING_LENGTH];
-    SKILLTYPE *skill = get_skilltype(sn);
+    SKILL_TYPE *skill = get_skilltype(sn);
 
     found = FALSE;
 
@@ -3808,7 +3808,7 @@ ch_ret spell_possess(int sn, int level, CHAR_DATA *ch, void *vo)
     CHAR_DATA *victim;
     char buf[MAX_STRING_LENGTH];
     AFFECT_DATA af;
-    SKILLTYPE *skill = get_skilltype(sn);
+    SKILL_TYPE *skill = get_skilltype(sn);
 
     if (ch->desc->original)
     {
@@ -3880,7 +3880,7 @@ ch_ret spell_possess(int sn, int level, CHAR_DATA *ch, void *vo)
 ch_ret spell_knock(int sn, int level, CHAR_DATA *ch, void *vo)
 {
     EXIT_DATA *pexit;
-    SKILLTYPE *skill = get_skilltype(sn);
+    SKILL_TYPE *skill = get_skilltype(sn);
 
     set_char_color(AT_MAGIC, ch);
     /*
@@ -4146,7 +4146,7 @@ ch_ret spell_helical_flow(int sn, int level, CHAR_DATA *ch, void *vo)
  */
 bool check_save(int sn, int level, CHAR_DATA *ch, CHAR_DATA *victim)
 {
-    SKILLTYPE *skill = get_skilltype(sn);
+    SKILL_TYPE *skill = get_skilltype(sn);
     bool saved = FALSE;
 
     if (SPELL_FLAG(skill, SF_PKSENSITIVE) && !IS_NPC(ch) && !IS_NPC(victim))
@@ -4180,7 +4180,7 @@ bool check_save(int sn, int level, CHAR_DATA *ch, CHAR_DATA *victim)
 ch_ret spell_attack(int sn, int level, CHAR_DATA *ch, void *vo)
 {
     CHAR_DATA *victim = (CHAR_DATA *)vo;
-    SKILLTYPE *skill = get_skilltype(sn);
+    SKILL_TYPE *skill = get_skilltype(sn);
     bool saved = check_save(sn, level, ch, victim);
     int dam;
     ch_ret retcode;
@@ -4213,7 +4213,7 @@ ch_ret spell_attack(int sn, int level, CHAR_DATA *ch, void *vo)
 ch_ret spell_area_attack(int sn, int level, CHAR_DATA *ch, void *vo)
 {
     CHAR_DATA *vch, *vch_next;
-    SKILLTYPE *skill = get_skilltype(sn);
+    SKILL_TYPE *skill = get_skilltype(sn);
     bool saved;
     bool affects;
     int dam;
@@ -4275,7 +4275,7 @@ ch_ret spell_affectchar(int sn, int level, CHAR_DATA *ch, void *vo)
 {
     AFFECT_DATA af;
     SMAUG_AFF *saf;
-    SKILLTYPE *skill = get_skilltype(sn);
+    SKILL_TYPE *skill = get_skilltype(sn);
     CHAR_DATA *victim = (CHAR_DATA *)vo;
     int chance;
     bool affected = FALSE, first = TRUE;
@@ -4438,7 +4438,7 @@ ch_ret spell_affectchar(int sn, int level, CHAR_DATA *ch, void *vo)
 ch_ret spell_affect(int sn, int level, CHAR_DATA *ch, void *vo)
 {
     SMAUG_AFF *saf;
-    SKILLTYPE *skill = get_skilltype(sn);
+    SKILL_TYPE *skill = get_skilltype(sn);
     CHAR_DATA *victim = (CHAR_DATA *)vo;
     bool groupsp;
     bool areasp;
@@ -4578,7 +4578,7 @@ ch_ret spell_affect(int sn, int level, CHAR_DATA *ch, void *vo)
 ch_ret spell_obj_inv(int sn, int level, CHAR_DATA *ch, void *vo)
 {
     OBJ_DATA *obj = (OBJ_DATA *)vo;
-    SKILLTYPE *skill = get_skilltype(sn);
+    SKILL_TYPE *skill = get_skilltype(sn);
 
     if (!obj)
     {
@@ -4756,7 +4756,7 @@ ch_ret spell_obj_inv(int sn, int level, CHAR_DATA *ch, void *vo)
  */
 ch_ret spell_create_obj(int sn, int level, CHAR_DATA *ch, void *vo)
 {
-    SKILLTYPE *skill = get_skilltype(sn);
+    SKILL_TYPE *skill = get_skilltype(sn);
     int lvl;
     int vnum = skill->value;
     OBJ_DATA *obj;
@@ -4809,7 +4809,7 @@ ch_ret spell_create_obj(int sn, int level, CHAR_DATA *ch, void *vo)
  */
 ch_ret spell_create_mob(int sn, int level, CHAR_DATA *ch, void *vo)
 {
-    SKILLTYPE *skill = get_skilltype(sn);
+    SKILL_TYPE *skill = get_skilltype(sn);
     int lvl;
     int vnum = skill->value;
     CHAR_DATA *mob;
@@ -4871,7 +4871,7 @@ ch_ret spell_create_mob(int sn, int level, CHAR_DATA *ch, void *vo)
  */
 ch_ret spell_smaug(int sn, int level, CHAR_DATA *ch, void *vo)
 {
-    struct skill_type *skill = get_skilltype(sn);
+    SKILL_TYPE *skill = get_skilltype(sn);
 
     switch (skill->target)
     {

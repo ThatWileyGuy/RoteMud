@@ -59,15 +59,16 @@ enum
     REN_OBJ,
     REN_MOB
 };
-struct renumber_data
+
+struct RENUMBER_DATA
 {
     int old_vnum;
     int new_vnum;
 
-    struct renumber_data *next;
+    RENUMBER_DATA *next;
 };
-typedef struct renumber_data RENUMBER_DATA;
-struct renumber_area
+
+struct RENUMBER_AREA
 {
     int low_obj, hi_obj;
     RENUMBER_DATA *r_obj;
@@ -76,7 +77,6 @@ struct renumber_area
     int low_room, hi_room;
     RENUMBER_DATA *r_room;
 };
-typedef struct renumber_area RENUMBER_AREA;
 
 void renumber_area(CHAR_DATA *ch, AREA_DATA *area, RENUMBER_AREA *r_area, bool area_is_proto, bool verbose);
 

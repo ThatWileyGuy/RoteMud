@@ -68,9 +68,9 @@ int mprog_do_command(char *cmnd, CHAR_DATA *mob, CHAR_DATA *actor, OBJ_DATA *obj
  *  Mudprogram additions
  */
 CHAR_DATA *supermob;
-struct act_prog_data *room_act_list;
-struct act_prog_data *obj_act_list;
-struct act_prog_data *mob_act_list;
+ACT_PROG_DATA *room_act_list;
+ACT_PROG_DATA *obj_act_list;
+ACT_PROG_DATA *mob_act_list;
 
 /*
  * Global variables to handle sleeping mud progs.
@@ -1980,12 +1980,12 @@ void mprog_time_check(CHAR_DATA *mob, CHAR_DATA *actor, OBJ_DATA *obj, void *vo,
 
 void mob_act_add(CHAR_DATA *mob)
 {
-    struct act_prog_data *runner, *tmp_mal;
+    ACT_PROG_DATA *runner, *tmp_mal;
 
     for (runner = mob_act_list; runner; runner = runner->next)
         if (runner->vo == mob)
             return;
-    CREATE(runner, struct act_prog_data, 1);
+    CREATE(runner, ACT_PROG_DATA, 1);
     runner->vo = mob;
     runner->next = NULL;
     /*
@@ -3206,12 +3206,12 @@ void progbug(const char *str, CHAR_DATA *mob)
 
 void room_act_add(ROOM_INDEX_DATA *room)
 {
-    struct act_prog_data *runner, *tmp_ral;
+    ACT_PROG_DATA *runner, *tmp_ral;
 
     for (runner = room_act_list; runner; runner = runner->next)
         if (runner->vo == room)
             return;
-    CREATE(runner, struct act_prog_data, 1);
+    CREATE(runner, ACT_PROG_DATA, 1);
     runner->vo = room;
     runner->next = NULL;
     /*
@@ -3235,7 +3235,7 @@ void room_act_add(ROOM_INDEX_DATA *room)
 
 void room_act_update(void)
 {
-    struct act_prog_data *runner;
+    ACT_PROG_DATA *runner;
     MPROG_ACT_LIST *mpact;
 
     while ((runner = room_act_list) != NULL)
@@ -3260,12 +3260,12 @@ void room_act_update(void)
 
 void obj_act_add(OBJ_DATA *obj)
 {
-    struct act_prog_data *runner, *tmp_oal;
+    ACT_PROG_DATA *runner, *tmp_oal;
 
     for (runner = obj_act_list; runner; runner = runner->next)
         if (runner->vo == obj)
             return;
-    CREATE(runner, struct act_prog_data, 1);
+    CREATE(runner, ACT_PROG_DATA, 1);
     runner->vo = obj;
     runner->next = NULL;
     /*
@@ -3289,7 +3289,7 @@ void obj_act_add(OBJ_DATA *obj)
 
 void obj_act_update(void)
 {
-    struct act_prog_data *runner;
+    ACT_PROG_DATA *runner;
     MPROG_ACT_LIST *mpact;
 
     while ((runner = obj_act_list) != NULL)

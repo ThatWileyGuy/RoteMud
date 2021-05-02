@@ -566,7 +566,7 @@ void affect_modify(CHAR_DATA *ch, AFFECT_DATA *paf, bool fAdd)
 {
     OBJ_DATA *wield;
     int mod;
-    struct skill_type *skill;
+    SKILL_TYPE *skill;
     ch_ret retcode;
 
     mod = paf->modifier;

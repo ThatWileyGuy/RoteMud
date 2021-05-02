@@ -78,8 +78,8 @@ const char go_ahead_str[] = {telnet::IAC, telnet::GA, '\0'};
 
 void save_sysdata args((SYSTEM_DATA sys));
 void write_ship_list args((void));
-void arms args((struct descriptor_data * d, char *argument));
-void send_main_mail_menu args((struct descriptor_data * d));
+void arms args((DESCRIPTOR_DATA * d, char *argument));
+void send_main_mail_menu args((DESCRIPTOR_DATA * d));
 /*  from act_info?  */
 void show_condition(CHAR_DATA *ch, CHAR_DATA *victim);
 void generate_com_freq(CHAR_DATA *ch);
@@ -99,8 +99,8 @@ bool mud_down; /* Shutdown			*/
 time_t boot_time;
 HOUR_MIN_SEC set_boot_time_struct;
 HOUR_MIN_SEC *set_boot_time;
-struct tm *new_boot_time;
-struct tm new_boot_struct;
+tm *new_boot_time;
+tm new_boot_struct;
 char str_boot_time[MAX_INPUT_LENGTH];
 char lastplayercmd[MAX_INPUT_LENGTH * 2];
 time_t current_time; /* Time of this pulse		*/
@@ -1336,7 +1336,7 @@ void nanny(DESCRIPTOR_DATA *d, char *argument)
             log_string_plus(log_buf, LOG_COMM, ch->top_level);
 
         {
-            struct tm *tme;
+            tm *tme;
             time_t now;
             char day[50];
             now = time(0);

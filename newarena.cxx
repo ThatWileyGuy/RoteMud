@@ -73,12 +73,12 @@
 #define ARENA_END 41                     /* vnum of last real arena room*/
 #define HALL_FAME_FILE SYSTEM_DIR "halloffame.lst"
 
-struct hall_of_fame_element
+struct HALL_OF_FAME_ELEMENT
 {
     char name[MAX_INPUT_LENGTH + 1];
     time_t date;
     int award;
-    struct hall_of_fame_element *next;
+    HALL_OF_FAME_ELEMENT *next;
 };
 
 void sportschan(char *);
@@ -91,12 +91,12 @@ void do_end_game();
 void start_game();
 void silent_end();
 void write_fame_list(void);
-void write_one_fame_node(FILE *fp, struct hall_of_fame_element *node);
+void write_one_fame_node(FILE *fp, HALL_OF_FAME_ELEMENT *node);
 void load_hall_of_fame(void);
 void find_bet_winners(CHAR_DATA *winner);
 void lost_arena(CHAR_DATA *ch);
 
-struct hall_of_fame_element *fame_list = NULL;
+HALL_OF_FAME_ELEMENT *fame_list = NULL;
 
 int ppl_challenged = 0;
 int ppl_in_arena = 0;
@@ -452,7 +452,7 @@ void find_game_winner()
     DESCRIPTOR_DATA *d;
     ROOM_INDEX_DATA *location;
 
-    struct hall_of_fame_element *fame_node;
+    HALL_OF_FAME_ELEMENT *fame_node;
 
     for (d = first_descriptor; d; d = d->next)
     {
@@ -487,7 +487,7 @@ void find_game_winner()
                 send_to_char(buf, i);
                 //          sprintf_s(buf2, "%s awarded %d credits for winning arena", i->name, (arena_pot/2));
                 //          bug(buf2, 0);
-                CREATE(fame_node, struct hall_of_fame_element, 1);
+                CREATE(fame_node, HALL_OF_FAME_ELEMENT, 1);
                 strcpy_s(fame_node->name, i->name);
                 fame_node->name[MAX_INPUT_LENGTH] = '\0';
                 fame_node->date = time(0);
@@ -645,7 +645,7 @@ void do_ahall(CHAR_DATA *ch, char *argument)
 {
     char site[MAX_INPUT_LENGTH], format[MAX_INPUT_LENGTH], *timestr;
     char format2[MAX_INPUT_LENGTH];
-    struct hall_of_fame_element *fame_node;
+    HALL_OF_FAME_ELEMENT *fame_node;
 
     char buf[MAX_INPUT_LENGTH];
     char buf2[MAX_INPUT_LENGTH];
@@ -692,7 +692,7 @@ void load_hall_of_fame(void)
     FILE *fl;
     int date, award;
     char name[MAX_INPUT_LENGTH + 1];
-    struct hall_of_fame_element *next_node;
+    HALL_OF_FAME_ELEMENT *next_node;
 
     fame_list = 0;
 
@@ -703,7 +703,7 @@ void load_hall_of_fame(void)
     }
     while (fscanf(fl, "%s %d %d", name, &date, &award) == 3)
     {
-        CREATE(next_node, struct hall_of_fame_element, 1);
+        CREATE(next_node, HALL_OF_FAME_ELEMENT, 1);
         strcpy_s(next_node->name, name);
         next_node->date = date;
         next_node->award = award;
@@ -730,7 +730,7 @@ void write_fame_list(void)
     return;
 }
 
-void write_one_fame_node(FILE *fp, struct hall_of_fame_element *node)
+void write_one_fame_node(FILE *fp, HALL_OF_FAME_ELEMENT *node)
 {
     if (node)
     {

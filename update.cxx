@@ -2249,7 +2249,7 @@ void aggr_update(void)
     CHAR_DATA *ch;
     CHAR_DATA *ch_next;
     CHAR_DATA *victim;
-    struct act_prog_data *apdtmp;
+    ACT_PROG_DATA *apdtmp;
 
 #ifdef UNDEFD
     /*
@@ -2839,7 +2839,7 @@ void reboot_check(char* arg)
 {
 	char buf[MAX_STRING_LENGTH];
 	extern bool mud_down;
-	/*struct tm *timestruct;
+	/*tm *timestruct;
 	int timecheck;*/
 	CHAR_DATA* vch;
 

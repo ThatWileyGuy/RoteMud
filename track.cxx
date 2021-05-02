@@ -60,14 +60,14 @@ ROOM_INDEX_DATA *generate_exit(ROOM_INDEX_DATA *in_room, EXIT_DATA **pexit);
    or hidden doors.
 */
 
-struct bfs_queue_struct
+struct BFS_QUEUE_ENTRY
 {
     ROOM_INDEX_DATA *room;
     char dir;
-    struct bfs_queue_struct *next;
+    BFS_QUEUE_ENTRY *next;
 };
 
-static struct bfs_queue_struct *queue_head = NULL, *queue_tail = NULL, *room_queue = NULL;
+static BFS_QUEUE_ENTRY *queue_head = NULL, *queue_tail = NULL, *room_queue = NULL;
 
 /* Utility macros */
 #define MARK(room) (SET_BIT((room)->room_flags, BFS_MARK))
@@ -97,9 +97,9 @@ bool valid_edge(ROOM_INDEX_DATA *room, sh_int door)
 
 void bfs_enqueue(ROOM_INDEX_DATA *room, char dir)
 {
-    struct bfs_queue_struct *curr;
+    BFS_QUEUE_ENTRY *curr;
 
-    CREATE(curr, struct bfs_queue_struct, 1);
+    CREATE(curr, BFS_QUEUE_ENTRY, 1);
     curr->room = room;
     curr->dir = dir;
     curr->next = NULL;
@@ -115,7 +115,7 @@ void bfs_enqueue(ROOM_INDEX_DATA *room, char dir)
 
 void bfs_dequeue(void)
 {
-    struct bfs_queue_struct *curr;
+    BFS_QUEUE_ENTRY *curr;
 
     curr = queue_head;
 
@@ -132,9 +132,9 @@ void bfs_clear_queue(void)
 
 void room_enqueue(ROOM_INDEX_DATA *room)
 {
-    struct bfs_queue_struct *curr;
+    BFS_QUEUE_ENTRY *curr;
 
-    CREATE(curr, struct bfs_queue_struct, 1);
+    CREATE(curr, BFS_QUEUE_ENTRY, 1);
     curr->room = room;
     curr->next = room_queue;
 
@@ -143,7 +143,7 @@ void room_enqueue(ROOM_INDEX_DATA *room)
 
 void clean_room_queue(void)
 {
-    struct bfs_queue_struct *curr, *curr_next;
+    BFS_QUEUE_ENTRY *curr, *curr_next;
 
     for (curr = room_queue; curr; curr = curr_next)
     {

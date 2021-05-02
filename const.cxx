@@ -54,7 +54,7 @@
 /*
  * Race table.
  */
-const struct race_type race_table[MAX_RACE] = {
+const RACE_TYPE race_table[MAX_RACE] = {
     /*  race name	   DEF_AFF      st dx ws in cn ch lk fc hp mn re su 	RESTRICTION  LANGUAGE */
     {"Human", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, LANG_BASIC},
     {"Wookiee", 0, 8, -1, -3, 0, 2, -2, 0, 0, 3, 0, 0, 0, 0, LANG_WOOKIEE},
@@ -205,7 +205,7 @@ const char *droid_name[8] = {"modern", "antique", "small", "large", "tiny", "pol
 /*
  * Attribute bonus tables.
  */
-const struct str_app_type str_app[26] = {
+const STR_APP_TYPE str_app[26] = {
     {-5, -4, 0, 0},                                                                        /* 0  */
     {-5, -4, 3, 1},                                                                        /* 1  */
     {-3, -2, 3, 2},  {-3, -1, 10, 3},                                                      /* 3  */
@@ -218,7 +218,7 @@ const struct str_app_type str_app[26] = {
     {4, 7, 600, 40}, {5, 7, 700, 45}, {6, 8, 800, 50}, {8, 10, 900, 55}, {10, 12, 999, 60} /* 25   */
 };
 
-const struct int_app_type int_app[26] = {
+const INT_APP_TYPE int_app[26] = {
     {3},                          /*  0 */
     {5},                          /*  1 */
     {7},  {8},                    /*  3 */
@@ -230,7 +230,7 @@ const struct int_app_type int_app[26] = {
     {55}, {60}, {70}, {85}, {99}  /* 25 */
 };
 
-const struct wis_app_type wis_app[26] = {
+const WIS_APP_TYPE wis_app[26] = {
     {0},                     /*  0 */
     {0},                     /*  1 */
     {0}, {0},                /*  3 */
@@ -242,7 +242,7 @@ const struct wis_app_type wis_app[26] = {
     {6}, {6}, {6}, {6}, {7}  /* 25 */
 };
 
-const struct dex_app_type dex_app[30] = {
+const DEX_APP_TYPE dex_app[30] = {
     {60},                                   /* 0 */
     {50},                                   /* 1 */
     {50},   {40},   {30},   {20},           /* 5 */
@@ -253,7 +253,7 @@ const struct dex_app_type dex_app[30] = {
     {-135}, {-150}, {-165}, {-180}          /* 29 */
 };
 
-const struct con_app_type con_app[26] = {
+const CON_APP_TYPE con_app[26] = {
     {-4, 20},                                      /*  0 */
     {-3, 25},                                      /*  1 */
     {-2, 30}, {-2, 35},                            /*  3 */
@@ -265,7 +265,7 @@ const struct con_app_type con_app[26] = {
     {4, 99},  {5, 99},  {6, 99}, {7, 99}, {8, 99}  /* 25 */
 };
 
-const struct cha_app_type cha_app[26] = {
+const CHA_APP_TYPE cha_app[26] = {
     {-60},                            /* 0 */
     {-50},                            /* 1 */
     {-50}, {-40}, {-30}, {-20},       /* 5 */
@@ -276,7 +276,7 @@ const struct cha_app_type cha_app[26] = {
 };
 
 /* Have to fix this up - not exactly sure how it works (Scryn) */
-const struct lck_app_type lck_app[26] = {
+const LCK_APP_TYPE lck_app[26] = {
     {60},                               /* 0 */
     {50},                               /* 1 */
     {50},  {40},  {30},  {20},          /* 5 */
@@ -286,7 +286,7 @@ const struct lck_app_type lck_app[26] = {
     {-60}, {-75}, {-90}, {-105}, {-120} /* 25 */
 };
 
-const struct frc_app_type frc_app[26] = {
+const FRC_APP_TYPE frc_app[26] = {
     {0},                     /* 0 */
     {0},                     /* 1 */
     {0}, {0}, {0}, {0},      /* 5 */
@@ -300,7 +300,7 @@ const struct frc_app_type frc_app[26] = {
  * Liquid properties.
  * Used in #OBJECT section of area file.
  */
-const liq_type liq_table[LIQ_MAX] = {
+const LIQ_TYPE liq_table[LIQ_MAX] = {
     {"water", "clear", {0, 1, 10}}, /*  0 */
     {"beer", "amber", {3, 2, 5}},
     {"wine", "rose", {5, 2, 5}},

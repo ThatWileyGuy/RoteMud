@@ -66,7 +66,7 @@ int ris_save(CHAR_DATA *ch, int chance, int ris);
 bool check_illegal_psteal(CHAR_DATA *ch, CHAR_DATA *victim);
 
 /* from magic.c */
-void failed_casting(struct skill_type *skill, CHAR_DATA *ch, CHAR_DATA *victim, OBJ_DATA *obj);
+void failed_casting(SKILL_TYPE *skill, CHAR_DATA *ch, CHAR_DATA *victim, OBJ_DATA *obj);
 
 int xp_compute args((CHAR_DATA * gch, CHAR_DATA *victim));
 
@@ -367,7 +367,7 @@ void do_slookup(CHAR_DATA *ch, char *argument)
     char buf[MAX_STRING_LENGTH];
     char arg[MAX_INPUT_LENGTH];
     int sn;
-    SKILLTYPE *skill = NULL;
+    SKILL_TYPE *skill = NULL;
 
     one_argument(argument, arg);
     if (arg[0] == '\0')
@@ -605,7 +605,7 @@ void do_sset(CHAR_DATA *ch, char *argument)
     if (get_trust(ch) > LEVEL_SUB_IMPLEM && !str_cmp(arg1, "create") &&
         (!str_cmp(arg2, "skill") || !str_cmp(arg2, "herb")))
     {
-        struct skill_type *skill;
+        SKILL_TYPE *skill;
         sh_int type = SKILL_UNKNOWN;
 
         if (!str_cmp(arg2, "herb"))
@@ -630,7 +630,7 @@ void do_sset(CHAR_DATA *ch, char *argument)
                       top_sn);
             return;
         }
-        CREATE(skill, struct skill_type, 1);
+        CREATE(skill, SKILL_TYPE, 1);
         if (type == SKILL_HERB)
         {
             int max, x;
@@ -659,7 +659,7 @@ void do_sset(CHAR_DATA *ch, char *argument)
     if (get_trust(ch) > LEVEL_GREATER && ((arg1[0] == 'h' && is_number(arg1 + 1) && (sn = atoi(arg1 + 1)) >= 0) ||
                                           (is_number(arg1) && (sn = atoi(arg1)) >= 0)))
     {
-        struct skill_type *skill;
+        SKILL_TYPE *skill;
 
         if (arg1[0] == 'h')
         {
@@ -2812,7 +2812,7 @@ void do_pick(CHAR_DATA *ch, char *argument)
 
 void do_sneak(CHAR_DATA *ch, char *argument)
 {
-    AFFECT_DATA af;
+    AFFECT_DATA af = {};
 
     if (IS_NPC(ch) && IS_AFFECTED(ch, AFF_CHARM))
     {
@@ -3523,7 +3523,7 @@ void do_circle(CHAR_DATA *ch, char *argument)
 void do_berserk(CHAR_DATA *ch, char *argument)
 {
     sh_int percent;
-    AFFECT_DATA af;
+    AFFECT_DATA af = {};
 
     if (!ch->fighting)
     {

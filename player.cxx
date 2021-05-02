@@ -439,7 +439,7 @@ void do_score(CHAR_DATA * ch, char *argument)
     if (ch->first_affect)
     {
     int i;
-    SKILLTYPE *sktmp;
+    SKILL_TYPE *sktmp;
 
     i = 0;
     send_to_char( "----------------------------------------------------------------------------\n\r", ch);
@@ -640,7 +640,7 @@ const char *get_race(CHAR_DATA *ch)
 void do_oldscore(CHAR_DATA *ch, char *argument)
 {
     AFFECT_DATA *paf;
-    SKILLTYPE *skill;
+    SKILL_TYPE *skill;
 
     if (IS_AFFECTED(ch, AFF_POSSESS))
     {
@@ -899,7 +899,7 @@ void do_affected(CHAR_DATA *ch, char *argument)
 {
     char arg[MAX_INPUT_LENGTH];
     AFFECT_DATA *paf;
-    SKILLTYPE *skill;
+    SKILL_TYPE *skill;
 
     if (IS_NPC(ch))
         return;

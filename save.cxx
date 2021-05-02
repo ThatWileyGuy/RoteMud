@@ -316,7 +316,7 @@ void fwrite_char(CHAR_DATA *ch, FILE *fp)
     AFFECT_DATA *paf = nullptr;
     int sn, track, drug;
     BUG_DATA *bug = nullptr;
-    SKILLTYPE *skill = nullptr;
+    SKILL_TYPE *skill = nullptr;
     SHIP_DATA *ship = nullptr;
     CONTRACT_DATA *contract = nullptr;
     FELLOW_DATA *fellow = nullptr;
@@ -560,7 +560,7 @@ void fwrite_char(CHAR_DATA *ch, FILE *fp)
             continue;
 
         if (paf->type >= 0 && paf->type < TYPE_PERSONAL)
-            fprintf(fp, "AffectData   '%s' %3d %3d %3d %10d\n", skill->name, paf->duration, paf->modifier,
+            fprintf(fp, "AFFECT_DATA   '%s' %3d %3d %3d %10d\n", skill->name, paf->duration, paf->modifier,
                     paf->location, paf->bitvector);
         else
             fprintf(fp, "Affect       %3d %3d %3d %3d %10d\n", paf->type, paf->duration, paf->modifier, paf->location,
@@ -716,7 +716,7 @@ void fwrite_obj(CHAR_DATA *ch, OBJ_DATA *obj, FILE *fp, int iNest, sh_int os_typ
                     paf->location, paf->bitvector);
         }
         else
-            fprintf(fp, "AffectData   '%s' %d %d %d %d\n", skill_table[paf->type]->name, paf->duration,
+            fprintf(fp, "AFFECT_DATA   '%s' %d %d %d %d\n", skill_table[paf->type]->name, paf->duration,
                     ((paf->location == APPLY_WEAPONSPELL || paf->location == APPLY_WEARSPELL ||
                       paf->location == APPLY_REMOVESPELL || paf->location == APPLY_STRIPSN) &&
                      IS_VALID_SN(paf->modifier))
@@ -1028,7 +1028,7 @@ void fread_char(CHAR_DATA *ch, FILE *fp, bool preload)
                 break;
             }
 
-            if (!str_cmp(word, "Affect") || !str_cmp(word, "AffectData"))
+            if (!str_cmp(word, "Affect") || !str_cmp(word, "AFFECT_DATA"))
             {
                 AFFECT_DATA *paf;
 
@@ -1800,7 +1800,7 @@ void fread_obj(CHAR_DATA *ch, FILE *fp, sh_int os_type)
             break;
 
         case 'A':
-            if (!str_cmp(word, "Affect") || !str_cmp(word, "AffectData"))
+            if (!str_cmp(word, "Affect") || !str_cmp(word, "AFFECT_DATA"))
             {
                 AFFECT_DATA *paf;
                 int pafmod;

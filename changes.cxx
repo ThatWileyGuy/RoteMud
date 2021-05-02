@@ -93,7 +93,7 @@ void load_changes()
     return; /* just return */
 }
 
-size_t my_strftime(char *s, size_t max, const char *fmt, const struct tm *tm)
+size_t my_strftime(char *s, size_t max, const char *fmt, const tm *tm)
 {
     return strftime(s, max, fmt, tm);
 }
@@ -101,7 +101,7 @@ size_t my_strftime(char *s, size_t max, const char *fmt, const struct tm *tm)
 char *current_date()
 {
     static char buf[128];
-    struct tm *datetime;
+    tm *datetime;
 
     datetime = localtime(&current_time);
     my_strftime(buf, sizeof(buf), "%x", datetime);
