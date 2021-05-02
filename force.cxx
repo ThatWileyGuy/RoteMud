@@ -201,44 +201,44 @@ const char *force_get_level(CHAR_DATA *ch)
 
 const char *force_parse_string(CHAR_DATA *ch, CHAR_DATA *victim, const char *srcmsg)
 {
-    static char msg[MAX_STRING_LENGTH];
+    static char msg[MAX_STRING_LENGTH] = {};
 
-    strncpy_s(msg, srcmsg, MAX_STRING_LENGTH);
+    strcpy_s(msg, srcmsg);
 
     if (victim)
     {
-        strncpy_s(msg, strrep(msg, "$vfl", force_get_level(victim)), MAX_STRING_LENGTH);
-        strncpy_s(msg, strrep(msg, "$vp", force_get_possessive(victim)), MAX_STRING_LENGTH);
-        strncpy_s(msg, strrep(msg, "$vo", force_get_objective(victim)), MAX_STRING_LENGTH);
-        strncpy_s(msg, strrep(msg, "$vn", force_get_pronoun(victim)), MAX_STRING_LENGTH);
-        strncpy_s(msg, strrep(msg, "$v", PERS(victim, ch)), MAX_STRING_LENGTH);
+        strcpy_s(msg, strrep(msg, "$vfl", force_get_level(victim)));
+        strcpy_s(msg, strrep(msg, "$vp", force_get_possessive(victim)));
+        strcpy_s(msg, strrep(msg, "$vo", force_get_objective(victim)));
+        strcpy_s(msg, strrep(msg, "$vn", force_get_pronoun(victim)));
+        strcpy_s(msg, strrep(msg, "$v", PERS(victim, ch)));
     }
     if (ch)
     {
-        strncpy_s(msg, strrep(msg, "$nfl", force_get_level(ch)), MAX_STRING_LENGTH);
-        strncpy_s(msg, strrep(msg, "$np", force_get_possessive(ch)), MAX_STRING_LENGTH);
-        strncpy_s(msg, strrep(msg, "$no", force_get_objective(ch)), MAX_STRING_LENGTH);
-        strncpy_s(msg, strrep(msg, "$nn", force_get_pronoun(ch)), MAX_STRING_LENGTH);
-        strncpy_s(msg, strrep(msg, "$n", ch->name), MAX_STRING_LENGTH);
+        strcpy_s(msg, strrep(msg, "$nfl", force_get_level(ch)));
+        strcpy_s(msg, strrep(msg, "$np", force_get_possessive(ch)));
+        strcpy_s(msg, strrep(msg, "$no", force_get_objective(ch)));
+        strcpy_s(msg, strrep(msg, "$nn", force_get_pronoun(ch)));
+        strcpy_s(msg, strrep(msg, "$n", ch->name));
 
         if (ch->force_type == FORCE_JEDI)
         {
-            strncpy_s(msg, strrep(msg, "$FC", "&C"), MAX_STRING_LENGTH);
-            strncpy_s(msg, strrep(msg, "$fc", "&B"), MAX_STRING_LENGTH);
+            strcpy_s(msg, strrep(msg, "$FC", "&C"));
+            strcpy_s(msg, strrep(msg, "$fc", "&B"));
         }
         else if (ch->force_type == FORCE_SITH)
         {
-            strncpy_s(msg, strrep(msg, "$FC", "&R"), MAX_STRING_LENGTH);
-            strncpy_s(msg, strrep(msg, "$fc", "&r"), MAX_STRING_LENGTH);
+            strcpy_s(msg, strrep(msg, "$FC", "&R"));
+            strcpy_s(msg, strrep(msg, "$fc", "&r"));
         }
         else
         {
-            strncpy_s(msg, strrep(msg, "$FC", "&W"), MAX_STRING_LENGTH);
-            strncpy_s(msg, strrep(msg, "$fc", "&w"), MAX_STRING_LENGTH);
+            strcpy_s(msg, strrep(msg, "$FC", "&W"));
+            strcpy_s(msg, strrep(msg, "$fc", "&w"));
         }
     }
-    strncpy_s(msg, strrep(msg, "$RN$$RN$", "\r\n\r\n"), MAX_STRING_LENGTH);
-    strncpy_s(msg, strrep(msg, "$RN$", "\r\n"), MAX_STRING_LENGTH);
+    strcpy_s(msg, strrep(msg, "$RN$$RN$", "\r\n\r\n"));
+    strcpy_s(msg, strrep(msg, "$RN$", "\r\n"));
     return msg;
 }
 

@@ -242,13 +242,13 @@ void violence_update(void)
         if (!ch->in_room || !ch->name)
         {
             log_string("violence_update: bad ch record!  (Shortcutting.)");
-            sprintf_s(buf, "ch: %d  ch->in_room: %d  ch->prev: %d  ch->next: %d", (int)ch, (int)ch->in_room,
-                      (int)ch->prev, (int)ch->next);
+            sprintf_s(buf, "ch: %p  ch->in_room: %p  ch->prev: %p  ch->next: %p", ch, ch->in_room,
+                      ch->prev, ch->next);
             log_string(buf);
             log_string(lastplayercmd);
             if (lst_ch)
-                sprintf_s(buf, "lst_ch: %d  lst_ch->prev: %d  lst_ch->next: %d", (int)lst_ch, (int)lst_ch->prev,
-                          (int)lst_ch->next);
+                sprintf_s(buf, "lst_ch: %p  lst_ch->prev: %p  lst_ch->next: %p", lst_ch, lst_ch->prev,
+                          lst_ch->next);
             else
                 strcpy_s(buf, "lst_ch: NULL");
             log_string(buf);
@@ -257,7 +257,7 @@ void violence_update(void)
         }
 
         /*
-         * Experience gained during battle deceases as battle drags on
+         * Experience gained during battle decreases as battle drags on
          */
         if (ch->fighting)
             if ((++ch->fighting->duration % 24) == 0)

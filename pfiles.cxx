@@ -316,7 +316,7 @@ timecheck:
     {
         if ((level < 10) && (tdiff > sysdata.newbie_purge))
         {
-            if (_unlink(fname) == -1)
+            if (unlink(fname) == -1)
                 perror("Unlink");
             else
             {
@@ -346,7 +346,7 @@ timecheck:
         {
             if (level < LEVEL_IMMORTAL)
             {
-                if (_unlink(fname) == -1)
+                if (unlink(fname) == -1)
                     perror("Unlink");
                 else
                 {

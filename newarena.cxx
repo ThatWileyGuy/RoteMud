@@ -488,7 +488,7 @@ void find_game_winner()
                 //          sprintf_s(buf2, "%s awarded %d credits for winning arena", i->name, (arena_pot/2));
                 //          bug(buf2, 0);
                 CREATE(fame_node, struct hall_of_fame_element, 1);
-                strncpy_s(fame_node->name, i->name, MAX_INPUT_LENGTH);
+                strcpy_s(fame_node->name, i->name);
                 fame_node->name[MAX_INPUT_LENGTH] = '\0';
                 fame_node->date = time(0);
                 fame_node->award = (arena_pot / 2);
@@ -704,7 +704,7 @@ void load_hall_of_fame(void)
     while (fscanf(fl, "%s %d %d", name, &date, &award) == 3)
     {
         CREATE(next_node, struct hall_of_fame_element, 1);
-        strncpy_s(next_node->name, name, MAX_INPUT_LENGTH);
+        strcpy_s(next_node->name, name);
         next_node->date = date;
         next_node->award = award;
         next_node->next = fame_list;

@@ -41,6 +41,8 @@
 #include <stdio.h>
 #include <string.h>
 #include <time.h>
+#include <fstream>
+#include <filesystem>
 #include "mud.hxx"
 
 /*
@@ -2139,10 +2141,7 @@ void do_sysbuglist(CHAR_DATA *ch, char *argument)
     }
     if (!str_cmp(argument, "clear now"))
     {
-        FILE *fp = nullptr;
-        fopen_s(&fp, BUG_FILE, "w");
-        if (fp)
-            fclose(fp);
+        auto bug_file = std::fstream(BUG_FILE, std::ios::out | std::ios::trunc);
         send_to_char_color("SysBugList file cleared.\n\r", ch);
         return;
     }
@@ -2168,10 +2167,7 @@ void do_plrbuglist(CHAR_DATA *ch, char *argument)
     }
     if (!str_cmp(argument, "clear now"))
     {
-        FILE *fp = nullptr;
-        fopen_s(&fp, PLRBUG_FILE, "w");
-        if (fp)
-            fclose(fp);
+        auto bug_file = std::fstream(PLRBUG_FILE, std::ios::out | std::ios::trunc);
         send_to_char_color("PlrBugList file cleared.\n\r", ch);
         return;
     }
@@ -2197,10 +2193,7 @@ void do_typoslist(CHAR_DATA *ch, char *argument)
     }
     if (!str_cmp(argument, "clear now"))
     {
-        FILE *fp = nullptr;
-        fopen_s(&fp, TYPO_FILE, "w");
-        if (fp)
-            fclose(fp);
+        auto bug_file = std::fstream(TYPO_FILE, std::ios::out | std::ios::trunc);
         send_to_char_color("TyposList file cleared.\n\r", ch);
         return;
     }
@@ -2265,9 +2258,7 @@ void do_ahelp(CHAR_DATA *ch, char *argument)
     if (!str_cmp(argument, "clear now"))
     {
         FILE *fp = nullptr;
-        fopen_s(&fp, HELP_FILE, "w");
-        if (fp)
-            fclose(fp);
+        auto help_file = std::fstream(HELP_FILE, std::ios::out | std::ios::trunc);
         send_to_char_color("Add Help file cleared.\n\r", ch);
         return;
     }
@@ -2418,72 +2409,35 @@ void do_quit(CHAR_DATA *ch, char *argument)
     return;
 }
 
+std::string file_to_string(std::string_view path)
+{
+    auto file = std::ifstream(std::string(path), std::ios::in | std::ios::binary); // TODO does this need to be binary to keep Windows from being dumb?
+    const auto file_size = std::filesystem::file_size(RIPSCREEN_FILE);
+
+    auto content = std::string(file_size + 1, '\0');
+    file.read(content.data(), file_size);
+
+    return content;
+}
+
 void send_rip_screen(CHAR_DATA *ch)
 {
-    FILE *rpfile = nullptr;
-    int num = 0;
-    char BUFF[MAX_STRING_LENGTH * 2];
-
-    fopen_s(&rpfile, RIPSCREEN_FILE, "r");
-    if (rpfile != NULL)
-    {
-        while ((BUFF[num] = fgetc(rpfile)) != EOF)
-            num++;
-        fclose(rpfile);
-        BUFF[num] = 0;
-        write_to_buffer(ch->desc, BUFF, num);
-    }
+    write_to_buffer(ch->desc, file_to_string(RIPSCREEN_FILE));
 }
 
 void send_rip_title(CHAR_DATA *ch)
 {
-    FILE *rpfile = nullptr;
-    int num = 0;
-    char BUFF[MAX_STRING_LENGTH * 2];
-
-    fopen_s(&rpfile, RIPTITLE_FILE, "r");
-    if (rpfile != NULL)
-    {
-        while ((BUFF[num] = fgetc(rpfile)) != EOF)
-            num++;
-        fclose(rpfile);
-        BUFF[num] = 0;
-        write_to_buffer(ch->desc, BUFF, num);
-    }
+    write_to_buffer(ch->desc, file_to_string(RIPTITLE_FILE));
 }
 
 void send_ansi_title(CHAR_DATA *ch)
 {
-    FILE *rpfile = nullptr;
-    int num = 0;
-    char BUFF[MAX_STRING_LENGTH * 2];
-
-    fopen_s(&rpfile, ANSITITLE_FILE, "r");
-    if (rpfile != NULL)
-    {
-        while ((BUFF[num] = fgetc(rpfile)) != EOF)
-            num++;
-        fclose(rpfile);
-        BUFF[num] = 0;
-        write_to_buffer(ch->desc, BUFF, num);
-    }
+    write_to_buffer(ch->desc, file_to_string(ANSITITLE_FILE));
 }
 
 void send_ascii_title(CHAR_DATA *ch)
 {
-    FILE *rpfile = nullptr;
-    int num = 0;
-    char BUFF[MAX_STRING_LENGTH];
-
-    fopen_s(&rpfile, ASCTITLE_FILE, "r");
-    if (rpfile != NULL)
-    {
-        while ((BUFF[num] = fgetc(rpfile)) != EOF)
-            num++;
-        fclose(rpfile);
-        BUFF[num] = 0;
-        write_to_buffer(ch->desc, BUFF, num);
-    }
+    write_to_buffer(ch->desc, file_to_string(ASCTITLE_FILE));
 }
 
 void do_rip(CHAR_DATA *ch, char *argument)

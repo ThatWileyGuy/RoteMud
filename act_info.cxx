@@ -1862,7 +1862,7 @@ void do_time(CHAR_DATA *ch, char *argument)
 {
     extern char str_boot_time[];
     extern char reboot_time[];
-    char time_string[MAX_INPUT_LENGTH] = {};
+    const char *time_string;
     const char *suf;
     int day;
 
@@ -1879,7 +1879,7 @@ void do_time(CHAR_DATA *ch, char *argument)
     else
         suf = "th";
 
-    ctime_s(time_string, sizeof(time_string), &current_time);
+    time_string = ctime(&current_time);
 
     set_char_color(AT_YELLOW, ch);
     ch_printf(ch,
@@ -1892,7 +1892,7 @@ void do_time(CHAR_DATA *ch, char *argument)
               day_name[day % 7], day, suf, month_name[time_info.month], str_boot_time, time_string, reboot_time);
     if (sysdata.CLEANPFILES)
     {
-        ctime_s(time_string, sizeof(time_string), &new_pfile_time_t);
+        time_string = ctime(&new_pfile_time_t);
         ch_printf(ch, "Next pfile cleanup is scheduled for: %s\n\r", time_string);
     }
 
@@ -2191,7 +2191,7 @@ void do_hset(CHAR_DATA *ch, char *argument)
         log_string_plus("Saving help.are...", LOG_NORMAL, LEVEL_GREATER);
 
         rename("help.are", "help.are.bak");
-        fopen_s(&fpout, "help.are", "w");
+        fpout = fopen("help.are", "w");
         if (fpout == NULL)
         {
             bug("hset save: fopen", 0);
@@ -2475,9 +2475,9 @@ void do_who(CHAR_DATA *ch, char *argument)
        else */
 
     if (fShowHomepage)
-        fopen_s(&whoout, WEBWHO_FILE, "w");
+        whoout = fopen(WEBWHO_FILE, "w");
     else
-        fopen_s(&whoout, WHO_FILE, "w");
+        whoout = fopen(WHO_FILE, "w");
 
     /* start from last to first to get it in the proper order */
     for (d = last_descriptor; d; d = d->prev)
@@ -2723,9 +2723,9 @@ void do_who(CHAR_DATA *ch, char *argument)
         //	fprintf( whoout, "%s", htmlcolor("&z( &R%d &rvisible &zplayer%s. &R%d &rtotal&z player%s.
         //)&R-_&r-^^-_-&R^^&r-_-^^-_-^^&R-_-^^&r-_-^^-_-^^-&R^^-\n"), 		sMatch, sMatch == 1 ? "" : "s", nMatch, nMatch ==
         //1 ? "" : "s" );
-        char buffer[MAX_INPUT_LENGTH] = {};
-        ctime_s(buffer, sizeof(buffer), &current_time);
-        fprintf(whoout, "<div style='position: absolute; color: white; top: 5px; right: 5px;'>%s</div></font>", buffer);
+        char *time_string = ctime(&current_time);
+        fprintf(whoout, "<div style='position: absolute; color: white; top: 5px; right: 5px;'>%s</div></font>",
+                time_string);
         fclose(whoout);
         return;
     }
@@ -4407,8 +4407,7 @@ void do_whois(CHAR_DATA *ch, char *argument)
         ch_printf(ch, "%s is %shelled at the moment.\n\r", victim->name,
                   (victim->pcdata->release_date == 0) ? "not " : "");
 
-        char buffer[MAX_INPUT_LENGTH] = {};
-        ctime_s(buffer, sizeof(buffer), &victim->pcdata->release_date);
+        char *buffer = ctime(&victim->pcdata->release_date);
 
         if (victim->pcdata->release_date != 0)
             ch_printf(ch, "%s was helled by %s, and will be released on %24.24s.\n\r",

@@ -124,7 +124,7 @@ void write_boards_txt()
     char filename[256];
 
     sprintf_s(filename, "%s%s", BOARD_DIR, BOARD_FILE);
-    fopen_s(&fpout, filename, "w");
+    fpout = fopen(filename, "w");
     if (!fpout)
     {
         bug("FATAL: cannot open board.txt for writing!\n\r", 0);
@@ -219,7 +219,7 @@ void write_board(BOARD_DATA *board)
      * Rewrite entire list.
      */
     sprintf_s(filename, "%s%s", BOARD_DIR, board->note_file);
-    fopen_s(&fp, filename, "w");
+    fp = fopen(filename, "w");
     if (fp == NULL)
     {
         perror(filename);

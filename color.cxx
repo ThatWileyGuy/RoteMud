@@ -899,6 +899,9 @@ int colorcode(const char *col, char *code, CHAR_DATA *ch)
         // else
         //	     {
 
+        // TODO why do all these copy 20 characters?
+        // the spec for strncpy says you get up to the null terminator and then all null terminators after that?
+
         /* Background color */
         if (*ctype == '^')
         {
@@ -910,28 +913,28 @@ int colorcode(const char *col, char *code, CHAR_DATA *ch)
                 code[2] = '\0';
                 return 2;
             case 'x': /* Black */
-                strncpy_s(code, 20, BACK_BLACK, 20);
+                strncpy(code, BACK_BLACK, 20);
                 break;
             case 'r': /* Dark Red */
-                strncpy_s(code, 20, BACK_DRED, 20);
+                strncpy(code, BACK_DRED, 20);
                 break;
             case 'g': /* Dark Green */
-                strncpy_s(code, 20, BACK_DGREEN, 20);
+                strncpy(code, BACK_DGREEN, 20);
                 break;
             case 'O': /* Orange/Brown */
-                strncpy_s(code, 20, BACK_ORANGE, 20);
+                strncpy(code, BACK_ORANGE, 20);
                 break;
             case 'b': /* Dark Blue */
-                strncpy_s(code, 20, BACK_DBLUE, 20);
+                strncpy(code, BACK_DBLUE, 20);
                 break;
             case 'p': /* Purple */
-                strncpy_s(code, 20, BACK_PURPLE, 20);
+                strncpy(code, BACK_PURPLE, 20);
                 break;
             case 'c': /* Cyan */
-                strncpy_s(code, 20, BACK_CYAN, 20);
+                strncpy(code, BACK_CYAN, 20);
                 break;
             case 'w': /* Grey */
-                strncpy_s(code, 20, BACK_GREY, 20);
+                strncpy(code, BACK_GREY, 20);
                 break;
             }
         }
@@ -1188,7 +1191,7 @@ void set_pager_color(sh_int AType, CHAR_DATA *ch)
     ch->desc->pagecolor = ch->colors[AType];
 }
 
-void write_to_pager(DESCRIPTOR_DATA *d, const char *txt, int length)
+void write_to_pager(DESCRIPTOR_DATA *d, const char *txt, size_t length)
 {
     int pageroffset; /* Pager fix by thoric */
 

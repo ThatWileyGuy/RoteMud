@@ -39,9 +39,16 @@
 #include <optional>
 #include <memory>
 #include <boost/asio.hpp>
+
+#ifdef WIN32
 #include <fcntl.h>
+#endif
 
 #include "mud.hxx"
+
+#ifdef ECHO
+#undef ECHO // TODO where does this come from on Linux?
+#endif
 
 /*
  * Socket and TCP/IP stuff.
@@ -145,8 +152,10 @@ int main(int argc, char **argv)
     malloc_debug(2);
 #endif
 
+#ifdef WIN32
     // turn off Windows EOL translations
     _set_fmode(_O_BINARY);
+#endif
 
     num_descriptors = 0;
     first_descriptor = NULL;
@@ -990,7 +999,7 @@ void flush_buffer(DESCRIPTOR_DATA *d, bool fPrompt)
 /*
  * Append onto an output buffer.
  */
-void write_to_buffer(DESCRIPTOR_DATA *d, const char *txt, int length)
+void write_to_buffer(DESCRIPTOR_DATA *d, std::string_view string)
 {
     if (!d)
     {
@@ -1003,12 +1012,6 @@ void write_to_buffer(DESCRIPTOR_DATA *d, const char *txt, int length)
      */
     if (!d->socket)
         return;
-
-    /*
-     * Find length in case caller didn't.
-     */
-    if (length <= 0)
-        length = strlen(txt);
 
     /* Uncomment if debugging or something
         if ( length != strlen(txt) )
@@ -1027,7 +1030,7 @@ void write_to_buffer(DESCRIPTOR_DATA *d, const char *txt, int length)
         d->output_buffer.push_back('\r');
     }
 
-    if (d->output_buffer.capacity() - d->output_buffer.size() < length)
+    if (d->output_buffer.capacity() - d->output_buffer.size() < string.size())
     {
         /* empty buffer */
         d->output_buffer.erase(d->output_buffer.begin(), d->output_buffer.end());
@@ -1039,8 +1042,18 @@ void write_to_buffer(DESCRIPTOR_DATA *d, const char *txt, int length)
     /*
      * Copy.
      */
-    d->output_buffer.insert(d->output_buffer.end(), txt, txt + length);
+    d->output_buffer.insert(d->output_buffer.end(), string.begin(), string.end());
     return;
+}
+
+void write_to_buffer(DESCRIPTOR_DATA *d, const char* string, size_t length)
+{
+    if (length <= 0)
+    {
+        length = strlen(string);
+    }
+
+    write_to_buffer(d, std::string_view(string, length));
 }
 
 void show_title(DESCRIPTOR_DATA *d)

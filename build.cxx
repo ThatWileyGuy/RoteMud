@@ -5757,7 +5757,7 @@ void fold_area(AREA_DATA *tarea, char *filename, bool install)
 
     sprintf_s(buf, "%s.bak", filename);
     rename(filename, buf);
-    fopen_s(&fpout, filename, "w");
+    fpout = fopen(filename, "w");
     if (fpout == NULL)
     {
         bug("fold_area: fopen", 0);

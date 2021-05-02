@@ -56,16 +56,18 @@ typedef int obj_ret;
 
 #ifndef WIN32
 // Linux doesn't define the safe CRT functions that use template deduction, but it's easy enough
-template<size_t size> int sprintf_s(char (&buffer)[size], const char *format, ...)
+template <size_t dest_size> int sprintf_s(char (&dest)[dest_size], const char *format, ...)
 {
     va_list args;
 
     va_start(args, format);
-    int ret = snprintf(&buffer[0], size, format, args);
+    int ret = vsnprintf(&dest[0], dest_size, format, args);
     va_end(args);
 
     return ret;
 }
+
+int sprintf_s(char *dest, size_t dest_size, const char *format, ...);
 
 template <size_t dest_size> char *strcpy_s(char (&dest)[dest_size], const char *source)
 {
@@ -78,15 +80,17 @@ template <size_t dest_size> char *strcpy_s(char (&dest)[dest_size], const char *
     return strcpy(&dest[0], source);
 }
 
-char* strcpy_s(char *dest, size_t dest_size, const char *source)
+char *strcpy_s(char *dest, size_t dest_size, const char *source);
+
+template <size_t dest_size> char *strncpy_s(char (&dest)[dest_size], const char *source, size_t num)
 {
-    if (strlen(source) >= dest_size)
+    if (num >= dest_size)
     {
         assert(0);
         return nullptr;
     }
 
-    return strcpy(dest, source);
+    return strncpy(&dest[0], source, num);
 }
 
 template <size_t dest_size> char* strcat_s(char (&dest)[dest_size], const char *source)
@@ -99,6 +103,8 @@ template <size_t dest_size> char* strcat_s(char (&dest)[dest_size], const char *
 
     return strcat(dest, source);
 }
+
+char *strcat_s(char *dest, size_t dest_size, const char *source);
 #endif
 
 #ifdef WIN32
@@ -4487,81 +4493,6 @@ extern struct act_prog_data *mob_act_list;
 extern BMARKET_DATA *first_market_ship;
 extern BMARKET_DATA *last_market_ship;
 
-/*
- * OS-dependent declarations.
- * These are all very standard library functions,
- *   but some systems have incomplete or non-ansi header files.
- */
-#if defined(_AIX)
-char *crypt args((const char *key, const char *salt));
-#endif
-
-#if defined(apollo)
-int atoi args((const char *string));
-void *calloc args((unsigned nelem, size_t size));
-char *crypt args((const char *key, const char *salt));
-#endif
-
-#if defined(hpux)
-char *crypt args((const char *key, const char *salt));
-#endif
-
-#if defined(interactive)
-#endif
-
-#if defined(linux)
-char *crypt args((const char *key, const char *salt));
-#endif
-
-#if defined(MIPS_OS)
-char *crypt args((const char *key, const char *salt));
-#endif
-
-#if defined(NeXT)
-char *crypt args((const char *key, const char *salt));
-#endif
-
-#if defined(sequent)
-char *crypt args((const char *key, const char *salt));
-int fclose args((FILE * stream));
-int fprintf args((FILE * stream, const char *format, ...));
-int fread args((void *ptr, int size, int n, FILE *stream));
-int fseek args((FILE * stream, long offset, int ptrname));
-void perror args((const char *s));
-int ungetc args((int c, FILE *stream));
-#endif
-
-#if defined(sun)
-char *crypt args((const char *key, const char *salt));
-int fclose args((FILE * stream));
-int fprintf args((FILE * stream, const char *format, ...));
-/*
-#if 	defined(SYSV)
-*/
-size_t 	fread		args((void* ptr, size_t size, size_t n,
-	/*				FILE *stream ) );
-	#else
-	int	fread		args( ( void *ptr, int size, int n, FILE *stream ) );
-	#endif
-	*/
-	int	fseek		args((FILE* stream, long offset, int ptrname));
-void	perror		args((const char* s));
-int	ungetc		args((int c, FILE* stream));
-#endif
-
-#if defined(ultrix)
-char* crypt		args((const char* key, const char* salt));
-#endif
-
-/*
- * The crypt(3) function is not available on some operating systems.
- * In particular, the U.S. Government prohibits its export from the
- *   United States to foreign countries.
- * Turn on NOCRYPT to keep passwords in plain text.
- */
-#if defined(NOCRYPT)
-#define crypt(s1, s2) (s1)
-#endif
 
 /*
  * Data files used by the server.
@@ -4879,10 +4810,11 @@ void	     create_ship_rooms		    args((SHIP_DATA* ship));
 const char* PERS		args((CHAR_DATA* ch, CHAR_DATA* looker));
 FELLOW_DATA* knowsof	args((CHAR_DATA* ch, CHAR_DATA* victim));
 void	close_socket	args((DESCRIPTOR_DATA* dclose, bool force));
+void write_to_buffer(DESCRIPTOR_DATA *d, std::string_view string);
 void	write_to_buffer	args((DESCRIPTOR_DATA* d, const char* txt,
-	int length));
+	size_t length));
 void	write_to_pager	args((DESCRIPTOR_DATA* d, const char* txt,
-	int length));
+	size_t length));
 void	send_to_char	args((const char* txt, CHAR_DATA* ch));
 void	send_to_char_color	args((const char* txt, CHAR_DATA* ch));
 void	send_to_desc_color	args((const char* txt, DESCRIPTOR_DATA* d));

@@ -41,7 +41,14 @@
 #include <ctype.h>
 #include <string.h>
 #include <stdexcept>
+
+#ifndef WIN32
+#include <dlfcn.h>
+#endif
+
 #include "mud.hxx"
+
+void shutdown_mud(char const *reason);
 
 #if defined(KEY)
 #undef KEY
@@ -73,32 +80,60 @@ void *find_symbol(const char *name)
     if (proc == nullptr)
     {
         bug("Error locating %s in symbol table: %d", name, GetLastError());
-        return (DO_FUN *)skill_notfound;
+        return nullptr;
     }
 
     return proc;
 #else
-    void *funHandle;
-    const char *error;
+    static void *dlHandle = nullptr;
+    void *funHandle = nullptr;
 
-    funHandle = dlsym(sysdata.dlHandle, name);
-    if ((error = dlerror()) != NULL)
+    if (dlHandle == nullptr)
     {
-        bug("Error locating %s in symbol table. %s", name, error);
-        return (SPELL_FUN *)spell_notfound;
+        dlHandle = dlopen(NULL, RTLD_LAZY);
     }
-    return (SPELL_FUN *)funHandle;
+
+    if (dlHandle == nullptr)
+    {
+        log_string("dl: Error opening local system executable as handle, please check compile flags.");
+        shutdown_mud("libdl failure");
+        exit(1);
+    }
+
+    funHandle = dlsym(dlHandle, name);
+
+    if (funHandle == nullptr)
+    {
+        bug("Error locating %s in symbol table. %s", name, dlerror());
+        return nullptr;
+    }
+
+    return funHandle;
 #endif
 }
 
 SPELL_FUN *spell_function(char *name)
 {
-    return (SPELL_FUN *)find_symbol(name);
+    auto result = (SPELL_FUN *)find_symbol(name);
+
+    if (result == nullptr)
+    {
+        return spell_notfound;
+    }
+
+    return result;
 }
 
 DO_FUN *skill_function(char *name)
 {
-    return (DO_FUN *)find_symbol(name);
+    auto result = (DO_FUN *)find_symbol(name);
+
+    if (result == nullptr)
+    {
+        return skill_notfound;
+    }
+
+    return result;
 }
 
 /*

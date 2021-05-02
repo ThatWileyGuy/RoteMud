@@ -118,7 +118,7 @@ void interpret(CHAR_DATA *ch, char *argument)
     int trust;
     int loglvl;
     bool found;
-    struct std::chrono::steady_clock::duration time_used;
+    std::chrono::steady_clock::duration time_used;
 
     if (!ch)
     {
@@ -582,9 +582,9 @@ int number_argument(const char *argument, char *arg)
 {
     char *pdot;
     int number;
-    char buffer[MAX_STRING_LENGTH];
+    char buffer[MAX_STRING_LENGTH] = {};
 
-    strncpy_s(buffer, argument, MAX_STRING_LENGTH);
+    strcpy_s(buffer, argument);
 
     for (pdot = buffer; *pdot != '\0'; pdot++)
     {

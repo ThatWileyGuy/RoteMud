@@ -2432,7 +2432,7 @@ void save_clan_storeroom(CHAR_DATA *ch, CLAN_DATA *clan)
     }
 
     sprintf_s(filename, "%s%s.vault", CLAN_DIR, clan->filename);
-    fopen_s(&fp, filename, "w");
+    fp = fopen(filename, "w");
     if (fp == NULL)
     {
         bug("save_clan_storeroom: fopen", 0);

@@ -450,7 +450,7 @@ void boot_db(bool fCopyOver)
     sh_int wear, x;
 
     show_hash(32);
-    _unlink(BOOTLOG_FILE);
+    unlink(BOOTLOG_FILE);
     boot_log("---------------------[ Boot Log ]--------------------");
 
     log_string("Loading commands");
@@ -4203,8 +4203,8 @@ void make_wizlist()
     }
 
     buf[0] = '\0';
-    _unlink(WIZLIST_FILE);
-    _unlink(WEBWIZLIST_FILE);
+    unlink(WIZLIST_FILE);
+    unlink(WEBWIZLIST_FILE);
     towizfile(" ", 0);
     towizfile("&B ________   ___   ____                  ", 0);
     towizfile("&B/ __   __| / _ \\ |  _ \\                ", 0);
