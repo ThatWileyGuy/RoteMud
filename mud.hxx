@@ -53,10 +53,16 @@
 typedef int ch_ret;
 typedef int obj_ret;
 
+#ifdef WIN32
+#define EXPORT __declspec(dllexport)
+#else
+#define EXPORT
+#endif
+
 #define args(list) list
-#define DECLARE_DO_FUN(fun) extern "C" __declspec(dllexport) DO_FUN fun
-#define DECLARE_SPEC_FUN(fun) extern "C" __declspec(dllexport) SPEC_FUN fun
-#define DECLARE_SPELL_FUN(fun) extern "C" __declspec(dllexport) SPELL_FUN fun
+#define DECLARE_DO_FUN(fun) extern "C" EXPORT DO_FUN fun
+#define DECLARE_SPEC_FUN(fun) extern "C" EXPORT SPEC_FUN fun
+#define DECLARE_SPELL_FUN(fun) extern "C" EXPORT SPELL_FUN fun
 
 /* Stuff from newarena.c */
 void show_jack_pot();
