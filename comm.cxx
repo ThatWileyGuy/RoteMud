@@ -3143,10 +3143,10 @@ void set_pager_input(DESCRIPTOR_DATA *d, char *argument)
 
 void pager_output(DESCRIPTOR_DATA *d)
 {
-    register char *last;
+    char *last;
     CHAR_DATA *ch;
     int pclines;
-    register int lines;
+    int lines;
     bool ret;
 
     if (!d || !d->pagepoint || d->pagecmd == -1)
