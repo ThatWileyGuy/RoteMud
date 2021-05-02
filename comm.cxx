@@ -282,6 +282,7 @@ boost::asio::ip::tcp::acceptor init_socket(int port)
     acceptor_socket.open(endpoint.protocol());
     acceptor_socket.set_option(boost::asio::ip::tcp::acceptor::reuse_address(true));
     acceptor_socket.set_option(boost::asio::ip::tcp::acceptor::linger(true, 1000));
+    acceptor_socket.set_option(boost::asio::ip::tcp::no_delay(true));
     acceptor_socket.bind(endpoint);
     acceptor_socket.listen(50);
 
@@ -338,6 +339,8 @@ void handle_new_socket(const boost::system::error_code &error)
     }
 
     LINK(dnew, first_descriptor, last_descriptor, next, prev);
+
+    dnew->socket->set_option(boost::asio::ip::tcp::no_delay(true));
 
     /*
      * Send the greeting. Forces new color function - Tawnos
@@ -616,8 +619,8 @@ void free_desc(DESCRIPTOR_DATA *d)
 
 void close_socket(DESCRIPTOR_DATA *dclose, bool force)
 {
-    CHAR_DATA *ch;
-    DESCRIPTOR_DATA *d;
+    CHAR_DATA *ch = nullptr;
+    DESCRIPTOR_DATA *d = nullptr;
     bool DoNotUnlink = FALSE;
 
     dclose->connected = CON_DISCONNECTING;
