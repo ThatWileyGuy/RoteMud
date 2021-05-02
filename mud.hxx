@@ -47,11 +47,59 @@
 #include <memory>
 #include <boost/asio/ip/tcp.hpp>
 #include <boost/circular_buffer.hpp>
+#include <stdarg.h>
 
 #define USECARGO
 
 typedef int ch_ret;
 typedef int obj_ret;
+
+#ifndef WIN32
+// Linux doesn't define the safe CRT functions that use template deduction, but it's easy enough
+template<size_t size> int sprintf_s(char (&buffer)[size], const char *format, ...)
+{
+    va_list args;
+
+    va_start(args, format);
+    int ret = snprintf(&buffer[0], size, format, args);
+    va_end(args);
+
+    return ret;
+}
+
+template <size_t dest_size> char *strcpy_s(char (&dest)[dest_size], const char *source)
+{
+    if (strlen(source) >= dest_size)
+    {
+        assert(0);
+        return nullptr;
+    }
+
+    return strcpy(&dest[0], source);
+}
+
+char* strcpy_s(char *dest, size_t dest_size, const char *source)
+{
+    if (strlen(source) >= dest_size)
+    {
+        assert(0);
+        return nullptr;
+    }
+
+    return strcpy(dest, source);
+}
+
+template <size_t dest_size> char* strcat_s(char (&dest)[dest_size], const char *source)
+{
+    if (strlen(source) + strlen(dest) >= dest_size)
+    {
+        assert(0);
+        return nullptr;
+    }
+
+    return strcat(dest, source);
+}
+#endif
 
 #ifdef WIN32
 #define EXPORT __declspec(dllexport)
