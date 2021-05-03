@@ -821,7 +821,7 @@ void boot_db(bool fCopyOver)
         FILE *fpList;
 
         log_string("Reading in area files...");
-        if ((fpList = fopen(AREA_LIST, "r")) == NULL)
+        if ((fpList = fopen(AREA_DIR AREA_LIST, "r")) == NULL)
         {
             shutdown_mud("Unable to open area list");
             exit(1);
@@ -5570,10 +5570,11 @@ void load_area_file(AREA_DATA *tarea, char *filename)
         return;
     }
 
-    if ((fpArea = fopen(filename, "r")) == NULL)
+    std::string file_path = std::string(AREA_DIR) + filename;
+
+    if ((fpArea = fopen(file_path.c_str(), "r")) == NULL)
     {
-        bug("load_area: error loading file (can't open)");
-        bug(filename);
+        bug("load_area: error loading file (can't open): %s", file_path.c_str());
         return;
     }
 

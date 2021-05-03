@@ -6273,7 +6273,7 @@ void write_area_list()
     AREA_DATA *tarea;
     FILE *fpout;
 
-    fpout = fopen(AREA_LIST, "w");
+    fpout = fopen(AREA_DIR AREA_LIST, "w");
     if (!fpout)
     {
         bug("FATAL: cannot open area.lst for writing!\n\r", 0);
