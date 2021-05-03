@@ -294,7 +294,7 @@ void show_list_to_char(OBJ_DATA *list, CHAR_DATA *ch, bool fShort, bool fShowNot
             (obj->item_type != ITEM_TRAP || IS_AFFECTED(ch, AFF_DETECTTRAPS)))
         {
             pstrShow = format_obj_to_char(obj, ch, fShort);
-            fCombine = FALSE;
+            fCombine = false;
 
             if (IS_NPC(ch) || IS_SET(ch->act, PLR_COMBINE))
             {
@@ -307,7 +307,7 @@ void show_list_to_char(OBJ_DATA *list, CHAR_DATA *ch, bool fShort, bool fShowNot
                     if (!strcmp(prgpstrShow[iShow], pstrShow))
                     {
                         prgnShow[iShow] += obj->count;
-                        fCombine = TRUE;
+                        fCombine = true;
                         break;
                     }
                 }
@@ -774,7 +774,7 @@ void show_char_to_char_1(CHAR_DATA *victim, CHAR_DATA *ch)
 
     show_condition(ch, victim);
 
-    found = FALSE;
+    found = false;
     for (iWear = 0; iWear < MAX_WEAR; iWear++)
     {
         if ((obj = get_eq_char(victim, iWear)) != NULL && can_see_obj(ch, obj))
@@ -783,10 +783,10 @@ void show_char_to_char_1(CHAR_DATA *victim, CHAR_DATA *ch)
             {
                 send_to_char("\n\r", ch);
                 act(AT_PLAIN, "$N is using:", ch, NULL, victim, TO_CHAR);
-                found = TRUE;
+                found = true;
             }
             send_to_char(where_name[iWear], ch);
-            send_to_char(format_obj_to_char(obj, ch, TRUE), ch);
+            send_to_char(format_obj_to_char(obj, ch, true), ch);
             send_to_char("\n\r", ch);
         }
     }
@@ -800,7 +800,7 @@ void show_char_to_char_1(CHAR_DATA *victim, CHAR_DATA *ch)
     if (number_percent() < ch->pcdata->learned[gsn_peek])
     {
         send_to_char("\n\rYou peek at the inventory:\n\r", ch);
-        show_list_to_char(victim->first_carrying, ch, TRUE, TRUE);
+        show_list_to_char(victim->first_carrying, ch, true, true);
         learn_from_success(ch, gsn_peek);
     }
     else if (ch->pcdata->learned[gsn_peek])
@@ -859,18 +859,18 @@ void show_ships_to_char(SHIP_DATA *ship, CHAR_DATA *ch)
 bool check_blind(CHAR_DATA *ch)
 {
     if (!IS_NPC(ch) && IS_SET(ch->act, PLR_HOLYLIGHT))
-        return TRUE;
+        return true;
 
     if (IS_AFFECTED(ch, AFF_TRUESIGHT))
-        return TRUE;
+        return true;
 
     if (IS_AFFECTED(ch, AFF_BLIND))
     {
         send_to_char("You can't see a thing!\n\r", ch);
-        return FALSE;
+        return false;
     }
 
-    return TRUE;
+    return true;
 }
 
 /*
@@ -1005,7 +1005,7 @@ void do_look(CHAR_DATA *ch, char *argument)
         }
 
         show_ships_to_char(ch->in_room->first_ship, ch);
-        show_list_to_char(ch->in_room->first_content, ch, FALSE, FALSE);
+        show_list_to_char(ch->in_room->first_content, ch, false, false);
         show_char_to_char(ch->in_room->first_person, ch);
 
         if (str_cmp(arg1, "auto"))
@@ -1098,7 +1098,7 @@ void do_look(CHAR_DATA *ch, char *argument)
         act(AT_PLAIN, "$n lifts $p and looks beneath it:", ch, obj, NULL, TO_ROOM);
         obj->count = count;
         if (IS_OBJ_STAT(obj, ITEM_COVERING))
-            show_list_to_char(obj->first_content, ch, TRUE, TRUE);
+            show_list_to_char(obj->first_content, ch, true, true);
         else
             send_to_char("Nothing.\n\r", ch);
         if (doexaprog)
@@ -1183,7 +1183,7 @@ void do_look(CHAR_DATA *ch, char *argument)
             obj->count = 1;
             act(AT_PLAIN, "$p contains:", ch, obj, NULL, TO_CHAR);
             obj->count = count;
-            show_list_to_char(obj->first_content, ch, TRUE, TRUE);
+            show_list_to_char(obj->first_content, ch, true, true);
             if (doexaprog)
                 oprog_examine_trigger(ch, obj);
             break;
@@ -1198,7 +1198,7 @@ void do_look(CHAR_DATA *ch, char *argument)
     }
 
     door = get_door(arg1);
-    if ((pexit = find_door(ch, arg1, TRUE)) != NULL)
+    if ((pexit = find_door(ch, arg1, true)) != NULL)
     {
         if (pexit->keyword)
         {
@@ -1803,12 +1803,12 @@ void do_exits(CHAR_DATA *ch, char *argument)
     strcpy_s(buf, fAuto ? "Exits:" : "\n\rObvious exits:\n\r&R--------------&W\n\r");
 
     set_char_color(AT_EXITS, ch);
-    found = FALSE;
+    found = false;
     for (pexit = ch->in_room->first_exit; pexit; pexit = pexit->next)
     {
         if (pexit->to_room && !IS_SET(pexit->exit_info, EX_HIDDEN))
         {
-            found = TRUE;
+            found = true;
             size_t cur_len = strlen(buf);
             char *insert_at = buf + cur_len;
             size_t remaining = sizeof(buf) - cur_len - 1;
@@ -1988,7 +1988,7 @@ void similar_help_files(CHAR_DATA *ch, const char *argument)
     char buf[MAX_STRING_LENGTH];
     char *extension;
     sh_int lvl = 0;
-    bool single = FALSE;
+    bool single = false;
     // char *argnew;
 
     /*
@@ -2016,11 +2016,11 @@ void similar_help_files(CHAR_DATA *ch, const char *argument)
             if (str_similarity(argument, buf) > lvl)
             {
                 lvl = str_similarity(argument, buf);
-                single = TRUE;
+                single = true;
             }
             else if (str_similarity(argument, buf) == lvl && lvl > 0)
             {
-                single = FALSE;
+                single = false;
             }
         }
     }
@@ -2262,8 +2262,8 @@ void do_hlist(CHAR_DATA *ch, char *argument)
     max = maxlimit;
 
     idx = NULL;
-    minfound = FALSE;
-    maxfound = FALSE;
+    minfound = false;
+    maxfound = false;
 
     for (argument = one_argument(argument, arg); arg[0] != '\0'; argument = one_argument(argument, arg))
     {
@@ -2282,12 +2282,12 @@ void do_hlist(CHAR_DATA *ch, char *argument)
             if (!minfound)
             {
                 min = URANGE(minlimit, atoi(arg), maxlimit);
-                minfound = TRUE;
+                minfound = true;
             }
             else if (!maxfound)
             {
                 max = URANGE(minlimit, atoi(arg), maxlimit);
-                maxfound = TRUE;
+                maxfound = true;
             }
             else
             {
@@ -2412,11 +2412,11 @@ void do_who(CHAR_DATA *ch, char *argument)
      */
     iLevelLower = 0;
     iLevelUpper = MAX_LEVEL;
-    fRaceRestrict = FALSE;
-    fImmortalOnly = FALSE;
-    fShowHomepage = FALSE;
+    fRaceRestrict = false;
+    fImmortalOnly = false;
+    fShowHomepage = false;
     for (iRace = 0; iRace < MAX_RACE; iRace++)
-        rgfRace[iRace] = FALSE;
+        rgfRace[iRace] = false;
 
     /*
      * Parse arguments.
@@ -2458,9 +2458,9 @@ void do_who(CHAR_DATA *ch, char *argument)
              */
 
             if (!str_cmp(arg, "imm") || !str_cmp(arg, "gods"))
-                fImmortalOnly = TRUE;
+                fImmortalOnly = true;
             else if (!str_cmp(arg, "www"))
-                fShowHomepage = TRUE;
+                fShowHomepage = true;
         }
     }
 
@@ -2743,7 +2743,7 @@ void do_setrank(CHAR_DATA *ch, char *argument)
     CHAR_DATA *vict;
     char arg1[MAX_INPUT_LENGTH];
     char buf[MAX_INPUT_LENGTH];
-    bool isleader = FALSE;
+    bool isleader = false;
 
     argument = one_argument(argument, arg1);
 
@@ -2774,7 +2774,7 @@ void do_setrank(CHAR_DATA *ch, char *argument)
         return;
     }
     else
-        isleader = TRUE;
+        isleader = true;
 
     if ((vict = get_char_room(ch, arg1)) == NULL)
     {
@@ -2948,13 +2948,13 @@ void do_where(CHAR_DATA *ch, char *argument)
             send_to_pager("Players logged in:\n\r", ch);
         else
             pager_printf(ch, "Players near you in %s:\n\r", ch->in_room->area->name);
-        found = FALSE;
+        found = false;
         for (d = first_descriptor; d; d = d->next)
             if ((d->connected == CON_PLAYING || d->connected == CON_EDITING) && (victim = d->character) != NULL &&
                 !IS_NPC(victim) && victim->in_room &&
                 (victim->in_room->area == ch->in_room->area || get_trust(ch) >= LEVEL_IMMORTAL) && can_see(ch, victim))
             {
-                found = TRUE;
+                found = true;
                 pager_printf(ch, "%-28s %-30s \n\r", victim->name, victim->in_room->name);
             }
         if (!found)
@@ -2962,12 +2962,12 @@ void do_where(CHAR_DATA *ch, char *argument)
     }
     else
     {
-        found = FALSE;
+        found = false;
         for (victim = first_char; victim; victim = victim->next)
             if (victim->in_room && victim->in_room->area == ch->in_room->area && !IS_AFFECTED(victim, AFF_HIDE) &&
                 !IS_AFFECTED(victim, AFF_SNEAK) && can_see(ch, victim) && is_name(arg, victim->name))
             {
-                found = TRUE;
+                found = true;
                 pager_printf(ch, "%-28s %s\n\r", PERS(victim, ch), victim->in_room->name);
                 break;
             }
@@ -3276,7 +3276,7 @@ void do_practice(CHAR_DATA *ch, char *argument)
     {
         CHAR_DATA *mob;
         int adept;
-        bool can_prac = TRUE;
+        bool can_prac = true;
 
         if (!IS_AWAKE(ch))
         {
@@ -3716,7 +3716,7 @@ void do_commands(CHAR_DATA *ch, char *argument)
     }
     else
     {
-        found = FALSE;
+        found = false;
         for (hash = 0; hash < 126; hash++)
             for (command = command_hash[hash]; command; command = command->next)
                 if (command->level < LEVEL_HERO && command->level <= get_trust(ch) &&
@@ -3727,7 +3727,7 @@ void do_commands(CHAR_DATA *ch, char *argument)
                     else
                         pager_printf(ch, "%-12s", command->name);
 
-                    found = TRUE;
+                    found = true;
                     if (++col % 4 == 0)
                         send_to_pager("\n\r", ch);
                 }
@@ -3824,12 +3824,12 @@ void do_channels(CHAR_DATA *ch, char *argument)
         int bit;
 
         bit = 0;
-        ClearAll = FALSE;
+        ClearAll = false;
 
         if (arg[0] == '+')
-            fClear = TRUE;
+            fClear = true;
         else if (arg[0] == '-')
-            fClear = FALSE;
+            fClear = false;
         else
         {
             send_to_char("Channels -channel or +channel?\n\r", ch);
@@ -3883,7 +3883,7 @@ void do_channels(CHAR_DATA *ch, char *argument)
         else if (!str_cmp(arg + 1, "holonet"))
             bit = CHANNEL_HOLONET;
         else if (!str_cmp(arg + 1, "all"))
-            ClearAll = TRUE;
+            ClearAll = true;
         else
         {
             send_to_char("Set or clear which channel?\n\r", ch);
@@ -4074,9 +4074,9 @@ void do_config(CHAR_DATA *ch, char *argument)
         int bit = 0;
 
         if (arg[0] == '+')
-            fSet = TRUE;
+            fSet = true;
         else if (arg[0] == '-')
-            fSet = FALSE;
+            fSet = false;
         else
         {
             send_to_char("Config -option or +option?\n\r", ch);
@@ -4485,7 +4485,7 @@ bool is_online(char *argument)
     DESCRIPTOR_DATA *d;
 
     if (argument[0] == '\0')
-        return FALSE;
+        return false;
 
     for (d = last_descriptor; d; d = d->prev)
     {
@@ -4496,10 +4496,10 @@ bool is_online(char *argument)
         wch = d->original ? d->original : d->character;
 
         if (!str_cmp(argument, wch->name))
-            return TRUE;
+            return true;
     }
 
-    return FALSE;
+    return false;
 }
 
 void do_whoinvis(CHAR_DATA *ch, char *argument)
@@ -4849,13 +4849,13 @@ void do_newexits(CHAR_DATA *ch, char *argument)
     fAuto = !str_cmp(argument, "auto");
     if (!check_blind(ch))
         return;
-    found = nfound = efound = sfound = wfound = ufound = dfound = nefound = nwfound = sefound = swfound = FALSE;
+    found = nfound = efound = sfound = wfound = ufound = dfound = nefound = nwfound = sefound = swfound = false;
     count = 0;
     for (pexit = ch->in_room->first_exit; pexit; pexit = pexit->next)
     {
         if (pexit->to_room && !IS_SET(pexit->exit_info, EX_HIDDEN))
         {
-            found = TRUE;
+            found = true;
             count++;
             buf[0] = '\0';
 
@@ -4883,25 +4883,25 @@ void do_newexits(CHAR_DATA *ch, char *argument)
                 sprintf_s(buf, "&R&W %s", capitalize(dir_name[pexit->vdir]));
             }
             if (pexit->vdir == 0)
-                nfound = TRUE;
+                nfound = true;
             if (pexit->vdir == 1)
-                efound = TRUE;
+                efound = true;
             if (pexit->vdir == 2)
-                sfound = TRUE;
+                sfound = true;
             if (pexit->vdir == 3)
-                wfound = TRUE;
+                wfound = true;
             if (pexit->vdir == 4)
-                ufound = TRUE;
+                ufound = true;
             if (pexit->vdir == 5)
-                dfound = TRUE;
+                dfound = true;
             if (pexit->vdir == 6)
-                nefound = TRUE;
+                nefound = true;
             if (pexit->vdir == 7)
-                nwfound = TRUE;
+                nwfound = true;
             if (pexit->vdir == 8)
-                sefound = TRUE;
+                sefound = true;
             if (pexit->vdir == 9)
-                swfound = TRUE;
+                swfound = true;
             if (count == 1)
                 strcpy_s(line0, buf);
             if (count == 2)
@@ -4936,15 +4936,15 @@ void do_newexits(CHAR_DATA *ch, char *argument)
               "      &G&z/|\\        %s\n\r"
               "    %s%2.2s &G&z| %s%-7.7s %s\n\r"
               "       %s%-9.9s %s\n\r",
-              nfound == TRUE ? "&R" : "&z", nfound == TRUE ? "N" : "*", line0[0] == '\0' ? "" : line0,
-              nwfound == TRUE ? "&R" : "&z", nwfound == TRUE ? "NW" : " *", nefound == TRUE ? "&R" : "&z",
-              nefound == TRUE ? "NE" : "* ", line1[0] == '\0' ? "" : line1, line2[0] == '\0' ? "" : line2,
-              wfound == TRUE ? "&R" : "&z", wfound == TRUE ? "W" : "*", ufound == TRUE ? "&R" : "&z",
-              ufound == TRUE ? "U" : "*", dfound == TRUE ? "&R" : "&z", dfound == TRUE ? "D" : "*",
-              efound == TRUE ? "&R" : "&z", efound == TRUE ? "E" : "*", line3[0] == '\0' ? "" : line3,
-              line4[0] == '\0' ? "" : line4, swfound == TRUE ? "&R" : "&z", swfound == TRUE ? "SW" : " *",
-              sefound == TRUE ? "&R" : "&z", sefound == TRUE ? "SE" : "* ", line5[0] == '\0' ? "" : line5,
-              sfound == TRUE ? "&R" : "&z", sfound == TRUE ? "S" : "*", line6[0] == '\0' ? "" : line6);
+              nfound == true ? "&R" : "&z", nfound == true ? "N" : "*", line0[0] == '\0' ? "" : line0,
+              nwfound == true ? "&R" : "&z", nwfound == true ? "NW" : " *", nefound == true ? "&R" : "&z",
+              nefound == true ? "NE" : "* ", line1[0] == '\0' ? "" : line1, line2[0] == '\0' ? "" : line2,
+              wfound == true ? "&R" : "&z", wfound == true ? "W" : "*", ufound == true ? "&R" : "&z",
+              ufound == true ? "U" : "*", dfound == true ? "&R" : "&z", dfound == true ? "D" : "*",
+              efound == true ? "&R" : "&z", efound == true ? "E" : "*", line3[0] == '\0' ? "" : line3,
+              line4[0] == '\0' ? "" : line4, swfound == true ? "&R" : "&z", swfound == true ? "SW" : " *",
+              sefound == true ? "&R" : "&z", sefound == true ? "SE" : "* ", line5[0] == '\0' ? "" : line5,
+              sfound == true ? "&R" : "&z", sfound == true ? "S" : "*", line6[0] == '\0' ? "" : line6);
     ch_printf(ch, buf);
     if (line7[0] != '\0')
         ch_printf(ch, "  %s\n\r", line7);

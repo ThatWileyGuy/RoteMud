@@ -106,7 +106,7 @@ void save_timedata(void)
     if (!str_cmp(word, literal))                                                                                       \
     {                                                                                                                  \
         field = value;                                                                                                 \
-        fMatch = TRUE;                                                                                                 \
+        fMatch = true;                                                                                                 \
         break;                                                                                                         \
     }
 
@@ -114,17 +114,17 @@ void save_timedata(void)
 void fread_timedata(FILE *fp)
 {
     const char *word = NULL;
-    bool fMatch = FALSE;
+    bool fMatch = false;
 
     for (;;)
     {
         word = feof(fp) ? "End" : fread_word(fp);
-        fMatch = FALSE;
+        fMatch = false;
 
         switch (UPPER(word[0]))
         {
         case '*':
-            fMatch = TRUE;
+            fMatch = true;
             fread_to_eol(fp);
             break;
 
@@ -152,13 +152,13 @@ bool load_timedata(void)
     FILE *fp;
     bool found;
 
-    found = FALSE;
+    found = false;
     sprintf_s(filename, "%stime.dat", SYSTEM_DIR);
 
     if ((fp = fopen(filename, "r")) != NULL)
     {
 
-        found = TRUE;
+        found = true;
         for (;;)
         {
             char letter = '\0';
@@ -261,12 +261,12 @@ void fread_pfile(FILE *fp, time_t tdiff, char *fname, bool count)
             bug("fread_word error on character %s.", fname);
             return;
         }
-        fMatch = FALSE;
+        fMatch = false;
 
         switch (UPPER(word[0]))
         {
         case '*':
-            fMatch = TRUE;
+            fMatch = true;
             fread_to_eol(fp);
             break;
 
@@ -312,7 +312,7 @@ timecheck:
 
     // TODO purging stale pfiles is disabled for now
     /*
-    if (count == FALSE && !IS_SET(pact2, ACT_EXEMPT))
+    if (count == false && !IS_SET(pact2, ACT_EXEMPT))
     {
         if ((level < 10) && (tdiff > sysdata.newbie_purge))
         {
@@ -328,7 +328,7 @@ timecheck:
                     plr_home->name = STRALLOC("An Empty Apartment");
                     REMOVE_BIT(plr_home->room_flags, ROOM_PLR_HOME);
                     SET_BIT(plr_home->room_flags, ROOM_EMPTY_HOME);
-                    fold_area(plr_home->area, plr_home->area->filename, FALSE);
+                    fold_area(plr_home->area, plr_home->area->filename, false);
                 }
 
                 days = sysdata.newbie_purge;
@@ -358,7 +358,7 @@ timecheck:
                         plr_home->name = STRALLOC("An Empty Apartment");
                         REMOVE_BIT(plr_home->room_flags, ROOM_PLR_HOME);
                         SET_BIT(plr_home->room_flags, ROOM_EMPTY_HOME);
-                        fold_area(plr_home->area, plr_home->area->filename, FALSE);
+                        fold_area(plr_home->area, plr_home->area->filename, false);
                     }
                     days = sysdata.regular_purge;
                     sprintf_s(log_buf, "Player %s was deleted. Exceeded time limit of %d days.", name, days);
@@ -502,12 +502,12 @@ void fread_fpfile(CHAR_DATA *ch, FILE *fp, char *fname)
     for (;;)
     {
         word = feof(fp) ? "End" : fread_word(fp);
-        fMatch = FALSE;
+        fMatch = false;
 
         switch (UPPER(word[0]))
         {
         case '*':
-            fMatch = TRUE;
+            fMatch = true;
             fread_to_eol(fp);
             break;
 
@@ -708,7 +708,7 @@ void do_pfiles(CHAR_DATA *ch, char *argument)
 
         sprintf_s(log_buf, "Manual pfile cleanup started by %s.", ch->name);
         log_string(log_buf);
-        pfile_scan(FALSE);
+        pfile_scan(false);
 
         return;
     }
@@ -725,7 +725,7 @@ void do_pfiles(CHAR_DATA *ch, char *argument)
     {
         sprintf_s(log_buf, "Pfile count started by %s.", ch->name);
         log_string(log_buf);
-        pfile_scan(TRUE);
+        pfile_scan(true);
         return;
     }
 
@@ -773,13 +773,13 @@ void check_pfiles(time_t reset)
     {
         reset = 0; /* Call me paranoid, but it might be meaningful later on */
         log_string("Counting pfiles.....");
-        pfile_scan(TRUE);
+        pfile_scan(true);
         return;
     }
 
     if (new_pfile_time_t <= current_time)
     {
-        if (sysdata.CLEANPFILES == TRUE)
+        if (sysdata.CLEANPFILES == true)
         {
 
             char buf[MSL];
@@ -799,7 +799,7 @@ void check_pfiles(time_t reset)
             new_pfile_time_t = current_time + 86400;
             save_timedata();
             log_string("Automated pfile cleanup beginning....");
-            pfile_scan(FALSE);
+            pfile_scan(false);
 #ifdef SAMSONRENT
             if (reset == 0)
                 rent_update();
@@ -810,7 +810,7 @@ void check_pfiles(time_t reset)
             new_pfile_time_t = current_time + 86400;
             save_timedata();
             log_string("Counting pfiles.....");
-            pfile_scan(TRUE);
+            pfile_scan(true);
 #ifdef SAMSONRENT
             if (reset == 0)
                 rent_update();

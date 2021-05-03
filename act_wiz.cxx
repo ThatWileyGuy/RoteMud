@@ -147,7 +147,7 @@ void do_restrict(CHAR_DATA *ch, char *argument)
     CMDTYPE *cmd;
     bool found;
 
-    found = FALSE;
+    found = false;
 
     argument = one_argument(argument, arg);
     if (arg[0] == '\0')
@@ -169,7 +169,7 @@ void do_restrict(CHAR_DATA *ch, char *argument)
     {
         if (!str_prefix(arg, cmd->name) && cmd->level <= get_trust(ch))
         {
-            found = TRUE;
+            found = true;
             break;
         }
     }
@@ -481,7 +481,7 @@ void do_disconnect(CHAR_DATA *ch, char *argument)
     {
         if (d == victim->desc)
         {
-            close_socket(d, FALSE);
+            close_socket(d, false);
             send_to_char("Ok.\n\r", ch);
             return;
         }
@@ -550,7 +550,7 @@ void do_forceclose(CHAR_DATA* ch, char* argument)
                 send_to_char("They might not like that...\n\r", ch);
                 return;
             }
-            close_socket(d, FALSE);
+            close_socket(d, false);
             send_to_char("Ok.\n\r", ch);
             return;
         }
@@ -803,7 +803,7 @@ void do_transfer(CHAR_DATA *ch, char *argument)
     }
 
     if (victim->fighting)
-        stop_fighting(victim, TRUE);
+        stop_fighting(victim, true);
     act(AT_MAGIC, "$n disappears in a cloud of swirling colors.", victim, NULL, NULL, TO_ROOM);
     victim->retran = victim->in_room->vnum;
     char_from_room(victim);
@@ -1191,7 +1191,7 @@ void do_ostat(CHAR_DATA *ch, char *argument)
     if ((obj->item_type == ITEM_CONTAINER) && (obj->first_content))
     {
         send_to_char("&w&GContents:&W\n\r", ch);
-        show_list_to_char(obj->first_content, ch, TRUE, FALSE);
+        show_list_to_char(obj->first_content, ch, true, false);
     }
 
     return;
@@ -1687,12 +1687,12 @@ void do_mwhere(CHAR_DATA *ch, char *argument)
     }
 
     set_pager_color(AT_PLAIN, ch);
-    found = FALSE;
+    found = false;
     for (victim = first_char; victim; victim = victim->next)
     {
         if (IS_NPC(victim) && victim->in_room && nifty_is_name(arg, victim->name))
         {
-            found = TRUE;
+            found = true;
             pager_printf(ch, "[%5d] %-28s [%5d] %s\n\r", victim->pIndexData->vnum, victim->short_descr,
                          victim->in_room->vnum, victim->in_room->name);
         }
@@ -1723,12 +1723,12 @@ void do_bodybag(CHAR_DATA *ch, char *argument)
     sprintf_s(buf3, " ");
     /* check to see if vict is playing? */
     sprintf_s(buf2, "the corpse of %s", arg);
-    found = FALSE;
+    found = false;
     for (obj = first_object; obj; obj = obj->next)
     {
         if (obj->in_room && !str_cmp(buf2, obj->short_descr) && (obj->pIndexData->vnum == 11))
         {
-            found = TRUE;
+            found = true;
             ch_printf(ch, "Bagging body: [%5d] %-28s [%5d] %s\n\r", obj->pIndexData->vnum, obj->short_descr,
                       obj->in_room->vnum, obj->in_room->name);
             obj_from_room(obj);
@@ -1798,12 +1798,12 @@ void do_owhere(CHAR_DATA *ch, char *argument)
         return;
     }
 
-    found = FALSE;
+    found = false;
     for (obj = first_object; obj; obj = obj->next)
     {
         if (!nifty_is_name(arg, obj->name))
             continue;
-        found = TRUE;
+        found = true;
 
         sprintf_s(buf, "(%3d) [%5d] %-28s in ", ++icnt, obj->pIndexData->vnum, obj_short(obj));
         if (obj->carried_by)
@@ -1867,7 +1867,7 @@ void do_reboot(CHAR_DATA *ch, char *argument)
             if (!IS_NPC(vch))
                 save_char_obj(vch);
 
-    mud_down = TRUE;
+    mud_down = true;
     return;
 }
 
@@ -1902,7 +1902,7 @@ void do_shutdown(CHAR_DATA *ch, char *argument)
         for (vch = first_char; vch; vch = vch->next)
             if (!IS_NPC(vch))
                 save_char_obj(vch);
-    mud_down = TRUE;
+    mud_down = true;
     return;
 }
 
@@ -2267,7 +2267,7 @@ void do_purge(CHAR_DATA *ch, char *argument)
         {
             vnext = victim->next_in_room;
             if (IS_NPC(victim) && victim != ch && !IS_SET(victim->act, ACT_POLYMORPHED))
-                extract_char(victim, TRUE);
+                extract_char(victim, true);
         }
 
         for (obj = ch->in_room->first_content; obj; obj = obj_next)
@@ -2325,7 +2325,7 @@ void do_purge(CHAR_DATA *ch, char *argument)
         return;
     }
     act(AT_IMMORT, "$n purges $N.", ch, NULL, victim, TO_NOTVICT);
-    extract_char(victim, TRUE);
+    extract_char(victim, true);
     return;
 }
 
@@ -2374,7 +2374,7 @@ void do_low_purge(CHAR_DATA *ch, char *argument)
 
     act(AT_IMMORT, "$n purges $N.", ch, NULL, victim, TO_NOTVICT);
     act(AT_IMMORT, "You make $N disappear in a puff of smoke!", ch, NULL, victim, TO_CHAR);
-    extract_char(victim, TRUE);
+    extract_char(victim, true);
     return;
 }
 
@@ -2457,7 +2457,7 @@ void do_balzhur(CHAR_DATA *ch, char *argument)
         {
             sprintf_s(buf, "%s%s", BUILD_DIR, buf2);
             if (IS_SET(pArea->status, AREA_LOADED))
-                fold_area(pArea, buf, FALSE);
+                fold_area(pArea, buf, false);
             close_area(pArea);
             sprintf_s(buf2, "%s.bak", buf);
             set_char_color(AT_RED, ch); /* Log message changes colors */
@@ -2921,12 +2921,12 @@ void do_log(CHAR_DATA *ch, char *argument)
     {
         if (fLogAll)
         {
-            fLogAll = FALSE;
+            fLogAll = false;
             send_to_char("Log ALL off.\n\r", ch);
         }
         else
         {
-            fLogAll = TRUE;
+            fLogAll = true;
             send_to_char("Log ALL on.\n\r", ch);
         }
         return;
@@ -2936,12 +2936,12 @@ void do_log(CHAR_DATA *ch, char *argument)
     {
         if (fLogPC)
         {
-            fLogPC = FALSE;
+            fLogPC = false;
             send_to_char("Log all PC's off.\n\r", ch);
         }
         else
         {
-            fLogPC = TRUE;
+            fLogPC = true;
             send_to_char("Log ALL PC's on.\n\r", ch);
         }
         return;
@@ -3265,7 +3265,7 @@ void do_peace(CHAR_DATA *ch, char *argument)
     for (rch = ch->in_room->first_person; rch; rch = rch->next_in_room)
     {
         if (rch->fighting)
-            stop_fighting(rch, TRUE);
+            stop_fighting(rch, true);
 
         /* Added by Narn, Nov 28/95 */
         stop_hating(rch);
@@ -3954,7 +3954,7 @@ void do_loadup(CHAR_DATA *ch, char *argument)
         d->prev = NULL;
         d->connected = CON_GET_NAME;
 
-        loaded = load_char_obj(d, name, FALSE);
+        loaded = load_char_obj(d, name, false);
         add_char(d->character);
         old_room_vnum = d->character->in_room->vnum;
         char_to_room(d->character, ch->in_room);
@@ -4214,7 +4214,7 @@ void do_bestow(CHAR_DATA *ch, char *argument)
     char arg[MAX_INPUT_LENGTH], buf[MAX_STRING_LENGTH], arg_buf[MAX_STRING_LENGTH];
     CHAR_DATA *victim;
     CMDTYPE *cmd;
-    bool fComm = FALSE;
+    bool fComm = false;
 
     set_char_color(AT_IMMORT, ch);
 
@@ -4265,7 +4265,7 @@ void do_bestow(CHAR_DATA *ch, char *argument)
     while (arg && arg[0] != '\0')
     {
         char *cmd_buf, cmd_tmp[MAX_INPUT_LENGTH];
-        bool cFound = FALSE;
+        bool cFound = false;
 
         if (!(cmd = find_command(arg)))
         {
@@ -4286,14 +4286,14 @@ void do_bestow(CHAR_DATA *ch, char *argument)
         {
             if (!str_cmp(cmd_tmp, arg))
             {
-                cFound = TRUE;
+                cFound = true;
                 break;
             }
 
             cmd_buf = one_argument(cmd_buf, cmd_tmp);
         }
 
-        if (cFound == TRUE)
+        if (cFound == true)
         {
             argument = one_argument(argument, arg);
             continue;
@@ -4302,7 +4302,7 @@ void do_bestow(CHAR_DATA *ch, char *argument)
         sprintf_s(arg, "%s ", arg);
         strcat_s(arg_buf, arg);
         argument = one_argument(argument, arg);
-        fComm = TRUE;
+        fComm = true;
     }
     if (!fComm)
     {
@@ -4337,7 +4337,7 @@ void do_set_boot_time(CHAR_DATA *ch, char *argument)
     char arg1[MAX_INPUT_LENGTH];
     bool check;
 
-    check = FALSE;
+    check = false;
 
     argument = one_argument(argument, arg);
 
@@ -4416,7 +4416,7 @@ void do_set_boot_time(CHAR_DATA *ch, char *argument)
         get_reboot_string();
 
         ch_printf(ch, "Boot time set to %s\n\r", reboot_time);
-        check = TRUE;
+        check = true;
     }
     else if (!str_cmp(arg, "manual"))
     {
@@ -4441,7 +4441,7 @@ void do_set_boot_time(CHAR_DATA *ch, char *argument)
 
         set_boot_time->manual = atoi(arg1);
         ch_printf(ch, "Manual bit set to %s\n\r", arg1);
-        check = TRUE;
+        check = true;
         get_reboot_string();
         return;
     }
@@ -4459,10 +4459,10 @@ void do_set_boot_time(CHAR_DATA *ch, char *argument)
         new_boot_time->tm_sec = 0;
         new_boot_time = update_time(new_boot_time);
 
-        sysdata.DENY_NEW_PLAYERS = FALSE;
+        sysdata.DENY_NEW_PLAYERS = false;
 
         send_to_char("Reboot time set back to normal.\n\r", ch);
-        check = TRUE;
+        check = true;
     }
 
     if (!check)
@@ -4505,13 +4505,13 @@ void close_area(AREA_DATA *pArea)
         ech_next = ech->next;
 
         if (ech->fighting)
-            stop_fighting(ech, TRUE);
+            stop_fighting(ech, true);
         if (IS_NPC(ech))
         {
             /* if mob is in area, or part of area. */
             if (URANGE(pArea->low_m_vnum, ech->pIndexData->vnum, pArea->hi_m_vnum) == ech->pIndexData->vnum ||
                 (ech->in_room && ech->in_room->area == pArea))
-                extract_char(ech, TRUE);
+                extract_char(ech, true);
             continue;
         }
         if (ech->in_room && ech->in_room->area == pArea)
@@ -4595,7 +4595,7 @@ void do_destroy(CHAR_DATA *ch, char *argument)
             if ((victim = d->character) && !IS_NPC(victim) && !str_cmp(victim->name, argument))
                 break;
         if (d)
-            close_socket(d, TRUE);
+            close_socket(d, true);
     }
     else
     {
@@ -4604,7 +4604,7 @@ void do_destroy(CHAR_DATA *ch, char *argument)
         quitting_char = victim;
         save_char_obj(victim);
         saving_char = NULL;
-        extract_char(victim, TRUE);
+        extract_char(victim, true);
         for (x = 0; x < MAX_WEAR; x++)
             for (y = 0; y < MAX_LAYERS; y++)
                 save_equipment[x][y] = NULL;
@@ -4635,7 +4635,7 @@ void do_destroy(CHAR_DATA *ch, char *argument)
             {
                 sprintf_s(buf, "%s%s", BUILD_DIR, buf2);
                 if (IS_SET(pArea->status, AREA_LOADED))
-                    fold_area(pArea, buf, FALSE);
+                    fold_area(pArea, buf, false);
                 close_area(pArea);
                 sprintf_s(buf2, "%s.bak", buf);
                 set_char_color(AT_RED, ch); /* Log message changes colors */
@@ -4737,7 +4737,7 @@ void do_for(CHAR_DATA *ch, char *argument)
 {
     char range[MAX_INPUT_LENGTH];
     char buf[MAX_STRING_LENGTH];
-    bool fGods = FALSE, fMortals = FALSE, fMobs = FALSE, fEverywhere = FALSE, found;
+    bool fGods = false, fMortals = false, fMobs = false, fEverywhere = false, found;
     ROOM_INDEX_DATA *room, *old_room;
     CHAR_DATA *p, *p_prev; /* p_next to p_prev -- TRI */
     int i;
@@ -4764,17 +4764,17 @@ void do_for(CHAR_DATA *ch, char *argument)
 
     if (!str_cmp(range, "all"))
     {
-        fMortals = TRUE;
-        fGods = TRUE;
+        fMortals = true;
+        fGods = true;
     }
     else if (!str_cmp(range, "gods"))
-        fGods = TRUE;
+        fGods = true;
     else if (!str_cmp(range, "mortals"))
-        fMortals = TRUE;
+        fMortals = true;
     else if (!str_cmp(range, "mobs"))
-        fMobs = TRUE;
+        fMobs = true;
     else if (!str_cmp(range, "everywhere"))
-        fEverywhere = TRUE;
+        fEverywhere = true;
     else
         do_help(ch, "for"); /* show syntax */
 
@@ -4792,17 +4792,17 @@ void do_for(CHAR_DATA *ch, char *argument)
         {
             p_prev = p->prev;        /* TRI */
             /*	p_next = p->next; */ /* In case someone DOES try to AT MOBS SLAY # */
-            found = FALSE;
+            found = false;
 
             if (!(p->in_room) || room_is_private(p, p->in_room) || (p == ch))
                 continue;
 
             if (IS_NPC(p) && fMobs)
-                found = TRUE;
+                found = true;
             else if (!IS_NPC(p) && get_trust(p) >= LEVEL_IMMORTAL && fGods)
-                found = TRUE;
+                found = true;
             else if (!IS_NPC(p) && get_trust(p) < LEVEL_IMMORTAL && fMortals)
-                found = TRUE;
+                found = true;
 
             /* It looks ugly to me.. but it works :) */
             if (found) /* p is 'appropriate' */
@@ -4843,11 +4843,11 @@ void do_for(CHAR_DATA *ch, char *argument)
         for (i = 0; i < MAX_KEY_HASH; i++) /* run through all the buckets */
             for (room = room_index_hash[i]; room; room = room->next)
             {
-                found = FALSE;
+                found = false;
 
                 /* Anyone in here at all? */
                 if (fEverywhere) /* Everywhere executes always */
-                    found = TRUE;
+                    found = true;
                 else if (!room->first_person) /* Skip it if room is empty */
                     continue;
                 /* ->people changed to first_person -- TRI */
@@ -4862,11 +4862,11 @@ void do_for(CHAR_DATA *ch, char *argument)
                         continue;
 
                     if (IS_NPC(p) && fMobs)
-                        found = TRUE;
+                        found = true;
                     else if (!IS_NPC(p) && (get_trust(p) >= LEVEL_IMMORTAL) && fGods)
-                        found = TRUE;
+                        found = true;
                     else if (!IS_NPC(p) && (get_trust(p) <= LEVEL_IMMORTAL) && fMortals)
-                        found = TRUE;
+                        found = true;
                 } /* for everyone inside the room */
 
                 if (found && !room_is_private(p, room)) /* Any of the required type here AND room not private? */
@@ -5250,7 +5250,7 @@ void do_hell(CHAR_DATA *ch, char *argument)
     CHAR_DATA *victim;
     char arg[MAX_INPUT_LENGTH];
     sh_int time;
-    bool h_d = FALSE;
+    bool h_d = false;
     tm *tms;
 
     argument = one_argument(argument, arg);
@@ -5289,7 +5289,7 @@ void do_hell(CHAR_DATA *ch, char *argument)
     }
     argument = one_argument(argument, arg);
     if (!*arg || !str_prefix(arg, "hours"))
-        h_d = TRUE;
+        h_d = true;
     else if (str_prefix(arg, "days"))
     {
         send_to_char("Is that value in hours or days?\n\r", ch);
@@ -5345,7 +5345,7 @@ void do_unhell(CHAR_DATA *ch, char *argument)
     location = get_room_index(wherehome(victim));
     if (!location)
         location = ch->in_room;
-    MOBtrigger = FALSE;
+    MOBtrigger = false;
     act(AT_MAGIC, "$n disappears in a cloud of godly light.", victim, NULL, ch, TO_NOTVICT);
     char_from_room(victim);
     char_to_room(victim, location);
@@ -5362,7 +5362,7 @@ void do_unhell(CHAR_DATA *ch, char *argument)
         victim->pcdata->helled_by = NULL;
     }
 
-    MOBtrigger = FALSE;
+    MOBtrigger = false;
     act(AT_MAGIC, "$n appears in a cloud of godly light.", victim, NULL, ch, TO_NOTVICT);
     victim->pcdata->release_date = 0;
     save_char_obj(victim);
@@ -5373,7 +5373,7 @@ void do_unhell(CHAR_DATA *ch, char *argument)
 void do_vsearch(CHAR_DATA *ch, char *argument)
 {
     char arg[MAX_INPUT_LENGTH];
-    bool found = FALSE;
+    bool found = false;
     OBJ_DATA *obj;
     OBJ_DATA *in_obj;
     int obj_counter = 1;
@@ -5400,7 +5400,7 @@ void do_vsearch(CHAR_DATA *ch, char *argument)
         if (!can_see_obj(ch, obj) || !(argi == obj->pIndexData->vnum))
             continue;
 
-        found = TRUE;
+        found = true;
         for (in_obj = obj; in_obj->in_obj != NULL; in_obj = in_obj->in_obj)
             ;
 
@@ -5756,10 +5756,10 @@ void do_sedit(CHAR_DATA *ch, char *argument)
         if (arg1[0] != social->name[0])
         {
             unlink_social(social);
-            relocate = TRUE;
+            relocate = true;
         }
         else
-            relocate = FALSE;
+            relocate = false;
         if (social->name)
             DISPOSE(social->name);
         social->name = str_dup(arg1);
@@ -6054,10 +6054,10 @@ void do_cedit(CHAR_DATA *ch, char *argument)
         if (arg1[0] != command->name[0])
         {
             unlink_command(command);
-            relocate = TRUE;
+            relocate = true;
         }
         else
-            relocate = FALSE;
+            relocate = false;
         if (command->name)
             DISPOSE(command->name);
         command->name = str_dup(arg1);
@@ -6204,7 +6204,7 @@ void do_fslay(CHAR_DATA *ch, char *argument)
     {
         if (d == victim->desc)
         {
-            close_socket(d, FALSE);
+            close_socket(d, false);
             send_to_char("Ok.\n\r", ch);
             return;
         }
@@ -6883,7 +6883,7 @@ void do_pcrename(CHAR_DATA *ch, char *argument)
     sprintf_s(oldname, "%s%c/%s", PLAYER_DIR, tolower(victim->name[0]), capitalize(victim->name));
     sprintf_s(backname, "%s%c/%s", BACKUP_DIR, tolower(victim->name[0]), capitalize(victim->name));
 
-    //  fOld = load_account(null, newname, TRUE);
+    //  fOld = load_account(null, newname, true);
 
     if (std::filesystem::exists(newname))
     {

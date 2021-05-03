@@ -519,11 +519,11 @@ void edit_buffer(CHAR_DATA *ch, char *argument)
         p--;
     if (p > line && *p == '\\')
     {
-        cont_line = TRUE;
+        cont_line = true;
         *p = '\0';
     }
     else
-        cont_line = FALSE;
+        cont_line = false;
 
     if (TOTAL_BUFFER_SIZE(edd) + linelen + 2 >= edd->max_size)
     {
@@ -1043,7 +1043,7 @@ const char *finer_one_argument(const char *argument, char *arg_first)
     if (*argument == '\'' || *argument == '"')
         cEnd = *argument++;
 
-    escaped = FALSE;
+    escaped = false;
     while (*argument != '\0' || ++count >= MAX_INPUT_LENGTH)
     {
         if (cEnd != ' ' && escaped)
@@ -1058,12 +1058,12 @@ const char *finer_one_argument(const char *argument, char *arg_first)
                 *arg_first = *argument;
             arg_first++;
             argument++;
-            escaped = FALSE;
+            escaped = false;
             continue;
         }
         if (cEnd != ' ' && *argument == '\\' && !escaped)
         {
-            escaped = TRUE;
+            escaped = true;
             argument++;
             continue;
         }

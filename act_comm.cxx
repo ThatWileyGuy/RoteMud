@@ -129,22 +129,22 @@ void do_beep(CHAR_DATA *ch, char *argument)
         return;
     }
 
-    ch_comlink = FALSE;
-    victim_comlink = FALSE;
+    ch_comlink = false;
+    victim_comlink = false;
 
     if (IS_IMMORTAL(ch))
     {
-        ch_comlink = TRUE;
-        victim_comlink = TRUE;
+        ch_comlink = true;
+        victim_comlink = true;
     }
 
     if (IS_IMMORTAL(victim))
-        victim_comlink = TRUE;
+        victim_comlink = true;
 
     for (obj = ch->last_carrying; obj; obj = obj->prev_content)
     {
         if (obj->pIndexData->item_type == ITEM_COMLINK)
-            ch_comlink = TRUE;
+            ch_comlink = true;
     }
 
     if (!ch_comlink)
@@ -156,7 +156,7 @@ void do_beep(CHAR_DATA *ch, char *argument)
     for (obj = victim->last_carrying; obj; obj = obj->prev_content)
     {
         if (obj->pIndexData->item_type == ITEM_COMLINK)
-            victim_comlink = TRUE;
+            victim_comlink = true;
     }
 
     if (!victim_comlink)
@@ -422,8 +422,8 @@ void talk_channel(CHAR_DATA *ch, const char *argument, int channel, const char *
     int position;
     CLAN_DATA *clan = NULL;
 
-    bool ch_comlink = FALSE;
-    bool garble = FALSE;
+    bool ch_comlink = false;
+    bool garble = false;
 
     if (ch->comfreq == NULL || !str_cmp(ch->comfreq, "(null)") || (strlen(ch->comfreq) != 7))
         generate_com_freq(ch);
@@ -436,13 +436,13 @@ void talk_channel(CHAR_DATA *ch, const char *argument, int channel, const char *
         OBJ_DATA *obj;
 
         if (IS_IMMORTAL(ch))
-            ch_comlink = TRUE;
+            ch_comlink = true;
         else
             for (obj = ch->last_carrying; obj; obj = obj->prev_content)
             {
                 if (obj->pIndexData->item_type == ITEM_COMLINK)
                 {
-                    ch_comlink = TRUE;
+                    ch_comlink = true;
                     break;
                 }
             }
@@ -618,7 +618,7 @@ void talk_channel(CHAR_DATA *ch, const char *argument, int channel, const char *
         if (d->connected == CON_PLAYING && vch != ch && !IS_SET(och->deaf, channel))
         {
             const char *sbuf = argument;
-            ch_comlink = FALSE;
+            ch_comlink = false;
 
             if (!str_cmp(vch->name, ch->name))
                 continue;
@@ -711,12 +711,12 @@ void talk_channel(CHAR_DATA *ch, const char *argument, int channel, const char *
                 OBJ_DATA *obj;
 
                 if (IS_IMMORTAL(och))
-                    ch_comlink = TRUE;
+                    ch_comlink = true;
                 else
                     for (obj = och->last_carrying; obj; obj = obj->prev_content)
                     {
                         if (obj->pIndexData->item_type == ITEM_COMLINK)
-                            ch_comlink = TRUE;
+                            ch_comlink = true;
                     }
 
                 if (!ch_comlink)
@@ -765,8 +765,8 @@ void talk_channel(CHAR_DATA *ch, const char *argument, int channel, const char *
                 bool commsys;
                 int chance;
                 OBJ_DATA *obj;
-                commsys = FALSE;
-                garble = FALSE;
+                commsys = false;
+                garble = false;
                 if (!ship)
                     continue;
                 if (!vch->in_room)
@@ -784,7 +784,7 @@ void talk_channel(CHAR_DATA *ch, const char *argument, int channel, const char *
                 {
                     if (obj->pIndexData->item_type == ITEM_COMMSYSTEM)
                     {
-                        commsys = TRUE;
+                        commsys = true;
                         break;
                     }
                 }
@@ -796,7 +796,7 @@ void talk_channel(CHAR_DATA *ch, const char *argument, int channel, const char *
                     chance = IS_NPC(vch) ? vch->top_level : (int)(vch->pcdata->learned[gsn_commsystem]);
                     if (number_percent() > chance)
                     {
-                        garble = TRUE;
+                        garble = true;
                         learn_from_failure(vch, gsn_commsystem);
                     }
                     else
@@ -835,7 +835,7 @@ void talk_channel(CHAR_DATA *ch, const char *argument, int channel, const char *
                 (channel != CHANNEL_NEWBIE && channel != CHANNEL_OOC && channel != CHANNEL_AUCTION &&
                  channel != CHANNEL_ASK && channel != CHANNEL_AVTALK))
                 sbuf = scramble(argument, ch->speaking);
-            MOBtrigger = FALSE;
+            MOBtrigger = false;
             if (channel == CHANNEL_IMMTALK || channel == CHANNEL_AVTALK || channel == CHANNEL_103 ||
                 channel == CHANNEL_104 || channel == CHANNEL_105)
             {
@@ -1354,7 +1354,7 @@ void do_say(CHAR_DATA *ch, char *argument)
             sbuf = scramble(argument, ch->speaking);
         sbuf = drunk_speech(sbuf, ch);
 
-        MOBtrigger = FALSE;
+        MOBtrigger = false;
 
         // Fun gag trick. Heh. Mmf mmmMmmf mmmf.
 
@@ -1385,10 +1385,10 @@ void do_say(CHAR_DATA *ch, char *argument)
         }
         act(AT_SAY, "$n says: $t", ch, sbuf, vch, TO_VICT);
     }
-    /*    MOBtrigger = FALSE;
+    /*    MOBtrigger = false;
         act( AT_SAY, "$n says '$T'", ch, NULL, argument, TO_ROOM );*/
     ch->act = actflags;
-    MOBtrigger = FALSE;
+    MOBtrigger = false;
 
     act(AT_SAY, "You say: $T", ch, NULL, drunk_speech(argument, ch), TO_CHAR);
 
@@ -1469,18 +1469,18 @@ void do_oldtell(CHAR_DATA *ch, char *argument)
 
     if (victim->in_room != ch->in_room && !IS_IMMORTAL(ch))
     {
-        ch_comlink = FALSE;
-        victim_comlink = FALSE;
+        ch_comlink = false;
+        victim_comlink = false;
 
         for (obj = ch->last_carrying; obj; obj = obj->prev_content)
         {
             if (obj->pIndexData->item_type == ITEM_COMLINK)
-                ch_comlink = TRUE;
+                ch_comlink = true;
         }
 
         if (IS_IMMORTAL(victim))
-            ch_comlink = TRUE;
-        victim_comlink = TRUE;
+            ch_comlink = true;
+        victim_comlink = true;
 
         if (!ch_comlink)
         {
@@ -1491,7 +1491,7 @@ void do_oldtell(CHAR_DATA *ch, char *argument)
         for (obj = victim->last_carrying; obj; obj = obj->prev_content)
         {
             if (obj->pIndexData->item_type == ITEM_COMLINK)
-                victim_comlink = TRUE;
+                victim_comlink = true;
         }
 
         if (!victim_comlink)
@@ -1673,18 +1673,18 @@ void do_tell(CHAR_DATA *ch, char *argument)
 
     if (victim->in_room != ch->in_room && !IS_IMMORTAL(ch))
     {
-        ch_comlink = FALSE;
-        victim_comlink = FALSE;
+        ch_comlink = false;
+        victim_comlink = false;
 
         for (obj = ch->last_carrying; obj; obj = obj->prev_content)
         {
             if (obj->pIndexData->item_type == ITEM_COMLINK)
-                ch_comlink = TRUE;
+                ch_comlink = true;
         }
 
         if (IS_IMMORTAL(victim))
-            ch_comlink = TRUE;
-        victim_comlink = TRUE;
+            ch_comlink = true;
+        victim_comlink = true;
 
         if (!ch_comlink)
         {
@@ -1695,7 +1695,7 @@ void do_tell(CHAR_DATA *ch, char *argument)
         for (obj = victim->last_carrying; obj; obj = obj->prev_content)
         {
             if (obj->pIndexData->item_type == ITEM_COMLINK)
-                victim_comlink = TRUE;
+                victim_comlink = true;
         }
 
         if (!victim_comlink)
@@ -1869,18 +1869,18 @@ void do_oldreply(CHAR_DATA *ch, char *argument)
 
     if (victim->in_room != ch->in_room && !IS_IMMORTAL(ch))
     {
-        ch_comlink = FALSE;
-        victim_comlink = FALSE;
+        ch_comlink = false;
+        victim_comlink = false;
 
         for (obj = ch->last_carrying; obj; obj = obj->prev_content)
         {
             if (obj->pIndexData->item_type == ITEM_COMLINK)
-                ch_comlink = TRUE;
+                ch_comlink = true;
         }
 
         if (IS_IMMORTAL(victim))
-            ch_comlink = TRUE;
-        victim_comlink = TRUE;
+            ch_comlink = true;
+        victim_comlink = true;
 
         if (!ch_comlink)
         {
@@ -1891,7 +1891,7 @@ void do_oldreply(CHAR_DATA *ch, char *argument)
         for (obj = victim->last_carrying; obj; obj = obj->prev_content)
         {
             if (obj->pIndexData->item_type == ITEM_COMLINK)
-                victim_comlink = TRUE;
+                victim_comlink = true;
         }
 
         if (!victim_comlink)
@@ -2025,18 +2025,18 @@ void do_reply(CHAR_DATA *ch, char *argument)
 
     if (victim->in_room != ch->in_room && !IS_IMMORTAL(ch))
     {
-        ch_comlink = FALSE;
-        victim_comlink = FALSE;
+        ch_comlink = false;
+        victim_comlink = false;
 
         for (obj = ch->last_carrying; obj; obj = obj->prev_content)
         {
             if (obj->pIndexData->item_type == ITEM_COMLINK)
-                ch_comlink = TRUE;
+                ch_comlink = true;
         }
 
         if (IS_IMMORTAL(victim))
-            ch_comlink = TRUE;
-        victim_comlink = TRUE;
+            ch_comlink = true;
+        victim_comlink = true;
 
         if (!ch_comlink)
         {
@@ -2047,7 +2047,7 @@ void do_reply(CHAR_DATA *ch, char *argument)
         for (obj = victim->last_carrying; obj; obj = obj->prev_content)
         {
             if (obj->pIndexData->item_type == ITEM_COMLINK)
-                victim_comlink = TRUE;
+                victim_comlink = true;
         }
 
         if (!victim_comlink)
@@ -2118,9 +2118,9 @@ void do_emote(CHAR_DATA *ch, char *argument)
     if (isalpha(plast[-1]))
         strcat_s(buf, ".");
 
-    MOBtrigger = FALSE;
+    MOBtrigger = false;
     act(AT_ACTION, "$n $T", ch, NULL, buf, TO_ROOM);
-    MOBtrigger = FALSE;
+    MOBtrigger = false;
     act(AT_ACTION, "$n $T", ch, NULL, buf, TO_CHAR);
     ch->act = actflags;
     if (IS_SET(ch->in_room->room_flags, ROOM_LOGSPEECH))
@@ -2395,7 +2395,7 @@ void do_quit(CHAR_DATA *ch, char *argument)
     /*
      * After extract_char the ch is no longer valid!
      */
-    extract_char(ch, TRUE);
+    extract_char(ch, true);
     for (x = 0; x < MAX_WEAR; x++)
         for (y = 0; y < MAX_LAYERS; y++)
             save_equipment[x][y] = NULL;
@@ -2575,8 +2575,8 @@ bool circle_follow(CHAR_DATA *ch, CHAR_DATA *victim)
 
     for (tmp = victim; tmp; tmp = tmp->master)
         if (tmp == ch)
-            return TRUE;
-    return FALSE;
+            return true;
+    return false;
 }
 
 void do_follow(CHAR_DATA *ch, char *argument)
@@ -2725,12 +2725,12 @@ void do_order(CHAR_DATA *ch, char *argument)
 
     if (!str_cmp(arg, "all"))
     {
-        fAll = TRUE;
+        fAll = true;
         victim = NULL;
     }
     else
     {
-        fAll = FALSE;
+        fAll = false;
         if ((victim = get_char_room(ch, arg)) == NULL)
         {
             send_to_char("They aren't here.\n\r", ch);
@@ -2750,14 +2750,14 @@ void do_order(CHAR_DATA *ch, char *argument)
         }
     }
 
-    found = FALSE;
+    found = false;
     for (och = ch->in_room->first_person; och; och = och_next)
     {
         och_next = och->next_in_room;
 
         if (IS_AFFECTED(och, AFF_CHARM) && och->master == ch && (fAll || och == victim))
         {
-            found = TRUE;
+            found = true;
             act(AT_ACTION, "$n orders you to '$t'.", ch, argument, och, TO_VICT);
             interpret(och, argument);
         }
@@ -3080,22 +3080,22 @@ bool knows_language(CHAR_DATA *ch, int language, CHAR_DATA *cch)
     sh_int sn;
 
     if (!IS_NPC(ch) && IS_IMMORTAL(ch))
-        return TRUE;
+        return true;
     if (IS_NPC(ch) && !ch->speaks) /* No langs = knows all for npcs */
-        return TRUE;
+        return true;
     if (IS_NPC(ch) && IS_SET(ch->speaks, (language & ~LANG_CLAN)))
-        return TRUE;
+        return true;
     /* everyone does not KNOW basic tongue
     if ( IS_SET(language, LANG_BASIC) )
-        return TRUE;
+        return true;
     */
     if (language & LANG_CLAN)
     {
         /* Clan = basic for mobs.. snicker.. -- Altrag */
         if (IS_NPC(ch) || IS_NPC(cch))
-            return TRUE;
+            return true;
         if (ch->pcdata->clan == cch->pcdata->clan && ch->pcdata->clan != NULL)
-            return TRUE;
+            return true;
     }
     if (!IS_NPC(ch))
     {
@@ -3103,26 +3103,26 @@ bool knows_language(CHAR_DATA *ch, int language, CHAR_DATA *cch)
 
         /* Racial languages for PCs */
         if (IS_SET(race_table[ch->race].language, language))
-            return TRUE;
+            return true;
 
         for (lang = 0; lang_array[lang] != LANG_UNKNOWN; lang++)
             if (IS_SET(language, lang_array[lang]) && IS_SET(ch->speaks, lang_array[lang]))
             {
                 if ((sn = skill_lookup(lang_names[lang])) != -1 && ch->pcdata->learned[sn] >= 60)
-                    return TRUE;
+                    return true;
             }
     }
-    return FALSE;
+    return false;
 }
 
 bool can_learn_lang(CHAR_DATA *ch, int language)
 {
     if (language & LANG_CLAN)
-        return FALSE;
+        return false;
     if (IS_NPC(ch) || IS_IMMORTAL(ch))
-        return FALSE;
+        return false;
     if (race_table[ch->race].language & language)
-        return FALSE;
+        return false;
     if (ch->speaks & language)
     {
         int lang;
@@ -3133,19 +3133,19 @@ bool can_learn_lang(CHAR_DATA *ch, int language)
                 int sn;
 
                 if (!(VALID_LANGS & lang_array[lang]))
-                    return FALSE;
+                    return false;
                 if ((sn = skill_lookup(lang_names[lang])) < 0)
                 {
                     bug("Can_learn_lang: valid language without sn: %d", lang);
                     continue;
                 }
                 if (ch->pcdata->learned[sn] >= 99)
-                    return FALSE;
+                    return false;
             }
     }
     if (VALID_LANGS & language)
-        return TRUE;
-    return FALSE;
+        return true;
+    return false;
 }
 
 int const lang_array[] = {

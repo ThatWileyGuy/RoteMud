@@ -133,12 +133,8 @@ void load_hall_of_fame(void);
  * Diavolo reports AIX compiler has bugs with short types.
  */
 // TODO all of these should go away
-#if !defined(FALSE)
-#define FALSE 0
-#endif
-
-#if !defined(TRUE)
-#define TRUE 1
+#if !defined(false)
+#define false 0
 #endif
 
 // TODO this needs to go away very rapidly

@@ -225,12 +225,12 @@ void do_comment(CHAR_DATA *ch, char *argument)
 
         if (!str_cmp(argument, "all"))
         {
-            fAll = TRUE;
+            fAll = true;
             anum = 0;
         }
         else if (is_number(argument))
         {
-            fAll = FALSE;
+            fAll = false;
             anum = atoi(argument);
         }
         else

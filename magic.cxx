@@ -63,27 +63,27 @@ bool is_immune(CHAR_DATA *ch, sh_int damtype)
     {
     case SD_FIRE:
         if (IS_SET(ch->immune, RIS_FIRE))
-            return TRUE;
+            return true;
     case SD_COLD:
         if (IS_SET(ch->immune, RIS_COLD))
-            return TRUE;
+            return true;
     case SD_ELECTRICITY:
         if (IS_SET(ch->immune, RIS_ELECTRICITY))
-            return TRUE;
+            return true;
     case SD_ENERGY:
         if (IS_SET(ch->immune, RIS_ENERGY))
-            return TRUE;
+            return true;
     case SD_ACID:
         if (IS_SET(ch->immune, RIS_ACID))
-            return TRUE;
+            return true;
     case SD_POISON:
         if (IS_SET(ch->immune, RIS_POISON))
-            return TRUE;
+            return true;
     case SD_DRAIN:
         if (IS_SET(ch->immune, RIS_DRAIN))
-            return TRUE;
+            return true;
     }
-    return FALSE;
+    return false;
 }
 
 /*
@@ -636,7 +636,7 @@ bool saves_poison_death(int level, CHAR_DATA *victim)
     if (!victim)
     {
         bug("saves_poison_death: No Victim", 0);
-        return FALSE;
+        return false;
     }
     save = 50 + (victim->top_level - level - victim->saving_poison_death) * 2;
     save = URANGE(5, save, 95);
@@ -647,7 +647,7 @@ bool saves_wands(int level, CHAR_DATA *victim)
     int save;
 
     if (IS_SET(victim->immune, RIS_MAGIC))
-        return TRUE;
+        return true;
 
     save = 50 + (victim->top_level - level - victim->saving_wand) * 2;
     save = URANGE(5, save, 95);
@@ -674,7 +674,7 @@ bool saves_spell_staff(int level, CHAR_DATA *victim)
     int save;
 
     if (IS_SET(victim->immune, RIS_MAGIC))
-        return TRUE;
+        return true;
 
     if (IS_NPC(victim) && level > 10)
         level -= 5;
@@ -714,17 +714,17 @@ bool process_spell_components(CHAR_DATA *ch, int sn)
 
     /* if no components necessary, then everything is cool */
     if (!comp || comp[0] == '\0')
-        return TRUE;
+        return true;
 
     /* disable the whole damn shabang */
 
-    return TRUE;
+    return true;
 
     while (comp[0] != '\0')
     {
         comp = one_argument(comp, arg);
-        consume = TRUE;
-        fail = found = FALSE;
+        consume = true;
+        fail = found = false;
         val = -1;
         switch (arg[1])
         {
@@ -733,11 +733,11 @@ bool process_spell_components(CHAR_DATA *ch, int sn)
             break;
         case '!':
             check = arg + 2;
-            fail = TRUE;
+            fail = true;
             break;
         case '+':
             check = arg + 2;
-            consume = FALSE;
+            consume = false;
             break;
         case '@':
             check = arg + 2;
@@ -775,9 +775,9 @@ bool process_spell_components(CHAR_DATA *ch, int sn)
                     if (fail)
                     {
                         send_to_char("Something disrupts the use of this power...\n\r", ch);
-                        return FALSE;
+                        return false;
                     }
-                    found = TRUE;
+                    found = true;
                     break;
                 }
             break;
@@ -788,9 +788,9 @@ bool process_spell_components(CHAR_DATA *ch, int sn)
                     if (fail)
                     {
                         send_to_char("Something disrupts the use of this power...\n\r", ch);
-                        return FALSE;
+                        return false;
                     }
-                    found = TRUE;
+                    found = true;
                     break;
                 }
             break;
@@ -801,9 +801,9 @@ bool process_spell_components(CHAR_DATA *ch, int sn)
                     if (fail)
                     {
                         send_to_char("Something disrupts the use of this power...\n\r", ch);
-                        return FALSE;
+                        return false;
                     }
-                    found = TRUE;
+                    found = true;
                     break;
                 }
             break;
@@ -813,7 +813,7 @@ bool process_spell_components(CHAR_DATA *ch, int sn)
                 if (fail)
                 {
                     send_to_char("Something disrupts the use of this power...\n\r", ch);
-                    return FALSE;
+                    return false;
                 }
                 else
                 {
@@ -833,7 +833,7 @@ bool process_spell_components(CHAR_DATA *ch, int sn)
                 if (fail)
                 {
                     send_to_char("Something disrupts the use of this power...\n\r", ch);
-                    return FALSE;
+                    return false;
                 }
                 else
                 {
@@ -856,7 +856,7 @@ bool process_spell_components(CHAR_DATA *ch, int sn)
         if (!found)
         {
             send_to_char("Something is missing...\n\r", ch);
-            return FALSE;
+            return false;
         }
         if (obj)
         {
@@ -864,7 +864,7 @@ bool process_spell_components(CHAR_DATA *ch, int sn)
             {
                 separate_obj(obj);
                 if (obj->value[val] <= 0)
-                    return FALSE;
+                    return false;
                 else if (--obj->value[val] == 0)
                 {
                     act(AT_MAGIC, "$p glows briefly, then disappears in a puff of smoke!", ch, obj, NULL, TO_CHAR);
@@ -891,7 +891,7 @@ bool process_spell_components(CHAR_DATA *ch, int sn)
             }
         }
     }
-    return TRUE;
+    return true;
 }
 
 int pAbort;
@@ -1041,7 +1041,7 @@ void do_cast(CHAR_DATA *ch, char *argument)
     int mana;
     int sn;
     ch_ret retcode;
-    bool dont_wait = FALSE;
+    bool dont_wait = false;
     SKILL_TYPE *skill = NULL;
     std::chrono::steady_clock::duration time_used;
 
@@ -1075,7 +1075,7 @@ void do_cast(CHAR_DATA *ch, char *argument)
 
         if (get_trust(ch) < LEVEL_GOD)
         {
-            if ((sn = find_spell(ch, arg1, TRUE)) < 0 || (!IS_NPC(ch) && ch->pcdata->learned[sn] <= 0))
+            if ((sn = find_spell(ch, arg1, true)) < 0 || (!IS_NPC(ch) && ch->pcdata->learned[sn] <= 0))
             {
                 send_to_char("You can't do that.\n\r", ch);
                 return;
@@ -1252,7 +1252,7 @@ void do_cast(CHAR_DATA *ch, char *argument)
                         tmp->tempnum = -1;
                         DISPOSE(tmp->dest_buf);
                     }
-                dont_wait = TRUE;
+                dont_wait = true;
                 send_to_char("You concentrate all the energy into a burst of force!\n\r", ch);
                 vo = locate_targets(ch, arg2, sn, &victim, &obj);
                 if (vo == &pAbort)
@@ -1682,7 +1682,7 @@ ch_ret spell_call_lightning(int sn, int level, CHAR_DATA *ch, void *vo)
     send_to_char("Lightning strikes your foes!\n\r", ch);
     act(AT_MAGIC, "$n calls Lightning to strike $s foes!", ch, NULL, NULL, TO_ROOM);
 
-    ch_died = FALSE;
+    ch_died = false;
     for (vch = first_char; vch; vch = vch_next)
     {
         vch_next = vch->next;
@@ -1696,7 +1696,7 @@ ch_ret spell_call_lightning(int sn, int level, CHAR_DATA *ch, void *vo)
             if (vch != ch && (IS_NPC(ch) ? !IS_NPC(vch) : IS_NPC(vch)))
                 retcode = damage(ch, vch, saves_spell_staff(level, vch) ? dam / 2 : dam, sn);
             if (retcode == rCHAR_DIED || char_died(ch))
-                ch_died = TRUE;
+                ch_died = true;
             continue;
         }
 
@@ -2177,7 +2177,7 @@ ch_ret spell_earthquake(int sn, int level, CHAR_DATA *ch, void *vo)
     ch_ret retcode;
     SKILL_TYPE *skill = get_skilltype(sn);
 
-    ch_died = FALSE;
+    ch_died = false;
     retcode = rNONE;
 
     if (IS_SET(ch->in_room->room_flags, ROOM_SAFE))
@@ -2213,7 +2213,7 @@ ch_ret spell_earthquake(int sn, int level, CHAR_DATA *ch, void *vo)
             retcode = damage(ch, vch, level + dice(2, 8), sn);
             if (retcode == rCHAR_DIED || char_died(ch))
             {
-                ch_died = TRUE;
+                ch_died = true;
                 continue;
             }
             if (char_died(vch))
@@ -2482,7 +2482,7 @@ ch_ret spell_injure(int sn, int level, CHAR_DATA *ch, void *vo)
         send_to_char("You sense their gut wrenching as they fall to the ground, unconcious.\n\r", ch);
         send_to_char("You fall to the ground in horrendous pain! You must take some time to recover..\n\r", victim);
         act(AT_WHITE, "$N falls to the ground, unconcious.", ch, NULL, victim, TO_ROOM);
-        stop_fighting(victim, TRUE);
+        stop_fighting(victim, true);
 
         if (!IS_AFFECTED(victim, AFF_PARALYSIS))
         {
@@ -2835,7 +2835,7 @@ ch_ret spell_locate_object(int sn, int level, CHAR_DATA *ch, void *vo)
     bool found;
     int cnt;
 
-    found = FALSE;
+    found = false;
     for (obj = first_object; obj; obj = obj->next)
     {
         if (!can_see_obj(ch, obj) || !nifty_is_name(target_name, obj->name))
@@ -2843,7 +2843,7 @@ ch_ret spell_locate_object(int sn, int level, CHAR_DATA *ch, void *vo)
         if (IS_OBJ_STAT(obj, ITEM_PROTOTYPE) && !IS_IMMORTAL(ch))
             continue;
 
-        found = TRUE;
+        found = true;
 
         for (cnt = 0, in_obj = obj; in_obj->in_obj && cnt < 100; in_obj = in_obj->in_obj, ++cnt)
             ;
@@ -2939,7 +2939,7 @@ ch_ret spell_poison(int sn, int level, CHAR_DATA *ch, void *vo)
     CHAR_DATA *victim = (CHAR_DATA *)vo;
     AFFECT_DATA af;
     int chance;
-    bool first = TRUE;
+    bool first = true;
 
     send_to_char("You feel the hatred grow within you!\n\r", ch);
     ch->alignment = ch->alignment - 100;
@@ -2950,7 +2950,7 @@ ch_ret spell_poison(int sn, int level, CHAR_DATA *ch, void *vo)
     if (chance == 1000 || saves_poison_death(chance, victim))
         return rSPELL_FAILED;
     if (IS_AFFECTED(victim, AFF_POISON))
-        first = FALSE;
+        first = false;
     af.type = sn;
     af.duration = level * DUR_CONV;
     af.location = APPLY_STR;
@@ -2984,7 +2984,7 @@ ch_ret spell_remove_trap(int sn, int level, CHAR_DATA *ch, void *vo)
         return rSPELL_FAILED;
     }
 
-    found = FALSE;
+    found = false;
 
     if (!ch->in_room->first_content)
     {
@@ -2995,7 +2995,7 @@ ch_ret spell_remove_trap(int sn, int level, CHAR_DATA *ch, void *vo)
     for (obj = ch->in_room->first_content; obj; obj = obj->next_content)
         if (can_see_obj(ch, obj) && nifty_is_name(target_name, obj->name))
         {
-            found = TRUE;
+            found = true;
             break;
         }
 
@@ -3375,7 +3375,7 @@ ch_ret spell_gas_breath(int sn, int level, CHAR_DATA *ch, void *vo)
     int hpch;
     bool ch_died;
 
-    ch_died = FALSE;
+    ch_died = false;
 
     if (IS_SET(ch->in_room->room_flags, ROOM_SAFE))
     {
@@ -3397,7 +3397,7 @@ ch_ret spell_gas_breath(int sn, int level, CHAR_DATA *ch, void *vo)
             if (saves_breath(level, vch))
                 dam /= 2;
             if (damage(ch, vch, dam, sn) == rCHAR_DIED || char_died(ch))
-                ch_died = TRUE;
+                ch_died = true;
         }
     }
     if (ch_died)
@@ -3695,7 +3695,7 @@ ch_ret spell_animate_dead(int sn, int level, CHAR_DATA *ch, void *vo)
     char buf[MAX_STRING_LENGTH];
     SKILL_TYPE *skill = get_skilltype(sn);
 
-    found = FALSE;
+    found = false;
 
     for (corpse = ch->in_room->first_content; corpse; corpse = corpse_next)
     {
@@ -3703,7 +3703,7 @@ ch_ret spell_animate_dead(int sn, int level, CHAR_DATA *ch, void *vo)
 
         if (corpse->item_type == ITEM_CORPSE_NPC && corpse->cost != -5)
         {
-            found = TRUE;
+            found = true;
             break;
         }
     }
@@ -3887,7 +3887,7 @@ ch_ret spell_knock(int sn, int level, CHAR_DATA *ch, void *vo)
      * shouldn't know why it didn't work, and shouldn't work on pickproof
      * exits.  -Thoric
      */
-    if (!(pexit = find_door(ch, target_name, FALSE)) || !IS_SET(pexit->exit_info, EX_CLOSED) ||
+    if (!(pexit = find_door(ch, target_name, false)) || !IS_SET(pexit->exit_info, EX_CLOSED) ||
         !IS_SET(pexit->exit_info, EX_LOCKED) || IS_SET(pexit->exit_info, EX_PICKPROOF))
     {
         failed_casting(skill, ch, NULL, NULL);
@@ -4028,7 +4028,7 @@ void do_revert(CHAR_DATA *ch, char *argument)
         ch->desc->character->desc = ch->desc;
         ch->desc->character->switched = NULL;
         ch->desc = NULL;
-        extract_char(mob, TRUE);
+        extract_char(mob, true);
         return;
     }
 
@@ -4061,7 +4061,7 @@ ch_ret spell_spiral_blast(int sn, int level, CHAR_DATA *ch, void *vo)
     int hpch;
     bool ch_died;
 
-    ch_died = FALSE;
+    ch_died = false;
 
     if (IS_SET(ch->in_room->room_flags, ROOM_SAFE))
     {
@@ -4097,7 +4097,7 @@ ch_ret spell_spiral_blast(int sn, int level, CHAR_DATA *ch, void *vo)
             if (saves_breath(level, vch))
                 dam /= 2;
             if (damage(ch, vch, dam, sn) == rCHAR_DIED || char_died(ch))
-                ch_died = TRUE;
+                ch_died = true;
         }
     }
 
@@ -4147,7 +4147,7 @@ ch_ret spell_helical_flow(int sn, int level, CHAR_DATA *ch, void *vo)
 bool check_save(int sn, int level, CHAR_DATA *ch, CHAR_DATA *victim)
 {
     SKILL_TYPE *skill = get_skilltype(sn);
-    bool saved = FALSE;
+    bool saved = false;
 
     if (SPELL_FLAG(skill, SF_PKSENSITIVE) && !IS_NPC(ch) && !IS_NPC(victim))
         level /= 2;
@@ -4217,7 +4217,7 @@ ch_ret spell_area_attack(int sn, int level, CHAR_DATA *ch, void *vo)
     bool saved;
     bool affects;
     int dam;
-    bool ch_died = FALSE;
+    bool ch_died = false;
     ch_ret retcode;
 
     send_to_char("You feel the hatred grow within you!\n\r", ch);
@@ -4231,7 +4231,7 @@ ch_ret spell_area_attack(int sn, int level, CHAR_DATA *ch, void *vo)
         return rSPELL_FAILED;
     }
 
-    affects = (skill->affects ? TRUE : FALSE);
+    affects = (skill->affects ? true : false);
     if (skill->hit_char && skill->hit_char[0] != '\0')
         act(AT_MAGIC, skill->hit_char, ch, NULL, NULL, TO_CHAR);
     if (skill->hit_room && skill->hit_room[0] != '\0')
@@ -4264,7 +4264,7 @@ ch_ret spell_area_attack(int sn, int level, CHAR_DATA *ch, void *vo)
             retcode = spell_affectchar(sn, level, ch, vch);
         if (retcode == rCHAR_DIED || char_died(ch))
         {
-            ch_died = TRUE;
+            ch_died = true;
             break;
         }
     }
@@ -4278,7 +4278,7 @@ ch_ret spell_affectchar(int sn, int level, CHAR_DATA *ch, void *vo)
     SKILL_TYPE *skill = get_skilltype(sn);
     CHAR_DATA *victim = (CHAR_DATA *)vo;
     int chance;
-    bool affected = FALSE, first = TRUE;
+    bool affected = false, first = true;
     ch_ret retcode = rNONE;
 
     if (SPELL_FLAG(skill, SF_RECASTABLE))
@@ -4289,15 +4289,15 @@ ch_ret spell_affectchar(int sn, int level, CHAR_DATA *ch, void *vo)
         {
             if (!SPELL_FLAG(skill, SF_ACCUMULATIVE))
             {
-                if (first == TRUE)
+                if (first == true)
                 {
                     if (SPELL_FLAG(skill, SF_RECASTABLE))
                         affect_strip(ch, sn);
                     if (is_affected(ch, sn))
-                        affected = TRUE;
+                        affected = true;
                 }
-                first = FALSE;
-                if (affected == TRUE)
+                first = false;
+                if (affected == true)
                     continue;
             }
             victim = ch;
@@ -4419,7 +4419,7 @@ ch_ret spell_affectchar(int sn, int level, CHAR_DATA *ch, void *vo)
                 update_pos(victim);
                 break;
             default:
-                affect_modify(victim, &af, TRUE);
+                affect_modify(victim, &af, true);
                 break;
             }
         }
@@ -4442,7 +4442,7 @@ ch_ret spell_affect(int sn, int level, CHAR_DATA *ch, void *vo)
     CHAR_DATA *victim = (CHAR_DATA *)vo;
     bool groupsp;
     bool areasp;
-    bool hitchar, hitroom, hitvict = FALSE;
+    bool hitchar, hitroom, hitvict = false;
     ch_ret retcode;
 
     if (!skill->affects)
@@ -4451,14 +4451,14 @@ ch_ret spell_affect(int sn, int level, CHAR_DATA *ch, void *vo)
         return rNONE;
     }
     if (SPELL_FLAG(skill, SF_GROUPSPELL))
-        groupsp = TRUE;
+        groupsp = true;
     else
-        groupsp = FALSE;
+        groupsp = false;
 
     if (SPELL_FLAG(skill, SF_AREA))
-        areasp = TRUE;
+        areasp = true;
     else
-        areasp = FALSE;
+        areasp = false;
     if (!groupsp && !areasp)
     {
         /* Can't find a victim */
@@ -4499,19 +4499,19 @@ ch_ret spell_affect(int sn, int level, CHAR_DATA *ch, void *vo)
         if (skill->hit_char && skill->hit_char[0] != '\0')
         {
             if (strstr(skill->hit_char, "$N"))
-                hitchar = TRUE;
+                hitchar = true;
             else
                 act(AT_MAGIC, skill->hit_char, ch, NULL, NULL, TO_CHAR);
         }
         if (skill->hit_room && skill->hit_room[0] != '\0')
         {
             if (strstr(skill->hit_room, "$N"))
-                hitroom = TRUE;
+                hitroom = true;
             else
                 act(AT_MAGIC, skill->hit_room, ch, NULL, NULL, TO_ROOM);
         }
         if (skill->hit_vict && skill->hit_vict[0] != '\0')
-            hitvict = TRUE;
+            hitvict = true;
         if (victim)
             victim = victim->in_room->first_person;
         else
@@ -5316,8 +5316,8 @@ ch_ret spell_calm(int sn, int level, CHAR_DATA *ch, void *vo)
     act(AT_BLUE, "You calm $N down, causing them to loose interest in your fight.", ch, NULL, victim, TO_CHAR);
     act(AT_BLUE, "You feel yourself calm down, loosing interest in the fight.", ch, NULL, victim, TO_VICT);
     act(AT_BLUE, "$N seems to loose interest in $S fight with $n.", ch, NULL, victim, TO_NOTVICT);
-    stop_fighting(victim, TRUE);
-    stop_fighting(vch, TRUE);
+    stop_fighting(victim, true);
+    stop_fighting(vch, true);
     return rNONE;
 }
 
@@ -5336,8 +5336,8 @@ ch_ret spell_forcepush(int sn, int level, CHAR_DATA *ch, void *vo)
     act(AT_BLUE, "$n extends $s hand towards $N and sends $N tumbling into a near by wall with a push of the force.",
         ch, NULL, victim, TO_NOTVICT);
 
-    stop_fighting(ch, TRUE);
-    stop_fighting(victim, TRUE);
+    stop_fighting(ch, true);
+    stop_fighting(victim, true);
     victim->position = POS_RESTING;
     update_pos(victim);
 

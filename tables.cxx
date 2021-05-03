@@ -58,7 +58,7 @@ void shutdown_mud(char const *reason);
     if (!str_cmp(word, literal))                                                                                       \
     {                                                                                                                  \
         field = value;                                                                                                 \
-        fMatch = TRUE;                                                                                                 \
+        fMatch = true;                                                                                                 \
         break;                                                                                                         \
     }
 
@@ -422,12 +422,12 @@ SKILL_TYPE *fread_skill(FILE *fp)
     for (;;)
     {
         word = feof(fp) ? "End" : fread_word(fp);
-        fMatch = FALSE;
+        fMatch = false;
 
         switch (UPPER(word[0]))
         {
         case '*':
-            fMatch = TRUE;
+            fMatch = true;
             fread_to_eol(fp);
             break;
 
@@ -444,7 +444,7 @@ SKILL_TYPE *fread_skill(FILE *fp)
                 aff->bitvector = fread_number(fp);
                 aff->next = skill->affects;
                 skill->affects = aff;
-                fMatch = TRUE;
+                fMatch = true;
                 break;
             }
             break;
@@ -456,7 +456,7 @@ SKILL_TYPE *fread_skill(FILE *fp)
                 DO_FUN *dofun;
                 char *w = fread_word(fp);
 
-                fMatch = TRUE;
+                fMatch = true;
                 if (!str_prefix("do_", w) && (dofun = skill_function(w)) != skill_notfound)
                 {
                     skill->skill_fun = dofun;
@@ -684,12 +684,12 @@ void fread_social(FILE *fp)
     for (;;)
     {
         word = feof(fp) ? "End" : fread_word(fp);
-        fMatch = FALSE;
+        fMatch = false;
 
         switch (UPPER(word[0]))
         {
         case '*':
-            fMatch = TRUE;
+            fMatch = true;
             fread_to_eol(fp);
             break;
 
@@ -802,12 +802,12 @@ void fread_command(FILE *fp)
     for (;;)
     {
         word = feof(fp) ? "End" : fread_word(fp);
-        fMatch = FALSE;
+        fMatch = false;
 
         switch (UPPER(word[0]))
         {
         case '*':
-            fMatch = TRUE;
+            fMatch = true;
             fread_to_eol(fp);
             break;
 

@@ -262,7 +262,7 @@ void do_mpasound(CHAR_DATA *ch, char *argument)
         if (pexit->to_room && pexit->to_room != was_in_room)
         {
             ch->in_room = pexit->to_room;
-            MOBtrigger = FALSE;
+            MOBtrigger = false;
             act(AT_SAY, argument, ch, NULL, NULL, TO_ROOM);
         }
     }
@@ -681,7 +681,7 @@ void do_mppurge(CHAR_DATA *ch, char *argument)
         {
             vnext = victim->next_in_room;
             if (IS_NPC(victim) && victim != ch)
-                extract_char(victim, TRUE);
+                extract_char(victim, true);
         }
         while (ch->in_room->first_content)
             extract_obj(ch->in_room->first_content);
@@ -716,7 +716,7 @@ void do_mppurge(CHAR_DATA *ch, char *argument)
         return;
     }
 
-    extract_char(victim, TRUE);
+    extract_char(victim, true);
     return;
 }
 
@@ -804,7 +804,7 @@ void do_mpgoto(CHAR_DATA *ch, char *argument)
     }
 
     if (ch->fighting)
-        stop_fighting(ch, TRUE);
+        stop_fighting(ch, true);
 
     char_from_room(ch);
     char_to_room(ch, location);
@@ -1003,7 +1003,7 @@ void do_mptransfer(CHAR_DATA *ch, char *argument)
           return;
     */
     if (victim->fighting)
-        stop_fighting(victim, TRUE);
+        stop_fighting(victim, true);
 
     char_from_room(victim);
     char_to_room(victim, location);
@@ -1173,7 +1173,7 @@ void do_mp_damage(CHAR_DATA *ch, char *argument)
      */
     if (simple_damage(ch, victim, dam, TYPE_UNDEFINED) == rVICT_DIED)
     {
-        stop_fighting(ch, FALSE);
+        stop_fighting(ch, false);
         stop_hating(ch);
         stop_fearing(ch);
         stop_hunting(ch);
@@ -1642,7 +1642,7 @@ void do_mpapplyb(CHAR_DATA *ch, char *argument)
         send_to_char("The gods permit you to enter the SWR.\n\r", victim);
         REMOVE_BIT(victim->pcdata->flags, PCFLAG_UNAUTHED);
         if (victim->fighting)
-            stop_fighting(victim, TRUE);
+            stop_fighting(victim, true);
         char_from_room(victim);
         char_to_room(victim, get_room_index(ROOM_VNUM_SCHOOL));
         act(AT_WHITE, "$n enters this world from within a column of blinding light!", victim, NULL, NULL, TO_ROOM);

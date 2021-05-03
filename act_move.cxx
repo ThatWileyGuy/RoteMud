@@ -454,14 +454,14 @@ bool will_fall(CHAR_DATA *ch, int fall)
             char_from_room(ch);
             char_to_room(ch, get_room_index(wherehome(ch)));
             fall = 0;
-            return TRUE;
+            return true;
         }
         set_char_color(AT_FALLING, ch);
         send_to_char("You're falling down...\n\r", ch);
         move_char(ch, get_exit(ch->in_room, DIR_DOWN), ++fall);
-        return TRUE;
+        return true;
     }
-    return FALSE;
+    return false;
 }
 
 /*
@@ -478,7 +478,7 @@ ROOM_INDEX_DATA *generate_exit(ROOM_INDEX_DATA *in_room, EXIT_DATA **pexit)
     int distance = -1;
     int vdir = orig_exit->vdir;
     sh_int hash;
-    bool found = FALSE;
+    bool found = false;
 
     if (in_room->vnum > MAX_VNUMS) /* room is virtual */
     {
@@ -514,7 +514,7 @@ ROOM_INDEX_DATA *generate_exit(ROOM_INDEX_DATA *in_room, EXIT_DATA **pexit)
     for (room = vroom_hash[hash]; room; room = room->next)
         if (room->vnum == serial && room->tele_vnum == roomnum)
         {
-            found = TRUE;
+            found = true;
             break;
         }
     if (!found)
@@ -569,12 +569,12 @@ ch_ret move_char(CHAR_DATA *ch, EXIT_DATA *pexit, int fall)
     const char *dtxt;
     ch_ret retcode;
     sh_int door, distance;
-    bool drunk = FALSE;
-    bool brief = FALSE;
+    bool drunk = false;
+    bool brief = false;
 
     if (!IS_NPC(ch))
         if (IS_DRUNK(ch, 2) && (ch->position != POS_SHOVE) && (ch->position != POS_DRAG))
-            drunk = TRUE;
+            drunk = true;
 
     if (drunk && !fall)
     {
@@ -759,14 +759,14 @@ ch_ret move_char(CHAR_DATA *ch, EXIT_DATA *pexit, int fall)
             OBJ_DATA *obj;
             bool found;
 
-            found = FALSE;
+            found = false;
             if (ch->mount)
             {
                 if (IS_AFFECTED(ch->mount, AFF_FLYING) || IS_AFFECTED(ch->mount, AFF_FLOATING))
-                    found = TRUE;
+                    found = true;
             }
             else if (IS_AFFECTED(ch, AFF_FLYING) || IS_AFFECTED(ch, AFF_FLOATING))
-                found = TRUE;
+                found = true;
 
             /*
              * Look for a boat.
@@ -776,7 +776,7 @@ ch_ret move_char(CHAR_DATA *ch, EXIT_DATA *pexit, int fall)
                 {
                     if (obj->item_type == ITEM_BOAT)
                     {
-                        found = TRUE;
+                        found = true;
                         if (drunk)
                             txt = "paddles unevenly";
                         else
@@ -796,11 +796,11 @@ ch_ret move_char(CHAR_DATA *ch, EXIT_DATA *pexit, int fall)
         {
             bool found;
 
-            found = FALSE;
+            found = false;
             if (ch->mount && IS_AFFECTED(ch->mount, AFF_FLYING))
-                found = TRUE;
+                found = true;
             else if (IS_AFFECTED(ch, AFF_FLYING))
-                found = TRUE;
+                found = true;
 
             if (!found && !ch->mount)
             {
@@ -820,7 +820,7 @@ ch_ret move_char(CHAR_DATA *ch, EXIT_DATA *pexit, int fall)
                     retcode = damage(ch, ch, (pexit->vdir == DIR_UP ? 10 : 5), TYPE_UNDEFINED);
                     return retcode;
                 }
-                found = TRUE;
+                found = true;
                 learn_from_success(ch, gsn_climb);
                 WAIT_STATE(ch, skill_table[gsn_climb]->beats);
                 txt = "climbs";
@@ -1414,7 +1414,7 @@ void do_open(CHAR_DATA *ch, char *argument)
         return;
     }
 
-    if ((pexit = find_door(ch, arg, TRUE)) != NULL)
+    if ((pexit = find_door(ch, arg, true)) != NULL)
     {
         /* 'open door' */
         EXIT_DATA *pexit_rev;
@@ -1513,7 +1513,7 @@ void do_close(CHAR_DATA *ch, char *argument)
         return;
     }
 
-    if ((pexit = find_door(ch, arg, TRUE)) != NULL)
+    if ((pexit = find_door(ch, arg, true)) != NULL)
     {
         /* 'close door' */
         EXIT_DATA *pexit_rev;
@@ -1589,9 +1589,9 @@ bool has_key(CHAR_DATA *ch, int key)
 
     for (obj = ch->first_carrying; obj; obj = obj->next_content)
         if (obj->pIndexData->vnum == key || obj->value[0] == key)
-            return TRUE;
+            return true;
 
-    return FALSE;
+    return false;
 }
 
 void do_lock(CHAR_DATA *ch, char *argument)
@@ -1608,7 +1608,7 @@ void do_lock(CHAR_DATA *ch, char *argument)
         return;
     }
 
-    if ((pexit = find_door(ch, arg, TRUE)) != NULL)
+    if ((pexit = find_door(ch, arg, true)) != NULL)
     {
         /* 'lock door' */
 
@@ -1700,7 +1700,7 @@ void do_unlock(CHAR_DATA *ch, char *argument)
         return;
     }
 
-    if ((pexit = find_door(ch, arg, TRUE)) != NULL)
+    if ((pexit = find_door(ch, arg, true)) != NULL)
     {
         /* 'unlock door' */
 
@@ -1804,7 +1804,7 @@ void do_bashdoor(CHAR_DATA *ch, char *argument)
         return;
     }
 
-    if ((pexit = find_door(ch, arg, FALSE)) != NULL)
+    if ((pexit = find_door(ch, arg, false)) != NULL)
     {
         ROOM_INDEX_DATA *to_room;
         EXIT_DATA *pexit_rev;
@@ -2839,9 +2839,9 @@ void teleport(CHAR_DATA *ch, int room, int flags)
     }
 
     if (IS_SET(flags, TELE_SHOWDESC))
-        show = TRUE;
+        show = true;
     else
-        show = FALSE;
+        show = false;
     if (!IS_SET(flags, TELE_TRANSALL))
     {
         teleportch(ch, pRoomIndex, show);
@@ -2862,7 +2862,7 @@ void do_climb(CHAR_DATA *ch, char *argument)
     EXIT_DATA *pexit;
     bool found;
 
-    found = FALSE;
+    found = false;
     if (argument[0] == '\0')
     {
         for (pexit = ch->in_room->first_exit; pexit; pexit = pexit->next)
@@ -2875,7 +2875,7 @@ void do_climb(CHAR_DATA *ch, char *argument)
         return;
     }
 
-    if ((pexit = find_door(ch, argument, TRUE)) != NULL && IS_SET(pexit->exit_info, EX_xCLIMB))
+    if ((pexit = find_door(ch, argument, true)) != NULL && IS_SET(pexit->exit_info, EX_xCLIMB))
     {
         move_char(ch, pexit, 0);
         return;
@@ -2892,7 +2892,7 @@ void do_enter(CHAR_DATA *ch, char *argument)
     EXIT_DATA *pexit;
     bool found;
 
-    found = FALSE;
+    found = false;
     if (argument[0] == '\0')
     {
         for (pexit = ch->in_room->first_exit; pexit; pexit = pexit->next)
@@ -2905,7 +2905,7 @@ void do_enter(CHAR_DATA *ch, char *argument)
         return;
     }
 
-    if ((pexit = find_door(ch, argument, TRUE)) != NULL && IS_SET(pexit->exit_info, EX_xENTER))
+    if ((pexit = find_door(ch, argument, true)) != NULL && IS_SET(pexit->exit_info, EX_xENTER))
     {
         move_char(ch, pexit, 0);
         return;
@@ -2922,7 +2922,7 @@ void do_leave(CHAR_DATA *ch, char *argument)
     EXIT_DATA *pexit;
     bool found;
 
-    found = FALSE;
+    found = false;
     if (argument[0] == '\0')
     {
         for (pexit = ch->in_room->first_exit; pexit; pexit = pexit->next)
@@ -2935,7 +2935,7 @@ void do_leave(CHAR_DATA *ch, char *argument)
         return;
     }
 
-    if ((pexit = find_door(ch, argument, TRUE)) != NULL && IS_SET(pexit->exit_info, EX_xLEAVE))
+    if ((pexit = find_door(ch, argument, true)) != NULL && IS_SET(pexit->exit_info, EX_xLEAVE))
     {
         move_char(ch, pexit, 0);
         return;
@@ -2959,7 +2959,7 @@ void do_keypad(CHAR_DATA *ch, char *argument)
         send_to_char("Syntax: Keypad <Direction> #####\n\r", ch);
         return;
     }
-    if ((pexit = find_door(ch, arg1, TRUE)) != NULL)
+    if ((pexit = find_door(ch, arg1, true)) != NULL)
     {
         /* 'unlock door' */
         if (IS_SET(pexit->exit_info, EX_LOCKED))

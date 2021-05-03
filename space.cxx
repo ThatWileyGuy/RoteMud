@@ -152,7 +152,7 @@ bool land_bus(SHIP_DATA *ship, int destination)
 
     if (!ship_to_room(ship, destination))
     {
-        return FALSE;
+        return false;
     }
 
     echo_to_ship(AT_YELLOW, ship, "You feel a slight thud as the ship sets down on the ground.");
@@ -166,10 +166,10 @@ bool land_bus(SHIP_DATA *ship, int destination)
     sprintf_s(buf, "The hatch on %s opens.", ship->name);
     echo_to_room(AT_YELLOW, get_room_index(ship->location), buf);
     echo_to_room(AT_YELLOW, get_room_index(ship->entrance), "The hatch opens.");
-    ship->hatchopen = TRUE;
+    ship->hatchopen = true;
     sound_to_room(get_room_index(ship->entrance), "!!SOUND(door)");
     sound_to_room(get_room_index(ship->location), "!!SOUND(door)");
-    return TRUE;
+    return true;
 }
 
 void launch_bus(SHIP_DATA *ship)
@@ -181,7 +181,7 @@ void launch_bus(SHIP_DATA *ship)
     sprintf_s(buf, "The hatch on %s closes and it begins to launch.", ship->name);
     echo_to_room(AT_YELLOW, get_room_index(ship->location), buf);
     echo_to_room(AT_YELLOW, get_room_index(ship->entrance), "The hatch slides shut.");
-    ship->hatchopen = FALSE;
+    ship->hatchopen = false;
     extract_ship(ship);
     echo_to_ship(AT_YELLOW, ship, "The ship begins to launch.");
     ship->location = 0;
@@ -248,7 +248,7 @@ void update_traffic()
         echo_to_room(AT_YELLOW, get_room_index(turbocar->location), buf);
         sprintf_s(buf, "Welcome to %s.", station_name[turbocar_stop]);
         echo_to_ship(AT_CYAN, turbocar, buf);
-        turbocar->hatchopen = TRUE;
+        turbocar->hatchopen = true;
 
         turbocar_stop++;
         if (turbocar_stop >= MAX_STATION)
@@ -475,7 +475,7 @@ void move_ships()
     float dx, dy, dz, change;
     char buf[MAX_STRING_LENGTH];
     CHAR_DATA *ch;
-    bool ch_found = FALSE;
+    bool ch_found = false;
 
     for (missile = first_missile; missile; missile = m_next)
     {
@@ -513,7 +513,7 @@ void move_ships()
                 {
                     if (target->manuever / 2 < number_range(1, 100))
                     {
-                        if (target->juking == TRUE)
+                        if (target->juking == true)
                         {
                             if (number_range(1, 11) != 11)
                             {
@@ -537,7 +537,7 @@ void move_ships()
                             for (ch = first_char; ch; ch = ch->next)
                                 if (!IS_NPC(ch) && nifty_is_name(missile->fired_by, ch->name))
                                 {
-                                    ch_found = TRUE;
+                                    ch_found = true;
                                     damage_ship_ch(target, 20 + missile->missiletype * missile->missiletype * 20,
                                                    30 + missile->missiletype * missile->missiletype *
                                                             missile->missiletype * 30,
@@ -1028,7 +1028,7 @@ void update_space()
             {
                 ship->shield = 0;
                 echo_to_cockpit(AT_RED, ship, "The ships shields fizzle and die.");
-                ship->autorecharge = FALSE;
+                ship->autorecharge = false;
             }
         }
 
@@ -1267,11 +1267,11 @@ void update_space()
                     }
 
                     target = ship->target0;
-                    ship->autotrack = TRUE;
+                    ship->autotrack = true;
                     if (ship->clazz != SHIP_SPACE_STATION)
                         ship->currspeed = ship->realspeed;
                     if (ship->energy > 200)
-                        ship->autorecharge = TRUE;
+                        ship->autorecharge = true;
 
                     if (ship->shipstate != SHIP_HYPERSPACE && ship->energy > 25 &&
                         ship->missilestate == MISSILE_READY && ship->target0->starsystem == ship->starsystem &&
@@ -1560,7 +1560,7 @@ void save_starsystem(SPACE_DATA *starsystem)
     if (!str_cmp(word, literal))                                                                                       \
     {                                                                                                                  \
         field = value;                                                                                                 \
-        fMatch = TRUE;                                                                                                 \
+        fMatch = true;                                                                                                 \
         break;                                                                                                         \
     }
 
@@ -1573,12 +1573,12 @@ void fread_starsystem(SPACE_DATA *starsystem, FILE *fp)
     for (;;)
     {
         word = feof(fp) ? "End" : fread_word(fp);
-        fMatch = FALSE;
+        fMatch = false;
 
         switch (UPPER(word[0]))
         {
         case '*':
-            fMatch = TRUE;
+            fMatch = true;
             fread_to_eol(fp);
             break;
 
@@ -1712,13 +1712,13 @@ bool load_starsystem(const char *starsystemfile)
 
     CREATE(starsystem, SPACE_DATA, 1);
 
-    found = FALSE;
+    found = false;
     sprintf_s(filename, "%s%s", SPACE_DIR, starsystemfile);
 
     if ((fp = fopen(filename, "r")) != NULL)
     {
 
-        found = TRUE;
+        found = true;
         LINK(starsystem, first_starsystem, last_starsystem, next, prev);
         for (;;)
         {
@@ -2386,9 +2386,9 @@ bool is_facing(SHIP_DATA *ship, SHIP_DATA *target)
     cosofa = (hx * dx + hy * dy + hz * dz) / (sqrt(hx * hx + hy * hy + hz * hz) + sqrt(dx * dx + dy * dy + dz * dz));
 
     if (cosofa > 0.75)
-        return TRUE;
+        return true;
 
-    return FALSE;
+    return false;
 }
 
 long int get_ship_value(SHIP_DATA *ship)
@@ -2785,7 +2785,7 @@ void save_ship(SHIP_DATA *ship)
     if (!str_cmp(word, literal))                                                                                       \
     {                                                                                                                  \
         field = value;                                                                                                 \
-        fMatch = TRUE;                                                                                                 \
+        fMatch = true;                                                                                                 \
         break;                                                                                                         \
     }
 
@@ -2801,12 +2801,12 @@ void fread_ship(SHIP_DATA *ship, FILE *fp)
     for (;;)
     {
         word = feof(fp) ? "End" : fread_word(fp);
-        fMatch = FALSE;
+        fMatch = false;
 
         switch (UPPER(word[0]))
         {
         case '*':
-            fMatch = TRUE;
+            fMatch = true;
             fread_to_eol(fp);
             break;
 
@@ -2875,13 +2875,13 @@ void fread_ship(SHIP_DATA *ship, FILE *fp)
                     ship->shipyard = ROOM_LIMBO_SHIPYARD;
                 if (ship->lastdoc <= 0)
                     ship->lastdoc = ship->shipyard;
-                ship->bayopen = FALSE;
+                ship->bayopen = false;
                 if (ship->clazz >= SHIP_CRUISER)
-                    ship->autopilot = TRUE;
+                    ship->autopilot = true;
                 else
-                    ship->autopilot = FALSE;
+                    ship->autopilot = false;
 
-                ship->hatchopen = FALSE;
+                ship->hatchopen = false;
                 if (ship->navseat <= 0)
                     ship->navseat = ship->cockpit;
                 if (ship->gunseat <= 0)
@@ -3019,7 +3019,7 @@ void fread_ship(SHIP_DATA *ship, FILE *fp)
                 }
                 else
                     ship->sim_vnum = 0;
-                fMatch = TRUE;
+                fMatch = true;
             }
 
             break;
@@ -3101,13 +3101,13 @@ bool load_ship_file(const char *shipfile)
 
     CREATE(ship, SHIP_DATA, 1);
 
-    found = FALSE;
+    found = false;
     sprintf_s(filename, "%s%s", SHIP_DIR, shipfile);
 
     if ((fp = fopen(filename, "r")) != NULL)
     {
 
-        found = TRUE;
+        found = true;
         for (;;)
         {
             char letter;
@@ -3270,16 +3270,16 @@ bool load_ship_file(const char *shipfile)
             ship->target1 = NULL;
             ship->target2 = NULL;
 
-            ship->hatchopen = FALSE;
-            ship->bayopen = FALSE;
-            ship->bayopen = FALSE;
+            ship->hatchopen = false;
+            ship->bayopen = false;
+            ship->bayopen = false;
 
             ship->missiles = ship->maxmissiles;
             ship->torpedos = ship->maxtorpedos;
             ship->rockets = ship->maxrockets;
-            ship->autorecharge = FALSE;
-            ship->autotrack = FALSE;
-            ship->autospeed = FALSE;
+            ship->autorecharge = false;
+            ship->autotrack = false;
+            ship->autospeed = false;
         }
 
         else if (ship->cockpit == ROOM_SHUTTLE_BUS || ship->cockpit == ROOM_SHUTTLE_BUS_2 ||
@@ -3324,8 +3324,8 @@ bool load_ship_file(const char *shipfile)
             ship->hy = 1;
             ship->hz = 1;
             ship->shipstate = SHIP_READY;
-            ship->autopilot = TRUE;
-            ship->autorecharge = TRUE;
+            ship->autopilot = true;
+            ship->autorecharge = true;
             ship->shield = ship->maxshield;
 
             if (ship->type == MOB_SHIP)
@@ -3371,8 +3371,8 @@ bool load_ship_file(const char *shipfile)
                 ship->hy = 1;
                 ship->hz = 1;
                 ship->shipstate = SHIP_READY;
-                ship->autopilot = TRUE;
-                ship->autorecharge = TRUE;
+                ship->autopilot = true;
+                ship->autorecharge = true;
                 ship->shield = ship->maxshield;
             }
         }
@@ -3507,15 +3507,15 @@ void resetship(SHIP_DATA *ship)
     ship->target1 = NULL;
     ship->target2 = NULL;
 
-    ship->hatchopen = FALSE;
-    ship->bayopen = FALSE;
+    ship->hatchopen = false;
+    ship->bayopen = false;
 
     ship->missiles = ship->maxmissiles;
     ship->torpedos = ship->maxtorpedos;
     ship->rockets = ship->maxrockets;
-    ship->autorecharge = FALSE;
-    ship->autotrack = FALSE;
-    ship->autospeed = FALSE;
+    ship->autorecharge = false;
+    ship->autotrack = false;
+    ship->autospeed = false;
 
     if (IS_SET(ship->flags, XSHIP_ION_DRIVE))
     {
@@ -3650,8 +3650,8 @@ void do_resetship(CHAR_DATA *ch, char *argument)
         ship->vy = number_range(-5000, 5000);
         ship->vz = number_range(-5000, 5000);
         ship->shipstate = SHIP_READY;
-        ship->autopilot = TRUE;
-        ship->autorecharge = TRUE;
+        ship->autopilot = true;
+        ship->autorecharge = true;
         ship->shield = ship->maxshield;
     }
 }
@@ -4638,7 +4638,7 @@ void do_showship(CHAR_DATA *ch, char *argument)
               ship->pilot, ship->copilot);
     ch_printf(ch, "Firstroom: %d   Lastroom: %d ", ship->firstroom, ship->lastroom);
     ch_printf(ch, "Cockpit: %d   Entrance: %d\n\rEngineroom: %d       Bay Doors: %s\n\r", ship->cockpit, ship->entrance,
-              ship->engineroom, ship->bayopen == TRUE ? "Open" : "Closed");
+              ship->engineroom, ship->bayopen == true ? "Open" : "Closed");
     ch_printf(ch, "Hanger1: %d   Hanger2: %d   Hanger3: %d  Hanger4: %d\n\r", ship->hanger1, ship->hanger2,
               ship->hanger3, ship->hanger4);
     ch_printf(ch, "Pilotseat: %d   Coseat: %d   Navseat: %d  Gunseat: %d\n\r", ship->pilotseat, ship->coseat,
@@ -5197,33 +5197,33 @@ void extract_missile(MISSILE_DATA *missile)
 bool is_rental(CHAR_DATA *ch, SHIP_DATA *ship)
 {
     if (!str_cmp("Public", ship->owner))
-        return TRUE;
+        return true;
 
-    return FALSE;
+    return false;
 }
 
 bool check_pilot(CHAR_DATA *ch, SHIP_DATA *ship)
 {
     if (!str_cmp(ch->name, ship->owner) || !str_cmp(ch->name, ship->pilot) || !str_cmp(ch->name, ship->copilot) ||
         !str_cmp("Public", ship->owner))
-        return TRUE;
+        return true;
 
     if (!IS_NPC(ch) && ch->pcdata && ch->pcdata->clan)
     {
         if (!str_cmp(ch->pcdata->clan->name, ship->owner))
         {
             if (!str_cmp(ch->pcdata->clan->leader, ch->name))
-                return TRUE;
+                return true;
             if (!str_cmp(ch->pcdata->clan->number1, ch->name))
-                return TRUE;
+                return true;
             if (!str_cmp(ch->pcdata->clan->number2, ch->name))
-                return TRUE;
+                return true;
             if (ch->pcdata->bestowments && is_name("pilot", ch->pcdata->bestowments))
-                return TRUE;
+                return true;
         }
     }
 
-    return FALSE;
+    return false;
 }
 
 bool extract_ship(SHIP_DATA *ship)
@@ -5235,7 +5235,7 @@ bool extract_ship(SHIP_DATA *ship)
         UNLINK(ship, room->first_ship, room->last_ship, next_in_room, prev_in_room);
         ship->in_room = NULL;
     }
-    return TRUE;
+    return true;
 }
 
 void damage_ship_ch(SHIP_DATA *ship, int min, int max, CHAR_DATA *ch)
@@ -5745,16 +5745,16 @@ void destroy_ship(SHIP_DATA *ship, CHAR_DATA *ch, const char *reason)
             ship->target1 = NULL;
             ship->target2 = NULL;
 
-            ship->hatchopen = FALSE;
-            ship->bayopen = FALSE;
+            ship->hatchopen = false;
+            ship->bayopen = false;
 
             ship->missiles = ship->maxmissiles;
             ship->torpedos = ship->maxtorpedos;
             ship->rockets = ship->maxrockets;
-            ship->autorecharge = FALSE;
-            ship->autotrack = FALSE;
-            ship->autospeed = FALSE;
-            ship->autopilot = TRUE;
+            ship->autorecharge = false;
+            ship->autotrack = false;
+            ship->autospeed = false;
+            ship->autopilot = true;
             ship->vx = number_range(-2000, 2000);
             ship->vy = number_range(-2000, 2000);
             ship->vz = number_range(-2000, 2000);
@@ -5834,7 +5834,7 @@ void destroy_ship(SHIP_DATA *ship, CHAR_DATA *ch, const char *reason)
                 wipe_resets(sroom);
                 delete_room(sroom);
             }
-            fold_area(tarea, tarea->filename, FALSE);
+            fold_area(tarea, tarea->filename, false);
         }
         sprintf_s(shiplog, "Ship Deleted: %s", ship->name);
         log_string(shiplog);
@@ -5860,11 +5860,11 @@ bool ship_to_room(SHIP_DATA *ship, int vnum)
     ROOM_INDEX_DATA *shipto;
 
     if ((shipto = get_room_index(vnum)) == NULL)
-        return FALSE;
+        return false;
 
     LINK(ship, shipto->first_ship, shipto->last_ship, next_in_room, prev_in_room);
     ship->in_room = shipto;
-    return TRUE;
+    return true;
 }
 
 void do_getship(CHAR_DATA *ch, char *argument)
@@ -5963,25 +5963,25 @@ bool rent_ship(CHAR_DATA *ch, SHIP_DATA *ship)
     long price;
 
     if (IS_NPC(ch))
-        return FALSE;
+        return false;
 
     price = get_ship_value(ship) / 100;
 
     if (IS_SET(ship->flags, SHIP_SIMULATOR))
     {
         ch_printf(ch, "&wThe simulation begins.\n\r");
-        return TRUE;
+        return true;
     }
 
     if (ch->gold < price)
     {
         ch_printf(ch, "&RRenting this ship costs %ld. You don't have enough credits!\n\r", price);
-        return FALSE;
+        return false;
     }
 
     ch->gold -= price;
     ch_printf(ch, "&GYou pay %ld credits to rent the ship.\n\r", price);
-    return TRUE;
+    return true;
 }
 
 void do_leaveship(CHAR_DATA *ch, char *argument)
@@ -6202,9 +6202,9 @@ void do_launch(CHAR_DATA *ch, char *argument)
         ship->torpedos = ship->maxtorpedos;
         ship->rockets = ship->maxrockets;
         ship->shield = 0;
-        ship->autorecharge = FALSE;
-        ship->autotrack = FALSE;
-        ship->autospeed = FALSE;
+        ship->autorecharge = false;
+        ship->autotrack = false;
+        ship->autospeed = false;
         ship->hull = ship->maxhull;
 
         ship->missilestate = MISSILE_READY;
@@ -6224,7 +6224,7 @@ void do_launch(CHAR_DATA *ch, char *argument)
 
         if (ship->hatchopen)
         {
-            ship->hatchopen = FALSE;
+            ship->hatchopen = false;
             sprintf_s(buf, "The hatch on %s closes.", ship->name);
             echo_to_room(AT_YELLOW, get_room_index(ship->location), buf);
             echo_to_room(AT_YELLOW, get_room_index(ship->entrance), "The hatch slides shut.");
@@ -6379,9 +6379,9 @@ void do_land(CHAR_DATA *ch, char *argument)
     SHIP_DATA *ship;
     SHIP_DATA *target;
     PLANET_DATA *planet;
-    bool pfound = FALSE;
+    bool pfound = false;
     ROOM_INDEX_DATA *room;
-    bool rfound = FALSE;
+    bool rfound = false;
     int vnum;
 
     strcpy_s(arg, argument);
@@ -6485,7 +6485,7 @@ void do_land(CHAR_DATA *ch, char *argument)
     {
         if (!str_prefix(arg1, planet->name))
         {
-            pfound = TRUE;
+            pfound = true;
 
             if (!planet->area)
             {
@@ -6541,7 +6541,7 @@ void do_land(CHAR_DATA *ch, char *argument)
                                 }
                             }
 
-                            rfound = TRUE;
+                            rfound = true;
                             break;
                         }
                     }
@@ -6605,7 +6605,7 @@ void do_land(CHAR_DATA *ch, char *argument)
                 return;
             }
 
-            if (target->bayopen == FALSE)
+            if (target->bayopen == false)
             {
                 send_to_char("&RThe bay doors on that ship are closed.\n\r", ch);
                 return;
@@ -6875,7 +6875,7 @@ void do_accelerate(CHAR_DATA *ch, char *argument)
 void do_trajectory(CHAR_DATA *ch, char *argument)
 {
     PLANET_DATA *planet;
-    bool foundplanet = FALSE;
+    bool foundplanet = false;
     char buf[MAX_STRING_LENGTH];
     char arg2[MAX_INPUT_LENGTH];
     char arg3[MAX_INPUT_LENGTH];
@@ -6966,7 +6966,7 @@ void do_trajectory(CHAR_DATA *ch, char *argument)
         {
             if (!str_prefix(arg2, planet->name))
             {
-                foundplanet = TRUE;
+                foundplanet = true;
                 vx = planet->x;
                 vy = planet->y;
                 vz = planet->z;
@@ -7346,34 +7346,34 @@ void do_autorecharge(CHAR_DATA *ch, char *argument)
 
     if (!str_cmp(argument, "on"))
     {
-        ship->autorecharge = TRUE;
+        ship->autorecharge = true;
         send_to_char("&GYou power up the shields.\n\r", ch);
         echo_to_cockpit(AT_YELLOW, ship, "Shields ON. Autorecharge ON.");
     }
     else if (!str_cmp(argument, "off"))
     {
-        ship->autorecharge = FALSE;
+        ship->autorecharge = false;
         send_to_char("&GYou shutdown the shields.\n\r", ch);
         echo_to_cockpit(AT_YELLOW, ship, "Shields OFF. Shield strength set to 0. Autorecharge OFF.");
         ship->shield = 0;
     }
     else if (!str_cmp(argument, "idle"))
     {
-        ship->autorecharge = FALSE;
+        ship->autorecharge = false;
         send_to_char("&GYou let the shields idle.\n\r", ch);
         echo_to_cockpit(AT_YELLOW, ship, "Autorecharge OFF. Shields IDLEING.");
     }
     else
     {
-        if (ship->autorecharge == TRUE)
+        if (ship->autorecharge == true)
         {
-            ship->autorecharge = FALSE;
+            ship->autorecharge = false;
             send_to_char("&GYou toggle the shields.\n\r", ch);
             echo_to_cockpit(AT_YELLOW, ship, "Autorecharge OFF. Shields IDLEING.");
         }
         else
         {
-            ship->autorecharge = TRUE;
+            ship->autorecharge = true;
             send_to_char("&GYou toggle the shields.\n\r", ch);
             echo_to_cockpit(AT_YELLOW, ship, "Shields ON. Autorecharge ON");
         }
@@ -7421,16 +7421,16 @@ void do_autopilot(CHAR_DATA *ch, char *argument)
 
     act(AT_PLAIN, "$n flips a switch on the control panell.", ch, NULL, argument, TO_ROOM);
 
-    if (ship->autopilot == TRUE)
+    if (ship->autopilot == true)
     {
-        ship->autopilot = FALSE;
+        ship->autopilot = false;
         send_to_char("&GYou toggle the autopilot.\n\r", ch);
         echo_to_cockpit(AT_YELLOW, ship, "Autopilot OFF.");
     }
     else
     {
-        ship->autopilot = TRUE;
-        ship->autorecharge = TRUE;
+        ship->autopilot = true;
+        ship->autorecharge = true;
         send_to_char("&GYou toggle the autopilot.\n\r", ch);
         echo_to_cockpit(AT_YELLOW, ship, "Autopilot ON.");
     }
@@ -7470,7 +7470,7 @@ void do_openhatch(CHAR_DATA *ch, char *argument)
                     send_to_char("&RPlease wait till the ship lands!\n\r", ch);
                     return;
                 }
-                ship->hatchopen = TRUE;
+                ship->hatchopen = true;
                 send_to_char("&GYou open the hatch.\n\r", ch);
                 act(AT_PLAIN, "$n opens the hatch.", ch, NULL, argument, TO_ROOM);
                 sprintf_s(buf, "The hatch on %s opens.", ship->name);
@@ -7520,7 +7520,7 @@ void do_openhatch(CHAR_DATA *ch, char *argument)
     }
     if (!ship->hatchopen)
     {
-        ship->hatchopen = TRUE;
+        ship->hatchopen = true;
         act(AT_PLAIN, "You open the hatch on $T.", ch, NULL, ship->name, TO_CHAR);
         act(AT_PLAIN, "$n opens the hatch on $T.", ch, NULL, ship->name, TO_ROOM);
         echo_to_room(AT_YELLOW, get_room_index(ship->entrance), "The hatch opens from the outside.");
@@ -7555,7 +7555,7 @@ void do_closehatch(CHAR_DATA *ch, char *argument)
             }
             if (ship->hatchopen)
             {
-                ship->hatchopen = FALSE;
+                ship->hatchopen = false;
                 send_to_char("&GYou close the hatch.\n\r", ch);
                 act(AT_PLAIN, "$n closes the hatch.", ch, NULL, argument, TO_ROOM);
                 sprintf_s(buf, "The hatch on %s closes.", ship->name);
@@ -7588,7 +7588,7 @@ void do_closehatch(CHAR_DATA *ch, char *argument)
     {
         if (ship->hatchopen)
         {
-            ship->hatchopen = FALSE;
+            ship->hatchopen = false;
             act(AT_PLAIN, "You close the hatch on $T.", ch, NULL, ship->name, TO_CHAR);
             act(AT_PLAIN, "$n closes the hatch on $T.", ch, NULL, ship->name, TO_ROOM);
             echo_to_room(AT_YELLOW, get_room_index(ship->entrance), "The hatch is closed from outside.");
@@ -7652,9 +7652,9 @@ void do_status(CHAR_DATA *ch, char *argument)
               target->vy, target->vz, target->hx, target->hy, target->hz);
     ch_printf(ch, "&zSpeed:&w %d&W/%d   &zHyperdrive: &wClass %d   %s %s\n\r", target->currspeed, target->realspeed,
               target->hyperspeed, ship->clazz >= SHIP_CRUISER ? "&zBay doors:" : "",
-              (ship->clazz >= SHIP_CRUISER && ship->bayopen == TRUE)
+              (ship->clazz >= SHIP_CRUISER && ship->bayopen == true)
                   ? "&wOpen"
-                  : (ship->clazz >= SHIP_CRUISER && ship->bayopen == FALSE) ? "&wClosed" : "");
+                  : (ship->clazz >= SHIP_CRUISER && ship->bayopen == false) ? "&wClosed" : "");
 
     ch_printf(ch, "&zHull:&w %d&W/%d   &zShields:&w %d&W/%d   &zFuel:&w %d&W/%d\n\r\n\r", target->hull, target->maxhull,
               target->shield, target->maxshield, target->energy, target->maxenergy);
@@ -7700,7 +7700,7 @@ void do_status(CHAR_DATA *ch, char *argument)
     }
 
     ch_printf(ch, "&z   Linked fire: &w%s\n\r",
-              (x <= 1) ? "Unavailable" : ship->primaryLinked == TRUE ? "&GON" : "&ROFF");
+              (x <= 1) ? "Unavailable" : ship->primaryLinked == true ? "&GON" : "&ROFF");
 
     switch (ship->secondaryType)
     {
@@ -7743,7 +7743,7 @@ void do_status(CHAR_DATA *ch, char *argument)
         ch_printf(ch, "&zSecondary Weapon System: &w%-7s&W::  &w%s\n\r",
                   target->secondaryState == LASER_DAMAGED ? "&ROffline" : "&GOnline", secondary_beam_name(target));
         ch_printf(ch, "&z   Linked fire: &w%s\n\r",
-                  (x <= 1) ? "Unavailable" : ship->secondaryLinked == TRUE ? "&GON" : "&ROFF");
+                  (x <= 1) ? "Unavailable" : ship->secondaryLinked == true ? "&GON" : "&ROFF");
     }
     if (target->turret1)
         ch_printf(ch, "\n\r&zTurret One:  &w %s  &zCurrent Target:&w %s\n\r",
@@ -7790,7 +7790,7 @@ void do_status(CHAR_DATA *ch, char *argument)
               !ship->maxmissiles ? "&RNot installed" : ship->missilestate == LASER_DAMAGED ? "&ROffline" : "&GOnline",
               ship->missiles, ship->maxmissiles);
     ch_printf(ch, " %-10s&w | &zTorpedo launcher:&w %-15s   &zPayload: &w%d&W/%d\n\r",
-              ship->warheadLinked == TRUE ? "&GLinked" : "&RUnlinked",
+              ship->warheadLinked == true ? "&GLinked" : "&RUnlinked",
               !ship->maxtorpedos ? "&RNot installed" : ship->torpedostate == LASER_DAMAGED ? "&ROffline" : "&GOnline",
               ship->torpedos, ship->maxtorpedos);
     ch_printf(ch, "          &w| &zRocket launcher: &w %-15s   &zPayload: &w%d&W/%d\n\r",
@@ -8212,7 +8212,7 @@ void do_fire(CHAR_DATA *ch, char *argument)
             send_to_char("&RThe ship's primary weapon system is damaged.\n\r", ch);
             return;
         }
-        if (ship->primaryLinked == TRUE)
+        if (ship->primaryLinked == true)
         {
             switch (ship->primaryType)
             {
@@ -8339,7 +8339,7 @@ void do_fire(CHAR_DATA *ch, char *argument)
         chance -= (abs(target->vy - ship->vy) / 100);
         chance -= (abs(target->vz - ship->vz) / 100);
         chance += size - 10;
-        if (target->rolling == FALSE)
+        if (target->rolling == false)
             chance = URANGE(5, chance, 95);
         else
             chance = number_range(5, 8);
@@ -8460,7 +8460,7 @@ void do_fire(CHAR_DATA *ch, char *argument)
             send_to_char("&RYou need to let the repeating ion cannon cool down.\n\r", ch);
             return;
         }
-        if (ship->secondaryLinked == TRUE)
+        if (ship->secondaryLinked == true)
         {
             switch (ship->secondaryType)
             {
@@ -8754,7 +8754,7 @@ void do_fire(CHAR_DATA *ch, char *argument)
             echo_to_cockpit(AT_BLOOD, ship, buf);
         }
 
-        if (ship->warheadLinked == TRUE && str_cmp(argument, "noloop"))
+        if (ship->warheadLinked == true && str_cmp(argument, "noloop"))
         {
             if (ship->maxtorpedos > 0 && ship->torpedos > 0)
                 do_fire(ch, "torpedo noloop");
@@ -8837,7 +8837,7 @@ void do_fire(CHAR_DATA *ch, char *argument)
             echo_to_cockpit(AT_BLOOD, ship, buf);
         }
 
-        if (ship->warheadLinked == TRUE && str_cmp(argument, "noloop"))
+        if (ship->warheadLinked == true && str_cmp(argument, "noloop"))
         {
             if (ship->maxmissiles > 0 && ship->missiles > 0)
                 do_fire(ch, "missile noloop");
@@ -8921,7 +8921,7 @@ void do_fire(CHAR_DATA *ch, char *argument)
             echo_to_cockpit(AT_BLOOD, ship, buf);
         }
 
-        if (ship->warheadLinked == TRUE && str_cmp(argument, "noloop"))
+        if (ship->warheadLinked == true && str_cmp(argument, "noloop"))
         {
             if (ship->maxmissiles > 0 && ship->missiles > 0)
                 do_fire(ch, "missile noloop");
@@ -9887,12 +9887,12 @@ void do_autotrack(CHAR_DATA *ch, char *argument)
     act(AT_PLAIN, "$n flips a switch on the control panel.", ch, NULL, argument, TO_ROOM);
     if (ship->autotrack)
     {
-        ship->autotrack = FALSE;
+        ship->autotrack = false;
         echo_to_cockpit(AT_YELLOW, ship, "Autotracking off.");
     }
     else
     {
-        ship->autotrack = TRUE;
+        ship->autotrack = true;
         echo_to_cockpit(AT_YELLOW, ship, "Autotracking on.");
     }
 
@@ -9919,7 +9919,7 @@ void do_openbay(CHAR_DATA *ch, char *argument)
         return;
     }
 
-    if (ship->bayopen == FALSE)
+    if (ship->bayopen == false)
     {
         echo_to_room(AT_WHITE, get_room_index(ship->pilotseat), "&G[&gShip Computer&G] &wOpening bay doors.");
         sprintf_s(buf, "The bay doors on %s slowly slide open.", ship->name);
@@ -9933,7 +9933,7 @@ void do_openbay(CHAR_DATA *ch, char *argument)
         if (ship->hanger4 != 0)
             echo_to_room(AT_WHITE, get_room_index(ship->hanger4), "&R&YThe bay doors slowly slide open.");
 
-        ship->bayopen = TRUE;
+        ship->bayopen = true;
         return;
     }
     else
@@ -9950,7 +9950,7 @@ void do_openbay(CHAR_DATA *ch, char *argument)
         if (ship->hanger4 != 0)
             echo_to_room(AT_WHITE, get_room_index(ship->hanger4), "&R&YThe bay doors slowly slide closed.");
 
-        ship->bayopen = FALSE;
+        ship->bayopen = false;
         return;
     }
 }
@@ -10232,14 +10232,14 @@ void do_tractorbeam(CHAR_DATA *ch, char *argument)
 
 void do_pluogus(CHAR_DATA *ch, char *argument)
 {
-    bool ch_comlink = FALSE;
+    bool ch_comlink = false;
     OBJ_DATA *obj;
     int next_planet, itt;
 
     for (obj = ch->last_carrying; obj; obj = obj->prev_content)
     {
         if (obj->pIndexData->item_type == ITEM_COMLINK)
-            ch_comlink = TRUE;
+            ch_comlink = true;
     }
 
     if (!ch_comlink)
@@ -10374,13 +10374,13 @@ ch_ret drive_ship(CHAR_DATA *ch, SHIP_DATA *ship, EXIT_DATA *pexit, int fall)
     const char *dtxt;
     ch_ret retcode;
     sh_int door, distance;
-    bool drunk = FALSE;
+    bool drunk = false;
     CHAR_DATA *rch;
     CHAR_DATA *next_rch;
 
     if (!IS_NPC(ch))
         if (IS_DRUNK(ch, 2) && (ch->position != POS_SHOVE) && (ch->position != POS_DRAG))
-            drunk = TRUE;
+            drunk = true;
 
     if (drunk && !fall)
     {
@@ -10659,7 +10659,7 @@ void do_bomb(CHAR_DATA *ch, char *argument)
     ROOM_INDEX_DATA *room;
     PLANET_DATA *planet;
     int bombs;
-    bool foundplanet = FALSE;
+    bool foundplanet = false;
     char buf[MAX_STRING_LENGTH];
     int chance;
 
@@ -10740,7 +10740,7 @@ void do_bomb(CHAR_DATA *ch, char *argument)
         if ((ship->vx > planet->x - 20) && (ship->vx < planet->x + 20) && (ship->vy > planet->y - 20) &&
             (ship->vy < planet->y + 20) && (ship->vz > planet->z - 20) && (ship->vz < planet->z + 20))
         {
-            foundplanet = TRUE;
+            foundplanet = true;
             break;
         }
 
@@ -10865,15 +10865,15 @@ bool autofly(SHIP_DATA *ship)
 {
 
     if (!ship)
-        return FALSE;
+        return false;
 
     if (ship->type == MOB_SHIP)
-        return TRUE;
+        return true;
 
     if (ship->autopilot)
-        return TRUE;
+        return true;
 
-    return FALSE;
+    return false;
 }
 
 SHIP_DATA *ship_from_room(int vnum)
@@ -11185,7 +11185,7 @@ void do_request(CHAR_DATA *ch, char *argument)
     char buf[MAX_STRING_LENGTH];
     bool open;
 
-    open = FALSE;
+    open = false;
     argument = one_argument(argument, arg1);
     argument = one_argument(argument, arg2);
 
@@ -11206,28 +11206,28 @@ void do_request(CHAR_DATA *ch, char *argument)
     }
     if (!str_cmp(arg2, "open"))
     {
-        if (target->bayopen == TRUE)
+        if (target->bayopen == true)
         {
             send_to_char("The bay doors are already open.\n\r", ch);
             return;
         }
 
         if (!str_cmp(ch->name, target->owner))
-            open = TRUE;
+            open = true;
         if (ch->pcdata->clan)
         {
             if (!str_cmp(ch->pcdata->clan->name, target->owner))
-                open = TRUE;
+                open = true;
         }
         if (!str_cmp(target->owner, ship->owner))
-            open = TRUE;
+            open = true;
 
         sprintf_s(buf, "&GYou request clearance to land on %s.\n\r", target->name);
         send_to_char(buf, ch);
         sprintf_s(buf, "&G%s requesting landing clearance.\n\r", ship->name);
         echo_to_cockpit(AT_BLOOD, target, buf);
 
-        if (open == TRUE)
+        if (open == true)
         {
             sprintf_s(buf, "\n\r&R&G%s hails: &WConfirmed %s, you're clear to land.\n\r", target->name, ship->name);
             echo_to_cockpit(AT_WHITE, ship, buf);
@@ -11244,7 +11244,7 @@ void do_request(CHAR_DATA *ch, char *argument)
             if (ship->hanger4 != 0)
                 echo_to_room(AT_WHITE, get_room_index(ship->hanger4), "&R&YThe bay doors slowly slide open.");
 
-            target->bayopen = TRUE;
+            target->bayopen = true;
             return;
         }
         else
@@ -11259,7 +11259,7 @@ void do_request(CHAR_DATA *ch, char *argument)
     }
     else if (!str_cmp(arg2, "close"))
     {
-        if (target->bayopen == FALSE)
+        if (target->bayopen == false)
         {
             send_to_char("The bay doors are already closed.\n\r", ch);
             return;
@@ -11278,7 +11278,7 @@ void do_request(CHAR_DATA *ch, char *argument)
             echo_to_room(AT_WHITE, get_room_index(ship->hanger3), "&R&YThe bay doors slowly slide closed.");
         if (ship->hanger4 != 0)
             echo_to_room(AT_WHITE, get_room_index(ship->hanger4), "&R&YThe bay doors slowly slide closed.");
-        target->bayopen = FALSE;
+        target->bayopen = false;
 
         return;
     }
@@ -11415,7 +11415,7 @@ void do_makeshipbomb(CHAR_DATA *ch, char *argument)
             return;
         }
 
-        checktool = checkdrink = checkbatt = checkchem1 = checkchem2 = checkchem3 = checkcirc1 = checkcirc2 = FALSE;
+        checktool = checkdrink = checkbatt = checkchem1 = checkchem2 = checkchem3 = checkcirc1 = checkcirc2 = false;
 
         if (!IS_SET(ch->in_room->room_flags, ROOM_FACTORY))
         {
@@ -11428,17 +11428,17 @@ void do_makeshipbomb(CHAR_DATA *ch, char *argument)
 
             if (obj->item_type == ITEM_TOOLKIT)
             {
-                checktool = TRUE;
+                checktool = true;
                 continue;
             }
             if (obj->item_type == ITEM_DRINK_CON && obj->value[1] == 0)
             {
-                checkdrink = TRUE;
+                checkdrink = true;
                 continue;
             }
             if (obj->item_type == ITEM_BATTERY)
             {
-                checkbatt = TRUE;
+                checkbatt = true;
                 continue;
             }
             if (obj->item_type == ITEM_CIRCUIT)
@@ -11530,36 +11530,36 @@ void do_makeshipbomb(CHAR_DATA *ch, char *argument)
         return;
     }
 
-    checktool = FALSE;
-    checkdrink = FALSE;
-    checkbatt = FALSE;
-    checkchem1 = FALSE;
-    checkchem2 = FALSE;
-    checkchem3 = FALSE;
-    checkcirc1 = FALSE;
-    checkcirc2 = FALSE;
+    checktool = false;
+    checkdrink = false;
+    checkbatt = false;
+    checkchem1 = false;
+    checkchem2 = false;
+    checkchem3 = false;
+    checkcirc1 = false;
+    checkcirc2 = false;
 
     for (obj = ch->last_carrying; obj; obj = obj->prev_content)
     {
         if (obj->item_type == ITEM_TOOLKIT)
         {
-            checktool = TRUE;
+            checktool = true;
             continue;
         }
-        if (obj->item_type == ITEM_DRINK_CON && checkdrink == FALSE && obj->value[1] == 0)
+        if (obj->item_type == ITEM_DRINK_CON && checkdrink == false && obj->value[1] == 0)
         {
-            checkdrink = TRUE;
+            checkdrink = true;
             separate_obj(obj);
             obj_from_char(obj);
             extract_obj(obj);
             continue;
         }
-        if (obj->item_type == ITEM_BATTERY && checkbatt == FALSE)
+        if (obj->item_type == ITEM_BATTERY && checkbatt == false)
         {
             separate_obj(obj);
             obj_from_char(obj);
             extract_obj(obj);
-            checkbatt = TRUE;
+            checkbatt = true;
             ;
             continue;
         }
@@ -12164,11 +12164,11 @@ void do_cut(CHAR_DATA *ch, char *argument)
     {
     default:
         /*
-         if(ship->cloaked == TRUE)
+         if(ship->cloaked == true)
          {
            send_to_char("&BYour cloak dissipates with the ship's power.\n\r", ch);
            sprintf_s(buf,"&R&B%s blips onto your radar at %.0f, %.0f, %.0f.\n\r", ship->name, ship->vx, ship->vy,
-         ship->vz); echo_to_system(AT_BLUE, ship, buf, NULL); ship->cloaked = FALSE;
+         ship->vz); echo_to_system(AT_BLUE, ship, buf, NULL); ship->cloaked = false;
          }
          */
         send_to_char("You flip the power switch and wait for the ship systems to reboot.\n\r", ch);
@@ -12345,12 +12345,12 @@ void do_transmit_pass(CHAR_DATA *ch, char *argument)
 
     if (!IS_IMMORTAL(ch))
     {
-        ch_comlink = FALSE;
+        ch_comlink = false;
 
         for (obj = ch->last_carrying; obj; obj = obj->prev_content)
         {
             if (obj->pIndexData->item_type == ITEM_COMLINK)
-                ch_comlink = TRUE;
+                ch_comlink = true;
         }
     }
     if (!ch_comlink)
@@ -12424,12 +12424,12 @@ void do_transmit_call(CHAR_DATA *ch, char *argument)
 
         if (!IS_IMMORTAL(ch))
         {
-            ch_comlink = FALSE;
+            ch_comlink = false;
 
             for (obj = ch->last_carrying; obj; obj = obj->prev_content)
             {
                 if (obj->pIndexData->item_type == ITEM_COMLINK)
-                    ch_comlink = TRUE;
+                    ch_comlink = true;
             }
         }
         if (!ch_comlink)
@@ -12580,12 +12580,12 @@ void do_transmit_status(CHAR_DATA *ch, char *argument)
 
     if (!IS_IMMORTAL(ch))
     {
-        ch_comlink = FALSE;
+        ch_comlink = false;
 
         for (obj = ch->last_carrying; obj; obj = obj->prev_content)
         {
             if (obj->pIndexData->item_type == ITEM_COMLINK)
-                ch_comlink = TRUE;
+                ch_comlink = true;
         }
     }
     if (!ch_comlink)
@@ -12613,9 +12613,9 @@ void do_transmit_status(CHAR_DATA *ch, char *argument)
               ship->vy, ship->vz, ship->hx, ship->hy, ship->hz);
     ch_printf(ch, "&zSpeed:&w %d&W/%d   &zHyperdrive: &wClass %d %s %s\n\r", ship->currspeed, ship->realspeed,
               ship->hyperspeed, ship->clazz >= SHIP_CRUISER ? "&zBay doors:" : "",
-              (ship->clazz >= SHIP_CRUISER && ship->bayopen == TRUE)
+              (ship->clazz >= SHIP_CRUISER && ship->bayopen == true)
                   ? "&wOpen"
-                  : (ship->clazz >= SHIP_CRUISER && ship->bayopen == FALSE) ? "&wClosed" : "");
+                  : (ship->clazz >= SHIP_CRUISER && ship->bayopen == false) ? "&wClosed" : "");
     ch_printf(ch, "&zHull:&w %d&W/%d   &zShields:&w %d&W/%d    &zFuel:&w %d&W/%d\n\r\n\r", ship->hull, ship->maxhull,
               ship->shield, ship->maxshield, ship->energy, ship->maxenergy);
     ch_printf(ch, "&zPrimary Weapon System:   &w%-7s&W::  &w%s\n\r",
@@ -12658,7 +12658,7 @@ void do_transmit_status(CHAR_DATA *ch, char *argument)
     }
 
     ch_printf(ch, "&z   Linked fire: &w%s\n\r",
-              (x <= 1) ? "Unavailable" : ship->primaryLinked == TRUE ? "&GON" : "&ROFF");
+              (x <= 1) ? "Unavailable" : ship->primaryLinked == true ? "&GON" : "&ROFF");
 
     switch (ship->secondaryType)
     {
@@ -12701,7 +12701,7 @@ void do_transmit_status(CHAR_DATA *ch, char *argument)
         ch_printf(ch, "&zSecondary Weapon System: &w%-7s&W::  &w%s\n\r",
                   ship->secondaryState == LASER_DAMAGED ? "&ROffline" : "&GOnline", secondary_beam_name(ship));
         ch_printf(ch, "&z   Linked fire: &w%s\n\r",
-                  (x <= 1) ? "Unavailable" : ship->secondaryLinked == TRUE ? "&GON" : "&ROFF");
+                  (x <= 1) ? "Unavailable" : ship->secondaryLinked == true ? "&GON" : "&ROFF");
     }
     if (ship->turret1)
         ch_printf(ch, "\n\r&zTurret One:  &w %s  &zCurrent Target:&w %s\n\r",
@@ -12747,7 +12747,7 @@ void do_transmit_status(CHAR_DATA *ch, char *argument)
               !ship->maxmissiles ? "&RNot installed" : ship->missilestate == LASER_DAMAGED ? "&ROffline" : "&GOnline",
               ship->missiles, ship->maxmissiles);
     ch_printf(ch, " %-10s&w | &zTorpedo launcher:&w %-15s   &zPayload: &w%d&W/%d\n\r",
-              ship->warheadLinked == TRUE ? "&GLinked" : "&RUnlinked",
+              ship->warheadLinked == true ? "&GLinked" : "&RUnlinked",
               !ship->maxtorpedos ? "&RNot installed" : ship->torpedostate == LASER_DAMAGED ? "&ROffline" : "&GOnline",
               ship->torpedos, ship->maxtorpedos);
     ch_printf(ch, "          &w| &zRocket launcher: &w %-15s   &zPayload: &w%d&W/%d\n\r",
@@ -12810,18 +12810,18 @@ void do_transmit_broadcast(CHAR_DATA *ch, char *argument)
 
     if (!IS_IMMORTAL(ch))
     {
-        ch_comlink = FALSE;
+        ch_comlink = false;
 
         for (obj = ch->last_carrying; obj; obj = obj->prev_content)
         {
             if (obj->pIndexData->item_type == ITEM_COMLINK)
-                ch_comlink = TRUE;
+                ch_comlink = true;
         }
     }
 
     if (IS_IMMORTAL(ch))
     {
-        ch_comlink = TRUE;
+        ch_comlink = true;
     }
 
     if (!ch_comlink)
@@ -12939,10 +12939,10 @@ void do_split_s(CHAR_DATA *ch, char *argument)
         else
         {
             ch_printf(ch, "%s",
-                      ship->rolling == TRUE ? "You stop rolling, and perform a split-S.\n\r"
-                                            : ship->juking == TRUE ? "You stop juking, and perform a split-S.\n\r"
+                      ship->rolling == true ? "You stop rolling, and perform a split-S.\n\r"
+                                            : ship->juking == true ? "You stop juking, and perform a split-S.\n\r"
                                                                    : "You perform a split-S.\n\r");
-            ship->rolling = ship->juking = FALSE;
+            ship->rolling = ship->juking = false;
             ship->hx = number_range(-2000, 3000);
             ship->hy = number_range(-2000, 3000);
             ship->hz = number_range(-2000, 3000);
@@ -12959,9 +12959,9 @@ void do_split_s(CHAR_DATA *ch, char *argument)
     if (number_percent() > chance)
     {
         ch_printf(ch, "&wYou attempt to do a split-S%s",
-                  ship->rolling == TRUE ? ", breaking out of the roll...\n\r"
-                                        : ship->juking == TRUE ? ", discontinuing the juke...\n\r" : "...\n\r");
-        ship->rolling = ship->juking = FALSE;
+                  ship->rolling == true ? ", breaking out of the roll...\n\r"
+                                        : ship->juking == true ? ", discontinuing the juke...\n\r" : "...\n\r");
+        ship->rolling = ship->juking = false;
         ship->hx = number_range(-2000, 3000);
         ship->hy = number_range(-2000, 3000);
         ship->hz = number_range(-2000, 3000);

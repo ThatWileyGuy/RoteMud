@@ -78,7 +78,7 @@ void explode(OBJ_DATA *obj)
     {
         ROOM_INDEX_DATA *room;
         CHAR_DATA *xch;
-        bool held = FALSE;
+        bool held = false;
 
         for (xch = first_char; xch; xch = xch->next)
             if (!IS_NPC(xch))
@@ -89,7 +89,7 @@ void explode(OBJ_DATA *obj)
                     act(AT_WHITE, "$p EXPLODES in $n's hands!", obj->carried_by, obj, NULL, TO_ROOM);
                     act(AT_WHITE, "$p EXPLODES in your hands!", obj->carried_by, obj, NULL, TO_CHAR);
                     room = xch->in_room;
-                    held = TRUE;
+                    held = true;
                 }
                 else if (obj->in_room)
                     room = obj->in_room;
@@ -211,9 +211,9 @@ void room_explode_2(ROOM_INDEX_DATA *room, int blast)
 bool is_wizvis(CHAR_DATA *ch, CHAR_DATA *victim)
 {
     if (!IS_NPC(victim) && IS_SET(victim->act, PLR_WIZINVIS) && get_trust(ch) < victim->pcdata->wizinvis)
-        return FALSE;
+        return false;
 
-    return TRUE;
+    return true;
 }
 
 /*
@@ -452,11 +452,11 @@ int can_carry_w(CHAR_DATA *ch)
 bool can_take_proto(CHAR_DATA *ch)
 {
     if (IS_IMMORTAL(ch))
-        return TRUE;
+        return true;
     else if (IS_NPC(ch) && IS_SET(ch->act, ACT_PROTOTYPE))
-        return TRUE;
+        return true;
     else
-        return FALSE;
+        return false;
 }
 
 /*
@@ -470,9 +470,9 @@ bool is_name(const char *str, const char *namelist)
     {
         namelist = one_argument(namelist, name);
         if (name[0] == '\0')
-            return FALSE;
+            return false;
         if (!str_cmp(str, name))
-            return TRUE;
+            return true;
     }
 }
 
@@ -484,9 +484,9 @@ bool is_name_prefix(const char *str, char *namelist)
     {
         namelist = one_argument(namelist, name);
         if (name[0] == '\0')
-            return FALSE;
+            return false;
         if (!str_prefix(str, name))
-            return TRUE;
+            return true;
     }
 }
 
@@ -502,9 +502,9 @@ bool is_name2(const char *str, const char *namelist)
     {
         namelist = one_argument2(namelist, name);
         if (name[0] == '\0')
-            return FALSE;
+            return false;
         if (!str_cmp(str, name))
-            return TRUE;
+            return true;
     }
 }
 
@@ -516,9 +516,9 @@ bool is_name2_prefix(const char *str, const char *namelist)
     {
         namelist = one_argument2(namelist, name);
         if (name[0] == '\0')
-            return FALSE;
+            return false;
         if (!str_prefix(str, name))
-            return TRUE;
+            return true;
     }
 }
 
@@ -530,15 +530,15 @@ bool nifty_is_name(const char *str, const char *namelist)
     char name[MAX_INPUT_LENGTH];
 
     if (!str || str[0] == '\0')
-        return FALSE;
+        return false;
 
     for (;;)
     {
         str = one_argument2(str, name);
         if (name[0] == '\0')
-            return TRUE;
+            return true;
         if (!is_name2(name, namelist))
-            return FALSE;
+            return false;
     }
 }
 
@@ -547,15 +547,15 @@ bool nifty_is_name_prefix(const char *str, const char *namelist)
     char name[MAX_INPUT_LENGTH];
 
     if (!str || str[0] == '\0')
-        return FALSE;
+        return false;
 
     for (;;)
     {
         str = one_argument2(str, name);
         if (name[0] == '\0')
-            return TRUE;
+            return true;
         if (!is_name2_prefix(name, namelist))
-            return FALSE;
+            return false;
     }
 }
 
@@ -895,7 +895,7 @@ void affect_to_char(CHAR_DATA *ch, AFFECT_DATA *paf)
     paf_new->modifier = paf->modifier;
     paf_new->bitvector = paf->bitvector;
 
-    affect_modify(ch, paf_new, TRUE);
+    affect_modify(ch, paf_new, true);
     return;
 }
 
@@ -910,7 +910,7 @@ void affect_remove(CHAR_DATA *ch, AFFECT_DATA *paf)
         return;
     }
 
-    affect_modify(ch, paf, FALSE);
+    affect_modify(ch, paf, false);
 
     UNLINK(paf, ch->first_affect, ch->last_affect, next, prev);
     DISPOSE(paf);
@@ -944,9 +944,9 @@ bool is_affected(CHAR_DATA *ch, int sn)
 
     for (paf = ch->first_affect; paf; paf = paf->next)
         if (paf->type == sn)
-            return TRUE;
+            return true;
 
-    return FALSE;
+    return false;
 }
 
 /*
@@ -1063,8 +1063,8 @@ OBJ_DATA *obj_to_char(OBJ_DATA *obj, CHAR_DATA *ch)
     int wear_loc = obj->wear_loc;
     int extra_flags = obj->extra_flags;
 
-    skipgroup = FALSE;
-    grouped = FALSE;
+    skipgroup = false;
+    grouped = false;
 
     if (IS_OBJ_STAT(obj, ITEM_PROTOTYPE))
     {
@@ -1079,18 +1079,18 @@ OBJ_DATA *obj_to_char(OBJ_DATA *obj, CHAR_DATA *ch)
             for (y = 0; y < MAX_LAYERS; y++)
                 if (save_equipment[x][y] == obj)
                 {
-                    skipgroup = TRUE;
+                    skipgroup = true;
                     break;
                 }
     }
     if (IS_NPC(ch) && ch->pIndexData->pShop)
-        skipgroup = TRUE;
+        skipgroup = true;
 
     if (!skipgroup)
         for (otmp = ch->first_carrying; otmp; otmp = otmp->next_content)
             if ((oret = group_object(otmp, obj)) == otmp)
             {
-                grouped = TRUE;
+                grouped = true;
                 break;
             }
 
@@ -1263,9 +1263,9 @@ void equip_char(CHAR_DATA *ch, OBJ_DATA *obj, int iWear)
         ch->carry_weight -= get_obj_weight(obj);
 
     for (paf = obj->pIndexData->first_affect; paf; paf = paf->next)
-        affect_modify(ch, paf, TRUE);
+        affect_modify(ch, paf, true);
     for (paf = obj->first_affect; paf; paf = paf->next)
-        affect_modify(ch, paf, TRUE);
+        affect_modify(ch, paf, true);
 
     if (obj->item_type == ITEM_LIGHT && obj->value[2] != 0 && ch->in_room)
         ++ch->in_room->light;
@@ -1294,10 +1294,10 @@ void unequip_char(CHAR_DATA *ch, OBJ_DATA *obj)
     obj->wear_loc = -1;
 
     for (paf = obj->pIndexData->first_affect; paf; paf = paf->next)
-        affect_modify(ch, paf, FALSE);
+        affect_modify(ch, paf, false);
     if (obj->carried_by)
         for (paf = obj->first_affect; paf; paf = paf->next)
-            affect_modify(ch, paf, FALSE);
+            affect_modify(ch, paf, false);
 
     if (!obj->carried_by)
         return;
@@ -1365,7 +1365,7 @@ OBJ_DATA *obj_to_room(OBJ_DATA *obj, ROOM_INDEX_DATA *pRoomIndex)
     if (item_type == ITEM_FIRE)
         pRoomIndex->light += count;
     falling++;
-    obj_fall(obj, FALSE);
+    obj_fall(obj, false);
     falling--;
     if (obj->pIndexData->vnum == OBJ_VNUM_CORPSE_PC && falling == 0)
         write_corpses(NULL, obj->short_descr + 14);
@@ -1504,7 +1504,7 @@ void extract_obj(OBJ_DATA *obj)
     --physicalobjects;
     if (obj->serial == cur_obj)
     {
-        cur_obj_extracted = TRUE;
+        cur_obj_extracted = true;
         if (global_objcode == rNONE)
             global_objcode = rOBJ_EXTRACTED;
     }
@@ -1547,7 +1547,7 @@ void extract_char(CHAR_DATA *ch, bool fPull)
     }
 
     if (ch == cur_char)
-        cur_char_died = TRUE;
+        cur_char_died = true;
     /* shove onto extraction queue */
     queue_extracted_char(ch, fPull);
 
@@ -1557,7 +1557,7 @@ void extract_char(CHAR_DATA *ch, bool fPull)
     if (fPull && !IS_SET(ch->act, ACT_POLYMORPHED))
         die_follower(ch);
 
-    stop_fighting(ch, TRUE);
+    stop_fighting(ch, true);
 
     if (ch->mount)
     {
@@ -1632,7 +1632,7 @@ void extract_char(CHAR_DATA *ch, bool fPull)
         else
         {
             ch->desc->character = NULL;
-            close_socket(ch->desc, FALSE);
+            close_socket(ch->desc, false);
             ch->desc = NULL;
         }
     }
@@ -2132,9 +2132,9 @@ bool ms_find_obj(CHAR_DATA *ch)
      */
     drunk = UMAX(1, drunk);
     if (abs(ms) + (drunk / 3) < 30)
-        return FALSE;
+        return false;
     if ((number_percent() + (ms < 0 ? 15 : 5)) > abs(ms) / 2 + drunk / 4)
-        return FALSE;
+        return false;
     if (ms > 15) /* range 1 to 20 */
         switch (number_range(UMAX(1, (ms / 5 - 15)), (ms + 4) / 5))
         {
@@ -2227,7 +2227,7 @@ bool ms_find_obj(CHAR_DATA *ch)
         }
     }
     send_to_char(t, ch);
-    return TRUE;
+    return true;
 }
 
 /*
@@ -2319,22 +2319,22 @@ bool room_is_dark(ROOM_INDEX_DATA *pRoomIndex)
     if (!pRoomIndex)
     {
         bug("room_is_dark: NULL pRoomIndex", 0);
-        return TRUE;
+        return true;
     }
 
     if (pRoomIndex->light > 0)
-        return FALSE;
+        return false;
 
     if (IS_SET(pRoomIndex->room_flags, ROOM_DARK))
-        return TRUE;
+        return true;
 
     if (pRoomIndex->sector_type == SECT_INSIDE || pRoomIndex->sector_type == SECT_CITY)
-        return FALSE;
+        return false;
 
     if (weather_info.sunlight == SUN_SET || weather_info.sunlight == SUN_DARK)
-        return TRUE;
+        return true;
 
-    return FALSE;
+    return false;
 }
 
 /*
@@ -2348,17 +2348,17 @@ bool room_is_private(CHAR_DATA *ch, ROOM_INDEX_DATA *pRoomIndex)
     if (!ch)
     {
         bug("room_is_private: NULL ch", 0);
-        return FALSE;
+        return false;
     }
 
     if (!pRoomIndex)
     {
         bug("room_is_private: NULL pRoomIndex", 0);
-        return FALSE;
+        return false;
     }
 
     if (IS_SET(pRoomIndex->room_flags, ROOM_PLR_HOME) && ch->plr_home != pRoomIndex)
-        return TRUE;
+        return true;
 
     count = 0;
 
@@ -2366,12 +2366,12 @@ bool room_is_private(CHAR_DATA *ch, ROOM_INDEX_DATA *pRoomIndex)
         count++;
 
     if (IS_SET(pRoomIndex->room_flags, ROOM_PRIVATE) && count >= 2)
-        return TRUE;
+        return true;
 
     if (IS_SET(pRoomIndex->room_flags, ROOM_SOLITARY) && count >= 1)
-        return TRUE;
+        return true;
 
-    return FALSE;
+    return false;
 }
 
 /*
@@ -2380,60 +2380,60 @@ bool room_is_private(CHAR_DATA *ch, ROOM_INDEX_DATA *pRoomIndex)
 bool can_see(CHAR_DATA *ch, CHAR_DATA *victim)
 {
     if (!victim)
-        return FALSE;
+        return false;
 
     if (victim->position == POS_FIGHTING || victim->position < POS_SLEEPING)
-        return TRUE;
+        return true;
 
     if (!ch)
     {
         if (IS_AFFECTED(victim, AFF_INVISIBLE) || IS_AFFECTED(victim, AFF_HIDE) || IS_SET(victim->act, PLR_WIZINVIS))
-            return FALSE;
+            return false;
         else
-            return TRUE;
+            return true;
     }
 
     if (ch == victim)
-        return TRUE;
+        return true;
 
     if (!IS_NPC(victim) && IS_SET(victim->act, PLR_WIZINVIS) && get_trust(ch) < victim->pcdata->wizinvis)
-        return FALSE;
+        return false;
 
     if (victim->position == POS_FIGHTING || victim->position < POS_SLEEPING)
-        return TRUE;
+        return true;
 
     /* SB */
     if (IS_NPC(victim) && IS_SET(victim->act, ACT_MOBINVIS) && get_trust(ch) < victim->mobinvis)
-        return FALSE;
+        return false;
 
     if (!IS_IMMORTAL(ch) && !IS_NPC(victim) && !victim->desc && get_timer(victim, TIMER_RECENTFIGHT) > 0 &&
         (!victim->switched || !IS_AFFECTED(victim->switched, AFF_POSSESS)))
-        return FALSE;
+        return false;
 
     if (!IS_NPC(ch) && IS_SET(ch->act, PLR_HOLYLIGHT))
-        return TRUE;
+        return true;
 
     /* The miracle cure for blindness? -- Altrag */
     if (!IS_AFFECTED(ch, AFF_TRUESIGHT))
     {
         if (IS_AFFECTED(ch, AFF_BLIND))
-            return FALSE;
+            return false;
 
         if (room_is_dark(ch->in_room) && !IS_AFFECTED(ch, AFF_INFRARED))
-            return FALSE;
+            return false;
 
         if (IS_AFFECTED(victim, AFF_HIDE) && !IS_AFFECTED(ch, AFF_DETECT_HIDDEN) && !victim->fighting &&
             !IS_AFFECTED(ch, AFF_INFRARED))
-            return FALSE;
+            return false;
 
         if (ch->race == RACE_DEFEL && victim->race == RACE_DEFEL)
-            return TRUE;
+            return true;
 
         if (IS_AFFECTED(victim, AFF_INVISIBLE) && !IS_AFFECTED(ch, AFF_DETECT_INVIS))
-            return FALSE;
+            return false;
     }
 
-    return TRUE;
+    return true;
 }
 
 /*
@@ -2442,30 +2442,30 @@ bool can_see(CHAR_DATA *ch, CHAR_DATA *victim)
 bool can_see_obj(CHAR_DATA *ch, OBJ_DATA *obj)
 {
     if (!IS_NPC(ch) && IS_SET(ch->act, PLR_HOLYLIGHT))
-        return TRUE;
+        return true;
 
     if (IS_OBJ_STAT(obj, ITEM_BURRIED))
-        return FALSE;
+        return false;
 
     if (IS_AFFECTED(ch, AFF_TRUESIGHT))
-        return TRUE;
+        return true;
 
     if (IS_AFFECTED(ch, AFF_BLIND))
-        return FALSE;
+        return false;
 
     if (IS_OBJ_STAT(obj, ITEM_HIDDEN))
-        return FALSE;
+        return false;
 
     if (obj->item_type == ITEM_LIGHT && obj->value[2] != 0)
-        return TRUE;
+        return true;
 
     if (room_is_dark(ch->in_room) && !IS_AFFECTED(ch, AFF_INFRARED))
-        return FALSE;
+        return false;
 
     if (IS_OBJ_STAT(obj, ITEM_INVIS) && !IS_AFFECTED(ch, AFF_DETECT_INVIS))
-        return FALSE;
+        return false;
 
-    return TRUE;
+    return true;
 }
 
 /*
@@ -2474,15 +2474,15 @@ bool can_see_obj(CHAR_DATA *ch, OBJ_DATA *obj)
 bool can_drop_obj(CHAR_DATA *ch, OBJ_DATA *obj)
 {
     if (!IS_OBJ_STAT(obj, ITEM_NODROP))
-        return TRUE;
+        return true;
 
     if (!IS_NPC(ch) && get_trust(ch) >= LEVEL_IMMORTAL)
-        return TRUE;
+        return true;
 
     if (IS_NPC(ch) && ch->pIndexData->vnum == 3)
-        return TRUE;
+        return true;
 
-    return FALSE;
+    return false;
 }
 
 /*
@@ -2964,20 +2964,20 @@ ch_ret check_room_for_traps(CHAR_DATA *ch, int flag)
 }
 
 /*
- * return TRUE if an object contains a trap			-Thoric
+ * return true if an object contains a trap			-Thoric
  */
 bool is_trapped(OBJ_DATA *obj)
 {
     OBJ_DATA *check;
 
     if (!obj->first_content)
-        return FALSE;
+        return false;
 
     for (check = obj->first_content; check; check = check->next_content)
         if (check->item_type == ITEM_TRAP)
-            return TRUE;
+            return true;
 
-    return FALSE;
+    return false;
 }
 
 /*
@@ -3215,7 +3215,7 @@ void fix_char(CHAR_DATA *ch)
     }
 
     for (aff = ch->first_affect; aff; aff = aff->next)
-        affect_modify(ch, aff, FALSE);
+        affect_modify(ch, aff, false);
 
     ch->affected_by = race_table[ch->race].affected;
     ch->mental_state = 0;
@@ -3243,7 +3243,7 @@ void fix_char(CHAR_DATA *ch)
     ch->carry_number = 0;
 
     for (aff = ch->first_affect; aff; aff = aff->next)
-        affect_modify(ch, aff, TRUE);
+        affect_modify(ch, aff, true);
 
     for (x = 0; x < ncarry; x++)
         obj_to_char(carry[x], ch);
@@ -3310,7 +3310,7 @@ void showaffect(CHAR_DATA *ch, AFFECT_DATA *paf)
 void set_cur_obj(OBJ_DATA *obj)
 {
     cur_obj = obj->serial;
-    cur_obj_extracted = FALSE;
+    cur_obj_extracted = false;
     global_objcode = rNONE;
 }
 
@@ -3322,15 +3322,15 @@ bool obj_extracted(OBJ_DATA *obj)
     OBJ_DATA *cod;
 
     if (!obj)
-        return TRUE;
+        return true;
 
     if (obj->serial == cur_obj && cur_obj_extracted)
-        return TRUE;
+        return true;
 
     for (cod = extracted_obj_queue; cod; cod = cod->next)
         if (obj == cod)
-            return TRUE;
-    return FALSE;
+            return true;
+    return false;
 }
 
 /*
@@ -3370,7 +3370,7 @@ void clean_obj_queue()
 void set_cur_char(CHAR_DATA *ch)
 {
     cur_char = ch;
-    cur_char_died = FALSE;
+    cur_char_died = false;
     cur_room = ch->in_room;
     global_retcode = rNONE;
 }
@@ -3383,12 +3383,12 @@ bool char_died(CHAR_DATA *ch)
     EXTRACT_CHAR_DATA *ccd;
 
     if (ch == cur_char && cur_char_died)
-        return TRUE;
+        return true;
 
     for (ccd = extracted_char_queue; ccd; ccd = ccd->next)
         if (ccd->ch == ch)
-            return TRUE;
-    return FALSE;
+            return true;
+    return false;
 }
 
 /*
@@ -3508,25 +3508,25 @@ void remove_timer(CHAR_DATA *ch, sh_int type)
 bool in_soft_range(CHAR_DATA *ch, AREA_DATA *tarea)
 {
     if (IS_IMMORTAL(ch))
-        return TRUE;
+        return true;
     else if (IS_NPC(ch))
-        return TRUE;
+        return true;
     else if ((tarea) && (ch->top_level >= tarea->low_soft_range || ch->top_level <= tarea->hi_soft_range))
-        return TRUE;
+        return true;
     else
-        return FALSE;
+        return false;
 }
 
 bool in_hard_range(CHAR_DATA *ch, AREA_DATA *tarea)
 {
     if (IS_IMMORTAL(ch))
-        return TRUE;
+        return true;
     else if (IS_NPC(ch))
-        return TRUE;
+        return true;
     else if ((tarea) && (ch->top_level >= tarea->low_hard_range && ch->top_level <= tarea->hi_hard_range))
-        return TRUE;
+        return true;
     else
-        return FALSE;
+        return false;
 }
 
 /*
@@ -3540,7 +3540,7 @@ bool chance(CHAR_DATA *ch, sh_int percent)
     if (!ch)
     {
         bug("Chance: null ch!", 0);
-        return FALSE;
+        return false;
     }
 
     /* Code for clan stuff put in by Narn, Feb/96.  The idea is to punish clan
@@ -3570,9 +3570,9 @@ bool chance(CHAR_DATA *ch, sh_int percent)
     ms = 10 - abs(ch->mental_state);
 
     if ((number_percent() - get_curr_lck(ch) + 13 - ms) + deity_factor <= percent)
-        return TRUE;
+        return true;
     else
-        return FALSE;
+        return false;
 }
 
 bool chance_attrib(CHAR_DATA *ch, sh_int percent, sh_int attrib)
@@ -3583,15 +3583,15 @@ bool chance_attrib(CHAR_DATA *ch, sh_int percent, sh_int attrib)
     if (!ch)
     {
         bug("Chance: null ch!", 0);
-        return FALSE;
+        return false;
     }
 
     deity_factor = 0;
 
     if (number_percent() - get_curr_lck(ch) + 13 - attrib + 13 + deity_factor <= percent)
-        return TRUE;
+        return true;
     else
-        return FALSE;
+        return false;
 }
 
 /*
@@ -3731,12 +3731,12 @@ bool empty_obj(OBJ_DATA *obj, OBJ_DATA *destobj, ROOM_INDEX_DATA *destroom)
 {
     OBJ_DATA *otmp, *otmp_next;
     CHAR_DATA *ch = obj->carried_by;
-    bool movedsome = FALSE;
+    bool movedsome = false;
 
     if (!obj)
     {
         bug("empty_obj: NULL obj", 0);
-        return FALSE;
+        return false;
     }
     if (destobj || (!destroom && !ch && (destobj = obj->in_obj) != NULL))
     {
@@ -3748,7 +3748,7 @@ bool empty_obj(OBJ_DATA *obj, OBJ_DATA *destobj, ROOM_INDEX_DATA *destroom)
                 continue;
             obj_from_obj(otmp);
             obj_to_obj(otmp, destobj);
-            movedsome = TRUE;
+            movedsome = true;
         }
         return movedsome;
     }
@@ -3773,7 +3773,7 @@ bool empty_obj(OBJ_DATA *obj, OBJ_DATA *destobj, ROOM_INDEX_DATA *destroom)
                 if (char_died(ch))
                     ch = NULL;
             }
-            movedsome = TRUE;
+            movedsome = true;
         }
         return movedsome;
     }
@@ -3784,12 +3784,12 @@ bool empty_obj(OBJ_DATA *obj, OBJ_DATA *destobj, ROOM_INDEX_DATA *destroom)
             otmp_next = otmp->next_content;
             obj_from_obj(otmp);
             obj_to_char(otmp, ch);
-            movedsome = TRUE;
+            movedsome = true;
         }
         return movedsome;
     }
     bug("empty_obj: could not determine a destination for vnum %d", obj->pIndexData->vnum);
-    return FALSE;
+    return false;
 }
 
 /*
@@ -3875,8 +3875,8 @@ bool economy_has(AREA_DATA *tarea, int gold)
     int hasgold = ((tarea->high_economy > 0) ? 1 : 0) * 1000000000 + tarea->low_economy;
 
     if (hasgold >= gold)
-        return TRUE;
-    return FALSE;
+        return true;
+    return false;
 }
 
 /*
@@ -3976,7 +3976,7 @@ void rem_group_affects(CHAR_DATA *ch)
         {
           if(paf == AFF_BATTLE_COMMAND)
           {
-           affect_modify( ch, paf, FALSE );
+           affect_modify( ch, paf, false );
            UNLINK( paf, ch->first_affect, ch->last_affect, next, prev );
            DISPOSE( paf );
           }

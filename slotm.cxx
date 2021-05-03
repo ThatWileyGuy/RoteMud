@@ -289,8 +289,8 @@ void printwinnings(CHAR_DATA *ch, sh_int *amount, sh_int *winningsmult)
 
 void checkslots(CHAR_DATA *ch, sh_int *amount, sh_int *slot1, sh_int *slot2, sh_int *slot3)
 {
-    bool oneandtwo = FALSE, oneandthree = FALSE, twoandthree = FALSE;
-    bool allthree = FALSE;
+    bool oneandtwo = false, oneandthree = false, twoandthree = false;
+    bool allthree = false;
     sh_int winningsmult = 0;
 
     /*1 = "cherries";
@@ -301,54 +301,54 @@ void checkslots(CHAR_DATA *ch, sh_int *amount, sh_int *slot1, sh_int *slot2, sh_
 
     // This sections checks to see which ones match
     if ((*slot1) == (*slot2))
-        oneandtwo = TRUE;
+        oneandtwo = true;
 
     if ((*slot1) == (*slot3))
-        oneandthree = TRUE;
+        oneandthree = true;
 
     if ((*slot2) == (*slot3))
-        twoandthree = TRUE;
+        twoandthree = true;
 
     // Find out if they all match
-    if ((oneandtwo == TRUE) && (oneandthree == TRUE) && (twoandthree == TRUE))
-        allthree = TRUE;
+    if ((oneandtwo == true) && (oneandthree == true) && (twoandthree == true))
+        allthree = true;
 
     // If they all match and are all bars
-    if ((allthree == TRUE) && ((*slot1) == slot_bar))
+    if ((allthree == true) && ((*slot1) == slot_bar))
         winningsmult = matchingthreebars;
 
     // If they all match but aren't bars
-    else if ((allthree == TRUE) && ((*slot1) != slot_bar))
+    else if ((allthree == true) && ((*slot1) != slot_bar))
         winningsmult = matchingthreenobar;
 
     // This section checks to see if two match and one of the matching is a bar
-    else if ((oneandtwo == TRUE) && ((*slot1) == slot_bar))
+    else if ((oneandtwo == true) && ((*slot1) == slot_bar))
         winningsmult = wildthree;
 
-    else if ((oneandthree == TRUE) && ((*slot1) == slot_bar))
+    else if ((oneandthree == true) && ((*slot1) == slot_bar))
         winningsmult = wildthree;
 
-    else if ((twoandthree == TRUE) && ((*slot2) == slot_bar))
+    else if ((twoandthree == true) && ((*slot2) == slot_bar))
         winningsmult = wildthree;
 
     // This section checks to see if two match and the third is a bar (doesn't work for 2 matching bars)
-    else if ((oneandtwo == TRUE) && ((*slot3) == slot_bar))
+    else if ((oneandtwo == true) && ((*slot3) == slot_bar))
         winningsmult = wildthree;
 
-    else if ((oneandthree == TRUE) && ((*slot2) == slot_bar))
+    else if ((oneandthree == true) && ((*slot2) == slot_bar))
         winningsmult = wildthree;
 
-    else if ((twoandthree == TRUE) && ((*slot1) == slot_bar))
+    else if ((twoandthree == true) && ((*slot1) == slot_bar))
         winningsmult = wildthree;
 
     // This section checks to see if two match and they are type cherries
-    else if ((oneandtwo == TRUE) && ((*slot1) == slot_cherries))
+    else if ((oneandtwo == true) && ((*slot1) == slot_cherries))
         winningsmult = twocherries;
 
-    else if ((oneandthree == TRUE) && ((*slot1) == slot_cherries))
+    else if ((oneandthree == true) && ((*slot1) == slot_cherries))
         winningsmult = twocherries;
 
-    else if ((twoandthree == TRUE) && ((*slot2) == slot_cherries))
+    else if ((twoandthree == true) && ((*slot2) == slot_cherries))
         winningsmult = twocherries;
 
     printwinnings(ch, &(*amount), &winningsmult); // Send the winningsmult to the printing function

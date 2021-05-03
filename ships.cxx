@@ -54,7 +54,7 @@
     if (!str_cmp(word, literal))                                                                                       \
     {                                                                                                                  \
         field = value;                                                                                                 \
-        fMatch = TRUE;                                                                                                 \
+        fMatch = true;                                                                                                 \
         break;                                                                                                         \
     }
 
@@ -174,7 +174,7 @@ void do_buymobship(CHAR_DATA *ch, char *argument)
     char arg[MAX_STRING_LENGTH];
     char shipname[MAX_STRING_LENGTH];
     char buf[MAX_STRING_LENGTH];
-    bool found_proto = FALSE;
+    bool found_proto = false;
     AREA_DATA *tarea;
     CLAN_DATA *clan;
     CLAN_DATA *mainclan;
@@ -222,7 +222,7 @@ void do_buymobship(CHAR_DATA *ch, char *argument)
     {
         if (nifty_is_name_prefix(arg, ship_prototypes[x].name))
         {
-            found_proto = TRUE;
+            found_proto = true;
             break;
         }
     }
@@ -313,12 +313,12 @@ void do_buymobship(CHAR_DATA *ch, char *argument)
         return;
     }
 
-    fsys = fplan = fcap = FALSE;
+    fsys = fplan = fcap = false;
     for (system = first_starsystem; system; system = system->next)
     {
         if (nifty_is_name(argument, system->name))
         {
-            fsys = TRUE;
+            fsys = true;
             break;
         }
     }
@@ -330,7 +330,7 @@ void do_buymobship(CHAR_DATA *ch, char *argument)
     for (planet = system->first_planet; planet; planet = planet->next_in_system)
     {
         if (ch->pcdata->clan == planet->governed_by)
-            fplan = TRUE;
+            fplan = true;
     }
     if (!fplan)
     {
@@ -344,7 +344,7 @@ void do_buymobship(CHAR_DATA *ch, char *argument)
             count++;
         if (sship->clazz >= SHIP_CRUISER)
         {
-            fcap = TRUE;
+            fcap = true;
             caps++;
         }
     }
@@ -390,7 +390,7 @@ void do_buymobship(CHAR_DATA *ch, char *argument)
     ship->vx = number_range(-3000, 3000);
     ship->vy = number_range(-3000, 3000);
     ship->vz = number_range(-3000, 3000);
-    ship->autopilot = TRUE;
+    ship->autopilot = true;
     sprintf_s(buf, "%s enters the starsystem at %.0f %.0f %.0f", ship->name, ship->vx, ship->vy, ship->vz);
     echo_to_system(AT_YELLOW, ship, buf, NULL);
     return;
@@ -401,7 +401,7 @@ void do_orderclanship(CHAR_DATA *ch, char *argument)
     int x, size, ship_type, vnum;
     SHIP_DATA *ship;
     char arg[MAX_STRING_LENGTH];
-    bool found_proto = FALSE;
+    bool found_proto = false;
     AREA_DATA *tarea;
     CLAN_DATA *clan;
     CLAN_DATA *mainclan;
@@ -444,7 +444,7 @@ void do_orderclanship(CHAR_DATA *ch, char *argument)
     {
         if (nifty_is_name_prefix(arg, ship_prototypes[x].name))
         {
-            found_proto = TRUE;
+            found_proto = true;
             break;
         }
     }
@@ -862,7 +862,7 @@ void do_ordership(CHAR_DATA *ch, char *argument)
     int x, size, ship_type, vnum, count;
     SHIP_DATA *ship;
     char arg[MAX_STRING_LENGTH];
-    bool found_proto = FALSE;
+    bool found_proto = false;
     AREA_DATA *tarea;
     BMARKET_DATA *marketship;
     char *bmshipname = nullptr;
@@ -918,7 +918,7 @@ void do_ordership(CHAR_DATA *ch, char *argument)
         {
             if (nifty_is_name_prefix(arg, ship_prototypes[x].name))
             {
-                found_proto = TRUE;
+                found_proto = true;
                 break;
             }
         }
@@ -1372,7 +1372,7 @@ int make_prototype_rooms(int ship_type, int vnum, AREA_DATA *tarea, char *Sname)
                     }
                 }
             }
-            instaroom(newroom, TRUE);
+            instaroom(newroom, true);
         }
     }
     for (proom = first_prototype_room; proom; proom = proom->next)
@@ -1398,13 +1398,13 @@ int make_prototype_rooms(int ship_type, int vnum, AREA_DATA *tarea, char *Sname)
         }
     }
     make_rprogs(ship_type, vnum);
-    fold_area(tarea, tarea->filename, FALSE);
+    fold_area(tarea, tarea->filename, false);
     return 1;
 }
 
 int find_vnum_block(int num_needed)
 {
-    bool counting = FALSE;
+    bool counting = false;
     int count = 0;
     AREA_DATA *tarea;
     int lrange;
@@ -1425,7 +1425,7 @@ int find_vnum_block(int num_needed)
         {
             if (!counting)
             {
-                counting = TRUE;
+                counting = true;
                 startvnum = vnum;
             }
             count++;
@@ -1434,7 +1434,7 @@ int find_vnum_block(int num_needed)
         }
         else if (counting)
         {
-            counting = FALSE;
+            counting = false;
             count = 0;
             startvnum = -1;
         }
@@ -1642,12 +1642,12 @@ bool load_prototype_header(FILE *fp, int prototype)
 {
     char buf[MAX_STRING_LENGTH];
     const char *word;
-    bool done = FALSE;
+    bool done = false;
     bool fMatch;
     while (!done)
     {
         word = feof(fp) ? "End" : fread_word(fp);
-        fMatch = FALSE;
+        fMatch = false;
         switch (UPPER(word[0]))
         {
         case 'C':
@@ -1659,8 +1659,8 @@ bool load_prototype_header(FILE *fp, int prototype)
             KEY("Energy", ship_prototypes[prototype].energy, fread_number(fp));
             if (!str_cmp(word, "End"))
             {
-                done = TRUE;
-                fMatch = TRUE;
+                done = true;
+                fMatch = true;
                 break;
             }
         case 'H':
@@ -1722,7 +1722,7 @@ bool load_prototype_header(FILE *fp, int prototype)
             bug(buf, 0);
         }
     }
-    return TRUE;
+    return true;
 }
 
 bool fread_prototype_room(FILE *fp, int prototype)
@@ -1730,14 +1730,14 @@ bool fread_prototype_room(FILE *fp, int prototype)
     PROTO_ROOM *proom;
     char buf[MAX_STRING_LENGTH];
     const char *word;
-    bool done = FALSE;
+    bool done = false;
     bool fMatch;
     CREATE(proom, PROTO_ROOM, 1);
     proom->what_prototype = prototype;
     while (!done)
     {
         word = feof(fp) ? "End" : fread_word(fp);
-        fMatch = FALSE;
+        fMatch = false;
         switch (UPPER(word[0]))
         {
         case 'D':
@@ -1745,8 +1745,8 @@ bool fread_prototype_room(FILE *fp, int prototype)
         case 'E':
             if (!str_cmp(word, "End"))
             {
-                done = TRUE;
-                fMatch = TRUE;
+                done = true;
+                fMatch = true;
                 break;
             }
             KEY("Exits0", proom->exits[0], fread_number(fp));
@@ -1817,14 +1817,14 @@ bool fread_prototype_room(FILE *fp, int prototype)
         }
     }
     LINK(proom, first_prototype_room, last_prototype_room, next, prev);
-    return TRUE;
+    return true;
 }
 
 bool load_prototype_rooms(FILE *fp, int prototype)
 {
     char letter;
     char *word;
-    bool done = FALSE;
+    bool done = false;
     while (!done)
     {
         letter = fread_letter(fp);
@@ -1834,27 +1834,27 @@ bool load_prototype_rooms(FILE *fp, int prototype)
             if (!strcmp("ROOM", word))
             {
                 if (!fread_prototype_room(fp, prototype))
-                    return FALSE;
+                    return false;
             }
             if (!strcmp("ENDROOMS", word))
-                done = TRUE;
+                done = true;
         }
         else
         {
             bug("Load_prototype_rooms, unknown prefix: %s", letter);
-            return FALSE;
+            return false;
         }
     }
-    return TRUE;
+    return true;
 }
 
 int load_prototype(const char *prototypefile, int prototype)
 {
     char filename[256];
     FILE *fp;
-    bool found = FALSE;
+    bool found = false;
     int stage = -1;
-    bool ok = TRUE;
+    bool ok = true;
     char letter;
     char *word;
 
@@ -1862,7 +1862,7 @@ int load_prototype(const char *prototypefile, int prototype)
 
     if ((fp = fopen(filename, "r")) != NULL)
     {
-        found = TRUE;
+        found = true;
         prototype++;
         while (ok)
         {
@@ -1886,7 +1886,7 @@ int load_prototype(const char *prototypefile, int prototype)
                     }
                     if (!load_prototype_header(fp, prototype))
                     {
-                        ok = FALSE;
+                        ok = false;
                         prototype--;
                     }
                     break;
@@ -1898,7 +1898,7 @@ int load_prototype(const char *prototypefile, int prototype)
                     }
                     if (!load_prototype_rooms(fp, prototype))
                     {
-                        ok = FALSE;
+                        ok = false;
                         prototype--;
                     }
                     break;
@@ -1907,7 +1907,7 @@ int load_prototype(const char *prototypefile, int prototype)
                 }
             }
             else
-                ok = FALSE;
+                ok = false;
         }
         fclose(fp);
     }
@@ -2535,7 +2535,7 @@ void add_market_ship(SHIP_DATA *ship)
         if (!str_cmp(marketship->filename, ship->protoname))
         {
             // Debugging  bug("Found, adding quantity", 0);
-            found = TRUE;
+            found = true;
             marketship->quantity++;
             return;
         }
@@ -2802,8 +2802,8 @@ void do_installmodule(CHAR_DATA *ch, char *argument)
     int tractor = 0;
 
     strcpy_s(arg, argument);
-    checktool = FALSE;
-    checkmod = FALSE;
+    checktool = false;
+    checkmod = false;
     switch (ch->substate)
     {
     default:
@@ -2822,20 +2822,20 @@ void do_installmodule(CHAR_DATA *ch, char *argument)
         for (obj = ch->last_carrying; obj; obj = obj->prev_content)
         {
             if (obj->item_type == ITEM_TOOLKIT)
-                checktool = TRUE;
+                checktool = true;
             if (obj->item_type == ITEM_MODULE)
             {
-                checkmod = TRUE;
+                checkmod = true;
                 modobj = obj;
             }
         }
 
-        if (checktool == FALSE)
+        if (checktool == false)
         {
             send_to_char("You need a toolkit to install a module.\n\r", ch);
             return;
         }
-        if (checkmod == FALSE)
+        if (checkmod == false)
         {
             send_to_char("You need a module to install!\n\r", ch);
             return;
@@ -2972,10 +2972,10 @@ void do_installmodule(CHAR_DATA *ch, char *argument)
     for (obj = ch->last_carrying; obj; obj = obj->prev_content)
     {
         if (obj->item_type == ITEM_TOOLKIT)
-            checktool = TRUE;
+            checktool = true;
         if (obj->item_type == ITEM_MODULE)
         {
-            checkmod = TRUE;
+            checkmod = true;
             modobj = obj;
         }
     }

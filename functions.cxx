@@ -55,17 +55,17 @@ char *strrep(const char *src, const char *sch, const char *rep)
 {
     int lensrc = strlen(src), lensch = strlen(sch), lenrep = strlen(rep), x, y, in_p;
     static char newsrc[MAX_STRING_LENGTH];
-    bool searching = FALSE;
+    bool searching = false;
 
     newsrc[0] = '\0';
     for (x = 0, in_p = 0; x < lensrc; x++, in_p++)
     {
         if (src[x] == sch[0])
         {
-            searching = TRUE;
+            searching = true;
             for (y = 0; y < lensch; y++)
                 if (src[x + y] != sch[y])
-                    searching = FALSE;
+                    searching = false;
 
             if (searching)
             {
@@ -80,7 +80,7 @@ char *strrep(const char *src, const char *sch, const char *rep)
                 }
                 x += lensch - 1;
                 in_p--;
-                searching = FALSE;
+                searching = false;
                 continue;
             }
         }
@@ -110,23 +110,23 @@ char *strlinwrp(char *src, int length)
     srclen = strlen(src);
     in_p = 0;
     // STRFREE(newstr); Commented out - was just defined!
-    looking = FALSE;
+    looking = false;
     for (x = 0, last_line = 0; x < srclen; x++, last_line++)
     {
         if (src[x] == '\r' || src[x] == '\n')
         {
             last_line = 0;
-            looking = FALSE;
+            looking = false;
         }
         else if (last_line % length == 0 && x != 0)
-            looking = TRUE;
+            looking = true;
         if (looking)
         {
             if (src[x] == ' ')
             {
                 newstr[in_p++] = '\r';
                 newstr[in_p++] = '\n';
-                looking = FALSE;
+                looking = false;
                 last_line = 0;
                 if (src[x + 1] == ' ')
                     x++;
@@ -235,7 +235,7 @@ const char *htmlcolor(const char *src)
   bool looking;
   srclen = strlen(src);
   in_p=0; STRFREE(newstr); count=0;
-  looking=FALSE;
+  looking=false;
   for(i=0,in_p=0;i<srclen;i++,in_p++)
   {
 
@@ -245,14 +245,14 @@ const char *htmlcolor(const char *src)
       }
 
     if (src[i] == '&'){
-        looking = TRUE;
+        looking = true;
 
         if (src[i++] == '&')
           count++;
           i--;
     }
     if (looking){
-          looking = FALSE;
+          looking = false;
             newstr[in_p] = src[i];
             in_p++;
             i++;

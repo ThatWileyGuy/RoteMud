@@ -237,21 +237,21 @@ void do_get(CHAR_DATA *ch, char *argument)
                 return;
             }
             if (!str_cmp(arg1, "all"))
-                fAll = TRUE;
+                fAll = true;
             else
-                fAll = FALSE;
+                fAll = false;
             if (number > 1)
                 chk = arg1;
             else
                 chk = &arg1[4];
             /* 'get all' or 'get all.obj' */
-            found = FALSE;
+            found = false;
             for (obj = ch->in_room->first_content; obj; obj = obj_next)
             {
                 obj_next = obj->next_content;
                 if ((fAll || nifty_is_name(chk, obj->name)) && can_see_obj(ch, obj))
                 {
-                    found = TRUE;
+                    found = true;
                     if (number && (cnt + obj->count) > number)
                         split_obj(obj, number - cnt);
                     cnt += obj->count;
@@ -354,20 +354,20 @@ void do_get(CHAR_DATA *ch, char *argument)
                 return;
             }
             if (!str_cmp(arg1, "all"))
-                fAll = TRUE;
+                fAll = true;
             else
-                fAll = FALSE;
+                fAll = false;
             if (number > 1)
                 chk = arg1;
             else
                 chk = &arg1[4];
-            found = FALSE;
+            found = false;
             for (obj = container->first_content; obj; obj = obj_next)
             {
                 obj_next = obj->next_content;
                 if ((fAll || nifty_is_name(chk, obj->name)) && can_see_obj(ch, obj))
                 {
-                    found = TRUE;
+                    found = true;
                     if (number && (cnt + obj->count) > number)
                         split_obj(obj, number - cnt);
                     cnt += obj->count;
@@ -418,7 +418,7 @@ void do_put(CHAR_DATA *ch, char *argument)
     CLAN_DATA *clan;
     sh_int count;
     int number;
-    bool save_char = FALSE;
+    bool save_char = false;
 
     argument = one_argument(argument, arg1);
     if (is_number(arg1))
@@ -460,7 +460,7 @@ void do_put(CHAR_DATA *ch, char *argument)
     }
 
     if (!container->carried_by && IS_SET(sysdata.save_flags, SV_PUT))
-        save_char = TRUE;
+        save_char = true;
 
     if (IS_OBJ_STAT(container, ITEM_COVERING))
     {
@@ -600,15 +600,15 @@ void do_put(CHAR_DATA *ch, char *argument)
     }
     else
     {
-        bool found = FALSE;
+        bool found = false;
         int cnt = 0;
         bool fAll;
         char *chk;
 
         if (!str_cmp(arg1, "all"))
-            fAll = TRUE;
+            fAll = true;
         else
-            fAll = FALSE;
+            fAll = false;
         if (number > 1)
             chk = arg1;
         else
@@ -640,7 +640,7 @@ void do_put(CHAR_DATA *ch, char *argument)
                     act(AT_ACTION, "You put $p in $P.", ch, obj, container, TO_CHAR);
                 }
                 obj = obj_to_obj(obj, container);
-                found = TRUE;
+                found = true;
 
                 check_for_trap(ch, container, TRAP_PUT);
                 if (char_died(ch))
@@ -812,9 +812,9 @@ void do_drop(CHAR_DATA *ch, char *argument)
         bool fAll;
 
         if (!str_cmp(arg, "all"))
-            fAll = TRUE;
+            fAll = true;
         else
-            fAll = FALSE;
+            fAll = false;
         if (number > 1)
             chk = arg;
         else
@@ -825,7 +825,7 @@ void do_drop(CHAR_DATA *ch, char *argument)
             send_to_char("You can't seem to do that here...\n\r", ch);
             return;
         }
-        found = FALSE;
+        found = false;
         for (obj = ch->first_carrying; obj; obj = obj_next)
         {
             obj_next = obj->next_content;
@@ -833,7 +833,7 @@ void do_drop(CHAR_DATA *ch, char *argument)
             if ((fAll || nifty_is_name(chk, obj->name)) && can_see_obj(ch, obj) && obj->wear_loc == WEAR_NONE &&
                 can_drop_obj(ch, obj))
             {
-                found = TRUE;
+                found = true;
                 if (obj->pIndexData->progtypes & DROP_PROG && obj->count > 1)
                 {
                     ++cnt;
@@ -1113,21 +1113,21 @@ bool remove_obj(CHAR_DATA *ch, int iWear, bool fReplace)
     OBJ_DATA *obj, *tmpobj;
 
     if ((obj = get_eq_char(ch, iWear)) == NULL)
-        return TRUE;
+        return true;
 
     if (!fReplace && ch->carry_number + get_obj_number(obj) > can_carry_n(ch))
     {
         act(AT_PLAIN, "$d: you can't carry that many items.", ch, NULL, obj->name, TO_CHAR);
-        return FALSE;
+        return false;
     }
 
     if (!fReplace)
-        return FALSE;
+        return false;
 
     if (IS_OBJ_STAT(obj, ITEM_NOREMOVE))
     {
         act(AT_PLAIN, "You can't remove $p.", ch, obj, NULL, TO_CHAR);
-        return FALSE;
+        return false;
     }
 
     if (obj == get_eq_char(ch, WEAR_WIELD) && (tmpobj = get_eq_char(ch, WEAR_DUAL_WIELD)) != NULL)
@@ -1138,7 +1138,7 @@ bool remove_obj(CHAR_DATA *ch, int iWear, bool fReplace)
     act(AT_ACTION, "$n stops using $p.", ch, obj, NULL, TO_ROOM);
     act(AT_ACTION, "You stop using $p.", ch, obj, NULL, TO_CHAR);
     oprog_remove_trigger(ch, obj);
-    return TRUE;
+    return true;
 }
 
 /*
@@ -1147,11 +1147,11 @@ bool remove_obj(CHAR_DATA *ch, int iWear, bool fReplace)
 bool could_dual(CHAR_DATA *ch)
 {
     if (IS_NPC(ch))
-        return TRUE;
+        return true;
     if (ch->pcdata->learned[gsn_dual_wield])
-        return TRUE;
+        return true;
 
-    return FALSE;
+    return false;
 }
 
 /*
@@ -1165,76 +1165,76 @@ bool can_dual(CHAR_DATA *ch)
      * We must assume that when they come in, they are NOT wielding something. We
      * take care of the actual value later. -Orion
      */
-    bool wielding[2], alreadyWielding = FALSE;
-    wielding[0] = FALSE;
-    wielding[1] = FALSE;
+    bool wielding[2], alreadyWielding = false;
+    wielding[0] = false;
+    wielding[1] = false;
 
     /*
      * If they don't have the ability to dual-wield, why should we allow them to
      * do so? -Orion
      */
     if (!could_dual(ch))
-        return FALSE;
+        return false;
 
     /*
      * Get that true wielding value I mentioned earlier. If they're wielding and
-     * missile wielding, we can simply return FALSE. If not, set the values. -Orion
+     * missile wielding, we can simply return false. If not, set the values. -Orion
      */
     if (get_eq_char(ch, WEAR_WIELD) && get_eq_char(ch, WEAR_MISSILE_WIELD))
     {
         send_to_char("You are already wielding two weapons... grow some more arms!\n\r", ch);
-        return FALSE;
+        return false;
     }
     else
     {
         /*
          * Wield position. -Orion
          */
-        wielding[0] = get_eq_char(ch, WEAR_WIELD) ? TRUE : FALSE;
+        wielding[0] = get_eq_char(ch, WEAR_WIELD) ? true : false;
         /*
          * Missile wield position. -Orion
          */
-        wielding[1] = get_eq_char(ch, WEAR_MISSILE_WIELD) ? TRUE : FALSE;
+        wielding[1] = get_eq_char(ch, WEAR_MISSILE_WIELD) ? true : false;
     }
 
     /*
      * Save some extra typing farther down. -Orion
      */
     if (wielding[0] || wielding[1])
-        alreadyWielding = TRUE;
+        alreadyWielding = true;
 
     /*
      * If wielding and dual wielding, then they can't wear another weapon. Return
-     * FALSE. We can assume that dual wield will not be full if there is no wield
+     * false. We can assume that dual wield will not be full if there is no wield
      * slot already filled. -Orion
      */
     if (wielding[0] && get_eq_char(ch, WEAR_DUAL_WIELD))
     {
         send_to_char("You are already wielding two weapons... grow some more arms!\n\r", ch);
-        return FALSE;
+        return false;
     }
 
     /*
      * If wielding or missile wielding and holding a shield, then we can return
-     * FALSE. -Orion
+     * false. -Orion
      */
     if (alreadyWielding && get_eq_char(ch, WEAR_SHIELD))
     {
         send_to_char("You cannot dual wield, you're already holding a shield!\n\r", ch);
-        return FALSE;
+        return false;
     }
 
     /*
      * If wielding or missile wielding and holding something, then we can return
-     * FALSE. -Orion
+     * false. -Orion
      */
     if (alreadyWielding && get_eq_char(ch, WEAR_HOLD))
     {
         send_to_char("You cannot hold another weapon, you're already holding something in that hand!\n\r", ch);
-        return FALSE;
+        return false;
     }
 
-    return TRUE;
+    return true;
 }
 
 /*
@@ -1251,15 +1251,15 @@ bool can_layer(CHAR_DATA *ch, OBJ_DATA *obj, sh_int wear_loc)
         if (otmp->wear_loc == wear_loc)
         {
             if (!otmp->pIndexData->layers)
-                return FALSE;
+                return false;
             else
                 bitlayers |= otmp->pIndexData->layers;
         }
     if ((bitlayers && !objlayers) || bitlayers > objlayers)
-        return FALSE;
+        return false;
     if (!bitlayers || ((bitlayers & ~objlayers) == bitlayers))
-        return TRUE;
-    return FALSE;
+        return true;
+    return false;
 }
 
 /*
@@ -1312,12 +1312,12 @@ void wear_obj(CHAR_DATA *ch, OBJ_DATA *obj, bool fReplace, sh_int wear_bit)
         }
     }
 
-    check_size = FALSE;
+    check_size = false;
 
     if (1 << bit == ITEM_WIELD || 1 << bit == ITEM_HOLD || obj->item_type == ITEM_LIGHT || 1 << bit == ITEM_WEAR_SHIELD)
-        check_size = FALSE;
+        check_size = false;
     else if (ch->race == RACE_DEFEL)
-        check_size = TRUE;
+        check_size = true;
     else if (!IS_NPC(ch))
         switch (ch->race)
         {
@@ -1330,13 +1330,13 @@ void wear_obj(CHAR_DATA *ch, OBJ_DATA *obj, bool fReplace, sh_int wear_bit)
         case RACE_TWI_LEK:
 
             if (!IS_OBJ_STAT(obj, ITEM_HUMAN_SIZE))
-                check_size = TRUE;
+                check_size = true;
             break;
 
         case RACE_HUTT:
 
             if (!IS_OBJ_STAT(obj, ITEM_HUTT_SIZE))
-                check_size = TRUE;
+                check_size = true;
             break;
 
         case RACE_GAMORREAN:
@@ -1345,7 +1345,7 @@ void wear_obj(CHAR_DATA *ch, OBJ_DATA *obj, bool fReplace, sh_int wear_bit)
         case RACE_WOOKIEE:
 
             if (!IS_OBJ_STAT(obj, ITEM_LARGE_SIZE))
-                check_size = TRUE;
+                check_size = true;
             break;
 
         case RACE_EWOK:
@@ -1353,7 +1353,7 @@ void wear_obj(CHAR_DATA *ch, OBJ_DATA *obj, bool fReplace, sh_int wear_bit)
         case RACE_JAWA:
 
             if (!IS_OBJ_STAT(obj, ITEM_SMALL_SIZE))
-                check_size = TRUE;
+                check_size = true;
             break;
         }
 
@@ -2038,7 +2038,7 @@ void do_wear(CHAR_DATA *ch, char *argument)
                 return;
             }
             if (obj->wear_loc == WEAR_NONE && can_see_obj(ch, obj))
-                wear_obj(ch, obj, FALSE, -1);
+                wear_obj(ch, obj, false, -1);
         }
         return;
     }
@@ -2058,7 +2058,7 @@ void do_wear(CHAR_DATA *ch, char *argument)
             wear_bit = get_wflag(arg2);
         else
             wear_bit = -1;
-        wear_obj(ch, obj, TRUE, wear_bit);
+        wear_obj(ch, obj, true, wear_bit);
     }
 
     return;
@@ -2086,7 +2086,7 @@ void do_remove(CHAR_DATA *ch, char *argument)
         {
             obj_next = obj->next_content;
             if (obj->wear_loc != WEAR_NONE && can_see_obj(ch, obj) && obj->item_type != ITEM_BINDERS)
-                remove_obj(ch, obj->wear_loc, TRUE);
+                remove_obj(ch, obj->wear_loc, true);
         }
         return;
     }
@@ -2107,7 +2107,7 @@ void do_remove(CHAR_DATA *ch, char *argument)
         return;
     }
 
-    remove_obj(ch, obj->wear_loc, TRUE);
+    remove_obj(ch, obj->wear_loc, true);
     return;
 }
 
@@ -2129,11 +2129,11 @@ void do_bury(CHAR_DATA *ch, char *argument)
     if (ms_find_obj(ch))
         return;
 
-    shovel = FALSE;
+    shovel = false;
     for (obj = ch->first_carrying; obj; obj = obj->next_content)
         if (obj->item_type == ITEM_SHOVEL)
         {
-            shovel = TRUE;
+            shovel = true;
             break;
         }
 
@@ -2544,7 +2544,7 @@ void do_auction(CHAR_DATA *ch, char *argument)
             {
                 ch_printf(ch, "&z||&w Contents of &G%s&w:\n\r\n\r", obj->short_descr);
                 set_char_color(AT_LBLUE, ch);
-                show_list_to_char(obj->first_content, ch, TRUE, FALSE);
+                show_list_to_char(obj->first_content, ch, true, false);
                 set_char_color(AT_WHITE, ch);
                 ch_printf(ch, "\n\r&z||&w\n\r&W++\n\r", ch);
             }
@@ -2807,9 +2807,9 @@ void obj_fall(OBJ_DATA *obj, bool through)
             act(AT_PLAIN, "$p falls far below...", obj->in_room->first_person, obj, NULL, TO_CHAR);
         }
         obj_from_room(obj);
-        is_falling = TRUE;
+        is_falling = true;
         obj = obj_to_room(obj, to_room);
-        is_falling = FALSE;
+        is_falling = false;
 
         if (obj->in_room->first_person)
         {
@@ -2866,7 +2866,7 @@ void obj_fall(OBJ_DATA *obj, bool through)
                 break;
             }
         }
-        obj_fall(obj, TRUE);
+        obj_fall(obj, true);
     }
     return;
 }

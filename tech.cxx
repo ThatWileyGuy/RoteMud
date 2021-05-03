@@ -76,11 +76,11 @@ void do_makemodule(CHAR_DATA *ch, char *argument)
                 ch);
             return;
         }
-        checklens = FALSE;
-        checkbat = FALSE;
-        checksuper = FALSE;
-        checkcircuit = FALSE;
-        checktool = FALSE;
+        checklens = false;
+        checkbat = false;
+        checksuper = false;
+        checkcircuit = false;
+        checktool = false;
         if (!IS_SET(ch->in_room->room_flags, ROOM_FACTORY))
         {
             send_to_char("&RYou need to be in a factory or workshop to do that.\n\r", ch);
@@ -90,15 +90,15 @@ void do_makemodule(CHAR_DATA *ch, char *argument)
         for (obj = ch->last_carrying; obj; obj = obj->prev_content)
         {
             if (obj->item_type == ITEM_LENS)
-                checklens = TRUE;
+                checklens = true;
             if (obj->item_type == ITEM_BATTERY)
-                checkbat = TRUE;
+                checkbat = true;
             if (obj->item_type == ITEM_SUPERCONDUCTOR)
-                checksuper = TRUE;
+                checksuper = true;
             if (obj->item_type == ITEM_CIRCUIT)
-                checkcircuit = TRUE;
+                checkcircuit = true;
             if (obj->item_type == ITEM_TOOLKIT)
-                checktool = TRUE;
+                checktool = true;
         }
 
         if (!checklens)
@@ -170,37 +170,37 @@ void do_makemodule(CHAR_DATA *ch, char *argument)
         return;
     }
 
-    checklens = FALSE;
-    checkbat = FALSE;
-    checksuper = FALSE;
-    checkcircuit = FALSE;
-    checktool = FALSE;
+    checklens = false;
+    checkbat = false;
+    checksuper = false;
+    checkcircuit = false;
+    checktool = false;
 
     for (obj = ch->last_carrying; obj; obj = obj->prev_content)
     {
         if (obj->item_type == ITEM_TOOLKIT)
-            checktool = TRUE;
-        if (obj->item_type == ITEM_LENS && checklens == FALSE)
+            checktool = true;
+        if (obj->item_type == ITEM_LENS && checklens == false)
         {
-            checklens = TRUE;
+            checklens = true;
             separate_obj(obj);
             obj_from_char(obj);
         }
-        if (obj->item_type == ITEM_BATTERY && checkbat == FALSE)
+        if (obj->item_type == ITEM_BATTERY && checkbat == false)
         {
-            checkbat = TRUE;
+            checkbat = true;
             separate_obj(obj);
             obj_from_char(obj);
         }
-        if (obj->item_type == ITEM_SUPERCONDUCTOR && checksuper == FALSE)
+        if (obj->item_type == ITEM_SUPERCONDUCTOR && checksuper == false)
         {
-            checksuper = TRUE;
+            checksuper = true;
             separate_obj(obj);
             obj_from_char(obj);
         }
-        if (obj->item_type == ITEM_CIRCUIT && checkcircuit == FALSE)
+        if (obj->item_type == ITEM_CIRCUIT && checkcircuit == false)
         {
-            checkcircuit = TRUE;
+            checkcircuit = true;
             separate_obj(obj);
             obj_from_char(obj);
         }
@@ -433,7 +433,7 @@ void do_removemodule(CHAR_DATA *ch, char *argument)
     int num, i;
 
     strcpy_s(arg, argument);
-    checktool = FALSE;
+    checktool = false;
     switch (ch->substate)
     {
     default:
@@ -457,10 +457,10 @@ void do_removemodule(CHAR_DATA *ch, char *argument)
         for (obj = ch->last_carrying; obj; obj = obj->prev_content)
         {
             if (obj->item_type == ITEM_TOOLKIT)
-                checktool = TRUE;
+                checktool = true;
         }
 
-        if (checktool == FALSE)
+        if (checktool == false)
         {
             send_to_char("You need a toolkit to remove a module.\n\r", ch);
             return;
@@ -511,7 +511,7 @@ void do_removemodule(CHAR_DATA *ch, char *argument)
     for (obj = ch->last_carrying; obj; obj = obj->prev_content)
     {
         if (obj->item_type == ITEM_TOOLKIT)
-            checktool = TRUE;
+            checktool = true;
     }
     chance = IS_NPC(ch) ? ch->top_level : (int)(ch->pcdata->learned[gsn_removemodule]);
 
@@ -954,11 +954,11 @@ void do_makejetpack(CHAR_DATA *ch, char *argument)
             return;
         }
 
-        checktool = FALSE;
-        checkbatt = FALSE;
-        checkchem = FALSE;
-        checkcirc = FALSE;
-        checkmetal = FALSE;
+        checktool = false;
+        checkbatt = false;
+        checkchem = false;
+        checkcirc = false;
+        checkmetal = false;
 
         if (!IS_SET(ch->in_room->room_flags, ROOM_FACTORY))
         {
@@ -969,15 +969,15 @@ void do_makejetpack(CHAR_DATA *ch, char *argument)
         for (obj = ch->last_carrying; obj; obj = obj->prev_content)
         {
             if (obj->item_type == ITEM_TOOLKIT)
-                checktool = TRUE;
+                checktool = true;
             if (obj->item_type == ITEM_BATTERY)
-                checkbatt = TRUE;
+                checkbatt = true;
             if (obj->item_type == ITEM_CIRCUIT)
-                checkcirc = TRUE;
+                checkcirc = true;
             if (obj->item_type == ITEM_CHEMICAL)
-                checkchem = TRUE;
+                checkchem = true;
             if (obj->item_type == ITEM_RARE_METAL)
-                checkmetal = TRUE;
+                checkmetal = true;
         }
 
         if (!checktool)
@@ -1050,44 +1050,44 @@ void do_makejetpack(CHAR_DATA *ch, char *argument)
         return;
     }
 
-    checktool = FALSE;
-    checkmetal = FALSE;
-    checkbatt = FALSE;
-    checkchem = FALSE;
-    checkcirc = FALSE;
+    checktool = false;
+    checkmetal = false;
+    checkbatt = false;
+    checkchem = false;
+    checkcirc = false;
 
     for (obj = ch->last_carrying; obj; obj = obj->prev_content)
     {
         if (obj->item_type == ITEM_TOOLKIT)
-            checktool = TRUE;
-        if (obj->item_type == ITEM_BATTERY && checkbatt == FALSE)
+            checktool = true;
+        if (obj->item_type == ITEM_BATTERY && checkbatt == false)
         {
             strength = obj->value[0];
             separate_obj(obj);
             obj_from_char(obj);
             extract_obj(obj);
-            checkbatt = TRUE;
+            checkbatt = true;
         }
         if (obj->item_type == ITEM_CHEMICAL)
         {
             separate_obj(obj);
             obj_from_char(obj);
             extract_obj(obj);
-            checkchem = TRUE;
+            checkchem = true;
         }
-        if (obj->item_type == ITEM_CIRCUIT && checkcirc == FALSE)
+        if (obj->item_type == ITEM_CIRCUIT && checkcirc == false)
         {
             separate_obj(obj);
             obj_from_char(obj);
             extract_obj(obj);
-            checkcirc = TRUE;
+            checkcirc = true;
         }
-        if (obj->item_type == ITEM_RARE_METAL && checkmetal == FALSE)
+        if (obj->item_type == ITEM_RARE_METAL && checkmetal == false)
         {
             separate_obj(obj);
             obj_from_char(obj);
             extract_obj(obj);
-            checkmetal = TRUE;
+            checkmetal = true;
         }
     }
 

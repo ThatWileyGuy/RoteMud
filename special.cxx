@@ -209,7 +209,7 @@ bool spec_make_apprentice_jedi(CHAR_DATA *ch)
             SET_BIT(victim->pcdata->act2, ACT_JEDI);
         }
     }
-    return FALSE;
+    return false;
 }
 
 bool spec_make_master_jedi(CHAR_DATA *ch)
@@ -229,7 +229,7 @@ bool spec_make_master_jedi(CHAR_DATA *ch)
             SET_BIT(victim->pcdata->act2, ACT_JEDI);
         }
     }
-    return FALSE;
+    return false;
 }
 
 bool spec_make_apprentice_sith(CHAR_DATA *ch)
@@ -248,7 +248,7 @@ bool spec_make_apprentice_sith(CHAR_DATA *ch)
             SET_BIT(victim->pcdata->act2, ACT_SITH);
         }
     }
-    return FALSE;
+    return false;
 }
 
 bool spec_newbie_pilot(CHAR_DATA *ch)
@@ -258,7 +258,7 @@ bool spec_newbie_pilot(CHAR_DATA *ch)
     CHAR_DATA *v_next;
     OBJ_DATA *obj;
     char buf[MAX_STRING_LENGTH];
-    bool diploma = FALSE;
+    bool diploma = false;
 
     for (victim = ch->in_room->first_person; victim; victim = v_next)
     {
@@ -269,7 +269,7 @@ bool spec_newbie_pilot(CHAR_DATA *ch)
 
         for (obj = victim->last_carrying; obj; obj = obj->prev_content)
             if (obj->pIndexData->vnum == OBJ_VNUM_SCHOOL_DIPLOMA)
-                diploma = TRUE;
+                diploma = true;
 
         if (!diploma)
             continue;
@@ -302,12 +302,12 @@ bool spec_newbie_pilot(CHAR_DATA *ch)
         echo_to_room(AT_ACTION, ch->in_room, buf);
     }
 
-    return FALSE;
+    return false;
 }
 
 bool spec_jedi(CHAR_DATA *ch)
 {
-    return FALSE;
+    return false;
 }
 
 bool spec_clan_guard(CHAR_DATA *ch)
@@ -316,7 +316,7 @@ bool spec_clan_guard(CHAR_DATA *ch)
     CHAR_DATA *v_next;
 
     if (!IS_AWAKE(ch) || ch->fighting)
-        return FALSE;
+        return false;
 
     for (victim = ch->in_room->first_person; victim; victim = v_next)
     {
@@ -332,11 +332,11 @@ bool spec_clan_guard(CHAR_DATA *ch)
         {
             do_yell(ch, "Hey your not allowed in here!");
             multi_hit(ch, victim, TYPE_UNDEFINED);
-            return TRUE;
+            return true;
         }
     }
 
-    return FALSE;
+    return false;
 }
 
 bool spec_ground_troop(CHAR_DATA *ch)
@@ -346,7 +346,7 @@ bool spec_ground_troop(CHAR_DATA *ch)
     char buf[MAX_STRING_LENGTH];
 
     if (!IS_AWAKE(ch) || ch->fighting)
-        return FALSE;
+        return false;
     for (victim = ch->in_room->first_person; victim; victim = v_next)
     {
         v_next = victim->next_in_room;
@@ -362,18 +362,18 @@ bool spec_ground_troop(CHAR_DATA *ch)
             sprintf_s(buf, "You are not loyal to %s", ch->mob_clan);
             do_yell(ch, buf);
             multi_hit(ch, victim, TYPE_UNDEFINED);
-            return TRUE;
+            return true;
         }
         if (IS_NPC(victim) && IS_AWAKE(victim) && str_cmp(ch->mob_clan, victim->mob_clan))
         {
             sprintf_s(buf, "You are not loyal to %s", ch->mob_clan);
             do_yell(ch, buf);
             multi_hit(ch, victim, TYPE_UNDEFINED);
-            return TRUE;
+            return true;
         }
     }
 
-    return FALSE;
+    return false;
 }
 
 bool spec_customs_smut(CHAR_DATA *ch)
@@ -385,7 +385,7 @@ bool spec_customs_smut(CHAR_DATA *ch)
     long ch_exp;
 
     if (!IS_AWAKE(ch) || ch->position == POS_FIGHTING)
-        return FALSE;
+        return false;
 
     for (victim = ch->in_room->first_person; victim; victim = v_next)
     {
@@ -403,7 +403,7 @@ bool spec_customs_smut(CHAR_DATA *ch)
                     sprintf_s(buf, "%s is illegal contraband. I'm going to have to confiscate that.", obj->short_descr);
                     do_say(ch, buf);
                     if (obj->wear_loc != WEAR_NONE)
-                        remove_obj(victim, obj->wear_loc, TRUE);
+                        remove_obj(victim, obj->wear_loc, true);
                     separate_obj(obj);
                     obj_from_char(obj);
                     act(AT_ACTION, "$n confiscates $p from $N.", ch, obj, victim, TO_NOTVICT);
@@ -414,7 +414,7 @@ bool spec_customs_smut(CHAR_DATA *ch)
                                                    exp_level(victim->skill_level[SMUGGLING_ABILITY])));
                     ch_printf(victim, "You lose %ld experience.\n\r ", ch_exp);
                     gain_exp(victim, 0 - ch_exp, SMUGGLING_ABILITY);
-                    return TRUE;
+                    return true;
                 }
                 else if (can_see(ch, victim) && !IS_SET(obj->extra_flags, ITEM_CONTRABAND))
                 {
@@ -427,7 +427,7 @@ bool spec_customs_smut(CHAR_DATA *ch)
                     act(AT_ACTION, "$n look at you suspiciously.", ch, NULL, victim, TO_VICT);
                     SET_BIT(obj->extra_flags, ITEM_CONTRABAND);
 
-                    return TRUE;
+                    return true;
                 }
                 else if (!IS_SET(obj->extra_flags, ITEM_CONTRABAND))
                 {
@@ -437,7 +437,7 @@ bool spec_customs_smut(CHAR_DATA *ch)
                     gain_exp(victim, ch_exp, SMUGGLING_ABILITY);
 
                     SET_BIT(obj->extra_flags, ITEM_CONTRABAND);
-                    return TRUE;
+                    return true;
                 }
             }
             else if (obj->item_type == ITEM_CONTAINER)
@@ -453,14 +453,14 @@ bool spec_customs_smut(CHAR_DATA *ch)
                                   content->short_descr);
                         gain_exp(victim, ch_exp, SMUGGLING_ABILITY);
                         SET_BIT(content->extra_flags, ITEM_CONTRABAND);
-                        return TRUE;
+                        return true;
                     }
                 }
             }
         }
     }
 
-    return FALSE;
+    return false;
 }
 
 bool spec_customs_weapons(CHAR_DATA *ch)
@@ -472,7 +472,7 @@ bool spec_customs_weapons(CHAR_DATA *ch)
     long ch_exp;
 
     if (!IS_AWAKE(ch) || ch->position == POS_FIGHTING)
-        return FALSE;
+        return false;
 
     for (victim = ch->in_room->first_person; victim; victim = v_next)
     {
@@ -497,7 +497,7 @@ bool spec_customs_weapons(CHAR_DATA *ch)
                               obj->short_descr);
                     do_say(ch, buf);
                     if (obj->wear_loc != WEAR_NONE)
-                        remove_obj(victim, obj->wear_loc, TRUE);
+                        remove_obj(victim, obj->wear_loc, true);
                     separate_obj(obj);
                     obj_from_char(obj);
                     act(AT_ACTION, "$n confiscates $p from $N.", ch, obj, victim, TO_NOTVICT);
@@ -508,7 +508,7 @@ bool spec_customs_weapons(CHAR_DATA *ch)
                                                    exp_level(victim->skill_level[SMUGGLING_ABILITY])));
                     ch_printf(victim, "You lose %ld experience.\n\r ", ch_exp);
                     gain_exp(victim, 0 - ch_exp, SMUGGLING_ABILITY);
-                    return TRUE;
+                    return true;
                 }
                 else if (can_see(ch, victim) && !IS_SET(obj->extra_flags, ITEM_CONTRABAND))
                 {
@@ -520,7 +520,7 @@ bool spec_customs_weapons(CHAR_DATA *ch)
                     act(AT_ACTION, "$n looks at $N suspiciously.", ch, NULL, victim, TO_NOTVICT);
                     act(AT_ACTION, "$n look at you suspiciously.", ch, NULL, victim, TO_VICT);
                     SET_BIT(obj->extra_flags, ITEM_CONTRABAND);
-                    return TRUE;
+                    return true;
                 }
                 else if (!IS_SET(obj->extra_flags, ITEM_CONTRABAND))
                 {
@@ -530,7 +530,7 @@ bool spec_customs_weapons(CHAR_DATA *ch)
                     gain_exp(victim, ch_exp, SMUGGLING_ABILITY);
 
                     SET_BIT(obj->extra_flags, ITEM_CONTRABAND);
-                    return TRUE;
+                    return true;
                 }
             }
             else if (obj->item_type == ITEM_CONTAINER)
@@ -546,14 +546,14 @@ bool spec_customs_weapons(CHAR_DATA *ch)
                                   content->short_descr);
                         gain_exp(victim, ch_exp, SMUGGLING_ABILITY);
                         SET_BIT(content->extra_flags, ITEM_CONTRABAND);
-                        return TRUE;
+                        return true;
                     }
                 }
             }
         }
     }
 
-    return FALSE;
+    return false;
 }
 
 bool spec_customs_alcohol(CHAR_DATA *ch)
@@ -566,7 +566,7 @@ bool spec_customs_alcohol(CHAR_DATA *ch)
     long ch_exp;
 
     if (!IS_AWAKE(ch) || ch->position == POS_FIGHTING)
-        return FALSE;
+        return false;
 
     for (victim = ch->in_room->first_person; victim; victim = v_next)
     {
@@ -590,7 +590,7 @@ bool spec_customs_alcohol(CHAR_DATA *ch)
                                   obj->short_descr);
                         do_say(ch, buf);
                         if (obj->wear_loc != WEAR_NONE)
-                            remove_obj(victim, obj->wear_loc, TRUE);
+                            remove_obj(victim, obj->wear_loc, true);
                         separate_obj(obj);
                         obj_from_char(obj);
                         act(AT_ACTION, "$n confiscates $p from $N.", ch, obj, victim, TO_NOTVICT);
@@ -601,7 +601,7 @@ bool spec_customs_alcohol(CHAR_DATA *ch)
                                                        exp_level(victim->skill_level[SMUGGLING_ABILITY])));
                         ch_printf(victim, "You lose %ld experience. \n\r", ch_exp);
                         gain_exp(victim, 0 - ch_exp, SMUGGLING_ABILITY);
-                        return TRUE;
+                        return true;
                     }
                     else if (can_see(ch, victim) && !IS_SET(obj->extra_flags, ITEM_CONTRABAND))
                     {
@@ -614,7 +614,7 @@ bool spec_customs_alcohol(CHAR_DATA *ch)
                         act(AT_ACTION, "$n looks at $N suspiciously.", ch, NULL, victim, TO_NOTVICT);
                         act(AT_ACTION, "$n look at you suspiciously.", ch, NULL, victim, TO_VICT);
                         SET_BIT(obj->extra_flags, ITEM_CONTRABAND);
-                        return TRUE;
+                        return true;
                     }
                     else if (!IS_SET(obj->extra_flags, ITEM_CONTRABAND))
                     {
@@ -625,7 +625,7 @@ bool spec_customs_alcohol(CHAR_DATA *ch)
                         gain_exp(victim, ch_exp, SMUGGLING_ABILITY);
 
                         SET_BIT(obj->extra_flags, ITEM_CONTRABAND);
-                        return TRUE;
+                        return true;
                     }
                 }
             }
@@ -647,14 +647,14 @@ bool spec_customs_alcohol(CHAR_DATA *ch)
                                   content->short_descr);
                         gain_exp(victim, ch_exp, SMUGGLING_ABILITY);
                         SET_BIT(content->extra_flags, ITEM_CONTRABAND);
-                        return TRUE;
+                        return true;
                     }
                 }
             }
         }
     }
 
-    return FALSE;
+    return false;
 }
 
 bool spec_customs_spice(CHAR_DATA *ch)
@@ -666,7 +666,7 @@ bool spec_customs_spice(CHAR_DATA *ch)
     long ch_exp;
 
     if (!IS_AWAKE(ch) || ch->position == POS_FIGHTING)
-        return FALSE;
+        return false;
 
     for (victim = ch->in_room->first_person; victim; victim = v_next)
     {
@@ -684,7 +684,7 @@ bool spec_customs_spice(CHAR_DATA *ch)
                     sprintf_s(buf, "%s is illegal contraband. I'm going to have to confiscate that.", obj->short_descr);
                     do_say(ch, buf);
                     if (obj->wear_loc != WEAR_NONE)
-                        remove_obj(victim, obj->wear_loc, TRUE);
+                        remove_obj(victim, obj->wear_loc, true);
                     separate_obj(obj);
                     obj_from_char(obj);
                     act(AT_ACTION, "$n confiscates $p from $N.", ch, obj, victim, TO_NOTVICT);
@@ -695,7 +695,7 @@ bool spec_customs_spice(CHAR_DATA *ch)
                                                    exp_level(victim->skill_level[SMUGGLING_ABILITY])));
                     ch_printf(victim, "You lose %ld experience. \n\r", ch_exp);
                     gain_exp(victim, 0 - ch_exp, SMUGGLING_ABILITY);
-                    return TRUE;
+                    return true;
                 }
                 else if (can_see(ch, victim) && !IS_SET(obj->extra_flags, ITEM_CONTRABAND))
                 {
@@ -707,7 +707,7 @@ bool spec_customs_spice(CHAR_DATA *ch)
                     act(AT_ACTION, "$n looks at $N suspiciously.", ch, NULL, victim, TO_NOTVICT);
                     act(AT_ACTION, "$n look at you suspiciously.", ch, NULL, victim, TO_VICT);
                     SET_BIT(obj->extra_flags, ITEM_CONTRABAND);
-                    return TRUE;
+                    return true;
                 }
                 else if (!IS_SET(obj->extra_flags, ITEM_CONTRABAND))
                 {
@@ -717,7 +717,7 @@ bool spec_customs_spice(CHAR_DATA *ch)
                     gain_exp(victim, ch_exp, SMUGGLING_ABILITY);
 
                     SET_BIT(obj->extra_flags, ITEM_CONTRABAND);
-                    return TRUE;
+                    return true;
                 }
             }
             else if (obj->item_type == ITEM_CONTAINER)
@@ -733,14 +733,14 @@ bool spec_customs_spice(CHAR_DATA *ch)
                                   content->short_descr);
                         gain_exp(victim, ch_exp, SMUGGLING_ABILITY);
                         SET_BIT(content->extra_flags, ITEM_CONTRABAND);
-                        return TRUE;
+                        return true;
                     }
                 }
             }
         }
     }
 
-    return FALSE;
+    return false;
 }
 
 bool spec_police(CHAR_DATA *ch)
@@ -751,7 +751,7 @@ bool spec_police(CHAR_DATA *ch)
     char buf[MAX_STRING_LENGTH];
 
     if (!IS_AWAKE(ch) || ch->fighting)
-        return FALSE;
+        return false;
 
     for (victim = ch->in_room->first_person; victim; victim = v_next)
     {
@@ -787,11 +787,11 @@ bool spec_police(CHAR_DATA *ch)
                         victim->gold = victim->gold * .9;
                     }
                 }
-                return TRUE;
+                return true;
             }
     }
 
-    return FALSE;
+    return false;
 }
 
 bool spec_police_attack(CHAR_DATA *ch)
@@ -802,7 +802,7 @@ bool spec_police_attack(CHAR_DATA *ch)
     char buf[MAX_STRING_LENGTH];
 
     if (!IS_AWAKE(ch) || ch->fighting)
-        return FALSE;
+        return false;
 
     for (victim = ch->in_room->first_person; victim; victim = v_next)
     {
@@ -820,11 +820,11 @@ bool spec_police_attack(CHAR_DATA *ch)
                 do_say(ch, buf);
                 //              REMOVE_BIT( victim->pcdata->wanted_flags , 1 << vip );
                 multi_hit(ch, victim, TYPE_UNDEFINED);
-                return TRUE;
+                return true;
             }
     }
 
-    return FALSE;
+    return false;
 }
 
 bool spec_police_fine(CHAR_DATA *ch)
@@ -835,7 +835,7 @@ bool spec_police_fine(CHAR_DATA *ch)
     char buf[MAX_STRING_LENGTH];
 
     if (!IS_AWAKE(ch) || ch->fighting)
-        return FALSE;
+        return false;
 
     for (victim = ch->in_room->first_person; victim; victim = v_next)
     {
@@ -864,11 +864,11 @@ bool spec_police_fine(CHAR_DATA *ch)
                     victim->gold = victim->gold * .9;
                 }
                 REMOVE_BIT(victim->pcdata->wanted_flags, 1 << vip);
-                return TRUE;
+                return true;
             }
     }
 
-    return FALSE;
+    return false;
 }
 
 bool spec_police_jail(CHAR_DATA *ch)
@@ -881,7 +881,7 @@ bool spec_police_jail(CHAR_DATA *ch)
     char buf[MAX_STRING_LENGTH];
 
     if (!IS_AWAKE(ch) || ch->fighting)
-        return FALSE;
+        return false;
 
     for (victim = ch->in_room->first_person; victim; victim = v_next)
     {
@@ -908,11 +908,11 @@ bool spec_police_jail(CHAR_DATA *ch)
                     char_from_room(victim);
                     char_to_room(victim, jail);
                 }
-                return TRUE;
+                return true;
             }
     }
 
-    return FALSE;
+    return false;
 }
 
 bool spec_jedi_healer(CHAR_DATA *ch)
@@ -921,7 +921,7 @@ bool spec_jedi_healer(CHAR_DATA *ch)
     CHAR_DATA *v_next;
 
     if (!IS_AWAKE(ch))
-        return FALSE;
+        return false;
 
     for (victim = ch->in_room->first_person; victim; victim = v_next)
     {
@@ -931,42 +931,42 @@ bool spec_jedi_healer(CHAR_DATA *ch)
     }
 
     if (!victim)
-        return FALSE;
+        return false;
 
     switch (number_bits(12))
     {
     case 0:
         act(AT_MAGIC, "$n pauses and concentrates for a moment.", ch, NULL, NULL, TO_ROOM);
         spell_smaug(skill_lookup("armor"), ch->top_level, ch, victim);
-        return TRUE;
+        return true;
 
     case 1:
         act(AT_MAGIC, "$n pauses and concentrates for a moment.", ch, NULL, NULL, TO_ROOM);
         spell_smaug(skill_lookup("good fortune"), ch->top_level, ch, victim);
-        return TRUE;
+        return true;
 
     case 2:
         act(AT_MAGIC, "$n pauses and concentrates for a moment.", ch, NULL, NULL, TO_ROOM);
         spell_cure_blindness(skill_lookup("cure blindness"), ch->top_level, ch, victim);
-        return TRUE;
+        return true;
 
     case 3:
         act(AT_MAGIC, "$n pauses and concentrates for a moment.", ch, NULL, NULL, TO_ROOM);
         spell_smaug(skill_lookup("cure light"), ch->top_level, ch, victim);
-        return TRUE;
+        return true;
 
     case 4:
         act(AT_MAGIC, "$n pauses and concentrates for a moment.", ch, NULL, NULL, TO_ROOM);
         spell_cure_poison(skill_lookup("cure poison"), ch->top_level, ch, victim);
-        return TRUE;
+        return true;
 
     case 5:
         act(AT_MAGIC, "$n pauses and concentrates for a moment.", ch, NULL, NULL, TO_ROOM);
         spell_smaug(skill_lookup("refresh"), ch->top_level, ch, victim);
-        return TRUE;
+        return true;
     }
 
-    return FALSE;
+    return false;
 }
 
 bool spec_dark_jedi(CHAR_DATA *ch)
@@ -977,7 +977,7 @@ bool spec_dark_jedi(CHAR_DATA *ch)
     int sn;
 
     if (ch->position != POS_FIGHTING)
-        return FALSE;
+        return false;
 
     for (victim = ch->in_room->first_person; victim; victim = v_next)
     {
@@ -987,7 +987,7 @@ bool spec_dark_jedi(CHAR_DATA *ch)
     }
 
     if (!victim || victim == ch)
-        return FALSE;
+        return false;
 
     for (;;)
     {
@@ -1036,7 +1036,7 @@ bool spec_dark_jedi(CHAR_DATA *ch)
             spell = "force spray";
             break;
         default:
-            return FALSE;
+            return false;
         }
 
         if (ch->top_level >= min_level)
@@ -1044,9 +1044,9 @@ bool spec_dark_jedi(CHAR_DATA *ch)
     }
 
     if ((sn = skill_lookup(spell)) < 0)
-        return FALSE;
+        return false;
     (*skill_table[sn]->spell_fun)(sn, ch->top_level, ch, victim);
-    return TRUE;
+    return true;
 }
 
 bool spec_fido(CHAR_DATA *ch)
@@ -1057,7 +1057,7 @@ bool spec_fido(CHAR_DATA *ch)
     OBJ_DATA *obj_next;
 
     if (!IS_AWAKE(ch))
-        return FALSE;
+        return false;
 
     for (corpse = ch->in_room->first_content; corpse; corpse = c_next)
     {
@@ -1073,10 +1073,10 @@ bool spec_fido(CHAR_DATA *ch)
             obj_to_room(obj, ch->in_room);
         }
         extract_obj(corpse);
-        return TRUE;
+        return true;
     }
 
-    return FALSE;
+    return false;
 }
 
 bool spec_stormtrooper(CHAR_DATA *ch)
@@ -1085,7 +1085,7 @@ bool spec_stormtrooper(CHAR_DATA *ch)
     CHAR_DATA *v_next;
 
     if (!IS_AWAKE(ch) || ch->fighting)
-        return FALSE;
+        return false;
 
     for (victim = ch->in_room->first_person; victim; victim = v_next)
     {
@@ -1103,11 +1103,11 @@ bool spec_stormtrooper(CHAR_DATA *ch)
         {
             do_yell(ch, "Die Rebel Scum!");
             multi_hit(ch, victim, TYPE_UNDEFINED);
-            return TRUE;
+            return true;
         }
     }
 
-    return FALSE;
+    return false;
 }
 
 bool spec_new_republic_trooper(CHAR_DATA *ch)
@@ -1116,7 +1116,7 @@ bool spec_new_republic_trooper(CHAR_DATA *ch)
     CHAR_DATA *v_next;
 
     if (!IS_AWAKE(ch) || ch->fighting)
-        return FALSE;
+        return false;
 
     for (victim = ch->in_room->first_person; victim; victim = v_next)
     {
@@ -1134,11 +1134,11 @@ bool spec_new_republic_trooper(CHAR_DATA *ch)
         {
             do_yell(ch, "Long live the New Republic!");
             multi_hit(ch, victim, TYPE_UNDEFINED);
-            return TRUE;
+            return true;
         }
     }
 
-    return FALSE;
+    return false;
 }
 
 bool spec_guardian(CHAR_DATA *ch)
@@ -1151,7 +1151,7 @@ bool spec_guardian(CHAR_DATA *ch)
     int max_evil;
 
     if (!IS_AWAKE(ch) || ch->fighting)
-        return FALSE;
+        return false;
 
     max_evil = 300;
     ech = NULL;
@@ -1171,7 +1171,7 @@ bool spec_guardian(CHAR_DATA *ch)
     {
         sprintf_s(buf, "%s is a %s!  As well as a COWARD!", victim->name, crime);
         do_yell(ch, buf);
-        return TRUE;
+        return true;
     }
 
     if (victim)
@@ -1179,17 +1179,17 @@ bool spec_guardian(CHAR_DATA *ch)
         sprintf_s(buf, "%s is a %s!  PROTECT THE INNOCENT!!", victim->name, crime);
         do_shout(ch, buf);
         multi_hit(ch, victim, TYPE_UNDEFINED);
-        return TRUE;
+        return true;
     }
 
     if (ech)
     {
         act(AT_YELL, "$n screams 'PROTECT THE INNOCENT!!", ch, NULL, NULL, TO_ROOM);
         multi_hit(ch, ech, TYPE_UNDEFINED);
-        return TRUE;
+        return true;
     }
 
-    return FALSE;
+    return false;
 }
 
 bool spec_janitor(CHAR_DATA *ch)
@@ -1198,7 +1198,7 @@ bool spec_janitor(CHAR_DATA *ch)
     OBJ_DATA *trash_next;
 
     if (!IS_AWAKE(ch))
-        return FALSE;
+        return false;
 
     for (trash = ch->in_room->first_content; trash; trash = trash_next)
     {
@@ -1211,11 +1211,11 @@ bool spec_janitor(CHAR_DATA *ch)
             act(AT_ACTION, "$n picks up some trash.", ch, NULL, NULL, TO_ROOM);
             obj_from_room(trash);
             obj_to_char(trash, ch);
-            return TRUE;
+            return true;
         }
     }
 
-    return FALSE;
+    return false;
 }
 
 bool spec_poison(CHAR_DATA *ch)
@@ -1223,13 +1223,13 @@ bool spec_poison(CHAR_DATA *ch)
     CHAR_DATA *victim;
 
     if (ch->position != POS_FIGHTING || (victim = who_fighting(ch)) == NULL || number_percent() > 2 * ch->top_level)
-        return FALSE;
+        return false;
 
     act(AT_HIT, "You bite $N!", ch, NULL, victim, TO_CHAR);
     act(AT_ACTION, "$n bites $N!", ch, NULL, victim, TO_NOTVICT);
     act(AT_POISON, "$n bites you!", ch, NULL, victim, TO_VICT);
     spell_poison(gsn_poison, ch->top_level, ch, victim);
-    return TRUE;
+    return true;
 }
 
 bool spec_thief(CHAR_DATA *ch)
@@ -1239,7 +1239,7 @@ bool spec_thief(CHAR_DATA *ch)
     int gold, maxgold;
 
     if (ch->position != POS_STANDING)
-        return FALSE;
+        return false;
 
     for (victim = ch->in_room->first_person; victim; victim = v_next)
     {
@@ -1253,7 +1253,7 @@ bool spec_thief(CHAR_DATA *ch)
         {
             act(AT_ACTION, "You discover $n's hands in your wallet!", ch, NULL, victim, TO_VICT);
             act(AT_ACTION, "$N discovers $n's hands in $S wallet!", ch, NULL, victim, TO_NOTVICT);
-            return TRUE;
+            return true;
         }
         else
         {
@@ -1266,11 +1266,11 @@ bool spec_thief(CHAR_DATA *ch)
                 boost_economy(ch->in_room->area, ch->gold - maxgold / 2);
                 ch->gold = maxgold / 2;
             }
-            return TRUE;
+            return true;
         }
     }
 
-    return FALSE;
+    return false;
 }
 
 bool spec_auth(CHAR_DATA *ch)
@@ -1288,11 +1288,11 @@ bool spec_auth(CHAR_DATA *ch)
 
         if (!IS_NPC(victim) && (pObjIndex = get_obj_index(OBJ_VNUM_SCHOOL_DIPLOMA)) != NULL)
         {
-            hasdiploma = FALSE;
+            hasdiploma = false;
 
             for (obj = victim->last_carrying; obj; obj = obj->prev_content)
                 if (obj->pIndexData == get_obj_index(OBJ_VNUM_SCHOOL_DIPLOMA))
-                    hasdiploma = TRUE;
+                    hasdiploma = true;
 
             if (!hasdiploma)
             {
@@ -1313,7 +1313,7 @@ bool spec_auth(CHAR_DATA *ch)
         sprintf_s(buf, "%s authorized %s", ch->name, victim->name);
         to_channel(buf, CHANNEL_MONITOR, "Monitor", ch->top_level);
     }
-    return FALSE;
+    return false;
 }
 
 bool spec_giveslug(CHAR_DATA *ch)
@@ -1335,5 +1335,5 @@ bool spec_giveslug(CHAR_DATA *ch)
         to_channel(buf, CHANNEL_MONITOR, "Monitor", ch->top_level);
     }
 
-    return FALSE;
+    return false;
 }

@@ -87,10 +87,10 @@ void do_makeblade(CHAR_DATA *ch, char *argument)
             return;
         }
 
-        checktool = FALSE;
-        checkdura = FALSE;
-        checkbatt = FALSE;
-        checkoven = FALSE;
+        checktool = false;
+        checkdura = false;
+        checkbatt = false;
+        checkoven = false;
 
         if (!IS_SET(ch->in_room->room_flags, ROOM_FACTORY))
         {
@@ -101,14 +101,14 @@ void do_makeblade(CHAR_DATA *ch, char *argument)
         for (obj = ch->last_carrying; obj; obj = obj->prev_content)
         {
             if (obj->item_type == ITEM_TOOLKIT)
-                checktool = TRUE;
+                checktool = true;
             if (obj->item_type == ITEM_DURASTEEL)
-                checkdura = TRUE;
+                checkdura = true;
             if (obj->item_type == ITEM_BATTERY)
-                checkbatt = TRUE;
+                checkbatt = true;
 
             if (obj->item_type == ITEM_OVEN)
-                checkoven = TRUE;
+                checkoven = true;
         }
 
         if (!checktool)
@@ -176,31 +176,31 @@ void do_makeblade(CHAR_DATA *ch, char *argument)
         return;
     }
 
-    checktool = FALSE;
-    checkdura = FALSE;
-    checkbatt = FALSE;
-    checkoven = FALSE;
+    checktool = false;
+    checkdura = false;
+    checkbatt = false;
+    checkoven = false;
 
     for (obj = ch->last_carrying; obj; obj = obj->prev_content)
     {
         if (obj->item_type == ITEM_TOOLKIT)
-            checktool = TRUE;
+            checktool = true;
         if (obj->item_type == ITEM_OVEN)
-            checkoven = TRUE;
-        if (obj->item_type == ITEM_DURASTEEL && checkdura == FALSE)
+            checkoven = true;
+        if (obj->item_type == ITEM_DURASTEEL && checkdura == false)
         {
-            checkdura = TRUE;
+            checkdura = true;
             separate_obj(obj);
             obj_from_char(obj);
             extract_obj(obj);
         }
-        if (obj->item_type == ITEM_BATTERY && checkbatt == FALSE)
+        if (obj->item_type == ITEM_BATTERY && checkbatt == false)
         {
             charge = UMAX(5, obj->value[0]);
             separate_obj(obj);
             obj_from_char(obj);
             extract_obj(obj);
-            checkbatt = TRUE;
+            checkbatt = true;
         }
     }
 
@@ -299,12 +299,12 @@ void do_makeblaster(CHAR_DATA *ch, char *argument)
             return;
         }
 
-        checktool = FALSE;
-        checkdura = FALSE;
-        checkbatt = FALSE;
-        checkoven = FALSE;
-        checkcond = FALSE;
-        checkcirc = FALSE;
+        checktool = false;
+        checkdura = false;
+        checkbatt = false;
+        checkoven = false;
+        checkcond = false;
+        checkcirc = false;
 
         if (!IS_SET(ch->in_room->room_flags, ROOM_FACTORY))
         {
@@ -315,17 +315,17 @@ void do_makeblaster(CHAR_DATA *ch, char *argument)
         for (obj = ch->last_carrying; obj; obj = obj->prev_content)
         {
             if (obj->item_type == ITEM_TOOLKIT)
-                checktool = TRUE;
+                checktool = true;
             if (obj->item_type == ITEM_DURAPLAST)
-                checkdura = TRUE;
+                checkdura = true;
             if (obj->item_type == ITEM_BATTERY)
-                checkbatt = TRUE;
+                checkbatt = true;
             if (obj->item_type == ITEM_OVEN)
-                checkoven = TRUE;
+                checkoven = true;
             if (obj->item_type == ITEM_CIRCUIT)
-                checkcirc = TRUE;
+                checkcirc = true;
             if (obj->item_type == ITEM_SUPERCONDUCTOR)
-                checkcond = TRUE;
+                checkcond = true;
         }
 
         if (!checktool)
@@ -405,13 +405,13 @@ void do_makeblaster(CHAR_DATA *ch, char *argument)
         return;
     }
 
-    checkammo = FALSE;
-    checktool = FALSE;
-    checkdura = FALSE;
-    checkbatt = FALSE;
-    checkoven = FALSE;
-    checkcond = FALSE;
-    checkcirc = FALSE;
+    checkammo = false;
+    checktool = false;
+    checkdura = false;
+    checkbatt = false;
+    checkoven = false;
+    checkcond = false;
+    checkcirc = false;
     power = 0;
     scope = 0;
     ammo = 0;
@@ -419,30 +419,30 @@ void do_makeblaster(CHAR_DATA *ch, char *argument)
     for (obj = ch->last_carrying; obj; obj = obj->prev_content)
     {
         if (obj->item_type == ITEM_TOOLKIT)
-            checktool = TRUE;
+            checktool = true;
         if (obj->item_type == ITEM_OVEN)
-            checkoven = TRUE;
-        if (obj->item_type == ITEM_DURAPLAST && checkdura == FALSE)
+            checkoven = true;
+        if (obj->item_type == ITEM_DURAPLAST && checkdura == false)
         {
-            checkdura = TRUE;
+            checkdura = true;
             separate_obj(obj);
             obj_from_char(obj);
             extract_obj(obj);
         }
-        if (obj->item_type == ITEM_AMMO && checkammo == FALSE)
+        if (obj->item_type == ITEM_AMMO && checkammo == false)
         {
             ammo = obj->value[0];
-            checkammo = TRUE;
+            checkammo = true;
             separate_obj(obj);
             obj_from_char(obj);
             extract_obj(obj);
         }
-        if (obj->item_type == ITEM_BATTERY && checkbatt == FALSE)
+        if (obj->item_type == ITEM_BATTERY && checkbatt == false)
         {
             separate_obj(obj);
             obj_from_char(obj);
             extract_obj(obj);
-            checkbatt = TRUE;
+            checkbatt = true;
         }
         if (obj->item_type == ITEM_LENS && scope == 0)
         {
@@ -457,14 +457,14 @@ void do_makeblaster(CHAR_DATA *ch, char *argument)
             separate_obj(obj);
             obj_from_char(obj);
             extract_obj(obj);
-            checkcond = TRUE;
+            checkcond = true;
         }
-        if (obj->item_type == ITEM_CIRCUIT && checkcirc == FALSE)
+        if (obj->item_type == ITEM_CIRCUIT && checkcirc == false)
         {
             separate_obj(obj);
             obj_from_char(obj);
             extract_obj(obj);
-            checkcirc = TRUE;
+            checkcirc = true;
         }
     }
 
@@ -563,15 +563,15 @@ void do_makelightsaber(CHAR_DATA *ch, char *argument)
             return;
         }
 
-        checktool = FALSE;
-        checkdura = FALSE;
-        checkbatt = FALSE;
-        checkoven = FALSE;
-        checkcond = FALSE;
-        checkcirc = FALSE;
-        checklens = FALSE;
-        checkgems = FALSE;
-        checkmirr = FALSE;
+        checktool = false;
+        checkdura = false;
+        checkbatt = false;
+        checkoven = false;
+        checkcond = false;
+        checkcirc = false;
+        checklens = false;
+        checkgems = false;
+        checkmirr = false;
 
         if (!IS_SET(ch->in_room->room_flags, ROOM_SAFE) || !IS_SET(ch->in_room->room_flags, ROOM_SILENCE))
         {
@@ -582,23 +582,23 @@ void do_makelightsaber(CHAR_DATA *ch, char *argument)
         for (obj = ch->last_carrying; obj; obj = obj->prev_content)
         {
             if (obj->item_type == ITEM_TOOLKIT)
-                checktool = TRUE;
+                checktool = true;
             if (obj->item_type == ITEM_LENS)
-                checklens = TRUE;
+                checklens = true;
             if (obj->item_type == ITEM_CRYSTAL)
-                checkgems = TRUE;
+                checkgems = true;
             if (obj->item_type == ITEM_MIRROR)
-                checkmirr = TRUE;
+                checkmirr = true;
             if (obj->item_type == ITEM_DURAPLAST || obj->item_type == ITEM_DURASTEEL)
-                checkdura = TRUE;
+                checkdura = true;
             if (obj->item_type == ITEM_BATTERY)
-                checkbatt = TRUE;
+                checkbatt = true;
             if (obj->item_type == ITEM_OVEN)
-                checkoven = TRUE;
+                checkoven = true;
             if (obj->item_type == ITEM_CIRCUIT)
-                checkcirc = TRUE;
+                checkcirc = true;
             if (obj->item_type == ITEM_SUPERCONDUCTOR)
-                checkcond = TRUE;
+                checkcond = true;
         }
 
         if (!checktool)
@@ -696,15 +696,15 @@ void do_makelightsaber(CHAR_DATA *ch, char *argument)
         return;
     }
 
-    checktool = FALSE;
-    checkdura = FALSE;
-    checkbatt = FALSE;
-    checkoven = FALSE;
-    checkcond = FALSE;
-    checkcirc = FALSE;
-    checklens = FALSE;
-    checkgems = FALSE;
-    checkmirr = FALSE;
+    checktool = false;
+    checkdura = false;
+    checkbatt = false;
+    checkoven = false;
+    checkcond = false;
+    checkcirc = false;
+    checklens = false;
+    checkgems = false;
+    checkmirr = false;
     gems = 0;
     charge = 0;
     gemtype = 0;
@@ -712,58 +712,58 @@ void do_makelightsaber(CHAR_DATA *ch, char *argument)
     for (obj = ch->last_carrying; obj; obj = obj->prev_content)
     {
         if (obj->item_type == ITEM_TOOLKIT)
-            checktool = TRUE;
+            checktool = true;
         if (obj->item_type == ITEM_OVEN)
-            checkoven = TRUE;
-        if ((obj->item_type == ITEM_DURAPLAST || obj->item_type == ITEM_DURASTEEL) && checkdura == FALSE)
+            checkoven = true;
+        if ((obj->item_type == ITEM_DURAPLAST || obj->item_type == ITEM_DURASTEEL) && checkdura == false)
         {
-            checkdura = TRUE;
+            checkdura = true;
             separate_obj(obj);
             obj_from_char(obj);
             extract_obj(obj);
         }
-        if (obj->item_type == ITEM_DURASTEEL && checkdura == FALSE)
+        if (obj->item_type == ITEM_DURASTEEL && checkdura == false)
         {
-            checkdura = TRUE;
+            checkdura = true;
             separate_obj(obj);
             obj_from_char(obj);
             extract_obj(obj);
         }
-        if (obj->item_type == ITEM_BATTERY && checkbatt == FALSE)
+        if (obj->item_type == ITEM_BATTERY && checkbatt == false)
         {
             charge = UMIN(obj->value[1], 10);
             separate_obj(obj);
             obj_from_char(obj);
             extract_obj(obj);
-            checkbatt = TRUE;
+            checkbatt = true;
         }
-        if (obj->item_type == ITEM_SUPERCONDUCTOR && checkcond == FALSE)
+        if (obj->item_type == ITEM_SUPERCONDUCTOR && checkcond == false)
         {
             separate_obj(obj);
             obj_from_char(obj);
             extract_obj(obj);
-            checkcond = TRUE;
+            checkcond = true;
         }
-        if (obj->item_type == ITEM_CIRCUIT && checkcirc == FALSE)
+        if (obj->item_type == ITEM_CIRCUIT && checkcirc == false)
         {
             separate_obj(obj);
             obj_from_char(obj);
             extract_obj(obj);
-            checkcirc = TRUE;
+            checkcirc = true;
         }
-        if (obj->item_type == ITEM_LENS && checklens == FALSE)
+        if (obj->item_type == ITEM_LENS && checklens == false)
         {
             separate_obj(obj);
             obj_from_char(obj);
             extract_obj(obj);
-            checklens = TRUE;
+            checklens = true;
         }
-        if (obj->item_type == ITEM_MIRROR && checkmirr == FALSE)
+        if (obj->item_type == ITEM_MIRROR && checkmirr == false)
         {
             separate_obj(obj);
             obj_from_char(obj);
             extract_obj(obj);
-            checkmirr = TRUE;
+            checkmirr = true;
         }
         if (obj->item_type == ITEM_CRYSTAL && gems < 3)
         {
@@ -773,7 +773,7 @@ void do_makelightsaber(CHAR_DATA *ch, char *argument)
             separate_obj(obj);
             obj_from_char(obj);
             extract_obj(obj);
-            checkgems = TRUE;
+            checkgems = true;
         }
     }
 
@@ -990,11 +990,11 @@ void do_makegrenade(CHAR_DATA *ch, char *argument)
             return;
         }
 
-        checktool = FALSE;
-        checkdrink = FALSE;
-        checkbatt = FALSE;
-        checkchem = FALSE;
-        checkcirc = FALSE;
+        checktool = false;
+        checkdrink = false;
+        checkbatt = false;
+        checkchem = false;
+        checkcirc = false;
 
         if (!IS_SET(ch->in_room->room_flags, ROOM_FACTORY))
         {
@@ -1005,15 +1005,15 @@ void do_makegrenade(CHAR_DATA *ch, char *argument)
         for (obj = ch->last_carrying; obj; obj = obj->prev_content)
         {
             if (obj->item_type == ITEM_TOOLKIT)
-                checktool = TRUE;
+                checktool = true;
             if (obj->item_type == ITEM_DRINK_CON && obj->value[1] == 0)
-                checkdrink = TRUE;
+                checkdrink = true;
             if (obj->item_type == ITEM_BATTERY)
-                checkbatt = TRUE;
+                checkbatt = true;
             if (obj->item_type == ITEM_CIRCUIT)
-                checkcirc = TRUE;
+                checkcirc = true;
             if (obj->item_type == ITEM_CHEMICAL)
-                checkchem = TRUE;
+                checkchem = true;
         }
 
         if (!checktool)
@@ -1087,29 +1087,29 @@ void do_makegrenade(CHAR_DATA *ch, char *argument)
         return;
     }
 
-    checktool = FALSE;
-    checkdrink = FALSE;
-    checkbatt = FALSE;
-    checkchem = FALSE;
-    checkcirc = FALSE;
+    checktool = false;
+    checkdrink = false;
+    checkbatt = false;
+    checkchem = false;
+    checkcirc = false;
 
     for (obj = ch->last_carrying; obj; obj = obj->prev_content)
     {
         if (obj->item_type == ITEM_TOOLKIT)
-            checktool = TRUE;
-        if (obj->item_type == ITEM_DRINK_CON && checkdrink == FALSE && obj->value[1] == 0)
+            checktool = true;
+        if (obj->item_type == ITEM_DRINK_CON && checkdrink == false && obj->value[1] == 0)
         {
-            checkdrink = TRUE;
+            checkdrink = true;
             separate_obj(obj);
             obj_from_char(obj);
             extract_obj(obj);
         }
-        if (obj->item_type == ITEM_BATTERY && checkbatt == FALSE)
+        if (obj->item_type == ITEM_BATTERY && checkbatt == false)
         {
             separate_obj(obj);
             obj_from_char(obj);
             extract_obj(obj);
-            checkbatt = TRUE;
+            checkbatt = true;
         }
         if (obj->item_type == ITEM_CHEMICAL)
         {
@@ -1118,14 +1118,14 @@ void do_makegrenade(CHAR_DATA *ch, char *argument)
             separate_obj(obj);
             obj_from_char(obj);
             extract_obj(obj);
-            checkchem = TRUE;
+            checkchem = true;
         }
-        if (obj->item_type == ITEM_CIRCUIT && checkcirc == FALSE)
+        if (obj->item_type == ITEM_CIRCUIT && checkcirc == false)
         {
             separate_obj(obj);
             obj_from_char(obj);
             extract_obj(obj);
-            checkcirc = TRUE;
+            checkcirc = true;
         }
     }
 
@@ -1199,11 +1199,11 @@ void do_makelandmine(CHAR_DATA *ch, char *argument)
             return;
         }
 
-        checktool = FALSE;
-        checkdrink = FALSE;
-        checkbatt = FALSE;
-        checkchem = FALSE;
-        checkcirc = FALSE;
+        checktool = false;
+        checkdrink = false;
+        checkbatt = false;
+        checkchem = false;
+        checkcirc = false;
 
         if (!IS_SET(ch->in_room->room_flags, ROOM_FACTORY))
         {
@@ -1214,15 +1214,15 @@ void do_makelandmine(CHAR_DATA *ch, char *argument)
         for (obj = ch->last_carrying; obj; obj = obj->prev_content)
         {
             if (obj->item_type == ITEM_TOOLKIT)
-                checktool = TRUE;
+                checktool = true;
             if (obj->item_type == ITEM_DRINK_CON && obj->value[1] == 0)
-                checkdrink = TRUE;
+                checkdrink = true;
             if (obj->item_type == ITEM_BATTERY)
-                checkbatt = TRUE;
+                checkbatt = true;
             if (obj->item_type == ITEM_CIRCUIT)
-                checkcirc = TRUE;
+                checkcirc = true;
             if (obj->item_type == ITEM_CHEMICAL)
-                checkchem = TRUE;
+                checkchem = true;
         }
 
         if (!checktool)
@@ -1296,29 +1296,29 @@ void do_makelandmine(CHAR_DATA *ch, char *argument)
         return;
     }
 
-    checktool = FALSE;
-    checkdrink = FALSE;
-    checkbatt = FALSE;
-    checkchem = FALSE;
-    checkcirc = FALSE;
+    checktool = false;
+    checkdrink = false;
+    checkbatt = false;
+    checkchem = false;
+    checkcirc = false;
 
     for (obj = ch->last_carrying; obj; obj = obj->prev_content)
     {
         if (obj->item_type == ITEM_TOOLKIT)
-            checktool = TRUE;
-        if (obj->item_type == ITEM_DRINK_CON && checkdrink == FALSE && obj->value[1] == 0)
+            checktool = true;
+        if (obj->item_type == ITEM_DRINK_CON && checkdrink == false && obj->value[1] == 0)
         {
-            checkdrink = TRUE;
+            checkdrink = true;
             separate_obj(obj);
             obj_from_char(obj);
             extract_obj(obj);
         }
-        if (obj->item_type == ITEM_BATTERY && checkbatt == FALSE)
+        if (obj->item_type == ITEM_BATTERY && checkbatt == false)
         {
             separate_obj(obj);
             obj_from_char(obj);
             extract_obj(obj);
-            checkbatt = TRUE;
+            checkbatt = true;
         }
         if (obj->item_type == ITEM_CHEMICAL)
         {
@@ -1327,14 +1327,14 @@ void do_makelandmine(CHAR_DATA *ch, char *argument)
             separate_obj(obj);
             obj_from_char(obj);
             extract_obj(obj);
-            checkchem = TRUE;
+            checkchem = true;
         }
-        if (obj->item_type == ITEM_CIRCUIT && checkcirc == FALSE)
+        if (obj->item_type == ITEM_CIRCUIT && checkcirc == false)
         {
             separate_obj(obj);
             obj_from_char(obj);
             extract_obj(obj);
-            checkcirc = TRUE;
+            checkcirc = true;
         }
     }
 
@@ -1407,11 +1407,11 @@ void do_makelight(CHAR_DATA *ch, char *argument)
             return;
         }
 
-        checktool = FALSE;
-        checkbatt = FALSE;
-        checkchem = FALSE;
-        checkcirc = FALSE;
-        checklens = FALSE;
+        checktool = false;
+        checkbatt = false;
+        checkchem = false;
+        checkcirc = false;
+        checklens = false;
 
         if (!IS_SET(ch->in_room->room_flags, ROOM_FACTORY))
         {
@@ -1422,15 +1422,15 @@ void do_makelight(CHAR_DATA *ch, char *argument)
         for (obj = ch->last_carrying; obj; obj = obj->prev_content)
         {
             if (obj->item_type == ITEM_TOOLKIT)
-                checktool = TRUE;
+                checktool = true;
             if (obj->item_type == ITEM_BATTERY)
-                checkbatt = TRUE;
+                checkbatt = true;
             if (obj->item_type == ITEM_CIRCUIT)
-                checkcirc = TRUE;
+                checkcirc = true;
             if (obj->item_type == ITEM_CHEMICAL)
-                checkchem = TRUE;
+                checkchem = true;
             if (obj->item_type == ITEM_LENS)
-                checklens = TRUE;
+                checklens = true;
         }
 
         if (!checktool)
@@ -1503,44 +1503,44 @@ void do_makelight(CHAR_DATA *ch, char *argument)
         return;
     }
 
-    checktool = FALSE;
-    checklens = FALSE;
-    checkbatt = FALSE;
-    checkchem = FALSE;
-    checkcirc = FALSE;
+    checktool = false;
+    checklens = false;
+    checkbatt = false;
+    checkchem = false;
+    checkcirc = false;
 
     for (obj = ch->last_carrying; obj; obj = obj->prev_content)
     {
         if (obj->item_type == ITEM_TOOLKIT)
-            checktool = TRUE;
-        if (obj->item_type == ITEM_BATTERY && checkbatt == FALSE)
+            checktool = true;
+        if (obj->item_type == ITEM_BATTERY && checkbatt == false)
         {
             strength = obj->value[0];
             separate_obj(obj);
             obj_from_char(obj);
             extract_obj(obj);
-            checkbatt = TRUE;
+            checkbatt = true;
         }
         if (obj->item_type == ITEM_CHEMICAL)
         {
             separate_obj(obj);
             obj_from_char(obj);
             extract_obj(obj);
-            checkchem = TRUE;
+            checkchem = true;
         }
-        if (obj->item_type == ITEM_CIRCUIT && checkcirc == FALSE)
+        if (obj->item_type == ITEM_CIRCUIT && checkcirc == false)
         {
             separate_obj(obj);
             obj_from_char(obj);
             extract_obj(obj);
-            checkcirc = TRUE;
+            checkcirc = true;
         }
-        if (obj->item_type == ITEM_LENS && checklens == FALSE)
+        if (obj->item_type == ITEM_LENS && checklens == false)
         {
             separate_obj(obj);
             obj_from_char(obj);
             extract_obj(obj);
-            checklens = TRUE;
+            checklens = true;
         }
     }
 
@@ -1643,9 +1643,9 @@ void do_makejewelry(CHAR_DATA *ch, char *argument)
             return;
         }
 
-        checktool = FALSE;
-        checkoven = FALSE;
-        checkmetal = FALSE;
+        checktool = false;
+        checkoven = false;
+        checkmetal = false;
 
         if (!IS_SET(ch->in_room->room_flags, ROOM_FACTORY))
         {
@@ -1656,11 +1656,11 @@ void do_makejewelry(CHAR_DATA *ch, char *argument)
         for (obj = ch->last_carrying; obj; obj = obj->prev_content)
         {
             if (obj->item_type == ITEM_TOOLKIT)
-                checktool = TRUE;
+                checktool = true;
             if (obj->item_type == ITEM_OVEN)
-                checkoven = TRUE;
+                checkoven = true;
             if (obj->item_type == ITEM_RARE_METAL)
-                checkmetal = TRUE;
+                checkmetal = true;
         }
 
         if (!checktool)
@@ -1718,21 +1718,21 @@ void do_makejewelry(CHAR_DATA *ch, char *argument)
 
     level = IS_NPC(ch) ? ch->top_level : (int)(ch->pcdata->learned[gsn_makejewelry]);
 
-    checkmetal = FALSE;
-    checkoven = FALSE;
-    checktool = FALSE;
+    checkmetal = false;
+    checkoven = false;
+    checktool = false;
     value = 0;
     cost = 0;
 
     for (obj = ch->last_carrying; obj; obj = obj->prev_content)
     {
         if (obj->item_type == ITEM_TOOLKIT)
-            checktool = TRUE;
+            checktool = true;
         if (obj->item_type == ITEM_OVEN)
-            checkoven = TRUE;
-        if (obj->item_type == ITEM_RARE_METAL && checkmetal == FALSE)
+            checkoven = true;
+        if (obj->item_type == ITEM_RARE_METAL && checkmetal == false)
         {
-            checkmetal = TRUE;
+            checkmetal = true;
             separate_obj(obj);
             obj_from_char(obj);
             metal = obj;
@@ -1902,8 +1902,8 @@ void do_makearmor(CHAR_DATA *ch, char *argument)
             return;
         }
 
-        checksew = FALSE;
-        checkfab = FALSE;
+        checksew = false;
+        checkfab = false;
 
         if (!IS_SET(ch->in_room->room_flags, ROOM_FACTORY))
         {
@@ -1914,9 +1914,9 @@ void do_makearmor(CHAR_DATA *ch, char *argument)
         for (obj = ch->last_carrying; obj; obj = obj->prev_content)
         {
             if (obj->item_type == ITEM_FABRIC)
-                checkfab = TRUE;
+                checkfab = true;
             if (obj->item_type == ITEM_THREAD)
-                checksew = TRUE;
+                checksew = true;
         }
 
         if (!checkfab)
@@ -1968,16 +1968,16 @@ void do_makearmor(CHAR_DATA *ch, char *argument)
 
     level = IS_NPC(ch) ? ch->top_level : (int)(ch->pcdata->learned[gsn_makearmor]);
 
-    checksew = FALSE;
-    checkfab = FALSE;
+    checksew = false;
+    checkfab = false;
 
     for (obj = ch->last_carrying; obj; obj = obj->prev_content)
     {
         if (obj->item_type == ITEM_THREAD)
-            checksew = TRUE;
-        if (obj->item_type == ITEM_FABRIC && checkfab == FALSE)
+            checksew = true;
+        if (obj->item_type == ITEM_FABRIC && checkfab == false)
         {
-            checkfab = TRUE;
+            checkfab = true;
             separate_obj(obj);
             obj_from_char(obj);
             material = obj;
@@ -2059,10 +2059,10 @@ void do_makecomlink(CHAR_DATA *ch, char *argument)
             return;
         }
 
-        checktool = FALSE;
-        checkgem = FALSE;
-        checkbatt = FALSE;
-        checkcirc = FALSE;
+        checktool = false;
+        checkgem = false;
+        checkbatt = false;
+        checkcirc = false;
 
         if (!IS_SET(ch->in_room->room_flags, ROOM_FACTORY))
         {
@@ -2073,13 +2073,13 @@ void do_makecomlink(CHAR_DATA *ch, char *argument)
         for (obj = ch->last_carrying; obj; obj = obj->prev_content)
         {
             if (obj->item_type == ITEM_TOOLKIT)
-                checktool = TRUE;
+                checktool = true;
             if (obj->item_type == ITEM_CRYSTAL)
-                checkgem = TRUE;
+                checkgem = true;
             if (obj->item_type == ITEM_BATTERY)
-                checkbatt = TRUE;
+                checkbatt = true;
             if (obj->item_type == ITEM_CIRCUIT)
-                checkcirc = TRUE;
+                checkcirc = true;
         }
 
         if (!checktool)
@@ -2148,35 +2148,35 @@ void do_makecomlink(CHAR_DATA *ch, char *argument)
         return;
     }
 
-    checktool = FALSE;
-    checkgem = FALSE;
-    checkbatt = FALSE;
-    checkcirc = FALSE;
+    checktool = false;
+    checkgem = false;
+    checkbatt = false;
+    checkcirc = false;
 
     for (obj = ch->last_carrying; obj; obj = obj->prev_content)
     {
         if (obj->item_type == ITEM_TOOLKIT)
-            checktool = TRUE;
-        if (obj->item_type == ITEM_CRYSTAL && checkgem == FALSE)
+            checktool = true;
+        if (obj->item_type == ITEM_CRYSTAL && checkgem == false)
         {
-            checkgem = TRUE;
+            checkgem = true;
             separate_obj(obj);
             obj_from_char(obj);
             extract_obj(obj);
         }
-        if (obj->item_type == ITEM_CIRCUIT && checkcirc == FALSE)
+        if (obj->item_type == ITEM_CIRCUIT && checkcirc == false)
         {
-            checkcirc = TRUE;
+            checkcirc = true;
             separate_obj(obj);
             obj_from_char(obj);
             extract_obj(obj);
         }
-        if (obj->item_type == ITEM_BATTERY && checkbatt == FALSE)
+        if (obj->item_type == ITEM_BATTERY && checkbatt == false)
         {
             separate_obj(obj);
             obj_from_char(obj);
             extract_obj(obj);
-            checkbatt = TRUE;
+            checkbatt = true;
         }
     }
 
@@ -2257,11 +2257,11 @@ void do_makeshield(CHAR_DATA *ch, char *argument)
             return;
         }
 
-        checktool = FALSE;
-        checkbatt = FALSE;
-        checkcond = FALSE;
-        checkcirc = FALSE;
-        checkgems = FALSE;
+        checktool = false;
+        checkbatt = false;
+        checkcond = false;
+        checkcirc = false;
+        checkgems = false;
 
         if (!IS_SET(ch->in_room->room_flags, ROOM_FACTORY))
         {
@@ -2272,15 +2272,15 @@ void do_makeshield(CHAR_DATA *ch, char *argument)
         for (obj = ch->last_carrying; obj; obj = obj->prev_content)
         {
             if (obj->item_type == ITEM_TOOLKIT)
-                checktool = TRUE;
+                checktool = true;
             if (obj->item_type == ITEM_CRYSTAL)
-                checkgems = TRUE;
+                checkgems = true;
             if (obj->item_type == ITEM_BATTERY)
-                checkbatt = TRUE;
+                checkbatt = true;
             if (obj->item_type == ITEM_CIRCUIT)
-                checkcirc = TRUE;
+                checkcirc = true;
             if (obj->item_type == ITEM_SUPERCONDUCTOR)
-                checkcond = TRUE;
+                checkcond = true;
         }
 
         if (!checktool)
@@ -2353,47 +2353,47 @@ void do_makeshield(CHAR_DATA *ch, char *argument)
         return;
     }
 
-    checktool = FALSE;
-    checkbatt = FALSE;
-    checkcond = FALSE;
-    checkcirc = FALSE;
-    checkgems = FALSE;
+    checktool = false;
+    checkbatt = false;
+    checkcond = false;
+    checkcirc = false;
+    checkgems = false;
     charge = 0;
 
     for (obj = ch->last_carrying; obj; obj = obj->prev_content)
     {
         if (obj->item_type == ITEM_TOOLKIT)
-            checktool = TRUE;
+            checktool = true;
 
-        if (obj->item_type == ITEM_BATTERY && checkbatt == FALSE)
+        if (obj->item_type == ITEM_BATTERY && checkbatt == false)
         {
             charge = UMIN(obj->value[1], 10);
             separate_obj(obj);
             obj_from_char(obj);
             extract_obj(obj);
-            checkbatt = TRUE;
+            checkbatt = true;
         }
-        if (obj->item_type == ITEM_SUPERCONDUCTOR && checkcond == FALSE)
+        if (obj->item_type == ITEM_SUPERCONDUCTOR && checkcond == false)
         {
             separate_obj(obj);
             obj_from_char(obj);
             extract_obj(obj);
-            checkcond = TRUE;
+            checkcond = true;
         }
-        if (obj->item_type == ITEM_CIRCUIT && checkcirc == FALSE)
+        if (obj->item_type == ITEM_CIRCUIT && checkcirc == false)
         {
             separate_obj(obj);
             obj_from_char(obj);
             extract_obj(obj);
-            checkcirc = TRUE;
+            checkcirc = true;
         }
-        if (obj->item_type == ITEM_CRYSTAL && checkgems == FALSE)
+        if (obj->item_type == ITEM_CRYSTAL && checkgems == false)
         {
             gemtype = obj->value[0];
             separate_obj(obj);
             obj_from_char(obj);
             extract_obj(obj);
-            checkgems = TRUE;
+            checkgems = true;
         }
     }
 
@@ -2496,8 +2496,8 @@ void do_makecontainer(CHAR_DATA *ch, char *argument)
             return;
         }
 
-        checksew = FALSE;
-        checkfab = FALSE;
+        checksew = false;
+        checkfab = false;
 
         if (!IS_SET(ch->in_room->room_flags, ROOM_FACTORY))
         {
@@ -2508,9 +2508,9 @@ void do_makecontainer(CHAR_DATA *ch, char *argument)
         for (obj = ch->last_carrying; obj; obj = obj->prev_content)
         {
             if (obj->item_type == ITEM_FABRIC)
-                checkfab = TRUE;
+                checkfab = true;
             if (obj->item_type == ITEM_THREAD)
-                checksew = TRUE;
+                checksew = true;
         }
 
         if (!checkfab)
@@ -2562,16 +2562,16 @@ void do_makecontainer(CHAR_DATA *ch, char *argument)
 
     level = IS_NPC(ch) ? ch->top_level : (int)(ch->pcdata->learned[gsn_makecontainer]);
 
-    checksew = FALSE;
-    checkfab = FALSE;
+    checksew = false;
+    checkfab = false;
 
     for (obj = ch->last_carrying; obj; obj = obj->prev_content)
     {
         if (obj->item_type == ITEM_THREAD)
-            checksew = TRUE;
-        if (obj->item_type == ITEM_FABRIC && checkfab == FALSE)
+            checksew = true;
+        if (obj->item_type == ITEM_FABRIC && checkfab == false)
         {
-            checkfab = TRUE;
+            checkfab = true;
             separate_obj(obj);
             obj_from_char(obj);
             material = obj;
@@ -2949,10 +2949,10 @@ void do_torture(CHAR_DATA *ch, char *argument)
 
     WAIT_STATE(ch, skill_table[gsn_torture]->beats);
 
-    fail = FALSE;
+    fail = false;
     chance = ris_save(victim, ch->skill_level[POLITICIAN_ABILITY], RIS_PARALYSIS);
     if (chance == 1000)
-        fail = TRUE;
+        fail = true;
     else
         fail = saves_para_petri(chance, victim);
 
@@ -3108,11 +3108,11 @@ void do_mine(CHAR_DATA *ch, char *argument)
     if (ms_find_obj(ch))
         return;
 
-    shovel = FALSE;
+    shovel = false;
     for (obj = ch->first_carrying; obj; obj = obj->next_content)
         if (obj->item_type == ITEM_SHOVEL)
         {
-            shovel = TRUE;
+            shovel = true;
             break;
         }
 
@@ -3268,7 +3268,7 @@ void do_snipe(CHAR_DATA *ch, char *argument)
     CHAR_DATA *victim = nullptr;
     int chance;
     char buf[MAX_STRING_LENGTH];
-    bool pfound = FALSE;
+    bool pfound = false;
 
     if (IS_SET(ch->in_room->room_flags, ROOM_SAFE))
     {
@@ -3333,12 +3333,12 @@ void do_snipe(CHAR_DATA *ch, char *argument)
 
         if (IS_NPC(ch) && (victim = get_char_room_mp(ch, arg2)) != NULL)
         {
-            pfound = TRUE;
+            pfound = true;
             break;
         }
         else if (!IS_NPC(ch) && (victim = get_char_room(ch, arg2)) != NULL)
         {
-            pfound = TRUE;
+            pfound = true;
             break;
         }
 
@@ -3435,7 +3435,7 @@ void do_snipe(CHAR_DATA *ch, char *argument)
         if (char_died(ch))
             return;
 
-        stop_fighting(ch, TRUE);
+        stop_fighting(ch, true);
 
         learn_from_success(ch, gsn_snipe);
     }
@@ -3897,7 +3897,7 @@ void do_hijack(CHAR_DATA *ch, char *argument)
     int x;
     SHIP_DATA *ship;
     char buf[MAX_STRING_LENGTH];
-    bool uhoh = FALSE;
+    bool uhoh = false;
     //    CHAR_DATA *guard;      <--- For the guard shits below
     //    ROOM_INDEX_DATA *room;
 
@@ -3958,7 +3958,7 @@ void do_hijack(CHAR_DATA *ch, char *argument)
                          {
                             start_hating( guard, ch );
                             start_hunting( guard , ch );
-                            uhoh = TRUE;
+                            uhoh = true;
                          }
            }
     */
@@ -3983,7 +3983,7 @@ void do_hijack(CHAR_DATA *ch, char *argument)
 
         if (ship->hatchopen)
         {
-            ship->hatchopen = FALSE;
+            ship->hatchopen = false;
             sprintf_s(buf, "The hatch on %s closes.", ship->name);
             echo_to_room(AT_YELLOW, get_room_index(ship->location), buf);
             echo_to_room(AT_YELLOW, get_room_index(ship->entrance), "The hatch slides shut.");
@@ -4950,8 +4950,8 @@ void do_repair(CHAR_DATA *ch, char *argument)
             return;
         }
 
-        checktool = FALSE;
-        checksew = FALSE;
+        checktool = false;
+        checksew = false;
 
         if (!IS_SET(ch->in_room->room_flags, ROOM_FACTORY))
         {
@@ -4979,9 +4979,9 @@ void do_repair(CHAR_DATA *ch, char *argument)
         for (cobj = ch->last_carrying; cobj; cobj = cobj->prev_content)
         {
             if (cobj->item_type == ITEM_TOOLKIT)
-                checktool = TRUE;
+                checktool = true;
             if (cobj->item_type == ITEM_THREAD)
-                checksew = TRUE;
+                checksew = true;
         }
 
         if (!checktool && obj->item_type == ITEM_WEAPON)
@@ -5085,15 +5085,15 @@ void do_makeduallightsaber(CHAR_DATA *ch, char *argument)
             return;
         }
 
-        checktool = FALSE;
-        checkdura = FALSE;
-        checkbatt = FALSE;
-        checkoven = FALSE;
-        checkcond = FALSE;
-        checkcirc = FALSE;
-        checklens = FALSE;
-        checkgems = FALSE;
-        checkmirr = FALSE;
+        checktool = false;
+        checkdura = false;
+        checkbatt = false;
+        checkoven = false;
+        checkcond = false;
+        checkcirc = false;
+        checklens = false;
+        checkgems = false;
+        checkmirr = false;
 
         if (!IS_SET(ch->in_room->room_flags, ROOM_SAFE) || !IS_SET(ch->in_room->room_flags, ROOM_SILENCE))
         {
@@ -5104,23 +5104,23 @@ void do_makeduallightsaber(CHAR_DATA *ch, char *argument)
         for (obj = ch->last_carrying; obj; obj = obj->prev_content)
         {
             if (obj->item_type == ITEM_TOOLKIT)
-                checktool = TRUE;
+                checktool = true;
             if (obj->item_type == ITEM_LENS)
-                checklens = TRUE;
+                checklens = true;
             if (obj->item_type == ITEM_CRYSTAL)
-                checkgems = TRUE;
+                checkgems = true;
             if (obj->item_type == ITEM_MIRROR)
-                checkmirr = TRUE;
+                checkmirr = true;
             if (obj->item_type == ITEM_DURAPLAST || obj->item_type == ITEM_DURASTEEL)
-                checkdura = TRUE;
+                checkdura = true;
             if (obj->item_type == ITEM_BATTERY)
-                checkbatt = TRUE;
+                checkbatt = true;
             if (obj->item_type == ITEM_OVEN)
-                checkoven = TRUE;
+                checkoven = true;
             if (obj->item_type == ITEM_CIRCUIT)
-                checkcirc = TRUE;
+                checkcirc = true;
             if (obj->item_type == ITEM_SUPERCONDUCTOR)
-                checkcond = TRUE;
+                checkcond = true;
         }
 
         if (!checktool)
@@ -5218,15 +5218,15 @@ void do_makeduallightsaber(CHAR_DATA *ch, char *argument)
         return;
     }
 
-    checktool = FALSE;
-    checkdura = FALSE;
-    checkbatt = FALSE;
-    checkoven = FALSE;
-    checkcond = FALSE;
-    checkcirc = FALSE;
-    checklens = FALSE;
-    checkgems = FALSE;
-    checkmirr = FALSE;
+    checktool = false;
+    checkdura = false;
+    checkbatt = false;
+    checkoven = false;
+    checkcond = false;
+    checkcirc = false;
+    checklens = false;
+    checkgems = false;
+    checkmirr = false;
     gems = 0;
     charge = 0;
     gemtype = 0;
@@ -5234,58 +5234,58 @@ void do_makeduallightsaber(CHAR_DATA *ch, char *argument)
     for (obj = ch->last_carrying; obj; obj = obj->prev_content)
     {
         if (obj->item_type == ITEM_TOOLKIT)
-            checktool = TRUE;
+            checktool = true;
         if (obj->item_type == ITEM_OVEN)
-            checkoven = TRUE;
-        if ((obj->item_type == ITEM_DURAPLAST || obj->item_type == ITEM_DURASTEEL) && checkdura == FALSE)
+            checkoven = true;
+        if ((obj->item_type == ITEM_DURAPLAST || obj->item_type == ITEM_DURASTEEL) && checkdura == false)
         {
-            checkdura = TRUE;
+            checkdura = true;
             separate_obj(obj);
             obj_from_char(obj);
             extract_obj(obj);
         }
-        if (obj->item_type == ITEM_DURASTEEL && checkdura == FALSE)
+        if (obj->item_type == ITEM_DURASTEEL && checkdura == false)
         {
-            checkdura = TRUE;
+            checkdura = true;
             separate_obj(obj);
             obj_from_char(obj);
             extract_obj(obj);
         }
-        if (obj->item_type == ITEM_BATTERY && checkbatt == FALSE)
+        if (obj->item_type == ITEM_BATTERY && checkbatt == false)
         {
             charge = UMIN(obj->value[1], 10);
             separate_obj(obj);
             obj_from_char(obj);
             extract_obj(obj);
-            checkbatt = TRUE;
+            checkbatt = true;
         }
-        if (obj->item_type == ITEM_SUPERCONDUCTOR && checkcond == FALSE)
+        if (obj->item_type == ITEM_SUPERCONDUCTOR && checkcond == false)
         {
             separate_obj(obj);
             obj_from_char(obj);
             extract_obj(obj);
-            checkcond = TRUE;
+            checkcond = true;
         }
-        if (obj->item_type == ITEM_CIRCUIT && checkcirc == FALSE)
+        if (obj->item_type == ITEM_CIRCUIT && checkcirc == false)
         {
             separate_obj(obj);
             obj_from_char(obj);
             extract_obj(obj);
-            checkcirc = TRUE;
+            checkcirc = true;
         }
-        if (obj->item_type == ITEM_LENS && checklens == FALSE)
+        if (obj->item_type == ITEM_LENS && checklens == false)
         {
             separate_obj(obj);
             obj_from_char(obj);
             extract_obj(obj);
-            checklens = TRUE;
+            checklens = true;
         }
-        if (obj->item_type == ITEM_MIRROR && checkmirr == FALSE)
+        if (obj->item_type == ITEM_MIRROR && checkmirr == false)
         {
             separate_obj(obj);
             obj_from_char(obj);
             extract_obj(obj);
-            checkmirr = TRUE;
+            checkmirr = true;
         }
         if (obj->item_type == ITEM_CRYSTAL && gems < 3)
         {
@@ -5295,7 +5295,7 @@ void do_makeduallightsaber(CHAR_DATA *ch, char *argument)
             separate_obj(obj);
             obj_from_char(obj);
             extract_obj(obj);
-            checkgems = TRUE;
+            checkgems = true;
         }
     }
 
@@ -5401,10 +5401,10 @@ void do_makepike(CHAR_DATA *ch, char *argument)
             return;
         }
 
-        checktool = FALSE;
-        checkdura = FALSE;
-        checkbatt = FALSE;
-        checkoven = FALSE;
+        checktool = false;
+        checkdura = false;
+        checkbatt = false;
+        checkoven = false;
 
         if (!IS_SET(ch->in_room->room_flags, ROOM_FACTORY))
         {
@@ -5415,14 +5415,14 @@ void do_makepike(CHAR_DATA *ch, char *argument)
         for (obj = ch->last_carrying; obj; obj = obj->prev_content)
         {
             if (obj->item_type == ITEM_TOOLKIT)
-                checktool = TRUE;
+                checktool = true;
             if (obj->item_type == ITEM_DURASTEEL)
-                checkdura = TRUE;
+                checkdura = true;
             if (obj->item_type == ITEM_BATTERY)
-                checkbatt = TRUE;
+                checkbatt = true;
 
             if (obj->item_type == ITEM_OVEN)
-                checkoven = TRUE;
+                checkoven = true;
         }
 
         if (!checktool)
@@ -5490,31 +5490,31 @@ void do_makepike(CHAR_DATA *ch, char *argument)
         return;
     }
 
-    checktool = FALSE;
-    checkdura = FALSE;
-    checkbatt = FALSE;
-    checkoven = FALSE;
+    checktool = false;
+    checkdura = false;
+    checkbatt = false;
+    checkoven = false;
 
     for (obj = ch->last_carrying; obj; obj = obj->prev_content)
     {
         if (obj->item_type == ITEM_TOOLKIT)
-            checktool = TRUE;
+            checktool = true;
         if (obj->item_type == ITEM_OVEN)
-            checkoven = TRUE;
-        if (obj->item_type == ITEM_DURASTEEL && checkdura == FALSE)
+            checkoven = true;
+        if (obj->item_type == ITEM_DURASTEEL && checkdura == false)
         {
-            checkdura = TRUE;
+            checkdura = true;
             separate_obj(obj);
             obj_from_char(obj);
             extract_obj(obj);
         }
-        if (obj->item_type == ITEM_BATTERY && checkbatt == FALSE)
+        if (obj->item_type == ITEM_BATTERY && checkbatt == false)
         {
             charge = UMAX(5, obj->value[0]);
             separate_obj(obj);
             obj_from_char(obj);
             extract_obj(obj);
-            checkbatt = TRUE;
+            checkbatt = true;
         }
     }
 
@@ -5592,9 +5592,9 @@ void do_makebug(CHAR_DATA *ch, char *argument)
     switch (ch->substate)
     {
     default:
-        checktool = FALSE;
-        checkbatt = FALSE;
-        checkcirc = FALSE;
+        checktool = false;
+        checkbatt = false;
+        checkcirc = false;
 
         if (!IS_SET(ch->in_room->room_flags, ROOM_FACTORY))
         {
@@ -5605,11 +5605,11 @@ void do_makebug(CHAR_DATA *ch, char *argument)
         for (obj = ch->last_carrying; obj; obj = obj->prev_content)
         {
             if (obj->item_type == ITEM_TOOLKIT)
-                checktool = TRUE;
+                checktool = true;
             if (obj->item_type == ITEM_BATTERY)
-                checkbatt = TRUE;
+                checkbatt = true;
             if (obj->item_type == ITEM_CIRCUIT)
-                checkcirc = TRUE;
+                checkcirc = true;
         }
 
         if (!checktool)
@@ -5670,29 +5670,29 @@ void do_makebug(CHAR_DATA *ch, char *argument)
         return;
     }
 
-    checktool = FALSE;
-    checkbatt = FALSE;
-    checkcirc = FALSE;
+    checktool = false;
+    checkbatt = false;
+    checkcirc = false;
 
     for (obj = ch->last_carrying; obj; obj = obj->prev_content)
     {
         if (obj->item_type == ITEM_TOOLKIT)
-            checktool = TRUE;
+            checktool = true;
 
-        if (obj->item_type == ITEM_BATTERY && checkbatt == FALSE)
+        if (obj->item_type == ITEM_BATTERY && checkbatt == false)
         {
             separate_obj(obj);
             obj_from_char(obj);
             extract_obj(obj);
-            checkbatt = TRUE;
+            checkbatt = true;
         }
 
-        if (obj->item_type == ITEM_CIRCUIT && checkcirc == FALSE)
+        if (obj->item_type == ITEM_CIRCUIT && checkcirc == false)
         {
             separate_obj(obj);
             obj_from_char(obj);
             extract_obj(obj);
-            checkcirc = TRUE;
+            checkcirc = true;
         }
     }
 
@@ -5745,9 +5745,9 @@ void do_makebeacon(CHAR_DATA *ch, char *argument)
     switch (ch->substate)
     {
     default:
-        checktool = FALSE;
-        checkbatt = FALSE;
-        checkcirc = FALSE;
+        checktool = false;
+        checkbatt = false;
+        checkcirc = false;
 
         if (!IS_SET(ch->in_room->room_flags, ROOM_FACTORY))
         {
@@ -5758,11 +5758,11 @@ void do_makebeacon(CHAR_DATA *ch, char *argument)
         for (obj = ch->last_carrying; obj; obj = obj->prev_content)
         {
             if (obj->item_type == ITEM_TOOLKIT)
-                checktool = TRUE;
+                checktool = true;
             if (obj->item_type == ITEM_BATTERY)
-                checkbatt = TRUE;
+                checkbatt = true;
             if (obj->item_type == ITEM_CIRCUIT)
-                checkcirc = TRUE;
+                checkcirc = true;
         }
 
         if (!checktool)
@@ -5823,29 +5823,29 @@ void do_makebeacon(CHAR_DATA *ch, char *argument)
         return;
     }
 
-    checktool = FALSE;
-    checkbatt = FALSE;
-    checkcirc = FALSE;
+    checktool = false;
+    checkbatt = false;
+    checkcirc = false;
 
     for (obj = ch->last_carrying; obj; obj = obj->prev_content)
     {
         if (obj->item_type == ITEM_TOOLKIT)
-            checktool = TRUE;
+            checktool = true;
 
-        if (obj->item_type == ITEM_BATTERY && checkbatt == FALSE)
+        if (obj->item_type == ITEM_BATTERY && checkbatt == false)
         {
             separate_obj(obj);
             obj_from_char(obj);
             extract_obj(obj);
-            checkbatt = TRUE;
+            checkbatt = true;
         }
 
-        if (obj->item_type == ITEM_CIRCUIT && checkcirc == FALSE)
+        if (obj->item_type == ITEM_CIRCUIT && checkcirc == false)
         {
             separate_obj(obj);
             obj_from_char(obj);
             extract_obj(obj);
-            checkcirc = TRUE;
+            checkcirc = true;
         }
     }
 
@@ -5891,7 +5891,7 @@ void do_plantbeacon(CHAR_DATA *ch, char *argument)
 {
     SHIP_DATA *ship;
     OBJ_DATA *obj;
-    bool checkbeacon = FALSE;
+    bool checkbeacon = false;
     char buf[MAX_STRING_LENGTH];
 
     if (IS_NPC(ch))
@@ -5915,8 +5915,8 @@ void do_plantbeacon(CHAR_DATA *ch, char *argument)
 
     for (obj = ch->last_carrying; obj; obj = obj->prev_content)
         if (obj->item_type == ITEM_BEACON)
-            checkbeacon = TRUE;
-    if (checkbeacon == FALSE)
+            checkbeacon = true;
+    if (checkbeacon == false)
     {
         send_to_char("You don't have any beacons to plant.\n\r", ch);
         return;
@@ -6212,9 +6212,9 @@ void do_makebinders(CHAR_DATA *ch, char *argument)
     switch (ch->substate)
     {
     default:
-        checktool = FALSE;
-        checkdura = FALSE;
-        checkoven = FALSE;
+        checktool = false;
+        checkdura = false;
+        checkoven = false;
 
         if (!IS_SET(ch->in_room->room_flags, ROOM_FACTORY))
         {
@@ -6225,11 +6225,11 @@ void do_makebinders(CHAR_DATA *ch, char *argument)
         for (obj = ch->last_carrying; obj; obj = obj->prev_content)
         {
             if (obj->item_type == ITEM_TOOLKIT)
-                checktool = TRUE;
+                checktool = true;
             if (obj->item_type == ITEM_OVEN)
-                checkoven = TRUE;
+                checkoven = true;
             if (obj->item_type == ITEM_DURASTEEL)
-                checkdura = TRUE;
+                checkdura = true;
         }
 
         if (!checktool)
@@ -6290,22 +6290,22 @@ void do_makebinders(CHAR_DATA *ch, char *argument)
         return;
     }
 
-    checktool = FALSE;
-    checkoven = FALSE;
-    checkdura = FALSE;
+    checktool = false;
+    checkoven = false;
+    checkdura = false;
 
     for (obj = ch->last_carrying; obj; obj = obj->prev_content)
     {
         if (obj->item_type == ITEM_TOOLKIT)
-            checktool = TRUE;
+            checktool = true;
         if (obj->item_type == ITEM_OVEN)
-            checkoven = TRUE;
-        if (obj->item_type == ITEM_DURASTEEL && checkdura == FALSE)
+            checkoven = true;
+        if (obj->item_type == ITEM_DURASTEEL && checkdura == false)
         {
             separate_obj(obj);
             obj_from_char(obj);
             extract_obj(obj);
-            checkdura = TRUE;
+            checkdura = true;
         }
     }
 

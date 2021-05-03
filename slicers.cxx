@@ -604,7 +604,7 @@ void do_inquire(CHAR_DATA *ch, char *argument)
     int chance;
 
     strcpy_s(arg, argument);
-    checkdata = FALSE;
+    checkdata = false;
     switch (ch->substate)
     {
     default:
@@ -612,10 +612,10 @@ void do_inquire(CHAR_DATA *ch, char *argument)
         for (obj = ch->last_carrying; obj; obj = obj->prev_content)
         {
             if (obj->item_type == ITEM_DATAPAD)
-                checkdata = TRUE;
+                checkdata = true;
         }
 
-        if ((checkdata == FALSE))
+        if ((checkdata == false))
         {
             send_to_char("You need a datapad to slice into the banking computer system.\n\r", ch);
             return;
@@ -724,11 +724,11 @@ void do_makecommsystem(CHAR_DATA *ch, char *argument)
             return;
         }
 
-        checktool = FALSE;
-        checkdura = FALSE;
-        checkbattery = FALSE;
-        checkcrystal = FALSE;
-        checkcircuit = FALSE;
+        checktool = false;
+        checkdura = false;
+        checkbattery = false;
+        checkcrystal = false;
+        checkcircuit = false;
 
         if (!IS_SET(ch->in_room->room_flags, ROOM_FACTORY))
         {
@@ -739,15 +739,15 @@ void do_makecommsystem(CHAR_DATA *ch, char *argument)
         for (obj = ch->last_carrying; obj; obj = obj->prev_content)
         {
             if (obj->item_type == ITEM_TOOLKIT)
-                checktool = TRUE;
+                checktool = true;
             if (obj->item_type == ITEM_DURAPLAST)
-                checkdura = TRUE;
+                checkdura = true;
             if (obj->item_type == ITEM_BATTERY)
-                checkbattery = TRUE;
+                checkbattery = true;
             if (obj->item_type == ITEM_CRYSTAL)
-                checkcrystal = TRUE;
+                checkcrystal = true;
             if (obj->item_type == ITEM_CIRCUIT)
-                checkcircuit = TRUE;
+                checkcircuit = true;
         }
 
         if (!checktool)
@@ -821,41 +821,41 @@ void do_makecommsystem(CHAR_DATA *ch, char *argument)
         return;
     }
 
-    checktool = FALSE;
-    checkdura = FALSE;
-    checkbattery = FALSE;
-    checkcrystal = FALSE;
-    checkcircuit = FALSE;
+    checktool = false;
+    checkdura = false;
+    checkbattery = false;
+    checkcrystal = false;
+    checkcircuit = false;
     for (obj = ch->last_carrying; obj; obj = obj->prev_content)
     {
         if (obj->item_type == ITEM_TOOLKIT)
-            checktool = TRUE;
-        if (obj->item_type == ITEM_DURAPLAST && checkdura == FALSE)
+            checktool = true;
+        if (obj->item_type == ITEM_DURAPLAST && checkdura == false)
 
         {
-            checkdura = TRUE;
+            checkdura = true;
             separate_obj(obj);
             obj_from_char(obj);
             extract_obj(obj);
         }
 
-        if (obj->item_type == ITEM_BATTERY && checkbattery == FALSE)
+        if (obj->item_type == ITEM_BATTERY && checkbattery == false)
         {
-            checkbattery = TRUE;
+            checkbattery = true;
             separate_obj(obj);
             obj_from_char(obj);
             extract_obj(obj);
         }
-        if (obj->item_type == ITEM_CRYSTAL && checkcrystal == FALSE)
+        if (obj->item_type == ITEM_CRYSTAL && checkcrystal == false)
         {
-            checkcrystal = TRUE;
+            checkcrystal = true;
             separate_obj(obj);
             obj_from_char(obj);
             extract_obj(obj);
         }
-        if (obj->item_type == ITEM_CIRCUIT && checkcircuit == FALSE)
+        if (obj->item_type == ITEM_CIRCUIT && checkcircuit == false)
         {
-            checkcircuit = TRUE;
+            checkcircuit = true;
             separate_obj(obj);
             obj_from_char(obj);
             extract_obj(obj);
@@ -928,12 +928,12 @@ void do_makedatapad(CHAR_DATA *ch, char *argument)
             return;
         }
 
-        checktool = FALSE;
-        checkdura = FALSE;
-        checkbattery = FALSE;
-        checksuper = FALSE;
-        checkcircuit = FALSE;
-        checklens = FALSE;
+        checktool = false;
+        checkdura = false;
+        checkbattery = false;
+        checksuper = false;
+        checkcircuit = false;
+        checklens = false;
 
         if (!IS_SET(ch->in_room->room_flags, ROOM_FACTORY))
         {
@@ -945,17 +945,17 @@ void do_makedatapad(CHAR_DATA *ch, char *argument)
         for (obj = ch->last_carrying; obj; obj = obj->prev_content)
         {
             if (obj->item_type == ITEM_TOOLKIT)
-                checktool = TRUE;
+                checktool = true;
             if (obj->item_type == ITEM_DURASTEEL)
-                checkdura = TRUE;
+                checkdura = true;
             if (obj->item_type == ITEM_BATTERY)
-                checkbattery = TRUE;
+                checkbattery = true;
             if (obj->item_type == ITEM_SUPERCONDUCTOR)
-                checksuper = TRUE;
+                checksuper = true;
             if (obj->item_type == ITEM_CIRCUIT)
-                checkcircuit = TRUE;
+                checkcircuit = true;
             if (obj->item_type == ITEM_LENS)
-                checklens = TRUE;
+                checklens = true;
         }
 
         if (!checktool)
@@ -1035,48 +1035,48 @@ void do_makedatapad(CHAR_DATA *ch, char *argument)
         return;
     }
 
-    checktool = FALSE;
-    checkdura = FALSE;
-    checkbattery = FALSE;
-    checksuper = FALSE;
-    checkcircuit = FALSE;
-    checklens = FALSE;
+    checktool = false;
+    checkdura = false;
+    checkbattery = false;
+    checksuper = false;
+    checkcircuit = false;
+    checklens = false;
     for (obj = ch->last_carrying; obj; obj = obj->prev_content)
     {
         if (obj->item_type == ITEM_TOOLKIT)
-            checktool = TRUE;
-        if (obj->item_type == ITEM_DURASTEEL && checkdura == FALSE)
+            checktool = true;
+        if (obj->item_type == ITEM_DURASTEEL && checkdura == false)
         {
-            checkdura = TRUE;
+            checkdura = true;
             separate_obj(obj);
             obj_from_char(obj);
             extract_obj(obj);
         }
 
-        if (obj->item_type == ITEM_BATTERY && checkbattery == FALSE)
+        if (obj->item_type == ITEM_BATTERY && checkbattery == false)
         {
-            checkbattery = TRUE;
+            checkbattery = true;
             separate_obj(obj);
             obj_from_char(obj);
             extract_obj(obj);
         }
-        if (obj->item_type == ITEM_SUPERCONDUCTOR && checksuper == FALSE)
+        if (obj->item_type == ITEM_SUPERCONDUCTOR && checksuper == false)
         {
-            checksuper = TRUE;
+            checksuper = true;
             separate_obj(obj);
             obj_from_char(obj);
             extract_obj(obj);
         }
-        if (obj->item_type == ITEM_CIRCUIT && checkcircuit == FALSE)
+        if (obj->item_type == ITEM_CIRCUIT && checkcircuit == false)
         {
-            checkcircuit = TRUE;
+            checkcircuit = true;
             separate_obj(obj);
             obj_from_char(obj);
             extract_obj(obj);
         }
-        if (obj->item_type == ITEM_LENS && checklens == FALSE)
+        if (obj->item_type == ITEM_LENS && checklens == false)
         {
-            checklens = TRUE;
+            checklens = true;
             separate_obj(obj);
             obj_from_char(obj);
             extract_obj(obj);
@@ -1141,7 +1141,7 @@ void do_codecrack(CHAR_DATA *ch, char *argument)
     int chance;
 
     strcpy_s(arg, argument);
-    checkdata = FALSE;
+    checkdata = false;
     switch (ch->substate)
     {
     default:
@@ -1164,10 +1164,10 @@ void do_codecrack(CHAR_DATA *ch, char *argument)
         for (obj = ch->last_carrying; obj; obj = obj->prev_content)
         {
             if (obj->item_type == ITEM_DATAPAD)
-                checkdata = TRUE;
+                checkdata = true;
         }
 
-        if (checkdata == FALSE)
+        if (checkdata == false)
         {
             send_to_char("You need a datapad to slice into the ships computer system.\n\r", ch);
             return;
@@ -1195,7 +1195,7 @@ void do_codecrack(CHAR_DATA *ch, char *argument)
         }
 
         send_to_char("&RYou are unable to find this ship's dataport.\n\r", ch);
-        ch->pcdata->is_hacking = FALSE;
+        ch->pcdata->is_hacking = false;
         learn_from_failure(ch, gsn_codecrack);
         return;
 
@@ -1209,7 +1209,7 @@ void do_codecrack(CHAR_DATA *ch, char *argument)
     case SUB_TIMER_DO_ABORT:
         DISPOSE(ch->dest_buf);
         ch->substate = SUB_NONE;
-        ch->pcdata->is_hacking = FALSE;
+        ch->pcdata->is_hacking = false;
         send_to_char("&RYou are interupted and fail to finish slicing into the ships computer system.\n\r", ch);
         return;
     }
@@ -1219,7 +1219,7 @@ void do_codecrack(CHAR_DATA *ch, char *argument)
     for (obj = ch->last_carrying; obj; obj = obj->prev_content)
     {
         if (obj->item_type == ITEM_DATAPAD)
-            checkdata = TRUE;
+            checkdata = true;
     }
     chance = IS_NPC(ch) ? ch->top_level : (int)(ch->pcdata->learned[gsn_codecrack]);
 
@@ -1251,10 +1251,10 @@ void do_codecrack(CHAR_DATA *ch, char *argument)
             if ((victim = get_char_world_ooc(ch, ship->owner)) != NULL)
                 ch_printf(victim, "&RYou have received a signal from the alarm module installed in %s.&W", ship->name);
         }
-        ch->pcdata->is_hacking = FALSE;
+        ch->pcdata->is_hacking = false;
         return;
     }
-    ch->pcdata->is_hacking = FALSE;
+    ch->pcdata->is_hacking = false;
     if (!ship->password)
     {
         sprintf_s(buf, "Error..%s does not have a password.\n\r", ship->name);
@@ -1285,7 +1285,7 @@ void do_codecrack(CHAR_DATA *ch, char *argument)
         // xpgain = UMIN( obj->cost*10 ,( exp_level(ch->skill_level[SLICER_ABILITY]+1) -
         // exp_level(ch->skill_level[SLICER_ABILITY]) ) );
         xpgain = 3000;
-        ch->pcdata->is_hacking = FALSE;
+        ch->pcdata->is_hacking = false;
         gain_exp(ch, xpgain, SLICER_ABILITY);
         ch_printf(ch, " You gain %d experience as for being a Slicer.\n\r", xpgain);
         learn_from_success(ch, gsn_codecrack);
@@ -1305,8 +1305,8 @@ void do_disableship(CHAR_DATA *ch, char *argument)
     char arg2[MAX_INPUT_LENGTH];
     OBJ_DATA *obj;
     long xpgain;
-    checkcomm = FALSE;
-    checkdata = FALSE;
+    checkcomm = false;
+    checkdata = false;
     argument = one_argument(argument, arg1);
     argument = one_argument(argument, arg2);
     switch (ch->substate)
@@ -1362,9 +1362,9 @@ void do_disableship(CHAR_DATA *ch, char *argument)
         for (obj = ch->last_carrying; obj; obj = obj->prev_content)
         {
             if (obj->item_type == ITEM_DATAPAD)
-                checkdata = TRUE;
+                checkdata = true;
             if (obj->item_type == ITEM_COMMSYSTEM)
-                checkcomm = TRUE;
+                checkcomm = true;
         }
 
         if (!checkdata)
@@ -1455,9 +1455,9 @@ void do_disableship(CHAR_DATA *ch, char *argument)
     for (obj = ch->last_carrying; obj; obj = obj->prev_content)
     {
         if (obj->item_type == ITEM_DATAPAD)
-            checkdata = TRUE;
+            checkdata = true;
         if (obj->item_type == ITEM_COMMSYSTEM)
-            checkcomm = TRUE;
+            checkcomm = true;
     }
 
     chance = IS_NPC(ch) ? ch->top_level : (int)(ch->pcdata->learned[gsn_disable]);
@@ -1504,7 +1504,7 @@ void do_disableship(CHAR_DATA *ch, char *argument)
 
     if (!str_cmp(disable, "shields"))
     {
-        ship->autorecharge = FALSE;
+        ship->autorecharge = false;
         ship->shield = 0;
     }
 
@@ -1555,7 +1555,7 @@ void do_assignpilot(CHAR_DATA *ch, char *argument)
     char arg1[MAX_INPUT_LENGTH];
     char arg2[MAX_INPUT_LENGTH];
     OBJ_DATA *obj;
-    checkdata = FALSE;
+    checkdata = false;
     argument = one_argument(argument, arg1);
     switch (ch->substate)
     {
@@ -1575,7 +1575,7 @@ void do_assignpilot(CHAR_DATA *ch, char *argument)
         for (obj = ch->last_carrying; obj; obj = obj->prev_content)
         {
             if (obj->item_type == ITEM_DATAPAD)
-                checkdata = TRUE;
+                checkdata = true;
         }
 
         if (!checkdata)
@@ -1621,7 +1621,7 @@ void do_assignpilot(CHAR_DATA *ch, char *argument)
     for (obj = ch->last_carrying; obj; obj = obj->prev_content)
     {
         if (obj->item_type == ITEM_DATAPAD)
-            checkdata = TRUE;
+            checkdata = true;
     }
 
     chance = IS_NPC(ch) ? ch->top_level : (int)(ch->pcdata->learned[gsn_assignpilot]);
@@ -1702,7 +1702,7 @@ void do_slicebank(CHAR_DATA *ch, char *argument)
 
     argument = one_argument(argument, arg2);
     strcpy_s(arg, argument);
-    checkdata = FALSE;
+    checkdata = false;
     switch (ch->substate)
     {
     default:
@@ -1727,9 +1727,9 @@ void do_slicebank(CHAR_DATA *ch, char *argument)
         for (obj = ch->last_carrying; obj; obj = obj->prev_content)
         {
             if (obj->item_type == ITEM_DATAPAD)
-                checkdata = TRUE;
+                checkdata = true;
         }
-        if ((checkdata == FALSE))
+        if ((checkdata == false))
         {
             send_to_char("You need a datapad to slice into the banking computer system.\n\r", ch);
             return;
@@ -1780,11 +1780,11 @@ void do_slicebank(CHAR_DATA *ch, char *argument)
     for (obj = ch->last_carrying; obj; obj = obj->prev_content)
     {
         if (obj->item_type == ITEM_DATAPAD)
-            checkdata = TRUE;
+            checkdata = true;
     }
     chance = IS_NPC(ch) ? ch->top_level : (int)(ch->pcdata->learned[gsn_slicebank]);
     chance = UMIN(chance, 70);
-    found = FALSE;
+    found = false;
 
     for (d = first_descriptor; d; d = d->next)
     {
@@ -1797,7 +1797,7 @@ void do_slicebank(CHAR_DATA *ch, char *argument)
 
         if (!str_cmp(arg2, acctname(d->character)))
         {
-            found = TRUE;
+            found = true;
             break;
         }
     }
@@ -1920,8 +1920,8 @@ void do_checkprints(CHAR_DATA *ch, char *argument)
     int chance;
 
     strcpy_s(arg, argument);
-    checkdata = FALSE;
-    checkcomm = FALSE;
+    checkdata = false;
+    checkcomm = false;
     switch (ch->substate)
     {
     default:
@@ -1935,18 +1935,18 @@ void do_checkprints(CHAR_DATA *ch, char *argument)
         for (obj = ch->last_carrying; obj; obj = obj->prev_content)
         {
             if (obj->item_type == ITEM_DATAPAD)
-                checkdata = TRUE;
+                checkdata = true;
             if (obj->item_type == ITEM_COMMSYSTEM)
-                checkcomm = TRUE;
+                checkcomm = true;
         }
 
-        if ((checkdata == FALSE))
+        if ((checkdata == false))
         {
             send_to_char("You need a datapad to gain access to the fingerprint computer system.\n\r", ch);
             return;
         }
 
-        if ((checkcomm == FALSE))
+        if ((checkcomm == false))
         {
             send_to_char("You need a commsystem to gain access to the fingerprint computer system.\n\r", ch);
             return;
@@ -2010,9 +2010,9 @@ void do_checkprints(CHAR_DATA *ch, char *argument)
     for (obj = ch->last_carrying; obj; obj = obj->prev_content)
     {
         if (obj->item_type == ITEM_DATAPAD)
-            checkdata = TRUE;
+            checkdata = true;
         if (obj->item_type == ITEM_COMMSYSTEM)
-            checkcomm = TRUE;
+            checkcomm = true;
     }
     chance = IS_NPC(ch) ? ch->top_level : (int)(ch->pcdata->learned[gsn_checkprints]);
 

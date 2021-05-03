@@ -547,7 +547,7 @@ void do_end_game()
                 i->move = i->max_move;
                 i->challenged = NULL;
                 //          i->armor = i->pcdata->oldac;
-                stop_fighting(i, TRUE);
+                stop_fighting(i, true);
                 location = i->pcdata->roomarena;
                 char_from_room(i);
                 char_to_room(i, location);

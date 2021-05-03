@@ -62,56 +62,56 @@ bool can_remove(CHAR_DATA *ch, BOARD_DATA *board)
 {
     /* If your trust is high enough, you can remove it. */
     if (get_trust(ch) >= board->min_remove_level)
-        return TRUE;
+        return true;
 
     if (board->extra_removers[0] != '\0')
     {
         if (is_name(ch->name, board->extra_removers))
-            return TRUE;
+            return true;
     }
-    return FALSE;
+    return false;
 }
 
 bool can_read(CHAR_DATA *ch, BOARD_DATA *board)
 {
     /* If your trust is high enough, you can read it. */
     if (get_trust(ch) >= board->min_read_level)
-        return TRUE;
+        return true;
 
     /* Your trust wasn't high enough, so check if a read_group or extra
        readers have been set up. */
     if (board->read_group[0] != '\0')
     {
         if (ch->pcdata->clan && !str_cmp(ch->pcdata->clan->name, board->read_group))
-            return TRUE;
+            return true;
         if (ch->pcdata->clan && ch->pcdata->clan->mainclan &&
             !str_cmp(ch->pcdata->clan->mainclan->name, board->read_group))
-            return TRUE;
+            return true;
     }
     if (board->extra_readers[0] != '\0')
     {
         if (is_name(ch->name, board->extra_readers))
-            return TRUE;
+            return true;
     }
-    return FALSE;
+    return false;
 }
 
 bool can_post(CHAR_DATA *ch, BOARD_DATA *board)
 {
     /* If your trust is high enough, you can post. */
     if (get_trust(ch) >= board->min_post_level)
-        return TRUE;
+        return true;
 
     /* Your trust wasn't high enough, so check if a post_group has been set up. */
     if (board->post_group[0] != '\0')
     {
         if (ch->pcdata->clan && !str_cmp(ch->pcdata->clan->name, board->post_group))
-            return TRUE;
+            return true;
         if (ch->pcdata->clan && ch->pcdata->clan->mainclan &&
             !str_cmp(ch->pcdata->clan->mainclan->name, board->post_group))
-            return TRUE;
+            return true;
     }
-    return FALSE;
+    return false;
 }
 
 /*
@@ -176,18 +176,18 @@ BOARD_DATA *find_board(CHAR_DATA *ch)
 bool is_note_to(CHAR_DATA *ch, NOTE_DATA *pnote)
 {
     if (!str_cmp(ch->name, pnote->sender))
-        return TRUE;
+        return true;
 
     if (is_name("all", pnote->to_list))
-        return TRUE;
+        return true;
 
     if (IS_HERO(ch) && is_name("immortal", pnote->to_list))
-        return TRUE;
+        return true;
 
     if (is_name(ch->name, pnote->to_list))
-        return TRUE;
+        return true;
 
-    return FALSE;
+    return false;
 }
 
 void note_attach(CHAR_DATA *ch)
@@ -301,7 +301,7 @@ void do_noteroom(CHAR_DATA *ch, char *argument)
     switch (ch->substate)
     {
     case SUB_WRITING_NOTE:
-        do_note(ch, arg_passed, FALSE);
+        do_note(ch, arg_passed, false);
         break;
 
     default:
@@ -310,7 +310,7 @@ void do_noteroom(CHAR_DATA *ch, char *argument)
         smash_tilde(argument);
         if (!str_cmp(arg, "write") || !str_cmp(arg, "to") || !str_cmp(arg, "subject") || !str_cmp(arg, "show"))
         {
-            do_note(ch, arg_passed, FALSE);
+            do_note(ch, arg_passed, false);
             return;
         }
 
@@ -328,7 +328,7 @@ void do_noteroom(CHAR_DATA *ch, char *argument)
         }
         else
         {
-            do_note(ch, arg_passed, FALSE);
+            do_note(ch, arg_passed, false);
             return;
         }
     }
@@ -345,7 +345,7 @@ void do_mailroom(CHAR_DATA *ch, char *argument)
     switch (ch->substate)
     {
     case SUB_WRITING_NOTE:
-        do_note(ch, arg_passed, TRUE);
+        do_note(ch, arg_passed, true);
         break;
 
     default:
@@ -354,7 +354,7 @@ void do_mailroom(CHAR_DATA *ch, char *argument)
         smash_tilde(argument);
         if (!str_cmp(arg, "write") || !str_cmp(arg, "to") || !str_cmp(arg, "subject") || !str_cmp(arg, "show"))
         {
-            do_note(ch, arg_passed, TRUE);
+            do_note(ch, arg_passed, true);
             return;
         }
 
@@ -372,7 +372,7 @@ void do_mailroom(CHAR_DATA *ch, char *argument)
         }
         else
         {
-            do_note(ch, arg_passed, TRUE);
+            do_note(ch, arg_passed, true);
             return;
         }
     }
@@ -395,8 +395,8 @@ void do_note(CHAR_DATA *ch, char *arg_passed, bool IS_MAIL)
     char short_desc_buf[MAX_STRING_LENGTH];
     char long_desc_buf[MAX_STRING_LENGTH];
     char keyword_buf[MAX_STRING_LENGTH];
-    bool mfound = FALSE;
-    bool wasfound = FALSE;
+    bool mfound = false;
+    bool wasfound = false;
 
     if (IS_NPC(ch))
         return;
@@ -483,7 +483,7 @@ void do_note(CHAR_DATA *ch, char *arg_passed, bool IS_MAIL)
             {
                 for (pnote = board->first_note; pnote; pnote = pnote->next)
                     if (is_note_to(ch, pnote))
-                        mfound = TRUE;
+                        mfound = true;
 
                 if (!mfound && get_trust(ch) < sysdata.read_all_mail)
                 {
@@ -518,12 +518,12 @@ void do_note(CHAR_DATA *ch, char *arg_passed, bool IS_MAIL)
 
         if (!str_cmp(arg_passed, "all"))
         {
-            fAll = TRUE;
+            fAll = true;
             anum = 0;
         }
         else if (is_number(arg_passed))
         {
-            fAll = FALSE;
+            fAll = false;
             anum = atoi(arg_passed);
         }
         else
@@ -541,7 +541,7 @@ void do_note(CHAR_DATA *ch, char *arg_passed, bool IS_MAIL)
                 vnum++;
                 if (vnum == anum || fAll)
                 {
-                    wasfound = TRUE;
+                    wasfound = true;
                     pager_printf(ch, "[%3d] %s: %s\n\r%s\n\rTo: %s\n\r%s", vnum, pnote->sender, pnote->subject,
                                  pnote->date, pnote->to_list, pnote->text);
 
@@ -568,7 +568,7 @@ void do_note(CHAR_DATA *ch, char *arg_passed, bool IS_MAIL)
                     vnum++;
                     if (vnum == anum || fAll)
                     {
-                        wasfound = TRUE;
+                        wasfound = true;
                         if (ch->gold < 10 && get_trust(ch) < sysdata.read_mail_free)
                         {
                             send_to_char("It costs 10 credits to read a message.\n\r", ch);
@@ -697,7 +697,7 @@ void do_note(CHAR_DATA *ch, char *arg_passed, bool IS_MAIL)
             write_board(board);
             return;
         }
-        do_note(ch, "", FALSE);
+        do_note(ch, "", false);
     }
     if (!str_cmp(arg, "write"))
     {
@@ -1141,19 +1141,19 @@ BOARD_DATA *read_board(char *boardfile, FILE *fp)
     if (!str_cmp(word, literal))                                                                                       \
     {                                                                                                                  \
         field = value;                                                                                                 \
-        fMatch = TRUE;                                                                                                 \
+        fMatch = true;                                                                                                 \
         break;                                                                                                         \
     }
 
     for (;;)
     {
         word = feof(fp) ? "End" : fread_word(fp);
-        fMatch = FALSE;
+        fMatch = false;
 
         switch (UPPER(word[0]))
         {
         case '*':
-            fMatch = TRUE;
+            fMatch = true;
             fread_to_eol(fp);
             break;
         case 'E':
@@ -1359,11 +1359,11 @@ void do_bset(CHAR_DATA *ch, char *argument)
     }
 
     value = atoi(argument);
-    found = FALSE;
+    found = false;
     for (board = first_board; board; board = board->next)
         if (!str_cmp(arg1, board->note_file))
         {
-            found = TRUE;
+            found = true;
             break;
         }
     if (!found)
@@ -1551,11 +1551,11 @@ void do_bstat(CHAR_DATA *ch, char *argument)
         return;
     }
 
-    found = FALSE;
+    found = false;
     for (board = first_board; board; board = board->next)
         if (!str_cmp(arg, board->note_file))
         {
-            found = TRUE;
+            found = true;
             break;
         }
     if (!found)

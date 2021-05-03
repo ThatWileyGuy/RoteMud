@@ -43,12 +43,12 @@
 
 #include "mud.hxx"
 
-#if !defined(FALSE)
-#define FALSE 0
+#if !defined(false)
+#define false 0
 #endif
 
-#if !defined(TRUE)
-#define TRUE 1
+#if !defined(true)
+#define true 1
 #endif
 
 #define STR_HASH_SIZE 1024
@@ -277,6 +277,6 @@ bool in_hash_table(char *str)
     hash = len % STR_HASH_SIZE;
     for (ptr = string_hash[hash]; ptr; ptr = ptr->next)
         if (len == ptr->length && str == ((char *)ptr + psize))
-            return TRUE;
-    return FALSE;
+            return true;
+    return false;
 }

@@ -53,8 +53,8 @@ bool check_social(CHAR_DATA *ch, const char *command, const char *argument);
 /*
  * Log-all switch.
  */
-bool fLogAll = FALSE;
-bool fLogPC = FALSE;
+bool fLogAll = false;
+bool fLogPC = false;
 
 CMDTYPE *command_hash[126];   /* hash table for cmd_table */
 SOCIALTYPE *social_index[27]; /* hash table for socials   */
@@ -97,9 +97,9 @@ bool check_pos(CHAR_DATA *ch, sh_int position)
             send_to_char("No way!  You are still fighting!\n\r", ch);
             break;
         }
-        return FALSE;
+        return false;
     }
-    return TRUE;
+    return true;
 }
 
 extern char lastplayercmd[MAX_INPUT_LENGTH * 2];
@@ -126,7 +126,7 @@ void interpret(CHAR_DATA *ch, char *argument)
         return;
     }
 
-    found = FALSE;
+    found = false;
     if (ch->substate == SUB_REPEATCMD)
     {
         DO_FUN *fun;
@@ -150,7 +150,7 @@ void interpret(CHAR_DATA *ch, char *argument)
                 for (cmd = command_hash[x]; cmd; cmd = cmd->next)
                     if (cmd->do_fun == fun)
                     {
-                        found = TRUE;
+                        found = true;
                         break;
                     }
                 if (found)
@@ -223,7 +223,7 @@ void interpret(CHAR_DATA *ch, char *argument)
                 (cmd->level <= trust || (!IS_NPC(ch) && ch->pcdata->bestowments && ch->pcdata->bestowments[0] != '\0' &&
                                          is_name(cmd->name, ch->pcdata->bestowments) && cmd->level <= (trust + 5))))
             {
-                found = TRUE;
+                found = true;
                 break;
             }
 
@@ -346,7 +346,7 @@ void interpret(CHAR_DATA *ch, char *argument)
             EXIT_DATA *pexit;
 
             /* check for an auto-matic exit command */
-            if ((pexit = find_door(ch, command, TRUE)) != NULL && IS_SET(pexit->exit_info, EX_xAUTO))
+            if ((pexit = find_door(ch, command, true)) != NULL && IS_SET(pexit->exit_info, EX_xAUTO))
             {
                 if (IS_SET(pexit->exit_info, EX_CLOSED) &&
                     (!IS_AFFECTED(ch, AFF_PASS_DOOR) || IS_SET(pexit->exit_info, EX_NOPASSDOOR)))
@@ -452,28 +452,28 @@ bool check_social(CHAR_DATA *ch, const char *command, const char *argument)
     SOCIALTYPE *social;
 
     if ((social = find_social(command)) == NULL)
-        return FALSE;
+        return false;
 
     if (!IS_NPC(ch) && IS_SET(ch->act, PLR_NO_EMOTE))
     {
         send_to_char("You are anti-social!\n\r", ch);
-        return TRUE;
+        return true;
     }
 
     switch (ch->position)
     {
     case POS_DEAD:
         send_to_char("Lie still; you are DEAD.\n\r", ch);
-        return TRUE;
+        return true;
 
     case POS_INCAP:
     case POS_MORTAL:
         send_to_char("You are hurt far too bad for that.\n\r", ch);
-        return TRUE;
+        return true;
 
     case POS_STUNNED:
         send_to_char("You are too stunned to do that.\n\r", ch);
-        return TRUE;
+        return true;
 
     case POS_SLEEPING:
         /*
@@ -483,7 +483,7 @@ bool check_social(CHAR_DATA *ch, const char *command, const char *argument)
         if (!str_cmp(social->name, "snore"))
             break;
         send_to_char("In your dreams, or what?\n\r", ch);
-        return TRUE;
+        return true;
     }
 
     one_argument(argument, arg);
@@ -555,7 +555,7 @@ bool check_social(CHAR_DATA *ch, const char *command, const char *argument)
         }
     }
 
-    return TRUE;
+    return true;
 }
 
 /*
@@ -564,15 +564,15 @@ bool check_social(CHAR_DATA *ch, const char *command, const char *argument)
 bool is_number(const char *arg)
 {
     if (*arg == '\0')
-        return FALSE;
+        return false;
 
     for (; *arg != '\0'; arg++)
     {
         if (!isdigit(*arg))
-            return FALSE;
+            return false;
     }
 
-    return TRUE;
+    return true;
 }
 
 /*
@@ -714,7 +714,7 @@ void do_timecmd(CHAR_DATA *ch, char *argument)
     }
     set_char_color(AT_PLAIN, ch);
     send_to_char("Starting timer.\n\r", ch);
-    timing = TRUE;
+    timing = true;
 
     auto start_time = std::chrono::steady_clock::now();
 
@@ -722,7 +722,7 @@ void do_timecmd(CHAR_DATA *ch, char *argument)
 
     auto end_time = std::chrono::steady_clock::now();
 
-    timing = FALSE;
+    timing = false;
     set_char_color(AT_PLAIN, ch);
     send_to_char("Timing complete.\n\r", ch);
 

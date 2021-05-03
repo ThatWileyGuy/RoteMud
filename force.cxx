@@ -86,14 +86,14 @@ FORCE_HELP *last_force_help;
 int check_force_skill(CHAR_DATA *ch, const char *command, char *argument)
 {
     FORCE_SKILL *fskill;
-    bool SKILL_FOUND = FALSE;
+    bool SKILL_FOUND = false;
     DO_FUN *fun;
 
     for (fskill = first_force_skill; fskill; fskill = fskill->next)
     {
         if (!str_cmp(command, fskill->name))
         {
-            SKILL_FOUND = TRUE;
+            SKILL_FOUND = true;
             break;
         }
     }
@@ -309,12 +309,12 @@ void force_learn_from_success(CHAR_DATA *ch, FORCE_SKILL *fskill)
 FORCE_SKILL *force_test_skill_use(const char *skill_name, CHAR_DATA *ch, int skill_type)
 {
     FORCE_SKILL *fskill;
-    bool SKILL_FOUND = FALSE;
+    bool SKILL_FOUND = false;
     for (fskill = first_force_skill; fskill; fskill = fskill->next)
     {
         if (!str_cmp(skill_name, fskill->name))
         {
-            SKILL_FOUND = TRUE;
+            SKILL_FOUND = true;
             break;
         }
     }
@@ -1225,10 +1225,10 @@ void do_fhstat(CHAR_DATA *ch, char *argument)
     FORCE_HELP *jhelp = nullptr;
     char type[MAX_STRING_LENGTH];
     char fname[MAX_STRING_LENGTH];
-    bool found_general = FALSE;
-    bool found_jedi = FALSE;
-    bool found_sith = FALSE;
-    bool match = FALSE;
+    bool found_general = false;
+    bool found_jedi = false;
+    bool found_sith = false;
+    bool match = false;
     if (!argument || argument[0] == '\0')
     {
         send_to_char("USAGE: fhstat <help file> [jedi/sith/general]\r\n", ch);
@@ -1242,20 +1242,20 @@ void do_fhstat(CHAR_DATA *ch, char *argument)
         {
             if (fhelp->type == FORCE_JEDI)
             {
-                found_jedi = TRUE;
+                found_jedi = true;
                 jhelp = fhelp;
             }
             else if (fhelp->type == FORCE_SITH)
             {
-                found_sith = TRUE;
+                found_sith = true;
                 shelp = fhelp;
             }
             else
             {
-                found_general = TRUE;
+                found_general = true;
                 ghelp = fhelp;
             }
-            match = TRUE;
+            match = true;
         }
     }
     if (!match)
@@ -1415,10 +1415,10 @@ FORCE_HELP *get_force_help(const char *fname, char *type)
     FORCE_HELP *ghelp = nullptr;
     FORCE_HELP *shelp = nullptr;
     FORCE_HELP *jhelp = nullptr;
-    bool found_general = FALSE;
-    bool found_jedi = FALSE;
-    bool found_sith = FALSE;
-    bool match = FALSE;
+    bool found_general = false;
+    bool found_jedi = false;
+    bool found_sith = false;
+    bool match = false;
     if (!fname || fname[0] == '\0')
         return NULL;
     if (!type || type[0] == '\0')
@@ -1429,20 +1429,20 @@ FORCE_HELP *get_force_help(const char *fname, char *type)
         {
             if (fhelp->type == FORCE_JEDI)
             {
-                found_jedi = TRUE;
+                found_jedi = true;
                 jhelp = fhelp;
             }
             else if (fhelp->type == FORCE_SITH)
             {
-                found_sith = TRUE;
+                found_sith = true;
                 shelp = fhelp;
             }
             else
             {
-                found_general = TRUE;
+                found_general = true;
                 ghelp = fhelp;
             }
-            match = TRUE;
+            match = true;
         }
     }
     if (!match)

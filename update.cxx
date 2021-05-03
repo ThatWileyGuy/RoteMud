@@ -1165,7 +1165,7 @@ void mobile_update(void)
                 act(AT_MAGIC, "$n returns to the dust from whence $e came.", ch, NULL, NULL, TO_ROOM);
 
             if (IS_NPC(ch)) /* Guard against purging switched? */
-                extract_char(ch, TRUE);
+                extract_char(ch, true);
             continue;
         }
 
@@ -1315,7 +1315,7 @@ void mobile_update(void)
             CHAR_DATA *rch;
             bool found;
 
-            found = FALSE;
+            found = false;
             for (rch = ch->in_room->first_person; rch; rch = rch->next_in_room)
             {
                 if (is_fearing(ch, rch))
@@ -1336,7 +1336,7 @@ void mobile_update(void)
                         break;
                     }
                     do_yell(ch, buf);
-                    found = TRUE;
+                    found = true;
                     break;
                 }
             }
@@ -2511,7 +2511,7 @@ void tele_update(void)
     }
 }
 
-#if FALSE
+#if false
 /*
  * Write all outstanding authorization requests to Log channel - Gorog
  */
@@ -2520,7 +2520,7 @@ void auth_update(void)
     CHAR_DATA *victim;
     DESCRIPTOR_DATA *d;
     char log_buf[MAX_INPUT_LENGTH];
-    bool first_time = TRUE; /* so titles are only done once */
+    bool first_time = true; /* so titles are only done once */
 
     for (d = first_descriptor; d; d = d->next)
     {
@@ -2529,7 +2529,7 @@ void auth_update(void)
         {
             if (first_time)
             {
-                first_time = FALSE;
+                first_time = false;
                 strcpy_s(log_buf, "Pending authorizations:");
                 to_channel(log_buf, CHANNEL_MONITOR, "Monitor", 1);
             }
@@ -2545,14 +2545,14 @@ void auth_update(void)
     CHAR_DATA *victim;
     DESCRIPTOR_DATA *d;
     char buf[MAX_INPUT_LENGTH], log_buf[MAX_INPUT_LENGTH];
-    bool found_hit = FALSE; /* was at least one found? */
+    bool found_hit = false; /* was at least one found? */
 
     strcpy_s(log_buf, "Pending authorizations:\n\r");
     for (d = first_descriptor; d; d = d->next)
     {
         if ((victim = d->character) && IS_WAITING_FOR_AUTH(victim))
         {
-            found_hit = TRUE;
+            found_hit = true;
             sprintf_s(buf, " %s@%s new %s\n\r", victim->name, victim->desc->host, race_table[victim->race].race_name);
             strcat_s(log_buf, buf);
         }
@@ -2720,7 +2720,7 @@ void remove_portal(OBJ_DATA *portal)
     }
 
     fromRoom = portal->in_room;
-    found = FALSE;
+    found = false;
     if (!fromRoom)
     {
         bug("remove_portal: portal->in_room is NULL", 0);
@@ -2730,7 +2730,7 @@ void remove_portal(OBJ_DATA *portal)
     for (pexit = fromRoom->first_exit; pexit; pexit = pexit->next)
         if (IS_SET(pexit->exit_info, EX_PORTAL))
         {
-            found = TRUE;
+            found = true;
             break;
         }
 
@@ -2781,7 +2781,7 @@ void reboot_check(time_t reset)
         for (trun = timesize - 1; trun >= 0; trun--)
             if (reset >= current_time + times[trun])
                 break;
-        init = TRUE;
+        init = true;
         return;
     }
 
@@ -2819,7 +2819,7 @@ void reboot_check(time_t reset)
         for (vch = first_char; vch; vch = vch->next)
             if (!IS_NPC(vch))
                 save_char_obj(vch);
-        mud_down = TRUE;
+        mud_down = true;
         return;
     }
 
@@ -2827,7 +2827,7 @@ void reboot_check(time_t reset)
     {
         echo_to_all(AT_YELLOW, tmsg[trun], ECHOTAR_ALL);
         if (trun <= 5)
-            sysdata.DENY_NEW_PLAYERS = TRUE;
+            sysdata.DENY_NEW_PLAYERS = true;
         --trun;
         return;
     }
@@ -2844,27 +2844,27 @@ void reboot_check(char* arg)
 	CHAR_DATA* vch;
 
 	/*Bools to show which pre-boot echoes we've done. */
-	static bool thirty = FALSE;
-	static bool fifteen = FALSE;
-	static bool ten = FALSE;
-	static bool five = FALSE;
-	static bool four = FALSE;
-	static bool three = FALSE;
-	static bool two = FALSE;
-	static bool one = FALSE;
+	static bool thirty = false;
+	static bool fifteen = false;
+	static bool ten = false;
+	static bool five = false;
+	static bool four = false;
+	static bool three = false;
+	static bool two = false;
+	static bool one = false;
 
 	/* This function can be called by do_setboot when the reboot time
 	   is being manually set to reset all the bools. */
 	if (!str_cmp(arg, "reset"))
 	{
-		thirty = FALSE;
-		fifteen = FALSE;
-		ten = FALSE;
-		five = FALSE;
-		four = FALSE;
-		three = FALSE;
-		two = FALSE;
-		one = FALSE;
+		thirty = false;
+		fifteen = false;
+		ten = false;
+		five = false;
+		four = false;
+		three = false;
+		two = false;
+		one = false;
 		return;
 	}
 
@@ -2919,7 +2919,7 @@ void reboot_check(char* arg)
 			if (!IS_NPC(vch))
 				save_char_obj(vch);
 		}
-		mud_down = TRUE;
+		mud_down = true;
 	}
 
 	/* How many minutes to the scheduled boot? */
@@ -2931,12 +2931,12 @@ void reboot_check(char* arg)
 	if ( timecheck <= 1 ) */
 	if (new_boot_time_t - current_time <= 60)
 	{
-		if (one == FALSE)
+		if (one == false)
 		{
 			sprintf_s(buf, "You feel the ground shake as the end comes near!");
 			echo_to_all(AT_YELLOW, buf, ECHOTAR_ALL);
-			one = TRUE;
-			sysdata.DENY_NEW_PLAYERS = TRUE;
+			one = true;
+			sysdata.DENY_NEW_PLAYERS = true;
 		}
 		return;
 	}
@@ -2944,12 +2944,12 @@ void reboot_check(char* arg)
 	/*  if ( timecheck == 2 )*/
 	if (new_boot_time_t - current_time <= 120)
 	{
-		if (two == FALSE)
+		if (two == false)
 		{
 			sprintf_s(buf, "Lightning crackles in the sky above!");
 			echo_to_all(AT_YELLOW, buf, ECHOTAR_ALL);
-			two = TRUE;
-			sysdata.DENY_NEW_PLAYERS = TRUE;
+			two = true;
+			sysdata.DENY_NEW_PLAYERS = true;
 		}
 		return;
 	}
@@ -2957,12 +2957,12 @@ void reboot_check(char* arg)
 	/*  if ( timecheck == 3 )*/
 	if (new_boot_time_t - current_time <= 180)
 	{
-		if (three == FALSE)
+		if (three == false)
 		{
 			sprintf_s(buf, "Crashes of thunder sound across the land!");
 			echo_to_all(AT_YELLOW, buf, ECHOTAR_ALL);
-			three = TRUE;
-			sysdata.DENY_NEW_PLAYERS = TRUE;
+			three = true;
+			sysdata.DENY_NEW_PLAYERS = true;
 		}
 		return;
 	}
@@ -2970,12 +2970,12 @@ void reboot_check(char* arg)
 	/*  if ( timecheck == 4 )*/
 	if (new_boot_time_t - current_time <= 240)
 	{
-		if (four == FALSE)
+		if (four == false)
 		{
 			sprintf_s(buf, "The sky has suddenly turned midnight black.");
 			echo_to_all(AT_YELLOW, buf, ECHOTAR_ALL);
-			four = TRUE;
-			sysdata.DENY_NEW_PLAYERS = TRUE;
+			four = true;
+			sysdata.DENY_NEW_PLAYERS = true;
 		}
 		return;
 	}
@@ -2983,12 +2983,12 @@ void reboot_check(char* arg)
 	/*  if ( timecheck == 5 )*/
 	if (new_boot_time_t - current_time <= 300)
 	{
-		if (five == FALSE)
+		if (five == false)
 		{
 			sprintf_s(buf, "You notice the life forms around you slowly dwindling away.");
 			echo_to_all(AT_YELLOW, buf, ECHOTAR_ALL);
-			five = TRUE;
-			sysdata.DENY_NEW_PLAYERS = TRUE;
+			five = true;
+			sysdata.DENY_NEW_PLAYERS = true;
 		}
 		return;
 	}
@@ -2996,11 +2996,11 @@ void reboot_check(char* arg)
 	/*  if ( timecheck == 10 )*/
 	if (new_boot_time_t - current_time <= 600)
 	{
-		if (ten == FALSE)
+		if (ten == false)
 		{
 			sprintf_s(buf, "The seas across the realm have turned frigid.");
 			echo_to_all(AT_YELLOW, buf, ECHOTAR_ALL);
-			ten = TRUE;
+			ten = true;
 		}
 		return;
 	}
@@ -3008,11 +3008,11 @@ void reboot_check(char* arg)
 	/*  if ( timecheck == 15 )*/
 	if (new_boot_time_t - current_time <= 900)
 	{
-		if (fifteen == FALSE)
+		if (fifteen == false)
 		{
 			sprintf_s(buf, "The aura of magic which once surrounded the realms seems slightly unstable.");
 			echo_to_all(AT_YELLOW, buf, ECHOTAR_ALL);
-			fifteen = TRUE;
+			fifteen = true;
 		}
 		return;
 	}
@@ -3020,11 +3020,11 @@ void reboot_check(char* arg)
 	/*  if ( timecheck == 30 )*/
 	if (new_boot_time_t - current_time <= 1800)
 	{
-		if (thirty == FALSE)
+		if (thirty == false)
 		{
 			sprintf_s(buf, "You sense a change in the magical forces surrounding you.");
 			echo_to_all(AT_YELLOW, buf, ECHOTAR_ALL);
-			thirty = TRUE;
+			thirty = true;
 		}
 		return;
 	}

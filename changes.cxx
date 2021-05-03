@@ -465,7 +465,7 @@ void do_changes(CHAR_DATA *ch, char *argument)
             today++;
 
     if (NULLSTR(arg))
-        fAll = FALSE;
+        fAll = false;
     else
         fAll = !str_cmp(arg, "all");
 

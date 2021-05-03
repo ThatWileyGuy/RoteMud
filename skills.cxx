@@ -154,10 +154,10 @@ int get_sclass(char *name)
 bool is_legal_kill(CHAR_DATA *ch, CHAR_DATA *vch)
 {
     if (IS_NPC(ch) || IS_NPC(vch))
-        return TRUE;
+        return true;
     if (is_safe(ch, vch))
-        return FALSE;
-    return TRUE;
+        return false;
+    return true;
 }
 
 extern const char *target_name; /* from magic.c */
@@ -184,7 +184,7 @@ bool check_skill(CHAR_DATA *ch, const char *command, char *argument)
             (IS_NPC(ch) || (ch->pcdata->learned[sn] > 0)))
             break;
         if (first >= top)
-            return FALSE;
+            return false;
         if (strcmp(command, skill_table[sn]->name) < 1)
             top = sn - 1;
         else
@@ -192,13 +192,13 @@ bool check_skill(CHAR_DATA *ch, const char *command, char *argument)
     }
 
     if (!check_pos(ch, skill_table[sn]->minimum_position))
-        return TRUE;
+        return true;
 
     if (IS_NPC(ch) && (IS_AFFECTED(ch, AFF_CHARM) || IS_AFFECTED(ch, AFF_POSSESS)))
     {
         send_to_char("For some reason, you seem unable to perform that...\n\r", ch);
         act(AT_GREY, "$n looks around.", ch, NULL, NULL, TO_ROOM);
-        return TRUE;
+        return true;
     }
 
     /* check if mana is required */
@@ -209,7 +209,7 @@ bool check_skill(CHAR_DATA *ch, const char *command, char *argument)
         if (!IS_NPC(ch) && ch->mana < mana)
         {
             send_to_char("You need to rest before using the Force any more.\n\r", ch);
-            return TRUE;
+            return true;
         }
     }
     else
@@ -234,7 +234,7 @@ bool check_skill(CHAR_DATA *ch, const char *command, char *argument)
         default:
             bug("Check_skill: bad target for sn %d.", sn);
             send_to_char("Something went wrong...\n\r", ch);
-            return TRUE;
+            return true;
 
         case TAR_IGNORE:
             vo = NULL;
@@ -251,15 +251,15 @@ bool check_skill(CHAR_DATA *ch, const char *command, char *argument)
             if (argument[0] == '\0' && (victim = who_fighting(ch)) == NULL)
             {
                 ch_printf(ch, "%s who?\n\r", capitalize(skill_table[sn]->name));
-                return TRUE;
+                return true;
             }
             else if (argument[0] != '\0' && (victim = get_char_room(ch, argument)) == NULL)
             {
                 send_to_char("They aren't here.\n\r", ch);
-                return TRUE;
+                return true;
             }
             if (is_safe(ch, victim))
-                return TRUE;
+                return true;
             vo = (void *)victim;
             break;
 
@@ -267,7 +267,7 @@ bool check_skill(CHAR_DATA *ch, const char *command, char *argument)
             if (argument[0] != '\0' && (victim = get_char_room(ch, argument)) == NULL)
             {
                 send_to_char("They aren't here.\n\r", ch);
-                return TRUE;
+                return true;
             }
             if (!victim)
                 victim = ch;
@@ -283,7 +283,7 @@ bool check_skill(CHAR_DATA *ch, const char *command, char *argument)
             if ((obj = get_obj_carry(ch, argument)) == NULL)
             {
                 send_to_char("You can't find that.\n\r", ch);
-                return TRUE;
+                return true;
             }
             vo = (void *)obj;
             break;
@@ -300,7 +300,7 @@ bool check_skill(CHAR_DATA *ch, const char *command, char *argument)
             {
                 ch->mana -= mana / 2;
             }
-            return TRUE;
+            return true;
         }
         if (mana)
         {
@@ -312,10 +312,10 @@ bool check_skill(CHAR_DATA *ch, const char *command, char *argument)
         update_userec(time_used, &skill_table[sn]->userec);
 
         if (retcode == rCHAR_DIED || retcode == rERROR)
-            return TRUE;
+            return true;
 
         if (char_died(ch))
-            return TRUE;
+            return true;
 
         if (retcode == rSPELL_FAILED)
         {
@@ -340,7 +340,7 @@ bool check_skill(CHAR_DATA *ch, const char *command, char *argument)
                 }
             }
         }
-        return TRUE;
+        return true;
     }
 
     if (mana)
@@ -355,7 +355,7 @@ bool check_skill(CHAR_DATA *ch, const char *command, char *argument)
     update_userec(time_used, &skill_table[sn]->userec);
 
     tail_chain();
-    return TRUE;
+    return true;
 }
 
 /*
@@ -1420,7 +1420,7 @@ void do_detrap(CHAR_DATA *ch, char *argument)
         }
         if (ms_find_obj(ch))
             return;
-        found = FALSE;
+        found = false;
         if (ch->mount)
         {
             send_to_char("You can't do that while mounted.\n\r", ch);
@@ -1435,7 +1435,7 @@ void do_detrap(CHAR_DATA *ch, char *argument)
         {
             if (can_see_obj(ch, obj) && nifty_is_name(arg, obj->name))
             {
-                found = TRUE;
+                found = true;
                 break;
             }
         }
@@ -1478,7 +1478,7 @@ void do_detrap(CHAR_DATA *ch, char *argument)
     {
         if (can_see_obj(ch, obj) && nifty_is_name(arg, obj->name))
         {
-            found = TRUE;
+            found = true;
             break;
         }
     }
@@ -1535,7 +1535,7 @@ void do_dig(CHAR_DATA *ch, char *argument)
         one_argument(argument, arg);
         if (arg[0] != '\0')
         {
-            if ((pexit = find_door(ch, arg, TRUE)) == NULL && get_dir(arg) == -1)
+            if ((pexit = find_door(ch, arg, true)) == NULL && get_dir(arg) == -1)
             {
                 send_to_char("What direction is that?\n\r", ch);
                 return;
@@ -1596,18 +1596,18 @@ void do_dig(CHAR_DATA *ch, char *argument)
     ch->substate = SUB_NONE;
 
     /* not having a shovel makes it harder to succeed */
-    shovel = FALSE;
+    shovel = false;
     for (obj = ch->first_carrying; obj; obj = obj->next_content)
         if (obj->item_type == ITEM_SHOVEL)
         {
-            shovel = TRUE;
+            shovel = true;
             break;
         }
 
     /* dig out an EX_DIG exit... */
     if (arg[0] != '\0')
     {
-        if ((pexit = find_door(ch, arg, TRUE)) != NULL && IS_SET(pexit->exit_info, EX_DIG) &&
+        if ((pexit = find_door(ch, arg, true)) != NULL && IS_SET(pexit->exit_info, EX_DIG) &&
             IS_SET(pexit->exit_info, EX_CLOSED))
         {
             /* 4 times harder to dig open a passage without a shovel */
@@ -1627,7 +1627,7 @@ void do_dig(CHAR_DATA *ch, char *argument)
     }
 
     startobj = ch->in_room->first_content;
-    found = FALSE;
+    found = false;
 
     for (obj = startobj; obj; obj = obj->next_content)
     {
@@ -1635,7 +1635,7 @@ void do_dig(CHAR_DATA *ch, char *argument)
         if (IS_OBJ_STAT(obj, ITEM_BURRIED) &&
             (number_percent() * (shovel ? 1 : 2)) < (IS_NPC(ch) ? 80 : ch->pcdata->learned[gsn_dig]))
         {
-            found = TRUE;
+            found = true;
             break;
         }
     }
@@ -1724,7 +1724,7 @@ void do_search(CHAR_DATA *ch, char *argument)
     ch->substate = SUB_NONE;
     if (arg[0] == '\0')
     {
-        room = TRUE;
+        room = true;
         startobj = ch->in_room->first_content;
     }
     else
@@ -1743,7 +1743,7 @@ void do_search(CHAR_DATA *ch, char *argument)
         }
     }
 
-    found = FALSE;
+    found = false;
 
     if ((!startobj && door == -1) || IS_NPC(ch))
     {
@@ -1774,7 +1774,7 @@ void do_search(CHAR_DATA *ch, char *argument)
             if ((IS_OBJ_STAT(obj, ITEM_HIDDEN) || IS_OBJ_STAT(obj, ITEM_BURRIED)) &&
                 percent < ch->pcdata->learned[gsn_search])
             {
-                found = TRUE;
+                found = true;
                 break;
             }
         }
@@ -2255,10 +2255,10 @@ void do_rescue(CHAR_DATA *ch, char *argument)
     ch->alignment = URANGE(-1000, ch->alignment, 1000);
 
     learn_from_success(ch, gsn_rescue);
-    stop_fighting(fch, FALSE);
-    stop_fighting(victim, FALSE);
+    stop_fighting(fch, false);
+    stop_fighting(victim, false);
     if (ch->fighting)
-        stop_fighting(ch, FALSE);
+        stop_fighting(ch, false);
 
     /* check_killer( ch, fch ); */
     set_fighting(ch, fch);
@@ -2428,10 +2428,10 @@ void do_stun(CHAR_DATA *ch, char *argument)
     }
 
     WAIT_STATE(ch, skill_table[gsn_stun]->beats);
-    fail = FALSE;
+    fail = false;
     chance = ris_save(victim, ch->skill_level[COMBAT_ABILITY], RIS_PARALYSIS);
     if (chance == 1000)
-        fail = TRUE;
+        fail = true;
     else
         fail = saves_para_petri(chance, victim);
 
@@ -2659,7 +2659,7 @@ void do_pick(CHAR_DATA *ch, char *argument)
         }
     }
 
-    if ((pexit = find_door(ch, arg, TRUE)) != NULL)
+    if ((pexit = find_door(ch, arg, true)) != NULL)
     {
         /* 'pick door' */
         /*	ROOM_INDEX_DATA *to_room; */ /* Unused */
@@ -2797,7 +2797,7 @@ void do_pick(CHAR_DATA *ch, char *argument)
 
         if (!ship->hatchopen)
         {
-            ship->hatchopen = TRUE;
+            ship->hatchopen = true;
             act(AT_PLAIN, "You pick the lock and open the hatch on $T.", ch, NULL, ship->name, TO_CHAR);
             act(AT_PLAIN, "$n picks open the hatch on $T.", ch, NULL, ship->name, TO_ROOM);
             echo_to_room(AT_YELLOW, get_room_index(ship->entrance), "The hatch opens from the outside.");
@@ -2979,7 +2979,7 @@ void do_recall(CHAR_DATA *ch, char *argument)
         }
 
         ch_printf(ch, "You recall from combat!\n\r");
-        stop_fighting(ch, TRUE);
+        stop_fighting(ch, true);
     }
 
     act(AT_ACTION, "$n disappears in a swirl of the Force.", ch, NULL, NULL, TO_ROOM);
@@ -3196,13 +3196,13 @@ bool check_parry(CHAR_DATA *ch, CHAR_DATA *victim)
     fskill = get_force_skill("parry");
 
     if (!fskill)
-        return FALSE;
+        return false;
 
     if (!IS_AWAKE(victim))
-        return FALSE;
+        return false;
 
     if (IS_NPC(victim) && !IS_SET(victim->defenses, DFND_PARRY))
-        return FALSE;
+        return false;
 
     if (IS_NPC(victim))
     {
@@ -3221,7 +3221,7 @@ bool check_parry(CHAR_DATA *ch, CHAR_DATA *victim)
             if ((wield = get_eq_char(victim, WEAR_DUAL_WIELD)) == NULL ||
                 (wield->value[3] != WEAPON_LIGHTSABER && wield->value[3] != WEAPON_DUAL_LIGHTSABER &&
                  wield->value[3] != WEAPON_FORCE_PIKE))
-                return FALSE;
+                return false;
         }
         chances = (int)(ch->force_skill[FORCE_SKILL_PARRY]);
     }
@@ -3231,7 +3231,7 @@ bool check_parry(CHAR_DATA *ch, CHAR_DATA *victim)
     if (number_range(1, 100) > chances)
     {
         force_learn_from_failure(victim, fskill);
-        return FALSE;
+        return false;
     }
     if (!IS_NPC(victim) && !IS_SET(victim->pcdata->flags, PCFLAG_GAG)) /*SB*/
         act(AT_SKILL, "You parry $n's attack.", ch, NULL, victim, TO_VICT);
@@ -3240,7 +3240,7 @@ bool check_parry(CHAR_DATA *ch, CHAR_DATA *victim)
         act(AT_SKILL, "$N parries your attack.", ch, NULL, victim, TO_CHAR);
 
     force_learn_from_success(victim, fskill);
-    return TRUE;
+    return true;
 }
 
 /*
@@ -3251,10 +3251,10 @@ bool check_dodge(CHAR_DATA *ch, CHAR_DATA *victim)
     int chances;
 
     if (!IS_AWAKE(victim))
-        return FALSE;
+        return false;
 
     if (IS_NPC(victim) && !IS_SET(victim->defenses, DFND_DODGE))
-        return FALSE;
+        return false;
 
     if (IS_NPC(victim))
         chances = UMIN(60, victim->top_level);
@@ -3264,7 +3264,7 @@ bool check_dodge(CHAR_DATA *ch, CHAR_DATA *victim)
     if (number_range(1, 100) > chances)
     {
         learn_from_failure(victim, gsn_dodge);
-        return FALSE;
+        return false;
     }
 
     if (!IS_NPC(victim) && !IS_SET(victim->pcdata->flags, PCFLAG_GAG))
@@ -3274,7 +3274,7 @@ bool check_dodge(CHAR_DATA *ch, CHAR_DATA *victim)
         act(AT_SKILL, "$N dodges your attack.", ch, NULL, victim, TO_CHAR);
 
     learn_from_success(victim, gsn_dodge);
-    return TRUE;
+    return true;
 }
 
 void do_poison_weapon(CHAR_DATA *ch, char *argument)
@@ -3412,10 +3412,10 @@ bool check_grip(CHAR_DATA *ch, CHAR_DATA *victim)
     int chance;
 
     if (!IS_AWAKE(victim))
-        return FALSE;
+        return false;
 
     if (IS_NPC(victim) && !IS_SET(victim->defenses, DFND_GRIP))
-        return FALSE;
+        return false;
 
     if (IS_NPC(victim))
         chance = UMIN(60, 2 * victim->top_level);
@@ -3428,12 +3428,12 @@ bool check_grip(CHAR_DATA *ch, CHAR_DATA *victim)
     if (number_percent() >= chance + victim->top_level - ch->top_level)
     {
         learn_from_failure(victim, gsn_grip);
-        return FALSE;
+        return false;
     }
     act(AT_SKILL, "You evade $n's attempt to disarm you.", ch, NULL, victim, TO_VICT);
     act(AT_SKILL, "$N holds $S weapon strongly, and is not disarmed.", ch, NULL, victim, TO_CHAR);
     learn_from_success(victim, gsn_grip);
-    return TRUE;
+    return true;
 }
 
 void do_circle(CHAR_DATA *ch, char *argument)
@@ -3622,7 +3622,7 @@ void do_hitall(CHAR_DATA *ch, char *argument)
 
 bool check_illegal_psteal(CHAR_DATA *ch, CHAR_DATA *victim)
 {
-    return FALSE;
+    return false;
 }
 
 void do_scan(CHAR_DATA *ch, char *argument)
@@ -3701,7 +3701,7 @@ void do_scan(CHAR_DATA *ch, char *argument)
         set_char_color(AT_RMNAME, ch);
         send_to_char(ch->in_room->name, ch);
         send_to_char("\n\r", ch);
-        show_list_to_char(ch->in_room->first_content, ch, FALSE, FALSE);
+        show_list_to_char(ch->in_room->first_content, ch, false, false);
         show_char_to_char(ch->in_room->first_person, ch);
 
         dist++;

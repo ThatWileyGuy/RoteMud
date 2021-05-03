@@ -70,7 +70,7 @@ int align_compute(CHAR_DATA *gch, CHAR_DATA *victim);
 ch_ret one_hit(CHAR_DATA *ch, CHAR_DATA *victim, int dt);
 int obj_hitroll(OBJ_DATA *obj);
 bool get_cover(CHAR_DATA *ch);
-bool dual_flip = FALSE;
+bool dual_flip = false;
 
 /*
  * Check to see if weapon is poisoned.
@@ -80,9 +80,9 @@ bool is_wielding_poisoned(CHAR_DATA *ch)
     OBJ_DATA *obj;
 
     if ((obj = get_eq_char(ch, WEAR_WIELD)) && (IS_SET(obj->extra_flags, ITEM_POISONED)))
-        return TRUE;
+        return true;
 
-    return FALSE;
+    return false;
 }
 
 /*
@@ -91,25 +91,25 @@ bool is_wielding_poisoned(CHAR_DATA *ch)
 bool is_hunting(CHAR_DATA *ch, CHAR_DATA *victim)
 {
     if (!ch->hunting || ch->hunting->who != victim)
-        return FALSE;
+        return false;
 
-    return TRUE;
+    return true;
 }
 
 bool is_hating(CHAR_DATA *ch, CHAR_DATA *victim)
 {
     if (!ch->hating || ch->hating->who != victim)
-        return FALSE;
+        return false;
 
-    return TRUE;
+    return true;
 }
 
 bool is_fearing(CHAR_DATA *ch, CHAR_DATA *victim)
 {
     if (!ch->fearing || ch->fearing->who != victim)
-        return FALSE;
+        return false;
 
-    return TRUE;
+    return true;
 }
 
 void stop_hunting(CHAR_DATA *ch)
@@ -330,7 +330,7 @@ void violence_update(void)
         {
             sprintf_s(buf, "violence_update: %s fighting %s in a SAFE room.", ch->name, victim->name);
             log_string(buf);
-            stop_fighting(ch, TRUE);
+            stop_fighting(ch, true);
         }
         else if (IS_AWAKE(ch) && ch->in_room == victim->in_room)
         {
@@ -339,7 +339,7 @@ void violence_update(void)
             retcode = multi_hit(ch, victim, TYPE_UNDEFINED);
         }
         else
-            stop_fighting(ch, FALSE);
+            stop_fighting(ch, false);
 
         if (char_died(ch))
             continue;
@@ -679,13 +679,13 @@ ch_ret one_hit(CHAR_DATA *ch, CHAR_DATA *victim, int dt)
      */
     if ((wield = get_eq_char(ch, WEAR_DUAL_WIELD)) != NULL)
     {
-        if (dual_flip == FALSE)
+        if (dual_flip == false)
         {
-            dual_flip = TRUE;
+            dual_flip = true;
             wield = get_eq_char(ch, WEAR_WIELD);
         }
         else
-            dual_flip = FALSE;
+            dual_flip = false;
     }
     else
         wield = get_eq_char(ch, WEAR_WIELD);
@@ -938,15 +938,15 @@ ch_ret one_hit(CHAR_DATA *ch, CHAR_DATA *victim, int dt)
         {
             dam /= 10;
             wield->value[4] -= 3;
-            fail = FALSE;
+            fail = false;
             chance = ris_save(victim, ch->skill_level[COMBAT_ABILITY], RIS_PARALYSIS);
             if (chance == 1000)
-                fail = TRUE;
+                fail = true;
             else
                 fail = saves_para_petri(chance, victim);
             if (victim->was_stunned > 0)
             {
-                fail = TRUE;
+                fail = true;
                 victim->was_stunned--;
             }
             chance = 100 - get_curr_con(victim) - victim->skill_level[COMBAT_ABILITY] / 2;
@@ -965,7 +965,7 @@ ch_ret one_hit(CHAR_DATA *ch, CHAR_DATA *victim, int dt)
                     TO_CHAR);
                 act(AT_BLUE, "Blue rings of energy from $n's blaster hit $N, leaving $M stunned!", ch, NULL, victim,
                     TO_NOTVICT);
-                stop_fighting(victim, TRUE);
+                stop_fighting(victim, true);
                 if (!IS_AFFECTED(victim, AFF_PARALYSIS))
                 {
                     af.type = gsn_stun;
@@ -1069,22 +1069,22 @@ ch_ret one_hit(CHAR_DATA *ch, CHAR_DATA *victim, int dt)
         if (dt >= 0 && dt < top_sn)
         {
             SKILL_TYPE *skill = skill_table[dt];
-            bool found = FALSE;
+            bool found = false;
 
             if (skill->imm_char && skill->imm_char[0] != '\0')
             {
                 act(AT_HIT, skill->imm_char, ch, NULL, victim, TO_CHAR);
-                found = TRUE;
+                found = true;
             }
             if (skill->imm_vict && skill->imm_vict[0] != '\0')
             {
                 act(AT_HITME, skill->imm_vict, ch, NULL, victim, TO_VICT);
-                found = TRUE;
+                found = true;
             }
             if (skill->imm_room && skill->imm_room[0] != '\0')
             {
                 act(AT_ACTION, skill->imm_room, ch, NULL, victim, TO_NOTVICT);
-                found = TRUE;
+                found = true;
             }
             if (found)
                 return rNONE;
@@ -1150,7 +1150,7 @@ ch_ret one_hit(CHAR_DATA *ch, CHAR_DATA *victim, int dt)
              OBJ_DATA *wield;
 
              wield = get_eq_char( victim, WEAR_WIELD );
-             if ( wield != NULL && wield->value[3] == WEAPON_BLASTER && get_cover( victim ) == TRUE )
+             if ( wield != NULL && wield->value[3] == WEAPON_BLASTER && get_cover( victim ) == true )
              {
                    start_hating( victim, ch );
                start_hunting( victim, ch );
@@ -1249,23 +1249,23 @@ ch_ret damage(CHAR_DATA *ch, CHAR_DATA *victim, int dam, int dt)
         {
             if (dt >= 0 && dt < top_sn)
             {
-                bool found = FALSE;
+                bool found = false;
                 SKILL_TYPE *skill = skill_table[dt];
 
                 if (skill->imm_char && skill->imm_char[0] != '\0')
                 {
                     act(AT_HIT, skill->imm_char, ch, NULL, victim, TO_CHAR);
-                    found = TRUE;
+                    found = true;
                 }
                 if (skill->imm_vict && skill->imm_vict[0] != '\0')
                 {
                     act(AT_HITME, skill->imm_vict, ch, NULL, victim, TO_VICT);
-                    found = TRUE;
+                    found = true;
                 }
                 if (skill->imm_room && skill->imm_room[0] != '\0')
                 {
                     act(AT_ACTION, skill->imm_room, ch, NULL, victim, TO_NOTVICT);
-                    found = TRUE;
+                    found = true;
                 }
                 if (found)
                     return rNONE;
@@ -1332,7 +1332,7 @@ ch_ret damage(CHAR_DATA *ch, CHAR_DATA *victim, int dam, int dt)
             if (IS_NPC(ch) && npcvict && IS_AFFECTED(victim, AFF_CHARM) && victim->master &&
                 victim->master->in_room == ch->in_room && number_bits(3) == 0)
             {
-                stop_fighting(ch, FALSE);
+                stop_fighting(ch, false);
                 retcode = multi_hit(ch, victim->master, TYPE_UNDEFINED);
                 return retcode;
             }
@@ -1510,7 +1510,7 @@ ch_ret damage(CHAR_DATA *ch, CHAR_DATA *victim, int dam, int dt)
         if (num_in_arena() == 1)
             find_game_winner();
         do_look(victim, "auto");
-        stop_fighting(victim, TRUE);
+        stop_fighting(victim, true);
         lost_arena(victim);
         return rNONE;
     }
@@ -1589,7 +1589,7 @@ ch_ret damage(CHAR_DATA *ch, CHAR_DATA *victim, int dam, int dt)
         if (victim->fighting && victim->fighting->who->hating && victim->fighting->who->hating->who == victim)
             stop_hating(victim->fighting->who);
 
-        stop_fighting(victim, TRUE);
+        stop_fighting(victim, true);
     }
 
     if (victim->hit <= 0 && !IS_NPC(victim))
@@ -1600,7 +1600,7 @@ ch_ret damage(CHAR_DATA *ch, CHAR_DATA *victim, int dam, int dt)
 
         REMOVE_BIT(victim->act, PLR_ATTACKER);
 
-        stop_fighting(victim, TRUE);
+        stop_fighting(victim, true);
 
         if ((obj = get_eq_char(victim, WEAR_DUAL_WIELD)) != NULL)
             unequip_char(victim, obj);
@@ -1680,7 +1680,7 @@ ch_ret damage(CHAR_DATA *ch, CHAR_DATA *victim, int dam, int dt)
         if (!IS_NPC(victim) || !IS_SET(victim->act, ACT_NOKILL))
             loot = legal_loot(ch, victim);
         else
-            loot = FALSE;
+            loot = false;
         if (IS_SET(victim->act, ACT_NOCORPSE))
             nocorpse = 1;
         // Make sure snipe doesnt loot.
@@ -1772,26 +1772,26 @@ ch_ret damage(CHAR_DATA *ch, CHAR_DATA *victim, int dam, int dt)
 bool is_safe(CHAR_DATA *ch, CHAR_DATA *victim)
 {
     if (!victim)
-        return FALSE;
+        return false;
 
     /* Thx Josh! */
     if (who_fighting(ch) == ch)
-        return FALSE;
+        return false;
 
     if (IS_SET(victim->in_room->room_flags, ROOM_SAFE))
     {
         set_char_color(AT_MAGIC, ch);
         send_to_char("You'll have to do that elswhere.\n\r", ch);
-        return TRUE;
+        return true;
     }
 
     if (get_trust(ch) > LEVEL_HERO)
-        return FALSE;
+        return false;
 
     if (IS_NPC(ch) || IS_NPC(victim))
-        return FALSE;
+        return false;
 
-    return FALSE;
+    return false;
 }
 
 /* checks is_safe but without the output
@@ -1800,7 +1800,7 @@ bool is_safe(CHAR_DATA *ch, CHAR_DATA *victim)
 
 bool is_safe_nm(CHAR_DATA *ch, CHAR_DATA *victim)
 {
-    return FALSE;
+    return false;
 }
 
 /*
@@ -1810,12 +1810,12 @@ bool legal_loot(CHAR_DATA *ch, CHAR_DATA *victim)
 {
     /* pc's can now loot .. why not .. death is pretty final */
     if (!IS_NPC(ch))
-        return TRUE;
+        return true;
     /* non-charmed mobs can loot anything */
     if (IS_NPC(ch) && !ch->master)
-        return TRUE;
+        return true;
 
-    return FALSE;
+    return false;
 }
 
 /*
@@ -2077,7 +2077,7 @@ void raw_kill(CHAR_DATA *ch, CHAR_DATA *victim)
 
     strcpy_s(arg, victim->name);
 
-    stop_fighting(victim, TRUE);
+    stop_fighting(victim, true);
 
     if (ch && !IS_NPC(ch) && !IS_NPC(victim))
     {
@@ -2156,7 +2156,7 @@ void raw_kill(CHAR_DATA *ch, CHAR_DATA *victim)
     if (IS_NPC(victim))
     {
         victim->pIndexData->killed++;
-        extract_char(victim, TRUE);
+        extract_char(victim, true);
         victim = NULL;
         return;
     }
@@ -2176,7 +2176,7 @@ void raw_kill(CHAR_DATA *ch, CHAR_DATA *victim)
         REMOVE_BIT(room->room_flags, ROOM_PLR_HOME);
         SET_BIT(room->room_flags, ROOM_EMPTY_HOME);
 
-        fold_area(room->area, room->area->filename, FALSE);
+        fold_area(room->area, room->area->filename, false);
     }
 
     if (victim->pcdata && victim->pcdata->clan)
@@ -2234,7 +2234,7 @@ void raw_kill(CHAR_DATA *ch, CHAR_DATA *victim)
             if ((victim = d->character) && !IS_NPC(victim))
                 break;
         if (d)
-            close_socket(d, TRUE);
+            close_socket(d, true);
     }
     else
     {
@@ -2243,7 +2243,7 @@ void raw_kill(CHAR_DATA *ch, CHAR_DATA *victim)
         quitting_char = victim;
         save_char_obj(victim);
         saving_char = NULL;
-        extract_char(victim, TRUE);
+        extract_char(victim, true);
         for (x = 0; x < MAX_WEAR; x++)
             for (y = 0; y < MAX_LAYERS; y++)
                 save_equipment[x][y] = NULL;
@@ -2267,7 +2267,7 @@ void raw_kill(CHAR_DATA *ch, CHAR_DATA *victim)
 
     /* original player kill started here
 
-        extract_char( victim, FALSE );
+        extract_char( victim, false );
         if ( !victim )
         {
           bug( "oops! raw_kill: extract_char destroyed pc char", 0 );
@@ -2482,8 +2482,8 @@ void dam_message(CHAR_DATA *ch, CHAR_DATA *victim, int dam, int dt)
     char punct;
     sh_int dampc;
     SKILL_TYPE *skill = NULL;
-    bool gcflag = FALSE;
-    bool gvflag = FALSE;
+    bool gcflag = false;
+    bool gvflag = false;
 
     if (!dam)
         dampc = 0;
@@ -2600,10 +2600,10 @@ void dam_message(CHAR_DATA *ch, CHAR_DATA *victim, int dam, int dt)
     punct = (dampc <= 30) ? '.' : '!';
 
     if (dam == 0 && (!IS_NPC(ch) && (IS_SET(ch->pcdata->flags, PCFLAG_GAG))))
-        gcflag = TRUE;
+        gcflag = true;
 
     if (dam == 0 && (!IS_NPC(victim) && (IS_SET(victim->pcdata->flags, PCFLAG_GAG))))
-        gvflag = TRUE;
+        gvflag = true;
 
     if (dt >= 0 && dt < top_sn)
         skill = skill_table[dt];
@@ -2645,22 +2645,22 @@ void dam_message(CHAR_DATA *ch, CHAR_DATA *victim, int dam, int dt)
             attack = skill->noun_damage;
             if (dam == 0)
             {
-                bool found = FALSE;
+                bool found = false;
 
                 if (skill->miss_char && skill->miss_char[0] != '\0')
                 {
                     act(AT_HIT, skill->miss_char, ch, NULL, victim, TO_CHAR);
-                    found = TRUE;
+                    found = true;
                 }
                 if (skill->miss_vict && skill->miss_vict[0] != '\0')
                 {
                     act(AT_HITME, skill->miss_vict, ch, NULL, victim, TO_VICT);
-                    found = TRUE;
+                    found = true;
                 }
                 if (skill->miss_room && skill->miss_room[0] != '\0')
                 {
                     act(AT_ACTION, skill->miss_room, ch, NULL, victim, TO_NOTVICT);
-                    found = TRUE;
+                    found = true;
                 }
                 if (found) /* miss message already sent */
                     return;
@@ -2851,12 +2851,12 @@ bool in_arena(CHAR_DATA *ch)
 {
 
     if (!str_cmp(ch->in_room->area->filename, "arena.are"))
-        return TRUE;
+        return true;
 
     if (ch->in_room->vnum < 29 || ch->in_room->vnum > 43)
-        return FALSE;
+        return false;
 
-    return TRUE;
+    return true;
 }
 
 void do_flee(CHAR_DATA *ch, char *argument)
@@ -2916,7 +2916,7 @@ void do_flee(CHAR_DATA *ch, char *argument)
         affect_strip(ch, gsn_sneak);
         REMOVE_BIT(ch->affected_by, AFF_SNEAK);
         if (ch->mount && ch->mount->fighting)
-            stop_fighting(ch->mount, TRUE);
+            stop_fighting(ch->mount, true);
         move_char(ch, pexit, 0);
         if ((now_in = ch->in_room) == was_in)
             continue;
@@ -2928,7 +2928,7 @@ void do_flee(CHAR_DATA *ch, char *argument)
         sprintf_s(buf, "You run for cover!");
         send_to_char(buf, ch);
 
-        stop_fighting(ch, TRUE);
+        stop_fighting(ch, true);
         return;
     }
 
@@ -2946,13 +2946,13 @@ bool get_cover(CHAR_DATA *ch)
     EXIT_DATA *pexit;
 
     if (!who_fighting(ch))
-        return FALSE;
+        return false;
 
     if (ch->position < POS_FIGHTING)
-        return FALSE;
+        return false;
 
     if (IS_NPC(ch) && IS_SET(ch->act, ACT_NOFLEE) && !IS_AFFECTED(ch, AFF_CHARM))
-        return FALSE;
+        return false;
 
     was_in = ch->in_room;
 
@@ -2968,7 +2968,7 @@ bool get_cover(CHAR_DATA *ch)
         affect_strip(ch, gsn_sneak);
         REMOVE_BIT(ch->affected_by, AFF_SNEAK);
         if (ch->mount && ch->mount->fighting)
-            stop_fighting(ch->mount, TRUE);
+            stop_fighting(ch->mount, true);
         move_char(ch, pexit, 0);
         if ((now_in = ch->in_room) == was_in)
             continue;
@@ -2978,12 +2978,12 @@ bool get_cover(CHAR_DATA *ch)
         ch->in_room = now_in;
         act(AT_FLEE, "$n spins around and takes aim.", ch, NULL, NULL, TO_ROOM);
 
-        stop_fighting(ch, TRUE);
+        stop_fighting(ch, true);
 
-        return TRUE;
+        return true;
     }
 
-    return FALSE;
+    return false;
 }
 
 void do_sla(CHAR_DATA *ch, char *argument)
@@ -3075,7 +3075,7 @@ void do_retreat(CHAR_DATA *ch, char *argument)
     affect_strip(ch, gsn_sneak);
     REMOVE_BIT(ch->affected_by, AFF_SNEAK);
     if (ch->mount && ch->mount->fighting)
-        stop_fighting(ch->mount, TRUE);
+        stop_fighting(ch->mount, true);
     move_char(ch, pexit, 0);
     if ((now_in = ch->in_room) == was_in)
         return;
@@ -3087,6 +3087,6 @@ void do_retreat(CHAR_DATA *ch, char *argument)
     sprintf_s(buf, "&YYou make a hasty retreat!");
     send_to_char(buf, ch);
     learn_from_success(ch, gsn_retreat);
-    stop_fighting(ch, TRUE);
+    stop_fighting(ch, true);
     return;
 }

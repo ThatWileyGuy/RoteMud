@@ -280,11 +280,11 @@ void do_makegoggles(CHAR_DATA *ch, char *argument)
             return;
         }
 
-        checktool = FALSE;
-        checkcirc = FALSE;
-        checkduraplast = FALSE;
-        checkbatt = FALSE;
-        checklens = FALSE;
+        checktool = false;
+        checkcirc = false;
+        checkduraplast = false;
+        checkbatt = false;
+        checklens = false;
 
         if (!IS_SET(ch->in_room->room_flags, ROOM_FACTORY))
         {
@@ -295,15 +295,15 @@ void do_makegoggles(CHAR_DATA *ch, char *argument)
         for (obj = ch->last_carrying; obj; obj = obj->prev_content)
         {
             if (obj->item_type == ITEM_DURAPLAST)
-                checkduraplast = TRUE;
+                checkduraplast = true;
             if (obj->item_type == ITEM_BATTERY)
-                checkbatt = TRUE;
+                checkbatt = true;
             if (obj->item_type == ITEM_LENS)
-                checklens = TRUE;
+                checklens = true;
             if (obj->item_type == ITEM_CIRCUIT)
-                checkcirc = TRUE;
+                checkcirc = true;
             if (obj->item_type == ITEM_TOOLKIT)
-                checktool = TRUE;
+                checktool = true;
         }
 
         if (!checkduraplast)
@@ -372,37 +372,37 @@ void do_makegoggles(CHAR_DATA *ch, char *argument)
 
     level = IS_NPC(ch) ? ch->top_level : (int)(ch->pcdata->learned[gsn_makegoggles]);
 
-    checktool = FALSE;
-    checklens = FALSE;
-    checkcirc = FALSE;
-    checkbatt = FALSE;
-    checkduraplast = FALSE;
+    checktool = false;
+    checklens = false;
+    checkcirc = false;
+    checkbatt = false;
+    checkduraplast = false;
 
     for (obj = ch->last_carrying; obj; obj = obj->prev_content)
     {
         if (obj->item_type == ITEM_TOOLKIT)
-            checktool = TRUE;
-        if (obj->item_type == ITEM_CIRCUIT && checkcirc == FALSE)
+            checktool = true;
+        if (obj->item_type == ITEM_CIRCUIT && checkcirc == false)
         {
-            checkcirc = TRUE;
+            checkcirc = true;
             separate_obj(obj);
             obj_from_char(obj);
         }
-        if (obj->item_type == ITEM_LENS && checklens == FALSE)
+        if (obj->item_type == ITEM_LENS && checklens == false)
         {
-            checklens = TRUE;
+            checklens = true;
             separate_obj(obj);
             obj_from_char(obj);
         }
-        if (obj->item_type == ITEM_DURAPLAST && checkduraplast == FALSE)
+        if (obj->item_type == ITEM_DURAPLAST && checkduraplast == false)
         {
-            checkduraplast = TRUE;
+            checkduraplast = true;
             separate_obj(obj);
             obj_from_char(obj);
         }
-        if (obj->item_type == ITEM_BATTERY && checkbatt == FALSE)
+        if (obj->item_type == ITEM_BATTERY && checkbatt == false)
         {
-            checkbatt = TRUE;
+            checkbatt = true;
             separate_obj(obj);
             obj_from_char(obj);
         }
@@ -506,10 +506,10 @@ void do_makemissile(CHAR_DATA *ch, char *argument)
             return;
         }
 
-        checktool = FALSE;
-        checkdura = FALSE;
-        checkbatt = FALSE;
-        checkcirc = FALSE;
+        checktool = false;
+        checkdura = false;
+        checkbatt = false;
+        checkcirc = false;
 
         if (!IS_SET(ch->in_room->room_flags, ROOM_FACTORY))
         {
@@ -520,13 +520,13 @@ void do_makemissile(CHAR_DATA *ch, char *argument)
         for (obj = ch->last_carrying; obj; obj = obj->prev_content)
         {
             if (obj->item_type == ITEM_TOOLKIT)
-                checktool = TRUE;
+                checktool = true;
             if (obj->item_type == ITEM_DURASTEEL)
-                checkdura = TRUE;
+                checkdura = true;
             if (obj->item_type == ITEM_BATTERY)
-                checkbatt = TRUE;
+                checkbatt = true;
             if (obj->item_type == ITEM_CIRCUIT)
-                checkcirc = TRUE;
+                checkcirc = true;
             if (obj->item_type == ITEM_CHEMICAL)
                 chemNum += obj->count;
         }
@@ -602,21 +602,21 @@ void do_makemissile(CHAR_DATA *ch, char *argument)
         return;
     }
 
-    checktool = FALSE;
-    checkdura = FALSE;
-    checkbatt = FALSE;
-    checkcirc = FALSE;
+    checktool = false;
+    checkdura = false;
+    checkbatt = false;
+    checkcirc = false;
 
     for (obj = ch->last_carrying; obj; obj = obj->prev_content)
     {
         if (obj->item_type == ITEM_TOOLKIT)
-            checktool = TRUE;
-        if (obj->item_type == ITEM_BATTERY && checkbatt == FALSE)
+            checktool = true;
+        if (obj->item_type == ITEM_BATTERY && checkbatt == false)
         {
             separate_obj(obj);
             obj_from_char(obj);
             extract_obj(obj);
-            checkbatt = TRUE;
+            checkbatt = true;
         }
         if (obj->item_type == ITEM_CHEMICAL && chemNum > 0)
         {
@@ -645,19 +645,19 @@ void do_makemissile(CHAR_DATA *ch, char *argument)
                 chemNum -= 2;
             }
         }
-        if (obj->item_type == ITEM_CIRCUIT && checkcirc == FALSE)
+        if (obj->item_type == ITEM_CIRCUIT && checkcirc == false)
         {
             separate_obj(obj);
             obj_from_char(obj);
             extract_obj(obj);
-            checkcirc = TRUE;
+            checkcirc = true;
         }
-        if (obj->item_type == ITEM_DURASTEEL && checkdura == FALSE)
+        if (obj->item_type == ITEM_DURASTEEL && checkdura == false)
         {
             separate_obj(obj);
             obj_from_char(obj);
             extract_obj(obj);
-            checkdura = TRUE;
+            checkdura = true;
         }
     }
 
@@ -937,17 +937,17 @@ void do_launch2(CHAR_DATA *ch, char *argument)
 
         for (;;) // next room, and all rooms after
         {
-            msgsent = FALSE;
+            msgsent = false;
             for (pexit = proom->first_exit; pexit; pexit = pexit->next)
             {
                 if (pexit->vdir == dir) // get next room information
                 {
                     missroom = pexit->vnum;
-                    exfound = TRUE;
+                    exfound = true;
                     break;
                 }
                 else
-                    exfound = FALSE;
+                    exfound = false;
             }
 
             // check target, return if hit
@@ -1028,7 +1028,7 @@ void do_launch2(CHAR_DATA *ch, char *argument)
                         ch_printf(zch, "A missile flies in from %s at %s! They quickly dodge it.\n\r", ftxt,
                                   PERS(rch, zch));
                     }
-                    msgsent = TRUE;
+                    msgsent = true;
                 }
                 if (ch->aiming_at)
                 {
@@ -1039,7 +1039,7 @@ void do_launch2(CHAR_DATA *ch, char *argument)
             // end ?target
 
             // check door, return if hit
-            if (exfound == TRUE)
+            if (exfound == true)
             {
                 if (IS_SET(pexit->exit_info, EX_CLOSED)) // Door in the way?
                 {
@@ -1115,7 +1115,7 @@ void do_launch2(CHAR_DATA *ch, char *argument)
             // check distance, return if drop
             if (dist == max_dist) // Missile reaches range
             {
-                if (msgsent == FALSE)
+                if (msgsent == false)
                     sprintf_s(buf, "A missile flies in from %s, loses speed, and drops, exploding!\n\r", ftxt);
                 else
                     sprintf_s(buf, "The missile loses speed and drops, exploding!\n\r");
@@ -1139,11 +1139,11 @@ void do_launch2(CHAR_DATA *ch, char *argument)
                 return;
             } // End reaches range
 
-            if (exfound == FALSE)
+            if (exfound == false)
                 break;
             else
             {
-                if (msgsent == FALSE)
+                if (msgsent == false)
                     sprintf_s(buf, "A missile flies in from %s, and continues %s!\n\r", ftxt, dtxt);
                 else
                     sprintf_s(buf, "The missile continues %s. That was close!\n\r", dtxt);
@@ -1155,10 +1155,10 @@ void do_launch2(CHAR_DATA *ch, char *argument)
             }
         }
 
-        if (exfound == FALSE)
+        if (exfound == false)
         {
             // msgsent, boom, return
-            if (msgsent == FALSE)
+            if (msgsent == false)
                 sprintf_s(buf, "A missile flies in from %s, and explodes, hitting a wall!\n\r", ftxt);
             else
                 sprintf_s(buf, "The missile flies into a wall, and explodes!\n\r");
@@ -1429,7 +1429,7 @@ void do_link(CHAR_DATA *ch, char *argument)
             return;
         }
 
-        ship->primaryLinked = TRUE;
+        ship->primaryLinked = true;
         ch_printf(ch, "Primary weapon systems are linked. All available will fire.\n\r");
         return;
     }
@@ -1484,7 +1484,7 @@ void do_link(CHAR_DATA *ch, char *argument)
             return;
         }
 
-        ship->secondaryLinked = TRUE;
+        ship->secondaryLinked = true;
         ch_printf(ch, "Secondary weapon systems are linked. All available will fire.\n\r");
         return;
     }
@@ -1500,7 +1500,7 @@ void do_link(CHAR_DATA *ch, char *argument)
             (ship->maxtorpedos && ship->maxmissiles) || (ship->maxtorpedos && ship->maxrockets) ||
             (ship->maxrockets && ship->maxmissiles) || (ship->maxrockets && ship->maxtorpedos))
         {
-            ship->warheadLinked = TRUE;
+            ship->warheadLinked = true;
             ch_printf(ch, "Launcher system linked. All available will fire.\n\r");
             return;
         }
@@ -1536,12 +1536,12 @@ void do_unlink(CHAR_DATA *ch, char *argument)
             send_to_char("This ship doesn't have a primary weapon system.\n\r", ch);
             return;
         }
-        if (ship->primaryLinked == FALSE)
+        if (ship->primaryLinked == false)
         {
             send_to_char("The primary weapon systems aren't linked.\n\r", ch);
             return;
         }
-        ship->primaryLinked = FALSE;
+        ship->primaryLinked = false;
         send_to_char("You unlink the primary weapon systems.\n\r", ch);
         act(AT_PLAIN, "$n presses a few buttons on the console.\n\r", ch, NULL, NULL, TO_ROOM);
         return;
@@ -1553,48 +1553,48 @@ void do_unlink(CHAR_DATA *ch, char *argument)
             send_to_char("This ship doesn't have a secondary weapon system.\n\r", ch);
             return;
         }
-        if (ship->secondaryLinked == FALSE)
+        if (ship->secondaryLinked == false)
         {
             send_to_char("The secondary weapon systems aren't linked.\n\r", ch);
             return;
         }
-        ship->secondaryLinked = FALSE;
+        ship->secondaryLinked = false;
         send_to_char("You unlink the secondary weapon systems.\n\r", ch);
         act(AT_PLAIN, "$n presses a few buttons on the console.\n\r", ch, NULL, NULL, TO_ROOM);
         return;
     }
     if (!str_prefix(argument, "launchers"))
     {
-        if (ship->warheadLinked == FALSE)
+        if (ship->warheadLinked == false)
         {
             send_to_char("The launcher systems aren't linked.\n\r", ch);
             return;
         }
-        ship->warheadLinked = FALSE;
+        ship->warheadLinked = false;
         send_to_char("You unlink the launcher systems.\n\r", ch);
         act(AT_PLAIN, "$n presses a few buttons on the console.\n\r", ch, NULL, NULL, TO_ROOM);
         return;
     }
     if (!str_prefix(argument, "all"))
     {
-        if (ship->warheadLinked == FALSE && ship->primaryLinked == FALSE && ship->secondaryLinked == FALSE)
+        if (ship->warheadLinked == false && ship->primaryLinked == false && ship->secondaryLinked == false)
         {
             send_to_char("No ship system is linked.\n\r", ch);
             return;
         }
-        if (ship->primaryLinked == TRUE)
+        if (ship->primaryLinked == true)
         {
-            ship->primaryLinked = FALSE;
+            ship->primaryLinked = false;
             send_to_char("Primary weapon systems unlinked.\n\r", ch);
         }
-        if (ship->secondaryLinked == TRUE)
+        if (ship->secondaryLinked == true)
         {
-            ship->secondaryLinked = FALSE;
+            ship->secondaryLinked = false;
             send_to_char("Secondary weapon systems unlinked.\n\r", ch);
         }
-        if (ship->warheadLinked == TRUE)
+        if (ship->warheadLinked == true)
         {
-            ship->warheadLinked = FALSE;
+            ship->warheadLinked = false;
             send_to_char("Launcher systems unlinked.\n\r", ch);
         }
         return;
@@ -1639,14 +1639,14 @@ void do_barrel_roll(CHAR_DATA *ch, char *argument)
             return;
         }
 
-        if (ship->juking == TRUE)
+        if (ship->juking == true)
         {
             send_to_char("&YYou stop juking from side to side, and perform a barrel roll.\n\r", ch);
             sprintf_s(buf, "%s stops juking from side to side.", ship->name);
             echo_to_system(AT_YELLOW, ship, buf, NULL);
-            ship->juking = FALSE;
+            ship->juking = false;
         }
-        ship->rolling = TRUE;
+        ship->rolling = true;
         send_to_char("&GThe ship starts rolling...\n\r", ch);
         act(AT_PLAIN, "$n performs a barrel roll.", ch, NULL, NULL, TO_ROOM);
         sprintf_s(buf, "%s performs a barrel roll.", ship->name);
@@ -1666,7 +1666,7 @@ void do_barrel_roll(CHAR_DATA *ch, char *argument)
         act(AT_PLAIN, "$n levels out $s flight pattern.\n\r", ch, NULL, NULL, TO_ROOM);
         sprintf_s(buf, "%s levels out its flight pattern.", ship->name);
         echo_to_system(AT_YELLOW, ship, buf, NULL);
-        ship->rolling = FALSE;
+        ship->rolling = false;
         return;
     }
 
@@ -1677,7 +1677,7 @@ void do_barrel_roll(CHAR_DATA *ch, char *argument)
     act(AT_PLAIN, "$n levels out $s flight pattern.\n\r", ch, NULL, NULL, TO_ROOM);
     sprintf_s(buf, "%s levels out its flight pattern.", ship->name);
     echo_to_system(AT_YELLOW, ship, buf, NULL);
-    ship->rolling = FALSE;
+    ship->rolling = false;
     return;
 }
 
@@ -1719,14 +1719,14 @@ void do_juke(CHAR_DATA *ch, char *argument)
             return;
         }
 
-        if (ship->rolling == TRUE)
+        if (ship->rolling == true)
         {
             send_to_char("&YYou break out of the barrel roll, and start juking.\n\r", ch);
             sprintf_s(buf, "%s stops rolling.", ship->name);
             echo_to_system(AT_YELLOW, ship, buf, NULL);
-            ship->rolling = FALSE;
+            ship->rolling = false;
         }
-        ship->juking = TRUE;
+        ship->juking = true;
         send_to_char("&GYou perform the maneuver, and the ship jukes from side to side.\n\r", ch);
         act(AT_PLAIN, "$n jukes the ship from side to side.", ch, NULL, NULL, TO_ROOM);
         sprintf_s(buf, "%s starts juking from side to side.", ship->name);
@@ -1746,7 +1746,7 @@ void do_juke(CHAR_DATA *ch, char *argument)
         act(AT_PLAIN, "$n levels out $s flight pattern.\n\r", ch, NULL, NULL, TO_ROOM);
         sprintf_s(buf, "%s levels out its flight pattern.", ship->name);
         echo_to_system(AT_YELLOW, ship, buf, NULL);
-        ship->juking = FALSE;
+        ship->juking = false;
         return;
     }
 
@@ -1757,6 +1757,6 @@ void do_juke(CHAR_DATA *ch, char *argument)
     act(AT_PLAIN, "$n levels out $s flight pattern.\n\r", ch, NULL, NULL, TO_ROOM);
     sprintf_s(buf, "%s levels out its flight pattern.", ship->name);
     echo_to_system(AT_YELLOW, ship, buf, NULL);
-    ship->juking = FALSE;
+    ship->juking = false;
     return;
 }

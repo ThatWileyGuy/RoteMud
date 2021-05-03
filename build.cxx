@@ -315,19 +315,19 @@ bool can_rmodify(CHAR_DATA *ch, ROOM_INDEX_DATA *room)
     AREA_DATA *pArea;
 
     if (IS_NPC(ch))
-        return FALSE;
+        return false;
     if (get_trust(ch) >= sysdata.level_modify_proto)
-        return TRUE;
+        return true;
     if (!ch->pcdata || !(pArea = ch->pcdata->area))
     {
         send_to_char("You must have an assigned area to modify this room.\n\r", ch);
-        return FALSE;
+        return false;
     }
     if (vnum >= pArea->low_r_vnum && vnum <= pArea->hi_r_vnum)
-        return TRUE;
+        return true;
 
     send_to_char("That room is not in your allocated range.\n\r", ch);
-    return FALSE;
+    return false;
 }
 
 bool can_omodify(CHAR_DATA *ch, OBJ_DATA *obj)
@@ -336,19 +336,19 @@ bool can_omodify(CHAR_DATA *ch, OBJ_DATA *obj)
     AREA_DATA *pArea;
 
     if (IS_NPC(ch))
-        return FALSE;
+        return false;
     if (get_trust(ch) >= sysdata.level_modify_proto)
-        return TRUE;
+        return true;
     if (!ch->pcdata || !(pArea = ch->pcdata->area))
     {
         send_to_char("You must have an assigned area to modify this object.\n\r", ch);
-        return FALSE;
+        return false;
     }
     if (vnum >= pArea->low_o_vnum && vnum <= pArea->hi_o_vnum)
-        return TRUE;
+        return true;
 
     send_to_char("That object is not in your allocated range.\n\r", ch);
-    return FALSE;
+    return false;
 }
 
 bool can_oedit(CHAR_DATA *ch, OBJ_INDEX_DATA *obj)
@@ -357,19 +357,19 @@ bool can_oedit(CHAR_DATA *ch, OBJ_INDEX_DATA *obj)
     AREA_DATA *pArea;
 
     if (IS_NPC(ch))
-        return FALSE;
+        return false;
     if (get_trust(ch) >= LEVEL_GOD)
-        return TRUE;
+        return true;
     if (!ch->pcdata || !(pArea = ch->pcdata->area))
     {
         send_to_char("You must have an assigned area to modify this object.\n\r", ch);
-        return FALSE;
+        return false;
     }
     if (vnum >= pArea->low_o_vnum && vnum <= pArea->hi_o_vnum)
-        return TRUE;
+        return true;
 
     send_to_char("That object is not in your allocated range.\n\r", ch);
-    return FALSE;
+    return false;
 }
 
 bool can_mmodify(CHAR_DATA *ch, CHAR_DATA *mob)
@@ -378,33 +378,33 @@ bool can_mmodify(CHAR_DATA *ch, CHAR_DATA *mob)
     AREA_DATA *pArea;
 
     if (mob == ch)
-        return TRUE;
+        return true;
 
     if (!IS_NPC(mob))
     {
         if (get_trust(ch) >= sysdata.level_modify_proto && get_trust(ch) > get_trust(mob))
-            return TRUE;
+            return true;
         else
             send_to_char("You can't do that.\n\r", ch);
-        return FALSE;
+        return false;
     }
 
     vnum = mob->pIndexData->vnum;
 
     if (IS_NPC(ch))
-        return FALSE;
+        return false;
     if (get_trust(ch) >= sysdata.level_modify_proto)
-        return TRUE;
+        return true;
     if (!ch->pcdata || !(pArea = ch->pcdata->area))
     {
         send_to_char("You must have an assigned area to modify this mobile.\n\r", ch);
-        return FALSE;
+        return false;
     }
     if (vnum >= pArea->low_m_vnum && vnum <= pArea->hi_m_vnum)
-        return TRUE;
+        return true;
 
     send_to_char("That mobile is not in your allocated range.\n\r", ch);
-    return FALSE;
+    return false;
 }
 
 bool can_medit(CHAR_DATA *ch, MOB_INDEX_DATA *mob)
@@ -413,19 +413,19 @@ bool can_medit(CHAR_DATA *ch, MOB_INDEX_DATA *mob)
     AREA_DATA *pArea;
 
     if (IS_NPC(ch))
-        return FALSE;
+        return false;
     if (get_trust(ch) >= LEVEL_GOD)
-        return TRUE;
+        return true;
     if (!ch->pcdata || !(pArea = ch->pcdata->area))
     {
         send_to_char("You must have an assigned area to modify this mobile.\n\r", ch);
-        return FALSE;
+        return false;
     }
     if (vnum >= pArea->low_m_vnum && vnum <= pArea->hi_m_vnum)
-        return TRUE;
+        return true;
 
     send_to_char("That mobile is not in your allocated range.\n\r", ch);
-    return FALSE;
+    return false;
 }
 
 int get_otype(const char *type)
@@ -917,7 +917,7 @@ void do_goto(CHAR_DATA *ch, char *argument)
 
     in_room = ch->in_room;
     if (ch->fighting)
-        stop_fighting(ch, TRUE);
+        stop_fighting(ch, true);
 
     if (!IS_SET(ch->act, PLR_WIZINVIS))
     {
@@ -1076,7 +1076,7 @@ void do_mset(CHAR_DATA *ch, char *argument)
     }
 
     victim = NULL;
-    lockvictim = FALSE;
+    lockvictim = false;
     smash_tilde(argument);
 
     if (ch->substate == SUB_REPEATCMD)
@@ -1108,14 +1108,14 @@ void do_mset(CHAR_DATA *ch, char *argument)
     }
     if (victim)
     {
-        lockvictim = TRUE;
+        lockvictim = true;
         strcpy_s(arg1, victim->name);
         argument = one_argument(argument, arg2);
         strcpy_s(arg3, argument);
     }
     else
     {
-        lockvictim = FALSE;
+        lockvictim = false;
         argument = one_argument(argument, arg1);
         argument = one_argument(argument, arg2);
         strcpy_s(arg3, argument);
@@ -2082,7 +2082,7 @@ void do_mset(CHAR_DATA *ch, char *argument)
 
     if (!str_cmp(arg2, "flags"))
     {
-        bool protoflag = FALSE, ftoggle = FALSE;
+        bool protoflag = false, ftoggle = false;
 
         if (!IS_NPC(victim) && get_trust(ch) < LEVEL_GREATER)
         {
@@ -2097,7 +2097,7 @@ void do_mset(CHAR_DATA *ch, char *argument)
         }
 
         if (IS_SET(victim->act, ACT_PROTOTYPE))
-            protoflag = TRUE;
+            protoflag = true;
 
         while (argument[0] != '\0')
         {
@@ -2126,7 +2126,7 @@ void do_mset(CHAR_DATA *ch, char *argument)
                     send_to_char("If the NPC flag could be changed, it would cause many problems.\n\r", ch);
                 else
                 {
-                    ftoggle = TRUE;
+                    ftoggle = true;
                     TOGGLE_BIT(victim->act, 1 << value);
                 }
             }
@@ -2970,14 +2970,14 @@ void do_oset(CHAR_DATA *ch, char *argument)
     }
     if (obj)
     {
-        lockobj = TRUE;
+        lockobj = true;
         strcpy_s(arg1, obj->name);
         argument = one_argument(argument, arg2);
         strcpy_s(arg3, argument);
     }
     else
     {
-        lockobj = FALSE;
+        lockobj = false;
         argument = one_argument(argument, arg1);
         argument = one_argument(argument, arg2);
         strcpy_s(arg3, argument);
@@ -3883,9 +3883,9 @@ void do_rset(CHAR_DATA *ch, char *argument)
          * Protect from messing up prototype flag
          */
         if (IS_SET(location->room_flags, ROOM_PROTOTYPE))
-            proto = TRUE;
+            proto = true;
         else
-            proto = FALSE;
+            proto = false;
         location->room_flags = value;
         if (proto)
             SET_BIT(location->room_flags, ROOM_PROTOTYPE);
@@ -4711,7 +4711,7 @@ void do_redit(CHAR_DATA *ch, char *argument)
             send_to_char("Usage: redit exit <dir> [room] [flags] [key] [keywords]\n\r", ch);
             return;
         }
-        addexit = numnotdir = FALSE;
+        addexit = numnotdir = false;
         switch (arg2[0])
         {
         default:
@@ -4719,11 +4719,11 @@ void do_redit(CHAR_DATA *ch, char *argument)
             break;
         case '+':
             edir = get_dir(arg2 + 1);
-            addexit = TRUE;
+            addexit = true;
             break;
         case '#':
             edir = atoi(arg2 + 1);
-            numnotdir = TRUE;
+            numnotdir = true;
             break;
         }
         if (!arg3 || arg3[0] == '\0')
@@ -4838,14 +4838,14 @@ void do_redit(CHAR_DATA *ch, char *argument)
             send_to_char("Usage: redit bexit <dir> [room] [flags] [key] [keywords]\n\r", ch);
             return;
         }
-        numnotdir = FALSE;
+        numnotdir = false;
         switch (arg2[0])
         {
         default:
             edir = get_dir(arg2);
             break;
         case '#':
-            numnotdir = TRUE;
+            numnotdir = true;
             edir = atoi(arg2 + 1);
             break;
         case '+':
@@ -5169,7 +5169,7 @@ void edit_buffer( CHAR_DATA *ch, char *argument )
    }
 
    edit = ch->editor;
-   save = FALSE;
+   save = false;
    max_buf_lines = 24;
 
    if ( ch->substate == SUB_MPROG_EDIT || ch->substate == SUB_HELP_EDIT )
@@ -5474,7 +5474,7 @@ void edit_buffer( CHAR_DATA *ch, char *argument )
         {
             edit->numlines = max_buf_lines;
             send_to_char( "Buffer full.\n\r", ch );
-            save = TRUE;
+            save = true;
             break;
         }
     }
@@ -5498,7 +5498,7 @@ void assign_area(CHAR_DATA *ch)
     char buf2[MAX_STRING_LENGTH];
     char taf[1024];
     AREA_DATA *tarea, *tmp;
-    bool created = FALSE;
+    bool created = false;
 
     if (IS_NPC(ch))
         return;
@@ -5529,7 +5529,7 @@ void assign_area(CHAR_DATA *ch)
             tarea->author = STRALLOC(buf2);
             tarea->age = 0;
             tarea->nplayer = 0;
-            created = TRUE;
+            created = true;
         }
         else
         {
@@ -5544,7 +5544,7 @@ void assign_area(CHAR_DATA *ch)
         tarea->hi_m_vnum = ch->pcdata->m_range_hi;
         ch->pcdata->area = tarea;
         if (created)
-            sort_area(tarea, TRUE);
+            sort_area(tarea, true);
     }
 }
 
@@ -5647,13 +5647,13 @@ bool DelRExtra(ROOM_INDEX_DATA *room, const char *keywords)
             break;
     }
     if (!rmed)
-        return FALSE;
+        return false;
     UNLINK(rmed, room->first_extradesc, room->last_extradesc, next, prev);
     STRFREE(rmed->keyword);
     STRFREE(rmed->description);
     DISPOSE(rmed);
     top_ed--;
-    return TRUE;
+    return true;
 }
 
 EXTRA_DESCR_DATA *SetOExtra(OBJ_DATA *obj, const char *keywords)
@@ -5686,13 +5686,13 @@ bool DelOExtra(OBJ_DATA *obj, const char *keywords)
             break;
     }
     if (!rmed)
-        return FALSE;
+        return false;
     UNLINK(rmed, obj->first_extradesc, obj->last_extradesc, next, prev);
     STRFREE(rmed->keyword);
     STRFREE(rmed->description);
     DISPOSE(rmed);
     top_ed--;
-    return TRUE;
+    return true;
 }
 
 EXTRA_DESCR_DATA *SetOExtraProto(OBJ_INDEX_DATA *obj, const char *keywords)
@@ -5725,13 +5725,13 @@ bool DelOExtraProto(OBJ_INDEX_DATA *obj, const char *keywords)
             break;
     }
     if (!rmed)
-        return FALSE;
+        return false;
     UNLINK(rmed, obj->first_extradesc, obj->last_extradesc, next, prev);
     STRFREE(rmed->keyword);
     STRFREE(rmed->description);
     DISPOSE(rmed);
     top_ed--;
-    return TRUE;
+    return true;
 }
 
 void fold_area(AREA_DATA *tarea, char *filename, bool install)
@@ -5795,9 +5795,9 @@ void fold_area(AREA_DATA *tarea, char *filename, bool install)
             pMobIndex->attacks != 0 || pMobIndex->defenses != 0 || pMobIndex->height != 0 || pMobIndex->weight != 0 ||
             pMobIndex->speaks != 0 || pMobIndex->speaking != 0 || pMobIndex->xflags != 0 ||
             pMobIndex->numattacks != 0 || pMobIndex->vip_flags != 0)
-            complexmob = TRUE;
+            complexmob = true;
         else
-            complexmob = FALSE;
+            complexmob = false;
         fprintf(fpout, "#%d\n", vnum);
         fprintf(fpout, "%s~\n", pMobIndex->player_name);
         fprintf(fpout, "%s~\n", pMobIndex->short_descr);
@@ -5934,7 +5934,7 @@ void fold_area(AREA_DATA *tarea, char *filename, bool install)
             {
                 vnext = victim->next_in_room;
                 if (IS_NPC(victim))
-                    extract_char(victim, TRUE);
+                    extract_char(victim, true);
             }
             /* purge room of (prototyped) objects */
             for (obj = room->first_content; obj; obj = obj_next)
@@ -6136,10 +6136,10 @@ void do_savearea(CHAR_DATA *ch, char *argument)
             send_to_char("You can only save your own area.\n\r", ch);
             return;
         }
-        for (found = FALSE, tarea = first_build; tarea; tarea = tarea->next)
+        for (found = false, tarea = first_build; tarea; tarea = tarea->next)
             if (!str_cmp(tarea->filename, argument))
             {
-                found = TRUE;
+                found = true;
                 break;
             }
         if (!found)
@@ -6163,7 +6163,7 @@ void do_savearea(CHAR_DATA *ch, char *argument)
     }
 
     sprintf_s(filename, "%s%s", BUILD_DIR, tarea->filename);
-    fold_area(tarea, filename, FALSE);
+    fold_area(tarea, filename, false);
     send_to_char("Done.\n\r", ch);
 }
 
@@ -6190,10 +6190,10 @@ void do_loadarea(CHAR_DATA *ch, char *argument)
             send_to_char("You can only load your own area.\n\r", ch);
             return;
         }
-        for (found = FALSE, tarea = first_build; tarea; tarea = tarea->next)
+        for (found = false, tarea = first_build; tarea; tarea = tarea->next)
             if (!str_cmp(tarea->filename, argument))
             {
-                found = TRUE;
+                found = true;
                 break;
             }
         if (!found)
@@ -6245,7 +6245,7 @@ void do_foldarea(CHAR_DATA *ch, char *argument)
     if (!str_cmp(arg, "all"))
     {
         for (tarea = first_area; tarea; tarea = tarea->next)
-            fold_area(tarea, tarea->filename, FALSE);
+            fold_area(tarea, tarea->filename, false);
         send_to_char("Done.\n\r", ch);
         return;
     }
@@ -6255,9 +6255,9 @@ void do_foldarea(CHAR_DATA *ch, char *argument)
         {
             send_to_char("Folding...\n\r", ch);
             if (!strcmp(argument, "remproto"))
-                fold_area(tarea, tarea->filename, TRUE);
+                fold_area(tarea, tarea->filename, true);
             else
-                fold_area(tarea, tarea->filename, FALSE);
+                fold_area(tarea, tarea->filename, false);
             send_to_char("Done.\n\r", ch);
             return;
         }
@@ -6317,7 +6317,7 @@ void do_installarea(CHAR_DATA *ch, char *argument)
 
             /* Fold area with install flag -- auto-removes prototype flags */
             send_to_char("Saving and installing file...\n\r", ch);
-            fold_area(tarea, tarea->filename, TRUE);
+            fold_area(tarea, tarea->filename, true);
 
             /* Remove from prototype area list */
             UNLINK(tarea, first_build, last_build, next, prev);
@@ -6329,7 +6329,7 @@ void do_installarea(CHAR_DATA *ch, char *argument)
             UNLINK(tarea, first_bsort, last_bsort, next_sort, prev_sort);
 
             /* Sort the area into it's proper sort list. BUGFIX: Samson 4-15-03 */
-            sort_area(tarea, FALSE);
+            sort_area(tarea, false);
 
             /* Fix up author if online */
             for (d = first_descriptor; d; d = d->next)
@@ -6371,12 +6371,12 @@ void do_astat(CHAR_DATA *ch, char *argument)
     AREA_DATA *tarea;
     bool proto, found;
 
-    found = FALSE;
-    proto = FALSE;
+    found = false;
+    proto = false;
     for (tarea = first_area; tarea; tarea = tarea->next)
         if (!str_cmp(tarea->filename, argument))
         {
-            found = TRUE;
+            found = true;
             break;
         }
 
@@ -6384,8 +6384,8 @@ void do_astat(CHAR_DATA *ch, char *argument)
         for (tarea = first_build; tarea; tarea = tarea->next)
             if (!str_cmp(tarea->filename, argument))
             {
-                found = TRUE;
-                proto = TRUE;
+                found = true;
+                proto = true;
                 break;
             }
 
@@ -6457,12 +6457,12 @@ void do_aset(CHAR_DATA *ch, char *argument)
         return;
     }
 
-    found = FALSE;
-    proto = FALSE;
+    found = false;
+    proto = false;
     for (tarea = first_area; tarea; tarea = tarea->next)
         if (!str_cmp(tarea->filename, arg1))
         {
-            found = TRUE;
+            found = true;
             break;
         }
 
@@ -6470,8 +6470,8 @@ void do_aset(CHAR_DATA *ch, char *argument)
         for (tarea = first_build; tarea; tarea = tarea->next)
             if (!str_cmp(tarea->filename, arg1))
             {
-                found = TRUE;
-                proto = TRUE;
+                found = true;
+                proto = true;
                 break;
             }
 
@@ -6514,7 +6514,7 @@ void do_aset(CHAR_DATA *ch, char *argument)
         DISPOSE(tarea->filename);
         tarea->filename = str_dup(argument);
         write_area_list();
-        fold_area(tarea, tarea->filename, TRUE);
+        fold_area(tarea, tarea->filename, true);
         send_to_char("Done.\n\r", ch);
         return;
     }
@@ -7044,13 +7044,13 @@ void do_mpedit(CHAR_DATA *ch, char *argument)
             return;
         }
         cnt = 0;
-        found = FALSE;
+        found = false;
         for (mprg = mprog; mprg; mprg = mprg->next)
         {
             if (++cnt == value)
             {
                 mptype = mprg->type;
-                found = TRUE;
+                found = true;
                 break;
             }
         }
@@ -7322,13 +7322,13 @@ void do_opedit(CHAR_DATA *ch, char *argument)
             return;
         }
         cnt = 0;
-        found = FALSE;
+        found = false;
         for (mprg = mprog; mprg; mprg = mprg->next)
         {
             if (++cnt == value)
             {
                 mptype = mprg->type;
-                found = TRUE;
+                found = true;
                 break;
             }
         }
@@ -7596,13 +7596,13 @@ void do_rpedit(CHAR_DATA *ch, char *argument)
             return;
         }
         cnt = 0;
-        found = FALSE;
+        found = false;
         for (mprg = mprog; mprg; mprg = mprg->next)
         {
             if (++cnt == value)
             {
                 mptype = mprg->type;
-                found = TRUE;
+                found = true;
                 break;
             }
         }
@@ -7881,7 +7881,7 @@ void do_cleanroom(CHAR_DATA *ch, char *argument)
     {
         vnext = victim->next_in_room;
         if (IS_NPC(victim) && victim != ch && !IS_SET(victim->act, ACT_POLYMORPHED))
-            extract_char(victim, TRUE);
+            extract_char(victim, true);
     }
 
     for (obj = ch->in_room->first_content; obj; obj = obj_next)

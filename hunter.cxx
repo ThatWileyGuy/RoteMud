@@ -48,7 +48,7 @@ void do_plantbug(CHAR_DATA *ch, char *argument)
     BUG_DATA *bug;
     BUG_DATA *cbug;
     OBJ_DATA *obj;
-    bool checkbug = FALSE;
+    bool checkbug = false;
     int chance;
 
     if (IS_NPC(ch))
@@ -86,9 +86,9 @@ void do_plantbug(CHAR_DATA *ch, char *argument)
 
     for (obj = ch->last_carrying; obj; obj = obj->prev_content)
         if (obj->item_type == ITEM_BUG)
-            checkbug = TRUE;
+            checkbug = true;
 
-    if (checkbug == FALSE)
+    if (checkbug == false)
     {
         send_to_char("You don't have any bugs to plant.\n\r", ch);
         return;
@@ -179,7 +179,7 @@ void do_bind(CHAR_DATA *ch, char *argument)
     OBJ_DATA *tobj;
     int chance;
     CHAR_DATA *victim;
-    bool checkbinders = FALSE;
+    bool checkbinders = false;
 
     if (argument[0] == '\0')
     {
@@ -214,11 +214,11 @@ void do_bind(CHAR_DATA *ch, char *argument)
     for (obj = ch->last_carrying; obj; obj = obj->prev_content)
         if (obj->item_type == ITEM_BINDERS)
         {
-            checkbinders = TRUE;
+            checkbinders = true;
             break;
         }
 
-    if (checkbinders == FALSE)
+    if (checkbinders == false)
     {
         send_to_char("You don't have any binders to bind them with.\n\r", ch);
         return;
@@ -260,7 +260,7 @@ void do_bind(CHAR_DATA *ch, char *argument)
 void do_unbind(CHAR_DATA *ch, char *argument)
 {
     OBJ_DATA *obj;
-    bool checkbinders = FALSE;
+    bool checkbinders = false;
     char buf[MAX_STRING_LENGTH];
     CHAR_DATA *victim;
 
@@ -320,11 +320,11 @@ void do_unbind(CHAR_DATA *ch, char *argument)
     for (obj = victim->last_carrying; obj; obj = obj->prev_content)
         if (obj->item_type == ITEM_BINDERS)
         {
-            checkbinders = TRUE;
+            checkbinders = true;
             break;
         }
 
-    if (checkbinders == FALSE)
+    if (checkbinders == false)
     {
         bug("Unbind: no binders in victims inventory.");
         send_to_char("Something went wrong. get an imm.\n\r", ch);

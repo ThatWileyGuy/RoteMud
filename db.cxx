@@ -59,7 +59,7 @@ void init_supermob();
     if (!str_cmp(word, literal))                                                                                       \
     {                                                                                                                  \
         field = value;                                                                                                 \
-        fMatch = TRUE;                                                                                                 \
+        fMatch = true;                                                                                                 \
         break;                                                                                                         \
     }
 
@@ -521,7 +521,7 @@ void boot_db(bool fCopyOver)
     load_force_help();
     load_ship_prototypes();
 
-    fBootDb = TRUE;
+    fBootDb = true;
 
     nummobsloaded = 0;
     numobjsloaded = 0;
@@ -550,8 +550,8 @@ void boot_db(bool fCopyOver)
     cur_char = NULL;
     cur_obj = 0;
     cur_obj_serial = 0;
-    cur_char_died = FALSE;
-    cur_obj_extracted = FALSE;
+    cur_char_died = false;
+    cur_obj_extracted = false;
     cur_room = NULL;
     quitting_char = NULL;
     loading_char = NULL;
@@ -854,7 +854,7 @@ void boot_db(bool fCopyOver)
     {
         log_string("Fixing exits");
         fix_exits();
-        fBootDb = FALSE;
+        fBootDb = false;
         log_string("Initializing economy");
         initialize_economy();
         log_string("Loading buildlist");
@@ -892,7 +892,7 @@ void boot_db(bool fCopyOver)
         log_string("Making new blackmarket list.");
         make_random_marketlist();
 
-        MOBtrigger = TRUE;
+        MOBtrigger = true;
         // TODO copyover is dead
         /*
         if (fCopyOver)
@@ -1169,7 +1169,7 @@ void load_mobiles(AREA_DATA *tarea, FILE *fp)
             break;
 
         tmpBootDb = fBootDb;
-        fBootDb = FALSE;
+        fBootDb = false;
         if (get_mob_index(vnum))
         {
             if (tmpBootDb)
@@ -1184,12 +1184,12 @@ void load_mobiles(AREA_DATA *tarea, FILE *fp)
                 sprintf_s(buf, "Cleaning mobile: %d", vnum);
                 log_string_plus(buf, LOG_BUILD, sysdata.log_level);
                 clean_mob(pMobIndex);
-                oldmob = TRUE;
+                oldmob = true;
             }
         }
         else
         {
-            oldmob = FALSE;
+            oldmob = false;
             CREATE(pMobIndex, MOB_INDEX_DATA, 1);
         }
         fBootDb = tmpBootDb;
@@ -1381,7 +1381,7 @@ void load_objects(AREA_DATA *tarea, FILE *fp)
             break;
 
         tmpBootDb = fBootDb;
-        fBootDb = FALSE;
+        fBootDb = false;
         if (get_obj_index(vnum))
         {
             if (tmpBootDb)
@@ -1396,12 +1396,12 @@ void load_objects(AREA_DATA *tarea, FILE *fp)
                 sprintf_s(buf, "Cleaning object: %d", vnum);
                 log_string_plus(buf, LOG_BUILD, sysdata.log_level);
                 clean_obj(pObjIndex);
-                oldobj = TRUE;
+                oldobj = true;
             }
         }
         else
         {
-            oldobj = FALSE;
+            oldobj = false;
             CREATE(pObjIndex, OBJ_INDEX_DATA, 1);
         }
         fBootDb = tmpBootDb;
@@ -1532,7 +1532,7 @@ void load_resets(AREA_DATA *tarea, FILE *fp)
 {
     ROOM_INDEX_DATA *pRoomIndex = NULL;
     ROOM_INDEX_DATA *roomlist;
-    bool not01 = FALSE;
+    bool not01 = false;
     int count = 0;
 
     if (!tarea)
@@ -1632,7 +1632,7 @@ void load_resets(AREA_DATA *tarea, FILE *fp)
                     boot_log("%s: %s (%d) 'P': destination object %d doesn't exist.", __FUNCTION__, tarea->filename,
                              count, arg3);
                 if (extra > 1)
-                    not01 = TRUE;
+                    not01 = true;
             }
             if (!pRoomIndex)
                 bug("%s: Unable to add room reset - room not found.", __FUNCTION__);
@@ -1727,7 +1727,7 @@ void load_room_reset(ROOM_INDEX_DATA *room, FILE *fp)
     EXIT_DATA *pexit;
     char letter;
     int extra, arg1, arg2, arg3;
-    bool not01 = FALSE;
+    bool not01 = false;
     int count = 0;
 
     letter = fread_letter(fp);
@@ -1774,7 +1774,7 @@ void load_room_reset(ROOM_INDEX_DATA *room, FILE *fp)
             boot_log("%s: %s (%d) 'P': destination object %d doesn't exist.", __FUNCTION__, room->area->filename, count,
                      arg3);
         if (extra > 1)
-            not01 = TRUE;
+            not01 = true;
         break;
 
     case 'G':
@@ -1868,7 +1868,7 @@ void load_rooms(AREA_DATA *tarea, FILE *fp)
             break;
 
         tmpBootDb = fBootDb;
-        fBootDb = FALSE;
+        fBootDb = false;
         if (get_room_index(vnum) != NULL)
         {
             if (tmpBootDb)
@@ -1883,12 +1883,12 @@ void load_rooms(AREA_DATA *tarea, FILE *fp)
                 sprintf_s(buf, "Cleaning room: %d", vnum);
                 log_string_plus(buf, LOG_BUILD, sysdata.log_level);
                 clean_room(pRoomIndex);
-                oldroom = TRUE;
+                oldroom = true;
             }
         }
         else
         {
-            oldroom = FALSE;
+            oldroom = false;
             CREATE(pRoomIndex, ROOM_INDEX_DATA, 1);
             pRoomIndex->first_person = NULL;
             pRoomIndex->last_person = NULL;
@@ -2229,7 +2229,7 @@ void fix_exits(void)
         {
             bool fexit;
 
-            fexit = FALSE;
+            fexit = false;
             for (pexit = pRoomIndex->first_exit; pexit; pexit = pexit_next)
             {
                 pexit_next = pexit->next;
@@ -2244,7 +2244,7 @@ void fix_exits(void)
                     extract_exit(pRoomIndex, pexit);
                 }
                 else
-                    fexit = TRUE;
+                    fexit = true;
             }
             if (!fexit)
                 SET_BIT(pRoomIndex->room_flags, ROOM_NO_MOB);
@@ -3078,14 +3078,14 @@ int fread_number(FILE *fp)
 
     number = 0;
 
-    sign = FALSE;
+    sign = false;
     if (c == '+')
     {
         c = getc(fp);
     }
     else if (c == '-')
     {
-        sign = TRUE;
+        sign = true;
         c = getc(fp);
     }
 
@@ -3666,7 +3666,7 @@ char *show_tilde(const char *str)
 
 /*
  * Compare strings, case insensitive.
- * Return TRUE if different
+ * Return true if different
  *   (compatibility with historical functions).
  */
 bool str_cmp(const char *astr, const char *bstr)
@@ -3676,7 +3676,7 @@ bool str_cmp(const char *astr, const char *bstr)
         // bug( "Str_cmp: null astr." );
         if (bstr)
             // fprintf( stderr, "str_cmp: astr: (null)  bstr: %s\n", bstr );
-            return TRUE;
+            return true;
     }
 
     if (!bstr)
@@ -3684,21 +3684,21 @@ bool str_cmp(const char *astr, const char *bstr)
         // bug( "Str_cmp: null bstr." );
         if (astr)
             // fprintf( stderr, "str_cmp: astr: %s  bstr: (null)\n", astr );
-            return TRUE;
+            return true;
     }
 
     for (; *astr || *bstr; astr++, bstr++)
     {
         if (LOWER(*astr) != LOWER(*bstr))
-            return TRUE;
+            return true;
     }
 
-    return FALSE;
+    return false;
 }
 
 /*
  * Compare strings, case insensitive, for prefix matching.
- * Return TRUE if astr not a prefix of bstr
+ * Return true if astr not a prefix of bstr
  *   (compatibility with historical functions).
  */
 bool str_prefix(const char *astr, const char *bstr)
@@ -3706,27 +3706,27 @@ bool str_prefix(const char *astr, const char *bstr)
     if (!astr)
     {
         // bug( "Strn_cmp: null astr." );
-        return TRUE;
+        return true;
     }
 
     if (!bstr)
     {
         // bug( "Strn_cmp: null bstr." );
-        return TRUE;
+        return true;
     }
 
     for (; *astr; astr++, bstr++)
     {
         if (LOWER(*astr) != LOWER(*bstr))
-            return TRUE;
+            return true;
     }
 
-    return FALSE;
+    return false;
 }
 
 /*
  * Compare strings, case insensitive, for match anywhere.
- * Returns TRUE is astr not part of bstr.
+ * Returns true is astr not part of bstr.
  *   (compatibility with historical functions).
  */
 bool str_infix(const char *astr, const char *bstr)
@@ -3737,21 +3737,21 @@ bool str_infix(const char *astr, const char *bstr)
     char c0;
 
     if ((c0 = LOWER(astr[0])) == '\0')
-        return FALSE;
+        return false;
 
     sstr1 = strlen(astr);
     sstr2 = strlen(bstr);
 
     for (ichar = 0; ichar <= sstr2 - sstr1; ichar++)
         if (c0 == LOWER(bstr[ichar]) && !str_prefix(astr, bstr + ichar))
-            return FALSE;
+            return false;
 
-    return TRUE;
+    return true;
 }
 
 /*
  * Compare strings, case insensitive, for suffix matching.
- * Return TRUE if astr not a suffix of bstr
+ * Return true if astr not a suffix of bstr
  *   (compatibility with historical functions).
  */
 bool str_suffix(const char *astr, const char *bstr)
@@ -3762,9 +3762,9 @@ bool str_suffix(const char *astr, const char *bstr)
     sstr1 = strlen(astr);
     sstr2 = strlen(bstr);
     if (sstr1 <= sstr2 && !str_cmp(astr, bstr + sstr2 - sstr1))
-        return FALSE;
+        return false;
     else
-        return TRUE;
+        return true;
 }
 
 /*
@@ -3811,7 +3811,7 @@ char *strupper(const char *str)
 }
 
 /*
- * Returns TRUE or FALSE if a letter is a vowel			-Thoric
+ * Returns true or false if a letter is a vowel			-Thoric
  */
 bool isavowel(char letter)
 {
@@ -3819,9 +3819,9 @@ bool isavowel(char letter)
 
     c = tolower(letter);
     if (c == 'a' || c == 'e' || c == 'i' || c == 'o' || c == 'u')
-        return TRUE;
+        return true;
     else
-        return FALSE;
+        return false;
 }
 
 /*
@@ -4073,7 +4073,7 @@ void towizfile(const char *line, bool Border)
     char outline2[MAX_STRING_LENGTH];
     FILE *wfp;
     FILE *wwwfp;
-    bool SNIP = FALSE;
+    bool SNIP = false;
     outline[0] = '\0';
     outline2[0] = '\0';
     if (line && line[0] != '\0')
@@ -4083,7 +4083,7 @@ void towizfile(const char *line, bool Border)
             filler = 1;
         ofiller = filler;
         if (Border && filler % 2 == 0)
-            SNIP = TRUE;
+            SNIP = true;
         filler /= 2;
         if (SNIP)
             filler--;
@@ -4390,7 +4390,7 @@ MPROG_DATA *mprog_file_read(char *f, MPROG_DATA *mprg, MOB_INDEX_DATA *pMobIndex
     FILE *progfile;
     char letter;
     MPROG_DATA *mprg_next, *mprg2;
-    bool done = FALSE;
+    bool done = false;
 
     sprintf_s(MUDProgfile, "%s%s", PROG_DIR, f);
 
@@ -4441,7 +4441,7 @@ MPROG_DATA *mprog_file_read(char *f, MPROG_DATA *mprg, MOB_INDEX_DATA *pMobIndex
                 mprg2 = mprg_next;
                 break;
             case '|':
-                done = TRUE;
+                done = true;
                 break;
             default:
                 bug("in mudprog file syntax error.");
@@ -4516,7 +4516,7 @@ void mprog_read_programs(FILE *fp, MOB_INDEX_DATA *pMobIndex)
 {
     MPROG_DATA *mprg;
     char letter;
-    bool done = FALSE;
+    bool done = false;
 
     if ((letter = fread_letter(fp)) != '>')
     {
@@ -4547,7 +4547,7 @@ void mprog_read_programs(FILE *fp, MOB_INDEX_DATA *pMobIndex)
             case '|':
                 mprg->next = NULL;
                 fread_to_eol(fp);
-                done = TRUE;
+                done = true;
                 break;
             default:
                 bug("Load_mobiles: vnum %d bad MUDPROG.", pMobIndex->vnum);
@@ -4570,7 +4570,7 @@ void mprog_read_programs(FILE *fp, MOB_INDEX_DATA *pMobIndex)
             case '|':
                 mprg->next = NULL;
                 fread_to_eol(fp);
-                done = TRUE;
+                done = true;
                 break;
             default:
                 bug("Load_mobiles: vnum %d bad MUDPROG.", pMobIndex->vnum);
@@ -4600,7 +4600,7 @@ MPROG_DATA *oprog_file_read(char *f, MPROG_DATA *mprg, OBJ_INDEX_DATA *pObjIndex
     FILE *progfile;
     char letter;
     MPROG_DATA *mprg_next, *mprg2;
-    bool done = FALSE;
+    bool done = false;
 
     sprintf_s(MUDProgfile, "%s%s", PROG_DIR, f);
 
@@ -4651,7 +4651,7 @@ MPROG_DATA *oprog_file_read(char *f, MPROG_DATA *mprg, OBJ_INDEX_DATA *pObjIndex
                 mprg2 = mprg_next;
                 break;
             case '|':
-                done = TRUE;
+                done = true;
                 break;
             default:
                 bug("in objprog file syntax error.");
@@ -4726,7 +4726,7 @@ void oprog_read_programs(FILE *fp, OBJ_INDEX_DATA *pObjIndex)
 {
     MPROG_DATA *mprg;
     char letter;
-    bool done = FALSE;
+    bool done = false;
 
     if ((letter = fread_letter(fp)) != '>')
     {
@@ -4757,7 +4757,7 @@ void oprog_read_programs(FILE *fp, OBJ_INDEX_DATA *pObjIndex)
             case '|':
                 mprg->next = NULL;
                 fread_to_eol(fp);
-                done = TRUE;
+                done = true;
                 break;
             default:
                 bug("Load_objects: vnum %d bad OBJPROG.", pObjIndex->vnum);
@@ -4780,7 +4780,7 @@ void oprog_read_programs(FILE *fp, OBJ_INDEX_DATA *pObjIndex)
             case '|':
                 mprg->next = NULL;
                 fread_to_eol(fp);
-                done = TRUE;
+                done = true;
                 break;
             default:
                 bug("Load_objects: vnum %d bad OBJPROG.", pObjIndex->vnum);
@@ -4809,7 +4809,7 @@ MPROG_DATA *rprog_file_read(char *f, MPROG_DATA *mprg, ROOM_INDEX_DATA *RoomInde
     FILE *progfile;
     char letter;
     MPROG_DATA *mprg_next, *mprg2;
-    bool done = FALSE;
+    bool done = false;
 
     sprintf_s(MUDProgfile, "%s%s", PROG_DIR, f);
 
@@ -4860,7 +4860,7 @@ MPROG_DATA *rprog_file_read(char *f, MPROG_DATA *mprg, ROOM_INDEX_DATA *RoomInde
                 mprg2 = mprg_next;
                 break;
             case '|':
-                done = TRUE;
+                done = true;
                 break;
             default:
                 bug("in roomprog file syntax error.");
@@ -4935,7 +4935,7 @@ void rprog_read_programs(FILE *fp, ROOM_INDEX_DATA *pRoomIndex)
 {
     MPROG_DATA *mprg;
     char letter;
-    bool done = FALSE;
+    bool done = false;
 
     if ((letter = fread_letter(fp)) != '>')
     {
@@ -4966,7 +4966,7 @@ void rprog_read_programs(FILE *fp, ROOM_INDEX_DATA *pRoomIndex)
             case '|':
                 mprg->next = NULL;
                 fread_to_eol(fp);
-                done = TRUE;
+                done = true;
                 break;
             default:
                 bug("Load_rooms: vnum %d bad ROOMPROG.", pRoomIndex->vnum);
@@ -4989,7 +4989,7 @@ void rprog_read_programs(FILE *fp, ROOM_INDEX_DATA *pRoomIndex)
             case '|':
                 mprg->next = NULL;
                 fread_to_eol(fp);
-                done = TRUE;
+                done = true;
                 break;
             default:
                 bug("Load_rooms: vnum %d bad ROOMPROG.", pRoomIndex->vnum);
@@ -5030,7 +5030,7 @@ void delete_room(ROOM_INDEX_DATA *room)
             char_to_room(ch, limbo);
         }
         else
-            extract_char(ch, TRUE);
+            extract_char(ch, true);
     }
     while ((o = room->first_content) != NULL)
     {
@@ -5155,7 +5155,7 @@ void delete_mob(MOB_INDEX_DATA *mob)
     {
         ch_next = ch->next;
         if (ch->pIndexData == mob)
-            extract_char(ch, TRUE);
+            extract_char(ch, true);
     }
     while ((mp = mob->mudprogs) != NULL)
     {
@@ -5474,11 +5474,11 @@ EXIT_DATA *make_exit(ROOM_INDEX_DATA *pRoomIndex, ROOM_INDEX_DATA *to_room, sh_i
             pexit->rexit = texit;
         }
     }
-    broke = FALSE;
+    broke = false;
     for (texit = pRoomIndex->first_exit; texit; texit = texit->next)
         if (door < texit->vdir)
         {
-            broke = TRUE;
+            broke = true;
             break;
         }
     if (!pRoomIndex->first_exit)
@@ -5519,10 +5519,10 @@ void fix_area_exits(AREA_DATA *tarea)
         if ((pRoomIndex = get_room_index(rnum)) == NULL)
             continue;
 
-        fexit = FALSE;
+        fexit = false;
         for (pexit = pRoomIndex->first_exit; pexit; pexit = pexit->next)
         {
-            fexit = TRUE;
+            fexit = true;
             pexit->rvnum = pRoomIndex->vnum;
             if (pexit->vnum <= 0)
                 pexit->to_room = NULL;
@@ -5655,7 +5655,7 @@ void load_area_file(AREA_DATA *tarea, char *filename)
     if (tarea)
     {
         if (fBootDb)
-            sort_area(tarea, FALSE);
+            sort_area(tarea, false);
 
         fprintf(stderr, "%-14s: Rooms: %5d - %-5d Objs: %5d - %-5d Mobs: %5d - %d\n", tarea->filename,
                 tarea->low_r_vnum, tarea->hi_r_vnum, tarea->low_o_vnum, tarea->hi_o_vnum, tarea->low_m_vnum,
@@ -5680,7 +5680,7 @@ void load_buildlist(void)
     char word[81];
     int low, hi;
     int mlow, mhi, olow, ohi, rlow, rhi;
-    bool badfile = FALSE;
+    bool badfile = false;
     char temp;
 
     for (auto &entry : std::filesystem::directory_iterator(GOD_DIR))
@@ -5694,7 +5694,7 @@ void load_buildlist(void)
                 continue;
             }
             log_string(buf);
-            badfile = FALSE;
+            badfile = false;
             rlow = rhi = olow = ohi = mlow = mhi = 0;
             while (!feof(fp) && !ferror(fp))
             {
@@ -5714,7 +5714,7 @@ void load_buildlist(void)
                     if (low < LEVEL_AVATAR)
                     {
                         sprintf_s(buf, "%s: God file with level %d < %d", entry.path().filename(), low, LEVEL_AVATAR);
-                        badfile = TRUE;
+                        badfile = true;
                     }
                 }
                 if (!strcmp(word, "RoomRange"))
@@ -5771,7 +5771,7 @@ void load_buildlist(void)
                         "Mobs: %5d - %-5d\n",
                         pArea->filename, pArea->low_r_vnum, pArea->hi_r_vnum, pArea->low_o_vnum, pArea->hi_o_vnum,
                         pArea->low_m_vnum, pArea->hi_m_vnum);
-                sort_area(pArea, TRUE);
+                sort_area(pArea, true);
             }
         }
     }
@@ -5803,7 +5803,7 @@ void sort_area(AREA_DATA *pArea, bool proto)
         last_sort = last_asort;
     }
 
-    found = FALSE;
+    found = false;
     pArea->next_sort = NULL;
     pArea->prev_sort = NULL;
 
@@ -5813,7 +5813,7 @@ void sort_area(AREA_DATA *pArea, bool proto)
         pArea->next_sort = NULL;
         first_sort = pArea;
         last_sort = pArea;
-        found = TRUE;
+        found = true;
     }
     else
         for (area = first_sort; area; area = area->next_sort)
@@ -5826,7 +5826,7 @@ void sort_area(AREA_DATA *pArea, bool proto)
                 pArea->prev_sort = area->prev_sort;
                 pArea->next_sort = area;
                 area->prev_sort = pArea;
-                found = TRUE;
+                found = true;
                 break;
             }
 
@@ -5910,7 +5910,7 @@ void do_vnums(CHAR_DATA *ch, char *argument)
         if (arg2[0] != '\0')
             high = atoi(arg2);
     }
-    show_vnums(ch, low, high, TRUE, TRUE, " *", "");
+    show_vnums(ch, low, high, true, true, " *", "");
 }
 
 /*
@@ -5936,7 +5936,7 @@ void do_zones(CHAR_DATA *ch, char *argument)
             high = atoi(arg2);
     }
 
-    show_vnums(ch, low, high, FALSE, TRUE, "", " X");
+    show_vnums(ch, low, high, false, true, "", " X");
 }
 
 /*
@@ -5958,7 +5958,7 @@ void do_newzones(CHAR_DATA *ch, char *argument)
         if (arg2[0] != '\0')
             high = atoi(arg2);
     }
-    show_vnums(ch, low, high, TRUE, FALSE, "", " X");
+    show_vnums(ch, low, high, true, false, "", " X");
 }
 
 /*
@@ -6027,12 +6027,12 @@ void fread_sysdata(SYSTEM_DATA *sys, FILE *fp)
     for (;;)
     {
         word = feof(fp) ? "End" : fread_word(fp);
-        fMatch = FALSE;
+        fMatch = false;
 
         switch (UPPER(word[0]))
         {
         case '*':
-            fMatch = TRUE;
+            fMatch = true;
             fread_to_eol(fp);
             break;
         case 'A':
@@ -6138,13 +6138,13 @@ bool load_systemdata(SYSTEM_DATA *sys)
     FILE *fp;
     bool found;
 
-    found = FALSE;
+    found = false;
     sprintf_s(filename, "%ssysdata.dat", SYSTEM_DIR);
 
     if ((fp = fopen(filename, "r")) != NULL)
     {
 
-        found = TRUE;
+        found = true;
         for (;;)
         {
             char letter;
@@ -6237,10 +6237,10 @@ void do_check_vnums(CHAR_DATA *ch, char *argument)
     bool room, mob, obj, all, area_conflict;
     int low_range, high_range;
 
-    room = FALSE;
-    mob = FALSE;
-    obj = FALSE;
-    all = FALSE;
+    room = false;
+    mob = false;
+    obj = false;
+    all = false;
 
     argument = one_argument(argument, arg1);
     argument = one_argument(argument, arg2);
@@ -6252,16 +6252,16 @@ void do_check_vnums(CHAR_DATA *ch, char *argument)
     }
 
     if (!str_cmp(arg1, "room"))
-        room = TRUE;
+        room = true;
 
     else if (!str_cmp(arg1, "mob"))
-        mob = TRUE;
+        mob = true;
 
     else if (!str_cmp(arg1, "object"))
-        obj = TRUE;
+        obj = true;
 
     else if (!str_cmp(arg1, "all"))
-        all = TRUE;
+        all = true;
     else
     {
         send_to_char("Please specify room, mob, or object as your first argument.\n\r", ch);
@@ -6315,51 +6315,51 @@ void do_check_vnums(CHAR_DATA *ch, char *argument)
 
     for (pArea = first_asort; pArea; pArea = pArea->next_sort)
     {
-        area_conflict = FALSE;
+        area_conflict = false;
         if (IS_SET(pArea->status, AREA_DELETED))
             continue;
         else if (room)
         {
             if (low_range < pArea->low_r_vnum && pArea->low_r_vnum < high_range)
-                area_conflict = TRUE;
+                area_conflict = true;
 
             if (low_range < pArea->hi_r_vnum && pArea->hi_r_vnum < high_range)
-                area_conflict = TRUE;
+                area_conflict = true;
 
             if ((low_range >= pArea->low_r_vnum) && (low_range <= pArea->hi_r_vnum))
-                area_conflict = TRUE;
+                area_conflict = true;
 
             if ((high_range <= pArea->hi_r_vnum) && (high_range >= pArea->low_r_vnum))
-                area_conflict = TRUE;
+                area_conflict = true;
         }
 
         if (mob)
         {
             if (low_range < pArea->low_m_vnum && pArea->low_m_vnum < high_range)
-                area_conflict = TRUE;
+                area_conflict = true;
 
             if (low_range < pArea->hi_m_vnum && pArea->hi_m_vnum < high_range)
-                area_conflict = TRUE;
+                area_conflict = true;
             if ((low_range >= pArea->low_m_vnum) && (low_range <= pArea->hi_m_vnum))
-                area_conflict = TRUE;
+                area_conflict = true;
 
             if ((high_range <= pArea->hi_m_vnum) && (high_range >= pArea->low_m_vnum))
-                area_conflict = TRUE;
+                area_conflict = true;
         }
 
         if (obj)
         {
             if (low_range < pArea->low_o_vnum && pArea->low_o_vnum < high_range)
-                area_conflict = TRUE;
+                area_conflict = true;
 
             if (low_range < pArea->hi_o_vnum && pArea->hi_o_vnum < high_range)
-                area_conflict = TRUE;
+                area_conflict = true;
 
             if ((low_range >= pArea->low_o_vnum) && (low_range <= pArea->hi_o_vnum))
-                area_conflict = TRUE;
+                area_conflict = true;
 
             if ((high_range <= pArea->hi_o_vnum) && (high_range >= pArea->low_o_vnum))
-                area_conflict = TRUE;
+                area_conflict = true;
         }
 
         if (area_conflict)
@@ -6378,51 +6378,51 @@ void do_check_vnums(CHAR_DATA *ch, char *argument)
     }
     for (pArea = first_bsort; pArea; pArea = pArea->next_sort)
     {
-        area_conflict = FALSE;
+        area_conflict = false;
         if (IS_SET(pArea->status, AREA_DELETED))
             continue;
         else if (room)
         {
             if (low_range < pArea->low_r_vnum && pArea->low_r_vnum < high_range)
-                area_conflict = TRUE;
+                area_conflict = true;
 
             if (low_range < pArea->hi_r_vnum && pArea->hi_r_vnum < high_range)
-                area_conflict = TRUE;
+                area_conflict = true;
 
             if ((low_range >= pArea->low_r_vnum) && (low_range <= pArea->hi_r_vnum))
-                area_conflict = TRUE;
+                area_conflict = true;
 
             if ((high_range <= pArea->hi_r_vnum) && (high_range >= pArea->low_r_vnum))
-                area_conflict = TRUE;
+                area_conflict = true;
         }
 
         if (mob)
         {
             if (low_range < pArea->low_m_vnum && pArea->low_m_vnum < high_range)
-                area_conflict = TRUE;
+                area_conflict = true;
 
             if (low_range < pArea->hi_m_vnum && pArea->hi_m_vnum < high_range)
-                area_conflict = TRUE;
+                area_conflict = true;
             if ((low_range >= pArea->low_m_vnum) && (low_range <= pArea->hi_m_vnum))
-                area_conflict = TRUE;
+                area_conflict = true;
 
             if ((high_range <= pArea->hi_m_vnum) && (high_range >= pArea->low_m_vnum))
-                area_conflict = TRUE;
+                area_conflict = true;
         }
 
         if (obj)
         {
             if (low_range < pArea->low_o_vnum && pArea->low_o_vnum < high_range)
-                area_conflict = TRUE;
+                area_conflict = true;
 
             if (low_range < pArea->hi_o_vnum && pArea->hi_o_vnum < high_range)
-                area_conflict = TRUE;
+                area_conflict = true;
 
             if ((low_range >= pArea->low_o_vnum) && (low_range <= pArea->hi_o_vnum))
-                area_conflict = TRUE;
+                area_conflict = true;
 
             if ((high_range <= pArea->hi_o_vnum) && (high_range >= pArea->low_o_vnum))
-                area_conflict = TRUE;
+                area_conflict = true;
         }
 
         if (area_conflict)
@@ -6443,24 +6443,24 @@ void do_check_vnums(CHAR_DATA *ch, char *argument)
     /*
         for ( pArea = first_asort; pArea; pArea = pArea->next_sort )
         {
-            area_conflict = FALSE;
+            area_conflict = false;
         if ( IS_SET( pArea->status, AREA_DELETED ) )
            continue;
         else
         if (room)
           if((pArea->low_r_vnum >= low_range)
           && (pArea->hi_r_vnum <= high_range))
-            area_conflict = TRUE;
+            area_conflict = true;
 
         if (mob)
           if((pArea->low_m_vnum >= low_range)
           && (pArea->hi_m_vnum <= high_range))
-            area_conflict = TRUE;
+            area_conflict = true;
 
         if (obj)
           if((pArea->low_o_vnum >= low_range)
           && (pArea->hi_o_vnum <= high_range))
-            area_conflict = TRUE;
+            area_conflict = true;
 
         if (area_conflict)
           ch_printf(ch, "Conflict:%-15s| Rooms: %5d - %-5d"
@@ -6473,24 +6473,24 @@ void do_check_vnums(CHAR_DATA *ch, char *argument)
 
         for ( pArea = first_bsort; pArea; pArea = pArea->next_sort )
         {
-            area_conflict = FALSE;
+            area_conflict = false;
         if ( IS_SET( pArea->status, AREA_DELETED ) )
            continue;
         else
         if (room)
           if((pArea->low_r_vnum >= low_range)
           && (pArea->hi_r_vnum <= high_range))
-            area_conflict = TRUE;
+            area_conflict = true;
 
         if (mob)
           if((pArea->low_m_vnum >= low_range)
           && (pArea->hi_m_vnum <= high_range))
-            area_conflict = TRUE;
+            area_conflict = true;
 
         if (obj)
           if((pArea->low_o_vnum >= low_range)
           && (pArea->hi_o_vnum <= high_range))
-            area_conflict = TRUE;
+            area_conflict = true;
 
         if (area_conflict)
           sprintf_s(ch, "Conflict:%-15s| Rooms: %5d - %-5d"
@@ -6584,14 +6584,14 @@ float fread_float(FILE *fp)
 
     number = 0;
 
-    sign = FALSE;
-    decimal = FALSE;
+    sign = false;
+    decimal = false;
 
     if (c == '+')
         c = getc(fp);
     else if (c == '-')
     {
-        sign = TRUE;
+        sign = true;
         c = getc(fp);
     }
 
@@ -6609,7 +6609,7 @@ float fread_float(FILE *fp)
         {
             if (c == '.')
             {
-                decimal = TRUE;
+                decimal = true;
                 c = getc(fp);
             }
 

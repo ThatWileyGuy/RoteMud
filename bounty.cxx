@@ -81,8 +81,8 @@ bool is_disintegration(CHAR_DATA *victim)
 
     for (bounty = first_disintegration; bounty; bounty = bounty->next)
         if (!str_cmp(victim->name, bounty->target))
-            return TRUE;
-    return FALSE;
+            return true;
+    return false;
 }
 
 BOUNTY_DATA *get_disintegration(char *target)
@@ -177,13 +177,13 @@ void disintegration(CHAR_DATA *ch, CHAR_DATA *victim, long amount)
     bool found;
     char buf[MAX_STRING_LENGTH];
 
-    found = FALSE;
+    found = false;
 
     for (bounty = first_disintegration; bounty; bounty = bounty->next)
     {
         if (!str_cmp(bounty->target, victim->name))
         {
-            found = TRUE;
+            found = true;
             break;
         }
     }

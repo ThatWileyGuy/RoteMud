@@ -160,8 +160,8 @@ int main(int argc, char **argv)
     num_descriptors = 0;
     first_descriptor = NULL;
     last_descriptor = NULL;
-    sysdata.NO_NAME_RESOLVING = TRUE;
-    sysdata.WAIT_FOR_AUTH = TRUE; // TODO does this go away along with ident?
+    sysdata.NO_NAME_RESOLVING = true;
+    sysdata.WAIT_FOR_AUTH = true; // TODO does this go away along with ident?
 
     /*
      * Init time.
@@ -224,11 +224,11 @@ int main(int argc, char **argv)
         /*
         if (argv[2] && argv[2][0])
         {
-            fCopyOver = TRUE;
+            fCopyOver = true;
             control = atoi(argv[3]);
         }
         else
-            fCopyOver = FALSE;
+            fCopyOver = false;
         */
     }
 
@@ -384,7 +384,7 @@ void refresh_output_io(DESCRIPTOR_DATA *desc)
             }
             else
             {
-                flush_buffer(desc, FALSE);
+                flush_buffer(desc, false);
             }
         }
     }
@@ -503,7 +503,7 @@ void game_loop()
             }
             else
             {
-                d->fcommand = FALSE;
+                d->fcommand = false;
 
                 if (d->character && d->character->wait > 0)
                 {
@@ -514,7 +514,7 @@ void game_loop()
                 read_from_buffer(d);
                 if (d->incomm[0] != '\0')
                 {
-                    d->fcommand = TRUE;
+                    d->fcommand = true;
                     stop_idling(d->character);
 
                     strcpy_s(cmdline, d->incomm);
@@ -621,13 +621,13 @@ void close_socket(DESCRIPTOR_DATA *dclose, bool force)
 {
     CHAR_DATA *ch = nullptr;
     DESCRIPTOR_DATA *d = nullptr;
-    bool DoNotUnlink = FALSE;
+    bool DoNotUnlink = false;
 
     dclose->connected = CON_DISCONNECTING;
 
     /* flush outbuf */
     if (!force && !dclose->output_buffer.empty())
-        flush_buffer(dclose, FALSE);
+        flush_buffer(dclose, false);
 
     /* say bye to whoever's snooping this descriptor */
     if (dclose->snoop_by)
@@ -675,7 +675,7 @@ void close_socket(DESCRIPTOR_DATA *dclose, bool force)
         if (!dclose->prev)
         {
             bug("Close_socket: %s desc:%p could not be found!.", ch ? ch->name : dclose->host, dclose);
-            DoNotUnlink = TRUE;
+            DoNotUnlink = true;
         }
     }
 
@@ -716,7 +716,7 @@ void handle_descriptor_error(DESCRIPTOR_DATA *d, const boost::system::error_code
 {
     if (d->character && (d->connected == CON_PLAYING || d->connected == CON_EDITING))
         save_char_obj(d->character);
-    close_socket(d, TRUE);
+    close_socket(d, true);
 }
 
 void handle_descriptor_read(DESCRIPTOR_DATA *d, size_t read)
@@ -1038,7 +1038,7 @@ void write_to_buffer(DESCRIPTOR_DATA *d, std::string_view string)
         /* empty buffer */
         d->output_buffer.erase(d->output_buffer.begin(), d->output_buffer.end());
         bug("Buffer overflow. Closing (%s).", d->character ? d->character->name : "???");
-        close_socket(d, TRUE);
+        close_socket(d, true);
         return;
     }
 
@@ -1149,13 +1149,13 @@ void nanny(DESCRIPTOR_DATA *d, char *argument)
 
     default:
         bug("Nanny: bad d->connected %d.", d->connected);
-        close_socket(d, TRUE);
+        close_socket(d, true);
         return;
 
     case CON_GET_NAME:
         if (argument[0] == '\0')
         {
-            close_socket(d, FALSE);
+            close_socket(d, false);
             return;
         }
 
@@ -1172,7 +1172,7 @@ void nanny(DESCRIPTOR_DATA *d, char *argument)
             {
                 /* New player */
                 /* Don't allow new players if DENY_NEW_PLAYERS is true */
-                if (sysdata.DENY_NEW_PLAYERS == TRUE)
+                if (sysdata.DENY_NEW_PLAYERS == true)
                 {
                     sprintf_s(buf, "The mud is currently preparing for a reboot.\n\r");
                     write_to_buffer(d, buf, 0);
@@ -1180,7 +1180,7 @@ void nanny(DESCRIPTOR_DATA *d, char *argument)
                     write_to_buffer(d, buf, 0);
                     sprintf_s(buf, "Please try again in a few minutes.\n\r");
                     write_to_buffer(d, buf, 0);
-                    close_socket(d, FALSE);
+                    close_socket(d, false);
                 }
                 sprintf_s(buf, "\n\rChoosing a name is one of the most important parts of this game...\n\r"
                                "Make sure to pick a name appropriate to the character you are going\n\r"
@@ -1199,19 +1199,19 @@ void nanny(DESCRIPTOR_DATA *d, char *argument)
             }
         }
 
-        if (check_playing(d, argument, FALSE) == BERR)
+        if (check_playing(d, argument, false) == BERR)
         {
             write_to_buffer(d, "Name: ", 0);
             return;
         }
 
-        fOld = load_char_obj(d, argument, TRUE);
+        fOld = load_char_obj(d, argument, true);
         if (!d->character)
         {
             sprintf_s(log_buf, "Bad player file %s@%s.", argument, d->host);
             log_string(log_buf);
             write_to_buffer(d, "Your playerfile is corrupt...Please notify the Admin.\n\r", 0);
-            close_socket(d, FALSE);
+            close_socket(d, false);
             return;
         }
         ch = d->character;
@@ -1221,7 +1221,7 @@ void nanny(DESCRIPTOR_DATA *d, char *argument)
             if ((!str_prefix(pban->name, d->host) || !str_suffix(pban->name, d->host)) && pban->level >= ch->top_level)
             {
                 write_to_buffer(d, "Your site has been banned from this Mud.\n\r", 0);
-                close_socket(d, FALSE);
+                close_socket(d, false);
                 return;
             }
         }
@@ -1236,17 +1236,17 @@ void nanny(DESCRIPTOR_DATA *d, char *argument)
                 return;
             }
             write_to_buffer(d, "You are denied access.\n\r", 0);
-            close_socket(d, FALSE);
+            close_socket(d, false);
             return;
         }
 
-        chk = check_reconnect(d, argument, FALSE);
+        chk = check_reconnect(d, argument, false);
         if (chk == BERR)
             return;
 
         if (chk)
         {
-            fOld = TRUE;
+            fOld = true;
         }
         else
         {
@@ -1255,7 +1255,7 @@ void nanny(DESCRIPTOR_DATA *d, char *argument)
             {
                 write_to_buffer(d, "The game is wizlocked.  Only immortals can connect now.\n\r", 0);
                 write_to_buffer(d, "Please try back later.\n\r", 0);
-                close_socket(d, FALSE);
+                close_socket(d, false);
                 return;
             }
         }
@@ -1295,36 +1295,36 @@ void nanny(DESCRIPTOR_DATA *d, char *argument)
             d->character->desc = NULL;
             sprintf_s(buf, "%s@%s: Invalid password.", ch->name, d->host);
             log_string(buf);
-            close_socket(d, FALSE);
+            close_socket(d, false);
             return;
         }
 
         write_to_buffer(d, echo_on_str, 0);
 
-        if (check_playing(d, ch->name, TRUE))
+        if (check_playing(d, ch->name, true))
             return;
 
-        chk = check_reconnect(d, ch->name, TRUE);
+        chk = check_reconnect(d, ch->name, true);
         if (chk == BERR)
         {
             if (d->character && d->character->desc)
                 d->character->desc = NULL;
-            close_socket(d, FALSE);
+            close_socket(d, false);
             return;
         }
-        if (chk == TRUE)
+        if (chk == true)
             return;
 
         if (check_multi(d, ch->name))
         {
-            close_socket(d, FALSE);
+            close_socket(d, false);
             return;
         }
 
         sprintf_s(buf, ch->name);
         d->character->desc = NULL;
         free_char(d->character);
-        fOld = load_char_obj(d, buf, FALSE);
+        fOld = load_char_obj(d, buf, false);
         ch = d->character;
         sprintf_s(log_buf, "%s@%s(%s) has connected.", ch->name, d->host, d->user);
         if (ch->top_level < LEVEL_DEMI)
@@ -1911,7 +1911,7 @@ void nanny(DESCRIPTOR_DATA *d, char *argument)
 
             case CON_WAIT_3:
             write_to_buffer( d, "Sorry... try again later.\n\r", 0 );
-            close_socket( d, FALSE );
+            close_socket( d, false );
             return;
             break;
 
@@ -2177,7 +2177,7 @@ void nanny(DESCRIPTOR_DATA *d, char *argument)
                 for (iNest = 0; iNest < MAX_NEST; iNest++)
                     rgObjNest[iNest] = NULL;
 
-                found = TRUE;
+                found = true;
                 for (;;)
                 {
                     char letter;
@@ -2268,16 +2268,16 @@ bool check_parse_name(char *name)
      */
     if (is_name(name, "all auto someone immortal self god supreme demigod dog guard cityguard cat cornholio spock "
                       "hicaine hithoric death ass fuck shit piss crap quit public phines"))
-        return FALSE;
+        return false;
 
     /*
      * Length restrictions.
      */
     if (strlen(name) < 3)
-        return FALSE;
+        return false;
 
     if (strlen(name) > 12)
-        return FALSE;
+        return false;
 
     /*
      * Alphanumerics only.
@@ -2287,17 +2287,17 @@ bool check_parse_name(char *name)
         char *pc;
         bool fIll;
 
-        fIll = TRUE;
+        fIll = true;
         for (pc = name; *pc != '\0'; pc++)
         {
             if (!isalpha(*pc))
-                return FALSE;
+                return false;
             if (LOWER(*pc) != 'i' && LOWER(*pc) != 'l')
-                fIll = FALSE;
+                fIll = false;
         }
 
         if (fIll)
-            return FALSE;
+            return false;
     }
 
     /*
@@ -2306,7 +2306,7 @@ bool check_parse_name(char *name)
      * would go in...
      */
 
-    return TRUE;
+    return true;
 }
 
 /*
@@ -2333,7 +2333,7 @@ bool check_reconnect(DESCRIPTOR_DATA *d, char *name, bool fConn)
                 }
                 return BERR;
             }
-            if (fConn == FALSE)
+            if (fConn == false)
             {
                 DISPOSE(d->character->pcdata->pwd);
                 d->character->pcdata->pwd = str_dup(ch->pcdata->pwd);
@@ -2356,11 +2356,11 @@ bool check_reconnect(DESCRIPTOR_DATA *d, char *name, bool fConn)
                 */
                 d->connected = CON_PLAYING;
             }
-            return TRUE;
+            return true;
         }
     }
 
-    return FALSE;
+    return false;
 }
 
 /*
@@ -2383,32 +2383,32 @@ bool check_multi(DESCRIPTOR_DATA *d, char *name)
 
             if (get_trust(d->character) >= LEVEL_SUPREME ||
                 get_trust(dold->original ? dold->original : dold->character) >= LEVEL_SUPREME)
-                return FALSE;
+                return false;
             for (iloop = 0; iloop < 11; iloop++)
             {
                 if (ok[iloop] != d->host[iloop])
                     break;
             }
             if (iloop >= 10)
-                return FALSE;
+                return false;
             for (iloop = 0; iloop < 11; iloop++)
             {
                 if (ok2[iloop] != d->host[iloop])
                     break;
             }
             if (iloop >= 10)
-                return FALSE;
+                return false;
             write_to_buffer(d, "Sorry multi-playing is not allowed ... have you other character quit first.\n\r", 0);
             sprintf_s(log_buf, "%s attempting to multiplay with %s.",
                       dold->original ? dold->original->name : dold->character->name, d->character->name);
             log_string_plus(log_buf, LOG_COMM, sysdata.log_level);
             d->character = NULL;
             free_char(d->character);
-            return TRUE;
+            return true;
         }
     }
 
-    return FALSE;
+    return false;
 }
 
 bool check_playing(DESCRIPTOR_DATA *d, char *name, bool kick)
@@ -2433,10 +2433,10 @@ bool check_playing(DESCRIPTOR_DATA *d, char *name, bool kick)
                 return BERR;
             }
             if (!kick)
-                return TRUE;
+                return true;
             write_to_buffer(d, "Already playing... Kicking off old connection.\n\r", 0);
             write_to_buffer(dold, "Kicking off old connection... bye!\n\r", 0);
-            close_socket(dold, FALSE);
+            close_socket(dold, false);
             /* clear descriptor pointer to get rid of bug message in log */
             d->character->desc = NULL;
             free_char(d->character);
@@ -2455,11 +2455,11 @@ bool check_playing(DESCRIPTOR_DATA *d, char *name, bool kick)
                       to_channel( log_buf, CHANNEL_MONITOR, "Monitor", ch->top_level );
             */
             d->connected = cstate;
-            return TRUE;
+            return true;
         }
     }
 
-    return FALSE;
+    return false;
 }
 
 void stop_idling(CHAR_DATA *ch)
@@ -2785,7 +2785,7 @@ void act(sh_int AType, const char *format, CHAR_DATA *ch, const void *arg1, cons
             mprog_act_trigger(txt, to, ch, (OBJ_DATA *)arg1, (void *)arg2);
         }
     }
-    MOBtrigger = TRUE;
+    MOBtrigger = true;
     return;
 }
 
@@ -3184,7 +3184,7 @@ void pager_output(DESCRIPTOR_DATA *d)
     case 'q':
         d->pagetop = 0;
         d->pagepoint = NULL;
-        flush_buffer(d, TRUE);
+        flush_buffer(d, true);
         DISPOSE(d->pagebuf);
         d->pagesize = MAX_STRING_LENGTH;
         return;
@@ -3214,7 +3214,7 @@ void pager_output(DESCRIPTOR_DATA *d)
     {
         d->pagetop = 0;
         d->pagepoint = NULL;
-        flush_buffer(d, TRUE);
+        flush_buffer(d, true);
         DISPOSE(d->pagebuf);
         d->pagesize = MAX_STRING_LENGTH;
         return;
@@ -3302,7 +3302,7 @@ void do_copyover(CHAR_DATA* ch, char* argument)
         {
             write_to_descriptor(d, "\n\rSorry, we are rebooting."
                 " Come back in a few minutes.\n\r", 0);
-            close_socket(d, FALSE); // throw'em out
+            close_socket(d, false); // throw'em out
         }
         else
         {
@@ -3398,12 +3398,12 @@ void copyover_recover()
 
         // Now, find the pfile
 
-        fOld = load_char_obj(d, name, FALSE);
+        fOld = load_char_obj(d, name, false);
 
         if (!fOld) // Player file not found?!
         {
             write_to_descriptor(desc, "\n\rSomehow, your character was lost in the copyover sorry.\n\r", 0);
-            close_socket(d, FALSE);
+            close_socket(d, false);
         }
         else // ok!
         {

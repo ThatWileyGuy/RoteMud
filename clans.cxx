@@ -208,7 +208,7 @@ void save_clan(CLAN_DATA *clan)
     if (!str_cmp(word, literal))                                                                                       \
     {                                                                                                                  \
         field = value;                                                                                                 \
-        fMatch = TRUE;                                                                                                 \
+        fMatch = true;                                                                                                 \
         break;                                                                                                         \
     }
 
@@ -221,12 +221,12 @@ void fread_clan(CLAN_DATA *clan, FILE *fp)
     for (;;)
     {
         word = feof(fp) ? "End" : fread_word(fp);
-        fMatch = FALSE;
+        fMatch = false;
 
         switch (UPPER(word[0]))
         {
         case '*':
-            fMatch = TRUE;
+            fMatch = true;
             fread_to_eol(fp);
             break;
 
@@ -342,13 +342,13 @@ bool load_clan_file(const char *clanfile)
     clan->first_subclan = NULL;
     clan->mainclan = NULL;
 
-    found = FALSE;
+    found = false;
     sprintf_s(filename, "%s%s", CLAN_DIR, clanfile);
 
     if ((fp = fopen(filename, "r")) != NULL)
     {
 
-        found = TRUE;
+        found = true;
         for (;;)
         {
             char letter;
@@ -411,7 +411,7 @@ bool load_clan_file(const char *clanfile)
             for (iNest = 0; iNest < MAX_NEST; iNest++)
                 rgObjNest[iNest] = NULL;
 
-            found = TRUE;
+            found = true;
             for (;;)
             {
                 char letter;
@@ -1078,7 +1078,7 @@ void do_makeclan(CHAR_DATA *ch, char *argument)
         return;
     }
 
-    found = FALSE;
+    found = false;
     sprintf_s(filename, "%s%s", CLAN_DIR, strlower(argument));
 
     CREATE(clan, CLAN_DATA, 1);
@@ -1398,7 +1398,7 @@ void do_shove( CHAR_DATA *ch, char *argument )
     }
 
     victim->position = POS_SHOVE;
-    nogo = FALSE;
+    nogo = false;
 
     if ( arg2[0] == '\0' )
     {
@@ -1406,12 +1406,12 @@ void do_shove( CHAR_DATA *ch, char *argument )
     return;
     }
     else if((pexit = get_exit(ch->in_room, (exit_dir = get_dir( arg2 )))) == NULL)
-       nogo = TRUE;
+       nogo = true;
     else
     if ( IS_SET(pexit->exit_info, EX_CLOSED)
     && (!IS_AFFECTED(victim, AFF_PASS_DOOR)
     ||   IS_SET(pexit->exit_info, EX_NOPASSDOOR)) )
-      nogo = TRUE;
+      nogo = true;
     if ( nogo )
     {
       send_to_char( "There's no exit in that direction.\n\r", ch );
@@ -1519,12 +1519,12 @@ void do_drag(CHAR_DATA *ch, char *argument)
 
     temp = victim->position;
 
-    nogo = FALSE;
+    nogo = false;
     if ((pexit = get_exit(ch->in_room, exit_dir)) == NULL)
-        nogo = TRUE;
+        nogo = true;
     else if (IS_SET(pexit->exit_info, EX_CLOSED) &&
              (!IS_AFFECTED(victim, AFF_PASS_DOOR) || IS_SET(pexit->exit_info, EX_NOPASSDOOR)))
-        nogo = TRUE;
+        nogo = true;
     if (nogo)
     {
         send_to_char("There's no exit in that direction.\n\r", ch);

@@ -150,9 +150,9 @@ int get_cost(CHAR_DATA *ch, CHAR_DATA *keeper, OBJ_DATA *obj, bool fBuy)
         return 0;
 
     if (ch->gold > (ch->top_level * ch->top_level * 1000))
-        richcustomer = TRUE;
+        richcustomer = true;
     else
-        richcustomer = FALSE;
+        richcustomer = false;
 
     if (fBuy)
     {
@@ -206,13 +206,13 @@ int get_repaircost(CHAR_DATA *keeper, OBJ_DATA *obj)
         return 0;
 
     cost = 0;
-    found = FALSE;
+    found = false;
     for (itype = 0; itype < MAX_FIX; itype++)
     {
         if (obj->item_type == rShop->fix_type[itype])
         {
             cost = (int)(obj->cost * rShop->profit_fix / 1000);
-            found = TRUE;
+            found = true;
             break;
         }
     }
@@ -273,19 +273,19 @@ void do_buy(CHAR_DATA *ch, char *argument)
         ROOM_INDEX_DATA *in_room;
 
         if (argument[0] == '\0')
-            debit = FALSE;
+            debit = false;
         else if (!str_cmp("atm", argument) || !str_cmp("debit", argument))
         {
-            bool has_card = FALSE;
+            bool has_card = false;
 
             for (obj = ch->last_carrying; obj; obj = obj->prev_content)
             {
                 if (obj->item_type == ITEM_DEBIT_CARD)
-                    has_card = TRUE;
+                    has_card = true;
             }
 
-            if (has_card == TRUE)
-                debit = TRUE;
+            if (has_card == true)
+                debit = true;
             else
             {
                 send_to_char("You don't even have your card with you!\n\r", ch);
@@ -315,19 +315,19 @@ void do_buy(CHAR_DATA *ch, char *argument)
             return;
         }
 
-        if ((ch->gold < 10 * pet->top_level * pet->top_level) && debit == FALSE)
+        if ((ch->gold < 10 * pet->top_level * pet->top_level) && debit == false)
         {
             send_to_char("You can't afford it.\n\r", ch);
             return;
         }
-        else if ((ch->pcdata->bank < 10 * pet->top_level * pet->top_level) && debit == TRUE)
+        else if ((ch->pcdata->bank < 10 * pet->top_level * pet->top_level) && debit == true)
         {
             send_to_char("You dont have enough money in your bank account for it.\n\r", ch);
             return;
         }
 
         maxgold = 10 * pet->top_level * pet->top_level;
-        if (debit == FALSE)
+        if (debit == false)
             ch->gold -= maxgold; /* this was already here, btw */
         else
             ch->pcdata->bank -= maxgold;
@@ -383,19 +383,19 @@ void do_buy(CHAR_DATA *ch, char *argument)
         }
 
         if (argument[0] == '\0')
-            debit = FALSE;
+            debit = false;
         else if (!str_cmp("atm", argument) || !str_cmp("debit", argument))
         {
-            bool has_card = FALSE;
+            bool has_card = false;
 
             for (obj = ch->last_carrying; obj; obj = obj->prev_content)
             {
                 if (obj->item_type == ITEM_DEBIT_CARD)
-                    has_card = TRUE;
+                    has_card = true;
             }
 
-            if (has_card == TRUE)
-                debit = TRUE;
+            if (has_card == true)
+                debit = true;
             else
             {
                 send_to_char("You don't even have your card with you!\n\r", ch);
@@ -408,7 +408,7 @@ void do_buy(CHAR_DATA *ch, char *argument)
         if (!obj && arg[0] == '#')
         {
             int onum, oref;
-            bool ofound = FALSE;
+            bool ofound = false;
 
             onum = 0;
             oref = atoi(arg + 1);
@@ -418,7 +418,7 @@ void do_buy(CHAR_DATA *ch, char *argument)
                     onum++;
                 if (onum == oref)
                 {
-                    ofound = TRUE;
+                    ofound = true;
                     break;
                 }
                 else if (onum > oref)
@@ -429,7 +429,7 @@ void do_buy(CHAR_DATA *ch, char *argument)
         }
         if (keeper->home != NULL && obj->cost > 0)
             cost = obj->cost;
-        cost = (get_cost(ch, keeper, obj, TRUE) * noi);
+        cost = (get_cost(ch, keeper, obj, true) * noi);
 
         if (!IS_NPC(ch) && ch->pcdata->learned[gsn_bargain] > 0 && ch->pcdata->learned[gsn_bargain] > number_percent())
         {
@@ -457,14 +457,14 @@ void do_buy(CHAR_DATA *ch, char *argument)
             return;
         }
 
-        if (ch->gold < cost && debit == FALSE)
+        if (ch->gold < cost && debit == false)
         {
             act(AT_TELL, "$n tells you 'You can't afford to buy $p.'", keeper, obj, ch, TO_VICT);
             ch->reply = keeper;
             return;
         }
 
-        if (ch->pcdata->bank < cost && debit == TRUE)
+        if (ch->pcdata->bank < cost && debit == true)
         {
             send_to_char("You are almost slide your card through, but you remember you don't have enough money!\n\r",
                          ch);
@@ -507,9 +507,9 @@ void do_buy(CHAR_DATA *ch, char *argument)
             act(AT_ACTION, "$N puts them into a bag and hands it to you.", ch, NULL, keeper, TO_CHAR);
         }
 
-        if (debit == FALSE)
+        if (debit == false)
             ch->gold -= cost; /* this line was already here, btw */
-        else if (debit == TRUE)
+        else if (debit == true)
             ch->pcdata->bank -= cost;
         keeper->gold += cost;
 
@@ -572,14 +572,14 @@ void do_list(CHAR_DATA *ch, char *argument)
             return;
         }
 
-        found = FALSE;
+        found = false;
         for (pet = pRoomIndexNext->first_person; pet; pet = pet->next_in_room)
         {
             if (IS_SET(pet->act, ACT_PET) && IS_NPC(pet))
             {
                 if (!found)
                 {
-                    found = TRUE;
+                    found = true;
                     send_to_char("Pets for sale:\n\r", ch);
                 }
                 ch_printf(ch, "[%2d] %8d - %s\n\r", pet->top_level, 10 * pet->top_level * pet->top_level,
@@ -604,19 +604,19 @@ void do_list(CHAR_DATA *ch, char *argument)
         if ((keeper = find_keeper(ch)) == NULL)
             return;
 
-        found = FALSE;
+        found = false;
         for (obj = keeper->last_carrying; obj; obj = obj->prev_content)
         {
             if (obj->wear_loc == WEAR_NONE && can_see_obj(ch, obj))
             {
                 oref++;
-                if ((cost = get_cost(ch, keeper, obj, TRUE)) > 0 && (arg[0] == '\0' || nifty_is_name(arg, obj->name)))
+                if ((cost = get_cost(ch, keeper, obj, true)) > 0 && (arg[0] == '\0' || nifty_is_name(arg, obj->name)))
                 {
                     if (keeper->home != NULL)
                         cost = obj->cost;
                     if (!found)
                     {
-                        found = TRUE;
+                        found = true;
                         ch_printf(ch, "%s[Price] {ref} Item\n\r", color_str(AT_LIST, ch));
                     }
                     ch_printf(ch, "%s[%5d] {%3d} %s%s%s.\n\r", color_str(AT_LIST, ch), cost, oref,
@@ -687,7 +687,7 @@ void do_sell(CHAR_DATA *ch, char *argument)
         return;
     }
 
-    if ((cost = get_cost(ch, keeper, obj, FALSE)) <= 0)
+    if ((cost = get_cost(ch, keeper, obj, false)) <= 0)
     {
         act(AT_ACTION, "$n looks uninterested in $p.", keeper, obj, ch, TO_VICT);
         return;
@@ -768,7 +768,7 @@ void do_value(CHAR_DATA *ch, char *argument)
         return;
     }
 
-    if ((cost = get_cost(ch, keeper, obj, FALSE)) <= 0)
+    if ((cost = get_cost(ch, keeper, obj, false)) <= 0)
     {
         act(AT_ACTION, "$n looks uninterested in $p.", keeper, obj, ch, TO_VICT);
         return;

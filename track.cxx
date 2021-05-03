@@ -90,9 +90,9 @@ bool valid_edge(ROOM_INDEX_DATA *room, sh_int door)
         && !IS_SET(pexit->exit_info, EX_CLOSED)
 #endif
         && !IS_MARKED(to_room))
-        return TRUE;
+        return true;
     else
-        return FALSE;
+        return false;
 }
 
 void bfs_enqueue(ROOM_INDEX_DATA *room, char dir)
@@ -391,9 +391,9 @@ void hunt_victim(CHAR_DATA *ch)
         return;
 
     /* make sure the char still exists */
-    for (found = FALSE, tmp = first_char; tmp && !found; tmp = tmp->next)
+    for (found = false, tmp = first_char; tmp && !found; tmp = tmp->next)
         if (ch->hunting->who == tmp)
-            found = TRUE;
+            found = true;
 
     if (!found)
     {
@@ -417,7 +417,7 @@ void hunt_victim(CHAR_DATA *ch)
         wield = get_eq_char(ch, WEAR_WIELD);
         if (wield != NULL && wield->value[3] == WEAPON_BLASTER)
         {
-            if (mob_snipe(ch, ch->hunting->who) == TRUE)
+            if (mob_snipe(ch, ch->hunting->who) == true)
                 return;
         }
         else if (!IS_SET(ch->act, ACT_DROID))
@@ -446,7 +446,7 @@ void hunt_victim(CHAR_DATA *ch)
     }
     else
     {
-        move_char(ch, get_exit(ch->in_room, ret), FALSE);
+        move_char(ch, get_exit(ch->in_room, ret), false);
         if (char_died(ch))
             return;
         if (!ch->hunting)
@@ -477,13 +477,13 @@ bool mob_snipe(CHAR_DATA *ch, CHAR_DATA *victim)
     ROOM_INDEX_DATA *was_in_room;
     ROOM_INDEX_DATA *to_room;
     char buf[MAX_STRING_LENGTH];
-    bool pfound = FALSE;
+    bool pfound = false;
 
     if (!ch->in_room || !victim->in_room)
-        return FALSE;
+        return false;
 
     if (IS_SET(ch->in_room->room_flags, ROOM_SAFE))
-        return FALSE;
+        return false;
 
     for (dir = 0; dir <= 10; dir++)
     {
@@ -515,7 +515,7 @@ bool mob_snipe(CHAR_DATA *ch, CHAR_DATA *victim)
 
             if (ch->in_room == victim->in_room)
             {
-                pfound = TRUE;
+                pfound = true;
                 break;
             }
 
@@ -534,16 +534,16 @@ bool mob_snipe(CHAR_DATA *ch, CHAR_DATA *victim)
         }
 
         if (IS_SET(victim->in_room->room_flags, ROOM_SAFE))
-            return FALSE;
+            return false;
 
         if (is_safe(ch, victim))
-            return FALSE;
+            return false;
 
         if (IS_AFFECTED(ch, AFF_CHARM) && ch->master == victim)
-            return FALSE;
+            return false;
 
         if (ch->position == POS_FIGHTING)
-            return FALSE;
+            return false;
 
         switch (dir)
         {
@@ -583,9 +583,9 @@ bool mob_snipe(CHAR_DATA *ch, CHAR_DATA *victim)
         one_hit(ch, victim, TYPE_UNDEFINED);
 
         if (char_died(ch))
-            return TRUE;
+            return true;
 
-        stop_fighting(ch, TRUE);
+        stop_fighting(ch, true);
 
         if (victim && !char_died(victim) && victim->hit < 0)
         {
@@ -596,8 +596,8 @@ bool mob_snipe(CHAR_DATA *ch, CHAR_DATA *victim)
         char_from_room(ch);
         char_to_room(ch, was_in_room);
 
-        return TRUE;
+        return true;
     }
 
-    return FALSE;
+    return false;
 }

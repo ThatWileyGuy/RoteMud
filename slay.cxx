@@ -105,7 +105,7 @@ SLAY_DATA *get_slay(char *name)
     if (!str_cmp(word, literal))                                                                                       \
     {                                                                                                                  \
         field = value;                                                                                                 \
-        fMatch = TRUE;                                                                                                 \
+        fMatch = true;                                                                                                 \
         break;                                                                                                         \
     }
 
@@ -119,12 +119,12 @@ void fread_slay(SLAY_DATA *slay, FILE *fp)
     for (;;)
     {
         word = feof(fp) ? "End" : fread_word(fp);
-        fMatch = FALSE;
+        fMatch = false;
 
         switch (UPPER(word[0]))
         {
         case '*':
-            fMatch = TRUE;
+            fMatch = true;
             fread_to_eol(fp);
             break;
 
@@ -279,7 +279,7 @@ void do_slay(CHAR_DATA *ch, char *argument)
     SLAY_DATA *slay;
     char type[MAX_INPUT_LENGTH];
     char who[MAX_INPUT_LENGTH];
-    bool found = FALSE;
+    bool found = false;
     char buf[MAX_STRING_LENGTH];
 
     if (IS_NPC(ch))
@@ -343,7 +343,7 @@ void do_slay(CHAR_DATA *ch, char *argument)
                 ((is_name(ch->name, slay->owner)) && !str_cmp(type, slay->type)) ||
                 ((ch->top_level == LEVEL_IMPLEMENTOR) && !str_cmp(type, slay->type)))
             {
-                found = TRUE;
+                found = true;
                 act(slay->color, slay->cmsg, ch, NULL, victim, TO_CHAR);
                 act(slay->color, slay->vmsg, ch, NULL, victim, TO_VICT);
                 act(slay->color, slay->rmsg, ch, NULL, victim, TO_NOTVICT);

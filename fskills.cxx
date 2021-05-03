@@ -583,7 +583,7 @@ void fskill_instruct(CHAR_DATA *ch, char *argument)
 {
     FORCE_SKILL *fskill, *skill;
     CHAR_DATA *victim;
-    bool SKILL_FOUND = FALSE;
+    bool SKILL_FOUND = false;
     char name[MAX_STRING_LENGTH];
     fskill = force_test_skill_use("instruct", ch, FORCE_NONCOMBAT);
     if (fskill == NULL)
@@ -612,7 +612,7 @@ void fskill_instruct(CHAR_DATA *ch, char *argument)
         if (skill->status <= ch->force_level_status && !strcmp(argument, skill->name) &&
             (skill->type == FORCE_GENERAL || skill->type == ch->force_type) && skill->notskill == 0)
         {
-            SKILL_FOUND = TRUE;
+            SKILL_FOUND = true;
             break;
         }
     }
@@ -1328,15 +1328,15 @@ void fskill_makelightsaber(CHAR_DATA *ch, char *argument)
             return;
         }
 
-        checktool = FALSE;
-        checkdura = FALSE;
-        checkbatt = FALSE;
-        checkoven = FALSE;
-        checkcond = FALSE;
-        checkcirc = FALSE;
-        checklens = FALSE;
-        checkgems = FALSE;
-        checkmirr = FALSE;
+        checktool = false;
+        checkdura = false;
+        checkbatt = false;
+        checkoven = false;
+        checkcond = false;
+        checkcirc = false;
+        checklens = false;
+        checkgems = false;
+        checkmirr = false;
 
         if (!IS_SET(ch->in_room->room_flags, ROOM_SAFE) || !IS_SET(ch->in_room->room_flags, ROOM_SILENCE))
         {
@@ -1347,23 +1347,23 @@ void fskill_makelightsaber(CHAR_DATA *ch, char *argument)
         for (obj = ch->last_carrying; obj; obj = obj->prev_content)
         {
             if (obj->item_type == ITEM_TOOLKIT)
-                checktool = TRUE;
+                checktool = true;
             if (obj->item_type == ITEM_LENS)
-                checklens = TRUE;
+                checklens = true;
             if (obj->item_type == ITEM_CRYSTAL)
-                checkgems = TRUE;
+                checkgems = true;
             if (obj->item_type == ITEM_MIRROR)
-                checkmirr = TRUE;
+                checkmirr = true;
             if (obj->item_type == ITEM_DURAPLAST || obj->item_type == ITEM_DURASTEEL)
-                checkdura = TRUE;
+                checkdura = true;
             if (obj->item_type == ITEM_BATTERY)
-                checkbatt = TRUE;
+                checkbatt = true;
             if (obj->item_type == ITEM_OVEN)
-                checkoven = TRUE;
+                checkoven = true;
             if (obj->item_type == ITEM_CIRCUIT)
-                checkcirc = TRUE;
+                checkcirc = true;
             if (obj->item_type == ITEM_SUPERCONDUCTOR)
-                checkcond = TRUE;
+                checkcond = true;
         }
 
         if (!checktool)
@@ -1461,15 +1461,15 @@ void fskill_makelightsaber(CHAR_DATA *ch, char *argument)
         return;
     }
 
-    checktool = FALSE;
-    checkdura = FALSE;
-    checkbatt = FALSE;
-    checkoven = FALSE;
-    checkcond = FALSE;
-    checkcirc = FALSE;
-    checklens = FALSE;
-    checkgems = FALSE;
-    checkmirr = FALSE;
+    checktool = false;
+    checkdura = false;
+    checkbatt = false;
+    checkoven = false;
+    checkcond = false;
+    checkcirc = false;
+    checklens = false;
+    checkgems = false;
+    checkmirr = false;
     gems = 0;
     charge = 0;
     gemtype = 0;
@@ -1477,64 +1477,64 @@ void fskill_makelightsaber(CHAR_DATA *ch, char *argument)
     for (obj = ch->last_carrying; obj; obj = obj->prev_content)
     {
         if (obj->item_type == ITEM_TOOLKIT)
-            checktool = TRUE;
+            checktool = true;
         if (obj->item_type == ITEM_OVEN)
-            checkoven = TRUE;
-        if ((obj->item_type == ITEM_DURAPLAST || obj->item_type == ITEM_DURASTEEL) && checkdura == FALSE)
+            checkoven = true;
+        if ((obj->item_type == ITEM_DURAPLAST || obj->item_type == ITEM_DURASTEEL) && checkdura == false)
         {
-            checkdura = TRUE;
+            checkdura = true;
             separate_obj(obj);
             obj_from_char(obj);
             extract_obj(obj);
         }
 
-        if (obj->item_type == ITEM_DURASTEEL && checkdura == FALSE)
+        if (obj->item_type == ITEM_DURASTEEL && checkdura == false)
         {
-            checkdura = TRUE;
+            checkdura = true;
             separate_obj(obj);
             obj_from_char(obj);
             extract_obj(obj);
         }
 
-        if (obj->item_type == ITEM_BATTERY && checkbatt == FALSE)
+        if (obj->item_type == ITEM_BATTERY && checkbatt == false)
         {
             charge = UMIN(obj->value[1], 10);
             separate_obj(obj);
             obj_from_char(obj);
             extract_obj(obj);
-            checkbatt = TRUE;
+            checkbatt = true;
         }
 
-        if (obj->item_type == ITEM_SUPERCONDUCTOR && checkcond == FALSE)
+        if (obj->item_type == ITEM_SUPERCONDUCTOR && checkcond == false)
         {
             separate_obj(obj);
             obj_from_char(obj);
             extract_obj(obj);
-            checkcond = TRUE;
+            checkcond = true;
         }
 
-        if (obj->item_type == ITEM_CIRCUIT && checkcirc == FALSE)
+        if (obj->item_type == ITEM_CIRCUIT && checkcirc == false)
         {
             separate_obj(obj);
             obj_from_char(obj);
             extract_obj(obj);
-            checkcirc = TRUE;
+            checkcirc = true;
         }
 
-        if (obj->item_type == ITEM_LENS && checklens == FALSE)
+        if (obj->item_type == ITEM_LENS && checklens == false)
         {
             separate_obj(obj);
             obj_from_char(obj);
             extract_obj(obj);
-            checklens = TRUE;
+            checklens = true;
         }
 
-        if (obj->item_type == ITEM_MIRROR && checkmirr == FALSE)
+        if (obj->item_type == ITEM_MIRROR && checkmirr == false)
         {
             separate_obj(obj);
             obj_from_char(obj);
             extract_obj(obj);
-            checkmirr = TRUE;
+            checkmirr = true;
         }
 
         if (obj->item_type == ITEM_CRYSTAL && gems < 3)
@@ -1545,7 +1545,7 @@ void fskill_makelightsaber(CHAR_DATA *ch, char *argument)
             separate_obj(obj);
             obj_from_char(obj);
             extract_obj(obj);
-            checkgems = TRUE;
+            checkgems = true;
         }
     }
 
@@ -1655,15 +1655,15 @@ void fskill_makedualsaber(CHAR_DATA *ch, char *argument)
             return;
         }
 
-        checktool = FALSE;
-        checkdura = FALSE;
-        checkbatt = FALSE;
-        checkoven = FALSE;
-        checkcond = FALSE;
-        checkcirc = FALSE;
-        checklens = FALSE;
-        checkgems = FALSE;
-        checkmirr = FALSE;
+        checktool = false;
+        checkdura = false;
+        checkbatt = false;
+        checkoven = false;
+        checkcond = false;
+        checkcirc = false;
+        checklens = false;
+        checkgems = false;
+        checkmirr = false;
 
         if (!IS_SET(ch->in_room->room_flags, ROOM_SAFE) || !IS_SET(ch->in_room->room_flags, ROOM_SILENCE))
         {
@@ -1674,23 +1674,23 @@ void fskill_makedualsaber(CHAR_DATA *ch, char *argument)
         for (obj = ch->last_carrying; obj; obj = obj->prev_content)
         {
             if (obj->item_type == ITEM_TOOLKIT)
-                checktool = TRUE;
+                checktool = true;
             if (obj->item_type == ITEM_LENS)
-                checklens = TRUE;
+                checklens = true;
             if (obj->item_type == ITEM_CRYSTAL)
-                checkgems = TRUE;
+                checkgems = true;
             if (obj->item_type == ITEM_MIRROR)
-                checkmirr = TRUE;
+                checkmirr = true;
             if (obj->item_type == ITEM_DURAPLAST || obj->item_type == ITEM_DURASTEEL)
-                checkdura = TRUE;
+                checkdura = true;
             if (obj->item_type == ITEM_BATTERY)
-                checkbatt = TRUE;
+                checkbatt = true;
             if (obj->item_type == ITEM_OVEN)
-                checkoven = TRUE;
+                checkoven = true;
             if (obj->item_type == ITEM_CIRCUIT)
-                checkcirc = TRUE;
+                checkcirc = true;
             if (obj->item_type == ITEM_SUPERCONDUCTOR)
-                checkcond = TRUE;
+                checkcond = true;
         }
 
         if (!checktool)
@@ -1788,15 +1788,15 @@ void fskill_makedualsaber(CHAR_DATA *ch, char *argument)
         return;
     }
 
-    checktool = FALSE;
-    checkdura = FALSE;
-    checkbatt = FALSE;
-    checkoven = FALSE;
-    checkcond = FALSE;
-    checkcirc = FALSE;
-    checklens = FALSE;
-    checkgems = FALSE;
-    checkmirr = FALSE;
+    checktool = false;
+    checkdura = false;
+    checkbatt = false;
+    checkoven = false;
+    checkcond = false;
+    checkcirc = false;
+    checklens = false;
+    checkgems = false;
+    checkmirr = false;
     gems = 0;
     charge = 0;
     gemtype = 0;
@@ -1804,64 +1804,64 @@ void fskill_makedualsaber(CHAR_DATA *ch, char *argument)
     for (obj = ch->last_carrying; obj; obj = obj->prev_content)
     {
         if (obj->item_type == ITEM_TOOLKIT)
-            checktool = TRUE;
+            checktool = true;
         if (obj->item_type == ITEM_OVEN)
-            checkoven = TRUE;
-        if ((obj->item_type == ITEM_DURAPLAST || obj->item_type == ITEM_DURASTEEL) && checkdura == FALSE)
+            checkoven = true;
+        if ((obj->item_type == ITEM_DURAPLAST || obj->item_type == ITEM_DURASTEEL) && checkdura == false)
         {
-            checkdura = TRUE;
+            checkdura = true;
             separate_obj(obj);
             obj_from_char(obj);
             extract_obj(obj);
         }
 
-        if (obj->item_type == ITEM_DURASTEEL && checkdura == FALSE)
+        if (obj->item_type == ITEM_DURASTEEL && checkdura == false)
         {
-            checkdura = TRUE;
+            checkdura = true;
             separate_obj(obj);
             obj_from_char(obj);
             extract_obj(obj);
         }
 
-        if (obj->item_type == ITEM_BATTERY && checkbatt == FALSE)
+        if (obj->item_type == ITEM_BATTERY && checkbatt == false)
         {
             charge = UMIN(obj->value[1], 10);
             separate_obj(obj);
             obj_from_char(obj);
             extract_obj(obj);
-            checkbatt = TRUE;
+            checkbatt = true;
         }
 
-        if (obj->item_type == ITEM_SUPERCONDUCTOR && checkcond == FALSE)
+        if (obj->item_type == ITEM_SUPERCONDUCTOR && checkcond == false)
         {
             separate_obj(obj);
             obj_from_char(obj);
             extract_obj(obj);
-            checkcond = TRUE;
+            checkcond = true;
         }
 
-        if (obj->item_type == ITEM_CIRCUIT && checkcirc == FALSE)
+        if (obj->item_type == ITEM_CIRCUIT && checkcirc == false)
         {
             separate_obj(obj);
             obj_from_char(obj);
             extract_obj(obj);
-            checkcirc = TRUE;
+            checkcirc = true;
         }
 
-        if (obj->item_type == ITEM_LENS && checklens == FALSE)
+        if (obj->item_type == ITEM_LENS && checklens == false)
         {
             separate_obj(obj);
             obj_from_char(obj);
             extract_obj(obj);
-            checklens = TRUE;
+            checklens = true;
         }
 
-        if (obj->item_type == ITEM_MIRROR && checkmirr == FALSE)
+        if (obj->item_type == ITEM_MIRROR && checkmirr == false)
         {
             separate_obj(obj);
             obj_from_char(obj);
             extract_obj(obj);
-            checkmirr = TRUE;
+            checkmirr = true;
         }
 
         if (obj->item_type == ITEM_CRYSTAL && gems < 3)
@@ -1872,7 +1872,7 @@ void fskill_makedualsaber(CHAR_DATA *ch, char *argument)
             separate_obj(obj);
             obj_from_char(obj);
             extract_obj(obj);
-            checkgems = TRUE;
+            checkgems = true;
         }
     }
 
@@ -2009,7 +2009,7 @@ void fskill_finish(CHAR_DATA *ch, char *argument)
                          sprintf_s(minibuf,"&C[&B-&c=&b| &G&W$n is surrounded by a blue glow before $e is killed
        &b|&c=&B-&C]&G&w\r\n"); act( AT_PLAIN, minibuf, victim, NULL, minibuf , TO_ROOM ); send_to_char("&C[&B-&c=&b|
        &G&WYou are surrounded by a blue glow before you are killed &b|&c=&B-&C]&G&w\r\n",victim); stop_fighting( victim,
-       TRUE ); stop_fighting( ch, TRUE ); victim->hit = victim->max_hit; victim->mana = victim->max_mana; victim->move =
+       true ); stop_fighting( ch, true ); victim->hit = victim->max_hit; victim->mana = victim->max_mana; victim->move =
        victim->max_move; ch->hit = ch->max_hit; ch->mana = ch->max_mana; ch->move = ch->max_move;
         }
     */
@@ -2018,7 +2018,7 @@ void fskill_finish(CHAR_DATA *ch, char *argument)
         send_to_char("Normally this is the part where you die, considering you were just cut in half.\r\n", victim);
         send_to_char("Due to your immortality though, you have surrvived the incredible trauma of being\r\n", victim);
         send_to_char("severed in two.\r\n", victim);
-        stop_fighting(victim, TRUE);
+        stop_fighting(victim, true);
     }
     else
     {
@@ -2037,7 +2037,7 @@ void fskill_fhelp(CHAR_DATA *ch, char *argument)
     FORCE_SKILL *fskill = nullptr;
     FORCE_HELP *fhelp = nullptr;
     FORCE_HELP *fdefault = nullptr;
-    bool match = FALSE;
+    bool match = false;
     int x, len;
     fskill = force_test_skill_use("fhelp", ch, FORCE_NONCOMBAT);
     if (fskill == NULL)
@@ -2052,7 +2052,7 @@ void fskill_fhelp(CHAR_DATA *ch, char *argument)
             continue;
         if (!strcmp(argument, fhelp->name))
         {
-            match = TRUE;
+            match = true;
             break;
         }
         if (!strcmp("force", fhelp->name))
@@ -2087,24 +2087,24 @@ bool check_reflect(CHAR_DATA *ch, CHAR_DATA *victim, int dam)
     CHAR_DATA *rch;
     int chances;
     if (!IS_AWAKE(victim))
-        return FALSE;
+        return false;
 
     if (!IS_NPC(victim) && victim->force_skill[FORCE_SKILL_REFLECT] < 1)
-        return FALSE;
+        return false;
 
     if ((wield = get_eq_char(victim, WEAR_WIELD)) == NULL || (wield->value[3] != WEAPON_LIGHTSABER))
     {
         if ((wield = get_eq_char(victim, WEAR_DUAL_WIELD)) == NULL || (wield->value[3] != WEAPON_LIGHTSABER))
-            return FALSE;
+            return false;
     }
     if (get_eq_char(ch, WEAR_WIELD) == NULL && get_eq_char(ch, WEAR_DUAL_WIELD) == NULL)
-        return FALSE;
+        return false;
     if ((chwield = get_eq_char(ch, WEAR_WIELD)) == NULL ||
         (chwield->value[3] != WEAPON_BLASTER && chwield->value[3] != WEAPON_BOWCASTER))
     {
         if ((chwield = get_eq_char(ch, WEAR_DUAL_WIELD)) == NULL ||
             (chwield->value[3] != WEAPON_BLASTER && chwield->value[3] != WEAPON_BOWCASTER))
-            return FALSE;
+            return false;
     }
     chances = (int)(victim->force_skill[FORCE_SKILL_REFLECT]);
     chances = chances * number_range(10, (25 * victim->force_level_status)) / 100;
@@ -2112,7 +2112,7 @@ bool check_reflect(CHAR_DATA *ch, CHAR_DATA *victim, int dam)
     {
         if (victim->force_level_status > 0)
             force_learn_from_failure(victim, get_force_skill("reflect"));
-        return FALSE;
+        return false;
     }
     victim->pcdata->lost_attacks++;
     {
@@ -2218,7 +2218,7 @@ bool check_reflect(CHAR_DATA *ch, CHAR_DATA *victim, int dam)
     }
     if (victim->force_level_status > 0)
         force_learn_from_success(victim, get_force_skill("reflect"));
-    return TRUE;
+    return true;
 }
 
 void fskill_convert(CHAR_DATA *ch, char *argument)

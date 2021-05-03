@@ -408,9 +408,9 @@ void do_instaroom(CHAR_DATA *ch, char *argument)
     }
 
     if (!str_cmp(argument, "nodoors"))
-        dodoors = FALSE;
+        dodoors = false;
     else
-        dodoors = TRUE;
+        dodoors = true;
 
     if (!can_rmodify(ch, ch->in_room))
         return;
@@ -438,9 +438,9 @@ void do_instazone(CHAR_DATA *ch, char *argument)
         return;
     }
     if (!str_cmp(argument, "nodoors"))
-        dodoors = FALSE;
+        dodoors = false;
     else
-        dodoors = TRUE;
+        dodoors = true;
     pArea = ch->pcdata->area;
     wipe_area_resets(pArea);
     for (pRoom = pArea->first_room; pRoom; pRoom = pRoom->next_aroom)

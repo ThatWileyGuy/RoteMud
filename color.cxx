@@ -178,19 +178,19 @@ const char *valid_color[] = {"black", "dred",  "dgreen", "orange", "dblue", "pur
 int const_color_str_len(const char *argument)
 {
     int str, count = 0;
-    bool IS_COLOR = FALSE;
+    bool IS_COLOR = false;
 
     for (str = 0; argument[str] != '\0'; str++)
     {
         if (argument[str] == '&')
         {
-            if (IS_COLOR == TRUE)
+            if (IS_COLOR == true)
             {
                 count++;
-                IS_COLOR = FALSE;
+                IS_COLOR = false;
             }
             else
-                IS_COLOR = TRUE;
+                IS_COLOR = true;
         }
 #ifdef OVERLANDCODE
         else if (argument[str] == '{')
@@ -198,20 +198,20 @@ int const_color_str_len(const char *argument)
         else if (argument[str] == '^')
 #endif
         {
-            if (IS_COLOR == TRUE)
+            if (IS_COLOR == true)
             {
                 count++;
-                IS_COLOR = FALSE;
+                IS_COLOR = false;
             }
             else
-                IS_COLOR = TRUE;
+                IS_COLOR = true;
         }
         else
         {
-            if (IS_COLOR == FALSE)
+            if (IS_COLOR == false)
                 count++;
             else
-                IS_COLOR = FALSE;
+                IS_COLOR = false;
         }
     }
 
@@ -221,19 +221,19 @@ int const_color_str_len(const char *argument)
 int const_color_strnlen(const char *argument, int maxlength)
 {
     int str, count = 0;
-    bool IS_COLOR = FALSE;
+    bool IS_COLOR = false;
 
     for (str = 0; argument[str] != '\0'; str++)
     {
         if (argument[str] == '&')
         {
-            if (IS_COLOR == TRUE)
+            if (IS_COLOR == true)
             {
                 count++;
-                IS_COLOR = FALSE;
+                IS_COLOR = false;
             }
             else
-                IS_COLOR = TRUE;
+                IS_COLOR = true;
         }
 #ifdef OVERLANDCODE
         else if (argument[str] == '{')
@@ -241,20 +241,20 @@ int const_color_strnlen(const char *argument, int maxlength)
         else if (argument[str] == '^')
 #endif
         {
-            if (IS_COLOR == TRUE)
+            if (IS_COLOR == true)
             {
                 count++;
-                IS_COLOR = FALSE;
+                IS_COLOR = false;
             }
             else
-                IS_COLOR = TRUE;
+                IS_COLOR = true;
         }
         else
         {
-            if (IS_COLOR == FALSE)
+            if (IS_COLOR == false)
                 count++;
             else
-                IS_COLOR = FALSE;
+                IS_COLOR = false;
         }
 
         if (count >= maxlength)
@@ -270,19 +270,19 @@ int const_color_strnlen(const char *argument, int maxlength)
 int color_str_len(char *argument)
 {
     int str, count = 0;
-    bool IS_COLOR = FALSE;
+    bool IS_COLOR = false;
 
     for (str = 0; argument[str] != '\0'; str++)
     {
         if (argument[str] == '&')
         {
-            if (IS_COLOR == TRUE)
+            if (IS_COLOR == true)
             {
                 count++;
-                IS_COLOR = FALSE;
+                IS_COLOR = false;
             }
             else
-                IS_COLOR = TRUE;
+                IS_COLOR = true;
         }
 #ifdef OVERLANDCODE
         else if (argument[str] == '{')
@@ -290,20 +290,20 @@ int color_str_len(char *argument)
         else if (argument[str] == '^')
 #endif
         {
-            if (IS_COLOR == TRUE)
+            if (IS_COLOR == true)
             {
                 count++;
-                IS_COLOR = FALSE;
+                IS_COLOR = false;
             }
             else
-                IS_COLOR = TRUE;
+                IS_COLOR = true;
         }
         else
         {
-            if (IS_COLOR == FALSE)
+            if (IS_COLOR == false)
                 count++;
             else
-                IS_COLOR = FALSE;
+                IS_COLOR = false;
         }
     }
 
@@ -313,19 +313,19 @@ int color_str_len(char *argument)
 int color_strnlen(char *argument, int maxlength)
 {
     int str, count = 0;
-    bool IS_COLOR = FALSE;
+    bool IS_COLOR = false;
 
     for (str = 0; argument[str] != '\0'; str++)
     {
         if (argument[str] == '&')
         {
-            if (IS_COLOR == TRUE)
+            if (IS_COLOR == true)
             {
                 count++;
-                IS_COLOR = FALSE;
+                IS_COLOR = false;
             }
             else
-                IS_COLOR = TRUE;
+                IS_COLOR = true;
         }
 #ifdef OVERLANDCODE
         else if (argument[str] == '{')
@@ -333,20 +333,20 @@ int color_strnlen(char *argument, int maxlength)
         else if (argument[str] == '^')
 #endif
         {
-            if (IS_COLOR == TRUE)
+            if (IS_COLOR == true)
             {
                 count++;
-                IS_COLOR = FALSE;
+                IS_COLOR = false;
             }
             else
-                IS_COLOR = TRUE;
+                IS_COLOR = true;
         }
         else
         {
-            if (IS_COLOR == FALSE)
+            if (IS_COLOR == false)
                 count++;
             else
-                IS_COLOR = FALSE;
+                IS_COLOR = false;
         }
 
         if (count >= maxlength)
@@ -512,8 +512,8 @@ void do_color(CHAR_DATA *ch, char *argument)
     char arg3[MIL];
     char buf[MAX_STRING_LENGTH];
 
-    dMatch = FALSE;
-    cMatch = FALSE;
+    dMatch = false;
+    cMatch = false;
 
     if (IS_NPC(ch))
     {
@@ -636,7 +636,7 @@ void do_color(CHAR_DATA *ch, char *argument)
 
     if (!str_prefix(arg, "_all_"))
     {
-        dMatch = TRUE;
+        dMatch = true;
         count = -1;
 
         /* search for a valid color setting*/
@@ -644,14 +644,14 @@ void do_color(CHAR_DATA *ch, char *argument)
         {
             if (!str_cmp(arg2, valid_color[y]))
             {
-                cMatch = TRUE;
+                cMatch = true;
                 break;
             }
         }
     }
     else if (arg2[0] == '\0')
     {
-        cMatch = FALSE;
+        cMatch = false;
     }
     else
     {
@@ -660,7 +660,7 @@ void do_color(CHAR_DATA *ch, char *argument)
         {
             if (!str_prefix(arg, pc_displays[count]))
             {
-                dMatch = TRUE;
+                dMatch = true;
                 break;
             }
         }
@@ -685,7 +685,7 @@ void do_color(CHAR_DATA *ch, char *argument)
         {
             if (!str_cmp(arg2, valid_color[y]))
             {
-                cMatch = TRUE;
+                cMatch = true;
                 break;
             }
         }
@@ -861,7 +861,7 @@ int colorcode(const char *col, char *code, CHAR_DATA *ch)
     bool ansi;
 
     if (!ch)
-        ansi = TRUE;
+        ansi = true;
     else
         ansi = (!IS_NPC(ch) && IS_SET(ch->act, PLR_ANSI));
 

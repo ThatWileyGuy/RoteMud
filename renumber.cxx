@@ -139,17 +139,17 @@ void do_renumber(CHAR_DATA *ch, char *argument)
     new_base = atoi(arg1);
 
     /* parse the flags */
-    fill_gaps = FALSE;
-    verbose = FALSE;
+    fill_gaps = false;
+    verbose = false;
     for (;;)
     {
         argument = one_argument(argument, arg1);
         if (arg1[0] == '\0')
             break;
         else if (!str_prefix(arg1, "fillgaps"))
-            fill_gaps = TRUE;
+            fill_gaps = true;
         else if (!str_prefix(arg1, "verbose"))
-            verbose = TRUE;
+            verbose = true;
         else
         {
             ch_printf(ch, "Invalid flag '%s'.\n\r", arg1);
@@ -255,7 +255,7 @@ bool check_vnums(CHAR_DATA *ch, AREA_DATA *tarea, RENUMBER_AREA *r_area)
 
     /* in do_check_vnums they use first_bsort, first_asort but.. i dunno.. */
     area = first_area;
-    proto = FALSE;
+    proto = false;
     while (area)
     {
         if (tarea == area)
@@ -265,17 +265,17 @@ bool check_vnums(CHAR_DATA *ch, AREA_DATA *tarea, RENUMBER_AREA *r_area)
                  !(high < area->low_m_vnum || low > area->hi_m_vnum))
         {
             ch_printf(ch, "This operation would overwrite area %s! Use checkvnums first.\n\r", area->filename);
-            return TRUE;
+            return true;
         }
 
         area = area->next;
         if (area == NULL && !proto)
         {
             area = first_build;
-            proto = TRUE;
+            proto = true;
         }
     }
-    return FALSE;
+    return false;
 }
 
 RENUMBER_AREA *gather_renumber_data(AREA_DATA *area, int new_base, bool fill_gaps)
@@ -320,23 +320,23 @@ RENUMBER_DATA *gather_one_list(short type, int low, int high, int new_base, bool
     highest = -1;
     for (i = low; i <= high; i++)
     {
-        found = FALSE;
+        found = false;
         switch (type)
         {
         case REN_ROOM:
             room = get_room_index(i);
             if (room != NULL)
-                found = TRUE;
+                found = true;
             break;
         case REN_OBJ:
             obj = get_obj_index(i);
             if (obj != NULL)
-                found = TRUE;
+                found = true;
             break;
         case REN_MOB:
             mob = get_mob_index(i);
             if (mob != NULL)
-                found = TRUE;
+                found = true;
             break;
         }
 
@@ -891,25 +891,25 @@ int find_translation(int vnum, RENUMBER_DATA *r_data)
 
 AREA_DATA *find_area(char *filename, bool *p_is_proto)
 /* simply returns a pointer to a "filename" or NULL if no such area. stores
-   TRUE in *p_is_proto if the area is proto */
+   true in *p_is_proto if the area is proto */
 {
     bool found;
     AREA_DATA *area;
 
-    found = FALSE;
+    found = false;
 
     for (area = first_area; area; area = area->next)
     {
         if (!str_cmp(area->filename, filename))
         {
-            found = TRUE;
+            found = true;
             break;
         }
     }
 
     if (found)
     {
-        *p_is_proto = FALSE;
+        *p_is_proto = false;
         return area;
     }
 
@@ -917,14 +917,14 @@ AREA_DATA *find_area(char *filename, bool *p_is_proto)
     {
         if (!str_cmp(area->filename, filename))
         {
-            found = TRUE;
+            found = true;
             break;
         }
     }
 
     if (found)
     {
-        *p_is_proto = TRUE;
+        *p_is_proto = true;
         return area;
     }
     else

@@ -54,7 +54,7 @@
     if (!str_cmp(word, literal))                                                                                       \
     {                                                                                                                  \
         field = value;                                                                                                 \
-        fMatch = TRUE;                                                                                                 \
+        fMatch = true;                                                                                                 \
         break;                                                                                                         \
     }
 
@@ -67,12 +67,12 @@ void fread_forcehelp(FORCE_HELP *fhelp, FILE *fp)
     for (;;)
     {
         word = feof(fp) ? "End" : fread_word(fp);
-        fMatch = FALSE;
+        fMatch = false;
 
         switch (UPPER(word[0]))
         {
         case '*':
-            fMatch = TRUE;
+            fMatch = true;
             fread_to_eol(fp);
             break;
         case 'D':
@@ -106,13 +106,13 @@ bool load_forcehelp(const char *forcehelpfile)
 
     CREATE(fhelp, FORCE_HELP, 1);
 
-    found = FALSE;
+    found = false;
     sprintf_s(filename, "%s%s", FORCE_HELP_DIR, forcehelpfile);
 
     if ((fp = fopen(filename, "r")) != NULL)
     {
 
-        found = TRUE;
+        found = true;
         LINK(fhelp, first_force_help, last_force_help, next, prev);
         for (;;)
         {
@@ -272,12 +272,12 @@ void fread_forceskill(FORCE_SKILL *fskill, FILE *fp)
     for (;;)
     {
         word = feof(fp) ? "End" : fread_word(fp);
-        fMatch = FALSE;
+        fMatch = false;
 
         switch (UPPER(word[0]))
         {
         case '*':
-            fMatch = TRUE;
+            fMatch = true;
             fread_to_eol(fp);
             break;
         case 'A':
@@ -342,13 +342,13 @@ bool load_forceskill(const char *forceskillfile)
 
     CREATE(fskill, FORCE_SKILL, 1);
 
-    found = FALSE;
+    found = false;
     sprintf_s(filename, "%s%s", FORCE_DIR, forceskillfile);
 
     if ((fp = fopen(filename, "r")) != NULL)
     {
 
-        found = TRUE;
+        found = true;
         LINK(fskill, first_force_skill, last_force_skill, next, prev);
         for (;;)
         {

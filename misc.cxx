@@ -99,7 +99,7 @@ void do_buyhome(CHAR_DATA *ch, char *argument)
     REMOVE_BIT(room->room_flags, ROOM_EMPTY_HOME);
     SET_BIT(room->room_flags, ROOM_PLR_HOME);
 
-    fold_area(room->area, room->area->filename, FALSE);
+    fold_area(room->area, room->area->filename, false);
 
     ch->plr_home = room;
     do_save(ch, "");
@@ -147,7 +147,7 @@ void do_sellhome(CHAR_DATA *ch, char *argument)
     REMOVE_BIT(room->room_flags, ROOM_PLR_HOME);
     SET_BIT(room->room_flags, ROOM_EMPTY_HOME);
 
-    fold_area(room->area, room->area->filename, FALSE);
+    fold_area(room->area, room->area->filename, false);
 
     ch->plr_home = NULL;
     do_save(ch, "");
@@ -186,7 +186,7 @@ void do_clone(CHAR_DATA *ch, char *argument)
     }
 
     if (ch->in_room->vnum == 1233)
-        secondroom = TRUE;
+        secondroom = true;
 
     if (ch->rppoints < 4)
     {
@@ -313,7 +313,7 @@ void do_backup(CHAR_DATA *ch, char *argument)
     }
 
     if (ch->in_room->vnum == 1233)
-        secondroom = TRUE;
+        secondroom = true;
 
     if (ch->rppoints < 4)
     {
@@ -402,7 +402,7 @@ void do_ammo(CHAR_DATA *ch, char *argument)
 {
     OBJ_DATA *wield;
     OBJ_DATA *obj;
-    bool checkammo = FALSE;
+    bool checkammo = false;
     int charge = 0;
 
     obj = NULL;
@@ -442,7 +442,7 @@ void do_ammo(CHAR_DATA *ch, char *argument)
                 return;
             }
             unequip_char(ch, obj);
-            checkammo = TRUE;
+            checkammo = true;
             charge = obj->value[0];
             separate_obj(obj);
             extract_obj(obj);
@@ -458,7 +458,7 @@ void do_ammo(CHAR_DATA *ch, char *argument)
                         send_to_char("That cartridge is too big for your blaster.", ch);
                         continue;
                     }
-                    checkammo = TRUE;
+                    checkammo = true;
                     charge = obj->value[0];
                     separate_obj(obj);
                     extract_obj(obj);
@@ -496,7 +496,7 @@ void do_ammo(CHAR_DATA *ch, char *argument)
                 return;
             }
             unequip_char(ch, obj);
-            checkammo = TRUE;
+            checkammo = true;
             charge = obj->value[0];
             separate_obj(obj);
             extract_obj(obj);
@@ -512,7 +512,7 @@ void do_ammo(CHAR_DATA *ch, char *argument)
                         send_to_char("That cartridge is too big for your bowcaster.", ch);
                         continue;
                     }
-                    checkammo = TRUE;
+                    checkammo = true;
                     charge = obj->value[0];
                     separate_obj(obj);
                     extract_obj(obj);
@@ -542,7 +542,7 @@ void do_ammo(CHAR_DATA *ch, char *argument)
         if (obj)
         {
             unequip_char(ch, obj);
-            checkammo = TRUE;
+            checkammo = true;
             charge = obj->value[0];
             separate_obj(obj);
             extract_obj(obj);
@@ -553,7 +553,7 @@ void do_ammo(CHAR_DATA *ch, char *argument)
             {
                 if (obj->item_type == ITEM_BATTERY)
                 {
-                    checkammo = TRUE;
+                    checkammo = true;
                     charge = obj->value[0];
                     separate_obj(obj);
                     extract_obj(obj);
@@ -828,7 +828,7 @@ void do_takedrug(CHAR_DATA *ch, char *argument)
         return;
     }
 
-    if ((obj = find_obj(ch, argument, TRUE)) == NULL)
+    if ((obj = find_obj(ch, argument, true)) == NULL)
         return;
 
     if (obj->item_type == ITEM_DEVICE)
@@ -1004,7 +1004,7 @@ void do_fill(CHAR_DATA *ch, char *argument)
     OBJ_DATA *source;
     sh_int dest_item, src_item1, src_item2, src_item3, src_item4;
     int diff;
-    bool all = FALSE;
+    bool all = false;
 
     argument = one_argument(argument, arg1);
     argument = one_argument(argument, arg2);
@@ -1091,7 +1091,7 @@ void do_fill(CHAR_DATA *ch, char *argument)
     {
         if (dest_item == ITEM_CONTAINER && (!str_cmp(arg2, "all") || !str_prefix("all.", arg2)))
         {
-            all = TRUE;
+            all = true;
             source = NULL;
         }
         else
@@ -1133,10 +1133,10 @@ void do_fill(CHAR_DATA *ch, char *argument)
 
     if (!source)
     {
-        bool found = FALSE;
+        bool found = false;
         OBJ_DATA *src_next;
 
-        found = FALSE;
+        found = false;
         separate_obj(obj);
         for (source = ch->in_room->first_content; source; source = src_next)
         {
@@ -1157,12 +1157,12 @@ void do_fill(CHAR_DATA *ch, char *argument)
                 }
                 else
                     obj_to_obj(source, obj);
-                found = TRUE;
+                found = true;
             }
             else if (source->item_type == src_item1 || source->item_type == src_item2 ||
                      source->item_type == src_item3 || source->item_type == src_item4)
             {
-                found = TRUE;
+                found = true;
                 break;
             }
         }
@@ -1201,7 +1201,7 @@ void do_fill(CHAR_DATA *ch, char *argument)
         char name[MAX_INPUT_LENGTH];
         CHAR_DATA *gch;
         char *pd;
-        bool found = FALSE;
+        bool found = false;
 
         if (source == obj)
         {
@@ -1246,12 +1246,12 @@ void do_fill(CHAR_DATA *ch, char *argument)
             {
                 bool fGroup;
 
-                fGroup = FALSE;
+                fGroup = false;
                 for (gch = first_char; gch; gch = gch->next)
                 {
                     if (!IS_NPC(gch) && is_same_group(ch, gch) && !str_cmp(name, gch->name))
                     {
-                        fGroup = TRUE;
+                        fGroup = true;
                         break;
                     }
                 }
@@ -1288,7 +1288,7 @@ void do_fill(CHAR_DATA *ch, char *argument)
                     continue;
                 obj_from_obj(otmp);
                 obj_to_obj(otmp, obj);
-                found = TRUE;
+                found = true;
             }
             if (found)
             {
@@ -1557,7 +1557,7 @@ void do_eat(CHAR_DATA *ch, char *argument)
         if (ms_find_obj(ch))
             return;
 
-    if ((obj = find_obj(ch, argument, TRUE)) == NULL)
+    if ((obj = find_obj(ch, argument, true)) == NULL)
         return;
 
     if (!IS_IMMORTAL(ch))
@@ -1683,7 +1683,7 @@ void do_quaff(CHAR_DATA *ch, char *argument)
         return;
     }
 
-    if ((obj = find_obj(ch, argument, TRUE)) == NULL)
+    if ((obj = find_obj(ch, argument, true)) == NULL)
         return;
 
     if (obj->item_type != ITEM_POTION)
@@ -1837,9 +1837,9 @@ void pullorpush(CHAR_DATA *ch, OBJ_DATA *obj, bool pull)
     const char *txt;
 
     if (IS_SET(obj->value[0], TRIG_UP))
-        isup = TRUE;
+        isup = true;
     else
-        isup = FALSE;
+        isup = false;
     switch (obj->item_type)
     {
     default:
@@ -2078,7 +2078,7 @@ void do_pull(CHAR_DATA *ch, char *argument)
         return;
     }
 
-    pullorpush(ch, obj, TRUE);
+    pullorpush(ch, obj, true);
 }
 
 void do_push(CHAR_DATA *ch, char *argument)
@@ -2102,7 +2102,7 @@ void do_push(CHAR_DATA *ch, char *argument)
         return;
     }
 
-    pullorpush(ch, obj, FALSE);
+    pullorpush(ch, obj, false);
 }
 
 /* pipe commands (light, tamp, smoke) by Thoric */
@@ -2634,8 +2634,8 @@ void do_train(CHAR_DATA *ch, char *argument)
 {
     char arg[MAX_INPUT_LENGTH];
     CHAR_DATA *mob;
-    bool tfound = FALSE;
-    bool successful = FALSE;
+    bool tfound = false;
+    bool successful = false;
 
     if (IS_NPC(ch))
         return;
@@ -2662,7 +2662,7 @@ void do_train(CHAR_DATA *ch, char *argument)
     for (mob = ch->in_room->first_person; mob; mob = mob->next_in_room)
         if (IS_NPC(mob) && IS_SET(mob->act, ACT_TRAIN))
         {
-            tfound = TRUE;
+            tfound = true;
             break;
         }
 
@@ -2762,10 +2762,10 @@ void do_train(CHAR_DATA *ch, char *argument)
 
     if ( number_bits ( 2 ) == 0 )
     {
-        successful = TRUE;
+        successful = true;
     }
     */
-    successful = TRUE;
+    successful = true;
     if (!str_cmp(arg, "str") || !str_cmp(arg, "strength"))
     {
         if (!successful)

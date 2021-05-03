@@ -180,7 +180,7 @@ void save_planet(PLANET_DATA *planet)
     if (!str_cmp(word, literal))                                                                                       \
     {                                                                                                                  \
         field = value;                                                                                                 \
-        fMatch = TRUE;                                                                                                 \
+        fMatch = true;                                                                                                 \
         break;                                                                                                         \
     }
 
@@ -197,12 +197,12 @@ void fread_planet(PLANET_DATA *planet, FILE *fp)
     for (;;)
     {
         word = feof(fp) ? "End" : fread_word(fp);
-        fMatch = FALSE;
+        fMatch = false;
 
         switch (UPPER(word[0]))
         {
         case '*':
-            fMatch = TRUE;
+            fMatch = true;
             fread_to_eol(fp);
             break;
 
@@ -242,7 +242,7 @@ void fread_planet(PLANET_DATA *planet, FILE *fp)
                                          planet->barracks++;
                                  }
                           }      */
-            // fMatch = TRUE;
+            // fMatch = true;
             //}
             if (!str_cmp(word, "area"))
             {
@@ -253,7 +253,7 @@ void fread_planet(PLANET_DATA *planet, FILE *fp)
                     area->planet = planet;
                     LINK(area, planet->first_area, planet->last_area, next_on_planet, prev_on_planet);
                 }
-                fMatch = TRUE;
+                fMatch = true;
             }
 
             break;
@@ -277,7 +277,7 @@ void fread_planet(PLANET_DATA *planet, FILE *fp)
             if (!str_cmp(word, "GovernedBy"))
             {
                 planet->governed_by = get_clan(fread_string(fp));
-                fMatch = TRUE;
+                fMatch = true;
             }
             break;
 
@@ -313,7 +313,7 @@ void fread_planet(PLANET_DATA *planet, FILE *fp)
 
                     LINK(planet, starsystem->first_planet, starsystem->last_planet, next_in_system, prev_in_system);
                 }
-                fMatch = TRUE;
+                fMatch = true;
             }
             break;
         case 'T':
@@ -357,13 +357,13 @@ bool load_planet_file(const char *planetfile)
     planet->first_guard = NULL;
     planet->last_guard = NULL;
 
-    found = FALSE;
+    found = false;
     sprintf_s(filename, "%s%s", PLANET_DIR, planetfile);
 
     if ((fp = fopen(filename, "r")) != NULL)
     {
 
-        found = TRUE;
+        found = true;
         for (;;)
         {
             char letter;
@@ -795,7 +795,7 @@ void do_makeplanet(CHAR_DATA *ch, char *argument)
         return;
     }
 
-    found = FALSE;
+    found = false;
     sprintf_s(filename, "%s%s", PLANET_DIR, strlower(argument));
 
     CREATE(planet, PLANET_DATA, 1);
