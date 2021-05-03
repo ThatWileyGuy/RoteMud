@@ -42,6 +42,7 @@
 #include <time.h>
 #include <math.h>
 #include "mud.hxx"
+#include "connection.hxx"
 
 /* From newarena.c -- Tawnos */
 extern void start_arena();
@@ -2552,7 +2553,8 @@ void auth_update(void)
         if ((victim = d->character) && IS_WAITING_FOR_AUTH(victim))
         {
             found_hit = true;
-            sprintf_s(buf, " %s@%s new %s\n\r", victim->name, victim->desc->host, race_table[victim->race].race_name);
+            sprintf_s(buf, " %s@%s new %s\n\r", victim->name, victim->desc->connection->getHostname().c_str(),
+                      race_table[victim->race].race_name);
             strcat_s(log_buf, buf);
         }
     }

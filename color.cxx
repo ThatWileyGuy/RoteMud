@@ -1210,7 +1210,6 @@ void write_to_pager(DESCRIPTOR_DATA* d, const char* txt, size_t length)
     {
         d->pagepoint = d->pagebuf;
         d->pagetop = 0;
-        d->pagecmd = '\0';
     }
     if (d->pagetop == 0 && !d->fcommand)
     {

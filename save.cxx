@@ -44,6 +44,7 @@
 #include <sys/stat.h>
 #include <filesystem>
 #include "mud.hxx"
+#include "connection.hxx"
 
 /*
  * Increment with every major format change.
@@ -520,8 +521,8 @@ void fwrite_char(CHAR_DATA* ch, FILE* fp)
 
         fprintf(fp, "Condition    %d %d %d %d\n", ch->pcdata->condition[0], ch->pcdata->condition[1],
                 ch->pcdata->condition[2], ch->pcdata->condition[3]);
-        if (ch->desc && ch->desc->host)
-            fprintf(fp, "Site         %s\n", ch->desc->host);
+        if (ch->desc && ch->desc->connection->getHostname().c_str())
+            fprintf(fp, "Site         %s\n", ch->desc->connection->getHostname().c_str());
         else
             fprintf(fp, "Site         (Link-Dead)\n");
 
@@ -739,14 +740,15 @@ void fwrite_obj(CHAR_DATA* ch, OBJ_DATA* obj, FILE* fp, int iNest, sh_int os_typ
 /*
  * Load a char and inventory into a new ch structure.
  */
-bool load_char_obj(DESCRIPTOR_DATA* d, char* name, bool preload)
+bool load_char_obj(DESCRIPTOR_DATA* d, const char* name, bool preload)
 {
     char strsave[MAX_INPUT_LENGTH];
-    CHAR_DATA* ch;
-    FILE* fp;
-    bool found;
-    struct stat fst;
-    int i, x;
+    CHAR_DATA* ch = nullptr;
+    FILE* fp = nullptr;
+    bool found = false;
+    struct stat fst = {};
+    int i = 0;
+    int x = 0;
     extern FILE* fpArea;
     extern char strArea[MAX_INPUT_LENGTH];
     char buf[MAX_INPUT_LENGTH];

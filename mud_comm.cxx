@@ -40,6 +40,7 @@
 #include <stdio.h>
 #include <string.h>
 #include "mud.hxx"
+#include "connection.hxx"
 
 const char* mprog_type_to_name(int type);
 ch_ret simple_damage(CHAR_DATA* ch, CHAR_DATA* victim, int dam, int dt);
@@ -1572,7 +1573,8 @@ void do_mpapply(CHAR_DATA* ch, char* argument)
     if (victim->pcdata->auth_state >= 1)
         return;
 
-    sprintf_s(log_buf, "%s@%s new %s applying for authorization...", victim->name, victim->desc->host,
+    sprintf_s(log_buf, "%s@%s new %s applying for authorization...", victim->name,
+              victim->desc->connection->getHostname().c_str(),
               race_table[victim->race].race_name);
     log_string(log_buf);
     to_channel(log_buf, CHANNEL_MONITOR, "Monitor", LEVEL_IMMORTAL);
@@ -1623,7 +1625,8 @@ void do_mpapplyb(CHAR_DATA* ch, char* argument)
     case 1:
     default:
         send_to_char("You attempt to regain the gods' attention.\n\r", victim);
-        sprintf_s(log_buf, "%s@%s new %s applying for authorization...", victim->name, victim->desc->host,
+        sprintf_s(log_buf, "%s@%s new %s applying for authorization...", victim->name,
+                  victim->desc->connection->getHostname().c_str(),
                   race_table[victim->race].race_name);
         log_string(log_buf);
         to_channel(log_buf, CHANNEL_MONITOR, "Monitor", LEVEL_IMMORTAL);

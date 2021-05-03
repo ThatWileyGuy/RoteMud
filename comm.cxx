@@ -38,13 +38,13 @@
 
 #include <optional>
 #include <memory>
-#include <boost/asio.hpp>
 
 #ifdef WIN32
 #include <fcntl.h>
 #endif
 
 #include "mud.hxx"
+#include "connection.hxx"
 
 #ifdef ECHO
 #undef ECHO // TODO where does this come from on Linux?
@@ -104,9 +104,7 @@ tm new_boot_struct;
 char str_boot_time[MAX_INPUT_LENGTH];
 char lastplayercmd[MAX_INPUT_LENGTH * 2];
 time_t current_time; /* Time of this pulse		*/
-int port;            /* Port number to be used       */
-boost::asio::io_context io_context;
-std::optional<boost::asio::ip::tcp::acceptor> control; /* Controlling descriptor	*/
+std::optional<IOManager> io_manager;
 
 /*
  * OS-dependent local functions.
@@ -120,21 +118,26 @@ void handle_descriptor_read(DESCRIPTOR_DATA* d, size_t read);
 /*
  * Other local functions (OS-independent).
  */
-bool check_parse_name(char* name);
+bool check_parse_name(const char* name);
 bool check_reconnect(DESCRIPTOR_DATA* d, char* name, bool fConn);
 bool check_playing(DESCRIPTOR_DATA* d, char* name, bool kick);
 bool check_multi(DESCRIPTOR_DATA* d, char* name);
 int main(int argc, char** argv);
 void nanny(DESCRIPTOR_DATA* d, char* argument);
-void flush_buffer(DESCRIPTOR_DATA* d, bool fPrompt);
-void read_from_buffer(DESCRIPTOR_DATA* d);
 void stop_idling(CHAR_DATA* ch);
 void free_desc(DESCRIPTOR_DATA* d);
 void display_prompt(DESCRIPTOR_DATA* d);
 int make_color_sequence(const char* col, char* buf, DESCRIPTOR_DATA* d);
 int make_color_sequence_desc(const char* col, char* buf, DESCRIPTOR_DATA* d);
-void set_pager_input(DESCRIPTOR_DATA* d, char* argument);
-void pager_output(DESCRIPTOR_DATA* d);
+void handle_pager_input(DESCRIPTOR_DATA* d, char* argument);
+void handle_command(void* context, const std::string& line);
+void* handle_new_unauthenticated_connection(std::shared_ptr<Connection> connection);
+bool authenticate_user(const std::string& username, const std::string& password);
+std::vector<Pubkey> get_public_keys_for_user(const std::string& username);
+void* handle_new_authenticated_connection(std::shared_ptr<Connection> connection, const std::string& username);
+void connection_closed(void* context);
+void close_socket(DESCRIPTOR_DATA* d, bool closedExternally, bool force);
+void send_prompt(DESCRIPTOR_DATA* d);
 
 void mail_count(CHAR_DATA* ch);
 
@@ -206,31 +209,8 @@ int main(int argc, char** argv)
     /*
      * Get the port number.
      */
-    port = 8787;
-    if (argc > 1)
-    {
-        if (!is_number(argv[1]))
-        {
-            fprintf(stderr, "Usage: %s [port #]\n", argv[0]);
-            exit(1);
-        }
-        else if ((port = atoi(argv[1])) <= 1024)
-        {
-            fprintf(stderr, "Port number must be above 1024.\n");
-            exit(1);
-        }
-
-        // TODO ditching copyover for now
-        /*
-        if (argv[2] && argv[2][0])
-        {
-            fCopyOver = true;
-            control = atoi(argv[3]);
-        }
-        else
-            fCopyOver = false;
-        */
-    }
+    const uint16_t telnet_port = 8787;
+    const uint16_t ssh_port = 22;
 
     /*
      * Run the game.
@@ -240,19 +220,22 @@ int main(int argc, char** argv)
     log_string("Initializing socket");
     if (!fCopyOver) /* We have already the port if copyover'ed */
     {
-        control = init_socket(port);
-        if (!control.has_value())
+        IOManagerCallbacks callbacks = {
+            &handle_command,           &handle_new_unauthenticated_connection, &authenticate_user,
+            &get_public_keys_for_user, &handle_new_authenticated_connection,   &connection_closed};
+
+        io_manager.emplace(callbacks, telnet_port, ssh_port);
+        if (!io_manager.has_value())
         {
-            fprintf(stderr, "failed to initialize listener socket");
+            fprintf(stderr, "failed to initialize IO");
             exit(1);
         }
     }
-    sprintf_s(log_buf, "%s ready on port %d.", sysdata.mud_acronym, port);
+
+    sprintf_s(log_buf, "%s ready on ports %d and %d.", sysdata.mud_acronym, telnet_port, ssh_port);
     log_string(log_buf);
-    new_socket = std::make_unique<boost::asio::ip::tcp::socket>(io_context);
-    control.value().async_accept(*new_socket, &handle_new_socket);
     game_loop();
-    control.value().close();
+    io_manager.reset();
 
     /*
      * That's all, folks.
@@ -261,68 +244,18 @@ int main(int argc, char** argv)
     return 0;
 }
 
-void init_descriptor(DESCRIPTOR_DATA* dnew, std::unique_ptr<boost::asio::ip::tcp::socket>&& socket)
+void* handle_new_unauthenticated_connection(std::shared_ptr<Connection> connection)
 {
-    dnew->socket.swap(socket);
+    DESCRIPTOR_DATA* dnew = nullptr;
+    CREATE(dnew, DESCRIPTOR_DATA, 1);
+
+    dnew->connection.swap(connection);
     dnew->connected = CON_GET_NAME;
     dnew->scrlen = 24;
     dnew->user = STRALLOC("unknown");
     dnew->prevcolor = 0x07;
 
-    auto input_buffer = new (&dnew->input_buffer) boost::circular_buffer<unsigned char>(MAX_INBUF_SIZE);
-    auto output_buffer =
-        new (&dnew->output_buffer) boost::circular_buffer<char>(64 * MAX_INBUF_SIZE); // TODO this should be a constant
-}
-
-boost::asio::ip::tcp::acceptor init_socket(int port)
-{
-
-    boost::asio::ip::tcp::acceptor acceptor_socket(io_context);
-    boost::asio::ip::tcp::endpoint endpoint(boost::asio::ip::tcp::v4(), port);
-    acceptor_socket.open(endpoint.protocol());
-    acceptor_socket.set_option(boost::asio::ip::tcp::acceptor::reuse_address(true));
-    acceptor_socket.set_option(boost::asio::ip::tcp::acceptor::linger(true, 1000));
-    acceptor_socket.set_option(boost::asio::ip::tcp::no_delay(true));
-    acceptor_socket.bind(endpoint);
-    acceptor_socket.listen(50);
-
-    return acceptor_socket;
-}
-
-void handle_new_socket(const boost::system::error_code& error)
-{
-    if (error)
-    {
-        std::string log_line = "listener socket hit an error: ";
-        log_line += error.message();
-        log_string(log_line.c_str());
-        return;
-    }
-
-    DESCRIPTOR_DATA* dnew = nullptr;
-    CREATE(dnew, DESCRIPTOR_DATA, 1);
-
-    init_descriptor(dnew, std::move(new_socket));
-
-    assert(new_socket == nullptr);
-    new_socket = std::make_unique<boost::asio::ip::tcp::socket>(io_context);
-    control.value().async_accept(*new_socket, &handle_new_socket);
-
     // TODO this is where IP bans would get processed - skipping for now
-
-    auto peer = dnew->socket->remote_endpoint();
-
-    auto ip = peer.address().to_string();
-
-    boost::asio::io_service io_service;
-    boost::asio::ip::tcp::resolver resolver(io_service);
-    boost::asio::ip::tcp::resolver::iterator destination = resolver.resolve(peer);
-
-    auto host = destination->host_name();
-
-    dnew->port = peer.port();
-    dnew->host = STRALLOC(host.c_str());
-    dnew->hostip = STRALLOC(ip.c_str());
 
     /*
      * Init descriptor data.
@@ -339,8 +272,6 @@ void handle_new_socket(const boost::system::error_code& error)
     }
 
     LINK(dnew, first_descriptor, last_descriptor, next, prev);
-
-    dnew->socket->set_option(boost::asio::ip::tcp::no_delay(true));
 
     /*
      * Send the greeting. Forces new color function - Tawnos
@@ -370,50 +301,52 @@ void handle_new_socket(const boost::system::error_code& error)
         to_channel(log_buf, CHANNEL_MONITOR, "Monitor", LEVEL_IMMORTAL);
         save_sysdata(sysdata);
     }
+
+    return dnew;
 }
 
-void refresh_output_io(DESCRIPTOR_DATA* desc)
+void handle_command(void* context, const std::string& command)
 {
-    if (!desc->output_io_pending)
+    auto d = reinterpret_cast<DESCRIPTOR_DATA*>(context);
+
+    // TODO close the socket instead of asserting
+    assert((command.size() + 1) < MAX_INPUT_LENGTH);
+    char cmdline[MAX_INPUT_LENGTH];
+
+    std::memcpy(cmdline, command.c_str(), command.length());
+    cmdline[command.length()] = '\0';
+
+    d->fcommand = true;
+    stop_idling(d->character);
+
+    if (d->character)
+        set_cur_char(d->character);
+
+    if (d->pagepoint)
+        handle_pager_input(d, cmdline);
+    else
     {
-        if ((desc->fcommand || !desc->output_buffer.empty()))
+        switch (d->connected)
         {
-            if (desc->pagepoint)
-            {
-                pager_output(desc);
-            }
-            else
-            {
-                flush_buffer(desc, false);
-            }
+        default:
+            nanny(d, cmdline);
+            break;
+        case CON_PLAYING:
+            interpret(d->character, cmdline);
+            break;
+        case CON_EDITING:
+            edit_buffer(d->character, cmdline);
+            break;
+        case CON_MAIL_BEGIN:
+        case CON_MAIN_MAIL_MENU:
+        case CON_MAIL_DISPLAY:
+        case CON_MAIL_WRITE_START:
+        case CON_MAIL_WRITE_TO:
+        case CON_MAIL_WRITE_SUBJECT:
+            arms(d, cmdline);
+            break;
         }
     }
-}
-
-void refresh_input_io(DESCRIPTOR_DATA* desc)
-{
-    if (!desc->input_io_pending &&
-        (desc->input_buffer.capacity() - desc->input_buffer.size()) >= desc->socket_input_buffer.size())
-    {
-        desc->input_io_pending = true;
-        desc->socket->async_read_some(boost::asio::buffer(desc->socket_input_buffer),
-                                      [desc](const boost::system::error_code& error, size_t transferred) {
-                                          if (error)
-                                          {
-                                              handle_descriptor_error(desc, error);
-                                          }
-                                          else
-                                          {
-                                              handle_descriptor_read(desc, transferred);
-                                          }
-                                      });
-    }
-}
-
-void refresh_io(DESCRIPTOR_DATA* desc)
-{
-    refresh_output_io(desc);
-    refresh_input_io(desc);
 }
 
 /*
@@ -503,49 +436,16 @@ void game_loop()
             }
             else
             {
-                d->fcommand = false;
+                if (d->fcommand)
+                {
+                    send_prompt(d);
+                    d->fcommand = false;
+                }
 
                 if (d->character && d->character->wait > 0)
                 {
                     --d->character->wait;
                     continue;
-                }
-
-                read_from_buffer(d);
-                if (d->incomm[0] != '\0')
-                {
-                    d->fcommand = true;
-                    stop_idling(d->character);
-
-                    strcpy_s(cmdline, d->incomm);
-                    d->incomm[0] = '\0';
-
-                    if (d->character)
-                        set_cur_char(d->character);
-
-                    if (d->pagepoint)
-                        set_pager_input(d, cmdline);
-                    else
-                        switch (d->connected)
-                        {
-                        default:
-                            nanny(d, cmdline);
-                            break;
-                        case CON_PLAYING:
-                            interpret(d->character, cmdline);
-                            break;
-                        case CON_EDITING:
-                            edit_buffer(d->character, cmdline);
-                            break;
-                        case CON_MAIL_BEGIN:
-                        case CON_MAIN_MAIL_MENU:
-                        case CON_MAIL_DISPLAY:
-                        case CON_MAIL_WRITE_START:
-                        case CON_MAIL_WRITE_TO:
-                        case CON_MAIL_WRITE_SUBJECT:
-                            arms(d, cmdline);
-                            break;
-                        }
                 }
             }
             if (d == last_descriptor)
@@ -560,20 +460,11 @@ void game_loop()
         /*
          * IO
          */
-        for (d = first_descriptor; d; d = d_next)
-        {
-            d_next = d->next;
 
-            refresh_io(d);
-
-            if (d == last_descriptor)
-                break;
-        }
-
-        // run IO and/or sleep until the next pulse
         auto next_pulse_start =
             last_time + std::chrono::steady_clock::duration(std::chrono::nanoseconds(1000000000 / PULSE_PER_SECOND));
-        io_context.run_until(next_pulse_start);
+
+        io_manager->runUntil(next_pulse_start);
         std::this_thread::sleep_until(next_pulse_start);
 
         last_time = next_pulse_start;
@@ -606,9 +497,6 @@ void log_printf(const char* fmt, ...)
 
 void free_desc(DESCRIPTOR_DATA* d)
 {
-    d->socket.get()->close();
-    if (d->host)
-        STRFREE(d->host);
     if (d->user)
         STRFREE(d->user); /* identd */
     if (d->pagebuf)
@@ -617,17 +505,35 @@ void free_desc(DESCRIPTOR_DATA* d)
     return;
 }
 
+void connection_closed(void* context)
+{
+    DESCRIPTOR_DATA* d = reinterpret_cast<DESCRIPTOR_DATA*>(context);
+
+    if (d == nullptr)
+        return;
+
+    close_socket(d, true, true);
+}
+
 void close_socket(DESCRIPTOR_DATA* dclose, bool force)
+{
+    close_socket(dclose, false, force);
+}
+
+void close_socket(DESCRIPTOR_DATA* dclose, bool startedExternally, bool force)
 {
     CHAR_DATA* ch = nullptr;
     DESCRIPTOR_DATA* d = nullptr;
     bool DoNotUnlink = false;
 
-    dclose->connected = CON_DISCONNECTING;
-
     /* flush outbuf */
-    if (!force && !dclose->output_buffer.empty())
-        flush_buffer(dclose, false);
+    if (!startedExternally)
+    {
+        if (!force)
+            dclose->connection->flushAndClose();
+        else
+            dclose->connection->close();
+    }
 
     /* say bye to whoever's snooping this descriptor */
     if (dclose->snoop_by)
@@ -658,15 +564,16 @@ void close_socket(DESCRIPTOR_DATA* dclose, bool force)
     if (!dclose->prev && dclose != first_descriptor)
     {
         DESCRIPTOR_DATA *dp, *dn;
-        bug("Close_socket: %s desc:%p != first_desc:%p and desc->prev = NULL!", ch ? ch->name : d->host, dclose,
-            first_descriptor);
+        bug("Close_socket: %s desc:%p != first_desc:%p and desc->prev = NULL!",
+            ch ? ch->name : d->connection->getHostname().c_str(), dclose, first_descriptor);
         dp = NULL;
         for (d = first_descriptor; d; d = dn)
         {
             dn = d->next;
             if (d == dclose)
             {
-                bug("Close_socket: %s desc:%p found, prev should be:%p, fixing.", ch ? ch->name : d->host, dclose, dp);
+                bug("Close_socket: %s desc:%p found, prev should be:%p, fixing.",
+                    ch ? ch->name : d->connection->getHostname().c_str(), dclose, dp);
                 dclose->prev = dp;
                 break;
             }
@@ -674,7 +581,8 @@ void close_socket(DESCRIPTOR_DATA* dclose, bool force)
         }
         if (!dclose->prev)
         {
-            bug("Close_socket: %s desc:%p could not be found!.", ch ? ch->name : dclose->host, dclose);
+            bug("Close_socket: %s desc:%p could not be found!.",
+                ch ? ch->name : dclose->connection->getHostname().c_str(), dclose);
             DoNotUnlink = true;
         }
     }
@@ -708,8 +616,7 @@ void close_socket(DESCRIPTOR_DATA* dclose, bool force)
         UNLINK(dclose, first_descriptor, last_descriptor, next, prev);
     }
 
-    if (!dclose->input_io_pending && !dclose->output_io_pending)
-        free_desc(dclose);
+    free_desc(dclose);
 }
 
 void handle_descriptor_error(DESCRIPTOR_DATA* d, const boost::system::error_code& error)
@@ -717,286 +624,6 @@ void handle_descriptor_error(DESCRIPTOR_DATA* d, const boost::system::error_code
     if (d->character && (d->connected == CON_PLAYING || d->connected == CON_EDITING))
         save_char_obj(d->character);
     close_socket(d, true);
-}
-
-void handle_descriptor_read(DESCRIPTOR_DATA* d, size_t read)
-{
-    d->idle = 0;
-    if (d->character)
-        d->character->timer = 0;
-
-    d->input_buffer.insert(d->input_buffer.end(), d->socket_input_buffer.begin(),
-                           d->socket_input_buffer.begin() + read);
-
-    d->input_io_pending = false;
-
-    if (d->connected == CON_DISCONNECTING && !d->input_io_pending)
-    {
-        free_desc(d);
-        return;
-    }
-
-    refresh_input_io(d);
-}
-
-void handle_descriptor_write(DESCRIPTOR_DATA* d, size_t intended_to_write, size_t written)
-{
-    if (written < intended_to_write)
-    {
-        const size_t still_to_write = intended_to_write - written;
-        memmove(&d->socket_output_buffer[0], &d->socket_output_buffer[written], still_to_write);
-
-        d->socket->async_write_some(boost::asio::buffer(&d->socket_output_buffer[0], still_to_write),
-                                    [d, still_to_write](const boost::system::error_code& error, size_t transferred) {
-                                        if (error)
-                                        {
-                                            handle_descriptor_error(d, error);
-                                        }
-                                        else
-                                        {
-                                            handle_descriptor_write(d, still_to_write, transferred);
-                                        }
-                                    });
-
-        return;
-    }
-
-    d->output_io_pending = false;
-
-    if (d->connected == CON_DISCONNECTING && !d->input_io_pending)
-    {
-        free_desc(d);
-        return;
-    }
-
-    refresh_output_io(d);
-}
-
-/*
- * Transfer one line from input buffer to input line.
- */
-void read_from_buffer(DESCRIPTOR_DATA* d)
-{
-    int i, j, k;
-
-    /*
-     * Hold horses if pending command already.
-     */
-    if (d->incomm[0] != '\0')
-        return;
-
-    /*
-     * Look for at least one new line.
-     */
-    for (i = 0; i < d->input_buffer.size() && d->input_buffer[i] != '\n' && d->input_buffer[i] != '\r'; i++)
-    {
-        if (d->input_buffer[i] == '\0')
-            return;
-    }
-
-    if (i == d->input_buffer.size())
-    {
-        return; // no actual line here
-    }
-
-    const int command_length = i;
-
-    if (command_length >= 254)
-    {
-        write_to_buffer(d, "Line too long.\n\r", 0);
-        d->input_buffer.erase_begin(command_length);
-
-        // clear out any garbage for next time
-        while (!d->input_buffer.empty() && (d->input_buffer.front() == '\n' || d->input_buffer.front() == '\r'))
-        {
-            d->input_buffer.pop_front();
-        }
-
-        return;
-    }
-
-    /*
-     * Canonical input processing.
-     */
-    for (i = 0, k = 0; i < command_length; i++)
-    {
-        if (d->input_buffer[i] == '\b' && k > 0)
-            --k;
-        else if (isascii(d->input_buffer[i]) && isprint(d->input_buffer[i]))
-            d->incomm[k++] = d->input_buffer[i];
-    }
-
-    /*
-     * Finish off the line.
-     */
-    if (k == 0)
-        d->incomm[k++] = ' ';
-    d->incomm[k] = '\0';
-
-    /*
-     * Deal with bozos with #repeat 1000 ...
-     */
-    if (k > 1 || d->incomm[0] == '!')
-    {
-        if (d->incomm[0] != '!' && strcmp(d->incomm, d->inlast))
-        {
-            d->repeat = 0;
-        }
-        else
-        {
-            if (++d->repeat >= 20)
-            {
-                /*		sprintf_s( log_buf, "%s input spamming!", d->host );
-                        log_string( log_buf );
-                */
-                write_to_buffer(d, "\n\r*** PUT A LID ON IT!!! ***\n\r", 0);
-            }
-        }
-    }
-
-    /*
-     * Do '!' substitution.
-     */
-    if (d->incomm[0] == '!')
-        strcpy_s(d->incomm, d->inlast);
-    else
-        strcpy_s(d->inlast, d->incomm);
-
-    /*
-     * Shift the input buffer.
-     */
-    while (d->input_buffer[i] == '\n' || d->input_buffer[i] == '\r')
-        i++;
-
-    d->input_buffer.erase_begin(i);
-}
-
-/*
- * Low level output function.
- */
-void flush_buffer(DESCRIPTOR_DATA* d, bool fPrompt)
-{
-    char buf[MAX_INPUT_LENGTH];
-    extern bool mud_down;
-    CHAR_DATA* ch = nullptr;
-
-    ch = d->original ? d->original : d->character;
-    if (ch && ch->fighting && ch->fighting->who)
-        show_condition(ch, ch->fighting->who);
-
-    /*
-     * Short-circuit if nothing to write.
-     */
-    if (d->output_buffer.empty())
-        return;
-
-    /*
-     * If buffer has more than 4K inside, spit out .5K at a time   -Thoric
-     */
-    if (!mud_down && d->output_buffer.size() > MAX_OUTPUT_SIZE)
-    {
-        const size_t bytes_to_send = 512;
-
-        for (size_t i = 0; i < bytes_to_send; i++)
-        {
-            d->socket_output_buffer[i] = d->output_buffer[i];
-        }
-
-        d->output_buffer.erase_begin(bytes_to_send);
-
-        if (d->snoop_by)
-        {
-            char snoopbuf[MAX_INPUT_LENGTH];
-
-            d->socket_output_buffer[bytes_to_send] = '\0';
-            if (d->character && d->character->name)
-            {
-                if (d->original && d->original->name)
-                    sprintf(snoopbuf, "%s (%s)", d->character->name, d->original->name);
-                else
-                    sprintf(snoopbuf, "%s", d->character->name);
-                write_to_buffer(d->snoop_by, snoopbuf, 0);
-            }
-            write_to_buffer(d->snoop_by, "% ", 2);
-            write_to_buffer(d->snoop_by, &d->socket_output_buffer[0], 0);
-        }
-
-        d->output_io_pending = true;
-        d->socket->async_write_some(boost::asio::buffer(&d->socket_output_buffer[0], bytes_to_send),
-                                    [d, bytes_to_send](const boost::system::error_code& error, size_t transferred) {
-                                        if (error)
-                                        {
-                                            handle_descriptor_error(d, error);
-                                        }
-                                        else
-                                        {
-                                            handle_descriptor_write(d, bytes_to_send, transferred);
-                                        }
-                                    });
-
-        return;
-    }
-
-    /*
-     * Bust a prompt.
-     */
-    if (fPrompt && !mud_down && d->connected == CON_PLAYING)
-    {
-        ch = d->original ? d->original : d->character;
-        if (IS_SET(ch->act, PLR_BLANK))
-            write_to_buffer(d, "\n\r", 2);
-
-        if (IS_SET(ch->act, PLR_PROMPT))
-            display_prompt(d);
-        if (IS_SET(ch->act, PLR_TELNET_GA))
-            write_to_buffer(d, go_ahead_str, 0);
-    }
-
-    const size_t bytes_to_send = d->output_buffer.size();
-    assert(bytes_to_send < d->socket_output_buffer.size());
-
-    for (size_t i = 0; i < bytes_to_send; i++)
-    {
-        d->socket_output_buffer[i] = d->output_buffer[i];
-    }
-
-    d->socket_output_buffer[bytes_to_send] = '\0';
-    d->output_buffer.erase_begin(bytes_to_send);
-
-    /*
-     * Snoop-o-rama.
-     */
-    if (d->snoop_by)
-    {
-        /* without check, 'force mortal quit' while snooped caused crash, -h */
-        if (d->character && d->character->name)
-        {
-            /* Show original snooped names. -- Altrag */
-            if (d->original && d->original->name)
-                sprintf(buf, "%s (%s)", d->character->name, d->original->name);
-            else
-                sprintf(buf, "%s", d->character->name);
-            write_to_buffer(d->snoop_by, buf, 0);
-        }
-        write_to_buffer(d->snoop_by, "% ", 2);
-        write_to_buffer(d->snoop_by, &d->output_buffer[0], bytes_to_send);
-    }
-
-    /*
-     * OS-dependent output.
-     */
-    d->output_io_pending = true;
-    d->socket->async_write_some(boost::asio::buffer(&d->socket_output_buffer[0], bytes_to_send),
-                                [d, bytes_to_send](const boost::system::error_code& error, size_t transferred) {
-                                    if (error)
-                                    {
-                                        handle_descriptor_error(d, error);
-                                    }
-                                    else
-                                    {
-                                        handle_descriptor_write(d, bytes_to_send, transferred);
-                                    }
-                                });
 }
 
 /*
@@ -1010,43 +637,28 @@ void write_to_buffer(DESCRIPTOR_DATA* d, std::string_view string)
         return;
     }
 
-    /*
-     * Normally a bug... but can happen if loadup is used.
-     */
-    if (!d->socket)
+    // Normally a bug... but can happen if loadup is used.
+    if (!d->connection)
         return;
 
-    /* Uncomment if debugging or something
-        if ( length != strlen(txt) )
+    try
+    {
+        // Initial \n\r if needed.
+        /*
+        if (!d->fcommand)
         {
-        bug( "Write_to_buffer: length(%d) != strlen(txt)!", length );
-        length = strlen(txt);
+            d->connection->write("\n\r");
         }
-    */
+        */
 
-    /*
-     * Initial \n\r if needed.
-     */
-    if (d->output_buffer.size() == 0 && !d->fcommand)
-    {
-        d->output_buffer.push_back('\n');
-        d->output_buffer.push_back('\r');
+        d->connection->write(string);
     }
-
-    if (d->output_buffer.capacity() - d->output_buffer.size() < string.size())
+    catch (...)
     {
-        /* empty buffer */
-        d->output_buffer.erase(d->output_buffer.begin(), d->output_buffer.end());
+        // TODO should probably have a specific exception type here.
         bug("Buffer overflow. Closing (%s).", d->character ? d->character->name : "???");
         close_socket(d, true);
-        return;
     }
-
-    /*
-     * Copy.
-     */
-    d->output_buffer.insert(d->output_buffer.end(), string.begin(), string.end());
-    return;
 }
 
 void write_to_buffer(DESCRIPTOR_DATA* d, const char* string, size_t length)
@@ -1208,7 +820,7 @@ void nanny(DESCRIPTOR_DATA* d, char* argument)
         fOld = load_char_obj(d, argument, true);
         if (!d->character)
         {
-            sprintf_s(log_buf, "Bad player file %s@%s.", argument, d->host);
+            sprintf_s(log_buf, "Bad player file %s@%s.", argument, d->connection->getHostname().c_str());
             log_string(log_buf);
             write_to_buffer(d, "Your playerfile is corrupt...Please notify the Admin.\n\r", 0);
             close_socket(d, false);
@@ -1218,7 +830,9 @@ void nanny(DESCRIPTOR_DATA* d, char* argument)
 
         for (pban = first_ban; pban; pban = pban->next)
         {
-            if ((!str_prefix(pban->name, d->host) || !str_suffix(pban->name, d->host)) && pban->level >= ch->top_level)
+            if ((!str_prefix(pban->name, d->connection->getHostname().c_str()) ||
+                 !str_suffix(pban->name, d->connection->getHostname().c_str())) &&
+                pban->level >= ch->top_level)
             {
                 write_to_buffer(d, "Your site has been banned from this Mud.\n\r", 0);
                 close_socket(d, false);
@@ -1227,7 +841,7 @@ void nanny(DESCRIPTOR_DATA* d, char* argument)
         }
         if (IS_SET(ch->act, PLR_DENY))
         {
-            sprintf_s(log_buf, "Denying access to %s@%s.", argument, d->host);
+            sprintf_s(log_buf, "Denying access to %s@%s.", argument, d->connection->getHostname().c_str());
             log_string_plus(log_buf, LOG_COMM, sysdata.log_level);
             if (d->newstate != 0)
             {
@@ -1293,7 +907,7 @@ void nanny(DESCRIPTOR_DATA* d, char* argument)
             write_to_buffer(d, "Wrong password.\n\r", 0);
             /* clear descriptor pointer to get rid of bug message in log */
             d->character->desc = NULL;
-            sprintf_s(buf, "%s@%s: Invalid password.", ch->name, d->host);
+            sprintf_s(buf, "%s@%s: Invalid password.", ch->name, d->connection->getHostname().c_str());
             log_string(buf);
             close_socket(d, false);
             return;
@@ -1326,7 +940,7 @@ void nanny(DESCRIPTOR_DATA* d, char* argument)
         free_char(d->character);
         fOld = load_char_obj(d, buf, false);
         ch = d->character;
-        sprintf_s(log_buf, "%s@%s(%s) has connected.", ch->name, d->host, d->user);
+        sprintf_s(log_buf, "%s@%s(%s) has connected.", ch->name, d->connection->getHostname().c_str(), d->user);
         if (ch->top_level < LEVEL_DEMI)
         {
             /*to_channel( log_buf, CHANNEL_MONITOR, "Monitor", ch->top_level );*/
@@ -1342,7 +956,7 @@ void nanny(DESCRIPTOR_DATA* d, char* argument)
             now = time(0);
             tme = localtime(&now);
             strftime(day, 50, "%a %b %d %H:%M:%S %Y", tme);
-            sprintf_s(log_buf, "%-20s     %-24s    %s", ch->name, day, d->host);
+            sprintf_s(log_buf, "%-20s     %-24s    %s", ch->name, day, d->connection->getHostname().c_str());
             write_last_file(log_buf);
         }
 
@@ -1855,7 +1469,8 @@ void nanny(DESCRIPTOR_DATA* d, char* argument)
             {
         */
 
-        sprintf_s(log_buf, "%s@%s new %s.", ch->name, d->host, race_table[ch->race].race_name);
+        sprintf_s(log_buf, "%s@%s new %s.", ch->name, d->connection->getHostname().c_str(),
+                  race_table[ch->race].race_name);
         log_string_plus(log_buf, LOG_COMM, sysdata.log_level);
         to_channel(log_buf, CHANNEL_MONITOR, "Monitor", LEVEL_IMMORTAL);
         sprintf_s(mudnamebuf, "\n\r&R&zWelcome to &R%s&z. Press enter to continue.&w\n\r\n\r", sysdata.mudname);
@@ -2258,10 +1873,229 @@ void nanny(DESCRIPTOR_DATA* d, char* argument)
     return;
 }
 
+bool authenticate_user(const std::string& rawName, const std::string& password)
+{
+    if (rawName.length() == 0)
+        return false;
+
+    std::string name = rawName;
+    name[0] = UPPER(name[0]);
+
+    if (!check_parse_name(name.c_str()))
+    {
+        return false;
+    }
+
+    if (name == "New")
+    {
+        return false; // TODO new player creation via SSH
+    }
+
+    // TODO check_playing - looks like a mess
+
+    DESCRIPTOR_DATA d = {};
+
+    bool found = load_char_obj(&d, name.c_str(), true);
+
+    CHAR_DATA* ch = d.character;
+
+    if (!found)
+    {
+        DISPOSE(ch);
+        return false;
+    }
+
+    if (IS_SET(ch->act, PLR_DENY))
+    {
+        sprintf_s(log_buf, "Denying access to %s", name.c_str());
+        log_string_plus(log_buf, LOG_COMM, sysdata.log_level);
+        DISPOSE(ch);
+        return false;
+    }
+
+    if (sysdata.wizlock == 1 && !IS_IMMORTAL(ch))
+    {
+        DISPOSE(ch);
+        return false;
+    }
+
+    if (!strcmp(smaug_crypt(password.c_str()), ch->pcdata->pwd))
+    {
+        DISPOSE(ch);
+        return true;
+    }
+
+    DISPOSE(ch);
+    return false;
+}
+
+std::vector<Pubkey> get_public_keys_for_user(const std::string& rawName)
+{
+    if (rawName.length() == 0)
+        return {};
+
+    std::string name = rawName;
+    name[0] = UPPER(name[0]);
+
+    if (!check_parse_name(name.c_str()))
+    {
+        return {};
+    }
+
+    DESCRIPTOR_DATA d = {};
+    bool found = load_char_obj(&d, name.c_str(), true);
+    CHAR_DATA* ch = d.character;
+
+    if (ch == nullptr)
+        return {};
+
+    bug("get_public_keys_for_user is unimplemented");
+
+    DISPOSE(ch);
+    return {};
+}
+
+void* handle_new_authenticated_connection(std::shared_ptr<Connection> connection, const std::string& rawName)
+{
+    std::string name = rawName;
+    name[0] = UPPER(name[0]);
+
+    DESCRIPTOR_DATA* dnew = nullptr;
+    CREATE(dnew, DESCRIPTOR_DATA, 1);
+
+    bool found = load_char_obj(dnew, name.c_str(), true);
+    assert(found);
+
+    dnew->connection.swap(connection);
+    dnew->scrlen = 24;
+    dnew->user = STRALLOC(name.c_str());
+    dnew->prevcolor = 0x07;
+
+    // TODO this is where IP bans would get processed - skipping for now
+
+    /*
+     * Init descriptor data.
+     */
+
+    if (!last_descriptor && first_descriptor)
+    {
+        DESCRIPTOR_DATA* d = nullptr;
+
+        bug("New_descriptor: last_desc is NULL, but first_desc is not! ...fixing");
+        for (d = first_descriptor; d; d = d->next)
+            if (!d->next)
+                last_descriptor = d;
+    }
+
+    LINK(dnew, first_descriptor, last_descriptor, next, prev);
+
+    /*
+     * Send the greeting. Forces new color function - Tawnos
+     */
+    {
+        extern char* help_greeting;
+        if (help_greeting[0] == '.')
+            send_to_desc_color2(help_greeting + 1, dnew);
+        else
+            send_to_desc_color2(help_greeting, dnew);
+    }
+
+    num_descriptors++;
+    char buf[MAX_STRING_LENGTH] = {};
+
+    if (num_descriptors > sysdata.maxplayers)
+        sysdata.maxplayers = num_descriptors;
+    if (sysdata.maxplayers > sysdata.alltimemax)
+    {
+        if (sysdata.time_of_max)
+            DISPOSE(sysdata.time_of_max);
+        sprintf_s(buf, "%24.24s", ctime(&current_time));
+        sysdata.time_of_max = str_dup(buf);
+        sysdata.alltimemax = sysdata.maxplayers;
+        sprintf_s(log_buf, "Broke all-time maximum player record: %d", sysdata.alltimemax);
+        log_string_plus(log_buf, LOG_COMM, sysdata.log_level);
+        to_channel(log_buf, CHANNEL_MONITOR, "Monitor", LEVEL_IMMORTAL);
+        save_sysdata(sysdata);
+    }
+
+    write_to_buffer(dnew, "\n\r", 2);
+
+    write_to_buffer(dnew, echo_on_str, 0);
+
+    CHAR_DATA* ch = dnew->character;
+
+    bool chk = check_reconnect(dnew, ch->name, true);
+    if (chk == BERR)
+    {
+        if (dnew->character && dnew->character->desc)
+            dnew->character->desc = NULL;
+        close_socket(dnew, false);
+        return nullptr;
+    }
+    if (chk == true)
+        return dnew;
+
+    if (check_multi(dnew, ch->name))
+    {
+        close_socket(dnew, false);
+        return nullptr;
+    }
+
+    sprintf_s(buf, ch->name);
+    dnew->character->desc = NULL;
+    free_char(dnew->character);
+    bool fOld = load_char_obj(dnew, buf, false);
+    ch = dnew->character;
+    sprintf_s(log_buf, "%s@%s(%s) has connected.", ch->name, dnew->connection->getHostname().c_str(), dnew->user);
+    if (ch->top_level < LEVEL_DEMI)
+    {
+        /*to_channel( log_buf, CHANNEL_MONITOR, "Monitor", ch->top_level );*/
+        log_string_plus(log_buf, LOG_COMM, sysdata.log_level);
+    }
+    else
+        log_string_plus(log_buf, LOG_COMM, ch->top_level);
+
+    {
+        tm* tme;
+        time_t now;
+        char day[50];
+        now = time(0);
+        tme = localtime(&now);
+        strftime(day, 50, "%a %b %d %H:%M:%S %Y", tme);
+        sprintf_s(log_buf, "%-20s     %-24s    %s", ch->name, day, dnew->connection->getHostname().c_str());
+        write_last_file(log_buf);
+    }
+
+    show_title(dnew);
+    if (ch->pcdata->area)
+    {
+        do_loadarea(ch, "");
+        assign_area(ch);
+    }
+    if (ch->max_mana != (ch->force_control + ch->force_sense + ch->force_alter) * 3 * ch->force_level_status)
+        ch->max_mana = (ch->force_control + ch->force_sense + ch->force_alter) * 3 * ch->force_level_status;
+    ch->mana = ch->max_mana;
+    if (ch->force_identified == 1 && ch->force_level_status == FORCE_MASTER)
+    {
+        int ft;
+        FORCE_SKILL* skill;
+        if (ch->force_skill[FORCE_SKILL_PARRY] < 50)
+            ch->force_skill[FORCE_SKILL_PARRY] = 50;
+        ft = ch->force_type;
+        for (skill = first_force_skill; skill; skill = skill->next)
+            if ((skill->type == ft || skill->type == FORCE_GENERAL) && ch->force_skill[skill->index] < 50 &&
+                (strcmp(skill->name, "master") && strcmp(skill->name, "student") && strcmp(skill->name, "promote") &&
+                 strcmp(skill->name, "instruct")))
+                ch->force_skill[skill->index] = 50;
+    }
+
+    return dnew;
+}
+
 /*
  * Parse a name for acceptability.
  */
-bool check_parse_name(char* name)
+bool check_parse_name(const char* name)
 {
     /*
      * Reserved words.
@@ -2284,7 +2118,7 @@ bool check_parse_name(char* name)
      * Lock out IllIll twits.
      */
     {
-        char* pc;
+        const char* pc;
         bool fIll;
 
         fIll = true;
@@ -2348,7 +2182,7 @@ bool check_reconnect(DESCRIPTOR_DATA* d, char* name, bool fConn)
                 ch->timer = 0;
                 send_to_char("Reconnecting.\n\r", ch);
                 act(AT_ACTION, "$n has reconnected.", ch, NULL, NULL, TO_ROOM);
-                sprintf_s(log_buf, "%s@%s(%s) reconnected.", ch->name, d->host, d->user);
+                sprintf_s(log_buf, "%s@%s(%s) reconnected.", ch->name, d->connection->getHostname().c_str(), d->user);
                 log_string_plus(log_buf, LOG_COMM, UMAX(sysdata.log_level, ch->top_level));
                 /*
                         if ( ch->top_level < LEVEL_SAVIOR )
@@ -2375,25 +2209,27 @@ bool check_multi(DESCRIPTOR_DATA* d, char* name)
     {
         if (dold != d && (dold->character || dold->original) &&
             str_cmp(name, dold->original ? dold->original->name : dold->character->name) &&
-            !str_cmp(dold->host, d->host))
+            !str_cmp(dold->connection->getHostname().c_str(), d->connection->getHostname().c_str()))
         {
             const char* ok = "194.234.177";
             const char* ok2 = "209.183.133.229";
             int iloop;
+
+            auto host = d->connection->getHostname().c_str();
 
             if (get_trust(d->character) >= LEVEL_SUPREME ||
                 get_trust(dold->original ? dold->original : dold->character) >= LEVEL_SUPREME)
                 return false;
             for (iloop = 0; iloop < 11; iloop++)
             {
-                if (ok[iloop] != d->host[iloop])
+                if (ok[iloop] != host[iloop])
                     break;
             }
             if (iloop >= 10)
                 return false;
             for (iloop = 0; iloop < 11; iloop++)
             {
-                if (ok2[iloop] != d->host[iloop])
+                if (ok2[iloop] != host[iloop])
                     break;
             }
             if (iloop >= 10)
@@ -2448,7 +2284,8 @@ bool check_playing(DESCRIPTOR_DATA* d, char* name, bool kick)
             ch->switched = NULL;
             send_to_char("Reconnecting.\n\r", ch);
             act(AT_ACTION, "$n has reconnected, kicking off old link.", ch, NULL, NULL, TO_ROOM);
-            sprintf_s(log_buf, "%s@%s reconnected, kicking off old link.", ch->name, d->host);
+            sprintf_s(log_buf, "%s@%s reconnected, kicking off old link.", ch->name,
+                      d->connection->getHostname().c_str());
             log_string_plus(log_buf, LOG_COMM, UMAX(sysdata.log_level, ch->top_level));
             /*
                     if ( ch->top_level < LEVEL_SAVIOR )
@@ -3149,28 +2986,35 @@ int make_color_sequence_desc(const char* col, char* buf, DESCRIPTOR_DATA* d)
     return ln;
 }
 
-void set_pager_input(DESCRIPTOR_DATA* d, char* argument)
+void send_prompt(DESCRIPTOR_DATA* d)
+{
+    CHAR_DATA* ch = d->original ? d->original : d->character;
+    if (IS_SET(ch->act, PLR_BLANK))
+        write_to_buffer(d, "\n\r", 2);
+
+    if (IS_SET(ch->act, PLR_PROMPT))
+        display_prompt(d);
+    if (IS_SET(ch->act, PLR_TELNET_GA))
+        write_to_buffer(d, go_ahead_str, 0);
+}
+
+void handle_pager_input(DESCRIPTOR_DATA* d, char* argument)
 {
     while (isspace(*argument))
         argument++;
-    d->pagecmd = *argument;
-    return;
-}
+    char pagecmd = *argument;
 
-void pager_output(DESCRIPTOR_DATA* d)
-{
-    char* last;
-    CHAR_DATA* ch;
-    int pclines;
-    int lines;
-    bool ret;
+    char* last = nullptr;
+    CHAR_DATA* ch = nullptr;
+    int pclines = 0;
+    int lines = 0;
 
-    if (!d || !d->pagepoint || d->pagecmd == -1)
+    if (!d || !d->pagepoint || pagecmd == -1)
         return;
 
     ch = d->original ? d->original : d->character;
     pclines = UMAX(ch->pcdata->pagerlen, 5) - 1;
-    switch (LOWER(d->pagecmd))
+    switch (LOWER(pagecmd))
     {
     default:
         lines = 0;
@@ -3184,7 +3028,7 @@ void pager_output(DESCRIPTOR_DATA* d)
     case 'q':
         d->pagetop = 0;
         d->pagepoint = NULL;
-        flush_buffer(d, true);
+        send_prompt(d);
         DISPOSE(d->pagebuf);
         d->pagesize = MAX_STRING_LENGTH;
         return;
@@ -3214,12 +3058,12 @@ void pager_output(DESCRIPTOR_DATA* d)
     {
         d->pagetop = 0;
         d->pagepoint = NULL;
-        flush_buffer(d, true);
+        send_prompt(d);
         DISPOSE(d->pagebuf);
         d->pagesize = MAX_STRING_LENGTH;
         return;
     }
-    d->pagecmd = -1;
+
     if (IS_SET(ch->act, PLR_ANSI))
         write_to_buffer(d, ANSI_LBLUE, 7);
     write_to_buffer(d, "(C)ontinue, (R)efresh, (B)ack, (Q)uit: [C] ", 0);
@@ -3551,7 +3395,10 @@ const char* PERS(CHAR_DATA* ch, CHAR_DATA* looker)
                 race[0] = tolower(race[0]);
                 if (!IS_DROID(ch))
                     sprintf_s(buf, "%s %s %s of %s height", aoran(build_name[ch->build]), race,
-                              ch->sex == 1 ? "male" : ch->sex == 2 ? "female" : "neutral", height_name[ch->pheight]);
+                              ch->sex == 1   ? "male"
+                              : ch->sex == 2 ? "female"
+                                             : "neutral",
+                              height_name[ch->pheight]);
                 else
                     sprintf_s(buf, "%s %s", aoran(droid_name[ch->build]), race);
                 return buf;

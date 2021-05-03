@@ -4062,6 +4062,19 @@ void log_string_plus(const char* str, sh_int log_type, sh_int level)
     return;
 }
 
+void log(const char* str, sh_int log_type, sh_int level, ...)
+{
+    char buf[MAX_STRING_LENGTH];
+    {
+        va_list param;
+
+        va_start(param, level);
+        vsprintf(buf, str, param);
+        va_end(param);
+    }
+    log_string_plus(buf, log_type, level);
+}
+
 /*
  * wizlist builder!						-Thoric
  */

@@ -42,7 +42,7 @@
 #include <string.h>
 #include <time.h>
 #include "mud.hxx"
-#include "do_fun.hxx"
+#include "connection.hxx"
 
 ROOM_INDEX_DATA* generate_exit(ROOM_INDEX_DATA* in_room, EXIT_DATA** pexit);
 
@@ -4433,14 +4433,14 @@ void do_whois(CHAR_DATA* ch, char* argument)
             strcat_s(buf2, ".\n\r");
             send_to_char(buf2, ch);
         }
-        if (victim->desc && victim->desc->host[0] != '\0') /* added by Gorog */
+        if (victim->desc && victim->desc->connection->getHostname()[0] != '\0') /* added by Gorog */
         {
-            sprintf_s(buf2, "%s's IP info: %s ", victim->name, victim->desc->hostip);
+            sprintf_s(buf2, "%s's IP info: %s ", victim->name, victim->desc->connection->getIpAddress().c_str());
             if (get_trust(ch) >= LEVEL_GOD)
             {
                 strcat_s(buf2, victim->desc->user);
                 strcat_s(buf2, "@");
-                strcat_s(buf2, victim->desc->host);
+                strcat_s(buf2, victim->desc->connection->getHostname().c_str());
             }
             strcat_s(buf2, "\n\r");
             send_to_char(buf2, ch);

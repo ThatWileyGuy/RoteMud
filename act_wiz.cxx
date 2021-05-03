@@ -45,6 +45,7 @@
 #include <errno.h>
 #include <filesystem>
 #include "mud.hxx"
+#include "connection.hxx"
 
 #define RESTORE_INTERVAL 21600
 
@@ -244,7 +245,7 @@ void do_authorize(CHAR_DATA* ch, char* argument)
         send_to_char("---------------------------------------------\n\r", ch);
         for (d = first_descriptor; d; d = d->next)
             if ((victim = d->character) != NULL && IS_WAITING_FOR_AUTH(victim))
-                ch_printf(ch, " %s@%s new %s...\n\r", victim->name, victim->desc->host,
+                ch_printf(ch, " %s@%s new %s...\n\r", victim->name, victim->desc->connection->getHostname().c_str(),
                           race_table[victim->race].race_name);
         return;
     }
@@ -1248,13 +1249,15 @@ void do_mstat(CHAR_DATA* ch, char* argument)
               get_curr_str(victim), get_curr_int(victim), get_curr_wis(victim), get_curr_dex(victim),
               get_curr_con(victim), get_curr_cha(victim), get_curr_lck(victim), get_curr_frc(victim));
     ch_printf(ch, "&W&z|  &GSex&W: %-6s               &GVnum&W: %-6d          &GInRoom&W: %-6d              &z|\n\r",
-              victim->sex == SEX_MALE ? "Male" : victim->sex == SEX_FEMALE ? "Female" : "Neuter",
+              victim->sex == SEX_MALE     ? "Male"
+              : victim->sex == SEX_FEMALE ? "Female"
+                                          : "Neuter",
               IS_NPC(victim) ? victim->pIndexData->vnum : 0, victim->in_room == NULL ? 0 : victim->in_room->vnum);
     ch_printf(ch, "&W&z+------------------------------------------------------------------------------+\n\r");
     if (!IS_NPC(victim) && victim->desc)
     {
-        ch_printf(ch, "&W&z|       &GUser&W: %-44s &GTrust&W: %-2d           &z|\n\r", victim->desc->host,
-                  victim->trust);
+        ch_printf(ch, "&W&z|       &GUser&W: %-44s &GTrust&W: %-2d           &z|\n\r",
+                  victim->desc->connection->getHostname().c_str(), victim->trust);
         // TODO no more descriptors
         ch_printf(ch, "&W&z| &GDescriptor&W: %-3d                                       &GAuthedBy&W: %-12s &z|\n\r",
                   -1, victim->pcdata->authed_by[0] != '\0' ? victim->pcdata->authed_by : "(unknown)");
@@ -1433,7 +1436,7 @@ void do_oldmstat(CHAR_DATA* ch, char* argument)
               (IS_NPC(victim) || !victim->pcdata->clan) ? "(none)" : victim->pcdata->clan->name);
     if (get_trust(ch) >= LEVEL_GOD && !IS_NPC(victim) && victim->desc)
         ch_printf(ch, "User: %s@%s   Descriptor: %d   Trust: %d   AuthedBy: %s\n\r", victim->desc->user,
-                  victim->desc->host, -1, // TODO no more descriptors!
+                  victim->desc->connection->getHostname().c_str(), -1, // TODO no more descriptors!
                   victim->trust, victim->pcdata->authed_by[0] != '\0' ? victim->pcdata->authed_by : "(unknown)");
     if (!IS_NPC(victim) && victim->pcdata->release_date != 0)
         ch_printf(ch, "Helled until %24.24s by %s.\n\r", ctime(&victim->pcdata->release_date),
@@ -1441,7 +1444,9 @@ void do_oldmstat(CHAR_DATA* ch, char* argument)
 
     ch_printf(ch, "Vnum: %d   Sex: %s   Room: %d   Count: %d  Killed: %d\n\r",
               IS_NPC(victim) ? victim->pIndexData->vnum : 0,
-              victim->sex == SEX_MALE ? "male" : victim->sex == SEX_FEMALE ? "female" : "neutral",
+              victim->sex == SEX_MALE     ? "male"
+              : victim->sex == SEX_FEMALE ? "female"
+                                          : "neutral",
               !victim->in_room ? 0 : victim->in_room->vnum, IS_NPC(victim) ? victim->pIndexData->count : 1,
               IS_NPC(victim) ? victim->pIndexData->killed : victim->pcdata->mdeaths + victim->pcdata->pdeaths);
     ch_printf(ch, "Str: %d  Int: %d  Wis: %d  Dex: %d  Con: %d  Cha: %d  Lck: %d  Frc: %d\n\r", get_curr_str(victim),
@@ -3497,8 +3502,11 @@ void do_users(CHAR_DATA* ch, char* argument)
                 count++;
                 sprintf_s(buf, "%3d | %4d | %-13s @ %s ",
                           -1, // TODO no more descriptors
-                          d->idle / 4, d->original ? d->original->name : d->character ? d->character->name : "(none)",
-                          d->host);
+                          d->idle / 4,
+                          d->original    ? d->original->name
+                          : d->character ? d->character->name
+                                         : "(none)",
+                          d->connection->getHostname().c_str());
                 strcat_s(buf, "\n\r");
                 send_to_pager(buf, ch);
             }
@@ -3506,13 +3514,17 @@ void do_users(CHAR_DATA* ch, char* argument)
         else
         {
             if (d->character && (can_see(ch, d->character) || get_trust(ch) >= d->character->top_level) &&
-                (!str_prefix(arg, d->host) || (d->character && !str_prefix(arg, d->character->name))))
+                (!str_prefix(arg, d->connection->getHostname().c_str()) ||
+                 (d->character && !str_prefix(arg, d->character->name))))
             {
                 count++;
                 pager_printf(ch, " %3d| %2d|%4d|%6d| %-12s@%-16s ",
                              -1, // TODO no more descriptors
-                             d->connected, d->idle / 4, d->port,
-                             d->original ? d->original->name : d->character ? d->character->name : "(none)", d->host);
+                             d->connected, d->idle / 4, d->connection->getPort(),
+                             d->original    ? d->original->name
+                             : d->character ? d->character->name
+                                            : "(none)",
+                             d->connection->getHostname().c_str());
                 buf[0] = '\0';
                 if (get_trust(ch) >= LEVEL_GOD)
                     sprintf_s(buf, "| %s", d->user);
@@ -3955,6 +3967,7 @@ void do_loadup(CHAR_DATA* ch, char* argument)
         d->connected = CON_GET_NAME;
 
         loaded = load_char_obj(d, name, false);
+
         add_char(d->character);
         old_room_vnum = d->character->in_room->vnum;
         char_to_room(d->character, ch->in_room);
@@ -6431,14 +6444,12 @@ void ostat_plus(CHAR_DATA* ch, OBJ_DATA* obj)
     case ITEM_CONTAINER:
         ch_printf(ch, "&GValue[&W0&G] Capacity (&W%d&c): &W", obj->value[0]);
         ch_printf(ch, "%s\n\r",
-                  obj->value[0] < 76
-                      ? "Small capacity"
-                      : obj->value[0] < 150
-                            ? "Small to medium capacity"
-                            : obj->value[0] < 300
-                                  ? "Medium capacity"
-                                  : obj->value[0] < 550 ? "Medium to large capacity"
-                                                        : obj->value[0] < 751 ? "Large capacity" : "Giant capacity");
+                  obj->value[0] < 76    ? "Small capacity"
+                  : obj->value[0] < 150 ? "Small to medium capacity"
+                  : obj->value[0] < 300 ? "Medium capacity"
+                  : obj->value[0] < 550 ? "Medium to large capacity"
+                  : obj->value[0] < 751 ? "Large capacity"
+                                        : "Giant capacity");
         ch_printf(ch, "&GValue[&W1&G] Flags (&W%d&c):&W", obj->value[1]);
         if (obj->value[1] <= 0)
             ch_printf(ch, " None\n\r");

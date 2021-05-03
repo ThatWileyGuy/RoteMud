@@ -37,7 +37,14 @@
  *                                                                                  *
  ***********************************************************************************/
 
+#pragma once
+
 #ifdef WIN32
+
+#ifndef NOMINMAX
+#define NOMINMAX
+#endif
+
 #include <SDKDDKVer.h>
 #endif
 
@@ -171,6 +178,11 @@ struct SHIP_PROTOTYPE;
 struct SPACE_DATA;
 
 /*
+ * Class types.
+ */
+class Connection;
+
+/*
  * Function types.
  */
 typedef void DO_FUN(CHAR_DATA* ch, char* argument);
@@ -219,7 +231,7 @@ typedef ch_ret SPELL_FUN(int sn, int level, CHAR_DATA* ch, void* vo);
  */
 #define MAX_KEY_HASH 2048
 #define MAX_STRING_LENGTH 4096 /* buf */ // TODO this needs to go away
-#define MAX_INPUT_LENGTH 1024            /* arg */
+#define MAX_INPUT_LENGTH 1024 /* arg */
 #define MAX_INBUF_SIZE 1024
 #define MAX_OUTPUT_SIZE 4096
 #define LAST_FILE_SIZE 500 // max entries in the last file
@@ -579,8 +591,7 @@ typedef enum
     CON_GET_PUEBLO,
     CON_GET_HEIGHT,
     CON_GET_BUILD,
-    CON_GET_DROID,
-    CON_DISCONNECTING
+    CON_GET_DROID
 } connection_types;
 
 /*
@@ -641,41 +652,25 @@ struct DESCRIPTOR_DATA
     DESCRIPTOR_DATA* next;
     DESCRIPTOR_DATA* prev;
     DESCRIPTOR_DATA* snoop_by;
+    std::shared_ptr<Connection> connection;
     CHAR_DATA* character;
     CHAR_DATA* original;
-    char* host;
-    char* hostip;
-    int port;
-    std::unique_ptr<boost::asio::ip::tcp::socket> socket;
     sh_int connected;
     sh_int idle;
     sh_int lines;
     sh_int scrlen;
-    bool fcommand;
-    char incomm[MAX_INPUT_LENGTH]; // a single line that's about to be run as a command
+    bool fcommand;                 // true if the user ran a command this pulse
     char inlast[MAX_INPUT_LENGTH]; // the last line that was run as a command
     int repeat;
-    /*
-    char* outbuf; // buffered socket output
-    unsigned long	outsize; // size of outbuf
-    int			outtop; // currently used size of outbuf
-    */
     char* pagebuf;
     unsigned long pagesize;
     int pagetop;
     char* pagepoint;
-    char pagecmd;
     char pagecolor;
     char* user;
     int atimes;
     int newstate;
     unsigned char prevcolor;
-    boost::circular_buffer<char> input_buffer;
-    std::array<char, MAX_INPUT_LENGTH> socket_input_buffer;
-    boost::circular_buffer<char> output_buffer;
-    std::array<char, MAX_OUTPUT_SIZE> socket_output_buffer;
-    bool output_io_pending;
-    bool input_io_pending;
 };
 
 /*
@@ -1677,41 +1672,41 @@ struct SMAUG_AFF
  * ACT bits for mobs.
  * Used in #MOBILES.
  */
-#define ACT_IS_NPC BV00     /* Auto set for mobs	*/
-#define ACT_SENTINEL BV01   /* Stays in one room	*/
-#define ACT_SCAVENGER BV02  /* Picks up objects	*/
-#define ACT_NOFLEE BV03     /* Mobs don't flee. -T  */
+#define ACT_IS_NPC BV00 /* Auto set for mobs	*/
+#define ACT_SENTINEL BV01 /* Stays in one room	*/
+#define ACT_SCAVENGER BV02 /* Picks up objects	*/
+#define ACT_NOFLEE BV03 /* Mobs don't flee. -T  */
 #define ACT_AGGRESSIVE BV05 /* Attacks PC's		*/
-#define ACT_STAY_AREA BV06  /* Won't leave area	*/
-#define ACT_WIMPY BV07      /* Flees when hurt	*/
-#define ACT_PET BV08        /* Auto set for pets	*/
-#define ACT_TRAIN BV09      /* Can train PC's	*/
-#define ACT_PRACTICE BV10   /* Can practice PC's	*/
-#define ACT_IMMORTAL BV11   /* Cannot be killed	*/
-#define ACT_DEADLY BV12     /* Has a deadly poison  */
+#define ACT_STAY_AREA BV06 /* Won't leave area	*/
+#define ACT_WIMPY BV07 /* Flees when hurt	*/
+#define ACT_PET BV08 /* Auto set for pets	*/
+#define ACT_TRAIN BV09 /* Can train PC's	*/
+#define ACT_PRACTICE BV10 /* Can practice PC's	*/
+#define ACT_IMMORTAL BV11 /* Cannot be killed	*/
+#define ACT_DEADLY BV12 /* Has a deadly poison  */
 #define ACT_POLYSELF BV13
-#define ACT_META_AGGR BV14   /* Extremely aggressive */
-#define ACT_GUARDIAN BV15    /* Protects master	*/
-#define ACT_RUNNING BV16     /* Hunts quickly	*/
-#define ACT_NOWANDER BV17    /* Doesn't wander	*/
-#define ACT_MOUNTABLE BV18   /* Can be mounted	*/
-#define ACT_MOUNTED BV19     /* Is mounted		*/
-#define ACT_SCHOLAR BV20     /* Can teach languages  */
-#define ACT_SECRETIVE BV21   /* actions aren't seen	*/
+#define ACT_META_AGGR BV14 /* Extremely aggressive */
+#define ACT_GUARDIAN BV15 /* Protects master	*/
+#define ACT_RUNNING BV16 /* Hunts quickly	*/
+#define ACT_NOWANDER BV17 /* Doesn't wander	*/
+#define ACT_MOUNTABLE BV18 /* Can be mounted	*/
+#define ACT_MOUNTED BV19 /* Is mounted		*/
+#define ACT_SCHOLAR BV20 /* Can teach languages  */
+#define ACT_SECRETIVE BV21 /* actions aren't seen	*/
 #define ACT_POLYMORPHED BV22 /* Mob is a ch		*/
-#define ACT_MOBINVIS BV23    /* Like wizinvis	*/
-#define ACT_NOASSIST BV24    /* Doesn't assist mobs	*/
-#define ACT_NOKILL BV25      /* Mob can't die */
-#define ACT_DROID BV26       /* mob is a droid */
+#define ACT_MOBINVIS BV23 /* Like wizinvis	*/
+#define ACT_NOASSIST BV24 /* Doesn't assist mobs	*/
+#define ACT_NOKILL BV25 /* Mob can't die */
+#define ACT_DROID BV26 /* mob is a droid */
 #define ACT_NOCORPSE BV27
-#define ACT_PUEBLO BV28    /* This is the pueblo flag */
+#define ACT_PUEBLO BV28 /* This is the pueblo flag */
 #define ACT_PROTOTYPE BV30 /* A prototype mob	*/
 
 /* Act2 Flags */
-#define ACT_BOUND BV00  /* This is the bind flag */
+#define ACT_BOUND BV00 /* This is the bind flag */
 #define ACT_EXEMPT BV01 /* Makes a player exampt from pfile deletion */
-#define ACT_JEDI BV02   /* This is a light jedi */
-#define ACT_SITH BV03   /* This is a dark jedi */
+#define ACT_JEDI BV02 /* This is a light jedi */
+#define ACT_SITH BV03 /* This is a dark jedi */
 #define ACT_GAGGED BV04 /* This is a gagged flag */
 /* 21 acts */
 
@@ -1901,21 +1896,21 @@ struct SMAUG_AFF
 #define SF_EARTH BV12
 #define SF_AIR BV13
 #define SF_ASTRAL BV14
-#define SF_AREA BV15    /* is an area spell		*/
+#define SF_AREA BV15 /* is an area spell		*/
 #define SF_DISTANT BV16 /* affects something far away	*/
 #define SF_REVERSE BV17
 #define SF_SAVE_HALF_DAMAGE BV18 /* save for half damage		*/
-#define SF_SAVE_NEGATES BV19     /* save negates affect		*/
-#define SF_ACCUMULATIVE BV20     /* is accumulative		*/
-#define SF_RECASTABLE BV21       /* can be refreshed		*/
-#define SF_NOSCRIBE BV22         /* cannot be scribed		*/
-#define SF_NOBREW BV23           /* cannot be brewed		*/
-#define SF_GROUPSPELL BV24       /* only affects group members	*/
-#define SF_OBJECT BV25           /* directed at an object	*/
-#define SF_CHARACTER BV26        /* directed at a character	*/
-#define SF_SECRETSKILL BV27      /* hidden unless learned	*/
-#define SF_PKSENSITIVE BV28      /* much harder for plr vs. plr	*/
-#define SF_STOPONFAIL BV29       /* stops spell on first failure */
+#define SF_SAVE_NEGATES BV19 /* save negates affect		*/
+#define SF_ACCUMULATIVE BV20 /* is accumulative		*/
+#define SF_RECASTABLE BV21 /* can be refreshed		*/
+#define SF_NOSCRIBE BV22 /* cannot be scribed		*/
+#define SF_NOBREW BV23 /* cannot be brewed		*/
+#define SF_GROUPSPELL BV24 /* only affects group members	*/
+#define SF_OBJECT BV25 /* directed at an object	*/
+#define SF_CHARACTER BV26 /* directed at a character	*/
+#define SF_SECRETSKILL BV27 /* hidden unless learned	*/
+#define SF_PKSENSITIVE BV28 /* much harder for plr vs. plr	*/
+#define SF_STOPONFAIL BV29 /* stops spell on first failure */
 
 typedef enum
 {
@@ -2496,7 +2491,7 @@ typedef enum
 
 #define ROOM_PLUOGUS_QUIT 905
 
-#define ROOM_SHUTTLE_BUS 907   /* Sol */
+#define ROOM_SHUTTLE_BUS 907 /* Sol */
 #define ROOM_SHUTTLE_BUS_2 914 /* Monir*/
 #define ROOM_SHUTTLE_BUS_3 921 /* Fau */
 #define ROOM_SHUTTLE_BUS_4 928 /* Taw */
@@ -2579,7 +2574,7 @@ typedef enum
     DIR_SOMEWHERE
 } dir_types;
 
-#define MAX_DIR DIR_SOUTHWEST    /* max for normal walking */
+#define MAX_DIR DIR_SOUTHWEST /* max for normal walking */
 #define DIR_PORTAL DIR_SOMEWHERE /* portal direction	  */
 
 /*
@@ -3571,8 +3566,8 @@ struct TELEPORT_DATA
  */
 #define TYPE_UNDEFINED -1
 #define TYPE_MISSILE 111
-#define TYPE_HIT 1000      /* allows for 1000 skills/spells */
-#define TYPE_HERB 2000     /* allows for 1000 attack types  */
+#define TYPE_HIT 1000 /* allows for 1000 skills/spells */
+#define TYPE_HERB 2000 /* allows for 1000 attack types  */
 #define TYPE_PERSONAL 3000 /* allows for 1000 herb types    */
 
 /*
@@ -4393,6 +4388,7 @@ extern BMARKET_DATA* last_market_ship;
 #define BACKUP_DIR "backup/" /* Backup Player files		*/
 #define GOD_DIR "gods/" /* God Info Dir			*/
 #define BOARD_DIR "boards/" /* Board data dir		*/
+#define KEYS_DIR "keys/"
 #define CLAN_DIR "clans/" /* Clan data dir		*/
 #define SHIP_DIR "space/" // TODO duplicate?
 #define SPACE_DIR "space/"
@@ -4400,20 +4396,20 @@ extern BMARKET_DATA* last_market_ship;
 #define FORCE_DIR "force/"
 #define FORCE_HELP_DIR "force/help/"
 #define PLANET_DIR "planets/"
-#define GUARD_DIR "planets/"                           // TODO duplicate?
-#define GUILD_DIR "guilds/"                            /* Guild data dir               */
-#define HELP_FILE SYSTEM_DIR "help.txt"                /*For undefined helps*/
-#define SLAY_FILE SYSTEM_DIR "slay.dat"                /* Slay data file for online editing - Samson 8-3-98 */
-#define LAST_LIST SYSTEM_DIR "last.lst"                // last list
-#define LAST_TEMP_LIST SYSTEM_DIR "ltemp.lst"          // temp file for the last list so the data can be copyover over
-#define BUILD_DIR "building/"                          /* Online building save dir     */
-#define SYSTEM_DIR "system/"                           /* Main system files		*/
+#define GUARD_DIR "planets/" // TODO duplicate?
+#define GUILD_DIR "guilds/" /* Guild data dir               */
+#define HELP_FILE SYSTEM_DIR "help.txt" /*For undefined helps*/
+#define SLAY_FILE SYSTEM_DIR "slay.dat" /* Slay data file for online editing - Samson 8-3-98 */
+#define LAST_LIST SYSTEM_DIR "last.lst" // last list
+#define LAST_TEMP_LIST SYSTEM_DIR "ltemp.lst" // temp file for the last list so the data can be copyover over
+#define BUILD_DIR "building/" /* Online building save dir     */
+#define SYSTEM_DIR "system/" /* Main system files		*/
 #define PROG_DIR "mudprogs/" /* MUDProg files		*/ // TODO unused?
-#define CORPSE_DIR "corpses/"                          /* Corpses			*/
-#define PROFILE_DIR "../public_html/profiles/"         /* Player Profiles */
-#define AREA_LIST "area.lst"                           /* List of areas		*/
-#define BAN_LIST "ban.lst"                             /* List of bans                 */
-#define CLAN_LIST "clan.lst"                           /* List of clans		*/
+#define CORPSE_DIR "corpses/" /* Corpses			*/
+#define PROFILE_DIR "../public_html/profiles/" /* Player Profiles */
+#define AREA_LIST "area.lst" /* List of areas		*/
+#define BAN_LIST "ban.lst" /* List of bans                 */
+#define CLAN_LIST "clan.lst" /* List of clans		*/
 #define SHIP_LIST "ship.lst"
 #define PROTOTYPE_LIST "prototype.lst"
 #define PLANET_LIST "planet.lst"
@@ -4421,44 +4417,44 @@ extern BMARKET_DATA* last_market_ship;
 #define BOUNTY_LIST "bounty.lst"
 #define disintegration_LIST "disintegration.lst"
 #define SENATE_LIST "senate.lst" /* List of senators		*/
-#define GUILD_LIST "guild.lst"   /* List of guilds               */
-#define GOD_LIST "gods.lst"      /* List of gods			*/
+#define GUILD_LIST "guild.lst" /* List of guilds               */
+#define GOD_LIST "gods.lst" /* List of gods			*/
 #define GUARD_LIST "guard.lst"
 
-#define BOARD_FILE "boards.txt"      /* For bulletin boards	 */
+#define BOARD_FILE "boards.txt" /* For bulletin boards	 */
 #define SHUTDOWN_FILE "shutdown.txt" /* For 'shutdown'	 */
 
 #define RIPSCREEN_FILE SYSTEM_DIR "mudrip.rip"
 #define RIPTITLE_FILE SYSTEM_DIR "mudtitle.rip"
 #define ANSITITLE_FILE SYSTEM_DIR "mudtitle.ans"
 #define ASCTITLE_FILE SYSTEM_DIR "mudtitle.asc"
-#define BOOTLOG_FILE SYSTEM_DIR "boot.txt"            /* Boot up error file	 */
-#define BUG_FILE SYSTEM_DIR "sysbugs.txt"             /* For 'bug' and bug( )*/
-#define PLRBUG_FILE SYSTEM_DIR "plrbugs.txt"          /* Used for player bugs */
-#define IDEA_FILE SYSTEM_DIR "ideas.txt"              /* For 'idea'		 */
-#define CHANGE_FILE SYSTEM_DIR "changes.txt"          /* Changes file - txt  */
+#define BOOTLOG_FILE SYSTEM_DIR "boot.txt" /* Boot up error file	 */
+#define BUG_FILE SYSTEM_DIR "sysbugs.txt" /* For 'bug' and bug( )*/
+#define PLRBUG_FILE SYSTEM_DIR "plrbugs.txt" /* Used for player bugs */
+#define IDEA_FILE SYSTEM_DIR "ideas.txt" /* For 'idea'		 */
+#define CHANGE_FILE SYSTEM_DIR "changes.txt" /* Changes file - txt  */
 #define CHANGEHTML_FILE "../public_html/changes.html" // Changes file - html
-#define DEBUG_FILE SYSTEM_DIR "debug.txt"             /* Catch-all for debug */
-#define TYPO_FILE SYSTEM_DIR "typos.txt"              /* For 'typo'		 */
-#define LOG_FILE SYSTEM_DIR "log.txt"                 /* For talking in logged rooms */
-#define WIZLIST_FILE SYSTEM_DIR "WIZLIST"             /* Wizlist		 */
+#define DEBUG_FILE SYSTEM_DIR "debug.txt" /* Catch-all for debug */
+#define TYPO_FILE SYSTEM_DIR "typos.txt" /* For 'typo'		 */
+#define LOG_FILE SYSTEM_DIR "log.txt" /* For talking in logged rooms */
+#define WIZLIST_FILE SYSTEM_DIR "WIZLIST" /* Wizlist		 */
 #define WEBWIZLIST_FILE "../public_html/WEBWIZLIST"
-#define WHO_FILE SYSTEM_DIR "../html/WHO"      // Who output file
+#define WHO_FILE SYSTEM_DIR "../html/WHO" // Who output file
 #define WEBWHO_FILE "../../public_html/WEBWHO" // Web Who File
-#define REQUEST_PIPE SYSTEM_DIR "REQUESTS"     /* Request FIFO	 */
-#define SKILL_FILE SYSTEM_DIR "skills.dat"     /* Skill table	 */
-#define HERB_FILE SYSTEM_DIR "herbs.dat"       /* Herb table		 */
-#define SOCIAL_FILE SYSTEM_DIR "socials.dat"   /* Socials		 */
+#define REQUEST_PIPE SYSTEM_DIR "REQUESTS" /* Request FIFO	 */
+#define SKILL_FILE SYSTEM_DIR "skills.dat" /* Skill table	 */
+#define HERB_FILE SYSTEM_DIR "herbs.dat" /* Herb table		 */
+#define SOCIAL_FILE SYSTEM_DIR "socials.dat" /* Socials		 */
 #define COMMAND_FILE SYSTEM_DIR "commands.dat" /* Commands		 */
-#define NAMEBAN_FILE SYSTEM_DIR "nameban.dat"  /* Nameban		 */
+#define NAMEBAN_FILE SYSTEM_DIR "nameban.dat" /* Nameban		 */
 #define USAGE_FILE                                                                                                     \
-    SYSTEM_DIR "usage.txt"                      /* How many people are on                                              \
-                               every half hour - trying to                                                             \
-                               determine best reboot time */
-#define TEMP_FILE SYSTEM_DIR "charsave.tmp"     /* More char save protect */
+    SYSTEM_DIR "usage.txt" /* How many people are on                                                                   \
+          every half hour - trying to                                                                                  \
+          determine best reboot time */
+#define TEMP_FILE SYSTEM_DIR "charsave.tmp" /* More char save protect */
 #define COPYOVER_FILE SYSTEM_DIR "copyover.dat" /* for warm reboots	 */
-#define EXE_FILE "../bin/swr"                   /* executable path	 */
-#define SLOG_FILE "../.slog/slog.txt"           /* Secret Log		 */
+#define EXE_FILE "../bin/swr" /* executable path	 */
+#define SLOG_FILE "../.slog/slog.txt" /* Secret Log		 */
 
 /*
  * Our function prototypes.
@@ -4494,7 +4490,7 @@ void remove_member(char* name, char* shortname);
 void add_member(char* name, char* shortname);
 
 /* act_comm.c */
-bool check_parse_name(char* name);
+bool check_parse_name(const char* name);
 void sound_to_room(ROOM_INDEX_DATA* room, const char* argument);
 bool circle_follow(CHAR_DATA* ch, CHAR_DATA* victim);
 char* smaug_crypt(const char* pwd);
@@ -4752,6 +4748,7 @@ void append_to_file(const char* file, char* str);
 void prepend_to_file(const char* file, char* str);
 void bug(const char* str, ...);
 void log_string_plus(const char* str, sh_int log_type, sh_int level);
+void log(const char* str, sh_int log_type, sh_int level, ...);
 RID* make_room(int vnum, AREA_DATA* area);
 RID* make_ship_room(SHIP_DATA* ship, int vnum);
 OID* make_object(int vnum, int cvnum, char* name);
@@ -5044,7 +5041,7 @@ void check_requests(void);
 void save_char_obj(CHAR_DATA* ch);
 void save_clone(CHAR_DATA* ch);
 void save_profile(CHAR_DATA* ch);
-bool load_char_obj(DESCRIPTOR_DATA* d, char* name, bool preload);
+bool load_char_obj(DESCRIPTOR_DATA* d, const char* name, bool preload);
 void set_alarm(long seconds);
 void requip_char(CHAR_DATA* ch);
 void fwrite_obj(CHAR_DATA* ch, OBJ_DATA* obj, FILE* fp, int iNest, sh_int os_type);
