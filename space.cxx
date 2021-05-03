@@ -56,10 +56,8 @@ SPACE_DATA *last_starsystem;
 extern char bname[MAX_STRING_LENGTH];
 char *primary_beam_name(SHIP_DATA *ship);
 char *secondary_beam_name(SHIP_DATA *ship);
-#ifdef USECARGO
 extern const char *cargo_names[CARGO_MAX];
 extern const char *cargo_names_lower[CARGO_MAX];
-#endif
 
 int bus_pos = 0;
 int bus_planet = 0;
@@ -2750,15 +2748,13 @@ void save_ship(SHIP_DATA *ship)
         fprintf(fp, "primaryLinked %d\n", ship->primaryLinked);
         fprintf(fp, "secondaryLinked %d\n", ship->secondaryLinked);
         fprintf(fp, "warheadLinked %d\n", ship->warheadLinked);
-
-#ifdef USECARGO
         fprintf(fp, "MaxCargo     %d\n", ship->maxcargo);
         if (ship->cargo > 0)
         {
             fprintf(fp, "Cargo     %d\n", ship->cargo);
             fprintf(fp, "CargoType %d\n", ship->cargotype);
         }
-#endif
+
         fprintf(fp, "Home         %s~\n", ship->home);
         for (mod = ship->first_module; mod; mod = mod->next)
             fprintf(fp, "Module     %d %d\n", mod->affect, mod->ammount);
@@ -2828,14 +2824,13 @@ void fread_ship(SHIP_DATA *ship, FILE *fp)
             KEY("Comm", ship->comm, fread_number(fp));
             KEY("Cost", ship->cost, fread_number(fp));
             KEY("Chaff", ship->chaff, fread_number(fp));
-#ifdef USECARGO
             KEY("Cargo", ship->cargo, fread_number(fp));
             KEY("CargoType", ship->cargotype, fread_number(fp));
             KEY("MaxCargo", ship->maxcargo, fread_number(fp));
 
             if (ship->cargotype != CARGO_NONE && ship->cargo < 1)
                 ship->cargotype = CARGO_NONE;
-#endif
+
             break;
 
         case 'D':
@@ -4303,7 +4298,6 @@ void do_setship(CHAR_DATA *ch, char *argument)
         return;
     }
 
-#ifdef USECARGO
     if (!str_cmp(arg2, "maxcargo"))
     {
         ship->maxcargo = URANGE(0, atoi(argument), 500);
@@ -4311,7 +4305,6 @@ void do_setship(CHAR_DATA *ch, char *argument)
         save_ship(ship);
         return;
     }
-#endif
 
     if (!str_cmp(arg2, "bombs"))
     {
@@ -4686,9 +4679,7 @@ void do_showship(CHAR_DATA *ch, char *argument)
     ch_printf(ch, "Flags: %s", flag_string(ship->flags, ship_flags));
     ch_printf(ch, "Engine Upgraded: %d   Upgrade Interval: %d  Upgrade Max: %d\n\r", ship->upeng, ship->upengint,
               ship->maxupeng);
-#ifdef USECARGO
     ch_printf(ch, "Cargo: %d/%d, Cargo Type: %s \n\r", ship->cargo, ship->maxcargo, cargo_names[ship->cargotype]);
-#endif
 
     return;
 }
@@ -4734,11 +4725,9 @@ void do_makeship(CHAR_DATA *ch, char *argument)
     ship->target8 = NULL;
     ship->target9 = NULL;
     ship->target10 = NULL;
-#ifdef USECARGO
     ship->maxcargo = 0;
     ship->cargo = 0;
     ship->cargotype = 0;
-#endif
 
     ship->filename = str_dup(arg);
     save_ship(ship);
@@ -7798,10 +7787,8 @@ void do_status(CHAR_DATA *ch, char *argument)
               ship->rockets, ship->maxrockets);
     if (ship->maxbombs > 0)
         ch_printf(ch, "&zBomb Payload: &w%d&W/%d\n\r", ship->bombs, ship->maxbombs);
-#ifdef USECARGO
     ch_printf(ch, "&OCargo: &Y%d/&O%d   Cargo Type: &Y%s&w\n\r", ship->cargo, ship->maxcargo,
               cargo_names[ship->cargotype]);
-#endif
 
     learn_from_success(ch, gsn_shipsystems);
 }
@@ -12997,7 +12984,6 @@ void do_split_s(CHAR_DATA *ch, char *argument)
     return;
 }
 
-#ifdef USECARGO
 void do_unload_cargo(CHAR_DATA *ch, char *argument)
 {
     SHIP_DATA *ship;
@@ -13142,8 +13128,7 @@ void do_load_cargo(CHAR_DATA *ch, char *argument)
             send_to_char("There is no room for anymore cargo\r\n", ch);
             return;
         }
-        if ((target->cargotype = !CARGO_NONE) && (ship->cargotype != target->cargotype))
-            ;
+        if ((target->cargotype != CARGO_NONE) && (ship->cargotype != target->cargotype))
         {
             send_to_char("Maybe you should deliver your cargo first.\n\r", ch);
             return;
@@ -13235,4 +13220,3 @@ void do_load_cargo(CHAR_DATA *ch, char *argument)
     ch_printf(ch, "You pay %d credits for a load of %s.\r\n", cost, cargo_names[cargo]);
     return;
 }
-#endif

@@ -1350,22 +1350,21 @@ void mobile_update(void)
 
 void update_taxes(void)
 {
-#ifdef USECARGO
     int i;
-#endif
     PLANET_DATA *planet;
     CLAN_DATA *clan;
 
     for (planet = first_planet; planet; planet = planet->next)
     {
-        /*#ifdef USECARGO
-                for( i = 1; i < CARGO_MAX; i++)
-                {
-                   planet->resource[i] += planet->produces[i];
-                   planet->resource[i] -= planet->consumes[i];
-                 }
-                save_planet(planet);
-        #endif*/
+        // TODO Do I need to set these values for cargo to work?
+        /*
+        for( i = 1; i < CARGO_MAX; i++)
+        {
+            planet->resource[i] += planet->produces[i];
+            planet->resource[i] -= planet->consumes[i];
+        }
+        */
+        save_planet(planet);
         clan = planet->governed_by;
         if (clan)
         {

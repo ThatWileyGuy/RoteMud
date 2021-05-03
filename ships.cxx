@@ -1274,9 +1274,7 @@ SHIP_DATA *make_prototype_ship(int ship_type, int vnum, CHAR_DATA *ch, char *shi
     ship->upenergy = 0;
     ship->upenergyint = ship_prototypes[ship_type].upenergyint;
     ship->upenergycost = ship_prototypes[ship_type].upenergycost;
-#ifdef USECARGO
     ship->maxcargo = ship_prototypes[ship_type].maxcargo;
-#endif
     ship->manuever = ship_prototypes[ship_type].manuever;
     // MARKER
     ship->shipyard = ch->in_room->vnum;
@@ -1638,7 +1636,7 @@ void write_all_prototypes()
     write_prototype_list();
 }
 
-bool load_prototype_header(FILE *fp, int prototype)
+bool load_prototype_header(FILE *fp, const std::string& filename, int prototype)
 {
     char buf[MAX_STRING_LENGTH];
     const char *word;
@@ -1718,7 +1716,7 @@ bool load_prototype_header(FILE *fp, int prototype)
         }
         if (!fMatch)
         {
-            sprintf_s(buf, "Load_prototype_header: no match: %s", word);
+            sprintf_s(buf, "Load_prototype_header: %s: no match: %s", filename.c_str(), word);
             bug(buf, 0);
         }
     }
@@ -1848,7 +1846,7 @@ bool load_prototype_rooms(FILE *fp, int prototype)
     return true;
 }
 
-int load_prototype(const char *prototypefile, int prototype)
+int load_prototype(const std::string& prototypefile, int prototype)
 {
     char filename[256];
     FILE *fp;
@@ -1858,7 +1856,7 @@ int load_prototype(const char *prototypefile, int prototype)
     char letter;
     char *word;
 
-    sprintf_s(filename, "%s%s", SHIP_PROTOTYPE_DIR, prototypefile);
+    sprintf_s(filename, "%s%s", SHIP_PROTOTYPE_DIR, prototypefile.c_str());
 
     if ((fp = fopen(filename, "r")) != NULL)
     {
@@ -1884,7 +1882,7 @@ int load_prototype(const char *prototypefile, int prototype)
                         bug("Load_prototype: HEADER not found.", 0);
                         break;
                     }
-                    if (!load_prototype_header(fp, prototype))
+                    if (!load_prototype_header(fp, prototypefile, prototype))
                     {
                         ok = false;
                         prototype--;
@@ -1938,7 +1936,7 @@ void load_ship_prototypes()
         if (filename[0] == '$')
             break;
 
-        prototype = load_prototype(filename, prototype);
+        prototype = load_prototype(std::string(filename), prototype);
     }
     fclose(fpList);
     log_string(" Done ship prototypes ");
@@ -2025,9 +2023,7 @@ void do_makeprototypeship(CHAR_DATA *ch, char *argument)
     // ship_prototypes[prototype].plasma = ship->maxplasmashield;
     ship_prototypes[prototype].energy = ship->maxenergy;
     ship_prototypes[prototype].chaff = ship->maxchaff;
-#ifdef USECARGO
     ship_prototypes[prototype].maxcargo = ship->maxcargo;
-#endif
     ship_prototypes[prototype].maxbombs = ship->maxbombs;
     ship_prototypes[prototype].speed = ship->realspeed;
     ship_prototypes[prototype].hyperspeed = ship->hyperspeed;

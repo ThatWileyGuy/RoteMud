@@ -49,8 +49,6 @@
 #include <boost/circular_buffer.hpp>
 #include <stdarg.h>
 
-#define USECARGO
-
 typedef int ch_ret;
 typedef int obj_ret;
 
@@ -5112,7 +5110,7 @@ void load_ship_prototypes();
 int load_prototype(const char *prototypefile, int prototype);
 bool load_prototype_rooms(FILE *fp, int prototype);
 bool fread_prototype_room(FILE *fp, int prototype);
-bool load_prototype_header(FILE *fp, int prototype);
+bool load_prototype_header(FILE *fp, const std::string& filename, int prototype);
 void write_all_prototypes();
 void write_prototype_list();
 void save_prototype(int prototype);

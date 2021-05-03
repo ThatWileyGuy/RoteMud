@@ -55,12 +55,10 @@ void fread_planet(PLANET_DATA *planet, FILE *fp);
 bool load_planet_file(char *planetfile);
 void write_planet_list(void);
 
-#ifdef USECARGO
 const char *cargo_names[CARGO_MAX] = {"None",   "Food",        "Water",       "Medical",
                                       "Metals", "Rare Metals", "Electronics", "Products"};
 const char *cargo_names_lower[CARGO_MAX] = {"none",   "food",        "water",       "medical",
                                             "metals", "rare metals", "electronics", "products"};
-#endif
 
 PLANET_DATA *get_planet(char *name)
 {
@@ -112,9 +110,7 @@ void save_planet(PLANET_DATA *planet)
     FILE *fp;
     char filename[256];
     char buf[MAX_STRING_LENGTH];
-#ifdef USECARGO
     int i = 0;
-#endif
 
     if (!planet)
     {
@@ -158,12 +154,11 @@ void save_planet(PLANET_DATA *planet)
         //	fprintf( fp, "Area         %s~\n",	pArea->filename  );
         for (pArea = planet->first_area; pArea; pArea = pArea->next_on_planet)
             fprintf(fp, "Area         %s~\n", pArea->filename);
-#ifdef USECARGO
+
         for (i = 1; i < CARGO_MAX; i++)
         {
             fprintf(fp, "Resource %d %d\n", i, planet->price[i]);
         }
-#endif
         fprintf(fp, "Base_value   %d\n", planet->base_value);
         fprintf(fp, "End\n\n");
         fprintf(fp, "#END\n");
@@ -188,10 +183,8 @@ void fread_planet(PLANET_DATA *planet, FILE *fp)
 {
     char buf[MAX_STRING_LENGTH];
     char const *word;
-#ifdef USECARGO
     char *line;
     int x0, x1, x2, x3, x4, x5;
-#endif
     bool fMatch;
 
     for (;;)
@@ -289,7 +282,6 @@ void fread_planet(PLANET_DATA *planet, FILE *fp)
             KEY("PopSupport", planet->pop_support, fread_float(fp));
             break;
 
-#ifdef USECARGO
         case 'R':
             if (!str_cmp(word, "Resource"))
                 ;
@@ -300,7 +292,6 @@ void fread_planet(PLANET_DATA *planet, FILE *fp)
                 planet->price[x0] = x1;
             }
             break;
-#endif
 
         case 'S':
             KEY("Sector", planet->sector, fread_number(fp));
@@ -342,7 +333,6 @@ void fread_planet(PLANET_DATA *planet, FILE *fp)
 
 bool load_planet_file(const char *planetfile)
 {
-    char filename[256];
     PLANET_DATA *planet;
     FILE *fp;
     bool found;
@@ -358,9 +348,10 @@ bool load_planet_file(const char *planetfile)
     planet->last_guard = NULL;
 
     found = false;
-    sprintf_s(filename, "%s%s", PLANET_DIR, planetfile);
 
-    if ((fp = fopen(filename, "r")) != NULL)
+    auto filename = std::string(PLANET_DIR) + planetfile;
+
+    if ((fp = fopen(filename.c_str(), "r")) != NULL)
     {
 
         found = true;
@@ -462,10 +453,8 @@ void do_setplanet(CHAR_DATA *ch, char *argument)
     char arg1[MAX_INPUT_LENGTH];
     char arg2[MAX_INPUT_LENGTH];
     PLANET_DATA *planet;
-#ifdef USECARGO
     int i = 0;
     char arg3[MAX_INPUT_LENGTH];
-#endif
 
     if (IS_NPC(ch))
     {
@@ -598,7 +587,6 @@ void do_setplanet(CHAR_DATA *ch, char *argument)
         write_planet_list();
         return;
     }
-#ifdef USECARGO
     if (!strcmp(arg2, "price"))
     {
         argument = one_argument(argument, arg3);
@@ -689,7 +677,6 @@ void do_setplanet(CHAR_DATA *ch, char *argument)
            send_to_char("No such resource type\r\n", ch);
            return;
         }*/
-#endif
 
     if (!strcmp(arg2, "filename"))
     {
