@@ -102,7 +102,7 @@ const RACE_TYPE race_table[MAX_RACE] = {
      LANG_BINARY} //(+)lead
 };
 
-const char *npc_race[MAX_NPC_RACE] = {"Human",
+const char* npc_race[MAX_NPC_RACE] = {"Human",
                                       "Wookiee",
                                       "Twi'lek",
                                       "Rodian",
@@ -193,14 +193,14 @@ const char *npc_race[MAX_NPC_RACE] = {"Human",
                                       "r89",
                                       "r90"};
 
-const char *ability_name[MAX_ABILITY] = {"Combat",     "Piloting", "Engineering", "Bounty Hunting", "Smuggling",
+const char* ability_name[MAX_ABILITY] = {"Combat",     "Piloting", "Engineering", "Bounty Hunting", "Smuggling",
                                          "Politician", "Force",    "Slicer",      "Assassin",       "Technician"};
 
-const char *height_name[4] = {"average", "short", "tall", "very tall"};
+const char* height_name[4] = {"average", "short", "tall", "very tall"};
 
-const char *build_name[6] = {"petite", "thin", "lean", "overweight", "muscular", "obese"};
+const char* build_name[6] = {"petite", "thin", "lean", "overweight", "muscular", "obese"};
 
-const char *droid_name[8] = {"modern", "antique", "small", "large", "tiny", "polished", "sleek", "huge"};
+const char* droid_name[8] = {"modern", "antique", "small", "large", "tiny", "polished", "sleek", "huge"};
 
 /*
  * Attribute bonus tables.
@@ -325,7 +325,7 @@ const LIQ_TYPE liq_table[LIQ_MAX] = {
     {"milkshake", "creamy", {0, 8, 5}}  /* 18 */
 };
 
-const char *attack_table[13] = {"hit",   "slice", "stab", "slash", "whip",   "claw",   "blast",
+const char* attack_table[13] = {"hit",   "slice", "stab", "slash", "whip",   "claw",   "blast",
                                 "pound", "crush", "shot", "bite",  "pierce", "suction"};
 
 /*

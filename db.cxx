@@ -47,7 +47,7 @@
 #include <filesystem>
 #include "mud.hxx"
 
-extern int _filbuf(FILE *);
+extern int _filbuf(FILE*);
 
 #if defined(KEY)
 #undef KEY
@@ -67,37 +67,37 @@ void init_supermob();
  * Globals.
  */
 
-WIZENT *first_wiz;
-WIZENT *last_wiz;
+WIZENT* first_wiz;
+WIZENT* last_wiz;
 
 time_t last_restore_all_time = 0;
 
-HELP_DATA *first_help;
-HELP_DATA *last_help;
+HELP_DATA* first_help;
+HELP_DATA* last_help;
 
-SHOP_DATA *first_shop;
-SHOP_DATA *last_shop;
+SHOP_DATA* first_shop;
+SHOP_DATA* last_shop;
 
-REPAIR_DATA *first_repair;
-REPAIR_DATA *last_repair;
+REPAIR_DATA* first_repair;
+REPAIR_DATA* last_repair;
 
-TELEPORT_DATA *first_teleport;
-TELEPORT_DATA *last_teleport;
+TELEPORT_DATA* first_teleport;
+TELEPORT_DATA* last_teleport;
 
-BMARKET_DATA *first_market_ship;
-BMARKET_DATA *last_market_ship;
+BMARKET_DATA* first_market_ship;
+BMARKET_DATA* last_market_ship;
 
-OBJ_DATA *extracted_obj_queue;
-EXTRACT_CHAR_DATA *extracted_char_queue;
+OBJ_DATA* extracted_obj_queue;
+EXTRACT_CHAR_DATA* extracted_char_queue;
 
 char bug_buf[2 * MAX_INPUT_LENGTH];
-CHAR_DATA *first_char;
-CHAR_DATA *last_char;
-char *help_greeting;
+CHAR_DATA* first_char;
+CHAR_DATA* last_char;
+char* help_greeting;
 char log_buf[2 * MAX_INPUT_LENGTH];
 
-OBJ_DATA *first_object;
-OBJ_DATA *last_object;
+OBJ_DATA* first_object;
+OBJ_DATA* last_object;
 TIME_INFO_DATA time_info;
 WEATHER_DATA weather_info;
 
@@ -107,9 +107,9 @@ int nummobsloaded;
 int numobjsloaded;
 int physicalobjects;
 
-MAP_INDEX_DATA *first_map; /* maps */
+MAP_INDEX_DATA* first_map; /* maps */
 
-AUCTION_DATA *auction; /* auctions */
+AUCTION_DATA* auction; /* auctions */
 
 /* criminals */
 sh_int gsn_torture;
@@ -344,18 +344,18 @@ bool MOBtrigger;
 /*
  * Locals.
  */
-MOB_INDEX_DATA *mob_index_hash[MAX_KEY_HASH];
-OBJ_INDEX_DATA *obj_index_hash[MAX_KEY_HASH];
-ROOM_INDEX_DATA *room_index_hash[MAX_KEY_HASH];
+MOB_INDEX_DATA* mob_index_hash[MAX_KEY_HASH];
+OBJ_INDEX_DATA* obj_index_hash[MAX_KEY_HASH];
+ROOM_INDEX_DATA* room_index_hash[MAX_KEY_HASH];
 
-AREA_DATA *first_area;
-AREA_DATA *last_area;
-AREA_DATA *first_build;
-AREA_DATA *last_build;
-AREA_DATA *first_asort;
-AREA_DATA *last_asort;
-AREA_DATA *first_bsort;
-AREA_DATA *last_bsort;
+AREA_DATA* first_area;
+AREA_DATA* last_area;
+AREA_DATA* first_build;
+AREA_DATA* last_build;
+AREA_DATA* first_asort;
+AREA_DATA* last_asort;
+AREA_DATA* first_bsort;
+AREA_DATA* last_bsort;
 
 SYSTEM_DATA sysdata;
 
@@ -376,7 +376,7 @@ int top_vroom;
  * Semi-locals.
  */
 bool fBootDb;
-FILE *fpArea;
+FILE* fpArea;
 char strArea[MAX_INPUT_LENGTH];
 char bname[MAX_STRING_LENGTH];
 
@@ -385,23 +385,23 @@ char bname[MAX_STRING_LENGTH];
  */
 void init_mm(void);
 
-void boot_log(const char *str, ...);
-void load_area(FILE *fp);
-void load_author(AREA_DATA *tarea, FILE *fp);
-void load_economy(AREA_DATA *tarea, FILE *fp);
-void load_resetmsg(AREA_DATA *tarea, FILE *fp); /* Rennard */
-void load_flags(AREA_DATA *tarea, FILE *fp);
-void load_helps(AREA_DATA *tarea, FILE *fp);
-void load_mobiles(AREA_DATA *tarea, FILE *fp);
-void load_objects(AREA_DATA *tarea, FILE *fp);
-void load_resets(AREA_DATA *tarea, FILE *fp);
-void load_rooms(AREA_DATA *tarea, FILE *fp);
-void load_shops(AREA_DATA *tarea, FILE *fp);
-void load_repairs(AREA_DATA *tarea, FILE *fp);
-void load_specials(AREA_DATA *tarea, FILE *fp);
-void load_ranges(AREA_DATA *tarea, FILE *fp);
+void boot_log(const char* str, ...);
+void load_area(FILE* fp);
+void load_author(AREA_DATA* tarea, FILE* fp);
+void load_economy(AREA_DATA* tarea, FILE* fp);
+void load_resetmsg(AREA_DATA* tarea, FILE* fp); /* Rennard */
+void load_flags(AREA_DATA* tarea, FILE* fp);
+void load_helps(AREA_DATA* tarea, FILE* fp);
+void load_mobiles(AREA_DATA* tarea, FILE* fp);
+void load_objects(AREA_DATA* tarea, FILE* fp);
+void load_resets(AREA_DATA* tarea, FILE* fp);
+void load_rooms(AREA_DATA* tarea, FILE* fp);
+void load_shops(AREA_DATA* tarea, FILE* fp);
+void load_repairs(AREA_DATA* tarea, FILE* fp);
+void load_specials(AREA_DATA* tarea, FILE* fp);
+void load_ranges(AREA_DATA* tarea, FILE* fp);
 void load_buildlist(void);
-bool load_systemdata(SYSTEM_DATA *sys);
+bool load_systemdata(SYSTEM_DATA* sys);
 void load_banlist(void);
 void initialize_economy(void);
 
@@ -411,29 +411,29 @@ void fix_exits(void);
  * External booting function
  */
 void load_corpses(void);
-void renumber_put_resets(ROOM_INDEX_DATA *room);
-void wipe_resets(ROOM_INDEX_DATA *room);
+void renumber_put_resets(ROOM_INDEX_DATA* room);
+void wipe_resets(ROOM_INDEX_DATA* room);
 
 /*
  * MUDprogram locals
  */
 
-int mprog_name_to_type(char *name);
-MPROG_DATA *mprog_file_read(char *f, MPROG_DATA *mprg, MOB_INDEX_DATA *pMobIndex);
+int mprog_name_to_type(char* name);
+MPROG_DATA* mprog_file_read(char* f, MPROG_DATA* mprg, MOB_INDEX_DATA* pMobIndex);
 /* int 		oprog_name_to_type	( char* name ); */
-MPROG_DATA *oprog_file_read(char *f, MPROG_DATA *mprg, OBJ_INDEX_DATA *pObjIndex);
+MPROG_DATA* oprog_file_read(char* f, MPROG_DATA* mprg, OBJ_INDEX_DATA* pObjIndex);
 /* int 		rprog_name_to_type	( char* name ); */
-MPROG_DATA *rprog_file_read(char *f, MPROG_DATA *mprg, ROOM_INDEX_DATA *pRoomIndex);
-void load_mudprogs(AREA_DATA *tarea, FILE *fp);
-void load_objprogs(AREA_DATA *tarea, FILE *fp);
-void load_roomprogs(AREA_DATA *tarea, FILE *fp);
-void mprog_read_programs(FILE *fp, MOB_INDEX_DATA *pMobIndex);
-void oprog_read_programs(FILE *fp, OBJ_INDEX_DATA *pObjIndex);
-void rprog_read_programs(FILE *fp, ROOM_INDEX_DATA *pRoomIndex);
+MPROG_DATA* rprog_file_read(char* f, MPROG_DATA* mprg, ROOM_INDEX_DATA* pRoomIndex);
+void load_mudprogs(AREA_DATA* tarea, FILE* fp);
+void load_objprogs(AREA_DATA* tarea, FILE* fp);
+void load_roomprogs(AREA_DATA* tarea, FILE* fp);
+void mprog_read_programs(FILE* fp, MOB_INDEX_DATA* pMobIndex);
+void oprog_read_programs(FILE* fp, OBJ_INDEX_DATA* pObjIndex);
+void rprog_read_programs(FILE* fp, ROOM_INDEX_DATA* pRoomIndex);
 
-void shutdown_mud(char const *reason)
+void shutdown_mud(char const* reason)
 {
-    FILE *fp;
+    FILE* fp;
 
     if ((fp = fopen(SHUTDOWN_FILE, "a")) != NULL)
     {
@@ -818,7 +818,7 @@ void boot_db(bool fCopyOver)
      * Read in all the area files.
      */
     {
-        FILE *fpList;
+        FILE* fpList;
 
         log_string("Reading in area files...");
         if ((fpList = fopen(AREA_DIR AREA_LIST, "r")) == NULL)
@@ -911,9 +911,9 @@ void boot_db(bool fCopyOver)
 /*
  * Load an 'area' header line.
  */
-void load_area(FILE *fp)
+void load_area(FILE* fp)
 {
-    AREA_DATA *pArea;
+    AREA_DATA* pArea;
 
     CREATE(pArea, AREA_DATA, 1);
     pArea->first_room = pArea->last_room = NULL;
@@ -944,7 +944,7 @@ void load_area(FILE *fp)
 /*
  * Load an author section. Scryn 2/1/96
  */
-void load_author(AREA_DATA *tarea, FILE *fp)
+void load_author(AREA_DATA* tarea, FILE* fp)
 {
     if (!tarea)
     {
@@ -967,7 +967,7 @@ void load_author(AREA_DATA *tarea, FILE *fp)
 /*
  * Load an economy section. Thoric
  */
-void load_economy(AREA_DATA *tarea, FILE *fp)
+void load_economy(AREA_DATA* tarea, FILE* fp)
 {
     if (!tarea)
     {
@@ -987,7 +987,7 @@ void load_economy(AREA_DATA *tarea, FILE *fp)
 }
 
 /* Reset Message Load, Rennard */
-void load_resetmsg(AREA_DATA *tarea, FILE *fp)
+void load_resetmsg(AREA_DATA* tarea, FILE* fp)
 {
     if (!tarea)
     {
@@ -1010,9 +1010,9 @@ void load_resetmsg(AREA_DATA *tarea, FILE *fp)
 /*
  * Load area flags. Narn, Mar/96
  */
-void load_flags(AREA_DATA *tarea, FILE *fp)
+void load_flags(AREA_DATA* tarea, FILE* fp)
 {
-    char *ln;
+    char* ln;
     int x1, x2;
 
     if (!tarea)
@@ -1036,7 +1036,7 @@ void load_flags(AREA_DATA *tarea, FILE *fp)
     return;
 }
 
-void free_help(HELP_DATA *pHelp)
+void free_help(HELP_DATA* pHelp)
 {
     if (!fBootDb)
         UNLINK(pHelp, first_help, last_help, next, prev);
@@ -1051,9 +1051,9 @@ void free_help(HELP_DATA *pHelp)
  * Page is insert-sorted by keyword.                    -Thoric
  * (The reason for sorting is to keep do_hlist looking nice)
  */
-void add_help(HELP_DATA *pHelp)
+void add_help(HELP_DATA* pHelp)
 {
-    HELP_DATA *tHelp;
+    HELP_DATA* tHelp;
     int match;
 
     for (tHelp = first_help; tHelp; tHelp = tHelp->next)
@@ -1086,9 +1086,9 @@ void add_help(HELP_DATA *pHelp)
 /*
  * Load a help section.
  */
-void load_helps(AREA_DATA *tarea, FILE *fp)
+void load_helps(AREA_DATA* tarea, FILE* fp)
 {
-    HELP_DATA *pHelp;
+    HELP_DATA* pHelp;
 
     for (;;)
     {
@@ -1116,7 +1116,7 @@ void load_helps(AREA_DATA *tarea, FILE *fp)
 /*
  * Add a character to the list of all characters		-Thoric
  */
-void add_char(CHAR_DATA *ch)
+void add_char(CHAR_DATA* ch)
 {
     LINK(ch, first_char, last_char, next, prev);
 }
@@ -1124,10 +1124,10 @@ void add_char(CHAR_DATA *ch)
 /*
  * Load a mob section.
  */
-void load_mobiles(AREA_DATA *tarea, FILE *fp)
+void load_mobiles(AREA_DATA* tarea, FILE* fp)
 {
-    MOB_INDEX_DATA *pMobIndex;
-    char *ln;
+    MOB_INDEX_DATA* pMobIndex;
+    char* ln;
     int x1, x2, x3, x4, x5, x6, x7, x8;
 
     if (!tarea)
@@ -1336,11 +1336,11 @@ void load_mobiles(AREA_DATA *tarea, FILE *fp)
 /*
  * Load an obj section.
  */
-void load_objects(AREA_DATA *tarea, FILE *fp)
+void load_objects(AREA_DATA* tarea, FILE* fp)
 {
-    OBJ_INDEX_DATA *pObjIndex;
+    OBJ_INDEX_DATA* pObjIndex;
     char letter;
-    char *ln;
+    char* ln;
     int x1, x2, x3, x4, x5, x6;
 
     if (!tarea)
@@ -1452,7 +1452,7 @@ void load_objects(AREA_DATA *tarea, FILE *fp)
 
             if (letter == 'A')
             {
-                AFFECT_DATA *paf;
+                AFFECT_DATA* paf;
 
                 CREATE(paf, AFFECT_DATA, 1);
                 paf->type = -1;
@@ -1470,7 +1470,7 @@ void load_objects(AREA_DATA *tarea, FILE *fp)
 
             else if (letter == 'E')
             {
-                EXTRA_DESCR_DATA *ed;
+                EXTRA_DESCR_DATA* ed;
 
                 CREATE(ed, EXTRA_DESCR_DATA, 1);
                 ed->keyword = fread_string(fp);
@@ -1528,10 +1528,10 @@ void load_objects(AREA_DATA *tarea, FILE *fp)
 /*
  * Load a reset section.
  */
-void load_resets(AREA_DATA *tarea, FILE *fp)
+void load_resets(AREA_DATA* tarea, FILE* fp)
 {
-    ROOM_INDEX_DATA *pRoomIndex = NULL;
-    ROOM_INDEX_DATA *roomlist;
+    ROOM_INDEX_DATA* pRoomIndex = NULL;
+    ROOM_INDEX_DATA* roomlist;
     bool not01 = false;
     int count = 0;
 
@@ -1561,7 +1561,7 @@ void load_resets(AREA_DATA *tarea, FILE *fp)
 
     for (;;)
     {
-        EXIT_DATA *pexit;
+        EXIT_DATA* pexit;
         char letter;
         int extra, arg1, arg2, arg3;
 
@@ -1722,9 +1722,9 @@ void load_resets(AREA_DATA *tarea, FILE *fp)
     return;
 }
 
-void load_room_reset(ROOM_INDEX_DATA *room, FILE *fp)
+void load_room_reset(ROOM_INDEX_DATA* room, FILE* fp)
 {
-    EXIT_DATA *pexit;
+    EXIT_DATA* pexit;
     char letter;
     int extra, arg1, arg2, arg3;
     bool not01 = false;
@@ -1825,11 +1825,11 @@ void load_room_reset(ROOM_INDEX_DATA *room, FILE *fp)
 /*
  * Load a room section.
  */
-void load_rooms(AREA_DATA *tarea, FILE *fp)
+void load_rooms(AREA_DATA* tarea, FILE* fp)
 {
-    ROOM_INDEX_DATA *pRoomIndex;
+    ROOM_INDEX_DATA* pRoomIndex;
     char buf[MAX_STRING_LENGTH];
-    char *ln;
+    char* ln;
 
     if (!tarea)
     {
@@ -1941,7 +1941,7 @@ void load_rooms(AREA_DATA *tarea, FILE *fp)
 
             if (letter == 'D')
             {
-                EXIT_DATA *pexit;
+                EXIT_DATA* pexit;
                 int locks;
 
                 door = fread_number(fp);
@@ -1983,7 +1983,7 @@ void load_rooms(AREA_DATA *tarea, FILE *fp)
             }
             else if (letter == 'E')
             {
-                EXTRA_DESCR_DATA *ed;
+                EXTRA_DESCR_DATA* ed;
 
                 CREATE(ed, EXTRA_DESCR_DATA, 1);
                 ed->keyword = fread_string(fp);
@@ -2024,13 +2024,13 @@ void load_rooms(AREA_DATA *tarea, FILE *fp)
 /*
  * Load a shop section.
  */
-void load_shops(AREA_DATA *tarea, FILE *fp)
+void load_shops(AREA_DATA* tarea, FILE* fp)
 {
-    SHOP_DATA *pShop;
+    SHOP_DATA* pShop;
 
     for (;;)
     {
-        MOB_INDEX_DATA *pMobIndex;
+        MOB_INDEX_DATA* pMobIndex;
         int iTrade;
 
         CREATE(pShop, SHOP_DATA, 1);
@@ -2064,13 +2064,13 @@ void load_shops(AREA_DATA *tarea, FILE *fp)
 /*
  * Load a repair shop section.					-Thoric
  */
-void load_repairs(AREA_DATA *tarea, FILE *fp)
+void load_repairs(AREA_DATA* tarea, FILE* fp)
 {
-    REPAIR_DATA *rShop;
+    REPAIR_DATA* rShop;
 
     for (;;)
     {
-        MOB_INDEX_DATA *pMobIndex;
+        MOB_INDEX_DATA* pMobIndex;
         int iFix;
 
         CREATE(rShop, REPAIR_DATA, 1);
@@ -2102,11 +2102,11 @@ void load_repairs(AREA_DATA *tarea, FILE *fp)
 /*
  * Load spec proc declarations.
  */
-void load_specials(AREA_DATA *tarea, FILE *fp)
+void load_specials(AREA_DATA* tarea, FILE* fp)
 {
     for (;;)
     {
-        MOB_INDEX_DATA *pMobIndex;
+        MOB_INDEX_DATA* pMobIndex;
         char letter;
 
         switch (letter = fread_letter(fp))
@@ -2154,10 +2154,10 @@ void load_specials(AREA_DATA *tarea, FILE *fp)
 /*
  * Load soft / hard area ranges.
  */
-void load_ranges(AREA_DATA *tarea, FILE *fp)
+void load_ranges(AREA_DATA* tarea, FILE* fp)
 {
     int x1, x2, x3, x4;
-    char *ln;
+    char* ln;
 
     if (!tarea)
     {
@@ -2190,8 +2190,8 @@ void load_ranges(AREA_DATA *tarea, FILE *fp)
  */
 void initialize_economy(void)
 {
-    AREA_DATA *tarea;
-    MOB_INDEX_DATA *mob;
+    AREA_DATA* tarea;
+    MOB_INDEX_DATA* mob;
     int idx, gold, rng;
 
     for (tarea = first_area; tarea; tarea = tarea->next)
@@ -2219,7 +2219,7 @@ void initialize_economy(void)
  */
 void fix_exits(void)
 {
-    ROOM_INDEX_DATA *pRoomIndex;
+    ROOM_INDEX_DATA* pRoomIndex;
     EXIT_DATA *pexit, *pexit_next, *rev_exit;
     int iHash;
 
@@ -2277,9 +2277,9 @@ void fix_exits(void)
 /*
  * Get diku-compatable exit by number				-Thoric
  */
-EXIT_DATA *get_exit_number(ROOM_INDEX_DATA *room, int xit)
+EXIT_DATA* get_exit_number(ROOM_INDEX_DATA* room, int xit)
 {
-    EXIT_DATA *pexit;
+    EXIT_DATA* pexit;
     int count;
 
     count = 0;
@@ -2293,7 +2293,7 @@ EXIT_DATA *get_exit_number(ROOM_INDEX_DATA *room, int xit)
  * (prelude...) This is going to be fun... NOT!
  * (conclusion) QSort is f*cked!
  */
-int exit_comp(EXIT_DATA **xit1, EXIT_DATA **xit2)
+int exit_comp(EXIT_DATA** xit1, EXIT_DATA** xit2)
 {
     int d1, d2;
 
@@ -2307,10 +2307,10 @@ int exit_comp(EXIT_DATA **xit1, EXIT_DATA **xit2)
     return 0;
 }
 
-void sort_exits(ROOM_INDEX_DATA *room)
+void sort_exits(ROOM_INDEX_DATA* room)
 {
-    EXIT_DATA *pexit; /* *texit */ /* Unused */
-    EXIT_DATA *exits[MAX_REXITS];
+    EXIT_DATA* pexit; /* *texit */ /* Unused */
+    EXIT_DATA* exits[MAX_REXITS];
     int x, nexits;
 
     nexits = 0;
@@ -2323,7 +2323,7 @@ void sort_exits(ROOM_INDEX_DATA *room)
             return;
         }
     }
-    qsort(&exits[0], nexits, sizeof(EXIT_DATA *), (int (*)(const void *, const void *))exit_comp);
+    qsort(&exits[0], nexits, sizeof(EXIT_DATA*), (int (*)(const void*, const void*))exit_comp);
     for (x = 0; x < nexits; x++)
     {
         if (x > 0)
@@ -2343,9 +2343,9 @@ void sort_exits(ROOM_INDEX_DATA *room)
     }
 }
 
-void randomize_exits(ROOM_INDEX_DATA *room, sh_int maxdir)
+void randomize_exits(ROOM_INDEX_DATA* room, sh_int maxdir)
 {
-    EXIT_DATA *pexit;
+    EXIT_DATA* pexit;
     int nexits, /* maxd, */ d0, d1, count, door; /* Maxd unused */
     int vdirs[MAX_REXITS];
 
@@ -2378,11 +2378,11 @@ void randomize_exits(ROOM_INDEX_DATA *room, sh_int maxdir)
  */
 void area_update(void)
 {
-    AREA_DATA *pArea;
+    AREA_DATA* pArea;
 
     for (pArea = first_area; pArea; pArea = pArea->next)
     {
-        CHAR_DATA *pch;
+        CHAR_DATA* pch;
         int reset_age = pArea->reset_frequency ? pArea->reset_frequency : 15;
 
         if ((reset_age == -1 && pArea->age == -1) || ++pArea->age < (reset_age - 1))
@@ -2416,7 +2416,7 @@ void area_update(void)
          */
         if (pArea->nplayer == 0 || pArea->age >= reset_age)
         {
-            ROOM_INDEX_DATA *pRoomIndex;
+            ROOM_INDEX_DATA* pRoomIndex;
 
             fprintf(stderr, "Resetting: %s\n", pArea->filename);
             reset_area(pArea);
@@ -2435,9 +2435,9 @@ void area_update(void)
 /*
  * Create an instance of a mobile.
  */
-CHAR_DATA *create_mobile(MOB_INDEX_DATA *pMobIndex)
+CHAR_DATA* create_mobile(MOB_INDEX_DATA* pMobIndex)
 {
-    CHAR_DATA *mob;
+    CHAR_DATA* mob;
 
     if (!pMobIndex)
     {
@@ -2534,9 +2534,9 @@ CHAR_DATA *create_mobile(MOB_INDEX_DATA *pMobIndex)
 /*
  * Create an instance of an object.
  */
-OBJ_DATA *create_object(OBJ_INDEX_DATA *pObjIndex, int level)
+OBJ_DATA* create_object(OBJ_INDEX_DATA* pObjIndex, int level)
 {
-    OBJ_DATA *obj;
+    OBJ_DATA* obj;
 
     if (!pObjIndex)
     {
@@ -2741,7 +2741,7 @@ OBJ_DATA *create_object(OBJ_INDEX_DATA *pObjIndex, int level)
 /*
  * Clear a new character.
  */
-void clear_char(CHAR_DATA *ch)
+void clear_char(CHAR_DATA* ch)
 {
     ch->editor = NULL;
     ch->hunting = NULL;
@@ -2814,14 +2814,14 @@ void clear_char(CHAR_DATA *ch)
 /*
  * Free a character.
  */
-void free_char(CHAR_DATA *ch)
+void free_char(CHAR_DATA* ch)
 {
-    OBJ_DATA *obj;
-    BUG_DATA *bugs;
-    CONTRACT_DATA *contract;
-    FELLOW_DATA *fellow;
-    AFFECT_DATA *paf;
-    TIMER *timer;
+    OBJ_DATA* obj;
+    BUG_DATA* bugs;
+    CONTRACT_DATA* contract;
+    FELLOW_DATA* fellow;
+    AFFECT_DATA* paf;
+    TIMER* timer;
     MPROG_ACT_LIST *mpact, *mpact_next;
     NOTE_DATA *comments, *comments_next;
 
@@ -2950,7 +2950,7 @@ void free_char(CHAR_DATA *ch)
 /*
  * Get an extra description from a list.
  */
-char *get_extra_descr(const char *name, EXTRA_DESCR_DATA *ed)
+char* get_extra_descr(const char* name, EXTRA_DESCR_DATA* ed)
 {
     for (; ed; ed = ed->next)
         if (is_name(name, ed->keyword))
@@ -2963,9 +2963,9 @@ char *get_extra_descr(const char *name, EXTRA_DESCR_DATA *ed)
  * Translates mob virtual number to its mob index struct.
  * Hash table lookup.
  */
-MOB_INDEX_DATA *get_mob_index(int vnum)
+MOB_INDEX_DATA* get_mob_index(int vnum)
 {
-    MOB_INDEX_DATA *pMobIndex;
+    MOB_INDEX_DATA* pMobIndex;
 
     if (vnum < 0)
         vnum = 0;
@@ -2984,9 +2984,9 @@ MOB_INDEX_DATA *get_mob_index(int vnum)
  * Translates obj virtual number to its obj index struct.
  * Hash table lookup.
  */
-OBJ_INDEX_DATA *get_obj_index(int vnum)
+OBJ_INDEX_DATA* get_obj_index(int vnum)
 {
-    OBJ_INDEX_DATA *pObjIndex;
+    OBJ_INDEX_DATA* pObjIndex;
 
     if (vnum < 0)
         vnum = 0;
@@ -3005,9 +3005,9 @@ OBJ_INDEX_DATA *get_obj_index(int vnum)
  * Translates room virtual number to its room index struct.
  * Hash table lookup.
  */
-ROOM_INDEX_DATA *get_room_index(int vnum)
+ROOM_INDEX_DATA* get_room_index(int vnum)
 {
-    ROOM_INDEX_DATA *pRoomIndex;
+    ROOM_INDEX_DATA* pRoomIndex;
 
     if (vnum < 0)
         vnum = 0;
@@ -3036,7 +3036,7 @@ ROOM_INDEX_DATA *get_room_index(int vnum)
 /*
  * Read a letter from a file.
  */
-char fread_letter(FILE *fp)
+char fread_letter(FILE* fp)
 {
     char c;
 
@@ -3058,7 +3058,7 @@ char fread_letter(FILE *fp)
 /*
  * Read a number from a file.
  */
-int fread_number(FILE *fp)
+int fread_number(FILE* fp)
 {
     int number;
     bool sign;
@@ -3124,9 +3124,9 @@ int fread_number(FILE *fp)
 /*
  * custom str_dup using create					-Thoric
  */
-char *str_dup(char const *str)
+char* str_dup(char const* str)
 {
-    static char *ret;
+    static char* ret;
     int len;
 
     if (!str)
@@ -3142,10 +3142,10 @@ char *str_dup(char const *str)
 /*
  * Read a string from file fp
  */
-char *fread_string(FILE *fp)
+char* fread_string(FILE* fp)
 {
     char buf[MAX_STRING_LENGTH];
-    char *plast;
+    char* plast;
     char c;
     int ln;
 
@@ -3215,10 +3215,10 @@ char *fread_string(FILE *fp)
 /*
  * Read a string from file fp using str_dup (ie: no string hashing)
  */
-char *fread_string_nohash(FILE *fp)
+char* fread_string_nohash(FILE* fp)
 {
     char buf[MAX_STRING_LENGTH];
-    char *plast;
+    char* plast;
     char c;
     int ln;
 
@@ -3288,7 +3288,7 @@ char *fread_string_nohash(FILE *fp)
 /*
  * Read to end of line (for comments).
  */
-void fread_to_eol(FILE *fp)
+void fread_to_eol(FILE* fp)
 {
     char c;
 
@@ -3316,10 +3316,10 @@ void fread_to_eol(FILE *fp)
 /*
  * Read to end of line into static buffer			-Thoric
  */
-char *fread_line(FILE *fp)
+char* fread_line(FILE* fp)
 {
     static char line[MAX_STRING_LENGTH];
-    char *pline;
+    char* pline;
     char c;
     int ln;
 
@@ -3378,10 +3378,10 @@ char *fread_line(FILE *fp)
 /*
  * Read one word (into static buffer).
  */
-char *fread_word(FILE *fp)
+char* fread_word(FILE* fp)
 {
     static char word[MAX_INPUT_LENGTH];
-    char *pword;
+    char* pword;
     char cEnd;
 
     do
@@ -3433,7 +3433,7 @@ char *fread_word(FILE *fp)
     return word;
 }
 
-void do_memory(CHAR_DATA *ch, char *argument)
+void do_memory(CHAR_DATA* ch, char* argument)
 {
     char arg[MAX_INPUT_LENGTH];
     int hash;
@@ -3552,7 +3552,7 @@ static int rgiState[2 + 55];
 
 void init_mm()
 {
-    int *piState;
+    int* piState;
     int iState;
 
     piState = &rgiState[2];
@@ -3571,7 +3571,7 @@ void init_mm()
 
 int number_mm(void)
 {
-    int *piState;
+    int* piState;
     int iState1;
     int iState2;
     int iRand;
@@ -3624,7 +3624,7 @@ int interpolate(int level, int value_00, int value_32)
  * Removes the tildes from a string.
  * Used for player-entered strings that go into disk files.
  */
-void smash_tilde(char *str)
+void smash_tilde(char* str)
 {
     for (; *str != '\0'; str++)
         if (*str == '~')
@@ -3637,7 +3637,7 @@ void smash_tilde(char *str)
  * Encodes the tildes in a string.				-Thoric
  * Used for player-entered strings that go into disk files.
  */
-void hide_tilde(char *str)
+void hide_tilde(char* str)
 {
     for (; *str != '\0'; str++)
         if (*str == '~')
@@ -3646,10 +3646,10 @@ void hide_tilde(char *str)
     return;
 }
 
-char *show_tilde(const char *str)
+char* show_tilde(const char* str)
 {
     static char buf[MAX_STRING_LENGTH];
-    char *bufptr;
+    char* bufptr;
 
     bufptr = buf;
     for (; *str != '\0'; str++, bufptr++)
@@ -3669,7 +3669,7 @@ char *show_tilde(const char *str)
  * Return true if different
  *   (compatibility with historical functions).
  */
-bool str_cmp(const char *astr, const char *bstr)
+bool str_cmp(const char* astr, const char* bstr)
 {
     if (!astr)
     {
@@ -3701,7 +3701,7 @@ bool str_cmp(const char *astr, const char *bstr)
  * Return true if astr not a prefix of bstr
  *   (compatibility with historical functions).
  */
-bool str_prefix(const char *astr, const char *bstr)
+bool str_prefix(const char* astr, const char* bstr)
 {
     if (!astr)
     {
@@ -3729,7 +3729,7 @@ bool str_prefix(const char *astr, const char *bstr)
  * Returns true is astr not part of bstr.
  *   (compatibility with historical functions).
  */
-bool str_infix(const char *astr, const char *bstr)
+bool str_infix(const char* astr, const char* bstr)
 {
     int sstr1;
     int sstr2;
@@ -3754,7 +3754,7 @@ bool str_infix(const char *astr, const char *bstr)
  * Return true if astr not a suffix of bstr
  *   (compatibility with historical functions).
  */
-bool str_suffix(const char *astr, const char *bstr)
+bool str_suffix(const char* astr, const char* bstr)
 {
     int sstr1;
     int sstr2;
@@ -3770,7 +3770,7 @@ bool str_suffix(const char *astr, const char *bstr)
 /*
  * Returns an initial-capped string.
  */
-char *capitalize(const char *str)
+char* capitalize(const char* str)
 {
     static char strcap[MAX_STRING_LENGTH];
     int i;
@@ -3785,7 +3785,7 @@ char *capitalize(const char *str)
 /*
  * Returns a lowercase string.
  */
-char *strlower(const char *str)
+char* strlower(const char* str)
 {
     static char strlow[MAX_STRING_LENGTH];
     int i;
@@ -3799,7 +3799,7 @@ char *strlower(const char *str)
 /*
  * Returns an uppercase string.
  */
-char *strupper(const char *str)
+char* strupper(const char* str)
 {
     static char strup[MAX_STRING_LENGTH];
     int i;
@@ -3827,7 +3827,7 @@ bool isavowel(char letter)
 /*
  * Shove either "a " or "an " onto the beginning of a string	-Thoric
  */
-char *aoran(const char *str)
+char* aoran(const char* str)
 {
     static char temp[MAX_STRING_LENGTH];
 
@@ -3849,9 +3849,9 @@ char *aoran(const char *str)
 /*
  * Append a string to a file.
  */
-void append_file(CHAR_DATA *ch, const char *file, char *str)
+void append_file(CHAR_DATA* ch, const char* file, char* str)
 {
-    FILE *fp;
+    FILE* fp;
 
     if (IS_NPC(ch) || str[0] == '\0')
         return;
@@ -3872,9 +3872,9 @@ void append_file(CHAR_DATA *ch, const char *file, char *str)
 /*
  * Append a string to a file.
  */
-void append_to_file(char const *file, char *str)
+void append_to_file(char const* file, char* str)
 {
-    FILE *fp;
+    FILE* fp;
 
     if ((fp = fopen(file, "a")) == NULL)
     {
@@ -3891,7 +3891,7 @@ void append_to_file(char const *file, char *str)
 /*
  * Prepend a string to a file.
  */
-void prepend_to_file(char *file, char *str)
+void prepend_to_file(char* file, char* str)
 {
     char temp[MAX_STRING_LENGTH];
     char tempname[MAX_STRING_LENGTH];
@@ -3908,10 +3908,10 @@ void prepend_to_file(char *file, char *str)
 /*
  * Reports a bug.
  */
-void bug(const char *str, ...)
+void bug(const char* str, ...)
 {
     char buf[MAX_STRING_LENGTH];
-    FILE *fp;
+    FILE* fp;
     struct stat fst;
 
     if (fpArea != NULL)
@@ -3970,10 +3970,10 @@ void bug(const char *str, ...)
 /*
  * Add a string to the boot-up log				-Thoric
  */
-void boot_log(const char *str, ...)
+void boot_log(const char* str, ...)
 {
     char buf[MAX_STRING_LENGTH];
-    FILE *fp;
+    FILE* fp;
     va_list param;
 
     strcpy_s(buf, "[*****] BOOT: ");
@@ -3994,9 +3994,9 @@ void boot_log(const char *str, ...)
 /*
  * Dump a text file to a player, a line at a time		-Thoric
  */
-void show_file(CHAR_DATA *ch, char const *filename)
+void show_file(CHAR_DATA* ch, char const* filename)
 {
-    FILE *fp;
+    FILE* fp;
     char buf[MAX_STRING_LENGTH];
     int c;
     int num = 0;
@@ -4024,7 +4024,7 @@ void show_file(CHAR_DATA *ch, char const *filename)
 /*
  * Show the boot log file					-Thoric
  */
-void do_dmesg(CHAR_DATA *ch, char *argument)
+void do_dmesg(CHAR_DATA* ch, char* argument)
 {
     set_pager_color(AT_LOG, ch);
     show_file(ch, BOOTLOG_FILE);
@@ -4033,9 +4033,9 @@ void do_dmesg(CHAR_DATA *ch, char *argument)
 /*
  * Writes a string to the log, extended version			-Thoric
  */
-void log_string_plus(const char *str, sh_int log_type, sh_int level)
+void log_string_plus(const char* str, sh_int log_type, sh_int level)
 {
-    char *strtime;
+    char* strtime;
     int offset;
 
     strtime = ctime(&current_time);
@@ -4066,13 +4066,13 @@ void log_string_plus(const char *str, sh_int log_type, sh_int level)
  * wizlist builder!						-Thoric
  */
 
-void towizfile(const char *line, bool Border)
+void towizfile(const char* line, bool Border)
 {
     int filler, xx, ofiller;
     char outline[MAX_STRING_LENGTH];
     char outline2[MAX_STRING_LENGTH];
-    FILE *wfp;
-    FILE *wwwfp;
+    FILE* wfp;
+    FILE* wwwfp;
     bool SNIP = false;
     outline[0] = '\0';
     outline2[0] = '\0';
@@ -4121,7 +4121,7 @@ void towizfile(const char *line, bool Border)
     }
 }
 
-void add_to_wizlist(char const *name, int level)
+void add_to_wizlist(char const* name, int level)
 {
     WIZENT *wiz, *tmp;
 
@@ -4168,8 +4168,8 @@ void add_to_wizlist(char const *name, int level)
  */
 void make_wizlist()
 {
-    FILE *gfp;
-    char const *word;
+    FILE* gfp;
+    char const* word;
     int ilevel, iflags;
     WIZENT *wiz, *wiznext;
     char buf[MAX_STRING_LENGTH];
@@ -4180,7 +4180,7 @@ void make_wizlist()
 
     ilevel = 0;
 
-    for (auto &file : std::filesystem::directory_iterator(GOD_DIR))
+    for (auto& file : std::filesystem::directory_iterator(GOD_DIR))
     {
         gfp = fopen(file.path().string().c_str(), "r");
         if (gfp)
@@ -4295,7 +4295,7 @@ void make_wizlist()
     towizfile("                              &B\\_/\\_/ |_||_||_|\\_\\|__/", 0);
 }
 
-void do_makewizlist(CHAR_DATA *ch, char *argument)
+void do_makewizlist(CHAR_DATA* ch, char* argument)
 {
     make_wizlist();
 }
@@ -4304,7 +4304,7 @@ void do_makewizlist(CHAR_DATA *ch, char *argument)
 
 /* This routine reads in scripts of MUDprograms from a file */
 
-int mprog_name_to_type(char *name)
+int mprog_name_to_type(char* name)
 {
     if (!str_cmp(name, "in_file_prog"))
         return IN_FILE_PROG;
@@ -4383,11 +4383,11 @@ int mprog_name_to_type(char *name)
     return (ERROR_PROG);
 }
 
-MPROG_DATA *mprog_file_read(char *f, MPROG_DATA *mprg, MOB_INDEX_DATA *pMobIndex)
+MPROG_DATA* mprog_file_read(char* f, MPROG_DATA* mprg, MOB_INDEX_DATA* pMobIndex)
 {
 
     char MUDProgfile[MAX_INPUT_LENGTH];
-    FILE *progfile;
+    FILE* progfile;
     char letter;
     MPROG_DATA *mprg_next, *mprg2;
     bool done = false;
@@ -4457,11 +4457,11 @@ MPROG_DATA *mprog_file_read(char *f, MPROG_DATA *mprg, MOB_INDEX_DATA *pMobIndex
 
 /* Load a MUDprogram section from the area file.
  */
-void load_mudprogs(AREA_DATA *tarea, FILE *fp)
+void load_mudprogs(AREA_DATA* tarea, FILE* fp)
 {
-    MOB_INDEX_DATA *iMob;
-    MPROG_DATA *original;
-    MPROG_DATA *working;
+    MOB_INDEX_DATA* iMob;
+    MPROG_DATA* original;
+    MPROG_DATA* working;
     char letter;
     int value;
 
@@ -4512,9 +4512,9 @@ void load_mudprogs(AREA_DATA *tarea, FILE *fp)
 /* This procedure is responsible for reading any in_file MUDprograms.
  */
 
-void mprog_read_programs(FILE *fp, MOB_INDEX_DATA *pMobIndex)
+void mprog_read_programs(FILE* fp, MOB_INDEX_DATA* pMobIndex)
 {
-    MPROG_DATA *mprg;
+    MPROG_DATA* mprg;
     char letter;
     bool done = false;
 
@@ -4593,11 +4593,11 @@ void mprog_read_programs(FILE *fp, MOB_INDEX_DATA *pMobIndex)
 
 /* This routine reads in scripts of OBJprograms from a file */
 
-MPROG_DATA *oprog_file_read(char *f, MPROG_DATA *mprg, OBJ_INDEX_DATA *pObjIndex)
+MPROG_DATA* oprog_file_read(char* f, MPROG_DATA* mprg, OBJ_INDEX_DATA* pObjIndex)
 {
 
     char MUDProgfile[MAX_INPUT_LENGTH];
-    FILE *progfile;
+    FILE* progfile;
     char letter;
     MPROG_DATA *mprg_next, *mprg2;
     bool done = false;
@@ -4667,11 +4667,11 @@ MPROG_DATA *oprog_file_read(char *f, MPROG_DATA *mprg, OBJ_INDEX_DATA *pObjIndex
 
 /* Load a MUDprogram section from the area file.
  */
-void load_objprogs(AREA_DATA *tarea, FILE *fp)
+void load_objprogs(AREA_DATA* tarea, FILE* fp)
 {
-    OBJ_INDEX_DATA *iObj;
-    MPROG_DATA *original;
-    MPROG_DATA *working;
+    OBJ_INDEX_DATA* iObj;
+    MPROG_DATA* original;
+    MPROG_DATA* working;
     char letter;
     int value;
 
@@ -4722,9 +4722,9 @@ void load_objprogs(AREA_DATA *tarea, FILE *fp)
 /* This procedure is responsible for reading any in_file OBJprograms.
  */
 
-void oprog_read_programs(FILE *fp, OBJ_INDEX_DATA *pObjIndex)
+void oprog_read_programs(FILE* fp, OBJ_INDEX_DATA* pObjIndex)
 {
-    MPROG_DATA *mprg;
+    MPROG_DATA* mprg;
     char letter;
     bool done = false;
 
@@ -4802,11 +4802,11 @@ void oprog_read_programs(FILE *fp, OBJ_INDEX_DATA *pObjIndex)
  */
 
 /* This routine reads in scripts of OBJprograms from a file */
-MPROG_DATA *rprog_file_read(char *f, MPROG_DATA *mprg, ROOM_INDEX_DATA *RoomIndex)
+MPROG_DATA* rprog_file_read(char* f, MPROG_DATA* mprg, ROOM_INDEX_DATA* RoomIndex)
 {
 
     char MUDProgfile[MAX_INPUT_LENGTH];
-    FILE *progfile;
+    FILE* progfile;
     char letter;
     MPROG_DATA *mprg_next, *mprg2;
     bool done = false;
@@ -4876,11 +4876,11 @@ MPROG_DATA *rprog_file_read(char *f, MPROG_DATA *mprg, ROOM_INDEX_DATA *RoomInde
 
 /* Load a ROOMprogram section from the area file.
  */
-void load_roomprogs(AREA_DATA *tarea, FILE *fp)
+void load_roomprogs(AREA_DATA* tarea, FILE* fp)
 {
-    ROOM_INDEX_DATA *iRoom;
-    MPROG_DATA *original;
-    MPROG_DATA *working;
+    ROOM_INDEX_DATA* iRoom;
+    MPROG_DATA* original;
+    MPROG_DATA* working;
     char letter;
     int value;
 
@@ -4931,9 +4931,9 @@ void load_roomprogs(AREA_DATA *tarea, FILE *fp)
 /* This procedure is responsible for reading any in_file ROOMprograms.
  */
 
-void rprog_read_programs(FILE *fp, ROOM_INDEX_DATA *pRoomIndex)
+void rprog_read_programs(FILE* fp, ROOM_INDEX_DATA* pRoomIndex)
 {
-    MPROG_DATA *mprg;
+    MPROG_DATA* mprg;
     char letter;
     bool done = false;
 
@@ -5009,16 +5009,16 @@ void rprog_read_programs(FILE *fp, ROOM_INDEX_DATA *pRoomIndex)
   Don't ask me why they return bool.. :).. oh well.. -- Alty
   Don't ask me either, so I changed it to void. - Samson
 */
-void delete_room(ROOM_INDEX_DATA *room)
+void delete_room(ROOM_INDEX_DATA* room)
 {
     int hash;
     ROOM_INDEX_DATA *prev, *limbo = get_room_index(ROOM_VNUM_LIMBO);
-    OBJ_DATA *o;
-    CHAR_DATA *ch;
-    EXTRA_DESCR_DATA *ed;
-    EXIT_DATA *ex;
-    MPROG_ACT_LIST *mpact;
-    MPROG_DATA *mp;
+    OBJ_DATA* o;
+    CHAR_DATA* ch;
+    EXTRA_DESCR_DATA* ed;
+    EXIT_DATA* ex;
+    MPROG_ACT_LIST* mpact;
+    MPROG_DATA* mp;
 
     UNLINK(room, room->area->first_room, room->area->last_room, next_aroom, prev_aroom);
 
@@ -5083,14 +5083,14 @@ void delete_room(ROOM_INDEX_DATA *room)
 }
 
 /* See comment on delete_room. */
-void delete_obj(OBJ_INDEX_DATA *obj)
+void delete_obj(OBJ_INDEX_DATA* obj)
 {
     int hash;
-    OBJ_INDEX_DATA *prev;
+    OBJ_INDEX_DATA* prev;
     OBJ_DATA *o, *o_next;
-    EXTRA_DESCR_DATA *ed;
-    AFFECT_DATA *af;
-    MPROG_DATA *mp;
+    EXTRA_DESCR_DATA* ed;
+    AFFECT_DATA* af;
+    MPROG_DATA* mp;
 
     /* Remove references to object index */
     for (o = first_object; o; o = o_next)
@@ -5144,12 +5144,12 @@ void delete_obj(OBJ_INDEX_DATA *obj)
 }
 
 /* See comment on delete_room. */
-void delete_mob(MOB_INDEX_DATA *mob)
+void delete_mob(MOB_INDEX_DATA* mob)
 {
     int hash;
-    MOB_INDEX_DATA *prev;
+    MOB_INDEX_DATA* prev;
     CHAR_DATA *ch, *ch_next;
-    MPROG_DATA *mp;
+    MPROG_DATA* mp;
 
     for (ch = first_char; ch; ch = ch_next)
     {
@@ -5205,9 +5205,9 @@ void delete_mob(MOB_INDEX_DATA *mob)
 /*
  * Creat a new room (for online building)			-Thoric
  */
-ROOM_INDEX_DATA *make_room(int vnum, AREA_DATA *area)
+ROOM_INDEX_DATA* make_room(int vnum, AREA_DATA* area)
 {
-    ROOM_INDEX_DATA *pRoomIndex;
+    ROOM_INDEX_DATA* pRoomIndex;
     int iHash;
 
     CREATE(pRoomIndex, ROOM_INDEX_DATA, 1);
@@ -5243,7 +5243,7 @@ ROOM_INDEX_DATA *make_room(int vnum, AREA_DATA *area)
  * Create a new INDEX object (for online building)		-Thoric
  * Option to clone an existing index object.
  */
-OBJ_INDEX_DATA *make_object(int vnum, int cvnum, char *name)
+OBJ_INDEX_DATA* make_object(int vnum, int cvnum, char* name)
 {
     OBJ_INDEX_DATA *pObjIndex, *cObjIndex;
     char buf[MAX_STRING_LENGTH];
@@ -5333,7 +5333,7 @@ OBJ_INDEX_DATA *make_object(int vnum, int cvnum, char *name)
  * Create a new INDEX mobile (for online building)		-Thoric
  * Option to clone an existing index mobile.
  */
-MOB_INDEX_DATA *make_mobile(int vnum, int cvnum, char *name)
+MOB_INDEX_DATA* make_mobile(int vnum, int cvnum, char* name)
 {
     MOB_INDEX_DATA *pMobIndex, *cMobIndex;
     char buf[MAX_STRING_LENGTH];
@@ -5454,7 +5454,7 @@ MOB_INDEX_DATA *make_mobile(int vnum, int cvnum, char *name)
  * to_room and vnum.						-Thoric
  * Exits are inserted into the linked list based on vdir.
  */
-EXIT_DATA *make_exit(ROOM_INDEX_DATA *pRoomIndex, ROOM_INDEX_DATA *to_room, sh_int door)
+EXIT_DATA* make_exit(ROOM_INDEX_DATA* pRoomIndex, ROOM_INDEX_DATA* to_room, sh_int door)
 {
     EXIT_DATA *pexit, *texit;
     bool broke;
@@ -5507,9 +5507,9 @@ EXIT_DATA *make_exit(ROOM_INDEX_DATA *pRoomIndex, ROOM_INDEX_DATA *to_room, sh_i
     return pexit;
 }
 
-void fix_area_exits(AREA_DATA *tarea)
+void fix_area_exits(AREA_DATA* tarea)
 {
-    ROOM_INDEX_DATA *pRoomIndex;
+    ROOM_INDEX_DATA* pRoomIndex;
     EXIT_DATA *pexit, *rev_exit;
     int rnum;
     bool fexit;
@@ -5553,7 +5553,7 @@ void fix_area_exits(AREA_DATA *tarea)
     }
 }
 
-void load_area_file(AREA_DATA *tarea, char *filename)
+void load_area_file(AREA_DATA* tarea, char* filename)
 {
     /*    FILE *fpin;
         what intelligent person stopped using fpArea?????
@@ -5580,7 +5580,7 @@ void load_area_file(AREA_DATA *tarea, char *filename)
 
     for (;;)
     {
-        char *word;
+        char* word;
 
         if (fread_letter(fpArea) != '#')
         {
@@ -5674,9 +5674,9 @@ void load_area_file(AREA_DATA *tarea, char *filename)
  * them out of the area files. -- Altrag */
 void load_buildlist(void)
 {
-    FILE *fp;
+    FILE* fp;
     char buf[MAX_STRING_LENGTH];
-    AREA_DATA *pArea;
+    AREA_DATA* pArea;
     char line[81];
     char word[81];
     int low, hi;
@@ -5684,7 +5684,7 @@ void load_buildlist(void)
     bool badfile = false;
     char temp;
 
-    for (auto &entry : std::filesystem::directory_iterator(GOD_DIR))
+    for (auto& entry : std::filesystem::directory_iterator(GOD_DIR))
     {
         if (entry.path().filename().c_str()[0] != '.')
         {
@@ -5781,9 +5781,9 @@ void load_buildlist(void)
 /*
  * Sort by room vnums					-Altrag & Thoric
  */
-void sort_area(AREA_DATA *pArea, bool proto)
+void sort_area(AREA_DATA* pArea, bool proto)
 {
-    AREA_DATA *area = NULL;
+    AREA_DATA* area = NULL;
     AREA_DATA *first_sort, *last_sort;
     bool found;
 
@@ -5855,7 +5855,7 @@ void sort_area(AREA_DATA *pArea, bool proto)
  * Display vnums currently assigned to areas		-Altrag & Thoric
  * Sorted, and flagged if loaded.
  */
-void show_vnums(CHAR_DATA *ch, int low, int high, bool proto, bool shownl, const char *loadst, const char *notloadst)
+void show_vnums(CHAR_DATA* ch, int low, int high, bool proto, bool shownl, const char* loadst, const char* notloadst)
 {
     AREA_DATA *pArea, *first_sort;
     int count, loaded;
@@ -5895,7 +5895,7 @@ void show_vnums(CHAR_DATA *ch, int low, int high, bool proto, bool shownl, const
  * Shows prototype vnums ranges, and if loaded
  */
 
-void do_vnums(CHAR_DATA *ch, char *argument)
+void do_vnums(CHAR_DATA* ch, char* argument)
 {
     char arg1[MAX_INPUT_LENGTH];
     char arg2[MAX_INPUT_LENGTH];
@@ -5917,7 +5917,7 @@ void do_vnums(CHAR_DATA *ch, char *argument)
 /*
  * Shows installed areas, sorted.  Mark unloaded areas with an X
  */
-void do_zones(CHAR_DATA *ch, char *argument)
+void do_zones(CHAR_DATA* ch, char* argument)
 {
     char arg1[MAX_INPUT_LENGTH];
     char arg2[MAX_INPUT_LENGTH];
@@ -5943,7 +5943,7 @@ void do_zones(CHAR_DATA *ch, char *argument)
 /*
  * Show prototype areas, sorted.  Only show loaded areas
  */
-void do_newzones(CHAR_DATA *ch, char *argument)
+void do_newzones(CHAR_DATA* ch, char* argument)
 {
     char arg1[MAX_INPUT_LENGTH];
     char arg2[MAX_INPUT_LENGTH];
@@ -5967,7 +5967,7 @@ void do_newzones(CHAR_DATA *ch, char *argument)
  */
 void save_sysdata(SYSTEM_DATA sys)
 {
-    FILE *fp;
+    FILE* fp;
     char filename[MAX_INPUT_LENGTH];
 
     sprintf_s(filename, "%ssysdata.dat", SYSTEM_DIR);
@@ -6019,9 +6019,9 @@ void save_sysdata(SYSTEM_DATA sys)
     return;
 }
 
-void fread_sysdata(SYSTEM_DATA *sys, FILE *fp)
+void fread_sysdata(SYSTEM_DATA* sys, FILE* fp)
 {
-    const char *word;
+    const char* word;
     bool fMatch;
 
     sys->time_of_max = NULL;
@@ -6133,10 +6133,10 @@ void fread_sysdata(SYSTEM_DATA *sys, FILE *fp)
 /*
  * Load the sysdata file
  */
-bool load_systemdata(SYSTEM_DATA *sys)
+bool load_systemdata(SYSTEM_DATA* sys)
 {
     char filename[MAX_INPUT_LENGTH];
-    FILE *fp;
+    FILE* fp;
     bool found;
 
     found = false;
@@ -6149,7 +6149,7 @@ bool load_systemdata(SYSTEM_DATA *sys)
         for (;;)
         {
             char letter;
-            char *word;
+            char* word;
 
             letter = fread_letter(fp);
             if (letter == '*')
@@ -6190,8 +6190,8 @@ bool load_systemdata(SYSTEM_DATA *sys)
 
 void load_banlist(void)
 {
-    BAN_DATA *pban;
-    FILE *fp;
+    BAN_DATA* pban;
+    FILE* fp;
     int number;
     char letter;
 
@@ -6228,11 +6228,11 @@ void load_banlist(void)
 
 /* Check to make sure range of vnums is free - Scryn 2/27/96 */
 
-void do_check_vnums(CHAR_DATA *ch, char *argument)
+void do_check_vnums(CHAR_DATA* ch, char* argument)
 {
     char buf[MAX_STRING_LENGTH];
     char buf2[MAX_STRING_LENGTH];
-    AREA_DATA *pArea;
+    AREA_DATA* pArea;
     char arg1[MAX_STRING_LENGTH];
     char arg2[MAX_STRING_LENGTH];
     bool room, mob, obj, all, area_conflict;
@@ -6506,10 +6506,10 @@ void do_check_vnums(CHAR_DATA *ch, char *argument)
 }
 
 /* little proggy to center text with whitespace in between. */
-char *centertext(const char *text, int size)
+char* centertext(const char* text, int size)
 {
     char buf[MAX_STRING_LENGTH] = {};
-    char *sent;
+    char* sent;
     int i;
     int filler = (size - strlen(remand(text))) / 2 - 1;
     sprintf_s(buf, " ");
@@ -6561,7 +6561,7 @@ void tail_chain(void)
 /*
  * Read a float number from a file. Turn the result into a float value.
  */
-float fread_float(FILE *fp)
+float fread_float(FILE* fp)
 {
     float number;
     bool sign, decimal;

@@ -55,7 +55,7 @@
 /*
  * Globals
  */
-char *current_date(void);
+char* current_date(void);
 int num_changes(void);
 
 /*
@@ -64,11 +64,11 @@ int num_changes(void);
 
 int maxChanges;
 #define NULLSTR(str) (str == NULL || str[0] == '\0')
-CHANGE_DATA *changes_table;
+CHANGE_DATA* changes_table;
 
 void load_changes()
 {
-    FILE *fp;
+    FILE* fp;
     int i;
 
     if (!(fp = fopen(CHANGE_FILE, "r")))
@@ -80,7 +80,7 @@ void load_changes()
     fscanf(fp, "%d\n", &maxChanges);
 
     /* Use malloc so we can realloc later on */
-    changes_table = reinterpret_cast<CHANGE_DATA *>(malloc(sizeof(CHANGE_DATA) * (maxChanges + 1)));
+    changes_table = reinterpret_cast<CHANGE_DATA*>(malloc(sizeof(CHANGE_DATA) * (maxChanges + 1)));
     for (i = 0; i < maxChanges; i++)
     {
         changes_table[i].change = fread_string(fp);
@@ -93,15 +93,15 @@ void load_changes()
     return; /* just return */
 }
 
-size_t my_strftime(char *s, size_t max, const char *fmt, const tm *tm)
+size_t my_strftime(char* s, size_t max, const char* fmt, const tm* tm)
 {
     return strftime(s, max, fmt, tm);
 }
 
-char *current_date()
+char* current_date()
 {
     static char buf[128];
-    tm *datetime;
+    tm* datetime;
 
     datetime = localtime(&current_time);
     my_strftime(buf, sizeof(buf), "%x", datetime);
@@ -110,7 +110,7 @@ char *current_date()
 
 void save_changes(void)
 {
-    FILE *fp;
+    FILE* fp;
     int i;
 
     if (!(fp = fopen(CHANGE_FILE, "w")))
@@ -136,9 +136,9 @@ void save_changes(void)
 void delete_change(int iChange)
 {
     int i, j;
-    CHANGE_DATA *new_table;
+    CHANGE_DATA* new_table;
 
-    new_table = reinterpret_cast<CHANGE_DATA *>(malloc(sizeof(CHANGE_DATA) * maxChanges));
+    new_table = reinterpret_cast<CHANGE_DATA*>(malloc(sizeof(CHANGE_DATA) * maxChanges));
 
     if (!new_table)
     {
@@ -162,10 +162,10 @@ void delete_change(int iChange)
     return;
 }
 
-void do_addchange(CHAR_DATA *ch, char *argument)
+void do_addchange(CHAR_DATA* ch, char* argument)
 {
     char buf1[MAX_STRING_LENGTH];
-    CHANGE_DATA *new_table;
+    CHANGE_DATA* new_table;
 
     if (IS_NPC(ch))
         return;
@@ -178,7 +178,7 @@ void do_addchange(CHAR_DATA *ch, char *argument)
     }
 
     maxChanges++;
-    new_table = reinterpret_cast<CHANGE_DATA *>(realloc(changes_table, sizeof(CHANGE_DATA) * (maxChanges + 1)));
+    new_table = reinterpret_cast<CHANGE_DATA*>(realloc(changes_table, sizeof(CHANGE_DATA) * (maxChanges + 1)));
 
     if (!new_table) /* realloc failed */
     {
@@ -202,7 +202,7 @@ void do_addchange(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void do_chedit(CHAR_DATA *ch, char *argument)
+void do_chedit(CHAR_DATA* ch, char* argument)
 {
     char arg1[MAX_INPUT_LENGTH];
     char arg2[MAX_INPUT_LENGTH];
@@ -270,7 +270,7 @@ void do_chedit(CHAR_DATA *ch, char *argument)
  * snippet -- Dreimas
  */
 
-static void AddSpaces(char **ppszText, int iNumber)
+static void AddSpaces(char** ppszText, int iNumber)
 {
     int iLoop;
 
@@ -280,10 +280,10 @@ static void AddSpaces(char **ppszText, int iNumber)
     }
 }
 
-char *change_justify(char *pszText, int iAlignment)
+char* change_justify(char* pszText, int iAlignment)
 {
     static char s_szResult[4096];
-    char *pszResult = &s_szResult[0];
+    char* pszResult = &s_szResult[0];
     char szStore[4096];
     int iMax;
     int iLength = iAlignment - 1;
@@ -424,7 +424,7 @@ char *change_justify(char *pszText, int iAlignment)
 
 int num_changes(void)
 {
-    char *test;
+    char* test;
     int today;
     int i;
 
@@ -439,11 +439,11 @@ int num_changes(void)
     return today;
 }
 
-void do_changes(CHAR_DATA *ch, char *argument)
+void do_changes(CHAR_DATA* ch, char* argument)
 {
     char arg[MAX_INPUT_LENGTH];
     char buf[MSL];
-    char *test;
+    char* test;
     int today;
     int i;
     bool fAll;

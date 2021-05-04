@@ -111,14 +111,14 @@
 
 // All the the headers for functions used in the program
 sh_int genslots(void);
-void calcslots(CHAR_DATA *ch, sh_int *amount);
-void printslots(CHAR_DATA *ch, sh_int *slot1, sh_int *slot2, sh_int *slot3);
-void printwinnings(CHAR_DATA *ch, sh_int *amount, sh_int *winningsmult);
-void checkslots(CHAR_DATA *ch, sh_int *amount, sh_int *slot1, sh_int *slot2, sh_int *slot3);
-void playslots_help(CHAR_DATA *ch);
-const char *get_slot_string(sh_int *slot);
+void calcslots(CHAR_DATA* ch, sh_int* amount);
+void printslots(CHAR_DATA* ch, sh_int* slot1, sh_int* slot2, sh_int* slot3);
+void printwinnings(CHAR_DATA* ch, sh_int* amount, sh_int* winningsmult);
+void checkslots(CHAR_DATA* ch, sh_int* amount, sh_int* slot1, sh_int* slot2, sh_int* slot3);
+void playslots_help(CHAR_DATA* ch);
+const char* get_slot_string(sh_int* slot);
 
-void playslots_help(CHAR_DATA *ch)
+void playslots_help(CHAR_DATA* ch)
 {
     ch_printf(ch,
               "&W Syntax: &wplayslots <amount to bet> \n\r\n\r"
@@ -133,7 +133,7 @@ void playslots_help(CHAR_DATA *ch)
               minsbet, maxsbet);
 }
 
-void do_playslots(CHAR_DATA *ch, char *argument)
+void do_playslots(CHAR_DATA* ch, char* argument)
 {
     sh_int amount;
     char errbuf[MSL];
@@ -205,7 +205,7 @@ sh_int genslots(void)
         return 3;
 }
 
-void calcslots(CHAR_DATA *ch, sh_int *amount) // This function makes and sets the values of the slots
+void calcslots(CHAR_DATA* ch, sh_int* amount) // This function makes and sets the values of the slots
 {
     sh_int slot1 = 0, slot2 = 0, slot3 = 0;
 
@@ -219,7 +219,7 @@ void calcslots(CHAR_DATA *ch, sh_int *amount) // This function makes and sets th
     return;
 }
 
-const char *get_slot_string(sh_int *slot)
+const char* get_slot_string(sh_int* slot)
 {
     if ((*slot) == slot_cherries) // if the rand number is equal to cheries num (1)
         return ("&Rcherries");    // copy cherries to string
@@ -238,7 +238,7 @@ const char *get_slot_string(sh_int *slot)
 }
 
 // Below code prints out the nice strings for the values
-void printslots(CHAR_DATA *ch, sh_int *slot1, sh_int *slot2, sh_int *slot3)
+void printslots(CHAR_DATA* ch, sh_int* slot1, sh_int* slot2, sh_int* slot3)
 {
     char buf[MSL];
     char slots1[MSL], slots2[MSL], slots3[MSL]; // defining slot strings to be modified
@@ -266,7 +266,7 @@ void printslots(CHAR_DATA *ch, sh_int *slot1, sh_int *slot2, sh_int *slot3)
 
 // Below function says if you are a winner or not
 // Then adds winnings or takes away the cost per turn
-void printwinnings(CHAR_DATA *ch, sh_int *amount, sh_int *winningsmult)
+void printwinnings(CHAR_DATA* ch, sh_int* amount, sh_int* winningsmult)
 {
     char buf[MSL];
 
@@ -287,7 +287,7 @@ void printwinnings(CHAR_DATA *ch, sh_int *amount, sh_int *winningsmult)
     return;
 }
 
-void checkslots(CHAR_DATA *ch, sh_int *amount, sh_int *slot1, sh_int *slot2, sh_int *slot3)
+void checkslots(CHAR_DATA* ch, sh_int* amount, sh_int* slot1, sh_int* slot2, sh_int* slot3)
 {
     bool oneandtwo = false, oneandthree = false, twoandthree = false;
     bool allthree = false;

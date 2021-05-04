@@ -44,19 +44,19 @@
 #include <time.h>
 #include "mud.hxx"
 
-BOUNTY_DATA *first_bounty;
-BOUNTY_DATA *last_bounty;
-BOUNTY_DATA *first_disintegration;
-BOUNTY_DATA *last_disintegration;
+BOUNTY_DATA* first_bounty;
+BOUNTY_DATA* last_bounty;
+BOUNTY_DATA* first_disintegration;
+BOUNTY_DATA* last_disintegration;
 
-void disintegration(CHAR_DATA *ch, CHAR_DATA *victim, long amount);
-void nodisintegration(CHAR_DATA *ch, CHAR_DATA *victim, long amount);
-int xp_compute(CHAR_DATA *ch, CHAR_DATA *victim);
+void disintegration(CHAR_DATA* ch, CHAR_DATA* victim, long amount);
+void nodisintegration(CHAR_DATA* ch, CHAR_DATA* victim, long amount);
+int xp_compute(CHAR_DATA* ch, CHAR_DATA* victim);
 
 void save_disintegrations()
 {
-    BOUNTY_DATA *tbounty;
-    FILE *fpout;
+    BOUNTY_DATA* tbounty;
+    FILE* fpout;
     char filename[256];
 
     sprintf_s(filename, "%s%s", SYSTEM_DIR, disintegration_LIST);
@@ -75,9 +75,9 @@ void save_disintegrations()
     fclose(fpout);
 }
 
-bool is_disintegration(CHAR_DATA *victim)
+bool is_disintegration(CHAR_DATA* victim)
 {
-    BOUNTY_DATA *bounty;
+    BOUNTY_DATA* bounty;
 
     for (bounty = first_disintegration; bounty; bounty = bounty->next)
         if (!str_cmp(victim->name, bounty->target))
@@ -85,9 +85,9 @@ bool is_disintegration(CHAR_DATA *victim)
     return false;
 }
 
-BOUNTY_DATA *get_disintegration(char *target)
+BOUNTY_DATA* get_disintegration(char* target)
 {
-    BOUNTY_DATA *bounty;
+    BOUNTY_DATA* bounty;
 
     for (bounty = first_disintegration; bounty; bounty = bounty->next)
         if (!str_cmp(target, bounty->target))
@@ -97,10 +97,10 @@ BOUNTY_DATA *get_disintegration(char *target)
 
 void load_bounties()
 {
-    FILE *fpList;
-    const char *target;
+    FILE* fpList;
+    const char* target;
     char bountylist[256];
-    BOUNTY_DATA *bounty;
+    BOUNTY_DATA* bounty;
     long int amount;
 
     first_disintegration = NULL;
@@ -132,9 +132,9 @@ void load_bounties()
     return;
 }
 
-void do_bounties(CHAR_DATA *ch, char *argument)
+void do_bounties(CHAR_DATA* ch, char* argument)
 {
-    BOUNTY_DATA *bounty;
+    BOUNTY_DATA* bounty;
     int count = 0;
 
     set_char_color(AT_WHITE, ch);
@@ -153,9 +153,9 @@ void do_bounties(CHAR_DATA *ch, char *argument)
         return;
     }
 }
-void do_rembounty(CHAR_DATA *ch, char *argument)
+void do_rembounty(CHAR_DATA* ch, char* argument)
 {
-    BOUNTY_DATA *bounty;
+    BOUNTY_DATA* bounty;
     char buf[MAX_INPUT_LENGTH];
 
     bounty = get_disintegration(argument);
@@ -171,9 +171,9 @@ void do_rembounty(CHAR_DATA *ch, char *argument)
     echo_to_all(AT_RED, buf, ECHOTAR_ALL);
 }
 
-void disintegration(CHAR_DATA *ch, CHAR_DATA *victim, long amount)
+void disintegration(CHAR_DATA* ch, CHAR_DATA* victim, long amount)
 {
-    BOUNTY_DATA *bounty;
+    BOUNTY_DATA* bounty;
     bool found;
     char buf[MAX_STRING_LENGTH];
 
@@ -204,11 +204,11 @@ void disintegration(CHAR_DATA *ch, CHAR_DATA *victim, long amount)
     echo_to_all(AT_RED, buf, 0);
 }
 
-void do_addbounty(CHAR_DATA *ch, char *argument)
+void do_addbounty(CHAR_DATA* ch, char* argument)
 {
     char arg[MAX_STRING_LENGTH];
     long int amount;
-    CHAR_DATA *victim;
+    CHAR_DATA* victim;
 
     if (!argument || argument[0] == '\0')
     {
@@ -276,7 +276,7 @@ void do_addbounty(CHAR_DATA *ch, char *argument)
     disintegration(ch, victim, amount);
 }
 
-void remove_disintegration(BOUNTY_DATA *bounty)
+void remove_disintegration(BOUNTY_DATA* bounty)
 {
     UNLINK(bounty, first_disintegration, last_disintegration, next, prev);
     STRFREE(bounty->target);
@@ -285,12 +285,12 @@ void remove_disintegration(BOUNTY_DATA *bounty)
     save_disintegrations();
 }
 
-void claim_disintegration(CHAR_DATA *ch, CHAR_DATA *victim)
+void claim_disintegration(CHAR_DATA* ch, CHAR_DATA* victim)
 {
-    BOUNTY_DATA *bounty;
+    BOUNTY_DATA* bounty;
     long int exp;
     char buf[MAX_STRING_LENGTH];
-    CLAN_DATA *clan;
+    CLAN_DATA* clan;
 
     if (IS_NPC(victim))
         return;

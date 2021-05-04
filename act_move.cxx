@@ -45,21 +45,21 @@
 
 const sh_int movement_loss[SECT_MAX] = {1, 2, 2, 3, 4, 6, 4, 1, 6, 10, 6, 5, 7, 4};
 
-const char *dir_name[] = {"north",     "east",      "south",     "west",      "up",       "down",
+const char* dir_name[] = {"north",     "east",      "south",     "west",      "up",       "down",
                           "northeast", "northwest", "southeast", "southwest", "somewhere"};
 
 const int trap_door[] = {TRAP_N, TRAP_E, TRAP_S, TRAP_W, TRAP_U, TRAP_D, TRAP_NE, TRAP_NW, TRAP_SE, TRAP_SW};
 
 const sh_int rev_dir[] = {2, 3, 0, 1, 5, 4, 9, 8, 7, 6, 10};
 
-ROOM_INDEX_DATA *vroom_hash[64];
+ROOM_INDEX_DATA* vroom_hash[64];
 
 /*
  * Local functions.
  */
-bool has_key(CHAR_DATA *ch, int key);
+bool has_key(CHAR_DATA* ch, int key);
 
-const char *sect_names[SECT_MAX][2] = {{"In a room", "inside"},
+const char* sect_names[SECT_MAX][2] = {{"In a room", "inside"},
                                        {"A City Street", "cities"},
                                        {"In a field", "fields"},
                                        {"In a forest", "forests"},
@@ -76,7 +76,7 @@ const char *sect_names[SECT_MAX][2] = {{"In a room", "inside"},
 
 const int sent_total[SECT_MAX] = {4, 24, 4, 4, 1, 1, 1, 1, 1, 2, 2, 1, 1, 1};
 
-const char *room_sents[SECT_MAX][25] = {
+const char* room_sents[SECT_MAX][25] = {
     {"The rough hewn walls are made of granite.", "You see an occasional spider crawling around.",
      "You notice signs of a recent battle from the bloodstains on the floor.",
      "This place hasa damp musty odour not unlike rotting vegetation."},
@@ -141,7 +141,7 @@ const char *room_sents[SECT_MAX][25] = {
 
 };
 
-int wherehome(CHAR_DATA *ch)
+int wherehome(CHAR_DATA* ch)
 {
     if (ch->plr_home)
         return ch->plr_home->vnum;
@@ -184,7 +184,7 @@ int wherehome(CHAR_DATA *ch)
     return ROOM_VNUM_TEMPLE;
 }
 
-char *grab_word(char *argument, char *arg_first)
+char* grab_word(char* argument, char* arg_first)
 {
     char cEnd;
     sh_int count;
@@ -215,10 +215,10 @@ char *grab_word(char *argument, char *arg_first)
     return argument;
 }
 
-char *wordwrap(char *txt, sh_int wrap)
+char* wordwrap(char* txt, sh_int wrap)
 {
     static char buf[MAX_STRING_LENGTH];
-    char *bufp;
+    char* bufp;
 
     buf[0] = '\0';
     bufp = buf;
@@ -266,7 +266,7 @@ char *wordwrap(char *txt, sh_int wrap)
     return bufp;
 }
 
-void decorate_room(ROOM_INDEX_DATA *room)
+void decorate_room(ROOM_INDEX_DATA* room)
 {
     char buf[MAX_STRING_LENGTH];
     char buf2[MAX_STRING_LENGTH];
@@ -360,9 +360,9 @@ void clear_vrooms()
  * Function to get the equivelant exit of DIR 0-MAXDIR out of linked list.
  * Made to allow old-style diku-merc exit functions to work.	-Thoric
  */
-EXIT_DATA *get_exit(ROOM_INDEX_DATA *room, sh_int dir)
+EXIT_DATA* get_exit(ROOM_INDEX_DATA* room, sh_int dir)
 {
-    EXIT_DATA *xit;
+    EXIT_DATA* xit;
 
     if (!room)
     {
@@ -379,9 +379,9 @@ EXIT_DATA *get_exit(ROOM_INDEX_DATA *room, sh_int dir)
 /*
  * Function to get an exit, leading the the specified room
  */
-EXIT_DATA *get_exit_to(ROOM_INDEX_DATA *room, sh_int dir, int vnum)
+EXIT_DATA* get_exit_to(ROOM_INDEX_DATA* room, sh_int dir, int vnum)
 {
-    EXIT_DATA *xit;
+    EXIT_DATA* xit;
 
     if (!room)
     {
@@ -398,9 +398,9 @@ EXIT_DATA *get_exit_to(ROOM_INDEX_DATA *room, sh_int dir, int vnum)
 /*
  * Function to get the nth exit of a room			-Thoric
  */
-EXIT_DATA *get_exit_num(ROOM_INDEX_DATA *room, sh_int count)
+EXIT_DATA* get_exit_num(ROOM_INDEX_DATA* room, sh_int count)
 {
-    EXIT_DATA *xit;
+    EXIT_DATA* xit;
     int cnt;
 
     if (!room)
@@ -418,7 +418,7 @@ EXIT_DATA *get_exit_num(ROOM_INDEX_DATA *room, sh_int count)
 /*
  * Modify movement due to encumbrance				-Thoric
  */
-sh_int encumbrance(CHAR_DATA *ch, sh_int move)
+sh_int encumbrance(CHAR_DATA* ch, sh_int move)
 {
     int cur, max;
 
@@ -443,7 +443,7 @@ sh_int encumbrance(CHAR_DATA *ch, sh_int move)
 /*
  * Check to see if a character can fall down, checks for looping   -Thoric
  */
-bool will_fall(CHAR_DATA *ch, int fall)
+bool will_fall(CHAR_DATA* ch, int fall)
 {
     if (IS_SET(ch->in_room->room_flags, ROOM_NOFLOOR) && CAN_GO(ch, DIR_DOWN) &&
         (!IS_AFFECTED(ch, AFF_FLYING) || (ch->mount && !IS_AFFECTED(ch->mount, AFF_FLYING))))
@@ -467,10 +467,10 @@ bool will_fall(CHAR_DATA *ch, int fall)
 /*
  * create a 'virtual' room					-Thoric
  */
-ROOM_INDEX_DATA *generate_exit(ROOM_INDEX_DATA *in_room, EXIT_DATA **pexit)
+ROOM_INDEX_DATA* generate_exit(ROOM_INDEX_DATA* in_room, EXIT_DATA** pexit)
 {
     EXIT_DATA *xit, *bxit;
-    EXIT_DATA *orig_exit = (EXIT_DATA *)*pexit;
+    EXIT_DATA* orig_exit = (EXIT_DATA*)*pexit;
     ROOM_INDEX_DATA *room, *backroom;
     int brvnum;
     int serial;
@@ -548,25 +548,25 @@ ROOM_INDEX_DATA *generate_exit(ROOM_INDEX_DATA *in_room, EXIT_DATA **pexit)
             bxit->distance = roomnum;
         else
         {
-            EXIT_DATA *tmp = get_exit(backroom, vdir);
+            EXIT_DATA* tmp = get_exit(backroom, vdir);
             int fulldist = tmp->distance;
 
             bxit->distance = fulldist - distance;
         }
     }
     //    (EXIT_DATA *) pexit = xit;
-    pexit = (EXIT_DATA **)xit;
+    pexit = (EXIT_DATA**)xit;
     return room;
 }
 
-ch_ret move_char(CHAR_DATA *ch, EXIT_DATA *pexit, int fall)
+ch_ret move_char(CHAR_DATA* ch, EXIT_DATA* pexit, int fall)
 {
-    ROOM_INDEX_DATA *in_room;
-    ROOM_INDEX_DATA *to_room;
-    ROOM_INDEX_DATA *from_room;
+    ROOM_INDEX_DATA* in_room;
+    ROOM_INDEX_DATA* to_room;
+    ROOM_INDEX_DATA* from_room;
     char buf[MAX_STRING_LENGTH];
-    const char *txt;
-    const char *dtxt;
+    const char* txt;
+    const char* dtxt;
     ch_ret retcode;
     sh_int door, distance;
     bool drunk = false;
@@ -756,7 +756,7 @@ ch_ret move_char(CHAR_DATA *ch, EXIT_DATA *pexit, int fall)
 
         if (in_room->sector_type == SECT_WATER_NOSWIM || to_room->sector_type == SECT_WATER_NOSWIM)
         {
-            OBJ_DATA *obj;
+            OBJ_DATA* obj;
             bool found;
 
             found = false;
@@ -907,7 +907,7 @@ ch_ret move_char(CHAR_DATA *ch, EXIT_DATA *pexit, int fall)
      */
     if (to_room->tunnel > 0)
     {
-        CHAR_DATA *ctmp;
+        CHAR_DATA* ctmp;
         int count = ch->mount ? 1 : 0;
 
         for (ctmp = to_room->first_person; ctmp; ctmp = ctmp->next_in_room)
@@ -1124,8 +1124,8 @@ ch_ret move_char(CHAR_DATA *ch, EXIT_DATA *pexit, int fall)
     */
     if (!fall)
     {
-        CHAR_DATA *fch;
-        CHAR_DATA *nextinroom;
+        CHAR_DATA* fch;
+        CHAR_DATA* nextinroom;
         int chars = 0, count = 0;
 
         for (fch = from_room->first_person; fch; fch = fch->next_in_room)
@@ -1186,7 +1186,7 @@ ch_ret move_char(CHAR_DATA *ch, EXIT_DATA *pexit, int fall)
     return retcode;
 }
 
-void do_north(CHAR_DATA *ch, char *argument)
+void do_north(CHAR_DATA* ch, char* argument)
 {
     if (!IS_NPC(ch) && IS_SET(ch->pcdata->act2, ACT_BOUND))
     {
@@ -1198,7 +1198,7 @@ void do_north(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void do_east(CHAR_DATA *ch, char *argument)
+void do_east(CHAR_DATA* ch, char* argument)
 {
     if (!IS_NPC(ch) && IS_SET(ch->pcdata->act2, ACT_BOUND))
     {
@@ -1210,7 +1210,7 @@ void do_east(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void do_south(CHAR_DATA *ch, char *argument)
+void do_south(CHAR_DATA* ch, char* argument)
 {
     if (!IS_NPC(ch) && IS_SET(ch->pcdata->act2, ACT_BOUND))
     {
@@ -1222,7 +1222,7 @@ void do_south(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void do_west(CHAR_DATA *ch, char *argument)
+void do_west(CHAR_DATA* ch, char* argument)
 {
     if (!IS_NPC(ch) && IS_SET(ch->pcdata->act2, ACT_BOUND))
     {
@@ -1234,7 +1234,7 @@ void do_west(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void do_up(CHAR_DATA *ch, char *argument)
+void do_up(CHAR_DATA* ch, char* argument)
 {
     if (!IS_NPC(ch) && IS_SET(ch->pcdata->act2, ACT_BOUND))
     {
@@ -1246,7 +1246,7 @@ void do_up(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void do_down(CHAR_DATA *ch, char *argument)
+void do_down(CHAR_DATA* ch, char* argument)
 {
     if (!IS_NPC(ch) && IS_SET(ch->pcdata->act2, ACT_BOUND))
     {
@@ -1258,7 +1258,7 @@ void do_down(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void do_northeast(CHAR_DATA *ch, char *argument)
+void do_northeast(CHAR_DATA* ch, char* argument)
 {
     if (!IS_NPC(ch) && IS_SET(ch->pcdata->act2, ACT_BOUND))
     {
@@ -1270,7 +1270,7 @@ void do_northeast(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void do_northwest(CHAR_DATA *ch, char *argument)
+void do_northwest(CHAR_DATA* ch, char* argument)
 {
     if (!IS_NPC(ch) && IS_SET(ch->pcdata->act2, ACT_BOUND))
     {
@@ -1282,7 +1282,7 @@ void do_northwest(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void do_southeast(CHAR_DATA *ch, char *argument)
+void do_southeast(CHAR_DATA* ch, char* argument)
 {
     if (!IS_NPC(ch) && IS_SET(ch->pcdata->act2, ACT_BOUND))
     {
@@ -1294,7 +1294,7 @@ void do_southeast(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void do_southwest(CHAR_DATA *ch, char *argument)
+void do_southwest(CHAR_DATA* ch, char* argument)
 {
     if (!IS_NPC(ch) && IS_SET(ch->pcdata->act2, ACT_BOUND))
     {
@@ -1306,9 +1306,9 @@ void do_southwest(CHAR_DATA *ch, char *argument)
     return;
 }
 
-EXIT_DATA *find_door(CHAR_DATA *ch, const char *arg, bool quiet)
+EXIT_DATA* find_door(CHAR_DATA* ch, const char* arg, bool quiet)
 {
-    EXIT_DATA *pexit;
+    EXIT_DATA* pexit;
     int door;
 
     if (arg == NULL || !str_cmp(arg, ""))
@@ -1372,38 +1372,38 @@ EXIT_DATA *find_door(CHAR_DATA *ch, const char *arg, bool quiet)
     return pexit;
 }
 
-void toggle_bexit_flag(EXIT_DATA *pexit, int flag)
+void toggle_bexit_flag(EXIT_DATA* pexit, int flag)
 {
-    EXIT_DATA *pexit_rev;
+    EXIT_DATA* pexit_rev;
 
     TOGGLE_BIT(pexit->exit_info, flag);
     if ((pexit_rev = pexit->rexit) != NULL && pexit_rev != pexit)
         TOGGLE_BIT(pexit_rev->exit_info, flag);
 }
 
-void set_bexit_flag(EXIT_DATA *pexit, int flag)
+void set_bexit_flag(EXIT_DATA* pexit, int flag)
 {
-    EXIT_DATA *pexit_rev;
+    EXIT_DATA* pexit_rev;
 
     SET_BIT(pexit->exit_info, flag);
     if ((pexit_rev = pexit->rexit) != NULL && pexit_rev != pexit)
         SET_BIT(pexit_rev->exit_info, flag);
 }
 
-void remove_bexit_flag(EXIT_DATA *pexit, int flag)
+void remove_bexit_flag(EXIT_DATA* pexit, int flag)
 {
-    EXIT_DATA *pexit_rev;
+    EXIT_DATA* pexit_rev;
 
     REMOVE_BIT(pexit->exit_info, flag);
     if ((pexit_rev = pexit->rexit) != NULL && pexit_rev != pexit)
         REMOVE_BIT(pexit_rev->exit_info, flag);
 }
 
-void do_open(CHAR_DATA *ch, char *argument)
+void do_open(CHAR_DATA* ch, char* argument)
 {
     char arg[MAX_INPUT_LENGTH];
-    OBJ_DATA *obj;
-    EXIT_DATA *pexit;
+    OBJ_DATA* obj;
+    EXIT_DATA* pexit;
     int door;
 
     one_argument(argument, arg);
@@ -1417,7 +1417,7 @@ void do_open(CHAR_DATA *ch, char *argument)
     if ((pexit = find_door(ch, arg, true)) != NULL)
     {
         /* 'open door' */
-        EXIT_DATA *pexit_rev;
+        EXIT_DATA* pexit_rev;
 
         if (!IS_SET(pexit->exit_info, EX_ISDOOR))
         {
@@ -1441,7 +1441,7 @@ void do_open(CHAR_DATA *ch, char *argument)
             act(AT_ACTION, "You open the $d.", ch, NULL, pexit->keyword, TO_CHAR);
             if ((pexit_rev = pexit->rexit) != NULL && pexit_rev->to_room == ch->in_room)
             {
-                CHAR_DATA *rch;
+                CHAR_DATA* rch;
 
                 for (rch = pexit->to_room->first_person; rch; rch = rch->next_in_room)
                     act(AT_ACTION, "The $d opens.", rch, NULL, pexit_rev->keyword, TO_CHAR);
@@ -1498,11 +1498,11 @@ void do_open(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void do_close(CHAR_DATA *ch, char *argument)
+void do_close(CHAR_DATA* ch, char* argument)
 {
     char arg[MAX_INPUT_LENGTH];
-    OBJ_DATA *obj;
-    EXIT_DATA *pexit;
+    OBJ_DATA* obj;
+    EXIT_DATA* pexit;
     int door;
 
     one_argument(argument, arg);
@@ -1516,7 +1516,7 @@ void do_close(CHAR_DATA *ch, char *argument)
     if ((pexit = find_door(ch, arg, true)) != NULL)
     {
         /* 'close door' */
-        EXIT_DATA *pexit_rev;
+        EXIT_DATA* pexit_rev;
 
         if (!IS_SET(pexit->exit_info, EX_ISDOOR))
         {
@@ -1535,7 +1535,7 @@ void do_close(CHAR_DATA *ch, char *argument)
         /* close the other side */
         if ((pexit_rev = pexit->rexit) != NULL && pexit_rev->to_room == ch->in_room)
         {
-            CHAR_DATA *rch;
+            CHAR_DATA* rch;
 
             SET_BIT(pexit_rev->exit_info, EX_CLOSED);
             for (rch = pexit->to_room->first_person; rch; rch = rch->next_in_room)
@@ -1583,9 +1583,9 @@ void do_close(CHAR_DATA *ch, char *argument)
     return;
 }
 
-bool has_key(CHAR_DATA *ch, int key)
+bool has_key(CHAR_DATA* ch, int key)
 {
-    OBJ_DATA *obj;
+    OBJ_DATA* obj;
 
     for (obj = ch->first_carrying; obj; obj = obj->next_content)
         if (obj->pIndexData->vnum == key || obj->value[0] == key)
@@ -1594,11 +1594,11 @@ bool has_key(CHAR_DATA *ch, int key)
     return false;
 }
 
-void do_lock(CHAR_DATA *ch, char *argument)
+void do_lock(CHAR_DATA* ch, char* argument)
 {
     char arg[MAX_INPUT_LENGTH];
-    OBJ_DATA *obj;
-    EXIT_DATA *pexit;
+    OBJ_DATA* obj;
+    EXIT_DATA* pexit;
 
     one_argument(argument, arg);
 
@@ -1686,11 +1686,11 @@ void do_lock(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void do_unlock(CHAR_DATA *ch, char *argument)
+void do_unlock(CHAR_DATA* ch, char* argument)
 {
     char arg[MAX_INPUT_LENGTH];
-    OBJ_DATA *obj;
-    EXIT_DATA *pexit;
+    OBJ_DATA* obj;
+    EXIT_DATA* pexit;
 
     one_argument(argument, arg);
 
@@ -1778,10 +1778,10 @@ void do_unlock(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void do_bashdoor(CHAR_DATA *ch, char *argument)
+void do_bashdoor(CHAR_DATA* ch, char* argument)
 {
-    CHAR_DATA *gch;
-    EXIT_DATA *pexit;
+    CHAR_DATA* gch;
+    EXIT_DATA* pexit;
     char arg[MAX_INPUT_LENGTH];
 
     if (!IS_NPC(ch) && ch->pcdata->learned[gsn_bashdoor] <= 0)
@@ -1806,10 +1806,10 @@ void do_bashdoor(CHAR_DATA *ch, char *argument)
 
     if ((pexit = find_door(ch, arg, false)) != NULL)
     {
-        ROOM_INDEX_DATA *to_room;
-        EXIT_DATA *pexit_rev;
+        ROOM_INDEX_DATA* to_room;
+        EXIT_DATA* pexit_rev;
         int chance;
-        const char *keyword;
+        const char* keyword;
 
         if (!IS_SET(pexit->exit_info, EX_CLOSED))
         {
@@ -1843,7 +1843,7 @@ void do_bashdoor(CHAR_DATA *ch, char *argument)
             if ((to_room = pexit->to_room) != NULL && (pexit_rev = pexit->rexit) != NULL &&
                 pexit_rev->to_room == ch->in_room)
             {
-                CHAR_DATA *rch;
+                CHAR_DATA* rch;
 
                 REMOVE_BIT(pexit_rev->exit_info, EX_CLOSED);
                 if (IS_SET(pexit_rev->exit_info, EX_LOCKED))
@@ -1883,12 +1883,12 @@ void do_bashdoor(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void do_stand(CHAR_DATA *ch, char *argument)
+void do_stand(CHAR_DATA* ch, char* argument)
 {
 
-    OBJ_DATA *obj = NULL;
+    OBJ_DATA* obj = NULL;
     int aon = 0;
-    CHAR_DATA *fch = NULL;
+    CHAR_DATA* fch = NULL;
     int val0;
     int val1;
 
@@ -2085,12 +2085,12 @@ void do_stand(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void do_sit(CHAR_DATA *ch, char *argument)
+void do_sit(CHAR_DATA* ch, char* argument)
 {
 
-    OBJ_DATA *obj = NULL;
+    OBJ_DATA* obj = NULL;
     int aon = 0;
-    CHAR_DATA *fch = NULL;
+    CHAR_DATA* fch = NULL;
     int val0;
     int val1;
 
@@ -2306,12 +2306,12 @@ void do_sit(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void do_rest(CHAR_DATA *ch, char *argument)
+void do_rest(CHAR_DATA* ch, char* argument)
 {
 
-    OBJ_DATA *obj = NULL;
+    OBJ_DATA* obj = NULL;
     int aon = 0;
-    CHAR_DATA *fch = NULL;
+    CHAR_DATA* fch = NULL;
     int val0;
     int val1;
 
@@ -2536,11 +2536,11 @@ void do_rest(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void do_sleep(CHAR_DATA *ch, char *argument)
+void do_sleep(CHAR_DATA* ch, char* argument)
 {
-    OBJ_DATA *obj = NULL;
+    OBJ_DATA* obj = NULL;
     int aon = 0;
-    CHAR_DATA *fch = NULL;
+    CHAR_DATA* fch = NULL;
     int val0;
     int val1;
 
@@ -2767,10 +2767,10 @@ void do_sleep(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void do_wake(CHAR_DATA *ch, char *argument)
+void do_wake(CHAR_DATA* ch, char* argument)
 {
     char arg[MIL];
-    CHAR_DATA *victim;
+    CHAR_DATA* victim;
 
     one_argument(argument, arg);
     if (arg[0] == '\0')
@@ -2813,7 +2813,7 @@ void do_wake(CHAR_DATA *ch, char *argument)
 /*
  * teleport a character to another room
  */
-void teleportch(CHAR_DATA *ch, ROOM_INDEX_DATA *room, bool show)
+void teleportch(CHAR_DATA* ch, ROOM_INDEX_DATA* room, bool show)
 {
     if (room_is_private(ch, room))
         return;
@@ -2825,10 +2825,10 @@ void teleportch(CHAR_DATA *ch, ROOM_INDEX_DATA *room, bool show)
         do_look(ch, "auto");
 }
 
-void teleport(CHAR_DATA *ch, int room, int flags)
+void teleport(CHAR_DATA* ch, int room, int flags)
 {
     CHAR_DATA *nch, *nch_next;
-    ROOM_INDEX_DATA *pRoomIndex;
+    ROOM_INDEX_DATA* pRoomIndex;
     bool show;
 
     pRoomIndex = get_room_index(room);
@@ -2857,9 +2857,9 @@ void teleport(CHAR_DATA *ch, int room, int flags)
 /*
  * "Climb" in a certain direction.				-Thoric
  */
-void do_climb(CHAR_DATA *ch, char *argument)
+void do_climb(CHAR_DATA* ch, char* argument)
 {
-    EXIT_DATA *pexit;
+    EXIT_DATA* pexit;
     bool found;
 
     found = false;
@@ -2887,9 +2887,9 @@ void do_climb(CHAR_DATA *ch, char *argument)
 /*
  * "enter" something (moves through an exit)			-Thoric
  */
-void do_enter(CHAR_DATA *ch, char *argument)
+void do_enter(CHAR_DATA* ch, char* argument)
 {
-    EXIT_DATA *pexit;
+    EXIT_DATA* pexit;
     bool found;
 
     found = false;
@@ -2917,9 +2917,9 @@ void do_enter(CHAR_DATA *ch, char *argument)
 /*
  * Leave through an exit.					-Thoric
  */
-void do_leave(CHAR_DATA *ch, char *argument)
+void do_leave(CHAR_DATA* ch, char* argument)
 {
-    EXIT_DATA *pexit;
+    EXIT_DATA* pexit;
     bool found;
 
     found = false;
@@ -2944,11 +2944,11 @@ void do_leave(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void do_keypad(CHAR_DATA *ch, char *argument)
+void do_keypad(CHAR_DATA* ch, char* argument)
 {
     char arg[MAX_INPUT_LENGTH];
     char arg1[MAX_INPUT_LENGTH];
-    EXIT_DATA *pexit;
+    EXIT_DATA* pexit;
     int password;
     argument = one_argument(argument, arg1);
 

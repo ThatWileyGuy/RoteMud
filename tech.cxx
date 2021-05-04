@@ -49,15 +49,15 @@
 
 /* Modules are how ships are upgraded. Ships can have only so many modules, Depending on the type of ship. */
 /* The effectiveness of the modules can vary depending on the level of the technitian's makemodule skill */
-void do_makemodule(CHAR_DATA *ch, char *argument)
+void do_makemodule(CHAR_DATA* ch, char* argument)
 {
     char arg[MAX_INPUT_LENGTH];
     int affecttype, affectammount;
     char name[MAX_STRING_LENGTH];
     int level, chance;
     bool checklens, checkbat, checksuper, checkcircuit, checktool;
-    OBJ_DATA *obj;
-    OBJ_INDEX_DATA *pObjIndex;
+    OBJ_DATA* obj;
+    OBJ_INDEX_DATA* pObjIndex;
 
     argument = one_argument(argument, arg);
 
@@ -147,7 +147,7 @@ void do_makemodule(CHAR_DATA *ch, char *argument)
     case 1:
         if (!ch->dest_buf)
             return;
-        strcpy(arg, reinterpret_cast<const char *>(ch->dest_buf));
+        strcpy(arg, reinterpret_cast<const char*>(ch->dest_buf));
         DISPOSE(ch->dest_buf);
         break;
 
@@ -349,10 +349,10 @@ void do_makemodule(CHAR_DATA *ch, char *argument)
     learn_from_success(ch, gsn_makemodule);
 }
 
-void do_showmodules(CHAR_DATA *ch, char *argument)
+void do_showmodules(CHAR_DATA* ch, char* argument)
 {
-    SHIP_DATA *ship;
-    MODULE_DATA *mod;
+    SHIP_DATA* ship;
+    MODULE_DATA* mod;
     char buf[MAX_STRING_LENGTH];
     char str[MAX_STRING_LENGTH];
     int i;
@@ -421,14 +421,14 @@ void do_showmodules(CHAR_DATA *ch, char *argument)
     learn_from_success(ch, gsn_showmodules);
 }
 
-void do_removemodule(CHAR_DATA *ch, char *argument)
+void do_removemodule(CHAR_DATA* ch, char* argument)
 {
-    SHIP_DATA *ship;
+    SHIP_DATA* ship;
     bool checktool;
-    OBJ_DATA *obj;
+    OBJ_DATA* obj;
     char arg[MAX_INPUT_LENGTH];
     char buf[MAX_INPUT_LENGTH];
-    MODULE_DATA *mod;
+    MODULE_DATA* mod;
     int chance;
     int num, i;
 
@@ -496,7 +496,7 @@ void do_removemodule(CHAR_DATA *ch, char *argument)
     case 1:
         if (!ch->dest_buf)
             return;
-        strcpy(arg, reinterpret_cast<const char *>(ch->dest_buf));
+        strcpy(arg, reinterpret_cast<const char*>(ch->dest_buf));
         DISPOSE(ch->dest_buf);
         break;
 
@@ -595,14 +595,14 @@ void do_removemodule(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void do_shipmaintenance(CHAR_DATA *ch, char *argument)
+void do_shipmaintenance(CHAR_DATA* ch, char* argument)
 {
     char arg[MAX_INPUT_LENGTH];
     char log_buf[MAX_INPUT_LENGTH];
     int chance, change, bombs = 0;
     long xp;
-    SHIP_DATA *ship;
-    OBJ_DATA *obj;
+    SHIP_DATA* ship;
+    OBJ_DATA* obj;
     int oldbombs;
 
     strcpy_s(arg, argument);
@@ -638,7 +638,7 @@ void do_shipmaintenance(CHAR_DATA *ch, char *argument)
     case 1:
         if (!ch->dest_buf)
             return;
-        strcpy(arg, reinterpret_cast<const char *>(ch->dest_buf));
+        strcpy(arg, reinterpret_cast<const char*>(ch->dest_buf));
         DISPOSE(ch->dest_buf);
         break;
 
@@ -721,15 +721,15 @@ void do_shipmaintenance(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void do_scanbugs(CHAR_DATA *ch, char *argument)
+void do_scanbugs(CHAR_DATA* ch, char* argument)
 {
-    CHAR_DATA *victim;
+    CHAR_DATA* victim;
 
     char arg[MAX_STRING_LENGTH];
 
     int chance;
 
-    BUG_DATA *bugs;
+    BUG_DATA* bugs;
     int i;
 
     argument = one_argument(argument, arg);
@@ -776,7 +776,7 @@ void do_scanbugs(CHAR_DATA *ch, char *argument)
     case 1:
         if (!ch->dest_buf)
             return;
-        strcpy(arg, reinterpret_cast<const char *>(ch->dest_buf));
+        strcpy(arg, reinterpret_cast<const char*>(ch->dest_buf));
         DISPOSE(ch->dest_buf);
         ch->dest_buf = NULL;
         break;
@@ -830,12 +830,12 @@ void do_scanbugs(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void do_removebug(CHAR_DATA *ch, char *argument)
+void do_removebug(CHAR_DATA* ch, char* argument)
 {
-    CHAR_DATA *victim;
+    CHAR_DATA* victim;
     char arg[MAX_STRING_LENGTH];
     int chance;
-    BUG_DATA *bugs = nullptr;
+    BUG_DATA* bugs = nullptr;
 
     argument = one_argument(argument, arg);
 
@@ -881,7 +881,7 @@ void do_removebug(CHAR_DATA *ch, char *argument)
     case 1:
         if (!ch->dest_buf)
             return;
-        strcpy(arg, reinterpret_cast<const char *>(ch->dest_buf));
+        strcpy(arg, reinterpret_cast<const char*>(ch->dest_buf));
         DISPOSE(ch->dest_buf);
         ch->dest_buf = NULL;
         break;
@@ -933,14 +933,14 @@ void do_removebug(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void do_makejetpack(CHAR_DATA *ch, char *argument)
+void do_makejetpack(CHAR_DATA* ch, char* argument)
 {
     char arg[MAX_INPUT_LENGTH];
     char buf[MAX_STRING_LENGTH];
     int level, chance, strength;
     bool checktool, checkbatt, checkchem, checkcirc, checkmetal;
-    OBJ_DATA *obj;
-    OBJ_INDEX_DATA *pObjIndex;
+    OBJ_DATA* obj;
+    OBJ_INDEX_DATA* pObjIndex;
     int vnum;
 
     strcpy_s(arg, argument);
@@ -1026,7 +1026,7 @@ void do_makejetpack(CHAR_DATA *ch, char *argument)
     case 1:
         if (!ch->dest_buf)
             return;
-        strcpy(arg, reinterpret_cast<const char *>(ch->dest_buf));
+        strcpy(arg, reinterpret_cast<const char*>(ch->dest_buf));
         DISPOSE(ch->dest_buf);
         break;
 

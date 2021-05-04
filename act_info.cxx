@@ -44,9 +44,9 @@
 #include "mud.hxx"
 #include "do_fun.hxx"
 
-ROOM_INDEX_DATA *generate_exit(ROOM_INDEX_DATA *in_room, EXIT_DATA **pexit);
+ROOM_INDEX_DATA* generate_exit(ROOM_INDEX_DATA* in_room, EXIT_DATA** pexit);
 
-const char *where_name[] = {
+const char* where_name[] = {
     "&G&b[&wused as light    &b]&G&w ", "&G&b[&wworn on finger   &b]&G&w ", "&G&b[&wworn on finger   &b]&G&w ",
     "&G&b[&wworn around neck &b]&G&w ", "&G&b[&wworn around neck &b]&G&w ", "&G&b[&wworn on body     &b]&G&w ",
     "&G&b[&wworn on head     &b]&G&w ", "&G&b[&wworn on legs     &b]&G&w ", "&G&b[&wworn on feet     &b]&G&w ",
@@ -60,15 +60,15 @@ const char *where_name[] = {
 /*
  * Local functions.
  */
-void show_char_to_char_0(CHAR_DATA *victim, CHAR_DATA *ch);
-void show_char_to_char_1(CHAR_DATA *victim, CHAR_DATA *ch);
-void show_char_to_char(CHAR_DATA *list, CHAR_DATA *ch);
-void show_char_to_char(CHAR_DATA *list, CHAR_DATA *ch);
-void show_ships_to_char(SHIP_DATA *ship, CHAR_DATA *ch);
-bool check_blind(CHAR_DATA *ch);
-void show_condition(CHAR_DATA *ch, CHAR_DATA *victim);
+void show_char_to_char_0(CHAR_DATA* victim, CHAR_DATA* ch);
+void show_char_to_char_1(CHAR_DATA* victim, CHAR_DATA* ch);
+void show_char_to_char(CHAR_DATA* list, CHAR_DATA* ch);
+void show_char_to_char(CHAR_DATA* list, CHAR_DATA* ch);
+void show_ships_to_char(SHIP_DATA* ship, CHAR_DATA* ch);
+bool check_blind(CHAR_DATA* ch);
+void show_condition(CHAR_DATA* ch, CHAR_DATA* victim);
 
-char *format_obj_to_char(OBJ_DATA *obj, CHAR_DATA *ch, bool fShort)
+char* format_obj_to_char(OBJ_DATA* obj, CHAR_DATA* ch, bool fShort)
 {
     static char buf[MAX_STRING_LENGTH];
 
@@ -107,7 +107,7 @@ char *format_obj_to_char(OBJ_DATA *obj, CHAR_DATA *ch, bool fShort)
 /*
  * Some increasingly freaky halucinated objects		-Thoric
  */
-const char *halucinated_object(int ms, bool fShort)
+const char* halucinated_object(int ms, bool fShort)
 {
     int sms = URANGE(1, (ms + 10) / 5, 20);
 
@@ -205,13 +205,13 @@ const char *halucinated_object(int ms, bool fShort)
  * Show a list to a character.
  * Can coalesce duplicated items.
  */
-void show_list_to_char(OBJ_DATA *list, CHAR_DATA *ch, bool fShort, bool fShowNothing)
+void show_list_to_char(OBJ_DATA* list, CHAR_DATA* ch, bool fShort, bool fShowNothing)
 {
-    char **prgpstrShow;
-    int *prgnShow;
-    int *pitShow;
-    char *pstrShow;
-    OBJ_DATA *obj;
+    char** prgpstrShow;
+    int* prgnShow;
+    int* pitShow;
+    char* pstrShow;
+    OBJ_DATA* obj;
     int nShow;
     int iShow;
     int count, offcount, tmp, ms, cnt;
@@ -268,7 +268,7 @@ void show_list_to_char(OBJ_DATA *list, CHAR_DATA *ch, bool fShort, bool fShowNot
         return;
     }
 
-    CREATE(prgpstrShow, char *, count + ((offcount > 0) ? offcount : 0));
+    CREATE(prgpstrShow, char*, count + ((offcount > 0) ? offcount : 0));
     CREATE(prgnShow, int, count + ((offcount > 0) ? offcount : 0));
     CREATE(pitShow, int, count + ((offcount > 0) ? offcount : 0));
     nShow = 0;
@@ -402,7 +402,7 @@ void show_list_to_char(OBJ_DATA *list, CHAR_DATA *ch, bool fShort, bool fShowNot
 /*
  * Show fancy descriptions for certain spell affects		-Thoric
  */
-void show_visible_affects_to_char(CHAR_DATA *victim, CHAR_DATA *ch)
+void show_visible_affects_to_char(CHAR_DATA* victim, CHAR_DATA* ch)
 {
     char buf[MAX_STRING_LENGTH];
     /*    if ( IS_AFFECTED(victim, AFF_SANCTUARY) )
@@ -459,7 +459,7 @@ void show_visible_affects_to_char(CHAR_DATA *victim, CHAR_DATA *ch)
     }
 }
 
-void show_char_to_char_0(CHAR_DATA *victim, CHAR_DATA *ch)
+void show_char_to_char_0(CHAR_DATA* victim, CHAR_DATA* ch)
 {
     char buf[MAX_STRING_LENGTH];
     char buf1[MAX_STRING_LENGTH];
@@ -737,9 +737,9 @@ void show_char_to_char_0(CHAR_DATA *victim, CHAR_DATA *ch)
     return;
 }
 
-void show_char_to_char_1(CHAR_DATA *victim, CHAR_DATA *ch)
+void show_char_to_char_1(CHAR_DATA* victim, CHAR_DATA* ch)
 {
-    OBJ_DATA *obj;
+    OBJ_DATA* obj;
     int iWear;
     bool found;
 
@@ -809,9 +809,9 @@ void show_char_to_char_1(CHAR_DATA *victim, CHAR_DATA *ch)
     return;
 }
 
-void show_char_to_char(CHAR_DATA *list, CHAR_DATA *ch)
+void show_char_to_char(CHAR_DATA* list, CHAR_DATA* ch)
 {
-    CHAR_DATA *rch;
+    CHAR_DATA* rch;
 
     for (rch = list; rch; rch = rch->next_in_room)
     {
@@ -837,10 +837,10 @@ void show_char_to_char(CHAR_DATA *list, CHAR_DATA *ch)
     return;
 }
 
-void show_ships_to_char(SHIP_DATA *ship, CHAR_DATA *ch)
+void show_ships_to_char(SHIP_DATA* ship, CHAR_DATA* ch)
 {
-    SHIP_DATA *rship;
-    SHIP_DATA *nship = NULL;
+    SHIP_DATA* rship;
+    SHIP_DATA* nship = NULL;
 
     for (rship = ship; rship; rship = nship)
     {
@@ -856,7 +856,7 @@ void show_ships_to_char(SHIP_DATA *ship, CHAR_DATA *ch)
     return;
 }
 
-bool check_blind(CHAR_DATA *ch)
+bool check_blind(CHAR_DATA* ch)
 {
     if (!IS_NPC(ch) && IS_SET(ch->act, PLR_HOLYLIGHT))
         return true;
@@ -876,7 +876,7 @@ bool check_blind(CHAR_DATA *ch)
 /*
  * Returns classical DIKU door direction based on text in arg	-Thoric
  */
-int get_door(char *arg)
+int get_door(char* arg)
 {
     int door;
 
@@ -905,17 +905,17 @@ int get_door(char *arg)
     return door;
 }
 
-void do_look(CHAR_DATA *ch, char *argument)
+void do_look(CHAR_DATA* ch, char* argument)
 {
     char arg[MAX_INPUT_LENGTH];
     char arg1[MAX_INPUT_LENGTH];
     char arg2[MAX_INPUT_LENGTH];
     char arg3[MAX_INPUT_LENGTH];
-    EXIT_DATA *pexit;
-    CHAR_DATA *victim;
-    OBJ_DATA *obj;
-    ROOM_INDEX_DATA *original;
-    char *pdesc;
+    EXIT_DATA* pexit;
+    CHAR_DATA* victim;
+    OBJ_DATA* obj;
+    ROOM_INDEX_DATA* original;
+    char* pdesc;
     bool doexaprog;
     sh_int door;
     int number, cnt;
@@ -955,7 +955,7 @@ void do_look(CHAR_DATA *ch, char *argument)
 
     if (arg1[0] == '\0' || !str_cmp(arg1, "auto"))
     {
-        SHIP_DATA *ship;
+        SHIP_DATA* ship;
 
         /* 'look' or 'look auto' */
         set_char_color(AT_RMNAME, ch);
@@ -1016,9 +1016,9 @@ void do_look(CHAR_DATA *ch, char *argument)
 
                 if (ship->starsystem)
                 {
-                    MISSILE_DATA *missile;
-                    SHIP_DATA *target;
-                    PLANET_DATA *planet;
+                    MISSILE_DATA* missile;
+                    SHIP_DATA* target;
+                    PLANET_DATA* planet;
 
                     set_char_color(AT_GREEN, ch);
                     if (ship->starsystem->star1 && str_cmp(ship->starsystem->star1, ""))
@@ -1053,7 +1053,7 @@ void do_look(CHAR_DATA *ch, char *argument)
                 }
                 else if (ship->location == ship->lastdoc)
                 {
-                    ROOM_INDEX_DATA *to_room;
+                    ROOM_INDEX_DATA* to_room;
                     to_room = ship->in_room;
                     if (to_room) // get_room_index( ship->location ) ) != NULL )
                     {
@@ -1254,7 +1254,7 @@ void do_look(CHAR_DATA *ch, char *argument)
             original = ch->in_room;
             if (pexit->distance > 1)
             {
-                ROOM_INDEX_DATA *to_room;
+                ROOM_INDEX_DATA* to_room;
                 if ((to_room = generate_exit(ch->in_room, &pexit)) != NULL)
                 {
                     char_from_room(ch);
@@ -1378,7 +1378,7 @@ void do_look(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void show_condition(CHAR_DATA *ch, CHAR_DATA *victim)
+void show_condition(CHAR_DATA* ch, CHAR_DATA* victim)
 {
     char buf[MAX_STRING_LENGTH];
     int percent;
@@ -1452,10 +1452,10 @@ the condition of a mob or pc, or if used without an argument, the
 same you would see if you enter the room and have config +brief.
 -- Narn, winter '96
 */
-void do_glance(CHAR_DATA *ch, char *argument)
+void do_glance(CHAR_DATA* ch, char* argument)
 {
     char arg1[MAX_INPUT_LENGTH];
-    CHAR_DATA *victim;
+    CHAR_DATA* victim;
     int save_act;
 
     if (!ch->desc)
@@ -1507,12 +1507,12 @@ void do_glance(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void do_examine(CHAR_DATA *ch, char *argument)
+void do_examine(CHAR_DATA* ch, char* argument)
 {
     char buf[MAX_STRING_LENGTH];
     char arg[MAX_INPUT_LENGTH];
-    OBJ_DATA *obj;
-    BOARD_DATA *board;
+    OBJ_DATA* obj;
+    BOARD_DATA* board;
     sh_int dam;
 
     if (!argument)
@@ -1786,10 +1786,10 @@ void do_examine(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void do_exits(CHAR_DATA *ch, char *argument)
+void do_exits(CHAR_DATA* ch, char* argument)
 {
     char buf[MAX_STRING_LENGTH];
-    EXIT_DATA *pexit;
+    EXIT_DATA* pexit;
     bool found;
     bool fAuto;
 
@@ -1810,7 +1810,7 @@ void do_exits(CHAR_DATA *ch, char *argument)
         {
             found = true;
             size_t cur_len = strlen(buf);
-            char *insert_at = buf + cur_len;
+            char* insert_at = buf + cur_len;
             size_t remaining = sizeof(buf) - cur_len - 1;
 
             if (!fAuto)
@@ -1851,19 +1851,19 @@ void do_exits(CHAR_DATA *ch, char *argument)
     return;
 }
 
-char const *const day_name[] = {"Redemption", "Stealth", "Deception", "Uprising", "the Fight", "Renaissance", "Beauty"};
+char const* const day_name[] = {"Redemption", "Stealth", "Deception", "Uprising", "the Fight", "Renaissance", "Beauty"};
 
-char const *const month_name[] = {"the Emperor",  "the Empire", "the Smuggler",    "the Tear",  "the Twin Suns",
+char const* const month_name[] = {"the Emperor",  "the Empire", "the Smuggler",    "the Tear",  "the Twin Suns",
                                   "the Jedi",     "Honoghr",    "D'an Imal",       "the Force", "the Assassin",
                                   "Eleven",       "the Clone",  "the Dark Shades", "the Sith",  "the Massassi",
                                   "the Ancients", "Kashyyyk"};
 
-void do_time(CHAR_DATA *ch, char *argument)
+void do_time(CHAR_DATA* ch, char* argument)
 {
     extern char str_boot_time[];
     extern char reboot_time[];
-    const char *time_string;
-    const char *suf;
+    const char* time_string;
+    const char* suf;
     int day;
 
     day = time_info.day + 1;
@@ -1899,9 +1899,9 @@ void do_time(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void do_weather(CHAR_DATA *ch, char *argument)
+void do_weather(CHAR_DATA* ch, char* argument)
 {
-    static char const *const sky_look[4] = {"cloudless", "cloudy", "rainy", "lit by flashes of lightning"};
+    static char const* const sky_look[4] = {"cloudless", "cloudy", "rainy", "lit by flashes of lightning"};
 
     if (!IS_OUTSIDE(ch))
     {
@@ -1919,12 +1919,12 @@ void do_weather(CHAR_DATA *ch, char *argument)
  * Moved into a separate function so it can be used for other things
  * ie: online help editing				-Thoric
  */
-HELP_DATA *get_help(CHAR_DATA *ch, const char *argument)
+HELP_DATA* get_help(CHAR_DATA* ch, const char* argument)
 {
     char argall[MAX_INPUT_LENGTH];
     char argone[MAX_INPUT_LENGTH];
     char argnew[MAX_INPUT_LENGTH];
-    HELP_DATA *pHelp;
+    HELP_DATA* pHelp;
     int lev;
 
     if (argument[0] == '\0')
@@ -1963,7 +1963,7 @@ HELP_DATA *get_help(CHAR_DATA *ch, const char *argument)
     return NULL;
 }
 
-sh_int str_similarity(const char *astr, const char *bstr)
+sh_int str_similarity(const char* astr, const char* bstr)
 {
     sh_int matches = 0;
 
@@ -1982,11 +1982,11 @@ sh_int str_similarity(const char *astr, const char *bstr)
     return matches;
 }
 
-void similar_help_files(CHAR_DATA *ch, const char *argument)
+void similar_help_files(CHAR_DATA* ch, const char* argument)
 {
-    HELP_DATA *pHelp = NULL;
+    HELP_DATA* pHelp = NULL;
     char buf[MAX_STRING_LENGTH];
-    char *extension;
+    char* extension;
     sh_int lvl = 0;
     bool single = false;
     // char *argnew;
@@ -2060,9 +2060,9 @@ void similar_help_files(CHAR_DATA *ch, const char *argument)
 /*
  * Now this is cleaner
  */
-void do_help(CHAR_DATA *ch, char *argument)
+void do_help(CHAR_DATA* ch, char* argument)
 {
-    HELP_DATA *pHelp;
+    HELP_DATA* pHelp;
     char nohelp[MSL];
     char buf[MAX_STRING_LENGTH];
 
@@ -2101,9 +2101,9 @@ void do_help(CHAR_DATA *ch, char *argument)
 /*
  * Help editor							-Thoric
  */
-void do_hedit(CHAR_DATA *ch, char *argument)
+void do_hedit(CHAR_DATA* ch, char* argument)
 {
-    HELP_DATA *pHelp;
+    HELP_DATA* pHelp;
 
     if (!ch->desc)
     {
@@ -2116,7 +2116,7 @@ void do_hedit(CHAR_DATA *ch, char *argument)
     default:
         break;
     case SUB_HELP_EDIT:
-        if ((pHelp = reinterpret_cast<HELP_DATA *>(ch->dest_buf)) == NULL)
+        if ((pHelp = reinterpret_cast<HELP_DATA*>(ch->dest_buf)) == NULL)
         {
             bug("hedit: sub_help_edit: NULL ch->dest_buf", 0);
             stop_editing(ch);
@@ -2154,10 +2154,10 @@ void do_hedit(CHAR_DATA *ch, char *argument)
 /*
  * Stupid leading space muncher fix				-Thoric
  */
-char *help_fix(char *text)
+char* help_fix(char* text)
 {
     static char empty = '\0';
-    char *fixed;
+    char* fixed;
 
     if (!text)
         return &empty;
@@ -2167,9 +2167,9 @@ char *help_fix(char *text)
     return fixed;
 }
 
-void do_hset(CHAR_DATA *ch, char *argument)
+void do_hset(CHAR_DATA* ch, char* argument)
 {
-    HELP_DATA *pHelp;
+    HELP_DATA* pHelp;
     char arg1[MAX_INPUT_LENGTH];
     char arg2[MAX_INPUT_LENGTH];
 
@@ -2186,7 +2186,7 @@ void do_hset(CHAR_DATA *ch, char *argument)
 
     if (!str_cmp(arg1, "save"))
     {
-        FILE *fpout;
+        FILE* fpout;
 
         log_string_plus("Saving help.are...", LOG_NORMAL, LEVEL_GREATER);
 
@@ -2247,13 +2247,13 @@ void do_hset(CHAR_DATA *ch, char *argument)
  * Idea suggested by Gorog
  * prefix keyword indexing added by Fireblade
  */
-void do_hlist(CHAR_DATA *ch, char *argument)
+void do_hlist(CHAR_DATA* ch, char* argument)
 {
     int min, max, minlimit, maxlimit, cnt;
     char arg[MAX_INPUT_LENGTH];
-    HELP_DATA *help;
+    HELP_DATA* help;
     bool minfound, maxfound;
-    char *idx;
+    char* idx;
 
     maxlimit = get_trust(ch);
     minlimit = maxlimit >= LEVEL_GREATER ? -1 : 0;
@@ -2374,7 +2374,7 @@ void do_hlist( CHAR_DATA *ch, char *argument )
  *
  * Uh, new do_who with no clan or race. Heh. -||
  */
-void do_who(CHAR_DATA *ch, char *argument)
+void do_who(CHAR_DATA* ch, char* argument)
 {
     char buf[MAX_STRING_LENGTH];
     char clan_name[MAX_INPUT_LENGTH];
@@ -2382,7 +2382,7 @@ void do_who(CHAR_DATA *ch, char *argument)
     char char_name[MAX_INPUT_LENGTH];
     char extra_title[MAX_STRING_LENGTH];
     char race_text[MAX_INPUT_LENGTH];
-    DESCRIPTOR_DATA *d;
+    DESCRIPTOR_DATA* d;
     int iRace;
     int iLevelLower;
     int iLevelUpper;
@@ -2393,7 +2393,7 @@ void do_who(CHAR_DATA *ch, char *argument)
     bool fRaceRestrict;
     bool fImmortalOnly;
     bool fShowHomepage;
-    FILE *whoout;
+    FILE* whoout;
     char mudnamebuffer[MSL];
 
     /*
@@ -2401,11 +2401,11 @@ void do_who(CHAR_DATA *ch, char *argument)
     #define WT_MORTAL 1;
     */
 
-    WHO_DATA *cur_who = NULL;
-    WHO_DATA *next_who = NULL;
-    WHO_DATA *first_mortal = NULL;
-    WHO_DATA *first_newbie = NULL;
-    WHO_DATA *first_imm = NULL;
+    WHO_DATA* cur_who = NULL;
+    WHO_DATA* next_who = NULL;
+    WHO_DATA* first_mortal = NULL;
+    WHO_DATA* first_newbie = NULL;
+    WHO_DATA* first_imm = NULL;
 
     /*
      * Set default arguments.
@@ -2482,8 +2482,8 @@ void do_who(CHAR_DATA *ch, char *argument)
     /* start from last to first to get it in the proper order */
     for (d = last_descriptor; d; d = d->prev)
     {
-        CHAR_DATA *wch;
-        char const *race;
+        CHAR_DATA* wch;
+        char const* race;
 
         if ((d->connected != CON_PLAYING && d->connected != CON_EDITING) ||
             (!can_see(ch, d->character) && IS_IMMORTAL(d->character)) || d->original)
@@ -2561,7 +2561,7 @@ void do_who(CHAR_DATA *ch, char *argument)
             (ch->pcdata->clan == wch->pcdata->clan || ch->top_level >= LEVEL_IMMORTAL))
 
         {
-            CLAN_DATA *pclan = wch->pcdata->clan;
+            CLAN_DATA* pclan = wch->pcdata->clan;
 
             strcpy_s(clan_name, " (");
 
@@ -2724,7 +2724,7 @@ void do_who(CHAR_DATA *ch, char *argument)
         //)&R-_&r-^^-_-&R^^&r-_-^^-_-^^&R-_-^^&r-_-^^-_-^^-&R^^-\n"), 		sMatch, sMatch == 1 ? "" : "s", nMatch,
         // nMatch
         //== 1 ? "" : "s" );
-        char *time_string = ctime(&current_time);
+        char* time_string = ctime(&current_time);
         fprintf(whoout, "<div style='position: absolute; color: white; top: 5px; right: 5px;'>%s</div></font>",
                 time_string);
         fclose(whoout);
@@ -2738,9 +2738,9 @@ void do_who(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void do_setrank(CHAR_DATA *ch, char *argument)
+void do_setrank(CHAR_DATA* ch, char* argument)
 {
-    CHAR_DATA *vict;
+    CHAR_DATA* vict;
     char arg1[MAX_INPUT_LENGTH];
     char buf[MAX_INPUT_LENGTH];
     bool isleader = false;
@@ -2832,15 +2832,15 @@ void do_setrank(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void do_compare(CHAR_DATA *ch, char *argument)
+void do_compare(CHAR_DATA* ch, char* argument)
 {
     char arg1[MAX_INPUT_LENGTH];
     char arg2[MAX_INPUT_LENGTH];
-    OBJ_DATA *obj1;
-    OBJ_DATA *obj2;
+    OBJ_DATA* obj1;
+    OBJ_DATA* obj2;
     int value1;
     int value2;
-    const char *msg;
+    const char* msg;
 
     argument = one_argument(argument, arg1);
     argument = one_argument(argument, arg2);
@@ -2926,11 +2926,11 @@ void do_compare(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void do_where(CHAR_DATA *ch, char *argument)
+void do_where(CHAR_DATA* ch, char* argument)
 {
     char arg[MAX_INPUT_LENGTH];
-    CHAR_DATA *victim;
-    DESCRIPTOR_DATA *d;
+    CHAR_DATA* victim;
+    DESCRIPTOR_DATA* d;
     bool found;
 
     if (get_trust(ch) < LEVEL_IMMORTAL)
@@ -2978,7 +2978,7 @@ void do_where(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void do_consider(CHAR_DATA *ch, char *argument)
+void do_consider(CHAR_DATA* ch, char* argument)
 {
     /* New Concider code by Ackbar counts in a little bit more than
        just their hp compared to yours :P Messages from godwars so leave this
@@ -2986,9 +2986,9 @@ void do_consider(CHAR_DATA *ch, char *argument)
     */
     int diff;
     int con_hp;
-    const char *msg;
+    const char* msg;
     int overall;
-    CHAR_DATA *victim;
+    CHAR_DATA* victim;
     /* It counts your difference's in combat, ac, and hp and then uses
      * a simple enough formula to determine who's most likely to win :).
      */
@@ -3195,7 +3195,7 @@ void do_consider(CHAR_DATA *ch, char *argument)
  */
 #define CANT_PRAC "Tongue"
 
-void do_practice(CHAR_DATA *ch, char *argument)
+void do_practice(CHAR_DATA* ch, char* argument)
 {
     char buf[MAX_STRING_LENGTH];
     int sn;
@@ -3274,7 +3274,7 @@ void do_practice(CHAR_DATA *ch, char *argument)
     }
     else
     {
-        CHAR_DATA *mob;
+        CHAR_DATA* mob;
         int adept;
         bool can_prac = true;
 
@@ -3361,10 +3361,10 @@ void do_practice(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void do_viewskills(CHAR_DATA *ch, char *argument)
+void do_viewskills(CHAR_DATA* ch, char* argument)
 {
     int sn;
-    CHAR_DATA *victim;
+    CHAR_DATA* victim;
     int col;
     sh_int lasttype, cnt;
 
@@ -3451,7 +3451,7 @@ void do_viewskills(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void do_teach(CHAR_DATA *ch, char *argument)
+void do_teach(CHAR_DATA* ch, char* argument)
 {
     char buf[MAX_STRING_LENGTH];
     int sn;
@@ -3469,7 +3469,7 @@ void do_teach(CHAR_DATA *ch, char *argument)
     }
     else
     {
-        CHAR_DATA *victim;
+        CHAR_DATA* victim;
         int adept;
 
         if (!IS_AWAKE(ch))
@@ -3541,7 +3541,7 @@ void do_teach(CHAR_DATA *ch, char *argument)
 }
 
 // Deprecated in FotE, but left in in case we decide to use it again.
-void do_wimpy(CHAR_DATA *ch, char *argument)
+void do_wimpy(CHAR_DATA* ch, char* argument)
 {
     char arg[MAX_INPUT_LENGTH];
     int wimpy;
@@ -3570,13 +3570,13 @@ void do_wimpy(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void do_password(CHAR_DATA *ch, char *argument)
+void do_password(CHAR_DATA* ch, char* argument)
 {
     char arg1[MAX_INPUT_LENGTH];
     char arg2[MAX_INPUT_LENGTH];
-    char *pArg;
-    char *pwdnew;
-    char *p;
+    char* pArg;
+    char* pwdnew;
+    char* p;
     char cEnd;
 
     if (IS_NPC(ch))
@@ -3666,11 +3666,11 @@ void do_password(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void do_socials(CHAR_DATA *ch, char *argument)
+void do_socials(CHAR_DATA* ch, char* argument)
 {
     int iHash;
     int col = 0;
-    SOCIALTYPE *social;
+    SOCIALTYPE* social;
 
     set_pager_color(AT_PLAIN, ch);
     for (iHash = 0; iHash < 27; iHash++)
@@ -3686,12 +3686,12 @@ void do_socials(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void do_commands(CHAR_DATA *ch, char *argument)
+void do_commands(CHAR_DATA* ch, char* argument)
 {
     int col;
     bool found;
     int hash;
-    CMDTYPE *command;
+    CMDTYPE* command;
 
     col = 0;
     set_pager_color(AT_PLAIN, ch);
@@ -3740,7 +3740,7 @@ void do_commands(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void do_channels(CHAR_DATA *ch, char *argument)
+void do_channels(CHAR_DATA* ch, char* argument)
 {
     char arg[MAX_INPUT_LENGTH];
 
@@ -3953,7 +3953,7 @@ void do_channels(CHAR_DATA *ch, char *argument)
 /*
  * display WIZLIST file						-Thoric
  */
-void do_wizlist(CHAR_DATA *ch, char *argument)
+void do_wizlist(CHAR_DATA* ch, char* argument)
 {
     set_pager_color(AT_IMMORT, ch);
     show_file(ch, WIZLIST_FILE);
@@ -3962,7 +3962,7 @@ void do_wizlist(CHAR_DATA *ch, char *argument)
 /*
  * Contributed by Grodyn.
  */
-void do_config(CHAR_DATA *ch, char *argument)
+void do_config(CHAR_DATA* ch, char* argument)
 {
     char arg[MAX_INPUT_LENGTH];
 
@@ -4155,7 +4155,7 @@ void do_config(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void do_credits(CHAR_DATA *ch, char *argument)
+void do_credits(CHAR_DATA* ch, char* argument)
 {
     do_help(ch, "credits");
 }
@@ -4193,9 +4193,9 @@ void do_areas( CHAR_DATA *ch, char *argument )
  * New do_areas with soft/hard level ranges
  */
 
-void do_areas(CHAR_DATA *ch, char *argument)
+void do_areas(CHAR_DATA* ch, char* argument)
 {
-    AREA_DATA *pArea;
+    AREA_DATA* pArea;
 
     set_pager_color(AT_PLAIN, ch);
     send_to_pager("\n\r   Author    |             Area                     | Recommended |  Enforced\n\r", ch);
@@ -4207,7 +4207,7 @@ void do_areas(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void do_afk(CHAR_DATA *ch, char *argument)
+void do_afk(CHAR_DATA* ch, char* argument)
 {
     if (IS_NPC(ch))
         return;
@@ -4227,7 +4227,7 @@ void do_afk(CHAR_DATA *ch, char *argument)
     }
 }
 
-void do_slist(CHAR_DATA *ch, char *argument)
+void do_slist(CHAR_DATA* ch, char* argument)
 {
     int sn, i, lFound;
     char skn[MAX_INPUT_LENGTH];
@@ -4317,9 +4317,9 @@ void do_slist(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void do_whois(CHAR_DATA *ch, char *argument)
+void do_whois(CHAR_DATA* ch, char* argument)
 {
-    CHAR_DATA *victim;
+    CHAR_DATA* victim;
     char buf[MAX_STRING_LENGTH];
     char buf2[MAX_STRING_LENGTH];
 
@@ -4408,7 +4408,7 @@ void do_whois(CHAR_DATA *ch, char *argument)
         ch_printf(ch, "%s is %shelled at the moment.\n\r", victim->name,
                   (victim->pcdata->release_date == 0) ? "not " : "");
 
-        char *buffer = ctime(&victim->pcdata->release_date);
+        char* buffer = ctime(&victim->pcdata->release_date);
 
         if (victim->pcdata->release_date != 0)
             ch_printf(ch, "%s was helled by %s, and will be released on %24.24s.\n\r",
@@ -4453,7 +4453,7 @@ void do_whois(CHAR_DATA *ch, char *argument)
     }
 }
 
-void do_pager(CHAR_DATA *ch, char *argument)
+void do_pager(CHAR_DATA* ch, char* argument)
 {
     char arg[MAX_INPUT_LENGTH];
 
@@ -4480,16 +4480,16 @@ void do_pager(CHAR_DATA *ch, char *argument)
     return;
 }
 
-bool is_online(char *argument)
+bool is_online(char* argument)
 {
-    DESCRIPTOR_DATA *d;
+    DESCRIPTOR_DATA* d;
 
     if (argument[0] == '\0')
         return false;
 
     for (d = last_descriptor; d; d = d->prev)
     {
-        CHAR_DATA *wch;
+        CHAR_DATA* wch;
 
         if ((d->connected != CON_PLAYING && d->connected != CON_EDITING) || d->original)
             continue;
@@ -4502,7 +4502,7 @@ bool is_online(char *argument)
     return false;
 }
 
-void do_whoinvis(CHAR_DATA *ch, char *argument)
+void do_whoinvis(CHAR_DATA* ch, char* argument)
 {
     if (IS_NPC(ch))
         return;
@@ -4520,14 +4520,14 @@ void do_whoinvis(CHAR_DATA *ch, char *argument)
     }
 }
 
-void do_introduce(CHAR_DATA *ch, char *argument)
+void do_introduce(CHAR_DATA* ch, char* argument)
 {
-    CHAR_DATA *victim = nullptr;
-    CHAR_DATA *rch = nullptr;
+    CHAR_DATA* victim = nullptr;
+    CHAR_DATA* rch = nullptr;
     char arg1[MAX_INPUT_LENGTH] = {};
     char buf[MAX_STRING_LENGTH] = {};
-    FELLOW_DATA *vfellow;
-    FELLOW_DATA *fellow;
+    FELLOW_DATA* vfellow;
+    FELLOW_DATA* fellow;
     int count;
 
     argument = one_argument(argument, arg1);
@@ -4644,12 +4644,12 @@ void do_introduce(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void do_remember(CHAR_DATA *ch, char *argument)
+void do_remember(CHAR_DATA* ch, char* argument)
 {
-    CHAR_DATA *victim;
+    CHAR_DATA* victim;
     char arg1[MAX_INPUT_LENGTH];
-    FELLOW_DATA *fellow;
-    FELLOW_DATA *nfellow;
+    FELLOW_DATA* fellow;
+    FELLOW_DATA* nfellow;
 
     argument = one_argument(argument, arg1);
     argument = remand(argument);
@@ -4730,13 +4730,13 @@ void do_remember(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void do_describe(CHAR_DATA *ch, char *argument)
+void do_describe(CHAR_DATA* ch, char* argument)
 {
-    CHAR_DATA *victim;
+    CHAR_DATA* victim;
     char arg1[MAX_INPUT_LENGTH];
-    FELLOW_DATA *fellow;
-    FELLOW_DATA *nfellow;
-    FELLOW_DATA *vfellow;
+    FELLOW_DATA* fellow;
+    FELLOW_DATA* nfellow;
+    FELLOW_DATA* vfellow;
 
     argument = one_argument(argument, arg1);
     argument = remand(argument);
@@ -4825,7 +4825,7 @@ void do_describe(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void do_newexits(CHAR_DATA *ch, char *argument)
+void do_newexits(CHAR_DATA* ch, char* argument)
 {
     char buf[MAX_STRING_LENGTH];
     char line0[MAX_STRING_LENGTH];
@@ -4838,7 +4838,7 @@ void do_newexits(CHAR_DATA *ch, char *argument)
     char line7[MAX_STRING_LENGTH];
     char line8[MAX_STRING_LENGTH];
     char line9[MAX_STRING_LENGTH];
-    EXIT_DATA *pexit;
+    EXIT_DATA* pexit;
     bool found, nfound, efound, sfound, wfound, ufound, dfound, nefound, nwfound, sefound, swfound;
     bool fAuto;
     int count;

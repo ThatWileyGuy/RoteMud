@@ -48,22 +48,22 @@
 /*
  *  Externals
  */
-void send_obj_page_to_char(CHAR_DATA *ch, OBJ_INDEX_DATA *idx, char page);
-void send_room_page_to_char(CHAR_DATA *ch, ROOM_INDEX_DATA *idx, char page);
-void send_page_to_char(CHAR_DATA *ch, MOB_INDEX_DATA *idx, char page);
-void send_control_page_to_char(CHAR_DATA *ch, char page);
-void sportschan(char *);
+void send_obj_page_to_char(CHAR_DATA* ch, OBJ_INDEX_DATA* idx, char page);
+void send_room_page_to_char(CHAR_DATA* ch, ROOM_INDEX_DATA* idx, char page);
+void send_page_to_char(CHAR_DATA* ch, MOB_INDEX_DATA* idx, char page);
+void send_control_page_to_char(CHAR_DATA* ch, char page);
+void sportschan(char*);
 
 /*
  * Local functions.
  */
 
-char *scramble(const char *argument, int modifier);
-char *drunk_speech(const char *argument, CHAR_DATA *ch);
-void generate_com_freq(CHAR_DATA *ch);
-void show_spys(CHAR_DATA *ch, CHAR_DATA *victim, char *tell);
+char* scramble(const char* argument, int modifier);
+char* drunk_speech(const char* argument, CHAR_DATA* ch);
+void generate_com_freq(CHAR_DATA* ch);
+void show_spys(CHAR_DATA* ch, CHAR_DATA* victim, char* tell);
 
-void generate_com_freq(CHAR_DATA *ch)
+void generate_com_freq(CHAR_DATA* ch)
 {
     char buf[MAX_STRING_LENGTH];
 
@@ -76,9 +76,9 @@ void generate_com_freq(CHAR_DATA *ch)
     return;
 }
 
-void sound_to_room(ROOM_INDEX_DATA *room, const char *argument)
+void sound_to_room(ROOM_INDEX_DATA* room, const char* argument)
 {
-    CHAR_DATA *vic;
+    CHAR_DATA* vic;
 
     if (room == NULL)
         return;
@@ -88,11 +88,11 @@ void sound_to_room(ROOM_INDEX_DATA *room, const char *argument)
             send_to_char(argument, vic);
 }
 
-void do_beep(CHAR_DATA *ch, char *argument)
+void do_beep(CHAR_DATA* ch, char* argument)
 {
-    CHAR_DATA *victim;
+    CHAR_DATA* victim;
     char arg[MAX_STRING_LENGTH];
-    OBJ_DATA *obj;
+    OBJ_DATA* obj;
     bool ch_comlink, victim_comlink;
 
     argument = one_argument(argument, arg);
@@ -220,7 +220,7 @@ void do_beep(CHAR_DATA *ch, char *argument)
 }
 
 /* Text scrambler -- Altrag */
-char *scramble(const char *argument, int modifier)
+char* scramble(const char* argument, int modifier)
 {
     static char arg[MAX_INPUT_LENGTH];
     sh_int position;
@@ -271,22 +271,22 @@ char *scramble(const char *argument, int modifier)
     return arg;
 }
 
-char *drunk_speech(const char *argument, CHAR_DATA *ch)
+char* drunk_speech(const char* argument, CHAR_DATA* ch)
 {
-    const char *arg = argument;
+    const char* arg = argument;
     static char buf[MAX_INPUT_LENGTH * 2] = {};
     char buf1[MAX_INPUT_LENGTH * 2] = {};
     sh_int drunk;
-    char *txt;
-    char *txt1;
+    char* txt;
+    char* txt1;
 
     if (IS_NPC(ch) || !ch->pcdata)
-        return (char *)argument;
+        return (char*)argument;
 
     drunk = ch->pcdata->condition[COND_DRUNK];
 
     if (drunk <= 0)
-        return (char *)argument;
+        return (char*)argument;
 
     buf[0] = '\0';
     buf1[0] = '\0';
@@ -411,16 +411,16 @@ char *drunk_speech(const char *argument, CHAR_DATA *ch)
 /*
  * Generic channel function. --Heavily modified for the new color system -->KeB
  */
-void talk_channel(CHAR_DATA *ch, const char *argument, int channel, const char *verb)
+void talk_channel(CHAR_DATA* ch, const char* argument, int channel, const char* verb)
 {
     char buf[MAX_STRING_LENGTH];
     char buf2[MAX_STRING_LENGTH];
     char garb[MAX_STRING_LENGTH];
-    DESCRIPTOR_DATA *d;
+    DESCRIPTOR_DATA* d;
 
-    SHIP_DATA *ship = ship_from_cockpit(ch->in_room->vnum);
+    SHIP_DATA* ship = ship_from_cockpit(ch->in_room->vnum);
     int position;
-    CLAN_DATA *clan = NULL;
+    CLAN_DATA* clan = NULL;
 
     bool ch_comlink = false;
     bool garble = false;
@@ -433,7 +433,7 @@ void talk_channel(CHAR_DATA *ch, const char *argument, int channel, const char *
         channel != CHANNEL_SYSTEM && channel != CHANNEL_SPACE && channel != CHANNEL_103 && channel != CHANNEL_104 &&
         channel != CHANNEL_105)
     {
-        OBJ_DATA *obj;
+        OBJ_DATA* obj;
 
         if (IS_IMMORTAL(ch))
             ch_comlink = true;
@@ -609,15 +609,15 @@ void talk_channel(CHAR_DATA *ch, const char *argument, int channel, const char *
 
     for (d = first_descriptor; d; d = d->next)
     {
-        CHAR_DATA *och;
-        CHAR_DATA *vch;
+        CHAR_DATA* och;
+        CHAR_DATA* vch;
 
         och = d->original ? d->original : d->character;
         vch = d->character;
 
         if (d->connected == CON_PLAYING && vch != ch && !IS_SET(och->deaf, channel))
         {
-            const char *sbuf = argument;
+            const char* sbuf = argument;
             ch_comlink = false;
 
             if (!str_cmp(vch->name, ch->name))
@@ -708,7 +708,7 @@ void talk_channel(CHAR_DATA *ch, const char *argument, int channel, const char *
                 channel != CHANNEL_AVTALK && channel != CHANNEL_SHIP && channel != CHANNEL_SYSTEM &&
                 channel != CHANNEL_SPACE && channel != CHANNEL_103 && channel != CHANNEL_104 && channel != CHANNEL_105)
             {
-                OBJ_DATA *obj;
+                OBJ_DATA* obj;
 
                 if (IS_IMMORTAL(och))
                     ch_comlink = true;
@@ -760,11 +760,11 @@ void talk_channel(CHAR_DATA *ch, const char *argument, int channel, const char *
 
             if (channel == CHANNEL_SYSTEM)
             {
-                SHIP_DATA *ship = ship_from_cockpit(ch->in_room->vnum);
-                SHIP_DATA *target;
+                SHIP_DATA* ship = ship_from_cockpit(ch->in_room->vnum);
+                SHIP_DATA* target;
                 bool commsys;
                 int chance;
-                OBJ_DATA *obj;
+                OBJ_DATA* obj;
                 commsys = false;
                 garble = false;
                 if (!ship)
@@ -810,8 +810,8 @@ void talk_channel(CHAR_DATA *ch, const char *argument, int channel, const char *
             }
             if (channel == CHANNEL_SHIP)
             {
-                SHIP_DATA *ship = ship_from_room(ch->in_room->vnum);
-                SHIP_DATA *target;
+                SHIP_DATA* ship = ship_from_room(ch->in_room->vnum);
+                SHIP_DATA* target;
 
                 if (!ship)
                     continue;
@@ -874,7 +874,7 @@ void talk_channel(CHAR_DATA *ch, const char *argument, int channel, const char *
     return;
 }
 
-void do_retune(CHAR_DATA *ch, char *argument)
+void do_retune(CHAR_DATA* ch, char* argument)
 {
     char buf[MAX_STRING_LENGTH];
 
@@ -921,10 +921,10 @@ void do_retune(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void to_channel(const char *argument, int channel, const char *verb, sh_int level)
+void to_channel(const char* argument, int channel, const char* verb, sh_int level)
 {
     char buf[MAX_STRING_LENGTH];
-    DESCRIPTOR_DATA *d;
+    DESCRIPTOR_DATA* d;
 
     if (!first_descriptor || argument[0] == '\0')
         return;
@@ -933,8 +933,8 @@ void to_channel(const char *argument, int channel, const char *verb, sh_int leve
 
     for (d = first_descriptor; d; d = d->next)
     {
-        CHAR_DATA *och;
-        CHAR_DATA *vch;
+        CHAR_DATA* och;
+        CHAR_DATA* vch;
 
         och = d->original ? d->original : d->character;
         vch = d->character;
@@ -963,21 +963,21 @@ void to_channel(const char *argument, int channel, const char *verb, sh_int leve
     return;
 }
 
-void do_chat(CHAR_DATA *ch, char *argument)
+void do_chat(CHAR_DATA* ch, char* argument)
 {
     talk_channel(ch, argument, CHANNEL_CHAT, "Chat");
     return;
 }
 
-void do_holonet(CHAR_DATA *ch, char *argument)
+void do_holonet(CHAR_DATA* ch, char* argument)
 {
     talk_channel(ch, argument, CHANNEL_HOLONET, "Holonet");
     return;
 }
 
-void do_shiptalk(CHAR_DATA *ch, char *argument)
+void do_shiptalk(CHAR_DATA* ch, char* argument)
 {
-    SHIP_DATA *ship;
+    SHIP_DATA* ship;
 
     if ((ship = ship_from_cockpit(ch->in_room->vnum)) == NULL)
     {
@@ -988,9 +988,9 @@ void do_shiptalk(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void do_systemtalk(CHAR_DATA *ch, char *argument)
+void do_systemtalk(CHAR_DATA* ch, char* argument)
 {
-    SHIP_DATA *ship;
+    SHIP_DATA* ship;
 
     if ((ship = ship_from_cockpit(ch->in_room->vnum)) == NULL)
     {
@@ -1001,9 +1001,9 @@ void do_systemtalk(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void do_spacetalk(CHAR_DATA *ch, char *argument)
+void do_spacetalk(CHAR_DATA* ch, char* argument)
 {
-    SHIP_DATA *ship;
+    SHIP_DATA* ship;
 
     if ((ship = ship_from_cockpit(ch->in_room->vnum)) == NULL)
     {
@@ -1014,11 +1014,11 @@ void do_spacetalk(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void do_gocial(CHAR_DATA *ch, char *command, char *argument)
+void do_gocial(CHAR_DATA* ch, char* command, char* argument)
 {
     char arg[MAX_INPUT_LENGTH], buf[MAX_INPUT_LENGTH];
-    CHAR_DATA *victim;
-    SOCIALTYPE *social;
+    CHAR_DATA* victim;
+    SOCIALTYPE* social;
 
     if ((social = find_social(command)) == NULL)
     {
@@ -1108,9 +1108,9 @@ void do_gocial(CHAR_DATA *ch, char *command, char *argument)
     }
 }
 
-void do_ooc(CHAR_DATA *ch, char *argument)
+void do_ooc(CHAR_DATA* ch, char* argument)
 {
-    DESCRIPTOR_DATA *d;
+    DESCRIPTOR_DATA* d;
     char buf[MAX_INPUT_LENGTH];
 
     if (!IS_NPC(ch) && (IS_SET(ch->act, PLR_NO_EMOTE) || IS_SET(ch->act, PLR_SILENCE)))
@@ -1156,7 +1156,7 @@ void do_ooc(CHAR_DATA *ch, char *argument)
     }
 }
 
-void do_clantalk(CHAR_DATA *ch, char *argument)
+void do_clantalk(CHAR_DATA* ch, char* argument)
 {
     if (NOT_AUTHED(ch))
     {
@@ -1173,7 +1173,7 @@ void do_clantalk(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void do_newbiechat(CHAR_DATA *ch, char *argument)
+void do_newbiechat(CHAR_DATA* ch, char* argument)
 {
     if (ch->top_level > 5)
     {
@@ -1184,24 +1184,24 @@ void do_newbiechat(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void do_ot(CHAR_DATA *ch, char *argument)
+void do_ot(CHAR_DATA* ch, char* argument)
 {
     do_ordertalk(ch, argument);
 }
 
-void do_ordertalk(CHAR_DATA *ch, char *argument)
+void do_ordertalk(CHAR_DATA* ch, char* argument)
 {
     send_to_char("Huh?\n\r", ch);
     return;
 }
 
-void do_guildtalk(CHAR_DATA *ch, char *argument)
+void do_guildtalk(CHAR_DATA* ch, char* argument)
 {
     send_to_char("Huh?\n\r", ch);
     return;
 }
 
-void do_music(CHAR_DATA *ch, char *argument)
+void do_music(CHAR_DATA* ch, char* argument)
 {
     if (NOT_AUTHED(ch))
     {
@@ -1212,7 +1212,7 @@ void do_music(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void do_quest(CHAR_DATA *ch, char *argument)
+void do_quest(CHAR_DATA* ch, char* argument)
 {
     if (NOT_AUTHED(ch))
     {
@@ -1223,7 +1223,7 @@ void do_quest(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void do_answer(CHAR_DATA *ch, char *argument)
+void do_answer(CHAR_DATA* ch, char* argument)
 {
     if (NOT_AUTHED(ch))
     {
@@ -1234,7 +1234,7 @@ void do_answer(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void do_shout(CHAR_DATA *ch, char *argument)
+void do_shout(CHAR_DATA* ch, char* argument)
 {
     if (NOT_AUTHED(ch))
     {
@@ -1246,7 +1246,7 @@ void do_shout(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void do_yell(CHAR_DATA *ch, char *argument)
+void do_yell(CHAR_DATA* ch, char* argument)
 {
     if (NOT_AUTHED(ch))
     {
@@ -1257,7 +1257,7 @@ void do_yell(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void do_immtalk(CHAR_DATA *ch, char *argument)
+void do_immtalk(CHAR_DATA* ch, char* argument)
 {
     if (NOT_AUTHED(ch))
     {
@@ -1268,7 +1268,7 @@ void do_immtalk(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void do_ask(CHAR_DATA *ch, char *argument)
+void do_ask(CHAR_DATA* ch, char* argument)
 {
     if (NOT_AUTHED(ch))
     {
@@ -1279,7 +1279,7 @@ void do_ask(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void do_i103(CHAR_DATA *ch, char *argument)
+void do_i103(CHAR_DATA* ch, char* argument)
 {
     if (NOT_AUTHED(ch))
     {
@@ -1290,7 +1290,7 @@ void do_i103(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void do_i104(CHAR_DATA *ch, char *argument)
+void do_i104(CHAR_DATA* ch, char* argument)
 {
     if (NOT_AUTHED(ch))
     {
@@ -1301,7 +1301,7 @@ void do_i104(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void do_i105(CHAR_DATA *ch, char *argument)
+void do_i105(CHAR_DATA* ch, char* argument)
 {
     if (NOT_AUTHED(ch))
     {
@@ -1312,7 +1312,7 @@ void do_i105(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void do_avtalk(CHAR_DATA *ch, char *argument)
+void do_avtalk(CHAR_DATA* ch, char* argument)
 {
     if (NOT_AUTHED(ch))
     {
@@ -1323,10 +1323,10 @@ void do_avtalk(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void do_say(CHAR_DATA *ch, char *argument)
+void do_say(CHAR_DATA* ch, char* argument)
 {
     char buf[MAX_STRING_LENGTH];
-    CHAR_DATA *vch;
+    CHAR_DATA* vch;
     int actflags, x;
 
     if (argument[0] == '\0')
@@ -1346,7 +1346,7 @@ void do_say(CHAR_DATA *ch, char *argument)
         REMOVE_BIT(ch->act, ACT_SECRETIVE);
     for (vch = ch->in_room->first_person; vch; vch = vch->next_in_room)
     {
-        char *sbuf = argument;
+        char* sbuf = argument;
 
         if (vch == ch)
             continue;
@@ -1407,18 +1407,18 @@ void do_say(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void do_oldtell(CHAR_DATA *ch, char *argument)
+void do_oldtell(CHAR_DATA* ch, char* argument)
 {
     char arg[MAX_INPUT_LENGTH];
     char buf[MAX_INPUT_LENGTH];
-    CHAR_DATA *victim;
-    DESCRIPTOR_DATA *i;
-    CHAR_DATA *och;
+    CHAR_DATA* victim;
+    DESCRIPTOR_DATA* i;
+    CHAR_DATA* och;
     int position;
-    CHAR_DATA *switched_victim;
+    CHAR_DATA* switched_victim;
     bool ch_comlink;
     bool victim_comlink;
-    OBJ_DATA *obj;
+    OBJ_DATA* obj;
 
     switched_victim = NULL;
 
@@ -1612,17 +1612,17 @@ void do_oldtell(CHAR_DATA *ch, char *argument)
 }
 
 /* New tell - utilizing comfreq (Still in the works) */
-void do_tell(CHAR_DATA *ch, char *argument)
+void do_tell(CHAR_DATA* ch, char* argument)
 {
     char arg[MAX_INPUT_LENGTH];
     char buf[MAX_INPUT_LENGTH];
-    CHAR_DATA *victim;
+    CHAR_DATA* victim;
     int position;
-    CHAR_DATA *switched_victim;
+    CHAR_DATA* switched_victim;
     bool ch_comlink;
     bool victim_comlink;
-    OBJ_DATA *obj;
-    CHAR_DATA *vict2;
+    OBJ_DATA* obj;
+    CHAR_DATA* vict2;
 
     switched_victim = NULL;
 
@@ -1802,16 +1802,16 @@ void do_tell(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void do_oldreply(CHAR_DATA *ch, char *argument)
+void do_oldreply(CHAR_DATA* ch, char* argument)
 {
     char buf[MAX_STRING_LENGTH];
-    DESCRIPTOR_DATA *i;
-    CHAR_DATA *och;
-    CHAR_DATA *victim;
+    DESCRIPTOR_DATA* i;
+    CHAR_DATA* och;
+    CHAR_DATA* victim;
     int position;
     bool ch_comlink;
     bool victim_comlink;
-    OBJ_DATA *obj;
+    OBJ_DATA* obj;
 
     if (argument[0] == '\0')
     {
@@ -1960,14 +1960,14 @@ void do_oldreply(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void do_reply(CHAR_DATA *ch, char *argument)
+void do_reply(CHAR_DATA* ch, char* argument)
 {
     char buf[MAX_STRING_LENGTH];
-    CHAR_DATA *victim;
+    CHAR_DATA* victim;
     int position;
     bool ch_comlink;
     bool victim_comlink;
-    OBJ_DATA *obj;
+    OBJ_DATA* obj;
 
     if (argument[0] == '\0')
     {
@@ -2090,10 +2090,10 @@ void do_reply(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void do_emote(CHAR_DATA *ch, char *argument)
+void do_emote(CHAR_DATA* ch, char* argument)
 {
     char buf[MAX_STRING_LENGTH];
-    char *plast;
+    char* plast;
     int actflags;
 
     if (!IS_NPC(ch) && IS_SET(ch->act, PLR_NO_EMOTE))
@@ -2131,7 +2131,7 @@ void do_emote(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void do_sysbuglist(CHAR_DATA *ch, char *argument)
+void do_sysbuglist(CHAR_DATA* ch, char* argument)
 {
     set_char_color(AT_PLAIN, ch);
     if (argument[0] == '\0')
@@ -2157,7 +2157,7 @@ void do_sysbuglist(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void do_plrbuglist(CHAR_DATA *ch, char *argument)
+void do_plrbuglist(CHAR_DATA* ch, char* argument)
 {
     set_char_color(AT_PLAIN, ch);
     if (argument[0] == '\0')
@@ -2183,7 +2183,7 @@ void do_plrbuglist(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void do_typoslist(CHAR_DATA *ch, char *argument)
+void do_typoslist(CHAR_DATA* ch, char* argument)
 {
     set_char_color(AT_PLAIN, ch);
     if (argument[0] == '\0')
@@ -2209,7 +2209,7 @@ void do_typoslist(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void do_bug(CHAR_DATA *ch, char *argument)
+void do_bug(CHAR_DATA* ch, char* argument)
 {
     if (argument[0] == '\0')
     {
@@ -2222,7 +2222,7 @@ void do_bug(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void do_ide(CHAR_DATA *ch, char *argument)
+void do_ide(CHAR_DATA* ch, char* argument)
 {
     send_to_char("If you want to send an idea, type 'idea <message>'.\n\r", ch);
     send_to_char("If you want to identify an object and have the identify spell,\n\r", ch);
@@ -2230,7 +2230,7 @@ void do_ide(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void do_idea(CHAR_DATA *ch, char *argument)
+void do_idea(CHAR_DATA* ch, char* argument)
 {
     if (argument[0] == '\0')
     {
@@ -2247,7 +2247,7 @@ void do_idea(CHAR_DATA *ch, char *argument)
 }
 
 /* Check the add helpfile file -- Xerves 8/24/99 */
-void do_ahelp(CHAR_DATA *ch, char *argument)
+void do_ahelp(CHAR_DATA* ch, char* argument)
 {
     set_char_color(AT_PLAIN, ch);
     if (argument[0] == '\0')
@@ -2257,7 +2257,7 @@ void do_ahelp(CHAR_DATA *ch, char *argument)
     }
     if (!str_cmp(argument, "clear now"))
     {
-        FILE *fp = nullptr;
+        FILE* fp = nullptr;
         auto help_file = std::fstream(HELP_FILE, std::ios::out | std::ios::trunc);
         send_to_char_color("Add Help file cleared.\n\r", ch);
         return;
@@ -2275,7 +2275,7 @@ void do_ahelp(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void do_typo(CHAR_DATA *ch, char *argument)
+void do_typo(CHAR_DATA* ch, char* argument)
 {
     if (argument[0] == '\0')
     {
@@ -2288,28 +2288,28 @@ void do_typo(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void do_rent(CHAR_DATA *ch, char *argument)
+void do_rent(CHAR_DATA* ch, char* argument)
 {
     set_char_color(AT_WHITE, ch);
     send_to_char("There is no rent here.  Just save and quit.\n\r", ch);
     return;
 }
 
-void do_qui(CHAR_DATA *ch, char *argument)
+void do_qui(CHAR_DATA* ch, char* argument)
 {
     set_char_color(AT_RED, ch);
     send_to_char("If you want to QUIT, you have to spell it out.\n\r", ch);
     return;
 }
 
-void do_quit(CHAR_DATA *ch, char *argument)
+void do_quit(CHAR_DATA* ch, char* argument)
 {
-    OBJ_DATA *obj;
-    OBJ_DATA *obj_next;
+    OBJ_DATA* obj;
+    OBJ_DATA* obj_next;
     int x, y;
     int level;
     char qbuf[MAX_INPUT_LENGTH];
-    CHAR_DATA *fch;
+    CHAR_DATA* fch;
 
     if (IS_NPC(ch) && IS_SET(ch->act, ACT_POLYMORPHED))
     {
@@ -2422,27 +2422,27 @@ std::string file_to_string(std::string_view path)
     return content;
 }
 
-void send_rip_screen(CHAR_DATA *ch)
+void send_rip_screen(CHAR_DATA* ch)
 {
     write_to_buffer(ch->desc, file_to_string(RIPSCREEN_FILE));
 }
 
-void send_rip_title(CHAR_DATA *ch)
+void send_rip_title(CHAR_DATA* ch)
 {
     write_to_buffer(ch->desc, file_to_string(RIPTITLE_FILE));
 }
 
-void send_ansi_title(CHAR_DATA *ch)
+void send_ansi_title(CHAR_DATA* ch)
 {
     write_to_buffer(ch->desc, file_to_string(ANSITITLE_FILE));
 }
 
-void send_ascii_title(CHAR_DATA *ch)
+void send_ascii_title(CHAR_DATA* ch)
 {
     write_to_buffer(ch->desc, file_to_string(ASCTITLE_FILE));
 }
 
-void do_rip(CHAR_DATA *ch, char *argument)
+void do_rip(CHAR_DATA* ch, char* argument)
 {
     char arg[MAX_INPUT_LENGTH];
 
@@ -2467,7 +2467,7 @@ void do_rip(CHAR_DATA *ch, char *argument)
     }
 }
 
-void do_ansi(CHAR_DATA *ch, char *argument)
+void do_ansi(CHAR_DATA* ch, char* argument)
 {
     char arg[MAX_INPUT_LENGTH];
 
@@ -2494,7 +2494,7 @@ void do_ansi(CHAR_DATA *ch, char *argument)
     }
 }
 
-void do_sound(CHAR_DATA *ch, char *argument)
+void do_sound(CHAR_DATA* ch, char* argument)
 {
     char arg[MAX_INPUT_LENGTH];
 
@@ -2522,7 +2522,7 @@ void do_sound(CHAR_DATA *ch, char *argument)
     }
 }
 
-void do_save(CHAR_DATA *ch, char *argument)
+void do_save(CHAR_DATA* ch, char* argument)
 {
     char strsave[MAX_STRING_LENGTH];
     char strback[MAX_STRING_LENGTH];
@@ -2569,9 +2569,9 @@ void do_save(CHAR_DATA *ch, char *argument)
  * follow in a loop through an exit leading back into the same room
  * (Which exists in many maze areas)			-Thoric
  */
-bool circle_follow(CHAR_DATA *ch, CHAR_DATA *victim)
+bool circle_follow(CHAR_DATA* ch, CHAR_DATA* victim)
 {
-    CHAR_DATA *tmp;
+    CHAR_DATA* tmp;
 
     for (tmp = victim; tmp; tmp = tmp->master)
         if (tmp == ch)
@@ -2579,10 +2579,10 @@ bool circle_follow(CHAR_DATA *ch, CHAR_DATA *victim)
     return false;
 }
 
-void do_follow(CHAR_DATA *ch, char *argument)
+void do_follow(CHAR_DATA* ch, char* argument)
 {
     char arg[MAX_INPUT_LENGTH];
-    CHAR_DATA *victim;
+    CHAR_DATA* victim;
 
     one_argument(argument, arg);
 
@@ -2628,7 +2628,7 @@ void do_follow(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void add_follower(CHAR_DATA *ch, CHAR_DATA *master)
+void add_follower(CHAR_DATA* ch, CHAR_DATA* master)
 {
     if (ch->master)
     {
@@ -2647,7 +2647,7 @@ void add_follower(CHAR_DATA *ch, CHAR_DATA *master)
     return;
 }
 
-void stop_follower(CHAR_DATA *ch)
+void stop_follower(CHAR_DATA* ch)
 {
     if (!ch->master)
     {
@@ -2673,9 +2673,9 @@ void stop_follower(CHAR_DATA *ch)
     return;
 }
 
-void die_follower(CHAR_DATA *ch)
+void die_follower(CHAR_DATA* ch)
 {
-    CHAR_DATA *fch;
+    CHAR_DATA* fch;
 
     if (ch->master)
         stop_follower(ch);
@@ -2692,13 +2692,13 @@ void die_follower(CHAR_DATA *ch)
     return;
 }
 
-void do_order(CHAR_DATA *ch, char *argument)
+void do_order(CHAR_DATA* ch, char* argument)
 {
     char arg[MAX_INPUT_LENGTH];
     char argbuf[MAX_INPUT_LENGTH];
-    CHAR_DATA *victim;
-    CHAR_DATA *och;
-    CHAR_DATA *och_next;
+    CHAR_DATA* victim;
+    CHAR_DATA* och;
+    CHAR_DATA* och_next;
     bool found;
     bool fAll;
 
@@ -2786,17 +2786,17 @@ char *itoa(int foo)
 }
 */
 
-void do_group(CHAR_DATA *ch, char *argument)
+void do_group(CHAR_DATA* ch, char* argument)
 {
     char arg[MAX_INPUT_LENGTH];
-    CHAR_DATA *victim = nullptr;
+    CHAR_DATA* victim = nullptr;
 
     one_argument(argument, arg);
 
     if (arg[0] == '\0')
     {
-        CHAR_DATA *gch;
-        CHAR_DATA *leader;
+        CHAR_DATA* gch;
+        CHAR_DATA* leader;
 
         leader = ch->leader ? ch->leader : ch;
         set_char_color(AT_GREEN, ch);
@@ -2824,7 +2824,7 @@ void do_group(CHAR_DATA *ch, char *argument)
 
     if (!strcmp(arg, "disband"))
     {
-        CHAR_DATA *gch;
+        CHAR_DATA* gch;
         int count = 0;
 
         if (ch->leader || ch->master)
@@ -2854,7 +2854,7 @@ void do_group(CHAR_DATA *ch, char *argument)
 
     if (!strcmp(arg, "all"))
     {
-        CHAR_DATA *rch;
+        CHAR_DATA* rch;
         int count = 0;
 
         for (rch = ch->in_room->first_person; rch; rch = rch->next_in_room)
@@ -2913,11 +2913,11 @@ void do_group(CHAR_DATA *ch, char *argument)
 /*
  * 'Split' originally by Gnort, God of Chaos.
  */
-void do_split(CHAR_DATA *ch, char *argument)
+void do_split(CHAR_DATA* ch, char* argument)
 {
     char buf[MAX_STRING_LENGTH];
     char arg[MAX_INPUT_LENGTH];
-    CHAR_DATA *gch;
+    CHAR_DATA* gch;
     int members;
     int amount;
     int share;
@@ -2995,9 +2995,9 @@ void do_split(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void do_gtell(CHAR_DATA *ch, char *argument)
+void do_gtell(CHAR_DATA* ch, char* argument)
 {
-    CHAR_DATA *gch;
+    CHAR_DATA* gch;
 
     if (argument[0] == '\0')
     {
@@ -3040,7 +3040,7 @@ void do_gtell(CHAR_DATA *ch, char *argument)
  * (2) if A ~ B then B ~ A
  * (3) if A ~ B  and B ~ C, then A ~ C
  */
-bool is_same_group(CHAR_DATA *ach, CHAR_DATA *bch)
+bool is_same_group(CHAR_DATA* ach, CHAR_DATA* bch)
 {
     if (ach->leader)
         ach = ach->leader;
@@ -3054,11 +3054,11 @@ bool is_same_group(CHAR_DATA *ach, CHAR_DATA *bch)
  * I am not too sure if this method is right..
  */
 
-void talk_auction(char *argument)
+void talk_auction(char* argument)
 {
-    DESCRIPTOR_DATA *d;
+    DESCRIPTOR_DATA* d;
     char buf[MAX_STRING_LENGTH];
-    CHAR_DATA *original;
+    CHAR_DATA* original;
 
     for (d = first_descriptor; d; d = d->next)
     {
@@ -3075,7 +3075,7 @@ void talk_auction(char *argument)
  * Language support functions. -- Altrag
  * 07/01/96
  */
-bool knows_language(CHAR_DATA *ch, int language, CHAR_DATA *cch)
+bool knows_language(CHAR_DATA* ch, int language, CHAR_DATA* cch)
 {
     sh_int sn;
 
@@ -3115,7 +3115,7 @@ bool knows_language(CHAR_DATA *ch, int language, CHAR_DATA *cch)
     return false;
 }
 
-bool can_learn_lang(CHAR_DATA *ch, int language)
+bool can_learn_lang(CHAR_DATA* ch, int language)
 {
     if (language & LANG_CLAN)
         return false;
@@ -3171,7 +3171,7 @@ int countlangs(int languages)
     return numlangs;
 }
 
-const char *lang_names[] = {
+const char* lang_names[] = {
     /*
     "basic", "wookiee", "twilek", "rodian", "hutt",
      "mon calamari", "noghri", "ewok", "ithorian",
@@ -3185,7 +3185,7 @@ const char *lang_names[] = {
     "jawa",      "adarian", "ewok",      "verpine", "defel",      "trandoshan",   "hapan",    "quarren",
     "sullustan", "binary",  "firrerreo", "clan",    "togorian",   "shistavanen",  "kubaz",    "yevethan",
     "gand",      "duros",   "coynite",   "gotal",   "devaronian", "falleen",      "ithorian", "barabel"};
-void do_speak(CHAR_DATA *ch, char *argument)
+void do_speak(CHAR_DATA* ch, char* argument)
 {
     int langs;
     char arg[MAX_INPUT_LENGTH];
@@ -3226,7 +3226,7 @@ void do_speak(CHAR_DATA *ch, char *argument)
     send_to_char("You do not know that language.\n\r", ch);
 }
 
-void do_languages(CHAR_DATA *ch, char *argument)
+void do_languages(CHAR_DATA* ch, char* argument)
 {
     char arg[MAX_INPUT_LENGTH];
     int lang;
@@ -3235,7 +3235,7 @@ void do_languages(CHAR_DATA *ch, char *argument)
     argument = one_argument(argument, arg);
     if (arg[0] != '\0' && !str_prefix(arg, "learn") && !IS_IMMORTAL(ch) && !IS_NPC(ch))
     {
-        CHAR_DATA *sch;
+        CHAR_DATA* sch;
         char arg2[MAX_INPUT_LENGTH];
         int prct;
 
@@ -3320,7 +3320,7 @@ void do_languages(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void do_wartalk(CHAR_DATA *ch, char *argument)
+void do_wartalk(CHAR_DATA* ch, char* argument)
 {
     if (NOT_AUTHED(ch))
     {
@@ -3331,9 +3331,9 @@ void do_wartalk(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void show_spys(CHAR_DATA *ch, CHAR_DATA *victim, char *tell)
+void show_spys(CHAR_DATA* ch, CHAR_DATA* victim, char* tell)
 {
-    CHAR_DATA *och;
+    CHAR_DATA* och;
 
     if (IS_NPC(ch) || IS_NPC(victim) || IS_IMMORTAL(ch) || IS_IMMORTAL(victim))
         return;

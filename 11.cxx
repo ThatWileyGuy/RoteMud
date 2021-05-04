@@ -46,21 +46,21 @@
 #include <time.h>
 #include "mud.hxx"
 
-void explode_emissile(CHAR_DATA *ch, ROOM_INDEX_DATA *proom, int mindam, int maxdam, bool incendiary);
-void do_makegoggles(CHAR_DATA *ch, char *argument);
+void explode_emissile(CHAR_DATA* ch, ROOM_INDEX_DATA* proom, int mindam, int maxdam, bool incendiary);
+void do_makegoggles(CHAR_DATA* ch, char* argument);
 extern int top_affect;
-void do_makemissile(CHAR_DATA *ch, char *argument);
-void do_launch2(CHAR_DATA *ch, char *argument);
-void do_load(CHAR_DATA *ch, char *argument);
-void do_unload(CHAR_DATA *ch, char *argument);
-void do_link(CHAR_DATA *ch, char *argument);
-SHIP_DATA *ship_from_gunseat(int vnum);
-SHIP_DATA *ship_from_cockpit(int vnum);
+void do_makemissile(CHAR_DATA* ch, char* argument);
+void do_launch2(CHAR_DATA* ch, char* argument);
+void do_load(CHAR_DATA* ch, char* argument);
+void do_unload(CHAR_DATA* ch, char* argument);
+void do_link(CHAR_DATA* ch, char* argument);
+SHIP_DATA* ship_from_gunseat(int vnum);
+SHIP_DATA* ship_from_cockpit(int vnum);
 extern char bname[MAX_STRING_LENGTH];
-void do_barrel_roll(CHAR_DATA *ch, char *argument);
-void do_juke(CHAR_DATA *ch, char *argument);
+void do_barrel_roll(CHAR_DATA* ch, char* argument);
+void do_juke(CHAR_DATA* ch, char* argument);
 
-char *primary_beam_name(SHIP_DATA *ship)
+char* primary_beam_name(SHIP_DATA* ship)
 {
 
     if (ship->primaryCount != 0)
@@ -137,7 +137,7 @@ char *primary_beam_name(SHIP_DATA *ship)
         return "None.";
 }
 
-char *secondary_beam_name(SHIP_DATA *ship)
+char* secondary_beam_name(SHIP_DATA* ship)
 {
 
     if (ship->secondaryCount != 0)
@@ -214,13 +214,13 @@ char *secondary_beam_name(SHIP_DATA *ship)
         return "None.";
 }
 
-void explode_emissile(CHAR_DATA *ch, ROOM_INDEX_DATA *proom, int mindam, int maxdam, bool incendiary)
+void explode_emissile(CHAR_DATA* ch, ROOM_INDEX_DATA* proom, int mindam, int maxdam, bool incendiary)
 {
-    CHAR_DATA *rch;
-    OBJ_INDEX_DATA *objindex;
-    OBJ_INDEX_DATA *fObjIndex;
-    OBJ_DATA *obj;
-    OBJ_DATA *fobj;
+    CHAR_DATA* rch;
+    OBJ_INDEX_DATA* objindex;
+    OBJ_INDEX_DATA* fObjIndex;
+    OBJ_DATA* obj;
+    OBJ_DATA* fobj;
     int dam;
 
     // Make scraps of missile
@@ -257,15 +257,15 @@ void explode_emissile(CHAR_DATA *ch, ROOM_INDEX_DATA *proom, int mindam, int max
     }
 }
 
-void do_makegoggles(CHAR_DATA *ch, char *argument)
+void do_makegoggles(CHAR_DATA* ch, char* argument)
 {
     char arg[MAX_INPUT_LENGTH];
     char arg2[MAX_INPUT_LENGTH];
     char buf[MAX_STRING_LENGTH];
     int level, chance;
     bool checktool, checkduraplast, checkcirc, checkbatt, checklens;
-    OBJ_DATA *obj;
-    AFFECT_DATA *aff;
+    OBJ_DATA* obj;
+    AFFECT_DATA* aff;
 
     argument = one_argument(argument, arg);
     strcpy_s(arg2, argument);
@@ -354,9 +354,9 @@ void do_makegoggles(CHAR_DATA *ch, char *argument)
             return;
         if (!ch->dest_buf_2)
             return;
-        strcpy_s(arg, reinterpret_cast<char *>(ch->dest_buf));
+        strcpy_s(arg, reinterpret_cast<char*>(ch->dest_buf));
         DISPOSE(ch->dest_buf);
-        strcpy_s(arg2, reinterpret_cast<char *>(ch->dest_buf_2));
+        strcpy_s(arg2, reinterpret_cast<char*>(ch->dest_buf_2));
         DISPOSE(ch->dest_buf_2);
         break;
 
@@ -484,14 +484,14 @@ void do_makegoggles(CHAR_DATA *ch, char *argument)
     learn_from_success(ch, gsn_makegoggles);
 }
 
-void do_makemissile(CHAR_DATA *ch, char *argument)
+void do_makemissile(CHAR_DATA* ch, char* argument)
 {
     char arg[MAX_INPUT_LENGTH];
     char buf[MAX_STRING_LENGTH];
     int level, chance;
     bool checktool, checkdura, checkbatt, checkcirc;
-    OBJ_DATA *obj;
-    OBJ_INDEX_DATA *pObjIndex;
+    OBJ_DATA* obj;
+    OBJ_INDEX_DATA* pObjIndex;
     int vnum = 0;
     int chemNum = 0;
 
@@ -578,7 +578,7 @@ void do_makemissile(CHAR_DATA *ch, char *argument)
     case 1:
         if (!ch->dest_buf)
             return;
-        strcpy_s(arg, reinterpret_cast<char *>(ch->dest_buf));
+        strcpy_s(arg, reinterpret_cast<char*>(ch->dest_buf));
         DISPOSE(ch->dest_buf);
         break;
 
@@ -724,18 +724,18 @@ void do_makemissile(CHAR_DATA *ch, char *argument)
     learn_from_success(ch, gsn_makemissile);
 }
 
-void do_launch2(CHAR_DATA *ch, char *argument)
+void do_launch2(CHAR_DATA* ch, char* argument)
 {
-    CHAR_DATA *rch;
-    CHAR_DATA *zch;
-    OBJ_DATA *wield;
+    CHAR_DATA* rch;
+    CHAR_DATA* zch;
+    OBJ_DATA* wield;
     char arg[MAX_INPUT_LENGTH];
     char arg2[MAX_INPUT_LENGTH];
-    char const *dtxt = nullptr;
-    char const *ftxt = nullptr;
+    char const* dtxt = nullptr;
+    char const* ftxt = nullptr;
     sh_int dir, dist = 0, max_dist;
-    EXIT_DATA *pexit = nullptr;
-    ROOM_INDEX_DATA *proom = nullptr;
+    EXIT_DATA* pexit = nullptr;
+    ROOM_INDEX_DATA* proom = nullptr;
     int chance, missroom;
     char buf[MAX_STRING_LENGTH];
     bool exfound;
@@ -1203,11 +1203,11 @@ void do_launch2(CHAR_DATA *ch, char *argument)
         */
 }
 
-void do_load(CHAR_DATA *ch, char *argument)
+void do_load(CHAR_DATA* ch, char* argument)
 {
-    CHAR_DATA *rch;
-    OBJ_DATA *obj;
-    OBJ_DATA *launcher;
+    CHAR_DATA* rch;
+    OBJ_DATA* obj;
+    OBJ_DATA* launcher;
     char arg1[MAX_STRING_LENGTH];
     char arg2[MAX_STRING_LENGTH];
 
@@ -1276,11 +1276,11 @@ void do_load(CHAR_DATA *ch, char *argument)
     }
 }
 
-void do_unload(CHAR_DATA *ch, char *argument)
+void do_unload(CHAR_DATA* ch, char* argument)
 {
-    CHAR_DATA *rch;
-    OBJ_DATA *obj;
-    OBJ_DATA *launcher;
+    CHAR_DATA* rch;
+    OBJ_DATA* obj;
+    OBJ_DATA* launcher;
 
     if (*argument == '\0')
     {
@@ -1358,9 +1358,9 @@ void do_unload(CHAR_DATA *ch, char *argument)
     }
 }
 
-void do_link(CHAR_DATA *ch, char *argument)
+void do_link(CHAR_DATA* ch, char* argument)
 {
-    SHIP_DATA *ship;
+    SHIP_DATA* ship;
     int x;
 
     if (IS_NPC(ch))
@@ -1512,9 +1512,9 @@ void do_link(CHAR_DATA *ch, char *argument)
     }
 }
 
-void do_unlink(CHAR_DATA *ch, char *argument)
+void do_unlink(CHAR_DATA* ch, char* argument)
 {
-    SHIP_DATA *ship;
+    SHIP_DATA* ship;
 
     if ((ship = ship_from_gunseat(ch->in_room->vnum)) == NULL)
     {
@@ -1601,9 +1601,9 @@ void do_unlink(CHAR_DATA *ch, char *argument)
     }
 }
 
-void do_barrel_roll(CHAR_DATA *ch, char *argument)
+void do_barrel_roll(CHAR_DATA* ch, char* argument)
 {
-    SHIP_DATA *ship;
+    SHIP_DATA* ship;
     char buf[MAX_STRING_LENGTH];
     int chance;
 
@@ -1681,9 +1681,9 @@ void do_barrel_roll(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void do_juke(CHAR_DATA *ch, char *argument)
+void do_juke(CHAR_DATA* ch, char* argument)
 {
-    SHIP_DATA *ship;
+    SHIP_DATA* ship;
     char buf[MAX_STRING_LENGTH];
     int chance;
 

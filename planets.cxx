@@ -48,21 +48,21 @@ extern int top_area;
 extern int top_r_vnum;
 void write_area_list();
 void write_starsystem_list();
-extern const char *sector_name[SECT_MAX];
+extern const char* sector_name[SECT_MAX];
 
 /* local routines */
-void fread_planet(PLANET_DATA *planet, FILE *fp);
-bool load_planet_file(char *planetfile);
+void fread_planet(PLANET_DATA* planet, FILE* fp);
+bool load_planet_file(char* planetfile);
 void write_planet_list(void);
 
-const char *cargo_names[CARGO_MAX] = {"None",   "Food",        "Water",       "Medical",
+const char* cargo_names[CARGO_MAX] = {"None",   "Food",        "Water",       "Medical",
                                       "Metals", "Rare Metals", "Electronics", "Products"};
-const char *cargo_names_lower[CARGO_MAX] = {"none",   "food",        "water",       "medical",
+const char* cargo_names_lower[CARGO_MAX] = {"none",   "food",        "water",       "medical",
                                             "metals", "rare metals", "electronics", "products"};
 
-PLANET_DATA *get_planet(char *name)
+PLANET_DATA* get_planet(char* name)
 {
-    PLANET_DATA *planet;
+    PLANET_DATA* planet;
 
     if (name[0] == '\0')
         return NULL;
@@ -88,8 +88,8 @@ PLANET_DATA *get_planet(char *name)
 
 void write_planet_list()
 {
-    PLANET_DATA *tplanet;
-    FILE *fpout;
+    PLANET_DATA* tplanet;
+    FILE* fpout;
     char filename[256];
 
     sprintf_s(filename, "%s%s", PLANET_DIR, PLANET_LIST);
@@ -105,9 +105,9 @@ void write_planet_list()
     fclose(fpout);
 }
 
-void save_planet(PLANET_DATA *planet)
+void save_planet(PLANET_DATA* planet)
 {
-    FILE *fp;
+    FILE* fp;
     char filename[256];
     char buf[MAX_STRING_LENGTH];
     int i = 0;
@@ -134,7 +134,7 @@ void save_planet(PLANET_DATA *planet)
     }
     else
     {
-        AREA_DATA *pArea;
+        AREA_DATA* pArea;
 
         fprintf(fp, "#PLANET\n");
         fprintf(fp, "Name         %s~\n", planet->name);
@@ -179,11 +179,11 @@ void save_planet(PLANET_DATA *planet)
         break;                                                                                                         \
     }
 
-void fread_planet(PLANET_DATA *planet, FILE *fp)
+void fread_planet(PLANET_DATA* planet, FILE* fp)
 {
     char buf[MAX_STRING_LENGTH];
-    char const *word;
-    char *line;
+    char const* word;
+    char* line;
     int x0, x1, x2, x3, x4, x5;
     bool fMatch;
 
@@ -242,7 +242,7 @@ void fread_planet(PLANET_DATA *planet, FILE *fp)
                 planet->area = get_area(fread_string(fp));
                 if (planet->area)
                 {
-                    AREA_DATA *area = planet->area;
+                    AREA_DATA* area = planet->area;
                     area->planet = planet;
                     LINK(area, planet->first_area, planet->last_area, next_on_planet, prev_on_planet);
                 }
@@ -300,7 +300,7 @@ void fread_planet(PLANET_DATA *planet, FILE *fp)
                 planet->starsystem = starsystem_from_name(fread_string(fp));
                 if (planet->starsystem)
                 {
-                    SPACE_DATA *starsystem = planet->starsystem;
+                    SPACE_DATA* starsystem = planet->starsystem;
 
                     LINK(planet, starsystem->first_planet, starsystem->last_planet, next_in_system, prev_in_system);
                 }
@@ -331,10 +331,10 @@ void fread_planet(PLANET_DATA *planet, FILE *fp)
     }
 }
 
-bool load_planet_file(const char *planetfile)
+bool load_planet_file(const char* planetfile)
 {
-    PLANET_DATA *planet;
-    FILE *fp;
+    PLANET_DATA* planet;
+    FILE* fp;
     bool found;
 
     CREATE(planet, PLANET_DATA, 1);
@@ -358,7 +358,7 @@ bool load_planet_file(const char *planetfile)
         for (;;)
         {
             char letter;
-            char *word;
+            char* word;
 
             letter = fread_letter(fp);
             if (letter == '*')
@@ -403,8 +403,8 @@ bool load_planet_file(const char *planetfile)
 
 void load_planets()
 {
-    FILE *fpList;
-    const char *filename;
+    FILE* fpList;
+    const char* filename;
     char planetlist[256];
     char buf[MAX_STRING_LENGTH];
 
@@ -438,9 +438,9 @@ void load_planets()
     return;
 }
 
-AREA_DATA *get_area(char *argument)
+AREA_DATA* get_area(char* argument)
 {
-    AREA_DATA *pArea;
+    AREA_DATA* pArea;
     for (pArea = first_area; pArea; pArea = pArea->next)
         if (pArea->filename && !str_cmp(pArea->filename, argument))
             return pArea;
@@ -448,11 +448,11 @@ AREA_DATA *get_area(char *argument)
     return NULL;
 }
 
-void do_setplanet(CHAR_DATA *ch, char *argument)
+void do_setplanet(CHAR_DATA* ch, char* argument)
 {
     char arg1[MAX_INPUT_LENGTH];
     char arg2[MAX_INPUT_LENGTH];
-    PLANET_DATA *planet;
+    PLANET_DATA* planet;
     int i = 0;
     char arg3[MAX_INPUT_LENGTH];
 
@@ -512,7 +512,7 @@ void do_setplanet(CHAR_DATA *ch, char *argument)
         planet->area = get_area(argument);
         if (planet->area)
         {
-            AREA_DATA *area = planet->area;
+            AREA_DATA* area = planet->area;
             LINK(area, planet->first_area, planet->last_area, next_on_planet, prev_on_planet);
         }
         send_to_char("Done.\n\r", ch);
@@ -522,7 +522,7 @@ void do_setplanet(CHAR_DATA *ch, char *argument)
 
     if (!strcmp(arg2, "governed_by"))
     {
-        CLAN_DATA *clan;
+        CLAN_DATA* clan;
         clan = get_clan(argument);
         if (clan)
         {
@@ -537,7 +537,7 @@ void do_setplanet(CHAR_DATA *ch, char *argument)
 
     if (!strcmp(arg2, "starsystem"))
     {
-        SPACE_DATA *starsystem;
+        SPACE_DATA* starsystem;
 
         if ((starsystem = planet->starsystem) != NULL)
             UNLINK(planet, starsystem->first_planet, starsystem->last_planet, next_in_system, prev_in_system);
@@ -692,11 +692,11 @@ void do_setplanet(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void do_showplanet(CHAR_DATA *ch, char *argument)
+void do_showplanet(CHAR_DATA* ch, char* argument)
 {
-    GUARD_DATA *guard;
-    PLANET_DATA *planet;
-    AREA_DATA *pArea;
+    GUARD_DATA* guard;
+    PLANET_DATA* planet;
+    AREA_DATA* pArea;
     char area[MAX_STRING_LENGTH];
     int num_guards = 0;
     int pf = 0;
@@ -770,10 +770,10 @@ void do_showplanet(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void do_makeplanet(CHAR_DATA *ch, char *argument)
+void do_makeplanet(CHAR_DATA* ch, char* argument)
 {
     char filename[256];
-    PLANET_DATA *planet;
+    PLANET_DATA* planet;
     bool found;
 
     if (!argument || argument[0] == '\0')
@@ -799,11 +799,11 @@ void do_makeplanet(CHAR_DATA *ch, char *argument)
     planet->flags = 0;
 }
 
-void do_planets(CHAR_DATA *ch, char *argument)
+void do_planets(CHAR_DATA* ch, char* argument)
 {
-    PLANET_DATA *planet;
+    PLANET_DATA* planet;
     int count = 0;
-    SPACE_DATA *starsystem;
+    SPACE_DATA* starsystem;
 
     set_char_color(AT_WHITE, ch);
     send_to_char("Planet             Starsystem    Governed By                  Popular Support\n\r", ch);
@@ -850,11 +850,11 @@ void do_planets(CHAR_DATA *ch, char *argument)
     send_to_char("&WUse SHOWPLANET for more information.\n\r", ch);
 }
 
-void do_capture(CHAR_DATA *ch, char *argument)
+void do_capture(CHAR_DATA* ch, char* argument)
 {
-    CLAN_DATA *clan;
-    PLANET_DATA *planet;
-    PLANET_DATA *cPlanet;
+    CLAN_DATA* clan;
+    PLANET_DATA* planet;
+    PLANET_DATA* cPlanet;
     float support = 0.0;
     int pCount = 0;
     char buf[MAX_STRING_LENGTH];
@@ -896,8 +896,8 @@ void do_capture(CHAR_DATA *ch, char *argument)
 
     if (planet->starsystem)
     {
-        SHIP_DATA *ship;
-        CLAN_DATA *sClan;
+        SHIP_DATA* ship;
+        CLAN_DATA* sClan;
 
         for (ship = planet->starsystem->first_ship; ship; ship = ship->next_in_starsystem)
         {
@@ -958,7 +958,7 @@ void do_capture(CHAR_DATA *ch, char *argument)
     return;
 }
 
-long get_taxes(PLANET_DATA *planet)
+long get_taxes(PLANET_DATA* planet)
 {
     long gain;
 
@@ -970,9 +970,9 @@ long get_taxes(PLANET_DATA *planet)
     return gain;
 }
 
-void do_imports(CHAR_DATA *ch, char *argument)
+void do_imports(CHAR_DATA* ch, char* argument)
 {
-    PLANET_DATA *planet;
+    PLANET_DATA* planet;
     int i;
 
     if (argument[0] == '\0')

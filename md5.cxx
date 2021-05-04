@@ -165,7 +165,7 @@
 #define T63 0x2ad7d2bb
 #define T64 /* 0xeb86d391 */ (T_MASK ^ 0x14792c6e)
 
-static void md5_process(md5_state_t *pms, const md5_byte_t *data /*[64] */)
+static void md5_process(md5_state_t* pms, const md5_byte_t* data /*[64] */)
 {
     md5_word_t a = pms->abcd[0], b = pms->abcd[1], c = pms->abcd[2], d = pms->abcd[3];
     md5_word_t t;
@@ -179,7 +179,7 @@ static void md5_process(md5_state_t *pms, const md5_byte_t *data /*[64] */)
      * Define storage for little-endian or both types of CPUs.
      */
     md5_word_t xbuf[16];
-    const md5_word_t *X;
+    const md5_word_t* X;
 #endif
 
     {
@@ -191,7 +191,7 @@ static void md5_process(md5_state_t *pms, const md5_byte_t *data /*[64] */)
          */
         static const int w = 1;
 
-        if (*((const md5_byte_t *)&w)) /* dynamic little-endian */
+        if (*((const md5_byte_t*)&w)) /* dynamic little-endian */
 #endif
 #if BYTE_ORDER <= 0 /* little-endian */
         {
@@ -199,12 +199,12 @@ static void md5_process(md5_state_t *pms, const md5_byte_t *data /*[64] */)
              * On little-endian machines, we can process properly aligned
              * data without copying it.
              */
-            if (!((data - (const md5_byte_t *)0) & 3))
+            if (!((data - (const md5_byte_t*)0) & 3))
             {
                 /*
                  * data are properly aligned
                  */
-                X = (const md5_word_t *)data;
+                X = (const md5_word_t*)data;
             }
             else
             {
@@ -225,7 +225,7 @@ static void md5_process(md5_state_t *pms, const md5_byte_t *data /*[64] */)
              * On big-endian machines, we must arrange the bytes in the
              * right order.
              */
-            const md5_byte_t *xp = data;
+            const md5_byte_t* xp = data;
             int i;
 
 #if BYTE_ORDER == 0
@@ -380,7 +380,7 @@ static void md5_process(md5_state_t *pms, const md5_byte_t *data /*[64] */)
     pms->abcd[3] += d;
 }
 
-void md5_init(md5_state_t *pms)
+void md5_init(md5_state_t* pms)
 {
     pms->count[0] = pms->count[1] = 0;
     pms->abcd[0] = 0x67452301;
@@ -389,9 +389,9 @@ void md5_init(md5_state_t *pms)
     pms->abcd[3] = 0x10325476;
 }
 
-void md5_append(md5_state_t *pms, const md5_byte_t *data, int nbytes)
+void md5_append(md5_state_t* pms, const md5_byte_t* data, int nbytes)
 {
-    const md5_byte_t *p = data;
+    const md5_byte_t* p = data;
     int left = nbytes;
     int offset = (pms->count[0] >> 3) & 63;
     md5_word_t nbits = (md5_word_t)(nbytes << 3);
@@ -435,7 +435,7 @@ void md5_append(md5_state_t *pms, const md5_byte_t *data, int nbytes)
         memcpy(pms->buf, p, left);
 }
 
-void md5_finish(md5_state_t *pms, md5_byte_t digest[16])
+void md5_finish(md5_state_t* pms, md5_byte_t digest[16])
 {
     static const md5_byte_t pad[64] = {0x80, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
                                        0,    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,

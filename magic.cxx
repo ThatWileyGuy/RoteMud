@@ -46,18 +46,18 @@
 /*
  * Local functions.
  */
-void say_spell(CHAR_DATA *ch, int sn);
-CHAR_DATA *make_poly_mob(CHAR_DATA *ch, int vnum);
-ch_ret spell_affect(int sn, int level, CHAR_DATA *ch, void *vo);
-ch_ret spell_affectchar(int sn, int level, CHAR_DATA *ch, void *vo);
+void say_spell(CHAR_DATA* ch, int sn);
+CHAR_DATA* make_poly_mob(CHAR_DATA* ch, int vnum);
+ch_ret spell_affect(int sn, int level, CHAR_DATA* ch, void* vo);
+ch_ret spell_affectchar(int sn, int level, CHAR_DATA* ch, void* vo);
 
 /* from shops.c */
-CHAR_DATA *find_keeper(CHAR_DATA *ch);
+CHAR_DATA* find_keeper(CHAR_DATA* ch);
 
 /*
  * Is immune to a damage type
  */
-bool is_immune(CHAR_DATA *ch, sh_int damtype)
+bool is_immune(CHAR_DATA* ch, sh_int damtype)
 {
     switch (damtype)
     {
@@ -89,7 +89,7 @@ bool is_immune(CHAR_DATA *ch, sh_int damtype)
 /*
  * Lookup a skill by name, only stopping at skills the player has.
  */
-int ch_slookup(CHAR_DATA *ch, const char *name)
+int ch_slookup(CHAR_DATA* ch, const char* name)
 {
     int sn;
 
@@ -110,7 +110,7 @@ int ch_slookup(CHAR_DATA *ch, const char *name)
 /*
  * Lookup an herb by name.
  */
-int herb_lookup(const char *name)
+int herb_lookup(const char* name)
 {
     int sn;
 
@@ -127,7 +127,7 @@ int herb_lookup(const char *name)
 /*
  * Lookup a personal skill
  */
-int personal_lookup(CHAR_DATA *ch, const char *name)
+int personal_lookup(CHAR_DATA* ch, const char* name)
 {
     return -1;
 }
@@ -135,7 +135,7 @@ int personal_lookup(CHAR_DATA *ch, const char *name)
 /*
  * Lookup a skill by name.
  */
-int skill_lookup(const char *name)
+int skill_lookup(const char* name)
 {
     int sn;
     if ((sn = bsearch_skill(name, gsn_first_spell, gsn_first_skill - 1)) == -1)
@@ -160,7 +160,7 @@ int skill_lookup(const char *name)
  * Return a skilltype pointer based on sn			-Thoric
  * Returns NULL if bad, unused or personal sn.
  */
-SKILL_TYPE *get_skilltype(int sn)
+SKILL_TYPE* get_skilltype(int sn)
 {
     if (sn >= TYPE_PERSONAL)
         return NULL;
@@ -175,7 +175,7 @@ SKILL_TYPE *get_skilltype(int sn)
  * Perform a binary search on a section of the skill table	-Thoric
  * Each different section of the skill table is sorted alphabetically
  */
-int bsearch_skill(const char *name, int first, int top)
+int bsearch_skill(const char* name, int first, int top)
 {
     int sn;
     for (;;)
@@ -197,7 +197,7 @@ int bsearch_skill(const char *name, int first, int top)
  * Each different section of the skill table is sorted alphabetically
  * Check for exact matches only
  */
-int bsearch_skill_exact(const char *name, int first, int top)
+int bsearch_skill_exact(const char* name, int first, int top)
 {
     int sn;
 
@@ -221,7 +221,7 @@ int bsearch_skill_exact(const char *name, int first, int top)
  * Each different section of the skill table is sorted alphabetically
  * Only match skills player knows				-Thoric
  */
-int ch_bsearch_skill(CHAR_DATA *ch, const char *name, int first, int top)
+int ch_bsearch_skill(CHAR_DATA* ch, const char* name, int first, int top)
 {
     int sn;
 
@@ -242,7 +242,7 @@ int ch_bsearch_skill(CHAR_DATA *ch, const char *name, int first, int top)
     return -1;
 }
 
-int find_spell(CHAR_DATA *ch, const char *name, bool know)
+int find_spell(CHAR_DATA* ch, const char* name, bool know)
 {
     if (IS_NPC(ch) || !know)
         return bsearch_skill(name, gsn_first_spell, gsn_first_skill - 1);
@@ -250,7 +250,7 @@ int find_spell(CHAR_DATA *ch, const char *name, bool know)
         return ch_bsearch_skill(ch, name, gsn_first_spell, gsn_first_skill - 1);
 }
 
-int find_skill(CHAR_DATA *ch, const char *name, bool know)
+int find_skill(CHAR_DATA* ch, const char* name, bool know)
 {
     if (IS_NPC(ch) || !know)
         return bsearch_skill(name, gsn_first_skill, gsn_first_weapon - 1);
@@ -258,7 +258,7 @@ int find_skill(CHAR_DATA *ch, const char *name, bool know)
         return ch_bsearch_skill(ch, name, gsn_first_skill, gsn_first_weapon - 1);
 }
 
-int find_weapon(CHAR_DATA *ch, const char *name, bool know)
+int find_weapon(CHAR_DATA* ch, const char* name, bool know)
 {
     if (IS_NPC(ch) || !know)
         return bsearch_skill(name, gsn_first_weapon, gsn_first_tongue - 1);
@@ -266,7 +266,7 @@ int find_weapon(CHAR_DATA *ch, const char *name, bool know)
         return ch_bsearch_skill(ch, name, gsn_first_weapon, gsn_first_tongue - 1);
 }
 
-int find_tongue(CHAR_DATA *ch, const char *name, bool know)
+int find_tongue(CHAR_DATA* ch, const char* name, bool know)
 {
     if (IS_NPC(ch) || !know)
         return bsearch_skill(name, gsn_first_tongue, gsn_top_sn - 1);
@@ -302,7 +302,7 @@ int slot_lookup(int slot)
 /*
  * Fancy message handling for a successful casting		-Thoric
  */
-void successful_casting(SKILL_TYPE *skill, CHAR_DATA *ch, CHAR_DATA *victim, OBJ_DATA *obj)
+void successful_casting(SKILL_TYPE* skill, CHAR_DATA* ch, CHAR_DATA* victim, OBJ_DATA* obj)
 {
     sh_int chitroom = (skill->type == SKILL_SPELL ? AT_MAGIC : AT_ACTION);
     sh_int chit = (skill->type == SKILL_SPELL ? AT_MAGIC : AT_HIT);
@@ -337,7 +337,7 @@ void successful_casting(SKILL_TYPE *skill, CHAR_DATA *ch, CHAR_DATA *victim, OBJ
 /*
  * Fancy message handling for a failed casting			-Thoric
  */
-void failed_casting(SKILL_TYPE *skill, CHAR_DATA *ch, CHAR_DATA *victim, OBJ_DATA *obj)
+void failed_casting(SKILL_TYPE* skill, CHAR_DATA* ch, CHAR_DATA* victim, OBJ_DATA* obj)
 {
     sh_int chitroom = (skill->type == SKILL_SPELL ? AT_MAGIC : AT_ACTION);
     sh_int chit = (skill->type == SKILL_SPELL ? AT_MAGIC : AT_HIT);
@@ -377,7 +377,7 @@ void failed_casting(SKILL_TYPE *skill, CHAR_DATA *ch, CHAR_DATA *victim, OBJ_DAT
 /*
  * Fancy message handling for being immune to something		-Thoric
  */
-void immune_casting(SKILL_TYPE *skill, CHAR_DATA *ch, CHAR_DATA *victim, OBJ_DATA *obj)
+void immune_casting(SKILL_TYPE* skill, CHAR_DATA* ch, CHAR_DATA* victim, OBJ_DATA* obj)
 {
     sh_int chitroom = (skill->type == SKILL_SPELL ? AT_MAGIC : AT_ACTION);
     sh_int chit = (skill->type == SKILL_SPELL ? AT_MAGIC : AT_HIT);
@@ -430,9 +430,9 @@ void immune_casting(SKILL_TYPE *skill, CHAR_DATA *ch, CHAR_DATA *victim, OBJ_DAT
 /*
  * Utter mystical words for an sn.
  */
-void say_spell(CHAR_DATA *ch, int sn)
+void say_spell(CHAR_DATA* ch, int sn)
 {
-    CHAR_DATA *rch;
+    CHAR_DATA* rch;
 
     for (rch = ch->in_room->first_person; rch; rch = rch->next_in_room)
     {
@@ -446,7 +446,7 @@ void say_spell(CHAR_DATA *ch, int sn)
 /*
  * Make adjustments to saving throw based in RIS		-Thoric
  */
-int ris_save(CHAR_DATA *ch, int chance, int ris)
+int ris_save(CHAR_DATA* ch, int chance, int ris)
 {
     sh_int modifier;
 
@@ -473,11 +473,11 @@ int ris_save(CHAR_DATA *ch, int chance, int ris)
  * Used for spell dice parsing, ie: 3d8+L-6
  *
  */
-int rd_parse(CHAR_DATA *ch, int level, char *exp)
+int rd_parse(CHAR_DATA* ch, int level, char* exp)
 {
     int x, lop = 0, gop = 0, eop = 0;
     char operation;
-    char *sexp[2];
+    char* sexp[2];
     int total = 0, len = 0;
 
     /* take care of nulls coming in */
@@ -580,7 +580,7 @@ int rd_parse(CHAR_DATA *ch, int level, char *exp)
     operation = exp[x];
     exp[x] = '\0';
     sexp[0] = exp;
-    sexp[1] = (char *)(exp + x + 1);
+    sexp[1] = (char*)(exp + x + 1);
 
     /* work it out */
     total = rd_parse(ch, level, sexp[0]);
@@ -618,7 +618,7 @@ int rd_parse(CHAR_DATA *ch, int level, char *exp)
 }
 
 /* wrapper function so as not to destroy exp */
-int dice_parse(CHAR_DATA *ch, int level, char *exp)
+int dice_parse(CHAR_DATA* ch, int level, char* exp)
 {
     char buf[MAX_INPUT_LENGTH];
 
@@ -630,7 +630,7 @@ int dice_parse(CHAR_DATA *ch, int level, char *exp)
  * Compute a saving throw.
  * Negative apply's make saving throw better.
  */
-bool saves_poison_death(int level, CHAR_DATA *victim)
+bool saves_poison_death(int level, CHAR_DATA* victim)
 {
     int save;
     if (!victim)
@@ -642,7 +642,7 @@ bool saves_poison_death(int level, CHAR_DATA *victim)
     save = URANGE(5, save, 95);
     return chance(victim, save);
 }
-bool saves_wands(int level, CHAR_DATA *victim)
+bool saves_wands(int level, CHAR_DATA* victim)
 {
     int save;
 
@@ -653,7 +653,7 @@ bool saves_wands(int level, CHAR_DATA *victim)
     save = URANGE(5, save, 95);
     return chance(victim, save);
 }
-bool saves_para_petri(int level, CHAR_DATA *victim)
+bool saves_para_petri(int level, CHAR_DATA* victim)
 {
     int save;
 
@@ -661,7 +661,7 @@ bool saves_para_petri(int level, CHAR_DATA *victim)
     save = URANGE(5, save, 95);
     return chance(victim, save);
 }
-bool saves_breath(int level, CHAR_DATA *victim)
+bool saves_breath(int level, CHAR_DATA* victim)
 {
     int save;
 
@@ -669,7 +669,7 @@ bool saves_breath(int level, CHAR_DATA *victim)
     save = URANGE(5, save, 95);
     return chance(victim, save);
 }
-bool saves_spell_staff(int level, CHAR_DATA *victim)
+bool saves_spell_staff(int level, CHAR_DATA* victim)
 {
     int save;
 
@@ -702,15 +702,15 @@ bool saves_spell_staff(int level, CHAR_DATA *victim)
  * ^ decrease component's value[4], and extract if it reaches 0
  * & decrease component's value[5], and extract if it reaches 0
  */
-bool process_spell_components(CHAR_DATA *ch, int sn)
+bool process_spell_components(CHAR_DATA* ch, int sn)
 {
-    SKILL_TYPE *skill = get_skilltype(sn);
-    char *comp = skill->components;
-    char *check;
+    SKILL_TYPE* skill = get_skilltype(sn);
+    char* comp = skill->components;
+    char* check;
     char arg[MAX_INPUT_LENGTH];
     bool consume, fail, found;
     int val, value;
-    OBJ_DATA *obj;
+    OBJ_DATA* obj;
 
     /* if no components necessary, then everything is cool */
     if (!comp || comp[0] == '\0')
@@ -899,10 +899,10 @@ int pAbort;
 /*
  * Locate targets.
  */
-void *locate_targets(CHAR_DATA *ch, char *arg, int sn, CHAR_DATA **victim, OBJ_DATA **obj)
+void* locate_targets(CHAR_DATA* ch, char* arg, int sn, CHAR_DATA** victim, OBJ_DATA** obj)
 {
-    SKILL_TYPE *skill = get_skilltype(sn);
-    void *vo = NULL;
+    SKILL_TYPE* skill = get_skilltype(sn);
+    void* vo = NULL;
 
     *victim = NULL;
     *obj = NULL;
@@ -975,7 +975,7 @@ void *locate_targets(CHAR_DATA *ch, char *arg, int sn, CHAR_DATA **victim, OBJ_D
             }
         }
 
-        vo = (void *)*victim;
+        vo = (void*)*victim;
         break;
 
     case TAR_CHAR_DEFENSIVE:
@@ -989,7 +989,7 @@ void *locate_targets(CHAR_DATA *ch, char *arg, int sn, CHAR_DATA **victim, OBJ_D
                 return &pAbort;
             }
         }
-        vo = (void *)*victim;
+        vo = (void*)*victim;
         break;
 
     case TAR_CHAR_SELF:
@@ -999,7 +999,7 @@ void *locate_targets(CHAR_DATA *ch, char *arg, int sn, CHAR_DATA **victim, OBJ_D
             return &pAbort;
         }
 
-        vo = (void *)ch;
+        vo = (void*)ch;
         break;
 
     case TAR_OBJ_INV:
@@ -1015,7 +1015,7 @@ void *locate_targets(CHAR_DATA *ch, char *arg, int sn, CHAR_DATA **victim, OBJ_D
             return &pAbort;
         }
 
-        vo = (void *)*obj;
+        vo = (void*)*obj;
         break;
     }
 
@@ -1025,24 +1025,24 @@ void *locate_targets(CHAR_DATA *ch, char *arg, int sn, CHAR_DATA **victim, OBJ_D
 /*
  * The kludgy global is for spells who want more stuff from command line.
  */
-const char *target_name;
+const char* target_name;
 
 /*
  * Cast a spell.  Multi-caster and component support by Thoric
  */
-void do_cast(CHAR_DATA *ch, char *argument)
+void do_cast(CHAR_DATA* ch, char* argument)
 {
     char arg1[MAX_INPUT_LENGTH];
     char arg2[MAX_INPUT_LENGTH];
     static char staticbuf[MAX_INPUT_LENGTH];
-    CHAR_DATA *victim = nullptr;
-    OBJ_DATA *obj = nullptr;
-    void *vo = nullptr;
+    CHAR_DATA* victim = nullptr;
+    OBJ_DATA* obj = nullptr;
+    void* vo = nullptr;
     int mana;
     int sn;
     ch_ret retcode;
     bool dont_wait = false;
-    SKILL_TYPE *skill = NULL;
+    SKILL_TYPE* skill = NULL;
     std::chrono::steady_clock::duration time_used;
 
     retcode = rNONE;
@@ -1218,27 +1218,27 @@ void do_cast(CHAR_DATA *ch, char *argument)
             return;
         }
         mana = IS_NPC(ch) ? 0 : skill->min_mana;
-        strcpy(staticbuf, reinterpret_cast<const char *>(ch->dest_buf));
+        strcpy(staticbuf, reinterpret_cast<const char*>(ch->dest_buf));
         target_name = one_argument(staticbuf, arg2);
         DISPOSE(ch->dest_buf);
         ch->substate = SUB_NONE;
         if (skill->participants > 1)
         {
             int cnt = 1;
-            CHAR_DATA *tmp;
-            TIMER *t;
+            CHAR_DATA* tmp;
+            TIMER* t;
 
             for (tmp = ch->in_room->first_person; tmp; tmp = tmp->next_in_room)
                 if (tmp != ch && (t = get_timerptr(tmp, TIMER_DO_FUN)) != NULL && t->count >= 1 &&
                     t->do_fun == do_cast && tmp->tempnum == sn && tmp->dest_buf &&
-                    !str_cmp(reinterpret_cast<const char *>(tmp->dest_buf), staticbuf))
+                    !str_cmp(reinterpret_cast<const char*>(tmp->dest_buf), staticbuf))
                     ++cnt;
             if (cnt >= skill->participants)
             {
                 for (tmp = ch->in_room->first_person; tmp; tmp = tmp->next_in_room)
                     if (tmp != ch && (t = get_timerptr(tmp, TIMER_DO_FUN)) != NULL && t->count >= 1 &&
                         t->do_fun == do_cast && tmp->tempnum == sn && tmp->dest_buf &&
-                        !str_cmp(reinterpret_cast<const char *>(tmp->dest_buf), staticbuf))
+                        !str_cmp(reinterpret_cast<const char*>(tmp->dest_buf), staticbuf))
                     {
                         extract_timer(tmp, t);
                         act(AT_MAGIC, "Channeling your energy into $n, you help direct the force", ch, NULL, tmp,
@@ -1425,12 +1425,12 @@ void do_cast(CHAR_DATA *ch, char *argument)
 /*
  * Cast spells at targets using a magical object.
  */
-ch_ret obj_cast_spell(int sn, int level, CHAR_DATA *ch, CHAR_DATA *victim, OBJ_DATA *obj)
+ch_ret obj_cast_spell(int sn, int level, CHAR_DATA* ch, CHAR_DATA* victim, OBJ_DATA* obj)
 {
-    void *vo;
+    void* vo;
     ch_ret retcode = rNONE;
     int levdiff = ch->top_level - level;
-    SKILL_TYPE *skill = get_skilltype(sn);
+    SKILL_TYPE* skill = get_skilltype(sn);
     std::chrono::steady_clock::duration time_used;
 
     if (sn == -1)
@@ -1507,13 +1507,13 @@ ch_ret obj_cast_spell(int sn, int level, CHAR_DATA *ch, CHAR_DATA *victim, OBJ_D
         }
         if (ch != victim && is_safe(ch, victim))
             return rNONE;
-        vo = (void *)victim;
+        vo = (void*)victim;
         break;
 
     case TAR_CHAR_DEFENSIVE:
         if (victim == NULL)
             victim = ch;
-        vo = (void *)victim;
+        vo = (void*)victim;
         if (skill->type != SKILL_HERB && IS_SET(victim->immune, RIS_MAGIC))
         {
             immune_casting(skill, ch, victim, NULL);
@@ -1522,7 +1522,7 @@ ch_ret obj_cast_spell(int sn, int level, CHAR_DATA *ch, CHAR_DATA *victim, OBJ_D
         break;
 
     case TAR_CHAR_SELF:
-        vo = (void *)ch;
+        vo = (void*)ch;
         if (skill->type != SKILL_HERB && IS_SET(ch->immune, RIS_MAGIC))
         {
             immune_casting(skill, ch, victim, NULL);
@@ -1536,7 +1536,7 @@ ch_ret obj_cast_spell(int sn, int level, CHAR_DATA *ch, CHAR_DATA *victim, OBJ_D
             send_to_char("You can't do that.\n\r", ch);
             return rNONE;
         }
-        vo = (void *)obj;
+        vo = (void*)obj;
         break;
     }
 
@@ -1556,8 +1556,8 @@ ch_ret obj_cast_spell(int sn, int level, CHAR_DATA *ch, CHAR_DATA *victim, OBJ_D
 
     if (skill->target == TAR_CHAR_OFFENSIVE && victim != ch && !char_died(victim))
     {
-        CHAR_DATA *vch;
-        CHAR_DATA *vch_next;
+        CHAR_DATA* vch;
+        CHAR_DATA* vch_next;
 
         for (vch = ch->in_room->first_person; vch; vch = vch_next)
         {
@@ -1576,9 +1576,9 @@ ch_ret obj_cast_spell(int sn, int level, CHAR_DATA *ch, CHAR_DATA *victim, OBJ_D
 /*
  * Spell functions.
  */
-ch_ret spell_acid_blast(int sn, int level, CHAR_DATA *ch, void *vo)
+ch_ret spell_acid_blast(int sn, int level, CHAR_DATA* ch, void* vo)
 {
-    CHAR_DATA *victim = (CHAR_DATA *)vo;
+    CHAR_DATA* victim = (CHAR_DATA*)vo;
     int dam;
 
     send_to_char("You feel the hatred grow within you!\n\r", ch);
@@ -1593,12 +1593,12 @@ ch_ret spell_acid_blast(int sn, int level, CHAR_DATA *ch, void *vo)
     return damage(ch, victim, dam, sn);
 }
 
-ch_ret spell_blindness(int sn, int level, CHAR_DATA *ch, void *vo)
+ch_ret spell_blindness(int sn, int level, CHAR_DATA* ch, void* vo)
 {
-    CHAR_DATA *victim = (CHAR_DATA *)vo;
+    CHAR_DATA* victim = (CHAR_DATA*)vo;
     AFFECT_DATA af;
     int tmp;
-    SKILL_TYPE *skill = get_skilltype(sn);
+    SKILL_TYPE* skill = get_skilltype(sn);
 
     if (SPELL_FLAG(skill, SF_PKSENSITIVE) && !IS_NPC(ch) && !IS_NPC(victim))
         tmp = level;
@@ -1629,9 +1629,9 @@ ch_ret spell_blindness(int sn, int level, CHAR_DATA *ch, void *vo)
     return rNONE;
 }
 
-ch_ret spell_burning_hands(int sn, int level, CHAR_DATA *ch, void *vo)
+ch_ret spell_burning_hands(int sn, int level, CHAR_DATA* ch, void* vo)
 {
-    CHAR_DATA *victim = (CHAR_DATA *)vo;
+    CHAR_DATA* victim = (CHAR_DATA*)vo;
     static const sh_int dam_each[] = {1,  3,  5,  7,  9,  14, 17, 20, 23, 26, 29, 29, 29, 30, 30, 31, 31, 32,
                                       32, 33, 33, 34, 34, 35, 35, 36, 36, 37, 37, 38, 38, 39, 39, 40, 40, 41,
                                       41, 42, 42, 43, 43, 44, 44, 45, 45, 46, 46, 47, 47, 48, 48, 49, 49, 50,
@@ -1651,10 +1651,10 @@ ch_ret spell_burning_hands(int sn, int level, CHAR_DATA *ch, void *vo)
     return damage(ch, victim, dam, sn);
 }
 
-ch_ret spell_call_lightning(int sn, int level, CHAR_DATA *ch, void *vo)
+ch_ret spell_call_lightning(int sn, int level, CHAR_DATA* ch, void* vo)
 {
-    CHAR_DATA *vch;
-    CHAR_DATA *vch_next;
+    CHAR_DATA* vch;
+    CHAR_DATA* vch_next;
     int dam;
     bool ch_died;
     ch_ret retcode;
@@ -1713,41 +1713,41 @@ ch_ret spell_call_lightning(int sn, int level, CHAR_DATA *ch, void *vo)
         return rNONE;
 }
 
-ch_ret spell_cause_light(int sn, int level, CHAR_DATA *ch, void *vo)
+ch_ret spell_cause_light(int sn, int level, CHAR_DATA* ch, void* vo)
 {
     send_to_char("You feel the hatred grow within you!\n\r", ch);
     ch->alignment = ch->alignment - 50;
     ch->alignment = URANGE(-1000, ch->alignment, 1000);
     sith_penalty(ch);
 
-    return damage(ch, (CHAR_DATA *)vo, dice(1, 8) + level / 3, sn);
+    return damage(ch, (CHAR_DATA*)vo, dice(1, 8) + level / 3, sn);
 }
 
-ch_ret spell_cause_critical(int sn, int level, CHAR_DATA *ch, void *vo)
+ch_ret spell_cause_critical(int sn, int level, CHAR_DATA* ch, void* vo)
 {
     send_to_char("You feel the hatred grow within you!\n\r", ch);
     ch->alignment = ch->alignment - 70;
     ch->alignment = URANGE(-1000, ch->alignment, 1000);
     sith_penalty(ch);
 
-    return damage(ch, (CHAR_DATA *)vo, dice(3, 8) + level, sn);
+    return damage(ch, (CHAR_DATA*)vo, dice(3, 8) + level, sn);
 }
 
-ch_ret spell_cause_serious(int sn, int level, CHAR_DATA *ch, void *vo)
+ch_ret spell_cause_serious(int sn, int level, CHAR_DATA* ch, void* vo)
 {
     send_to_char("You feel the hatred grow within you!\n\r", ch);
     ch->alignment = ch->alignment - 90;
     ch->alignment = URANGE(-1000, ch->alignment, 1000);
     sith_penalty(ch);
 
-    return damage(ch, (CHAR_DATA *)vo, dice(level, 2), sn);
+    return damage(ch, (CHAR_DATA*)vo, dice(level, 2), sn);
 }
 
-ch_ret spell_change_sex(int sn, int level, CHAR_DATA *ch, void *vo)
+ch_ret spell_change_sex(int sn, int level, CHAR_DATA* ch, void* vo)
 {
-    CHAR_DATA *victim = (CHAR_DATA *)vo;
+    CHAR_DATA* victim = (CHAR_DATA*)vo;
     AFFECT_DATA af;
-    SKILL_TYPE *skill = get_skilltype(sn);
+    SKILL_TYPE* skill = get_skilltype(sn);
 
     if (IS_SET(victim->immune, RIS_MAGIC))
     {
@@ -1772,13 +1772,13 @@ ch_ret spell_change_sex(int sn, int level, CHAR_DATA *ch, void *vo)
     return rNONE;
 }
 
-ch_ret spell_charm_person(int sn, int level, CHAR_DATA *ch, void *vo)
+ch_ret spell_charm_person(int sn, int level, CHAR_DATA* ch, void* vo)
 {
-    CHAR_DATA *victim = (CHAR_DATA *)vo;
+    CHAR_DATA* victim = (CHAR_DATA*)vo;
     AFFECT_DATA af;
     int chance;
     char buf[MAX_STRING_LENGTH];
-    SKILL_TYPE *skill = get_skilltype(sn);
+    SKILL_TYPE* skill = get_skilltype(sn);
 
     if (victim == ch)
     {
@@ -1836,9 +1836,9 @@ ch_ret spell_charm_person(int sn, int level, CHAR_DATA *ch, void *vo)
     return rNONE;
 }
 
-ch_ret spell_chill_touch(int sn, int level, CHAR_DATA *ch, void *vo)
+ch_ret spell_chill_touch(int sn, int level, CHAR_DATA* ch, void* vo)
 {
-    CHAR_DATA *victim = (CHAR_DATA *)vo;
+    CHAR_DATA* victim = (CHAR_DATA*)vo;
     static const sh_int dam_each[] = {3,  4,  5,  6,  7,  8,  9,  12, 13, 13, 13, 14, 14, 14, 15, 15, 15, 16,
                                       16, 16, 17, 17, 17, 18, 18, 18, 19, 19, 19, 20, 20, 20, 21, 21, 21, 22,
                                       22, 22, 23, 23, 23, 24, 24, 24, 25, 25, 25, 26, 26, 26, 27, 27, 28, 28,
@@ -1871,9 +1871,9 @@ ch_ret spell_chill_touch(int sn, int level, CHAR_DATA *ch, void *vo)
     return damage(ch, victim, dam, sn);
 }
 
-ch_ret spell_colour_spray(int sn, int level, CHAR_DATA *ch, void *vo)
+ch_ret spell_colour_spray(int sn, int level, CHAR_DATA* ch, void* vo)
 {
-    CHAR_DATA *victim = (CHAR_DATA *)vo;
+    CHAR_DATA* victim = (CHAR_DATA*)vo;
     static const sh_int dam_each[] = {3,  4,  5,  6,  7,  8,  9,  10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 55,
                                       55, 56, 57, 58, 58, 59, 60, 61, 61, 62, 63, 64, 64, 65, 66, 67, 67, 68,
                                       69, 70, 70, 71, 72, 73, 73, 74, 75, 76, 76, 77, 78, 79, 79, 80, 80, 81,
@@ -1894,9 +1894,9 @@ ch_ret spell_colour_spray(int sn, int level, CHAR_DATA *ch, void *vo)
     return damage(ch, victim, dam, sn);
 }
 
-ch_ret spell_control_weather(int sn, int level, CHAR_DATA *ch, void *vo)
+ch_ret spell_control_weather(int sn, int level, CHAR_DATA* ch, void* vo)
 {
-    SKILL_TYPE *skill = get_skilltype(sn);
+    SKILL_TYPE* skill = get_skilltype(sn);
 
     if (!str_cmp(target_name, "better"))
         weather_info.change += dice(level / 3, 4);
@@ -1911,9 +1911,9 @@ ch_ret spell_control_weather(int sn, int level, CHAR_DATA *ch, void *vo)
     return rNONE;
 }
 
-ch_ret spell_create_food(int sn, int level, CHAR_DATA *ch, void *vo)
+ch_ret spell_create_food(int sn, int level, CHAR_DATA* ch, void* vo)
 {
-    OBJ_DATA *mushroom;
+    OBJ_DATA* mushroom;
 
     mushroom = create_object(get_obj_index(OBJ_VNUM_MUSHROOM), 0);
     mushroom->value[0] = 5 + level;
@@ -1923,9 +1923,9 @@ ch_ret spell_create_food(int sn, int level, CHAR_DATA *ch, void *vo)
     return rNONE;
 }
 
-ch_ret spell_create_water(int sn, int level, CHAR_DATA *ch, void *vo)
+ch_ret spell_create_water(int sn, int level, CHAR_DATA* ch, void* vo)
 {
-    OBJ_DATA *obj = (OBJ_DATA *)vo;
+    OBJ_DATA* obj = (OBJ_DATA*)vo;
     int water;
 
     if (obj->item_type != ITEM_DRINK_CON)
@@ -1961,10 +1961,10 @@ ch_ret spell_create_water(int sn, int level, CHAR_DATA *ch, void *vo)
     return rNONE;
 }
 
-ch_ret spell_cure_blindness(int sn, int level, CHAR_DATA *ch, void *vo)
+ch_ret spell_cure_blindness(int sn, int level, CHAR_DATA* ch, void* vo)
 {
-    CHAR_DATA *victim = (CHAR_DATA *)vo;
-    SKILL_TYPE *skill = get_skilltype(sn);
+    CHAR_DATA* victim = (CHAR_DATA*)vo;
+    SKILL_TYPE* skill = get_skilltype(sn);
 
     if (IS_SET(victim->immune, RIS_MAGIC))
     {
@@ -1991,10 +1991,10 @@ ch_ret spell_cure_blindness(int sn, int level, CHAR_DATA *ch, void *vo)
     return rNONE;
 }
 
-ch_ret spell_cure_poison(int sn, int level, CHAR_DATA *ch, void *vo)
+ch_ret spell_cure_poison(int sn, int level, CHAR_DATA* ch, void* vo)
 {
-    CHAR_DATA *victim = (CHAR_DATA *)vo;
-    SKILL_TYPE *skill = get_skilltype(sn);
+    CHAR_DATA* victim = (CHAR_DATA*)vo;
+    SKILL_TYPE* skill = get_skilltype(sn);
 
     if (IS_SET(victim->immune, RIS_MAGIC))
     {
@@ -2024,11 +2024,11 @@ ch_ret spell_cure_poison(int sn, int level, CHAR_DATA *ch, void *vo)
         return rSPELL_FAILED;
 }
 
-ch_ret spell_curse(int sn, int level, CHAR_DATA *ch, void *vo)
+ch_ret spell_curse(int sn, int level, CHAR_DATA* ch, void* vo)
 {
-    CHAR_DATA *victim = (CHAR_DATA *)vo;
+    CHAR_DATA* victim = (CHAR_DATA*)vo;
     AFFECT_DATA af;
-    SKILL_TYPE *skill = get_skilltype(sn);
+    SKILL_TYPE* skill = get_skilltype(sn);
 
     if (IS_SET(victim->immune, RIS_MAGIC))
     {
@@ -2064,9 +2064,9 @@ ch_ret spell_curse(int sn, int level, CHAR_DATA *ch, void *vo)
     return rNONE;
 }
 
-ch_ret spell_detect_poison(int sn, int level, CHAR_DATA *ch, void *vo)
+ch_ret spell_detect_poison(int sn, int level, CHAR_DATA* ch, void* vo)
 {
-    OBJ_DATA *obj = (OBJ_DATA *)vo;
+    OBJ_DATA* obj = (OBJ_DATA*)vo;
 
     set_char_color(AT_MAGIC, ch);
     if (obj->item_type == ITEM_DRINK_CON || obj->item_type == ITEM_FOOD)
@@ -2084,11 +2084,11 @@ ch_ret spell_detect_poison(int sn, int level, CHAR_DATA *ch, void *vo)
     return rNONE;
 }
 
-ch_ret spell_dispel_evil(int sn, int level, CHAR_DATA *ch, void *vo)
+ch_ret spell_dispel_evil(int sn, int level, CHAR_DATA* ch, void* vo)
 {
-    CHAR_DATA *victim = (CHAR_DATA *)vo;
+    CHAR_DATA* victim = (CHAR_DATA*)vo;
     int dam;
-    SKILL_TYPE *skill = get_skilltype(sn);
+    SKILL_TYPE* skill = get_skilltype(sn);
 
     if (!IS_NPC(ch) && IS_EVIL(ch))
         victim = ch;
@@ -2117,11 +2117,11 @@ ch_ret spell_dispel_evil(int sn, int level, CHAR_DATA *ch, void *vo)
     return damage(ch, victim, dam, sn);
 }
 
-ch_ret spell_dispel_magic(int sn, int level, CHAR_DATA *ch, void *vo)
+ch_ret spell_dispel_magic(int sn, int level, CHAR_DATA* ch, void* vo)
 {
-    CHAR_DATA *victim = (CHAR_DATA *)vo;
+    CHAR_DATA* victim = (CHAR_DATA*)vo;
     int affected_by, cnt;
-    SKILL_TYPE *skill = get_skilltype(sn);
+    SKILL_TYPE* skill = get_skilltype(sn);
 
     if (IS_SET(victim->immune, RIS_MAGIC))
     {
@@ -2169,13 +2169,13 @@ ch_ret spell_dispel_magic(int sn, int level, CHAR_DATA *ch, void *vo)
     return rNONE;
 }
 
-ch_ret spell_earthquake(int sn, int level, CHAR_DATA *ch, void *vo)
+ch_ret spell_earthquake(int sn, int level, CHAR_DATA* ch, void* vo)
 {
-    CHAR_DATA *vch;
-    CHAR_DATA *vch_next;
+    CHAR_DATA* vch;
+    CHAR_DATA* vch_next;
     bool ch_died;
     ch_ret retcode;
-    SKILL_TYPE *skill = get_skilltype(sn);
+    SKILL_TYPE* skill = get_skilltype(sn);
 
     ch_died = false;
     retcode = rNONE;
@@ -2233,10 +2233,10 @@ ch_ret spell_earthquake(int sn, int level, CHAR_DATA *ch, void *vo)
         return rNONE;
 }
 
-ch_ret spell_enchant_weapon(int sn, int level, CHAR_DATA *ch, void *vo)
+ch_ret spell_enchant_weapon(int sn, int level, CHAR_DATA* ch, void* vo)
 {
-    OBJ_DATA *obj = (OBJ_DATA *)vo;
-    AFFECT_DATA *paf;
+    OBJ_DATA* obj = (OBJ_DATA*)vo;
+    AFFECT_DATA* paf;
 
     if (obj->item_type != ITEM_WEAPON || IS_OBJ_STAT(obj, ITEM_MAGIC) || obj->first_affect)
         return rSPELL_FAILED;
@@ -2284,12 +2284,12 @@ ch_ret spell_enchant_weapon(int sn, int level, CHAR_DATA *ch, void *vo)
  * Drain XP, MANA, HP.
  * Caster gains HP.
  */
-ch_ret spell_energy_drain(int sn, int level, CHAR_DATA *ch, void *vo)
+ch_ret spell_energy_drain(int sn, int level, CHAR_DATA* ch, void* vo)
 {
-    CHAR_DATA *victim = (CHAR_DATA *)vo;
+    CHAR_DATA* victim = (CHAR_DATA*)vo;
     int dam;
     int chance;
-    SKILL_TYPE *skill = get_skilltype(sn);
+    SKILL_TYPE* skill = get_skilltype(sn);
 
     if (IS_SET(victim->immune, RIS_MAGIC))
     {
@@ -2324,9 +2324,9 @@ ch_ret spell_energy_drain(int sn, int level, CHAR_DATA *ch, void *vo)
     return damage(ch, victim, dam, sn);
 }
 
-ch_ret spell_fireball(int sn, int level, CHAR_DATA *ch, void *vo)
+ch_ret spell_fireball(int sn, int level, CHAR_DATA* ch, void* vo)
 {
-    CHAR_DATA *victim = (CHAR_DATA *)vo;
+    CHAR_DATA* victim = (CHAR_DATA*)vo;
     static const sh_int dam_each[] = {1,  1,  4,  7,  10, 13, 16, 19, 22, 25, 28, 31, 34, 37, 40, 40, 41, 42,
                                       42, 43, 44, 44, 45, 46, 46, 47, 48, 48, 49, 50, 50, 51, 52, 52, 53, 54,
                                       54, 55, 56, 56, 57, 58, 58, 59, 60, 60, 61, 62, 62, 63, 64, 64, 65, 65,
@@ -2346,9 +2346,9 @@ ch_ret spell_fireball(int sn, int level, CHAR_DATA *ch, void *vo)
     return damage(ch, victim, dam, sn);
 }
 
-ch_ret spell_flamestrike(int sn, int level, CHAR_DATA *ch, void *vo)
+ch_ret spell_flamestrike(int sn, int level, CHAR_DATA* ch, void* vo)
 {
-    CHAR_DATA *victim = (CHAR_DATA *)vo;
+    CHAR_DATA* victim = (CHAR_DATA*)vo;
     int dam;
 
     send_to_char("You feel the hatred grow within you!\n\r", ch);
@@ -2362,11 +2362,11 @@ ch_ret spell_flamestrike(int sn, int level, CHAR_DATA *ch, void *vo)
     return damage(ch, victim, dam, sn);
 }
 
-ch_ret spell_faerie_fire(int sn, int level, CHAR_DATA *ch, void *vo)
+ch_ret spell_faerie_fire(int sn, int level, CHAR_DATA* ch, void* vo)
 {
-    CHAR_DATA *victim = (CHAR_DATA *)vo;
+    CHAR_DATA* victim = (CHAR_DATA*)vo;
     AFFECT_DATA af;
-    SKILL_TYPE *skill = get_skilltype(sn);
+    SKILL_TYPE* skill = get_skilltype(sn);
 
     if (IS_SET(victim->immune, RIS_MAGIC))
     {
@@ -2390,9 +2390,9 @@ ch_ret spell_faerie_fire(int sn, int level, CHAR_DATA *ch, void *vo)
     return rNONE;
 }
 
-ch_ret spell_faerie_fog(int sn, int level, CHAR_DATA *ch, void *vo)
+ch_ret spell_faerie_fog(int sn, int level, CHAR_DATA* ch, void* vo)
 {
-    CHAR_DATA *ich;
+    CHAR_DATA* ich;
 
     act(AT_MAGIC, "$n conjures a cloud of purple smoke.", ch, NULL, NULL, TO_ROOM);
     act(AT_MAGIC, "You conjure a cloud of purple smoke.", ch, NULL, NULL, TO_CHAR);
@@ -2419,15 +2419,15 @@ ch_ret spell_faerie_fog(int sn, int level, CHAR_DATA *ch, void *vo)
     return rNONE;
 }
 
-ch_ret spell_gate(int sn, int level, CHAR_DATA *ch, void *vo)
+ch_ret spell_gate(int sn, int level, CHAR_DATA* ch, void* vo)
 {
     return rNONE;
 }
 
-ch_ret spell_force_disarm(int sn, int level, CHAR_DATA *ch, void *vo)
+ch_ret spell_force_disarm(int sn, int level, CHAR_DATA* ch, void* vo)
 {
-    OBJ_DATA *obj;
-    CHAR_DATA *victim = (CHAR_DATA *)vo;
+    OBJ_DATA* obj;
+    CHAR_DATA* victim = (CHAR_DATA*)vo;
 
     if ((obj = get_eq_char(victim, WEAR_WIELD)) == NULL)
     {
@@ -2458,11 +2458,11 @@ ch_ret spell_force_disarm(int sn, int level, CHAR_DATA *ch, void *vo)
     return rNONE;
 }
 
-ch_ret spell_injure(int sn, int level, CHAR_DATA *ch, void *vo)
+ch_ret spell_injure(int sn, int level, CHAR_DATA* ch, void* vo)
 {
-    CHAR_DATA *victim = (CHAR_DATA *)vo;
+    CHAR_DATA* victim = (CHAR_DATA*)vo;
     int dam, chance;
-    SKILL_TYPE *skill = get_skilltype(sn);
+    SKILL_TYPE* skill = get_skilltype(sn);
     AFFECT_DATA af;
 
     if (IS_SET(victim->immune, RIS_MAGIC))
@@ -2512,14 +2512,14 @@ ch_ret spell_injure(int sn, int level, CHAR_DATA *ch, void *vo)
     return damage(ch, victim, dam, sn);
 }
 
-ch_ret spell_identify(int sn, int level, CHAR_DATA *ch, void *vo)
+ch_ret spell_identify(int sn, int level, CHAR_DATA* ch, void* vo)
 {
     /* Modified by Scryn to work on mobs/players/objs */
-    OBJ_DATA *obj;
-    CHAR_DATA *victim;
-    AFFECT_DATA *paf;
-    SKILL_TYPE *sktmp;
-    SKILL_TYPE *skill = get_skilltype(sn);
+    OBJ_DATA* obj;
+    CHAR_DATA* victim;
+    AFFECT_DATA* paf;
+    SKILL_TYPE* sktmp;
+    SKILL_TYPE* skill = get_skilltype(sn);
 
     if (target_name[0] == '\0')
     {
@@ -2702,10 +2702,10 @@ ch_ret spell_identify(int sn, int level, CHAR_DATA *ch, void *vo)
     return rNONE;
 }
 
-ch_ret spell_invis(int sn, int level, CHAR_DATA *ch, void *vo)
+ch_ret spell_invis(int sn, int level, CHAR_DATA* ch, void* vo)
 {
-    CHAR_DATA *victim;
-    SKILL_TYPE *skill = get_skilltype(sn);
+    CHAR_DATA* victim;
+    SKILL_TYPE* skill = get_skilltype(sn);
 
     /* Modifications on 1/2/96 to work on player/object - Scryn */
 
@@ -2742,7 +2742,7 @@ ch_ret spell_invis(int sn, int level, CHAR_DATA *ch, void *vo)
     }
     else
     {
-        OBJ_DATA *obj;
+        OBJ_DATA* obj;
 
         obj = get_obj_carry(ch, target_name);
 
@@ -2763,12 +2763,12 @@ ch_ret spell_invis(int sn, int level, CHAR_DATA *ch, void *vo)
     return rSPELL_FAILED;
 }
 
-ch_ret spell_know_alignment(int sn, int level, CHAR_DATA *ch, void *vo)
+ch_ret spell_know_alignment(int sn, int level, CHAR_DATA* ch, void* vo)
 {
-    CHAR_DATA *victim = (CHAR_DATA *)vo;
-    const char *msg;
+    CHAR_DATA* victim = (CHAR_DATA*)vo;
+    const char* msg;
     int ap;
-    SKILL_TYPE *skill = get_skilltype(sn);
+    SKILL_TYPE* skill = get_skilltype(sn);
 
     if (!victim)
     {
@@ -2803,9 +2803,9 @@ ch_ret spell_know_alignment(int sn, int level, CHAR_DATA *ch, void *vo)
     return rNONE;
 }
 
-ch_ret spell_lightning_bolt(int sn, int level, CHAR_DATA *ch, void *vo)
+ch_ret spell_lightning_bolt(int sn, int level, CHAR_DATA* ch, void* vo)
 {
-    CHAR_DATA *victim = (CHAR_DATA *)vo;
+    CHAR_DATA* victim = (CHAR_DATA*)vo;
     static const sh_int dam_each[] = {1,   2,   4,   6,   8,   10,  12,  14,  16,  18,  20,  22,  24,  26,  28,
                                       30,  35,  40,  45,  50,  55,  60,  65,  70,  75,  80,  82,  84,  86,  88,
                                       90,  92,  94,  96,  98,  100, 102, 104, 106, 108, 110, 112, 114, 116, 118,
@@ -2827,11 +2827,11 @@ ch_ret spell_lightning_bolt(int sn, int level, CHAR_DATA *ch, void *vo)
     return damage(ch, victim, dam, sn);
 }
 
-ch_ret spell_locate_object(int sn, int level, CHAR_DATA *ch, void *vo)
+ch_ret spell_locate_object(int sn, int level, CHAR_DATA* ch, void* vo)
 {
     char buf[MAX_INPUT_LENGTH];
-    OBJ_DATA *obj;
-    OBJ_DATA *in_obj;
+    OBJ_DATA* obj;
+    OBJ_DATA* in_obj;
     bool found;
     int cnt;
 
@@ -2882,9 +2882,9 @@ ch_ret spell_locate_object(int sn, int level, CHAR_DATA *ch, void *vo)
     return rNONE;
 }
 
-ch_ret spell_magic_missile(int sn, int level, CHAR_DATA *ch, void *vo)
+ch_ret spell_magic_missile(int sn, int level, CHAR_DATA* ch, void* vo)
 {
-    CHAR_DATA *victim = (CHAR_DATA *)vo;
+    CHAR_DATA* victim = (CHAR_DATA*)vo;
     static const sh_int dam_each[] = {1,  3,  3,  4,  4,  5,  6,  6,  6,  6,  6,  7,  7,  7,  7,  7,  8,  8,
                                       8,  8,  8,  9,  9,  9,  9,  9,  10, 10, 10, 10, 10, 11, 11, 11, 11, 11,
                                       12, 12, 12, 12, 12, 13, 13, 13, 13, 13, 14, 14, 14, 14, 14, 15, 15, 15,
@@ -2906,11 +2906,11 @@ ch_ret spell_magic_missile(int sn, int level, CHAR_DATA *ch, void *vo)
     return damage(ch, victim, dam, sn);
 }
 
-ch_ret spell_pass_door(int sn, int level, CHAR_DATA *ch, void *vo)
+ch_ret spell_pass_door(int sn, int level, CHAR_DATA* ch, void* vo)
 {
-    CHAR_DATA *victim = (CHAR_DATA *)vo;
+    CHAR_DATA* victim = (CHAR_DATA*)vo;
     AFFECT_DATA af;
-    SKILL_TYPE *skill = get_skilltype(sn);
+    SKILL_TYPE* skill = get_skilltype(sn);
 
     if (IS_SET(victim->immune, RIS_MAGIC))
     {
@@ -2934,9 +2934,9 @@ ch_ret spell_pass_door(int sn, int level, CHAR_DATA *ch, void *vo)
     return rNONE;
 }
 
-ch_ret spell_poison(int sn, int level, CHAR_DATA *ch, void *vo)
+ch_ret spell_poison(int sn, int level, CHAR_DATA* ch, void* vo)
 {
-    CHAR_DATA *victim = (CHAR_DATA *)vo;
+    CHAR_DATA* victim = (CHAR_DATA*)vo;
     AFFECT_DATA af;
     int chance;
     bool first = true;
@@ -2965,18 +2965,18 @@ ch_ret spell_poison(int sn, int level, CHAR_DATA *ch, void *vo)
     return rNONE;
 }
 
-ch_ret spell_remove_curse(int sn, int level, CHAR_DATA *ch, void *vo)
+ch_ret spell_remove_curse(int sn, int level, CHAR_DATA* ch, void* vo)
 {
     return rNONE;
 }
 
-ch_ret spell_remove_trap(int sn, int level, CHAR_DATA *ch, void *vo)
+ch_ret spell_remove_trap(int sn, int level, CHAR_DATA* ch, void* vo)
 {
-    OBJ_DATA *obj;
-    OBJ_DATA *trap;
+    OBJ_DATA* obj;
+    OBJ_DATA* trap;
     bool found;
     int retcode;
-    SKILL_TYPE *skill = get_skilltype(sn);
+    SKILL_TYPE* skill = get_skilltype(sn);
 
     if (!target_name || target_name[0] == '\0')
     {
@@ -3026,9 +3026,9 @@ ch_ret spell_remove_trap(int sn, int level, CHAR_DATA *ch, void *vo)
     return rNONE;
 }
 
-ch_ret spell_shocking_grasp(int sn, int level, CHAR_DATA *ch, void *vo)
+ch_ret spell_shocking_grasp(int sn, int level, CHAR_DATA* ch, void* vo)
 {
-    CHAR_DATA *victim = (CHAR_DATA *)vo;
+    CHAR_DATA* victim = (CHAR_DATA*)vo;
     static const int dam_each[] = {1,  2,  4,  6,  8,  10, 15, 20, 25, 29, 33, 36, 39, 39, 39, 40, 40, 41,
                                    41, 42, 42, 43, 43, 44, 44, 45, 45, 46, 46, 47, 47, 48, 48, 49, 49, 50,
                                    50, 51, 51, 52, 52, 53, 53, 54, 54, 55, 55, 56, 56, 57, 57, 58, 58, 59,
@@ -3048,14 +3048,14 @@ ch_ret spell_shocking_grasp(int sn, int level, CHAR_DATA *ch, void *vo)
     return damage(ch, victim, dam, sn);
 }
 
-ch_ret spell_sleep(int sn, int level, CHAR_DATA *ch, void *vo)
+ch_ret spell_sleep(int sn, int level, CHAR_DATA* ch, void* vo)
 {
     AFFECT_DATA af;
     int retcode;
     int chance;
     int tmp;
-    CHAR_DATA *victim;
-    SKILL_TYPE *skill = get_skilltype(sn);
+    CHAR_DATA* victim;
+    SKILL_TYPE* skill = get_skilltype(sn);
 
     if ((victim = get_char_room(ch, target_name)) == NULL)
     {
@@ -3125,22 +3125,22 @@ ch_ret spell_sleep(int sn, int level, CHAR_DATA *ch, void *vo)
     return rNONE;
 }
 
-ch_ret spell_summon(int sn, int level, CHAR_DATA *ch, void *vo)
+ch_ret spell_summon(int sn, int level, CHAR_DATA* ch, void* vo)
 {
     return rNONE;
 }
 
-ch_ret spell_teleport(int sn, int level, CHAR_DATA *ch, void *vo)
+ch_ret spell_teleport(int sn, int level, CHAR_DATA* ch, void* vo)
 {
     return rNONE;
 }
 
-ch_ret spell_ventriloquate(int sn, int level, CHAR_DATA *ch, void *vo)
+ch_ret spell_ventriloquate(int sn, int level, CHAR_DATA* ch, void* vo)
 {
     char buf1[MAX_STRING_LENGTH];
     char buf2[MAX_STRING_LENGTH];
     char speaker[MAX_INPUT_LENGTH];
-    CHAR_DATA *vch;
+    CHAR_DATA* vch;
 
     target_name = one_argument(target_name, speaker);
 
@@ -3160,11 +3160,11 @@ ch_ret spell_ventriloquate(int sn, int level, CHAR_DATA *ch, void *vo)
     return rNONE;
 }
 
-ch_ret spell_weaken(int sn, int level, CHAR_DATA *ch, void *vo)
+ch_ret spell_weaken(int sn, int level, CHAR_DATA* ch, void* vo)
 {
-    CHAR_DATA *victim = (CHAR_DATA *)vo;
+    CHAR_DATA* victim = (CHAR_DATA*)vo;
     AFFECT_DATA af;
-    SKILL_TYPE *skill = get_skilltype(sn);
+    SKILL_TYPE* skill = get_skilltype(sn);
 
     if (IS_SET(victim->immune, RIS_MAGIC))
     {
@@ -3189,20 +3189,20 @@ ch_ret spell_weaken(int sn, int level, CHAR_DATA *ch, void *vo)
 /*
  * A spell as it should be				-Thoric
  */
-ch_ret spell_word_of_recall(int sn, int level, CHAR_DATA *ch, void *vo)
+ch_ret spell_word_of_recall(int sn, int level, CHAR_DATA* ch, void* vo)
 {
-    do_recall((CHAR_DATA *)vo, "");
+    do_recall((CHAR_DATA*)vo, "");
     return rNONE;
 }
 
 /*
  * NPC spells.
  */
-ch_ret spell_acid_breath(int sn, int level, CHAR_DATA *ch, void *vo)
+ch_ret spell_acid_breath(int sn, int level, CHAR_DATA* ch, void* vo)
 {
-    CHAR_DATA *victim = (CHAR_DATA *)vo;
-    OBJ_DATA *obj_lose;
-    OBJ_DATA *obj_next;
+    CHAR_DATA* victim = (CHAR_DATA*)vo;
+    OBJ_DATA* obj_lose;
+    OBJ_DATA* obj_next;
     int dam;
     int hpch;
 
@@ -3252,11 +3252,11 @@ ch_ret spell_acid_breath(int sn, int level, CHAR_DATA *ch, void *vo)
     return damage(ch, victim, dam, sn);
 }
 
-ch_ret spell_fire_breath(int sn, int level, CHAR_DATA *ch, void *vo)
+ch_ret spell_fire_breath(int sn, int level, CHAR_DATA* ch, void* vo)
 {
-    CHAR_DATA *victim = (CHAR_DATA *)vo;
-    OBJ_DATA *obj_lose = nullptr;
-    OBJ_DATA *obj_next = nullptr;
+    CHAR_DATA* victim = (CHAR_DATA*)vo;
+    OBJ_DATA* obj_lose = nullptr;
+    OBJ_DATA* obj_next = nullptr;
     int dam;
     int hpch;
 
@@ -3264,7 +3264,7 @@ ch_ret spell_fire_breath(int sn, int level, CHAR_DATA *ch, void *vo)
     {
         for (obj_lose = victim->first_carrying; obj_lose; obj_lose = obj_next)
         {
-            const char *msg;
+            const char* msg;
 
             obj_next = obj_lose->next_content;
             if (number_bits(2) != 0)
@@ -3319,11 +3319,11 @@ ch_ret spell_fire_breath(int sn, int level, CHAR_DATA *ch, void *vo)
     return damage(ch, victim, dam, sn);
 }
 
-ch_ret spell_frost_breath(int sn, int level, CHAR_DATA *ch, void *vo)
+ch_ret spell_frost_breath(int sn, int level, CHAR_DATA* ch, void* vo)
 {
-    CHAR_DATA *victim = (CHAR_DATA *)vo;
-    OBJ_DATA *obj_lose;
-    OBJ_DATA *obj_next;
+    CHAR_DATA* victim = (CHAR_DATA*)vo;
+    OBJ_DATA* obj_lose;
+    OBJ_DATA* obj_next;
     int dam;
     int hpch;
 
@@ -3331,7 +3331,7 @@ ch_ret spell_frost_breath(int sn, int level, CHAR_DATA *ch, void *vo)
     {
         for (obj_lose = victim->first_carrying; obj_lose; obj_lose = obj_next)
         {
-            const char *msg;
+            const char* msg;
 
             obj_next = obj_lose->next_content;
             if (number_bits(2) != 0)
@@ -3367,10 +3367,10 @@ ch_ret spell_frost_breath(int sn, int level, CHAR_DATA *ch, void *vo)
     return damage(ch, victim, dam, sn);
 }
 
-ch_ret spell_gas_breath(int sn, int level, CHAR_DATA *ch, void *vo)
+ch_ret spell_gas_breath(int sn, int level, CHAR_DATA* ch, void* vo)
 {
-    CHAR_DATA *vch;
-    CHAR_DATA *vch_next;
+    CHAR_DATA* vch;
+    CHAR_DATA* vch_next;
     int dam;
     int hpch;
     bool ch_died;
@@ -3406,9 +3406,9 @@ ch_ret spell_gas_breath(int sn, int level, CHAR_DATA *ch, void *vo)
         return rNONE;
 }
 
-ch_ret spell_lightning_breath(int sn, int level, CHAR_DATA *ch, void *vo)
+ch_ret spell_lightning_breath(int sn, int level, CHAR_DATA* ch, void* vo)
 {
-    CHAR_DATA *victim = (CHAR_DATA *)vo;
+    CHAR_DATA* victim = (CHAR_DATA*)vo;
     int dam;
     int hpch;
 
@@ -3419,14 +3419,14 @@ ch_ret spell_lightning_breath(int sn, int level, CHAR_DATA *ch, void *vo)
     return damage(ch, victim, dam, sn);
 }
 
-ch_ret spell_null(int sn, int level, CHAR_DATA *ch, void *vo)
+ch_ret spell_null(int sn, int level, CHAR_DATA* ch, void* vo)
 {
     send_to_char("That's not a spell!\n\r", ch);
     return rNONE;
 }
 
 /* don't remove, may look redundant, but is important */
-ch_ret spell_notfound(int sn, int level, CHAR_DATA *ch, void *vo)
+ch_ret spell_notfound(int sn, int level, CHAR_DATA* ch, void* vo)
 {
     send_to_char("That's not a spell!\n\r", ch);
     return rNONE;
@@ -3447,7 +3447,7 @@ ch_ret spell_notfound(int sn, int level, CHAR_DATA *ch, void *vo)
  */
 
 /* Working on DM's transport eq suggestion - Scryn 8/13 */
-ch_ret spell_transport(int sn, int level, CHAR_DATA *ch, void *vo)
+ch_ret spell_transport(int sn, int level, CHAR_DATA* ch, void* vo)
 {
     return rNONE;
 }
@@ -3459,22 +3459,22 @@ ch_ret spell_transport(int sn, int level, CHAR_DATA *ch, void *vo)
  *
  * do_mp_open_passage, combined with spell_astral
  */
-ch_ret spell_portal(int sn, int level, CHAR_DATA *ch, void *vo)
+ch_ret spell_portal(int sn, int level, CHAR_DATA* ch, void* vo)
 {
     return rNONE;
 }
 
-ch_ret spell_astral_walk(int sn, int level, CHAR_DATA *ch, void *vo)
+ch_ret spell_astral_walk(int sn, int level, CHAR_DATA* ch, void* vo)
 {
     return rNONE;
 }
 
-ch_ret spell_farsight(int sn, int level, CHAR_DATA *ch, void *vo)
+ch_ret spell_farsight(int sn, int level, CHAR_DATA* ch, void* vo)
 {
-    ROOM_INDEX_DATA *location;
-    ROOM_INDEX_DATA *original;
-    CHAR_DATA *victim;
-    SKILL_TYPE *skill = get_skilltype(sn);
+    ROOM_INDEX_DATA* location;
+    ROOM_INDEX_DATA* original;
+    CHAR_DATA* victim;
+    SKILL_TYPE* skill = get_skilltype(sn);
 
     /* The spell fails if the victim isn't playing, the victim is the caster,
        the target room has private, solitary, noastral, death or proto flags,
@@ -3507,9 +3507,9 @@ ch_ret spell_farsight(int sn, int level, CHAR_DATA *ch, void *vo)
     return rNONE;
 }
 
-ch_ret spell_recharge(int sn, int level, CHAR_DATA *ch, void *vo)
+ch_ret spell_recharge(int sn, int level, CHAR_DATA* ch, void* vo)
 {
-    OBJ_DATA *obj = (OBJ_DATA *)vo;
+    OBJ_DATA* obj = (OBJ_DATA*)vo;
 
     if (obj->item_type == ITEM_STAFF || obj->item_type == ITEM_WAND)
     {
@@ -3569,7 +3569,7 @@ ch_ret spell_recharge(int sn, int level, CHAR_DATA *ch, void *vo)
  * Idea from AD&D 2nd edition player's handbook (c)1989 TSR Hobbies Inc.
  * -Thoric
  */
-ch_ret spell_plant_pass(int sn, int level, CHAR_DATA *ch, void *vo)
+ch_ret spell_plant_pass(int sn, int level, CHAR_DATA* ch, void* vo)
 {
     return rNONE;
 }
@@ -3577,7 +3577,7 @@ ch_ret spell_plant_pass(int sn, int level, CHAR_DATA *ch, void *vo)
 /*
  * Vampire version of astral_walk				-Thoric
  */
-ch_ret spell_mist_walk(int sn, int level, CHAR_DATA *ch, void *vo)
+ch_ret spell_mist_walk(int sn, int level, CHAR_DATA* ch, void* vo)
 {
     return rNONE;
 }
@@ -3585,16 +3585,16 @@ ch_ret spell_mist_walk(int sn, int level, CHAR_DATA *ch, void *vo)
 /*
  * Cleric version of astral_walk				-Thoric
  */
-ch_ret spell_solar_flight(int sn, int level, CHAR_DATA *ch, void *vo)
+ch_ret spell_solar_flight(int sn, int level, CHAR_DATA* ch, void* vo)
 {
     return rNONE;
 }
 
 /* Scryn 2/2/96 */
-ch_ret spell_remove_invis(int sn, int level, CHAR_DATA *ch, void *vo)
+ch_ret spell_remove_invis(int sn, int level, CHAR_DATA* ch, void* vo)
 {
-    OBJ_DATA *obj;
-    SKILL_TYPE *skill = get_skilltype(sn);
+    OBJ_DATA* obj;
+    SKILL_TYPE* skill = get_skilltype(sn);
 
     if (target_name[0] == '\0')
     {
@@ -3617,7 +3617,7 @@ ch_ret spell_remove_invis(int sn, int level, CHAR_DATA *ch, void *vo)
     }
     else
     {
-        CHAR_DATA *victim;
+        CHAR_DATA* victim;
 
         victim = get_char_room(ch, target_name);
 
@@ -3682,18 +3682,18 @@ ch_ret spell_remove_invis(int sn, int level, CHAR_DATA *ch, void *vo)
  * Animate Dead: Scryn 3/2/96
  * Modifications by Altrag 16/2/96
  */
-ch_ret spell_animate_dead(int sn, int level, CHAR_DATA *ch, void *vo)
+ch_ret spell_animate_dead(int sn, int level, CHAR_DATA* ch, void* vo)
 {
-    CHAR_DATA *mob;
-    OBJ_DATA *corpse;
-    OBJ_DATA *corpse_next;
-    OBJ_DATA *obj;
-    OBJ_DATA *obj_next;
+    CHAR_DATA* mob;
+    OBJ_DATA* corpse;
+    OBJ_DATA* corpse_next;
+    OBJ_DATA* obj;
+    OBJ_DATA* obj_next;
     bool found;
-    MOB_INDEX_DATA *pMobIndex;
+    MOB_INDEX_DATA* pMobIndex;
     AFFECT_DATA af;
     char buf[MAX_STRING_LENGTH];
-    SKILL_TYPE *skill = get_skilltype(sn);
+    SKILL_TYPE* skill = get_skilltype(sn);
 
     found = false;
 
@@ -3803,12 +3803,12 @@ ch_ret spell_animate_dead(int sn, int level, CHAR_DATA *ch, void *vo)
 }
 
 /* Works now.. -- Altrag */
-ch_ret spell_possess(int sn, int level, CHAR_DATA *ch, void *vo)
+ch_ret spell_possess(int sn, int level, CHAR_DATA* ch, void* vo)
 {
-    CHAR_DATA *victim;
+    CHAR_DATA* victim;
     char buf[MAX_STRING_LENGTH];
     AFFECT_DATA af;
-    SKILL_TYPE *skill = get_skilltype(sn);
+    SKILL_TYPE* skill = get_skilltype(sn);
 
     if (ch->desc->original)
     {
@@ -3877,10 +3877,10 @@ ch_ret spell_possess(int sn, int level, CHAR_DATA *ch, void *vo)
 }
 
 /* Ignores pickproofs, but can't unlock containers. -- Altrag 17/2/96 */
-ch_ret spell_knock(int sn, int level, CHAR_DATA *ch, void *vo)
+ch_ret spell_knock(int sn, int level, CHAR_DATA* ch, void* vo)
 {
-    EXIT_DATA *pexit;
-    SKILL_TYPE *skill = get_skilltype(sn);
+    EXIT_DATA* pexit;
+    SKILL_TYPE* skill = get_skilltype(sn);
 
     set_char_color(AT_MAGIC, ch);
     /*
@@ -3902,9 +3902,9 @@ ch_ret spell_knock(int sn, int level, CHAR_DATA *ch, void *vo)
 }
 
 /* Tells to sleepers in are. -- Altrag 17/2/96 */
-ch_ret spell_dream(int sn, int level, CHAR_DATA *ch, void *vo)
+ch_ret spell_dream(int sn, int level, CHAR_DATA* ch, void* vo)
 {
-    CHAR_DATA *victim;
+    CHAR_DATA* victim;
     char arg[MAX_INPUT_LENGTH];
 
     target_name = one_argument(target_name, arg);
@@ -3931,10 +3931,10 @@ ch_ret spell_dream(int sn, int level, CHAR_DATA *ch, void *vo)
     return rNONE;
 }
 
-ch_ret spell_polymorph(int sn, int level, CHAR_DATA *ch, void *vo)
+ch_ret spell_polymorph(int sn, int level, CHAR_DATA* ch, void* vo)
 {
     int poly_vnum;
-    CHAR_DATA *poly_mob;
+    CHAR_DATA* poly_mob;
 
     if (IS_NPC(ch))
     {
@@ -3977,10 +3977,10 @@ ch_ret spell_polymorph(int sn, int level, CHAR_DATA *ch, void *vo)
     return rNONE;
 }
 
-CHAR_DATA *make_poly_mob(CHAR_DATA *ch, int vnum)
+CHAR_DATA* make_poly_mob(CHAR_DATA* ch, int vnum)
 {
-    CHAR_DATA *mob;
-    MOB_INDEX_DATA *pMobIndex;
+    CHAR_DATA* mob;
+    MOB_INDEX_DATA* pMobIndex;
 
     if (!ch)
     {
@@ -4004,10 +4004,10 @@ CHAR_DATA *make_poly_mob(CHAR_DATA *ch, int vnum)
     return mob;
 }
 
-void do_revert(CHAR_DATA *ch, char *argument)
+void do_revert(CHAR_DATA* ch, char* argument)
 {
 
-    CHAR_DATA *mob;
+    CHAR_DATA* mob;
 
     if (!IS_NPC(ch) || !IS_SET(ch->act, ACT_POLYMORPHED))
     {
@@ -4053,10 +4053,10 @@ void do_revert(CHAR_DATA *ch, char *argument)
 /* Added spells spiral_blast, scorching surge,
     nostrum, and astral   by SB for Augurer class
 7/10/96 */
-ch_ret spell_spiral_blast(int sn, int level, CHAR_DATA *ch, void *vo)
+ch_ret spell_spiral_blast(int sn, int level, CHAR_DATA* ch, void* vo)
 {
-    CHAR_DATA *vch;
-    CHAR_DATA *vch_next;
+    CHAR_DATA* vch;
+    CHAR_DATA* vch_next;
     int dam;
     int hpch;
     bool ch_died;
@@ -4107,9 +4107,9 @@ ch_ret spell_spiral_blast(int sn, int level, CHAR_DATA *ch, void *vo)
         return rNONE;
 }
 
-ch_ret spell_scorching_surge(int sn, int level, CHAR_DATA *ch, void *vo)
+ch_ret spell_scorching_surge(int sn, int level, CHAR_DATA* ch, void* vo)
 {
-    CHAR_DATA *victim = (CHAR_DATA *)vo;
+    CHAR_DATA* victim = (CHAR_DATA*)vo;
     static const sh_int dam_each[] = {1,   1,   2,   3,   4,   5,   6,   8,   10,  12,  14,  16,  18,  20,  25,
                                       30,  35,  40,  45,  50,  55,  60,  65,  70,  75,  80,  82,  84,  86,  88,
                                       90,  92,  94,  96,  98,  100, 102, 104, 106, 108, 110, 112, 114, 116, 118,
@@ -4132,7 +4132,7 @@ ch_ret spell_scorching_surge(int sn, int level, CHAR_DATA *ch, void *vo)
     return damage(ch, victim, (dam * 1.4), sn);
 }
 
-ch_ret spell_helical_flow(int sn, int level, CHAR_DATA *ch, void *vo)
+ch_ret spell_helical_flow(int sn, int level, CHAR_DATA* ch, void* vo)
 {
     return rNONE;
 }
@@ -4144,9 +4144,9 @@ ch_ret spell_helical_flow(int sn, int level, CHAR_DATA *ch, void *vo)
 /*
  * saving throw check						-Thoric
  */
-bool check_save(int sn, int level, CHAR_DATA *ch, CHAR_DATA *victim)
+bool check_save(int sn, int level, CHAR_DATA* ch, CHAR_DATA* victim)
 {
-    SKILL_TYPE *skill = get_skilltype(sn);
+    SKILL_TYPE* skill = get_skilltype(sn);
     bool saved = false;
 
     if (SPELL_FLAG(skill, SF_PKSENSITIVE) && !IS_NPC(ch) && !IS_NPC(victim))
@@ -4177,10 +4177,10 @@ bool check_save(int sn, int level, CHAR_DATA *ch, CHAR_DATA *victim)
 /*
  * Generic offensive spell damage attack			-Thoric
  */
-ch_ret spell_attack(int sn, int level, CHAR_DATA *ch, void *vo)
+ch_ret spell_attack(int sn, int level, CHAR_DATA* ch, void* vo)
 {
-    CHAR_DATA *victim = (CHAR_DATA *)vo;
-    SKILL_TYPE *skill = get_skilltype(sn);
+    CHAR_DATA* victim = (CHAR_DATA*)vo;
+    SKILL_TYPE* skill = get_skilltype(sn);
     bool saved = check_save(sn, level, ch, victim);
     int dam;
     ch_ret retcode;
@@ -4210,10 +4210,10 @@ ch_ret spell_attack(int sn, int level, CHAR_DATA *ch, void *vo)
 /*
  * Generic area attack						-Thoric
  */
-ch_ret spell_area_attack(int sn, int level, CHAR_DATA *ch, void *vo)
+ch_ret spell_area_attack(int sn, int level, CHAR_DATA* ch, void* vo)
 {
     CHAR_DATA *vch, *vch_next;
-    SKILL_TYPE *skill = get_skilltype(sn);
+    SKILL_TYPE* skill = get_skilltype(sn);
     bool saved;
     bool affects;
     int dam;
@@ -4271,12 +4271,12 @@ ch_ret spell_area_attack(int sn, int level, CHAR_DATA *ch, void *vo)
     return retcode;
 }
 
-ch_ret spell_affectchar(int sn, int level, CHAR_DATA *ch, void *vo)
+ch_ret spell_affectchar(int sn, int level, CHAR_DATA* ch, void* vo)
 {
     AFFECT_DATA af;
-    SMAUG_AFF *saf;
-    SKILL_TYPE *skill = get_skilltype(sn);
-    CHAR_DATA *victim = (CHAR_DATA *)vo;
+    SMAUG_AFF* saf;
+    SKILL_TYPE* skill = get_skilltype(sn);
+    CHAR_DATA* victim = (CHAR_DATA*)vo;
     int chance;
     bool affected = false, first = true;
     ch_ret retcode = rNONE;
@@ -4303,7 +4303,7 @@ ch_ret spell_affectchar(int sn, int level, CHAR_DATA *ch, void *vo)
             victim = ch;
         }
         else
-            victim = (CHAR_DATA *)vo;
+            victim = (CHAR_DATA*)vo;
         /* Check if char has this bitvector already */
         if ((af.bitvector = saf->bitvector) != 0 && IS_AFFECTED(victim, af.bitvector) &&
             !SPELL_FLAG(skill, SF_ACCUMULATIVE))
@@ -4435,11 +4435,11 @@ ch_ret spell_affectchar(int sn, int level, CHAR_DATA *ch, void *vo)
 /*
  * Generic spell affect						-Thoric
  */
-ch_ret spell_affect(int sn, int level, CHAR_DATA *ch, void *vo)
+ch_ret spell_affect(int sn, int level, CHAR_DATA* ch, void* vo)
 {
-    SMAUG_AFF *saf;
-    SKILL_TYPE *skill = get_skilltype(sn);
-    CHAR_DATA *victim = (CHAR_DATA *)vo;
+    SMAUG_AFF* saf;
+    SKILL_TYPE* skill = get_skilltype(sn);
+    CHAR_DATA* victim = (CHAR_DATA*)vo;
     bool groupsp;
     bool areasp;
     bool hitchar, hitroom, hitvict = false;
@@ -4575,10 +4575,10 @@ ch_ret spell_affect(int sn, int level, CHAR_DATA *ch, void *vo)
 /*
  * Generic inventory object spell				-Thoric
  */
-ch_ret spell_obj_inv(int sn, int level, CHAR_DATA *ch, void *vo)
+ch_ret spell_obj_inv(int sn, int level, CHAR_DATA* ch, void* vo)
 {
-    OBJ_DATA *obj = (OBJ_DATA *)vo;
-    SKILL_TYPE *skill = get_skilltype(sn);
+    OBJ_DATA* obj = (OBJ_DATA*)vo;
+    SKILL_TYPE* skill = get_skilltype(sn);
 
     if (!obj)
     {
@@ -4676,7 +4676,7 @@ ch_ret spell_obj_inv(int sn, int level, CHAR_DATA *ch, void *vo)
         }
         switch (SPELL_POWER(skill)) /* clone object */
         {
-            OBJ_DATA *clone;
+            OBJ_DATA* clone;
 
         default:
         case SP_NONE:
@@ -4754,13 +4754,13 @@ ch_ret spell_obj_inv(int sn, int level, CHAR_DATA *ch, void *vo)
 /*
  * Generic object creating spell				-Thoric
  */
-ch_ret spell_create_obj(int sn, int level, CHAR_DATA *ch, void *vo)
+ch_ret spell_create_obj(int sn, int level, CHAR_DATA* ch, void* vo)
 {
-    SKILL_TYPE *skill = get_skilltype(sn);
+    SKILL_TYPE* skill = get_skilltype(sn);
     int lvl;
     int vnum = skill->value;
-    OBJ_DATA *obj;
-    OBJ_INDEX_DATA *oi;
+    OBJ_DATA* obj;
+    OBJ_INDEX_DATA* oi;
 
     switch (SPELL_POWER(skill))
     {
@@ -4807,13 +4807,13 @@ ch_ret spell_create_obj(int sn, int level, CHAR_DATA *ch, void *vo)
 /*
  * Generic mob creating spell					-Thoric
  */
-ch_ret spell_create_mob(int sn, int level, CHAR_DATA *ch, void *vo)
+ch_ret spell_create_mob(int sn, int level, CHAR_DATA* ch, void* vo)
 {
-    SKILL_TYPE *skill = get_skilltype(sn);
+    SKILL_TYPE* skill = get_skilltype(sn);
     int lvl;
     int vnum = skill->value;
-    CHAR_DATA *mob;
-    MOB_INDEX_DATA *mi;
+    CHAR_DATA* mob;
+    MOB_INDEX_DATA* mi;
     AFFECT_DATA af;
 
     /* set maximum mob level */
@@ -4869,9 +4869,9 @@ ch_ret spell_create_mob(int sn, int level, CHAR_DATA *ch, void *vo)
 /*
  * Generic handler for new "SMAUG" spells			-Thoric
  */
-ch_ret spell_smaug(int sn, int level, CHAR_DATA *ch, void *vo)
+ch_ret spell_smaug(int sn, int level, CHAR_DATA* ch, void* vo)
 {
-    SKILL_TYPE *skill = get_skilltype(sn);
+    SKILL_TYPE* skill = get_skilltype(sn);
 
     switch (skill->target)
     {
@@ -4915,7 +4915,7 @@ ch_ret spell_smaug(int sn, int level, CHAR_DATA *ch, void *vo)
     case TAR_CHAR_SELF:
         if (vo && SPELL_ACTION(skill) == SA_DESTROY)
         {
-            CHAR_DATA *victim = (CHAR_DATA *)vo;
+            CHAR_DATA* victim = (CHAR_DATA*)vo;
 
             /* cure poison */
             if (SPELL_DAMAGE(skill) == SD_POISON)
@@ -4956,9 +4956,9 @@ ch_ret spell_smaug(int sn, int level, CHAR_DATA *ch, void *vo)
 /*
  *  4 Energy Spells
  */
-ch_ret spell_ethereal_fist(int sn, int level, CHAR_DATA *ch, void *vo)
+ch_ret spell_ethereal_fist(int sn, int level, CHAR_DATA* ch, void* vo)
 {
-    CHAR_DATA *victim = (CHAR_DATA *)vo;
+    CHAR_DATA* victim = (CHAR_DATA*)vo;
     int dam;
 
     level = UMAX(0, level);
@@ -4979,9 +4979,9 @@ ch_ret spell_ethereal_fist(int sn, int level, CHAR_DATA *ch, void *vo)
     return damage(ch, victim, dam, sn);
 }
 
-ch_ret spell_spectral_furor(int sn, int level, CHAR_DATA *ch, void *vo)
+ch_ret spell_spectral_furor(int sn, int level, CHAR_DATA* ch, void* vo)
 {
-    CHAR_DATA *victim = (CHAR_DATA *)vo;
+    CHAR_DATA* victim = (CHAR_DATA*)vo;
     int dam;
 
     send_to_char("You feel the hatred grow within you!\n\r", ch);
@@ -4998,9 +4998,9 @@ ch_ret spell_spectral_furor(int sn, int level, CHAR_DATA *ch, void *vo)
     return damage(ch, victim, dam, sn);
 }
 
-ch_ret spell_hand_of_chaos(int sn, int level, CHAR_DATA *ch, void *vo)
+ch_ret spell_hand_of_chaos(int sn, int level, CHAR_DATA* ch, void* vo)
 {
-    CHAR_DATA *victim = (CHAR_DATA *)vo;
+    CHAR_DATA* victim = (CHAR_DATA*)vo;
     int dam;
 
     level = UMAX(0, level);
@@ -5017,9 +5017,9 @@ ch_ret spell_hand_of_chaos(int sn, int level, CHAR_DATA *ch, void *vo)
     return damage(ch, victim, dam, sn);
 }
 
-ch_ret spell_disruption(int sn, int level, CHAR_DATA *ch, void *vo)
+ch_ret spell_disruption(int sn, int level, CHAR_DATA* ch, void* vo)
 {
-    CHAR_DATA *victim = (CHAR_DATA *)vo;
+    CHAR_DATA* victim = (CHAR_DATA*)vo;
     int dam;
 
     level = UMAX(0, level);
@@ -5038,9 +5038,9 @@ ch_ret spell_disruption(int sn, int level, CHAR_DATA *ch, void *vo)
     return damage(ch, victim, dam, sn);
 }
 
-ch_ret spell_sonic_resonance(int sn, int level, CHAR_DATA *ch, void *vo)
+ch_ret spell_sonic_resonance(int sn, int level, CHAR_DATA* ch, void* vo)
 {
-    CHAR_DATA *victim = (CHAR_DATA *)vo;
+    CHAR_DATA* victim = (CHAR_DATA*)vo;
     int dam;
 
     level = UMAX(0, level);
@@ -5061,9 +5061,9 @@ ch_ret spell_sonic_resonance(int sn, int level, CHAR_DATA *ch, void *vo)
 /*
  * 3 Mentalstate spells
  */
-ch_ret spell_mind_wrack(int sn, int level, CHAR_DATA *ch, void *vo)
+ch_ret spell_mind_wrack(int sn, int level, CHAR_DATA* ch, void* vo)
 {
-    CHAR_DATA *victim = (CHAR_DATA *)vo;
+    CHAR_DATA* victim = (CHAR_DATA*)vo;
     int dam;
 
     /* decrement mentalstate by up to 50 */
@@ -5081,9 +5081,9 @@ ch_ret spell_mind_wrack(int sn, int level, CHAR_DATA *ch, void *vo)
     return damage(ch, victim, dam, sn);
 }
 
-ch_ret spell_mind_wrench(int sn, int level, CHAR_DATA *ch, void *vo)
+ch_ret spell_mind_wrench(int sn, int level, CHAR_DATA* ch, void* vo)
 {
-    CHAR_DATA *victim = (CHAR_DATA *)vo;
+    CHAR_DATA* victim = (CHAR_DATA*)vo;
     int dam;
 
     /* increment mentalstate by up to 50 */
@@ -5102,9 +5102,9 @@ ch_ret spell_mind_wrench(int sn, int level, CHAR_DATA *ch, void *vo)
 }
 
 /* Non-offensive spell! */
-ch_ret spell_revive(int sn, int level, CHAR_DATA *ch, void *vo)
+ch_ret spell_revive(int sn, int level, CHAR_DATA* ch, void* vo)
 {
-    CHAR_DATA *victim = (CHAR_DATA *)vo;
+    CHAR_DATA* victim = (CHAR_DATA*)vo;
     int dam;
 
     /* set mentalstate to mentalstate/2 */
@@ -5119,9 +5119,9 @@ ch_ret spell_revive(int sn, int level, CHAR_DATA *ch, void *vo)
 /*
  * n Acid Spells
  */
-ch_ret spell_sulfurous_spray(int sn, int level, CHAR_DATA *ch, void *vo)
+ch_ret spell_sulfurous_spray(int sn, int level, CHAR_DATA* ch, void* vo)
 {
-    CHAR_DATA *victim = (CHAR_DATA *)vo;
+    CHAR_DATA* victim = (CHAR_DATA*)vo;
     int dam;
 
     level = UMAX(0, level);
@@ -5139,9 +5139,9 @@ ch_ret spell_sulfurous_spray(int sn, int level, CHAR_DATA *ch, void *vo)
     return damage(ch, victim, dam, sn);
 }
 
-ch_ret spell_caustic_fount(int sn, int level, CHAR_DATA *ch, void *vo)
+ch_ret spell_caustic_fount(int sn, int level, CHAR_DATA* ch, void* vo)
 {
-    CHAR_DATA *victim = (CHAR_DATA *)vo;
+    CHAR_DATA* victim = (CHAR_DATA*)vo;
     int dam;
 
     level = UMAX(0, level);
@@ -5161,9 +5161,9 @@ ch_ret spell_caustic_fount(int sn, int level, CHAR_DATA *ch, void *vo)
     return damage(ch, victim, dam, sn);
 }
 
-ch_ret spell_acetum_primus(int sn, int level, CHAR_DATA *ch, void *vo)
+ch_ret spell_acetum_primus(int sn, int level, CHAR_DATA* ch, void* vo)
 {
-    CHAR_DATA *victim = (CHAR_DATA *)vo;
+    CHAR_DATA* victim = (CHAR_DATA*)vo;
     int dam;
 
     level = UMAX(0, level);
@@ -5180,9 +5180,9 @@ ch_ret spell_acetum_primus(int sn, int level, CHAR_DATA *ch, void *vo)
  *  Electrical
  */
 
-ch_ret spell_galvanic_whip(int sn, int level, CHAR_DATA *ch, void *vo)
+ch_ret spell_galvanic_whip(int sn, int level, CHAR_DATA* ch, void* vo)
 {
-    CHAR_DATA *victim = (CHAR_DATA *)vo;
+    CHAR_DATA* victim = (CHAR_DATA*)vo;
     int dam;
 
     level = UMAX(0, level);
@@ -5201,9 +5201,9 @@ ch_ret spell_galvanic_whip(int sn, int level, CHAR_DATA *ch, void *vo)
     return damage(ch, victim, dam, sn);
 }
 
-ch_ret spell_magnetic_thrust(int sn, int level, CHAR_DATA *ch, void *vo)
+ch_ret spell_magnetic_thrust(int sn, int level, CHAR_DATA* ch, void* vo)
 {
-    CHAR_DATA *victim = (CHAR_DATA *)vo;
+    CHAR_DATA* victim = (CHAR_DATA*)vo;
     int dam;
 
     level = UMAX(0, level);
@@ -5220,9 +5220,9 @@ ch_ret spell_magnetic_thrust(int sn, int level, CHAR_DATA *ch, void *vo)
     return damage(ch, victim, dam, sn);
 }
 
-ch_ret spell_quantum_spike(int sn, int level, CHAR_DATA *ch, void *vo)
+ch_ret spell_quantum_spike(int sn, int level, CHAR_DATA* ch, void* vo)
 {
-    CHAR_DATA *victim = (CHAR_DATA *)vo;
+    CHAR_DATA* victim = (CHAR_DATA*)vo;
     int dam, l;
 
     level = UMAX(0, level);
@@ -5246,9 +5246,9 @@ ch_ret spell_quantum_spike(int sn, int level, CHAR_DATA *ch, void *vo)
  */
 
 /* L2 Mage Spell */
-ch_ret spell_black_hand(int sn, int level, CHAR_DATA *ch, void *vo)
+ch_ret spell_black_hand(int sn, int level, CHAR_DATA* ch, void* vo)
 {
-    CHAR_DATA *victim = (CHAR_DATA *)vo;
+    CHAR_DATA* victim = (CHAR_DATA*)vo;
     int dam;
 
     level = UMAX(0, level);
@@ -5266,9 +5266,9 @@ ch_ret spell_black_hand(int sn, int level, CHAR_DATA *ch, void *vo)
     return damage(ch, victim, dam, sn);
 }
 
-ch_ret spell_black_fist(int sn, int level, CHAR_DATA *ch, void *vo)
+ch_ret spell_black_fist(int sn, int level, CHAR_DATA* ch, void* vo)
 {
-    CHAR_DATA *victim = (CHAR_DATA *)vo;
+    CHAR_DATA* victim = (CHAR_DATA*)vo;
     int dam;
 
     level = UMAX(0, level);
@@ -5285,10 +5285,10 @@ ch_ret spell_black_fist(int sn, int level, CHAR_DATA *ch, void *vo)
     return damage(ch, victim, dam, sn);
 }
 
-ch_ret spell_steal_life(int sn, int level, CHAR_DATA *ch, void *vo)
+ch_ret spell_steal_life(int sn, int level, CHAR_DATA* ch, void* vo)
 {
     int life;
-    CHAR_DATA *victim = (CHAR_DATA *)vo;
+    CHAR_DATA* victim = (CHAR_DATA*)vo;
     if (ch->position == POS_FIGHTING)
     {
         send_to_char("You can't concentrate enough while fighting.\n\r", ch);
@@ -5304,10 +5304,10 @@ ch_ret spell_steal_life(int sn, int level, CHAR_DATA *ch, void *vo)
     return rNONE;
 }
 
-ch_ret spell_calm(int sn, int level, CHAR_DATA *ch, void *vo)
+ch_ret spell_calm(int sn, int level, CHAR_DATA* ch, void* vo)
 {
-    CHAR_DATA *vch;
-    CHAR_DATA *victim = (CHAR_DATA *)vo;
+    CHAR_DATA* vch;
+    CHAR_DATA* victim = (CHAR_DATA*)vo;
     if ((vch = who_fighting(victim)) == NULL)
     {
         send_to_char("They aren't fighting anyone.\n\r", ch);
@@ -5321,10 +5321,10 @@ ch_ret spell_calm(int sn, int level, CHAR_DATA *ch, void *vo)
     return rNONE;
 }
 
-ch_ret spell_forcepush(int sn, int level, CHAR_DATA *ch, void *vo)
+ch_ret spell_forcepush(int sn, int level, CHAR_DATA* ch, void* vo)
 {
     int dam;
-    CHAR_DATA *victim = (CHAR_DATA *)vo;
+    CHAR_DATA* victim = (CHAR_DATA*)vo;
     dam = 100;
     dam += number_range(ch->hitroll, ch->damroll);
 
@@ -5348,9 +5348,9 @@ ch_ret spell_forcepush(int sn, int level, CHAR_DATA *ch, void *vo)
     return rNONE;
 }
 
-ch_ret spell_black_lightning(int sn, int level, CHAR_DATA *ch, void *vo)
+ch_ret spell_black_lightning(int sn, int level, CHAR_DATA* ch, void* vo)
 {
-    CHAR_DATA *victim = (CHAR_DATA *)vo;
+    CHAR_DATA* victim = (CHAR_DATA*)vo;
     int dam;
 
     dam = 100;
@@ -5381,11 +5381,11 @@ ch_ret spell_black_lightning(int sn, int level, CHAR_DATA *ch, void *vo)
     }
 }
 
-ch_ret spell_midas_touch(int sn, int level, CHAR_DATA *ch, void *vo)
+ch_ret spell_midas_touch(int sn, int level, CHAR_DATA* ch, void* vo)
 {
-    CHAR_DATA *victim = nullptr;
+    CHAR_DATA* victim = nullptr;
     int val;
-    OBJ_DATA *obj = (OBJ_DATA *)vo;
+    OBJ_DATA* obj = (OBJ_DATA*)vo;
 
     separate_obj(obj); /* nice, alty :) */
 
@@ -5491,12 +5491,12 @@ ch_ret spell_midas_touch(int sn, int level, CHAR_DATA *ch, void *vo)
     return rNONE;
 }
 
-ch_ret spell_suggest(int sn, int level, CHAR_DATA *ch, void *vo)
+ch_ret spell_suggest(int sn, int level, CHAR_DATA* ch, void* vo)
 {
     return rNONE;
 }
 
-ch_ret spell_cure_addiction(int sn, int level, CHAR_DATA *ch, void *vo)
+ch_ret spell_cure_addiction(int sn, int level, CHAR_DATA* ch, void* vo)
 {
     return rNONE;
 }

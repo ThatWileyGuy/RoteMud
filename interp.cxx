@@ -48,7 +48,7 @@
  * Externals
  */
 
-bool check_social(CHAR_DATA *ch, const char *command, const char *argument);
+bool check_social(CHAR_DATA* ch, const char* command, const char* argument);
 
 /*
  * Log-all switch.
@@ -56,13 +56,13 @@ bool check_social(CHAR_DATA *ch, const char *command, const char *argument);
 bool fLogAll = false;
 bool fLogPC = false;
 
-CMDTYPE *command_hash[126];   /* hash table for cmd_table */
-SOCIALTYPE *social_index[27]; /* hash table for socials   */
+CMDTYPE* command_hash[126];   /* hash table for cmd_table */
+SOCIALTYPE* social_index[27]; /* hash table for socials   */
 
 /*
  * Character not in position for command?
  */
-bool check_pos(CHAR_DATA *ch, sh_int position)
+bool check_pos(CHAR_DATA* ch, sh_int position)
 {
     if (ch->position < position)
     {
@@ -108,13 +108,13 @@ extern char lastplayercmd[MAX_INPUT_LENGTH * 2];
  * The main entry point for executing commands.
  * Can be recursively called from 'at', 'order', 'force'.
  */
-void interpret(CHAR_DATA *ch, char *argument)
+void interpret(CHAR_DATA* ch, char* argument)
 {
     char command[MAX_INPUT_LENGTH];
     char logline[MAX_INPUT_LENGTH];
     char logname[MAX_INPUT_LENGTH];
-    TIMER *timer = NULL;
-    CMDTYPE *cmd = NULL;
+    TIMER* timer = NULL;
+    CMDTYPE* cmd = NULL;
     int trust;
     int loglvl;
     bool found;
@@ -129,7 +129,7 @@ void interpret(CHAR_DATA *ch, char *argument)
     found = false;
     if (ch->substate == SUB_REPEATCMD)
     {
-        DO_FUN *fun;
+        DO_FUN* fun;
 
         if ((fun = ch->last_cmd) == NULL)
         {
@@ -343,7 +343,7 @@ void interpret(CHAR_DATA *ch, char *argument)
     {
         if (!check_skill(ch, command, argument) && !check_social(ch, command, argument))
         {
-            EXIT_DATA *pexit;
+            EXIT_DATA* pexit;
 
             /* check for an auto-matic exit command */
             if ((pexit = find_door(ch, command, true)) != NULL && IS_SET(pexit->exit_info, EX_xAUTO))
@@ -416,9 +416,9 @@ void interpret(CHAR_DATA *ch, char *argument)
     tail_chain();
 }
 
-CMDTYPE *find_command(const char *command)
+CMDTYPE* find_command(const char* command)
 {
-    CMDTYPE *cmd;
+    CMDTYPE* cmd;
     int hash = LOWER(command[0]) % 126;
 
     for (cmd = command_hash[hash]; cmd; cmd = cmd->next)
@@ -428,9 +428,9 @@ CMDTYPE *find_command(const char *command)
     return NULL;
 }
 
-SOCIALTYPE *find_social(const char *command)
+SOCIALTYPE* find_social(const char* command)
 {
-    SOCIALTYPE *social;
+    SOCIALTYPE* social;
     int hash;
 
     if (command[0] < 'a' || command[0] > 'z')
@@ -445,11 +445,11 @@ SOCIALTYPE *find_social(const char *command)
     return NULL;
 }
 
-bool check_social(CHAR_DATA *ch, const char *command, const char *argument)
+bool check_social(CHAR_DATA* ch, const char* command, const char* argument)
 {
     char arg[MAX_INPUT_LENGTH];
-    CHAR_DATA *victim;
-    SOCIALTYPE *social;
+    CHAR_DATA* victim;
+    SOCIALTYPE* social;
 
     if ((social = find_social(command)) == NULL)
         return false;
@@ -561,7 +561,7 @@ bool check_social(CHAR_DATA *ch, const char *command, const char *argument)
 /*
  * Return true if an argument is completely numeric.
  */
-bool is_number(const char *arg)
+bool is_number(const char* arg)
 {
     if (*arg == '\0')
         return false;
@@ -578,9 +578,9 @@ bool is_number(const char *arg)
 /*
  * Given a string like 14.foo, return 14 and 'foo'
  */
-int number_argument(const char *argument, char *arg)
+int number_argument(const char* argument, char* arg)
 {
-    char *pdot;
+    char* pdot;
     int number;
     char buffer[MAX_STRING_LENGTH] = {};
 
@@ -606,7 +606,7 @@ int number_argument(const char *argument, char *arg)
  * Pick off one argument from a string and return the rest.
  * Understands quotes.
  */
-const char *one_argument(const char *argument, char *arg_first)
+const char* one_argument(const char* argument, char* arg_first)
 {
     char cEnd;
     sh_int count;
@@ -639,16 +639,16 @@ const char *one_argument(const char *argument, char *arg_first)
     return argument;
 }
 
-char *one_argument(char *argument, char *arg_first)
+char* one_argument(char* argument, char* arg_first)
 {
-    return const_cast<char *>(one_argument(const_cast<const char *>(argument), arg_first));
+    return const_cast<char*>(one_argument(const_cast<const char*>(argument), arg_first));
 }
 
 /*
  * Pick off one argument from a string and return the rest.
  * Understands quotes.  Delimiters = { ' ', '-' }
  */
-const char *one_argument2(const char *argument, char *arg_first)
+const char* one_argument2(const char* argument, char* arg_first)
 {
     char cEnd;
     sh_int count;
@@ -681,15 +681,15 @@ const char *one_argument2(const char *argument, char *arg_first)
     return argument;
 }
 
-char *one_argument2(char *argument, char *arg_first)
+char* one_argument2(char* argument, char* arg_first)
 {
-    return const_cast<char *>(one_argument2(const_cast<const char *>(argument), arg_first));
+    return const_cast<char*>(one_argument2(const_cast<const char*>(argument), arg_first));
 }
 
-void do_timecmd(CHAR_DATA *ch, char *argument)
+void do_timecmd(CHAR_DATA* ch, char* argument)
 {
     static bool timing;
-    extern CHAR_DATA *timechar;
+    extern CHAR_DATA* timechar;
     char arg[MAX_INPUT_LENGTH];
 
     send_to_char("Timing\n\r", ch);
@@ -732,7 +732,7 @@ void do_timecmd(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void send_timer(TIMERSET *vtime, CHAR_DATA *ch)
+void send_timer(TIMERSET* vtime, CHAR_DATA* ch)
 {
     using namespace std::chrono;
 
@@ -750,7 +750,7 @@ void send_timer(TIMERSET *vtime, CHAR_DATA *ch)
     return;
 }
 
-void update_userec(std::chrono::steady_clock::duration time_used, TIMERSET *userec)
+void update_userec(std::chrono::steady_clock::duration time_used, TIMERSET* userec)
 {
     userec->num_uses++;
     if (userec->num_uses == 1 || time_used < userec->min_time)

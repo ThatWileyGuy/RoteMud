@@ -44,36 +44,36 @@
 #include <time.h>
 #include "mud.hxx"
 
-void add_reinforcements(CHAR_DATA *ch);
-ch_ret one_hit(CHAR_DATA *ch, CHAR_DATA *victim, int dt);
-int xp_compute(CHAR_DATA *ch, CHAR_DATA *victim);
-ROOM_INDEX_DATA *generate_exit(ROOM_INDEX_DATA *in_room, EXIT_DATA **pexit);
-int ris_save(CHAR_DATA *ch, int chance, int ris);
-void explode_emissile(CHAR_DATA *ch, ROOM_INDEX_DATA *proom, int mindam, int maxdam, bool incendiary);
-CHAR_DATA *get_char_room_mp(CHAR_DATA *ch, char *argument);
+void add_reinforcements(CHAR_DATA* ch);
+ch_ret one_hit(CHAR_DATA* ch, CHAR_DATA* victim, int dt);
+int xp_compute(CHAR_DATA* ch, CHAR_DATA* victim);
+ROOM_INDEX_DATA* generate_exit(ROOM_INDEX_DATA* in_room, EXIT_DATA** pexit);
+int ris_save(CHAR_DATA* ch, int chance, int ris);
+void explode_emissile(CHAR_DATA* ch, ROOM_INDEX_DATA* proom, int mindam, int maxdam, bool incendiary);
+CHAR_DATA* get_char_room_mp(CHAR_DATA* ch, char* argument);
 
 /* from shops.c */
-CHAR_DATA *find_keeper(CHAR_DATA *ch);
+CHAR_DATA* find_keeper(CHAR_DATA* ch);
 
 extern int top_affect;
 
-const char *sector_name[SECT_MAX] = {"inside",      "city",         "field",      "forest", "hills",    "mountain",
+const char* sector_name[SECT_MAX] = {"inside",      "city",         "field",      "forest", "hills",    "mountain",
                                      "water swim",  "water noswim", "underwater", "air",    "desert",   "unknown",
                                      "ocean floor", "underground",  "scrub",      "rocky",  "savanna",  "tundra",
                                      "glacial",     "rainforest",   "jungle",     "swamp",  "wetlands", "brush",
                                      "steppe",      "farmland",     "volcanic"};
 
-void do_makeblade(CHAR_DATA *ch, char *argument)
+void do_makeblade(CHAR_DATA* ch, char* argument)
 {
     char arg[MAX_INPUT_LENGTH];
     char buf[MAX_STRING_LENGTH];
     int level, chance, charge;
     bool checktool, checkdura, checkbatt, checkoven;
-    OBJ_DATA *obj;
-    OBJ_INDEX_DATA *pObjIndex;
+    OBJ_DATA* obj;
+    OBJ_INDEX_DATA* pObjIndex;
     int vnum;
-    AFFECT_DATA *paf;
-    AFFECT_DATA *paf2;
+    AFFECT_DATA* paf;
+    AFFECT_DATA* paf2;
 
     strcpy_s(arg, argument);
 
@@ -152,7 +152,7 @@ void do_makeblade(CHAR_DATA *ch, char *argument)
     case 1:
         if (!ch->dest_buf)
             return;
-        strcpy(arg, reinterpret_cast<const char *>(ch->dest_buf));
+        strcpy(arg, reinterpret_cast<const char*>(ch->dest_buf));
         DISPOSE(ch->dest_buf);
         break;
 
@@ -276,17 +276,17 @@ void do_makeblade(CHAR_DATA *ch, char *argument)
     learn_from_success(ch, gsn_makeblade);
 }
 
-void do_makeblaster(CHAR_DATA *ch, char *argument)
+void do_makeblaster(CHAR_DATA* ch, char* argument)
 {
     char arg[MAX_INPUT_LENGTH];
     char buf[MAX_STRING_LENGTH];
     int level, chance;
     bool checktool, checkdura, checkbatt, checkoven, checkcond, checkcirc, checkammo;
-    OBJ_DATA *obj;
-    OBJ_INDEX_DATA *pObjIndex;
+    OBJ_DATA* obj;
+    OBJ_INDEX_DATA* pObjIndex;
     int vnum, power, scope, ammo;
-    AFFECT_DATA *paf;
-    AFFECT_DATA *paf2;
+    AFFECT_DATA* paf;
+    AFFECT_DATA* paf2;
 
     strcpy_s(arg, argument);
 
@@ -381,7 +381,7 @@ void do_makeblaster(CHAR_DATA *ch, char *argument)
     case 1:
         if (!ch->dest_buf)
             return;
-        strcpy(arg, reinterpret_cast<const char *>(ch->dest_buf));
+        strcpy(arg, reinterpret_cast<const char*>(ch->dest_buf));
         DISPOSE(ch->dest_buf);
         break;
 
@@ -540,17 +540,17 @@ void do_makeblaster(CHAR_DATA *ch, char *argument)
     learn_from_success(ch, gsn_makeblaster);
 }
 
-void do_makelightsaber(CHAR_DATA *ch, char *argument)
+void do_makelightsaber(CHAR_DATA* ch, char* argument)
 {
     char arg[MAX_INPUT_LENGTH];
     char buf[MAX_STRING_LENGTH];
     int chance;
     bool checktool, checkdura, checkbatt, checkoven, checkcond, checkcirc, checklens, checkgems, checkmirr;
-    OBJ_DATA *obj;
-    OBJ_INDEX_DATA *pObjIndex;
+    OBJ_DATA* obj;
+    OBJ_INDEX_DATA* pObjIndex;
     int vnum, level, gems, charge, gemtype;
-    AFFECT_DATA *paf;
-    AFFECT_DATA *paf2;
+    AFFECT_DATA* paf;
+    AFFECT_DATA* paf2;
 
     strcpy_s(arg, argument);
 
@@ -672,7 +672,7 @@ void do_makelightsaber(CHAR_DATA *ch, char *argument)
     case 1:
         if (!ch->dest_buf)
             return;
-        strcpy(arg, reinterpret_cast<const char *>(ch->dest_buf));
+        strcpy(arg, reinterpret_cast<const char*>(ch->dest_buf));
         DISPOSE(ch->dest_buf);
         break;
 
@@ -858,12 +858,12 @@ void do_makelightsaber(CHAR_DATA *ch, char *argument)
     learn_from_success(ch, gsn_makelightsaber);
 }
 
-void do_makespice(CHAR_DATA *ch, char *argument)
+void do_makespice(CHAR_DATA* ch, char* argument)
 {
     char arg[MAX_INPUT_LENGTH];
     char buf[MAX_STRING_LENGTH];
     int chance;
-    OBJ_DATA *obj;
+    OBJ_DATA* obj;
 
     switch (ch->substate)
     {
@@ -913,7 +913,7 @@ void do_makespice(CHAR_DATA *ch, char *argument)
     case 1:
         if (!ch->dest_buf)
             return;
-        strcpy(arg, reinterpret_cast<const char *>(ch->dest_buf));
+        strcpy(arg, reinterpret_cast<const char*>(ch->dest_buf));
         DISPOSE(ch->dest_buf);
         break;
 
@@ -969,14 +969,14 @@ void do_makespice(CHAR_DATA *ch, char *argument)
     learn_from_success(ch, gsn_spice_refining);
 }
 
-void do_makegrenade(CHAR_DATA *ch, char *argument)
+void do_makegrenade(CHAR_DATA* ch, char* argument)
 {
     char arg[MAX_INPUT_LENGTH];
     char buf[MAX_STRING_LENGTH];
     int level, chance, strength, weight;
     bool checktool, checkdrink, checkbatt, checkchem, checkcirc;
-    OBJ_DATA *obj;
-    OBJ_INDEX_DATA *pObjIndex;
+    OBJ_DATA* obj;
+    OBJ_INDEX_DATA* pObjIndex;
     int vnum;
 
     strcpy_s(arg, argument);
@@ -1063,7 +1063,7 @@ void do_makegrenade(CHAR_DATA *ch, char *argument)
     case 1:
         if (!ch->dest_buf)
             return;
-        strcpy(arg, reinterpret_cast<const char *>(ch->dest_buf));
+        strcpy(arg, reinterpret_cast<const char*>(ch->dest_buf));
         DISPOSE(ch->dest_buf);
         break;
 
@@ -1178,14 +1178,14 @@ void do_makegrenade(CHAR_DATA *ch, char *argument)
     learn_from_success(ch, gsn_makegrenade);
 }
 
-void do_makelandmine(CHAR_DATA *ch, char *argument)
+void do_makelandmine(CHAR_DATA* ch, char* argument)
 {
     char arg[MAX_INPUT_LENGTH];
     char buf[MAX_STRING_LENGTH];
     int level, chance, strength, weight;
     bool checktool, checkdrink, checkbatt, checkchem, checkcirc;
-    OBJ_DATA *obj;
-    OBJ_INDEX_DATA *pObjIndex;
+    OBJ_DATA* obj;
+    OBJ_INDEX_DATA* pObjIndex;
     int vnum;
 
     strcpy_s(arg, argument);
@@ -1272,7 +1272,7 @@ void do_makelandmine(CHAR_DATA *ch, char *argument)
     case 1:
         if (!ch->dest_buf)
             return;
-        strcpy(arg, reinterpret_cast<const char *>(ch->dest_buf));
+        strcpy(arg, reinterpret_cast<const char*>(ch->dest_buf));
         DISPOSE(ch->dest_buf);
         break;
 
@@ -1386,14 +1386,14 @@ void do_makelandmine(CHAR_DATA *ch, char *argument)
     }
     learn_from_success(ch, gsn_makelandmine);
 }
-void do_makelight(CHAR_DATA *ch, char *argument)
+void do_makelight(CHAR_DATA* ch, char* argument)
 {
     char arg[MAX_INPUT_LENGTH];
     char buf[MAX_STRING_LENGTH];
     int level, chance, strength;
     bool checktool, checkbatt, checkchem, checkcirc, checklens;
-    OBJ_DATA *obj;
-    OBJ_INDEX_DATA *pObjIndex;
+    OBJ_DATA* obj;
+    OBJ_INDEX_DATA* pObjIndex;
     int vnum;
 
     strcpy_s(arg, argument);
@@ -1479,7 +1479,7 @@ void do_makelight(CHAR_DATA *ch, char *argument)
     case 1:
         if (!ch->dest_buf)
             return;
-        strcpy(arg, reinterpret_cast<const char *>(ch->dest_buf));
+        strcpy(arg, reinterpret_cast<const char*>(ch->dest_buf));
         DISPOSE(ch->dest_buf);
         break;
 
@@ -1591,16 +1591,16 @@ void do_makelight(CHAR_DATA *ch, char *argument)
     learn_from_success(ch, gsn_makelight);
 }
 
-void do_makejewelry(CHAR_DATA *ch, char *argument)
+void do_makejewelry(CHAR_DATA* ch, char* argument)
 {
     char arg[MAX_INPUT_LENGTH];
     char arg2[MAX_INPUT_LENGTH];
     char buf[MAX_STRING_LENGTH];
     int level, chance;
     bool checktool, checkoven, checkmetal;
-    OBJ_DATA *obj = nullptr;
-    OBJ_DATA *metal = nullptr;
-    AFFECT_DATA *paf = nullptr;
+    OBJ_DATA* obj = nullptr;
+    OBJ_DATA* metal = nullptr;
+    AFFECT_DATA* paf = nullptr;
     int value, cost;
 
     argument = one_argument(argument, arg);
@@ -1700,9 +1700,9 @@ void do_makejewelry(CHAR_DATA *ch, char *argument)
             return;
         if (!ch->dest_buf_2)
             return;
-        strcpy(arg, reinterpret_cast<const char *>(ch->dest_buf));
+        strcpy(arg, reinterpret_cast<const char*>(ch->dest_buf));
         DISPOSE(ch->dest_buf);
-        strcpy(arg2, reinterpret_cast<const char *>(ch->dest_buf_2));
+        strcpy(arg2, reinterpret_cast<const char*>(ch->dest_buf_2));
         DISPOSE(ch->dest_buf_2);
         break;
 
@@ -1852,15 +1852,15 @@ void do_makejewelry(CHAR_DATA *ch, char *argument)
     learn_from_success(ch, gsn_makejewelry);
 }
 
-void do_makearmor(CHAR_DATA *ch, char *argument)
+void do_makearmor(CHAR_DATA* ch, char* argument)
 {
     char arg[MAX_INPUT_LENGTH];
     char arg2[MAX_INPUT_LENGTH];
     char buf[MAX_STRING_LENGTH];
     int level, chance;
     bool checksew, checkfab;
-    OBJ_DATA *obj = nullptr;
-    OBJ_DATA *material = nullptr;
+    OBJ_DATA* obj = nullptr;
+    OBJ_DATA* material = nullptr;
     int value;
 
     argument = one_argument(argument, arg);
@@ -1950,9 +1950,9 @@ void do_makearmor(CHAR_DATA *ch, char *argument)
             return;
         if (!ch->dest_buf_2)
             return;
-        strcpy(arg, reinterpret_cast<const char *>(ch->dest_buf));
+        strcpy(arg, reinterpret_cast<const char*>(ch->dest_buf));
         DISPOSE(ch->dest_buf);
-        strcpy(arg2, reinterpret_cast<const char *>(ch->dest_buf_2));
+        strcpy(arg2, reinterpret_cast<const char*>(ch->dest_buf_2));
         DISPOSE(ch->dest_buf_2);
         break;
 
@@ -2034,15 +2034,15 @@ void do_makearmor(CHAR_DATA *ch, char *argument)
     learn_from_success(ch, gsn_makearmor);
 }
 
-void do_makecomlink(CHAR_DATA *ch, char *argument)
+void do_makecomlink(CHAR_DATA* ch, char* argument)
 {
     char arg[MAX_INPUT_LENGTH];
     char arg2[MAX_INPUT_LENGTH];
     char buf[MAX_STRING_LENGTH];
     int chance;
     bool checktool, checkgem, checkbatt, checkcirc;
-    OBJ_DATA *obj;
-    OBJ_INDEX_DATA *pObjIndex;
+    OBJ_DATA* obj;
+    OBJ_INDEX_DATA* pObjIndex;
     int vnum;
 
     argument = one_argument(argument, arg);
@@ -2123,9 +2123,9 @@ void do_makecomlink(CHAR_DATA *ch, char *argument)
     case 1:
         if (!ch->dest_buf)
             return;
-        strcpy(arg, reinterpret_cast<const char *>(ch->dest_buf));
+        strcpy(arg, reinterpret_cast<const char*>(ch->dest_buf));
         DISPOSE(ch->dest_buf);
-        strcpy(arg2, reinterpret_cast<const char *>(ch->dest_buf_2));
+        strcpy(arg2, reinterpret_cast<const char*>(ch->dest_buf_2));
         DISPOSE(ch->dest_buf_2);
         break;
 
@@ -2236,14 +2236,14 @@ void do_makecomlink(CHAR_DATA *ch, char *argument)
     learn_from_success(ch, gsn_makecomlink);
 }
 
-void do_makeshield(CHAR_DATA *ch, char *argument)
+void do_makeshield(CHAR_DATA* ch, char* argument)
 {
     char arg[MAX_INPUT_LENGTH];
     char buf[MAX_STRING_LENGTH];
     int chance;
     bool checktool, checkbatt, checkcond, checkcirc, checkgems;
-    OBJ_DATA *obj;
-    OBJ_INDEX_DATA *pObjIndex;
+    OBJ_DATA* obj;
+    OBJ_INDEX_DATA* pObjIndex;
     int vnum, level, charge, gemtype;
 
     strcpy_s(arg, argument);
@@ -2329,7 +2329,7 @@ void do_makeshield(CHAR_DATA *ch, char *argument)
     case 1:
         if (!ch->dest_buf)
             return;
-        strcpy(arg, reinterpret_cast<const char *>(ch->dest_buf));
+        strcpy(arg, reinterpret_cast<const char*>(ch->dest_buf));
         DISPOSE(ch->dest_buf);
         break;
 
@@ -2446,15 +2446,15 @@ void do_makeshield(CHAR_DATA *ch, char *argument)
     learn_from_success(ch, gsn_makeshield);
 }
 
-void do_makecontainer(CHAR_DATA *ch, char *argument)
+void do_makecontainer(CHAR_DATA* ch, char* argument)
 {
     char arg[MAX_INPUT_LENGTH];
     char arg2[MAX_INPUT_LENGTH];
     char buf[MAX_STRING_LENGTH];
     int level, chance;
     bool checksew, checkfab;
-    OBJ_DATA *obj = nullptr;
-    OBJ_DATA *material = nullptr;
+    OBJ_DATA* obj = nullptr;
+    OBJ_DATA* material = nullptr;
     int value;
 
     argument = one_argument(argument, arg);
@@ -2544,9 +2544,9 @@ void do_makecontainer(CHAR_DATA *ch, char *argument)
             return;
         if (!ch->dest_buf_2)
             return;
-        strcpy(arg, reinterpret_cast<const char *>(ch->dest_buf));
+        strcpy(arg, reinterpret_cast<const char*>(ch->dest_buf));
         DISPOSE(ch->dest_buf);
-        strcpy(arg2, reinterpret_cast<const char *>(ch->dest_buf_2));
+        strcpy(arg2, reinterpret_cast<const char*>(ch->dest_buf_2));
         DISPOSE(ch->dest_buf_2);
         break;
 
@@ -2632,12 +2632,12 @@ void do_makecontainer(CHAR_DATA *ch, char *argument)
     learn_from_success(ch, gsn_makecontainer);
 }
 
-void do_gemcutting(CHAR_DATA *ch, char *argument)
+void do_gemcutting(CHAR_DATA* ch, char* argument)
 {
     send_to_char("&RSorry, this skill isn't finished yet :(\n\r", ch);
 }
 
-void do_reinforcements(CHAR_DATA *ch, char *argument)
+void do_reinforcements(CHAR_DATA* ch, char* argument)
 {
     char arg[MAX_INPUT_LENGTH];
     int chance, credits;
@@ -2685,7 +2685,7 @@ void do_reinforcements(CHAR_DATA *ch, char *argument)
     case 1:
         if (!ch->dest_buf)
             return;
-        strcpy(arg, reinterpret_cast<const char *>(ch->dest_buf));
+        strcpy(arg, reinterpret_cast<const char*>(ch->dest_buf));
         DISPOSE(ch->dest_buf);
         break;
 
@@ -2715,7 +2715,7 @@ void do_reinforcements(CHAR_DATA *ch, char *argument)
     ch->backup_wait = number_range(1, 2);
 }
 
-void do_postguard(CHAR_DATA *ch, char *argument)
+void do_postguard(CHAR_DATA* ch, char* argument)
 {
     char arg[MAX_INPUT_LENGTH];
     int chance, credits;
@@ -2762,7 +2762,7 @@ void do_postguard(CHAR_DATA *ch, char *argument)
     case 1:
         if (!ch->dest_buf)
             return;
-        strcpy(arg, reinterpret_cast<const char *>(ch->dest_buf));
+        strcpy(arg, reinterpret_cast<const char*>(ch->dest_buf));
         DISPOSE(ch->dest_buf);
         break;
 
@@ -2793,11 +2793,11 @@ void do_postguard(CHAR_DATA *ch, char *argument)
     ch->backup_wait = 1;
 }
 
-void add_reinforcements(CHAR_DATA *ch)
+void add_reinforcements(CHAR_DATA* ch)
 {
-    MOB_INDEX_DATA *pMobIndex;
-    OBJ_DATA *blaster;
-    OBJ_INDEX_DATA *pObjIndex;
+    MOB_INDEX_DATA* pMobIndex;
+    OBJ_DATA* blaster;
+    OBJ_INDEX_DATA* pObjIndex;
     int max = 1;
 
     if ((pMobIndex = get_mob_index(ch->backup_mob)) == NULL)
@@ -2807,7 +2807,7 @@ void add_reinforcements(CHAR_DATA *ch)
         ch->backup_mob == MOB_VNUM_MERCINARY || ch->backup_mob == MOB_VNUM_IMP_FORCES ||
         ch->backup_mob == MOB_VNUM_NR_FORCES || ch->backup_mob == MOB_VNUM_MERC_FORCES)
     {
-        CHAR_DATA *mob[3];
+        CHAR_DATA* mob[3];
         int mob_cnt;
 
         send_to_char("Your reinforcements have arrived.\n\r", ch);
@@ -2843,7 +2843,7 @@ void add_reinforcements(CHAR_DATA *ch)
     }
     else
     {
-        CHAR_DATA *mob;
+        CHAR_DATA* mob;
         int ability;
 
         mob = create_mobile(pMobIndex);
@@ -2884,10 +2884,10 @@ void add_reinforcements(CHAR_DATA *ch)
     }
 }
 
-void do_torture(CHAR_DATA *ch, char *argument)
+void do_torture(CHAR_DATA* ch, char* argument)
 {
     char arg[MAX_INPUT_LENGTH];
-    CHAR_DATA *victim;
+    CHAR_DATA* victim;
     int chance, dam;
     bool fail;
 
@@ -2989,7 +2989,7 @@ void do_torture(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void do_disguise(CHAR_DATA *ch, char *argument)
+void do_disguise(CHAR_DATA* ch, char* argument)
 {
     int chance;
 
@@ -3036,7 +3036,7 @@ void do_disguise(CHAR_DATA *ch, char *argument)
     send_to_char("Ok.\n\r", ch);
 }
 
-void do_deception(CHAR_DATA *ch, char *argument)
+void do_deception(CHAR_DATA* ch, char* argument)
 {
     int chance;
 
@@ -3084,10 +3084,10 @@ void do_deception(CHAR_DATA *ch, char *argument)
     send_to_char("Ok.\n\r", ch);
 }
 
-void do_mine(CHAR_DATA *ch, char *argument)
+void do_mine(CHAR_DATA* ch, char* argument)
 {
     char arg[MAX_INPUT_LENGTH];
-    OBJ_DATA *obj;
+    OBJ_DATA* obj;
     bool shovel;
     sh_int move;
 
@@ -3181,10 +3181,10 @@ void do_mine(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void do_first_aid(CHAR_DATA *ch, char *argument)
+void do_first_aid(CHAR_DATA* ch, char* argument)
 {
-    OBJ_DATA *medpac;
-    CHAR_DATA *victim;
+    OBJ_DATA* medpac;
+    CHAR_DATA* victim;
     int heal;
     char buf[MAX_STRING_LENGTH];
 
@@ -3255,17 +3255,17 @@ void do_first_aid(CHAR_DATA *ch, char *argument)
     learn_from_success(ch, gsn_first_aid);
 }
 
-void do_snipe(CHAR_DATA *ch, char *argument)
+void do_snipe(CHAR_DATA* ch, char* argument)
 {
-    OBJ_DATA *wield;
+    OBJ_DATA* wield;
     char arg[MAX_INPUT_LENGTH];
     char arg2[MAX_INPUT_LENGTH];
     sh_int dir, dist;
     sh_int max_dist = 3;
-    EXIT_DATA *pexit = nullptr;
-    ROOM_INDEX_DATA *was_in_room = nullptr;
-    ROOM_INDEX_DATA *to_room = nullptr;
-    CHAR_DATA *victim = nullptr;
+    EXIT_DATA* pexit = nullptr;
+    ROOM_INDEX_DATA* was_in_room = nullptr;
+    ROOM_INDEX_DATA* to_room = nullptr;
+    CHAR_DATA* victim = nullptr;
     int chance;
     char buf[MAX_STRING_LENGTH];
     bool pfound = false;
@@ -3476,19 +3476,19 @@ void do_snipe(CHAR_DATA *ch, char *argument)
 
 /* syntax throw <obj> [direction] [target] */
 
-void do_throw(CHAR_DATA *ch, char *argument)
+void do_throw(CHAR_DATA* ch, char* argument)
 {
-    OBJ_DATA *obj;
-    OBJ_DATA *tmpobj;
+    OBJ_DATA* obj;
+    OBJ_DATA* tmpobj;
     char arg[MAX_INPUT_LENGTH];
     char arg2[MAX_INPUT_LENGTH];
     char arg3[MAX_INPUT_LENGTH];
     sh_int dir;
-    SHIP_DATA *ship;
-    EXIT_DATA *pexit;
-    ROOM_INDEX_DATA *was_in_room;
-    ROOM_INDEX_DATA *to_room;
-    CHAR_DATA *victim;
+    SHIP_DATA* ship;
+    EXIT_DATA* pexit;
+    ROOM_INDEX_DATA* was_in_room;
+    ROOM_INDEX_DATA* to_room;
+    CHAR_DATA* victim;
     char buf[MAX_STRING_LENGTH];
 
     argument = one_argument(argument, arg);
@@ -3756,11 +3756,11 @@ void do_throw(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void do_beg(CHAR_DATA *ch, char *argument)
+void do_beg(CHAR_DATA* ch, char* argument)
 {
     char buf[MAX_STRING_LENGTH];
     char arg1[MAX_INPUT_LENGTH];
-    CHAR_DATA *victim;
+    CHAR_DATA* victim;
     int percent, xp;
     int amount;
 
@@ -3886,16 +3886,16 @@ void do_beg(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void do_pickshiplock(CHAR_DATA *ch, char *argument)
+void do_pickshiplock(CHAR_DATA* ch, char* argument)
 {
     do_pick(ch, argument);
 }
 
-void do_hijack(CHAR_DATA *ch, char *argument)
+void do_hijack(CHAR_DATA* ch, char* argument)
 {
     int chance;
     int x;
-    SHIP_DATA *ship;
+    SHIP_DATA* ship;
     char buf[MAX_STRING_LENGTH];
     bool uhoh = false;
     //    CHAR_DATA *guard;      <--- For the guard shits below
@@ -4008,7 +4008,7 @@ void do_hijack(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void do_special_forces(CHAR_DATA *ch, char *argument)
+void do_special_forces(CHAR_DATA* ch, char* argument)
 {
     char arg[MAX_INPUT_LENGTH];
     int chance, credits;
@@ -4055,7 +4055,7 @@ void do_special_forces(CHAR_DATA *ch, char *argument)
     case 1:
         if (!ch->dest_buf)
             return;
-        strcpy(arg, reinterpret_cast<const char *>(ch->dest_buf));
+        strcpy(arg, reinterpret_cast<const char*>(ch->dest_buf));
         DISPOSE(ch->dest_buf);
         break;
 
@@ -4085,7 +4085,7 @@ void do_special_forces(CHAR_DATA *ch, char *argument)
     ch->backup_wait = number_range(1, 2);
 }
 
-void do_elite_guard(CHAR_DATA *ch, char *argument)
+void do_elite_guard(CHAR_DATA* ch, char* argument)
 {
     char arg[MAX_INPUT_LENGTH];
     int chance, credits;
@@ -4132,7 +4132,7 @@ void do_elite_guard(CHAR_DATA *ch, char *argument)
     case 1:
         if (!ch->dest_buf)
             return;
-        strcpy(arg, reinterpret_cast<const char *>(ch->dest_buf));
+        strcpy(arg, reinterpret_cast<const char*>(ch->dest_buf));
         DISPOSE(ch->dest_buf);
         break;
 
@@ -4163,7 +4163,7 @@ void do_elite_guard(CHAR_DATA *ch, char *argument)
     ch->backup_wait = 1;
 }
 
-void do_add_patrol(CHAR_DATA *ch, char *argument)
+void do_add_patrol(CHAR_DATA* ch, char* argument)
 {
     char arg[MAX_INPUT_LENGTH];
     int chance, credits;
@@ -4210,7 +4210,7 @@ void do_add_patrol(CHAR_DATA *ch, char *argument)
     case 1:
         if (!ch->dest_buf)
             return;
-        strcpy(arg, reinterpret_cast<const char *>(ch->dest_buf));
+        strcpy(arg, reinterpret_cast<const char*>(ch->dest_buf));
         DISPOSE(ch->dest_buf);
         break;
 
@@ -4241,11 +4241,11 @@ void do_add_patrol(CHAR_DATA *ch, char *argument)
     ch->backup_wait = 1;
 }
 
-void do_jail(CHAR_DATA *ch, char *argument)
+void do_jail(CHAR_DATA* ch, char* argument)
 {
-    CHAR_DATA *victim = NULL;
-    CLAN_DATA *clan = NULL;
-    ROOM_INDEX_DATA *jail = NULL;
+    CHAR_DATA* victim = NULL;
+    CLAN_DATA* clan = NULL;
+    ROOM_INDEX_DATA* jail = NULL;
 
     if (IS_NPC(ch))
         return;
@@ -4335,13 +4335,13 @@ void do_jail(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void do_smalltalk(CHAR_DATA *ch, char *argument)
+void do_smalltalk(CHAR_DATA* ch, char* argument)
 {
     char buf[MAX_STRING_LENGTH];
     char arg1[MAX_INPUT_LENGTH];
-    CHAR_DATA *victim = NULL;
-    PLANET_DATA *planet = NULL;
-    CLAN_DATA *clan = NULL;
+    CHAR_DATA* victim = NULL;
+    PLANET_DATA* planet = NULL;
+    CLAN_DATA* clan = NULL;
     int percent;
 
     if (IS_NPC(ch) || !ch->pcdata)
@@ -4462,13 +4462,13 @@ void do_smalltalk(CHAR_DATA *ch, char *argument)
         planet->pop_support = 100;
 }
 
-void do_propeganda(CHAR_DATA *ch, char *argument)
+void do_propeganda(CHAR_DATA* ch, char* argument)
 {
     char buf[MAX_STRING_LENGTH];
     char arg1[MAX_INPUT_LENGTH];
-    CHAR_DATA *victim;
-    PLANET_DATA *planet;
-    CLAN_DATA *clan;
+    CHAR_DATA* victim;
+    PLANET_DATA* planet;
+    CLAN_DATA* clan;
     int percent;
 
     if (IS_NPC(ch) || !ch->pcdata || !ch->pcdata->clan || !ch->in_room->area || !ch->in_room->area->planet)
@@ -4591,12 +4591,12 @@ void do_propeganda(CHAR_DATA *ch, char *argument)
     save_planet(planet);
 }
 
-void do_bribe(CHAR_DATA *ch, char *argument)
+void do_bribe(CHAR_DATA* ch, char* argument)
 {
     char arg1[MAX_INPUT_LENGTH];
-    CHAR_DATA *victim = nullptr;
-    PLANET_DATA *planet = nullptr;
-    CLAN_DATA *clan = nullptr;
+    CHAR_DATA* victim = nullptr;
+    PLANET_DATA* planet = nullptr;
+    CLAN_DATA* clan = nullptr;
     int percent = 0;
     int amount = 0;
 
@@ -4727,14 +4727,14 @@ void do_bribe(CHAR_DATA *ch, char *argument)
         planet->pop_support = 100;
 }
 
-void do_seduce(CHAR_DATA *ch, char *argument)
+void do_seduce(CHAR_DATA* ch, char* argument)
 {
     AFFECT_DATA af;
     int chance;
     int level;
     char buf[MAX_STRING_LENGTH];
-    CHAR_DATA *victim;
-    CHAR_DATA *rch;
+    CHAR_DATA* victim;
+    CHAR_DATA* rch;
 
     if (argument[0] == '\0')
     {
@@ -4820,12 +4820,12 @@ void do_seduce(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void do_mass_propeganda(CHAR_DATA *ch, char *argument)
+void do_mass_propeganda(CHAR_DATA* ch, char* argument)
 {
     char buf[MAX_STRING_LENGTH];
-    CHAR_DATA *rch;
-    PLANET_DATA *planet;
-    CLAN_DATA *clan;
+    CHAR_DATA* rch;
+    PLANET_DATA* planet;
+    CLAN_DATA* clan;
     int victims = 0;
 
     if (IS_NPC(ch) || !ch->pcdata || !ch->pcdata->clan || !ch->in_room->area || !ch->in_room->area->planet)
@@ -4921,11 +4921,11 @@ void do_mass_propeganda(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void do_gather_intelligence(CHAR_DATA *ch, char *argument)
+void do_gather_intelligence(CHAR_DATA* ch, char* argument)
 {
 }
 
-void do_repair(CHAR_DATA *ch, char *argument)
+void do_repair(CHAR_DATA* ch, char* argument)
 {
     OBJ_DATA *obj, *cobj;
     char arg[MAX_STRING_LENGTH];
@@ -5005,7 +5005,7 @@ void do_repair(CHAR_DATA *ch, char *argument)
     case 1:
         if (!ch->dest_buf)
             return;
-        strcpy(arg, reinterpret_cast<const char *>(ch->dest_buf));
+        strcpy(arg, reinterpret_cast<const char*>(ch->dest_buf));
         DISPOSE(ch->dest_buf);
         break;
 
@@ -5062,17 +5062,17 @@ void do_repair(CHAR_DATA *ch, char *argument)
     learn_from_success(ch, gsn_repair);
 }
 
-void do_makeduallightsaber(CHAR_DATA *ch, char *argument)
+void do_makeduallightsaber(CHAR_DATA* ch, char* argument)
 {
     char arg[MAX_INPUT_LENGTH];
     char buf[MAX_STRING_LENGTH];
     int chance;
     bool checktool, checkdura, checkbatt, checkoven, checkcond, checkcirc, checklens, checkgems, checkmirr;
-    OBJ_DATA *obj;
-    OBJ_INDEX_DATA *pObjIndex;
+    OBJ_DATA* obj;
+    OBJ_INDEX_DATA* pObjIndex;
     int vnum, level, gems, charge, gemtype;
-    AFFECT_DATA *paf;
-    AFFECT_DATA *paf2;
+    AFFECT_DATA* paf;
+    AFFECT_DATA* paf2;
 
     strcpy_s(arg, argument);
 
@@ -5194,7 +5194,7 @@ void do_makeduallightsaber(CHAR_DATA *ch, char *argument)
     case 1:
         if (!ch->dest_buf)
             return;
-        strcpy(arg, reinterpret_cast<const char *>(ch->dest_buf));
+        strcpy(arg, reinterpret_cast<const char*>(ch->dest_buf));
         DISPOSE(ch->dest_buf);
         break;
 
@@ -5378,16 +5378,16 @@ void do_makeduallightsaber(CHAR_DATA *ch, char *argument)
     learn_from_success(ch, gsn_makeduallightsaber);
 }
 
-void do_makepike(CHAR_DATA *ch, char *argument)
+void do_makepike(CHAR_DATA* ch, char* argument)
 {
     char arg[MAX_INPUT_LENGTH];
     char buf[MAX_STRING_LENGTH];
     int level, chance, charge;
     bool checktool, checkdura, checkbatt, checkoven;
-    OBJ_DATA *obj;
-    OBJ_INDEX_DATA *pObjIndex;
+    OBJ_DATA* obj;
+    OBJ_INDEX_DATA* pObjIndex;
     int vnum;
-    AFFECT_DATA *paf;
+    AFFECT_DATA* paf;
 
     strcpy_s(arg, argument);
 
@@ -5466,7 +5466,7 @@ void do_makepike(CHAR_DATA *ch, char *argument)
     case 1:
         if (!ch->dest_buf)
             return;
-        strcpy(arg, reinterpret_cast<const char *>(ch->dest_buf));
+        strcpy(arg, reinterpret_cast<const char*>(ch->dest_buf));
         DISPOSE(ch->dest_buf);
         break;
 
@@ -5581,12 +5581,12 @@ void do_makepike(CHAR_DATA *ch, char *argument)
     learn_from_success(ch, gsn_makepike);
 }
 
-void do_makebug(CHAR_DATA *ch, char *argument)
+void do_makebug(CHAR_DATA* ch, char* argument)
 {
     int level, chance;
     bool checktool, checkbatt, checkcirc;
-    OBJ_DATA *obj;
-    OBJ_INDEX_DATA *pObjIndex;
+    OBJ_DATA* obj;
+    OBJ_INDEX_DATA* pObjIndex;
     int vnum;
 
     switch (ch->substate)
@@ -5734,12 +5734,12 @@ void do_makebug(CHAR_DATA *ch, char *argument)
     learn_from_success(ch, gsn_makebug);
 }
 
-void do_makebeacon(CHAR_DATA *ch, char *argument)
+void do_makebeacon(CHAR_DATA* ch, char* argument)
 {
     int level, chance;
     bool checktool, checkbatt, checkcirc;
-    OBJ_DATA *obj;
-    OBJ_INDEX_DATA *pObjIndex;
+    OBJ_DATA* obj;
+    OBJ_INDEX_DATA* pObjIndex;
     int vnum;
 
     switch (ch->substate)
@@ -5887,10 +5887,10 @@ void do_makebeacon(CHAR_DATA *ch, char *argument)
     learn_from_success(ch, gsn_makebeacon);
 }
 
-void do_plantbeacon(CHAR_DATA *ch, char *argument)
+void do_plantbeacon(CHAR_DATA* ch, char* argument)
 {
-    SHIP_DATA *ship;
-    OBJ_DATA *obj;
+    SHIP_DATA* ship;
+    OBJ_DATA* obj;
     bool checkbeacon = false;
     char buf[MAX_STRING_LENGTH];
 
@@ -5955,10 +5955,10 @@ void do_plantbeacon(CHAR_DATA *ch, char *argument)
     }
 }
 
-void do_showbeacons(CHAR_DATA *ch, char *argument)
+void do_showbeacons(CHAR_DATA* ch, char* argument)
 {
-    SHIP_DATA *ship;
-    SHIP_DATA *ship2;
+    SHIP_DATA* ship;
+    SHIP_DATA* ship2;
     char buf[MAX_STRING_LENGTH];
     char buf2[MAX_STRING_LENGTH];
     char buf3[MAX_STRING_LENGTH];
@@ -6041,9 +6041,9 @@ void do_showbeacons(CHAR_DATA *ch, char *argument)
     learn_from_success(ch, gsn_showbeacons);
 }
 
-void do_checkbeacons(CHAR_DATA *ch, char *argument)
+void do_checkbeacons(CHAR_DATA* ch, char* argument)
 {
-    SHIP_DATA *ship;
+    SHIP_DATA* ship;
     char arg[MAX_STRING_LENGTH];
     int chance;
 
@@ -6084,7 +6084,7 @@ void do_checkbeacons(CHAR_DATA *ch, char *argument)
     case 1:
         if (!ch->dest_buf)
             return;
-        strcpy(arg, reinterpret_cast<const char *>(ch->dest_buf));
+        strcpy(arg, reinterpret_cast<const char*>(ch->dest_buf));
         DISPOSE(ch->dest_buf);
         ch->dest_buf = NULL;
         break;
@@ -6122,9 +6122,9 @@ void do_checkbeacons(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void do_nullifybeacons(CHAR_DATA *ch, char *argument)
+void do_nullifybeacons(CHAR_DATA* ch, char* argument)
 {
-    SHIP_DATA *ship;
+    SHIP_DATA* ship;
     char arg[MAX_STRING_LENGTH];
     int chance;
 
@@ -6165,7 +6165,7 @@ void do_nullifybeacons(CHAR_DATA *ch, char *argument)
     case 1:
         if (!ch->dest_buf)
             return;
-        strcpy(arg, reinterpret_cast<const char *>(ch->dest_buf));
+        strcpy(arg, reinterpret_cast<const char*>(ch->dest_buf));
         DISPOSE(ch->dest_buf);
         ch->dest_buf = NULL;
         break;
@@ -6201,12 +6201,12 @@ void do_nullifybeacons(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void do_makebinders(CHAR_DATA *ch, char *argument)
+void do_makebinders(CHAR_DATA* ch, char* argument)
 {
     int level, chance;
     bool checktool, checkoven, checkdura;
-    OBJ_DATA *obj;
-    OBJ_INDEX_DATA *pObjIndex;
+    OBJ_DATA* obj;
+    OBJ_INDEX_DATA* pObjIndex;
     int vnum;
 
     switch (ch->substate)
@@ -6347,7 +6347,7 @@ void do_makebinders(CHAR_DATA *ch, char *argument)
     learn_from_success(ch, gsn_makebinders);
 }
 
-void do_setinfrared(CHAR_DATA *ch, char *argument)
+void do_setinfrared(CHAR_DATA* ch, char* argument)
 {
     char arg[MAX_INPUT_LENGTH];
 
@@ -6380,9 +6380,9 @@ void do_setinfrared(CHAR_DATA *ch, char *argument)
     }
 }
 
-void do_battle_command(CHAR_DATA *ch, char *argument)
+void do_battle_command(CHAR_DATA* ch, char* argument)
 {
-    CHAR_DATA *gch;
+    CHAR_DATA* gch;
     AFFECT_DATA af;
     int chance;
 

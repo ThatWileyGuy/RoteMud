@@ -44,20 +44,20 @@
 #include <time.h>
 #include "mud.hxx"
 
-SHIP_DATA *first_ship;
-SHIP_DATA *last_ship;
+SHIP_DATA* first_ship;
+SHIP_DATA* last_ship;
 
-MISSILE_DATA *first_missile;
-MISSILE_DATA *last_missile;
+MISSILE_DATA* first_missile;
+MISSILE_DATA* last_missile;
 
-SPACE_DATA *first_starsystem;
-SPACE_DATA *last_starsystem;
+SPACE_DATA* first_starsystem;
+SPACE_DATA* last_starsystem;
 
 extern char bname[MAX_STRING_LENGTH];
-char *primary_beam_name(SHIP_DATA *ship);
-char *secondary_beam_name(SHIP_DATA *ship);
-extern const char *cargo_names[CARGO_MAX];
-extern const char *cargo_names_lower[CARGO_MAX];
+char* primary_beam_name(SHIP_DATA* ship);
+char* secondary_beam_name(SHIP_DATA* ship);
+extern const char* cargo_names[CARGO_MAX];
+extern const char* cargo_names_lower[CARGO_MAX];
 
 int bus_pos = 0;
 int bus_planet = 0;
@@ -75,7 +75,7 @@ int corus_shuttle = 0;
 
 const int station_vnum[MAX_STATION] = {215, 216, 217, 218, 219, 220, 221, 222, 223, 224};
 
-const char *station_name[MAX_STATION] = {"Menari Spaceport",  "Skydome Botanical Gardens",
+const char* station_name[MAX_STATION] = {"Menari Spaceport",  "Skydome Botanical Gardens",
                                          "Grand Towers",      "Grandis Mon Theater",
                                          "Palace Station",    "Great Galactic Museum",
                                          "College Station",   "Holographic Zoo of Extinct Animals",
@@ -83,12 +83,12 @@ const char *station_name[MAX_STATION] = {"Menari Spaceport",  "Skydome Botanical
 
 int const bus_vnum[MAX_BUS_STOP] = {1053, 1850, 250, 4556, 28613, 9701, 7801, 9000, 10154, 18003};
 
-const char *bus_stop[MAX_BUS_STOP + 1] = {
+const char* bus_stop[MAX_BUS_STOP + 1] = {
     "Coruscant", "Yavin IV",    "Tatooine", "Endor",  "Kashyyyk", "Mon Calamari",
     "Nal Hutta", "Ord Mantell", "Corellia", "Bakura", "Coruscant" /* last should always be same as first */
 };
 
-const char *ship_flags[] = {
+const char* ship_flags[] = {
     "nohijack",      "shield_boost", "torp_boost",  "chaff_boost", "hull_boost",  "laser_boost",
     "missile_boost", "rocket_boost", "simulator",   "nodestroy",   "noslicer",    "ion_lasers",
     "ion_drive",     "ion_ion",      "ion_turret1", "ion_turret2", "ion_turret3", "ion_turret4",
@@ -96,7 +96,7 @@ const char *ship_flags[] = {
     "respawn",       "ion_misiles",  "ion_hyper",   "cloak",       "r24",         "r25",
     "r26",           "r27",          "r28",         "r29",         "r30",         "r31"};
 
-int get_shipflag(char *flag)
+int get_shipflag(char* flag)
 {
     int x;
 
@@ -107,29 +107,29 @@ int get_shipflag(char *flag)
 }
 
 /* local routines */
-void fread_ship(SHIP_DATA *ship, FILE *fp);
-bool load_ship_file(char *shipfile);
+void fread_ship(SHIP_DATA* ship, FILE* fp);
+bool load_ship_file(char* shipfile);
 void write_ship_list(void);
-void fread_starsystem(SPACE_DATA *starsystem, FILE *fp);
-bool load_starsystem(char *starsystemfile);
+void fread_starsystem(SPACE_DATA* starsystem, FILE* fp);
+bool load_starsystem(char* starsystemfile);
 void write_starsystem_list(void);
-void resetship(SHIP_DATA *ship);
-void landship(SHIP_DATA *ship, char *arg);
-void launchship(SHIP_DATA *ship);
-bool land_bus(SHIP_DATA *ship, int destination);
-void launch_bus(SHIP_DATA *ship);
-void echo_to_room_dnr(int ecolor, ROOM_INDEX_DATA *room, const char *argument);
-ch_ret drive_ship(CHAR_DATA *ch, SHIP_DATA *ship, EXIT_DATA *exit, int fall);
-bool autofly(SHIP_DATA *ship);
-bool is_facing(SHIP_DATA *ship, SHIP_DATA *target);
-void sound_to_ship(SHIP_DATA *ship, char *argument);
-int get_shipflag(char *flag);
+void resetship(SHIP_DATA* ship);
+void landship(SHIP_DATA* ship, char* arg);
+void launchship(SHIP_DATA* ship);
+bool land_bus(SHIP_DATA* ship, int destination);
+void launch_bus(SHIP_DATA* ship);
+void echo_to_room_dnr(int ecolor, ROOM_INDEX_DATA* room, const char* argument);
+ch_ret drive_ship(CHAR_DATA* ch, SHIP_DATA* ship, EXIT_DATA* exit, int fall);
+bool autofly(SHIP_DATA* ship);
+bool is_facing(SHIP_DATA* ship, SHIP_DATA* target);
+void sound_to_ship(SHIP_DATA* ship, char* argument);
+int get_shipflag(char* flag);
 
-ROOM_INDEX_DATA *generate_exit(ROOM_INDEX_DATA *in_room, EXIT_DATA **pexit);
+ROOM_INDEX_DATA* generate_exit(ROOM_INDEX_DATA* in_room, EXIT_DATA** pexit);
 
-void echo_to_room_dnr(int ecolor, ROOM_INDEX_DATA *room, const char *argument)
+void echo_to_room_dnr(int ecolor, ROOM_INDEX_DATA* room, const char* argument)
 {
-    CHAR_DATA *vic;
+    CHAR_DATA* vic;
 
     if (room == NULL)
         return;
@@ -141,7 +141,7 @@ void echo_to_room_dnr(int ecolor, ROOM_INDEX_DATA *room, const char *argument)
     }
 }
 
-bool land_bus(SHIP_DATA *ship, int destination)
+bool land_bus(SHIP_DATA* ship, int destination)
 {
     char buf[MAX_STRING_LENGTH];
 
@@ -170,7 +170,7 @@ bool land_bus(SHIP_DATA *ship, int destination)
     return true;
 }
 
-void launch_bus(SHIP_DATA *ship)
+void launch_bus(SHIP_DATA* ship)
 {
     char buf[MAX_STRING_LENGTH];
 
@@ -188,8 +188,8 @@ void launch_bus(SHIP_DATA *ship)
 
 void update_traffic()
 {
-    SHIP_DATA *shuttle;
-    SHIP_DATA *turbocar;
+    SHIP_DATA* shuttle;
+    SHIP_DATA* turbocar;
     char buf[MAX_STRING_LENGTH];
 
     shuttle = ship_from_cockpit(ROOM_CORUSCANT_SHUTTLE);
@@ -256,11 +256,11 @@ void update_traffic()
 
 void update_bus()
 {
-    SHIP_DATA *ship;
-    SHIP_DATA *ship2;
-    SHIP_DATA *ship3;
-    SHIP_DATA *ship4;
-    SHIP_DATA *target;
+    SHIP_DATA* ship;
+    SHIP_DATA* ship2;
+    SHIP_DATA* ship3;
+    SHIP_DATA* ship4;
+    SHIP_DATA* target;
     int destination;
     char buf[MAX_STRING_LENGTH];
 
@@ -466,13 +466,13 @@ void update_bus()
 
 void move_ships()
 {
-    SHIP_DATA *ship;
-    MISSILE_DATA *missile;
-    MISSILE_DATA *m_next;
-    SHIP_DATA *target;
+    SHIP_DATA* ship;
+    MISSILE_DATA* missile;
+    MISSILE_DATA* m_next;
+    SHIP_DATA* target;
     float dx, dy, dz, change;
     char buf[MAX_STRING_LENGTH];
-    CHAR_DATA *ch;
+    CHAR_DATA* ch;
     bool ch_found = false;
 
     for (missile = first_missile; missile; missile = m_next)
@@ -736,7 +736,7 @@ void move_ships()
 
 void recharge_ships()
 {
-    SHIP_DATA *ship;
+    SHIP_DATA* ship;
     char buf[MAX_STRING_LENGTH];
 
     for (ship = first_ship; ship; ship = ship->next)
@@ -859,7 +859,7 @@ void recharge_ships()
                 if (ship->target0 && ship->primaryState != LASER_DAMAGED)
                 {
                     int chance = 50;
-                    SHIP_DATA *target = ship->target0;
+                    SHIP_DATA* target = ship->target0;
                     int shots;
 
                     for (shots = 0; shots <= ship->primaryCount && ship->target0; shots++)
@@ -906,8 +906,8 @@ void recharge_ships()
 
 void update_space()
 {
-    SHIP_DATA *ship;
-    SHIP_DATA *target;
+    SHIP_DATA* ship;
+    SHIP_DATA* target;
     char buf[MAX_STRING_LENGTH];
     int too_close, target_too_close;
     int recharge;
@@ -1381,8 +1381,8 @@ void update_space()
 
 void write_starsystem_list()
 {
-    SPACE_DATA *tstarsystem;
-    FILE *fpout;
+    SPACE_DATA* tstarsystem;
+    FILE* fpout;
     char filename[256];
 
     sprintf_s(filename, "%s%s", SPACE_DIR, SPACE_LIST);
@@ -1401,9 +1401,9 @@ void write_starsystem_list()
 /*
  * Get pointer to space structure from starsystem name.
  */
-SPACE_DATA *starsystem_from_name(const char *name)
+SPACE_DATA* starsystem_from_name(const char* name)
 {
-    SPACE_DATA *starsystem;
+    SPACE_DATA* starsystem;
 
     for (starsystem = first_starsystem; starsystem; starsystem = starsystem->next)
         if (!str_cmp(name, starsystem->name))
@@ -1419,10 +1419,10 @@ SPACE_DATA *starsystem_from_name(const char *name)
 /*
  * Get pointer to space structure from the dock vnun.
  */
-SPACE_DATA *starsystem_from_vnum(int vnum)
+SPACE_DATA* starsystem_from_vnum(int vnum)
 {
-    SPACE_DATA *starsystem;
-    SHIP_DATA *ship;
+    SPACE_DATA* starsystem;
+    SHIP_DATA* ship;
 
     for (starsystem = first_starsystem; starsystem; starsystem = starsystem->next)
         if (vnum == starsystem->doc1a || vnum == starsystem->doc2a || vnum == starsystem->doc3a ||
@@ -1436,9 +1436,9 @@ SPACE_DATA *starsystem_from_vnum(int vnum)
 
     return NULL;
 }
-SPACE_DATA *starsystem_from_room(ROOM_INDEX_DATA *room)
+SPACE_DATA* starsystem_from_room(ROOM_INDEX_DATA* room)
 {
-    SHIP_DATA *ship;
+    SHIP_DATA* ship;
     //    ROOM_INDEX_DATA  *sRoom;
 
     if (room == NULL)
@@ -1463,9 +1463,9 @@ SPACE_DATA *starsystem_from_room(ROOM_INDEX_DATA *room)
 /*
  * Save a starsystem's data to its data file
  */
-void save_starsystem(SPACE_DATA *starsystem)
+void save_starsystem(SPACE_DATA* starsystem)
 {
-    FILE *fp;
+    FILE* fp;
     char filename[256];
     char buf[MAX_STRING_LENGTH];
 
@@ -1562,10 +1562,10 @@ void save_starsystem(SPACE_DATA *starsystem)
         break;                                                                                                         \
     }
 
-void fread_starsystem(SPACE_DATA *starsystem, FILE *fp)
+void fread_starsystem(SPACE_DATA* starsystem, FILE* fp)
 {
     char buf[MAX_STRING_LENGTH];
-    const char *word;
+    const char* word;
     bool fMatch;
 
     for (;;)
@@ -1701,11 +1701,11 @@ void fread_starsystem(SPACE_DATA *starsystem, FILE *fp)
  * Load a starsystem file
  */
 
-bool load_starsystem(const char *starsystemfile)
+bool load_starsystem(const char* starsystemfile)
 {
     char filename[256];
-    SPACE_DATA *starsystem;
-    FILE *fp;
+    SPACE_DATA* starsystem;
+    FILE* fp;
     bool found;
 
     CREATE(starsystem, SPACE_DATA, 1);
@@ -1721,7 +1721,7 @@ bool load_starsystem(const char *starsystemfile)
         for (;;)
         {
             char letter;
-            char *word;
+            char* word;
 
             letter = fread_letter(fp);
             if (letter == '*')
@@ -1767,8 +1767,8 @@ bool load_starsystem(const char *starsystemfile)
  */
 void load_space()
 {
-    FILE *fpList;
-    const char *filename;
+    FILE* fpList;
+    const char* filename;
     char starsystemlist[256];
     char buf[MAX_STRING_LENGTH];
 
@@ -1801,11 +1801,11 @@ void load_space()
     return;
 }
 
-void do_setstarsystem(CHAR_DATA *ch, char *argument)
+void do_setstarsystem(CHAR_DATA* ch, char* argument)
 {
     char arg1[MAX_INPUT_LENGTH];
     char arg2[MAX_INPUT_LENGTH];
-    SPACE_DATA *starsystem;
+    SPACE_DATA* starsystem;
 
     if (IS_NPC(ch))
     {
@@ -2205,7 +2205,7 @@ void do_setstarsystem(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void showstarsystem(CHAR_DATA *ch, SPACE_DATA *starsystem)
+void showstarsystem(CHAR_DATA* ch, SPACE_DATA* starsystem)
 {
     ch_printf(ch, "Starsystem:%s     Filename: %s    Xpos: %d   Ypos: %d\n\r", starsystem->name, starsystem->filename,
               starsystem->xpos, starsystem->ypos);
@@ -2231,9 +2231,9 @@ void showstarsystem(CHAR_DATA *ch, SPACE_DATA *starsystem)
     return;
 }
 
-void do_showstarsystem(CHAR_DATA *ch, char *argument)
+void do_showstarsystem(CHAR_DATA* ch, char* argument)
 {
-    SPACE_DATA *starsystem;
+    SPACE_DATA* starsystem;
 
     starsystem = starsystem_from_name(argument);
 
@@ -2243,11 +2243,11 @@ void do_showstarsystem(CHAR_DATA *ch, char *argument)
         showstarsystem(ch, starsystem);
 }
 
-void do_makestarsystem(CHAR_DATA *ch, char *argument)
+void do_makestarsystem(CHAR_DATA* ch, char* argument)
 {
     char arg[MAX_INPUT_LENGTH];
     char filename[256];
-    SPACE_DATA *starsystem;
+    SPACE_DATA* starsystem;
 
     if (!argument || argument[0] == '\0')
     {
@@ -2282,9 +2282,9 @@ void do_makestarsystem(CHAR_DATA *ch, char *argument)
     write_starsystem_list();
 }
 
-void do_starsystems(CHAR_DATA *ch, char *argument)
+void do_starsystems(CHAR_DATA* ch, char* argument)
 {
-    SPACE_DATA *starsystem;
+    SPACE_DATA* starsystem;
     int count = 0;
 
     set_char_color(AT_NOTE, ch);
@@ -2310,7 +2310,7 @@ void do_starsystems(CHAR_DATA *ch, char *argument)
     }
 }
 
-void echo_to_ship(int color, SHIP_DATA *ship, const char *argument)
+void echo_to_ship(int color, SHIP_DATA* ship, const char* argument)
 {
     int room;
 
@@ -2320,11 +2320,11 @@ void echo_to_ship(int color, SHIP_DATA *ship, const char *argument)
     }
 }
 
-void sound_to_ship(SHIP_DATA *ship, const char *argument)
+void sound_to_ship(SHIP_DATA* ship, const char* argument)
 {
     int roomnum;
-    ROOM_INDEX_DATA *room;
-    CHAR_DATA *vic;
+    ROOM_INDEX_DATA* room;
+    CHAR_DATA* vic;
 
     for (roomnum = ship->firstroom; roomnum <= ship->lastroom; roomnum++)
     {
@@ -2340,7 +2340,7 @@ void sound_to_ship(SHIP_DATA *ship, const char *argument)
     }
 }
 
-void echo_to_cockpit(int color, SHIP_DATA *ship, const char *argument)
+void echo_to_cockpit(int color, SHIP_DATA* ship, const char* argument)
 {
     int room;
 
@@ -2354,9 +2354,9 @@ void echo_to_cockpit(int color, SHIP_DATA *ship, const char *argument)
     }
 }
 
-void echo_to_system(int color, SHIP_DATA *ship, const char *argument, SHIP_DATA *ignore)
+void echo_to_system(int color, SHIP_DATA* ship, const char* argument, SHIP_DATA* ignore)
 {
-    SHIP_DATA *target;
+    SHIP_DATA* target;
 
     if (!ship->starsystem)
         return;
@@ -2368,7 +2368,7 @@ void echo_to_system(int color, SHIP_DATA *ship, const char *argument, SHIP_DATA 
     }
 }
 
-bool is_facing(SHIP_DATA *ship, SHIP_DATA *target)
+bool is_facing(SHIP_DATA* ship, SHIP_DATA* target)
 {
     float dy, dx, dz, hx, hy, hz;
     float cosofa;
@@ -2389,7 +2389,7 @@ bool is_facing(SHIP_DATA *ship, SHIP_DATA *target)
     return false;
 }
 
-long int get_ship_value(SHIP_DATA *ship)
+long int get_ship_value(SHIP_DATA* ship)
 {
     long int price;
 
@@ -2400,8 +2400,8 @@ long int get_ship_value(SHIP_DATA *ship)
 
 void write_ship_list()
 {
-    SHIP_DATA *tship;
-    FILE *fpout;
+    SHIP_DATA* tship;
+    FILE* fpout;
     char filename[256];
 
     sprintf_s(filename, "%s%s", SHIP_DIR, SHIP_LIST);
@@ -2417,9 +2417,9 @@ void write_ship_list()
     fclose(fpout);
 }
 
-SHIP_DATA *ship_in_room(ROOM_INDEX_DATA *room, char *name)
+SHIP_DATA* ship_in_room(ROOM_INDEX_DATA* room, char* name)
 {
-    SHIP_DATA *ship;
+    SHIP_DATA* ship;
 
     if (!room)
         return NULL;
@@ -2438,9 +2438,9 @@ SHIP_DATA *ship_in_room(ROOM_INDEX_DATA *room, char *name)
 /*
  * Get pointer to ship structure from ship name.
  */
-SHIP_DATA *get_ship(char *name)
+SHIP_DATA* get_ship(char* name)
 {
-    SHIP_DATA *ship;
+    SHIP_DATA* ship;
 
     for (ship = first_ship; ship; ship = ship->next)
         if (!str_cmp(name, ship->name))
@@ -2456,9 +2456,9 @@ SHIP_DATA *get_ship(char *name)
 /*
  * Checks if ships in a starsystem and returns poiner if it is.
  */
-SHIP_DATA *get_ship_here(char *name, SPACE_DATA *starsystem)
+SHIP_DATA* get_ship_here(char* name, SPACE_DATA* starsystem)
 {
-    SHIP_DATA *ship;
+    SHIP_DATA* ship;
 
     if (starsystem == NULL)
         return NULL;
@@ -2477,9 +2477,9 @@ SHIP_DATA *get_ship_here(char *name, SPACE_DATA *starsystem)
 /*
  * Get pointer to ship structure from ship name.
  */
-SHIP_DATA *ship_from_pilot(char *name)
+SHIP_DATA* ship_from_pilot(char* name)
 {
-    SHIP_DATA *ship;
+    SHIP_DATA* ship;
 
     for (ship = first_ship; ship; ship = ship->next)
         if (!str_cmp(name, ship->pilot))
@@ -2495,9 +2495,9 @@ SHIP_DATA *ship_from_pilot(char *name)
  * Get pointer to ship structure from cockpit, turret, or entrance ramp vnum.
  */
 
-SHIP_DATA *ship_from_cockpit(int vnum)
+SHIP_DATA* ship_from_cockpit(int vnum)
 {
-    SHIP_DATA *ship;
+    SHIP_DATA* ship;
 
     for (ship = first_ship; ship; ship = ship->next)
         if (vnum == ship->cockpit || vnum == ship->turret1 || vnum == ship->turret2 || vnum == ship->turret3 ||
@@ -2508,9 +2508,9 @@ SHIP_DATA *ship_from_cockpit(int vnum)
     return NULL;
 }
 
-SHIP_DATA *ship_from_pilotseat(int vnum)
+SHIP_DATA* ship_from_pilotseat(int vnum)
 {
-    SHIP_DATA *ship;
+    SHIP_DATA* ship;
 
     for (ship = first_ship; ship; ship = ship->next)
         if (vnum == ship->pilotseat || vnum == ship->cockpit)
@@ -2518,9 +2518,9 @@ SHIP_DATA *ship_from_pilotseat(int vnum)
     return NULL;
 }
 
-SHIP_DATA *ship_from_coseat(int vnum)
+SHIP_DATA* ship_from_coseat(int vnum)
 {
-    SHIP_DATA *ship;
+    SHIP_DATA* ship;
 
     for (ship = first_ship; ship; ship = ship->next)
         if (vnum == ship->coseat)
@@ -2528,9 +2528,9 @@ SHIP_DATA *ship_from_coseat(int vnum)
     return NULL;
 }
 
-SHIP_DATA *ship_from_navseat(int vnum)
+SHIP_DATA* ship_from_navseat(int vnum)
 {
-    SHIP_DATA *ship;
+    SHIP_DATA* ship;
 
     for (ship = first_ship; ship; ship = ship->next)
         if (vnum == ship->navseat)
@@ -2538,9 +2538,9 @@ SHIP_DATA *ship_from_navseat(int vnum)
     return NULL;
 }
 
-SHIP_DATA *ship_from_gunseat(int vnum)
+SHIP_DATA* ship_from_gunseat(int vnum)
 {
-    SHIP_DATA *ship;
+    SHIP_DATA* ship;
 
     for (ship = first_ship; ship; ship = ship->next)
         if (vnum == ship->gunseat)
@@ -2548,9 +2548,9 @@ SHIP_DATA *ship_from_gunseat(int vnum)
     return NULL;
 }
 
-SHIP_DATA *ship_from_engine(int vnum)
+SHIP_DATA* ship_from_engine(int vnum)
 {
-    SHIP_DATA *ship;
+    SHIP_DATA* ship;
 
     for (ship = first_ship; ship; ship = ship->next)
     {
@@ -2569,9 +2569,9 @@ SHIP_DATA *ship_from_engine(int vnum)
     return NULL;
 }
 
-SHIP_DATA *ship_from_turret(int vnum)
+SHIP_DATA* ship_from_turret(int vnum)
 {
-    SHIP_DATA *ship;
+    SHIP_DATA* ship;
 
     for (ship = first_ship; ship; ship = ship->next)
         if (vnum == ship->gunseat || vnum == ship->turret1 || vnum == ship->turret2 || vnum == ship->turret3 ||
@@ -2581,9 +2581,9 @@ SHIP_DATA *ship_from_turret(int vnum)
     return NULL;
 }
 
-SHIP_DATA *ship_from_entrance(int vnum)
+SHIP_DATA* ship_from_entrance(int vnum)
 {
-    SHIP_DATA *ship;
+    SHIP_DATA* ship;
 
     for (ship = first_ship; ship; ship = ship->next)
         if (vnum == ship->entrance)
@@ -2591,9 +2591,9 @@ SHIP_DATA *ship_from_entrance(int vnum)
     return NULL;
 }
 
-SHIP_DATA *ship_from_hanger(int vnum)
+SHIP_DATA* ship_from_hanger(int vnum)
 {
-    SHIP_DATA *ship;
+    SHIP_DATA* ship;
 
     for (ship = first_ship; ship; ship = ship->next)
         if (vnum == ship->hanger1 || vnum == ship->hanger2 || vnum == ship->hanger3 || vnum == ship->hanger4)
@@ -2601,12 +2601,12 @@ SHIP_DATA *ship_from_hanger(int vnum)
     return NULL;
 }
 
-void save_ship(SHIP_DATA *ship)
+void save_ship(SHIP_DATA* ship)
 {
-    FILE *fp;
+    FILE* fp;
     char filename[256];
     char buf[MAX_STRING_LENGTH];
-    MODULE_DATA *mod;
+    MODULE_DATA* mod;
 
     if (!ship)
     {
@@ -2785,14 +2785,14 @@ void save_ship(SHIP_DATA *ship)
         break;                                                                                                         \
     }
 
-void fread_ship(SHIP_DATA *ship, FILE *fp)
+void fread_ship(SHIP_DATA* ship, FILE* fp)
 {
     char buf[MAX_STRING_LENGTH];
-    const char *word;
+    const char* word;
     bool fMatch;
     int dummy_number;
     int x1, x2;
-    char *line;
+    char* line;
 
     for (;;)
     {
@@ -2946,7 +2946,7 @@ void fread_ship(SHIP_DATA *ship, FILE *fp)
             KEY("MaxCargo", ship->maxcargo, fread_number(fp));
             if (!str_cmp(word, "Module"))
             {
-                MODULE_DATA *mod;
+                MODULE_DATA* mod;
                 line = fread_line(fp);
                 CREATE(mod, MODULE_DATA, 1);
                 LINK(mod, ship->first_module, ship->last_module, next, prev);
@@ -3085,14 +3085,14 @@ void fread_ship(SHIP_DATA *ship, FILE *fp)
  * Load a ship file
  */
 
-bool load_ship_file(const char *shipfile)
+bool load_ship_file(const char* shipfile)
 {
     char filename[256];
-    SHIP_DATA *ship;
-    FILE *fp;
+    SHIP_DATA* ship;
+    FILE* fp;
     bool found;
-    ROOM_INDEX_DATA *pRoomIndex;
-    CLAN_DATA *clan;
+    ROOM_INDEX_DATA* pRoomIndex;
+    CLAN_DATA* clan;
 
     CREATE(ship, SHIP_DATA, 1);
 
@@ -3106,7 +3106,7 @@ bool load_ship_file(const char *shipfile)
         for (;;)
         {
             char letter;
-            char *word;
+            char* word;
 
             letter = fread_letter(fp);
             if (letter == '*')
@@ -3392,8 +3392,8 @@ bool load_ship_file(const char *shipfile)
  */
 void load_ships()
 {
-    FILE *fpList;
-    const char *filename;
+    FILE* fpList;
+    const char* filename;
     char shiplist[256];
     char buf[MAX_STRING_LENGTH];
 
@@ -3430,10 +3430,10 @@ void load_ships()
     return;
 }
 
-void untargetship(SHIP_DATA *target)
+void untargetship(SHIP_DATA* target)
 {
-    SHIP_DATA *ship;
-    MISSILE_DATA *missile;
+    SHIP_DATA* ship;
+    MISSILE_DATA* missile;
 
     for (ship = first_ship; ship; ship = ship->next)
     {
@@ -3467,7 +3467,7 @@ void untargetship(SHIP_DATA *target)
             missile->target = NULL;
 }
 
-void resetship(SHIP_DATA *ship)
+void resetship(SHIP_DATA* ship)
 {
     untargetship(ship);
     ship->shipstate = SHIP_READY;
@@ -3604,7 +3604,7 @@ void resetship(SHIP_DATA *ship)
 
     if (str_cmp("Public", ship->owner) && ship->type != MOB_SHIP)
     {
-        CLAN_DATA *clan;
+        CLAN_DATA* clan;
 
         if (ship->type != MOB_SHIP && (clan = get_clan(ship->owner)) != NULL)
         {
@@ -3625,9 +3625,9 @@ void resetship(SHIP_DATA *ship)
     save_ship(ship);
 }
 
-void do_resetship(CHAR_DATA *ch, char *argument)
+void do_resetship(CHAR_DATA* ch, char* argument)
 {
-    SHIP_DATA *ship;
+    SHIP_DATA* ship;
 
     ship = get_ship(argument);
     if (ship == NULL)
@@ -3651,13 +3651,13 @@ void do_resetship(CHAR_DATA *ch, char *argument)
     }
 }
 
-void do_setship(CHAR_DATA *ch, char *argument)
+void do_setship(CHAR_DATA* ch, char* argument)
 {
     char arg1[MAX_INPUT_LENGTH];
     char arg2[MAX_INPUT_LENGTH];
-    SHIP_DATA *ship;
+    SHIP_DATA* ship;
     int tempnum;
-    ROOM_INDEX_DATA *roomindex;
+    ROOM_INDEX_DATA* roomindex;
 
     if (IS_NPC(ch))
     {
@@ -3693,7 +3693,7 @@ void do_setship(CHAR_DATA *ch, char *argument)
 
     if (!str_cmp(arg2, "owner"))
     {
-        CLAN_DATA *clan;
+        CLAN_DATA* clan;
         if (ship->type != MOB_SHIP && (clan = get_clan(ship->owner)) != NULL)
         {
             if (ship->clazz != LAND_VEHICLE)
@@ -4574,9 +4574,9 @@ void do_setship(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void do_showship(CHAR_DATA *ch, char *argument)
+void do_showship(CHAR_DATA* ch, char* argument)
 {
-    SHIP_DATA *ship;
+    SHIP_DATA* ship;
 
     if (IS_NPC(ch))
     {
@@ -4684,9 +4684,9 @@ void do_showship(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void do_makeship(CHAR_DATA *ch, char *argument)
+void do_makeship(CHAR_DATA* ch, char* argument)
 {
-    SHIP_DATA *ship;
+    SHIP_DATA* ship;
     char arg[MAX_INPUT_LENGTH];
 
     argument = one_argument(argument, arg);
@@ -4734,10 +4734,10 @@ void do_makeship(CHAR_DATA *ch, char *argument)
     write_ship_list();
 }
 
-void do_copyship(CHAR_DATA *ch, char *argument)
+void do_copyship(CHAR_DATA* ch, char* argument)
 {
-    SHIP_DATA *ship;
-    SHIP_DATA *old;
+    SHIP_DATA* ship;
+    SHIP_DATA* old;
     char arg[MAX_INPUT_LENGTH];
     char arg2[MAX_INPUT_LENGTH];
 
@@ -4794,9 +4794,9 @@ void do_copyship(CHAR_DATA *ch, char *argument)
     write_ship_list();
 }
 
-void do_ships(CHAR_DATA *ch, char *argument)
+void do_ships(CHAR_DATA* ch, char* argument)
 {
-    SHIP_DATA *ship;
+    SHIP_DATA* ship;
     int count;
 
     if (!IS_NPC(ch))
@@ -4876,9 +4876,9 @@ void do_ships(CHAR_DATA *ch, char *argument)
         } */
 }
 
-void do_speeders(CHAR_DATA *ch, char *argument)
+void do_speeders(CHAR_DATA* ch, char* argument)
 {
-    SHIP_DATA *ship;
+    SHIP_DATA* ship;
     int count;
 
     if (!IS_NPC(ch))
@@ -4951,9 +4951,9 @@ void do_speeders(CHAR_DATA *ch, char *argument)
     }
 }
 
-void do_allspeeders(CHAR_DATA *ch, char *argument)
+void do_allspeeders(CHAR_DATA* ch, char* argument)
 {
-    SHIP_DATA *ship;
+    SHIP_DATA* ship;
     int count = 0;
 
     count = 0;
@@ -4993,9 +4993,9 @@ void do_allspeeders(CHAR_DATA *ch, char *argument)
     }
 }
 
-void do_allships(CHAR_DATA *ch, char *argument)
+void do_allships(CHAR_DATA* ch, char* argument)
 {
-    SHIP_DATA *ship;
+    SHIP_DATA* ship;
     int count = 0;
 
     count = 0;
@@ -5045,7 +5045,7 @@ void do_allships(CHAR_DATA *ch, char *argument)
     }
 }
 
-void ship_to_starsystem(SHIP_DATA *ship, SPACE_DATA *starsystem)
+void ship_to_starsystem(SHIP_DATA* ship, SPACE_DATA* starsystem)
 {
     if (starsystem == NULL)
         return;
@@ -5068,10 +5068,10 @@ void ship_to_starsystem(SHIP_DATA *ship, SPACE_DATA *starsystem)
     ship->starsystem = starsystem;
 }
 
-void new_missile(SHIP_DATA *ship, SHIP_DATA *target, CHAR_DATA *ch, int missiletype)
+void new_missile(SHIP_DATA* ship, SHIP_DATA* target, CHAR_DATA* ch, int missiletype)
 {
-    SPACE_DATA *starsystem;
-    MISSILE_DATA *missile;
+    SPACE_DATA* starsystem;
+    MISSILE_DATA* missile;
 
     if (ship == NULL)
         return;
@@ -5120,7 +5120,7 @@ void new_missile(SHIP_DATA *ship, SHIP_DATA *target, CHAR_DATA *ch, int missilet
     missile->starsystem = starsystem;
 }
 
-void ship_from_starsystem(SHIP_DATA *ship, SPACE_DATA *starsystem)
+void ship_from_starsystem(SHIP_DATA* ship, SPACE_DATA* starsystem)
 {
 
     if (starsystem == NULL)
@@ -5146,9 +5146,9 @@ void ship_from_starsystem(SHIP_DATA *ship, SPACE_DATA *starsystem)
     ship->prev_in_starsystem = NULL;
 }
 
-void extract_missile(MISSILE_DATA *missile)
+void extract_missile(MISSILE_DATA* missile)
 {
-    SPACE_DATA *starsystem;
+    SPACE_DATA* starsystem;
 
     if (missile == NULL)
         return;
@@ -5183,7 +5183,7 @@ void extract_missile(MISSILE_DATA *missile)
     DISPOSE(missile);
 }
 
-bool is_rental(CHAR_DATA *ch, SHIP_DATA *ship)
+bool is_rental(CHAR_DATA* ch, SHIP_DATA* ship)
 {
     if (!str_cmp("Public", ship->owner))
         return true;
@@ -5191,7 +5191,7 @@ bool is_rental(CHAR_DATA *ch, SHIP_DATA *ship)
     return false;
 }
 
-bool check_pilot(CHAR_DATA *ch, SHIP_DATA *ship)
+bool check_pilot(CHAR_DATA* ch, SHIP_DATA* ship)
 {
     if (!str_cmp(ch->name, ship->owner) || !str_cmp(ch->name, ship->pilot) || !str_cmp(ch->name, ship->copilot) ||
         !str_cmp("Public", ship->owner))
@@ -5215,9 +5215,9 @@ bool check_pilot(CHAR_DATA *ch, SHIP_DATA *ship)
     return false;
 }
 
-bool extract_ship(SHIP_DATA *ship)
+bool extract_ship(SHIP_DATA* ship)
 {
-    ROOM_INDEX_DATA *room;
+    ROOM_INDEX_DATA* room;
 
     if ((room = ship->in_room) != NULL)
     {
@@ -5227,7 +5227,7 @@ bool extract_ship(SHIP_DATA *ship)
     return true;
 }
 
-void damage_ship_ch(SHIP_DATA *ship, int min, int max, CHAR_DATA *ch)
+void damage_ship_ch(SHIP_DATA* ship, int min, int max, CHAR_DATA* ch)
 {
     int damage, shield_dmg;
     long xp;
@@ -5423,7 +5423,7 @@ void damage_ship_ch(SHIP_DATA *ship, int min, int max, CHAR_DATA *ch)
         echo_to_cockpit(AT_BLOOD + AT_BLINK, ship, "&G[&gShip Computer&G] &wShip hull severely damaged.");
 }
 
-void damage_ship_ch_ion(SHIP_DATA *ship, int min, int max, CHAR_DATA *ch)
+void damage_ship_ch_ion(SHIP_DATA* ship, int min, int max, CHAR_DATA* ch)
 {
     int damage, numloop, shields, range, chance;
     long xp;
@@ -5619,7 +5619,7 @@ void damage_ship_ch_ion(SHIP_DATA *ship, int min, int max, CHAR_DATA *ch)
     }
 }
 
-void damage_ship(SHIP_DATA *ship, int min, int max)
+void damage_ship(SHIP_DATA* ship, int min, int max)
 {
     int damage, shield_dmg;
 
@@ -5677,18 +5677,18 @@ void damage_ship(SHIP_DATA *ship, int min, int max)
         echo_to_cockpit(AT_BLOOD + AT_BLINK, ship, "&G[&gShip Computer&G]&w Warning. Ship hull critically damaged.");
 }
 
-void destroy_ship(SHIP_DATA *ship, CHAR_DATA *ch, const char *reason)
+void destroy_ship(SHIP_DATA* ship, CHAR_DATA* ch, const char* reason)
 {
     char buf[MAX_STRING_LENGTH];
     int roomnum;
-    ROOM_INDEX_DATA *room;
-    OBJ_DATA *robj;
-    CHAR_DATA *rch;
+    ROOM_INDEX_DATA* room;
+    OBJ_DATA* robj;
+    CHAR_DATA* rch;
     int vnum, size;
-    ROOM_INDEX_DATA *sroom;
+    ROOM_INDEX_DATA* sroom;
     char shiplog[MAX_STRING_LENGTH];
-    AREA_DATA *tarea;
-    SHIP_DATA *hship;
+    AREA_DATA* tarea;
+    SHIP_DATA* hship;
 
     sprintf_s(buf, "%s explodes in a blinding flash of light!", ship->name);
     echo_to_system(AT_WHITE + AT_BLINK, ship, buf, NULL);
@@ -5844,9 +5844,9 @@ void destroy_ship(SHIP_DATA *ship, CHAR_DATA *ch, const char *reason)
     }
 }
 
-bool ship_to_room(SHIP_DATA *ship, int vnum)
+bool ship_to_room(SHIP_DATA* ship, int vnum)
 {
-    ROOM_INDEX_DATA *shipto;
+    ROOM_INDEX_DATA* shipto;
 
     if ((shipto = get_room_index(vnum)) == NULL)
         return false;
@@ -5856,10 +5856,10 @@ bool ship_to_room(SHIP_DATA *ship, int vnum)
     return true;
 }
 
-void do_getship(CHAR_DATA *ch, char *argument)
+void do_getship(CHAR_DATA* ch, char* argument)
 {
     int landroom;
-    SHIP_DATA *ship;
+    SHIP_DATA* ship;
     char buf[MAX_STRING_LENGTH];
     landroom = ch->in_room->vnum;
     if (argument[0] == '\0')
@@ -5883,11 +5883,11 @@ void do_getship(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void do_board(CHAR_DATA *ch, char *argument)
+void do_board(CHAR_DATA* ch, char* argument)
 {
-    ROOM_INDEX_DATA *fromroom;
-    ROOM_INDEX_DATA *toroom;
-    SHIP_DATA *ship;
+    ROOM_INDEX_DATA* fromroom;
+    ROOM_INDEX_DATA* toroom;
+    SHIP_DATA* ship;
 
     if (!argument || argument[0] == '\0')
     {
@@ -5919,7 +5919,7 @@ void do_board(CHAR_DATA *ch, char *argument)
 
         if (toroom->tunnel > 0)
         {
-            CHAR_DATA *ctmp;
+            CHAR_DATA* ctmp;
             int count = 0;
 
             for (ctmp = toroom->first_person; ctmp; ctmp = ctmp->next_in_room)
@@ -5946,7 +5946,7 @@ void do_board(CHAR_DATA *ch, char *argument)
         send_to_char("That ship has no entrance!\n\r", ch);
 }
 
-bool rent_ship(CHAR_DATA *ch, SHIP_DATA *ship)
+bool rent_ship(CHAR_DATA* ch, SHIP_DATA* ship)
 {
 
     long price;
@@ -5973,11 +5973,11 @@ bool rent_ship(CHAR_DATA *ch, SHIP_DATA *ship)
     return true;
 }
 
-void do_leaveship(CHAR_DATA *ch, char *argument)
+void do_leaveship(CHAR_DATA* ch, char* argument)
 {
-    ROOM_INDEX_DATA *fromroom;
-    ROOM_INDEX_DATA *toroom;
-    SHIP_DATA *ship;
+    ROOM_INDEX_DATA* fromroom;
+    ROOM_INDEX_DATA* toroom;
+    SHIP_DATA* ship;
 
     fromroom = ch->in_room;
 
@@ -6024,7 +6024,7 @@ void do_leaveship(CHAR_DATA *ch, char *argument)
         send_to_char("The exit doesn't seem to be working properly.\n\r", ch);
 }
 
-void do_launch(CHAR_DATA *ch, char *argument)
+void do_launch(CHAR_DATA* ch, char* argument)
 {
     int chance, password;
     long price = 0;
@@ -6249,13 +6249,13 @@ void do_launch(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void launchship(SHIP_DATA *ship)
+void launchship(SHIP_DATA* ship)
 {
     char buf[MAX_STRING_LENGTH];
-    SHIP_DATA *source;
+    SHIP_DATA* source;
     int plusminus;
-    ROOM_INDEX_DATA *room;
-    SPACE_DATA *simul;
+    ROOM_INDEX_DATA* room;
+    SPACE_DATA* simul;
     for (simul = first_starsystem; simul; simul = simul->next)
     {
         if (!strcmp(simul->name, "Simulator\0"))
@@ -6339,9 +6339,9 @@ void launchship(SHIP_DATA *ship)
     ship->inship = NULL;
 }
 
-void showland(AREA_DATA *tarea, CHAR_DATA *ch)
+void showland(AREA_DATA* tarea, CHAR_DATA* ch)
 {
-    ROOM_INDEX_DATA *room;
+    ROOM_INDEX_DATA* room;
     int vnum;
     int num = 0;
     for (vnum = tarea->low_r_vnum; vnum <= tarea->hi_r_vnum; vnum++)
@@ -6360,16 +6360,16 @@ void showland(AREA_DATA *tarea, CHAR_DATA *ch)
     return;
 }
 
-void do_land(CHAR_DATA *ch, char *argument)
+void do_land(CHAR_DATA* ch, char* argument)
 {
     char arg[MAX_INPUT_LENGTH];
     char arg1[MAX_INPUT_LENGTH];
     int chance;
-    SHIP_DATA *ship;
-    SHIP_DATA *target;
-    PLANET_DATA *planet;
+    SHIP_DATA* ship;
+    SHIP_DATA* target;
+    PLANET_DATA* planet;
     bool pfound = false;
-    ROOM_INDEX_DATA *room;
+    ROOM_INDEX_DATA* room;
     bool rfound = false;
     int vnum;
 
@@ -6491,7 +6491,7 @@ void do_land(CHAR_DATA *ch, char *argument)
 
             if (argument[0] != '\0')
             {
-                AREA_DATA *pArea;
+                AREA_DATA* pArea;
                 for (pArea = planet->first_area; pArea; pArea = pArea->next_on_planet)
                 {
                     for (vnum = pArea->low_r_vnum; vnum <= pArea->hi_r_vnum; vnum++)
@@ -6539,7 +6539,7 @@ void do_land(CHAR_DATA *ch, char *argument)
 
             if (!rfound)
             {
-                AREA_DATA *pArea;
+                AREA_DATA* pArea;
                 send_to_char("&c+--------------------------------------------------+\n\r", ch);
                 send_to_char("&c| &CPlease type the location after the planet name.  &c|\n\r", ch);
                 ch_printf(ch, "&c| &CPossible choices for %-26.26s  &c|\n\r", planet->name);
@@ -6643,17 +6643,17 @@ void do_land(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void landship(SHIP_DATA *ship, char *argument)
+void landship(SHIP_DATA* ship, char* argument)
 {
-    SHIP_DATA *target;
+    SHIP_DATA* target;
     char buf[MAX_STRING_LENGTH];
     int destination = 0;
     char arg[MAX_INPUT_LENGTH];
     char arg1[MAX_INPUT_LENGTH];
     // HANGER_DATA *hanger;
-    PLANET_DATA *planet;
-    ROOM_INDEX_DATA *room;
-    AREA_DATA *pArea;
+    PLANET_DATA* planet;
+    ROOM_INDEX_DATA* room;
+    AREA_DATA* pArea;
     int vnum;
 
     strcpy_s(arg, argument);
@@ -6716,7 +6716,7 @@ void landship(SHIP_DATA *ship, char *argument)
     }
     else
     {
-        ROOM_INDEX_DATA *room = nullptr;
+        ROOM_INDEX_DATA* room = nullptr;
         target = get_ship_here(arg, ship->starsystem);
 
         if ((ship->type == 0 || ship->type == 1) && target->hanger1)
@@ -6747,11 +6747,11 @@ void landship(SHIP_DATA *ship, char *argument)
     }
 }
 
-void do_accelerate(CHAR_DATA *ch, char *argument)
+void do_accelerate(CHAR_DATA* ch, char* argument)
 {
     int chance;
     int change;
-    SHIP_DATA *ship;
+    SHIP_DATA* ship;
     char buf[MAX_STRING_LENGTH];
 
     if ((ship = ship_from_cockpit(ch->in_room->vnum)) == NULL)
@@ -6861,16 +6861,16 @@ void do_accelerate(CHAR_DATA *ch, char *argument)
         learn_from_success(ch, gsn_largespace);
 }
 
-void do_trajectory(CHAR_DATA *ch, char *argument)
+void do_trajectory(CHAR_DATA* ch, char* argument)
 {
-    PLANET_DATA *planet;
+    PLANET_DATA* planet;
     bool foundplanet = false;
     char buf[MAX_STRING_LENGTH];
     char arg2[MAX_INPUT_LENGTH];
     char arg3[MAX_INPUT_LENGTH];
     int chance;
     float vx, vy, vz;
-    SHIP_DATA *ship;
+    SHIP_DATA* ship;
 
     if ((ship = ship_from_cockpit(ch->in_room->vnum)) == NULL)
     {
@@ -7013,10 +7013,10 @@ void do_trajectory(CHAR_DATA *ch, char *argument)
         learn_from_success(ch, gsn_largespace);
 }
 
-void do_buyship(CHAR_DATA *ch, char *argument)
+void do_buyship(CHAR_DATA* ch, char* argument)
 {
     long price;
-    SHIP_DATA *ship;
+    SHIP_DATA* ship;
 
     if (IS_NPC(ch) || !ch->pcdata)
     {
@@ -7091,12 +7091,12 @@ void do_buyship(CHAR_DATA *ch, char *argument)
     save_ship(ship);
 }
 
-void do_clanbuyship(CHAR_DATA *ch, char *argument)
+void do_clanbuyship(CHAR_DATA* ch, char* argument)
 {
     long price;
-    SHIP_DATA *ship;
-    CLAN_DATA *clan;
-    CLAN_DATA *mainclan;
+    SHIP_DATA* ship;
+    CLAN_DATA* clan;
+    CLAN_DATA* mainclan;
 
     if (IS_NPC(ch) || !ch->pcdata)
     {
@@ -7168,10 +7168,10 @@ void do_clanbuyship(CHAR_DATA *ch, char *argument)
         clan->vehicles++;
 }
 
-void do_sellship(CHAR_DATA *ch, char *argument)
+void do_sellship(CHAR_DATA* ch, char* argument)
 {
     long price;
-    SHIP_DATA *ship;
+    SHIP_DATA* ship;
 
     ship = ship_in_room(ch->in_room, argument);
     if (!ship)
@@ -7204,10 +7204,10 @@ void do_sellship(CHAR_DATA *ch, char *argument)
     save_ship(ship);
 }
 
-void do_info(CHAR_DATA *ch, char *argument)
+void do_info(CHAR_DATA* ch, char* argument)
 {
-    SHIP_DATA *ship;
-    SHIP_DATA *target;
+    SHIP_DATA* ship;
+    SHIP_DATA* target;
     char buf[MAX_STRING_LENGTH];
 
     if ((ship = ship_from_cockpit(ch->in_room->vnum)) == NULL)
@@ -7299,10 +7299,10 @@ void do_info(CHAR_DATA *ch, char *argument)
     act(AT_PLAIN, buf, ch, NULL, argument, TO_ROOM);
 }
 
-void do_autorecharge(CHAR_DATA *ch, char *argument)
+void do_autorecharge(CHAR_DATA* ch, char* argument)
 {
     int chance;
-    SHIP_DATA *ship;
+    SHIP_DATA* ship;
     int recharge;
 
     if ((ship = ship_from_cockpit(ch->in_room->vnum)) == NULL)
@@ -7380,9 +7380,9 @@ void do_autorecharge(CHAR_DATA *ch, char *argument)
     learn_from_success(ch, gsn_shipsystems);
 }
 
-void do_autopilot(CHAR_DATA *ch, char *argument)
+void do_autopilot(CHAR_DATA* ch, char* argument)
 {
-    SHIP_DATA *ship;
+    SHIP_DATA* ship;
 
     if ((ship = ship_from_cockpit(ch->in_room->vnum)) == NULL)
     {
@@ -7425,9 +7425,9 @@ void do_autopilot(CHAR_DATA *ch, char *argument)
     }
 }
 
-void do_openhatch(CHAR_DATA *ch, char *argument)
+void do_openhatch(CHAR_DATA* ch, char* argument)
 {
-    SHIP_DATA *ship;
+    SHIP_DATA* ship;
     char buf[MAX_STRING_LENGTH];
     char arg1[MAX_STRING_LENGTH];
     char arg2[MAX_STRING_LENGTH];
@@ -7521,9 +7521,9 @@ void do_openhatch(CHAR_DATA *ch, char *argument)
     send_to_char("&GIts already open!\n\r", ch);
 }
 
-void do_closehatch(CHAR_DATA *ch, char *argument)
+void do_closehatch(CHAR_DATA* ch, char* argument)
 {
-    SHIP_DATA *ship;
+    SHIP_DATA* ship;
     char buf[MAX_STRING_LENGTH];
 
     if (!argument || argument[0] == '\0' || !str_cmp(argument, "hatch"))
@@ -7594,11 +7594,11 @@ void do_closehatch(CHAR_DATA *ch, char *argument)
     }
 }
 
-void do_status(CHAR_DATA *ch, char *argument)
+void do_status(CHAR_DATA* ch, char* argument)
 {
     int chance, x;
-    SHIP_DATA *ship;
-    SHIP_DATA *target;
+    SHIP_DATA* ship;
+    SHIP_DATA* target;
 
     if ((ship = ship_from_cockpit(ch->in_room->vnum)) == NULL)
     {
@@ -7793,11 +7793,11 @@ void do_status(CHAR_DATA *ch, char *argument)
     learn_from_success(ch, gsn_shipsystems);
 }
 
-void do_hyperspace(CHAR_DATA *ch, char *argument)
+void do_hyperspace(CHAR_DATA* ch, char* argument)
 {
     int chance;
-    SHIP_DATA *ship;
-    SHIP_DATA *eShip;
+    SHIP_DATA* ship;
+    SHIP_DATA* eShip;
     char buf[MAX_STRING_LENGTH];
 
     if ((ship = ship_from_cockpit(ch->in_room->vnum)) == NULL)
@@ -7932,12 +7932,12 @@ void do_hyperspace(CHAR_DATA *ch, char *argument)
         learn_from_success(ch, gsn_largespace);
 }
 
-void do_target(CHAR_DATA *ch, char *argument)
+void do_target(CHAR_DATA* ch, char* argument)
 {
     char arg[MAX_INPUT_LENGTH];
     int chance;
-    SHIP_DATA *ship;
-    SHIP_DATA *target;
+    SHIP_DATA* ship;
+    SHIP_DATA* target;
     char buf[MAX_STRING_LENGTH];
 
     strcpy_s(arg, argument);
@@ -8049,7 +8049,7 @@ void do_target(CHAR_DATA *ch, char *argument)
     case 1:
         if (!ch->dest_buf)
             return;
-        strcpy_s(arg, reinterpret_cast<char *>(ch->dest_buf));
+        strcpy_s(arg, reinterpret_cast<char*>(ch->dest_buf));
         DISPOSE(ch->dest_buf);
         break;
 
@@ -8125,7 +8125,7 @@ void do_target(CHAR_DATA *ch, char *argument)
 
 /* Fire update by ||, primary/secondary usage, autoblasters, repeating ions... */
 
-void do_fire(CHAR_DATA *ch, char *argument)
+void do_fire(CHAR_DATA* ch, char* argument)
 {
     int chance;
     int range = 1500;
@@ -8133,9 +8133,9 @@ void do_fire(CHAR_DATA *ch, char *argument)
     int damage;
     int p, times, size;
     char arg[MAX_STRING_LENGTH];
-    SHIP_DATA *ship = nullptr;
-    SHIP_DATA *target = nullptr;
-    OBJ_DATA *obj = nullptr;
+    SHIP_DATA* ship = nullptr;
+    SHIP_DATA* target = nullptr;
+    OBJ_DATA* obj = nullptr;
     char buf[MAX_STRING_LENGTH];
 
     obj = get_eq_char(ch, WEAR_WIELD);
@@ -9300,15 +9300,15 @@ void do_fire(CHAR_DATA *ch, char *argument)
     send_to_char("&RYou can't fire that!\n\r", ch);
 }
 
-void do_calculate(CHAR_DATA *ch, char *argument)
+void do_calculate(CHAR_DATA* ch, char* argument)
 {
     char arg1[MAX_INPUT_LENGTH];
     char arg2[MAX_INPUT_LENGTH];
     char arg3[MAX_INPUT_LENGTH];
     int chance = 0;
     int count = 0;
-    SHIP_DATA *ship = nullptr;
-    SPACE_DATA *starsystem = nullptr;
+    SHIP_DATA* ship = nullptr;
+    SPACE_DATA* starsystem = nullptr;
 
     argument = one_argument(argument, arg1);
     argument = one_argument(argument, arg2);
@@ -9415,7 +9415,7 @@ void do_calculate(CHAR_DATA *ch, char *argument)
     }
     else
     {
-        SPACE_DATA *starsystem;
+        SPACE_DATA* starsystem;
 
         starsystem = ship->currjump;
 
@@ -9486,11 +9486,11 @@ void do_calculate(CHAR_DATA *ch, char *argument)
     WAIT_STATE(ch, 2 * PULSE_VIOLENCE);
 }
 
-void do_recharge(CHAR_DATA *ch, char *argument)
+void do_recharge(CHAR_DATA* ch, char* argument)
 {
     int recharge;
     int chance;
-    SHIP_DATA *ship;
+    SHIP_DATA* ship;
 
     if ((ship = ship_from_cockpit(ch->in_room->vnum)) == NULL)
     {
@@ -9544,13 +9544,13 @@ void do_recharge(CHAR_DATA *ch, char *argument)
         send_to_char("&GShip shields are at maximum.\n\r", ch);
 }
 
-void do_refuel(CHAR_DATA *ch, char *argument)
+void do_refuel(CHAR_DATA* ch, char* argument)
 {
 }
 
-void do_addpilot(CHAR_DATA *ch, char *argument)
+void do_addpilot(CHAR_DATA* ch, char* argument)
 {
-    SHIP_DATA *ship;
+    SHIP_DATA* ship;
 
     if ((ship = ship_from_cockpit(ch->in_room->vnum)) == NULL)
     {
@@ -9616,9 +9616,9 @@ void do_addpilot(CHAR_DATA *ch, char *argument)
     save_ship(ship);
 }
 
-void do_rempilot(CHAR_DATA *ch, char *argument)
+void do_rempilot(CHAR_DATA* ch, char* argument)
 {
-    SHIP_DATA *ship;
+    SHIP_DATA* ship;
 
     if ((ship = ship_from_cockpit(ch->in_room->vnum)) == NULL)
     {
@@ -9681,13 +9681,13 @@ void do_rempilot(CHAR_DATA *ch, char *argument)
     send_to_char("&RThat person isn't listed as one of the ships pilots.\n\r", ch);
 }
 
-void do_radar(CHAR_DATA *ch, char *argument)
+void do_radar(CHAR_DATA* ch, char* argument)
 {
-    SHIP_DATA *target;
-    PLANET_DATA *planet;
+    SHIP_DATA* target;
+    PLANET_DATA* planet;
     int chance;
-    SHIP_DATA *ship;
-    MISSILE_DATA *missile;
+    SHIP_DATA* ship;
+    MISSILE_DATA* missile;
 
     if ((ship = ship_from_cockpit(ch->in_room->vnum)) == NULL)
     {
@@ -9819,9 +9819,9 @@ void do_radar(CHAR_DATA *ch, char *argument)
     learn_from_success(ch, gsn_navigation);
 }
 
-void do_autotrack(CHAR_DATA *ch, char *argument)
+void do_autotrack(CHAR_DATA* ch, char* argument)
 {
-    SHIP_DATA *ship;
+    SHIP_DATA* ship;
     int chance;
 
     if ((ship = ship_from_cockpit(ch->in_room->vnum)) == NULL)
@@ -9886,18 +9886,18 @@ void do_autotrack(CHAR_DATA *ch, char *argument)
     learn_from_success(ch, gsn_shipsystems);
 }
 
-void do_jumpvector(CHAR_DATA *ch, char *argument)
+void do_jumpvector(CHAR_DATA* ch, char* argument)
 {
 }
-void do_reload(CHAR_DATA *ch, char *argument)
+void do_reload(CHAR_DATA* ch, char* argument)
 {
 }
-void do_closebay(CHAR_DATA *ch, char *argument)
+void do_closebay(CHAR_DATA* ch, char* argument)
 {
 }
-void do_openbay(CHAR_DATA *ch, char *argument)
+void do_openbay(CHAR_DATA* ch, char* argument)
 {
-    SHIP_DATA *ship;
+    SHIP_DATA* ship;
     char buf[MAX_STRING_LENGTH];
 
     if ((ship = ship_from_pilotseat(ch->in_room->vnum)) == NULL)
@@ -9942,7 +9942,7 @@ void do_openbay(CHAR_DATA *ch, char *argument)
     }
 }
 
-void do_tractorbeam(CHAR_DATA *ch, char *argument)
+void do_tractorbeam(CHAR_DATA* ch, char* argument)
 /* Added 'stop' capability for tractor beams. --Trillen of SW:FotE
  * Idea from Mikor of SW:RotR
  */
@@ -9950,8 +9950,8 @@ void do_tractorbeam(CHAR_DATA *ch, char *argument)
 
     char arg1[MAX_INPUT_LENGTH];
     int chance;
-    SHIP_DATA *ship = nullptr;
-    SHIP_DATA *target = nullptr;
+    SHIP_DATA* ship = nullptr;
+    SHIP_DATA* target = nullptr;
     char buf[MAX_STRING_LENGTH];
 
     argument = one_argument(argument, arg1);
@@ -10217,10 +10217,10 @@ void do_tractorbeam(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void do_pluogus(CHAR_DATA *ch, char *argument)
+void do_pluogus(CHAR_DATA* ch, char* argument)
 {
     bool ch_comlink = false;
-    OBJ_DATA *obj;
+    OBJ_DATA* obj;
     int next_planet, itt;
 
     for (obj = ch->last_carrying; obj; obj = obj->prev_content)
@@ -10308,14 +10308,14 @@ void do_pluogus(CHAR_DATA *ch, char *argument)
     ch_printf(ch, "\n\r");
 }
 
-void do_fly(CHAR_DATA *ch, char *argument)
+void do_fly(CHAR_DATA* ch, char* argument)
 {
 }
 
-void do_drive(CHAR_DATA *ch, char *argument)
+void do_drive(CHAR_DATA* ch, char* argument)
 {
     int dir;
-    SHIP_DATA *ship;
+    SHIP_DATA* ship;
 
     if ((ship = ship_from_cockpit(ch->in_room->vnum)) == NULL)
     {
@@ -10350,20 +10350,20 @@ void do_drive(CHAR_DATA *ch, char *argument)
     drive_ship(ch, ship, get_exit(get_room_index(ship->location), dir), 0);
 }
 
-ch_ret drive_ship(CHAR_DATA *ch, SHIP_DATA *ship, EXIT_DATA *pexit, int fall)
+ch_ret drive_ship(CHAR_DATA* ch, SHIP_DATA* ship, EXIT_DATA* pexit, int fall)
 {
-    ROOM_INDEX_DATA *in_room;
-    ROOM_INDEX_DATA *to_room;
-    ROOM_INDEX_DATA *from_room;
-    ROOM_INDEX_DATA *original;
+    ROOM_INDEX_DATA* in_room;
+    ROOM_INDEX_DATA* to_room;
+    ROOM_INDEX_DATA* from_room;
+    ROOM_INDEX_DATA* original;
     char buf[MAX_STRING_LENGTH];
-    const char *txt;
-    const char *dtxt;
+    const char* txt;
+    const char* dtxt;
     ch_ret retcode;
     sh_int door, distance;
     bool drunk = false;
-    CHAR_DATA *rch;
-    CHAR_DATA *next_rch;
+    CHAR_DATA* rch;
+    CHAR_DATA* next_rch;
 
     if (!IS_NPC(ch))
         if (IS_DRUNK(ch, 2) && (ch->position != POS_SHOVE) && (ch->position != POS_DRAG))
@@ -10523,7 +10523,7 @@ ch_ret drive_ship(CHAR_DATA *ch, SHIP_DATA *ship, EXIT_DATA *pexit, int fall)
 
     if (to_room->tunnel > 0)
     {
-        CHAR_DATA *ctmp;
+        CHAR_DATA* ctmp;
         int count = 0;
 
         for (ctmp = to_room->first_person; ctmp; ctmp = ctmp->next_in_room)
@@ -10637,14 +10637,14 @@ ch_ret drive_ship(CHAR_DATA *ch, SHIP_DATA *ship, EXIT_DATA *pexit, int fall)
     return retcode;
 }
 
-void do_bomb(CHAR_DATA *ch, char *argument)
+void do_bomb(CHAR_DATA* ch, char* argument)
 {
     int vnum, i, hibomb, lowbomb;
-    SHIP_DATA *ship;
-    OBJ_INDEX_DATA *pobj;
-    OBJ_DATA *obj;
-    ROOM_INDEX_DATA *room;
-    PLANET_DATA *planet;
+    SHIP_DATA* ship;
+    OBJ_INDEX_DATA* pobj;
+    OBJ_DATA* obj;
+    ROOM_INDEX_DATA* room;
+    PLANET_DATA* planet;
     int bombs;
     bool foundplanet = false;
     char buf[MAX_STRING_LENGTH];
@@ -10785,10 +10785,10 @@ void do_bomb(CHAR_DATA *ch, char *argument)
     learn_from_success(ch, gsn_bomb);
 }
 
-void do_chaff(CHAR_DATA *ch, char *argument)
+void do_chaff(CHAR_DATA* ch, char* argument)
 {
     int chance;
-    SHIP_DATA *ship;
+    SHIP_DATA* ship;
 
     if ((ship = ship_from_cockpit(ch->in_room->vnum)) == NULL)
     {
@@ -10848,7 +10848,7 @@ void do_chaff(CHAR_DATA *ch, char *argument)
     learn_from_success(ch, gsn_weaponsystems);
 }
 
-bool autofly(SHIP_DATA *ship)
+bool autofly(SHIP_DATA* ship)
 {
 
     if (!ship)
@@ -10863,9 +10863,9 @@ bool autofly(SHIP_DATA *ship)
     return false;
 }
 
-SHIP_DATA *ship_from_room(int vnum)
+SHIP_DATA* ship_from_room(int vnum)
 {
-    SHIP_DATA *ship;
+    SHIP_DATA* ship;
     int sRoom;
 
     for (ship = first_ship; ship; ship = ship->next)
@@ -10875,9 +10875,9 @@ SHIP_DATA *ship_from_room(int vnum)
     return NULL;
 }
 
-void do_salvage(CHAR_DATA *ch, char *argument)
+void do_salvage(CHAR_DATA* ch, char* argument)
 {
-    SHIP_DATA *ship;
+    SHIP_DATA* ship;
     int value;
     char buf[MAX_STRING_LENGTH];
     ship = ship_in_room(ch->in_room, argument);
@@ -10937,10 +10937,10 @@ void do_salvage(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void do_clansalvage(CHAR_DATA *ch, char *argument)
+void do_clansalvage(CHAR_DATA* ch, char* argument)
 {
-    SHIP_DATA *ship;
-    CLAN_DATA *clan;
+    SHIP_DATA* ship;
+    CLAN_DATA* clan;
     int value;
     char buf[MAX_STRING_LENGTH];
 
@@ -10988,9 +10988,9 @@ void do_clansalvage(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void do_endsimulator(CHAR_DATA *ch, char *argument)
+void do_endsimulator(CHAR_DATA* ch, char* argument)
 {
-    SHIP_DATA *ship;
+    SHIP_DATA* ship;
     char buf[MAX_INPUT_LENGTH];
 
     if ((ship = ship_from_cockpit(ch->in_room->vnum)) == NULL)
@@ -11020,9 +11020,9 @@ void do_endsimulator(CHAR_DATA *ch, char *argument)
     send_to_char("You press a button and the simulation ends.\n\r", ch);
 }
 
-void do_freeship(CHAR_DATA *ch, char *argument)
+void do_freeship(CHAR_DATA* ch, char* argument)
 {
-    SHIP_DATA *ship;
+    SHIP_DATA* ship;
     char buf[MAX_INPUT_LENGTH];
     send_to_char("&z+-----------------------------------------------------------------------------+\n\r", ch);
     send_to_char("&z| &cShip                      &z| &YRent       &z| &RLocation &z                          |\n\r",
@@ -11051,10 +11051,10 @@ void do_freeship(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void do_giveship(CHAR_DATA *ch, char *argument)
+void do_giveship(CHAR_DATA* ch, char* argument)
 {
-    SHIP_DATA *ship;
-    CHAR_DATA *victim;
+    SHIP_DATA* ship;
+    CHAR_DATA* victim;
 
     char logbuf[MAX_STRING_LENGTH];
     char arg1[MAX_INPUT_LENGTH];
@@ -11106,10 +11106,10 @@ void do_giveship(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void do_clangiveship(CHAR_DATA *ch, char *argument)
+void do_clangiveship(CHAR_DATA* ch, char* argument)
 {
-    SHIP_DATA *ship;
-    CLAN_DATA *clan;
+    SHIP_DATA* ship;
+    CLAN_DATA* clan;
 
     char buf[MAX_STRING_LENGTH];
     char logbuf[MAX_STRING_LENGTH];
@@ -11163,10 +11163,10 @@ void do_clangiveship(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void do_request(CHAR_DATA *ch, char *argument)
+void do_request(CHAR_DATA* ch, char* argument)
 {
-    SHIP_DATA *ship;
-    SHIP_DATA *target;
+    SHIP_DATA* ship;
+    SHIP_DATA* target;
     char arg1[MAX_INPUT_LENGTH];
     char arg2[MAX_INPUT_LENGTH];
     char buf[MAX_STRING_LENGTH];
@@ -11276,24 +11276,24 @@ void do_request(CHAR_DATA *ch, char *argument)
     }
 }
 
-void do_makesimulator(CHAR_DATA *ch, char *argument)
+void do_makesimulator(CHAR_DATA* ch, char* argument)
 {
 }
 
-void do_makemobship(CHAR_DATA *ch, char *argument)
+void do_makemobship(CHAR_DATA* ch, char* argument)
 {
 }
 
-void do_prototypes(CHAR_DATA *ch, char *argument)
+void do_prototypes(CHAR_DATA* ch, char* argument)
 {
 }
 
 // Written by Ackbar, updated by Tranin, Reupdated by Tawnos
-void do_sabotage(CHAR_DATA *ch, char *argument)
+void do_sabotage(CHAR_DATA* ch, char* argument)
 {
     char arg[MAX_INPUT_LENGTH];
     int chance;
-    SHIP_DATA *ship;
+    SHIP_DATA* ship;
     strcpy_s(arg, argument);
 
     switch (ch->substate)
@@ -11336,7 +11336,7 @@ void do_sabotage(CHAR_DATA *ch, char *argument)
     case 1:
         if (!ch->dest_buf)
             return;
-        strcpy(arg, reinterpret_cast<const char *>(ch->dest_buf));
+        strcpy(arg, reinterpret_cast<const char*>(ch->dest_buf));
         DISPOSE(ch->dest_buf);
         break;
 
@@ -11381,14 +11381,14 @@ void do_sabotage(CHAR_DATA *ch, char *argument)
     learn_from_success(ch, gsn_sabotage);
 }
 
-void do_makeshipbomb(CHAR_DATA *ch, char *argument)
+void do_makeshipbomb(CHAR_DATA* ch, char* argument)
 {
     char arg[MAX_INPUT_LENGTH];
     char buf[MAX_INPUT_LENGTH];
     int level, chance, strength, weight;
     bool checktool, checkdrink, checkbatt, checkchem1, checkchem2, checkchem3, checkcirc1, checkcirc2;
-    OBJ_DATA *obj;
-    OBJ_INDEX_DATA *pObjIndex;
+    OBJ_DATA* obj;
+    OBJ_INDEX_DATA* pObjIndex;
     int vnum;
     int circNum = 0, chemNum = 0;
     strcpy_s(arg, argument);
@@ -11493,7 +11493,7 @@ void do_makeshipbomb(CHAR_DATA *ch, char *argument)
     case 1:
         if (!ch->dest_buf)
             return;
-        strcpy(arg, reinterpret_cast<const char *>(ch->dest_buf));
+        strcpy(arg, reinterpret_cast<const char*>(ch->dest_buf));
         DISPOSE(ch->dest_buf);
         break;
 
@@ -11656,11 +11656,11 @@ void do_makeshipbomb(CHAR_DATA *ch, char *argument)
     learn_from_success(ch, gsn_makeshipbomb);
 }
 
-void do_shiprepair(CHAR_DATA *ch, char *argument)
+void do_shiprepair(CHAR_DATA* ch, char* argument)
 {
     char arg[MAX_INPUT_LENGTH];
     int chance, change;
-    SHIP_DATA *ship;
+    SHIP_DATA* ship;
 
     strcpy_s(arg, argument);
 
@@ -11812,7 +11812,7 @@ void do_shiprepair(CHAR_DATA *ch, char *argument)
     case 1:
         if (!ch->dest_buf)
             return;
-        strcpy(arg, reinterpret_cast<const char *>(ch->dest_buf));
+        strcpy(arg, reinterpret_cast<const char*>(ch->dest_buf));
         DISPOSE(ch->dest_buf);
         break;
 
@@ -11890,12 +11890,12 @@ void do_shiprepair(CHAR_DATA *ch, char *argument)
     learn_from_success(ch, gsn_shiprepair);
 }
 
-void do_transship(CHAR_DATA *ch, char *argument)
+void do_transship(CHAR_DATA* ch, char* argument)
 {
     char arg1[MAX_INPUT_LENGTH];
     char arg2[MAX_INPUT_LENGTH];
     int arg3;
-    SHIP_DATA *ship;
+    SHIP_DATA* ship;
 
     if (IS_NPC(ch))
     {
@@ -11940,12 +11940,12 @@ void do_transship(CHAR_DATA *ch, char *argument)
     send_to_char("Ship Transfered.\n\r", ch);
 }
 
-void do_transshipss(CHAR_DATA *ch, char *argument)
+void do_transshipss(CHAR_DATA* ch, char* argument)
 {
     char arg1[MAX_INPUT_LENGTH];
     char arg2[MAX_INPUT_LENGTH];
-    SHIP_DATA *ship;
-    SPACE_DATA *starsystem;
+    SHIP_DATA* ship;
+    SPACE_DATA* starsystem;
 
     if (IS_NPC(ch))
     {
@@ -11992,9 +11992,9 @@ void do_transshipss(CHAR_DATA *ch, char *argument)
     send_to_char("Ship transferred.\n\r", ch);
 }
 
-void do_removeship(CHAR_DATA *ch, char *argument)
+void do_removeship(CHAR_DATA* ch, char* argument)
 {
-    SHIP_DATA *ship;
+    SHIP_DATA* ship;
     char buf[MAX_STRING_LENGTH];
 
     if (argument[0] == '\0')
@@ -12016,9 +12016,9 @@ void do_removeship(CHAR_DATA *ch, char *argument)
     return;
 }
 
-SHIP_DATA *get_ship2(char *name)
+SHIP_DATA* get_ship2(char* name)
 {
-    SHIP_DATA *ship;
+    SHIP_DATA* ship;
     //    char buf[MAX_STRING_LENGTH];
     for (ship = first_ship; ship; ship = ship->next)
     {
@@ -12031,11 +12031,11 @@ SHIP_DATA *get_ship2(char *name)
     return NULL;
 }
 
-void do_shiplock(CHAR_DATA *ch, char *argument)
+void do_shiplock(CHAR_DATA* ch, char* argument)
 {
     int locknum;
     char buf[MAX_INPUT_LENGTH];
-    SHIP_DATA *ship;
+    SHIP_DATA* ship;
 
     if ((ship = ship_from_cockpit(ch->in_room->vnum)) == NULL)
     {
@@ -12062,7 +12062,7 @@ void do_shiplock(CHAR_DATA *ch, char *argument)
     save_ship(ship);
 }
 
-const char *ship_bit_name(int vector)
+const char* ship_bit_name(int vector)
 {
     static char buf[512];
 
@@ -12126,9 +12126,9 @@ const char *ship_bit_name(int vector)
     return (buf[0] != '\0') ? buf + 1 : "none";
 }
 
-void do_cut(CHAR_DATA *ch, char *argument)
+void do_cut(CHAR_DATA* ch, char* argument)
 {
-    SHIP_DATA *ship;
+    SHIP_DATA* ship;
     //  char buf[MAX_STRING_LENGTH];
     /*
      * This function will be used to repair damage caused by an ion cannon. Only this
@@ -12279,17 +12279,17 @@ void do_cut(CHAR_DATA *ch, char *argument)
     }
 }
 
-void do_transmit_pass(CHAR_DATA *ch, char *argument)
+void do_transmit_pass(CHAR_DATA* ch, char* argument)
 /* Coded by Trillen of SW:FotE for slave circuit modules
  * Allows player to remotely change the shiplock */
 {
     int locknum;
-    SHIP_DATA *ship;
+    SHIP_DATA* ship;
     char buf[MAX_STRING_LENGTH];
     char arg1[MAX_STRING_LENGTH];
     char arg2[MAX_STRING_LENGTH];
     bool ch_comlink;
-    OBJ_DATA *obj;
+    OBJ_DATA* obj;
 
     argument = one_argument(argument, arg1);
     argument = one_argument(argument, arg2);
@@ -12365,17 +12365,17 @@ void do_transmit_pass(CHAR_DATA *ch, char *argument)
     save_ship(ship);
 }
 
-void do_transmit_call(CHAR_DATA *ch, char *argument)
+void do_transmit_call(CHAR_DATA* ch, char* argument)
 /* Coded by Trillen and Eleven of SW:FotE for slave circuit modules
  * Allows user to call ship from anywhere in the galaxy. */
 {
-    SHIP_DATA *ship;
+    SHIP_DATA* ship;
     char buf[MAX_STRING_LENGTH];
     char buf2[MAX_STRING_LENGTH];
     int roomloc;
     int hprspd = 0;
     bool ch_comlink;
-    OBJ_DATA *obj;
+    OBJ_DATA* obj;
 
     switch (ch->substate)
     {
@@ -12477,14 +12477,14 @@ void do_transmit_call(CHAR_DATA *ch, char *argument)
     case 1:
         if (!ch->dest_buf)
             return;
-        argument = str_dup(reinterpret_cast<const char *>(ch->dest_buf));
+        argument = str_dup(reinterpret_cast<const char*>(ch->dest_buf));
         DISPOSE(ch->dest_buf);
         break;
 
     case SUB_TIMER_DO_ABORT:
         if (!ch->dest_buf)
             return;
-        argument = str_dup(reinterpret_cast<const char *>(ch->dest_buf));
+        argument = str_dup(reinterpret_cast<const char*>(ch->dest_buf));
         DISPOSE(ch->dest_buf);
         break;
     }
@@ -12528,14 +12528,14 @@ void do_transmit_call(CHAR_DATA *ch, char *argument)
     save_ship(ship);
 }
 
-void do_transmit_status(CHAR_DATA *ch, char *argument)
+void do_transmit_status(CHAR_DATA* ch, char* argument)
 /* Coded by Trillen of SW:FotE for slave circuit modules.
  * Allows player to use comlink to get status on any of his ships with a slave circuit.  */
 {
-    SHIP_DATA *ship;
+    SHIP_DATA* ship;
     int x;
     bool ch_comlink;
-    OBJ_DATA *obj;
+    OBJ_DATA* obj;
 
     if (argument[0] == '\0')
     {
@@ -12744,18 +12744,18 @@ void do_transmit_status(CHAR_DATA *ch, char *argument)
         ch_printf(ch, "&zBomb Payload: &w%d&W/%d\n\r", ship->bombs, ship->maxbombs);
 }
 
-void do_transmit_broadcast(CHAR_DATA *ch, char *argument)
+void do_transmit_broadcast(CHAR_DATA* ch, char* argument)
 /* Coded by Trillen and Tawnos of SW:FotE for slave circuit modules */
 /* Allows player to send a message over his ship, in a one-way shiptalk */
 {
-    SHIP_DATA *ship;
+    SHIP_DATA* ship;
     int newloc;
-    ROOM_INDEX_DATA *original;
-    CHAR_DATA *wch;
+    ROOM_INDEX_DATA* original;
+    CHAR_DATA* wch;
     char arg1[MAX_STRING_LENGTH];
     char arg2[MAX_STRING_LENGTH];
     bool ch_comlink;
-    OBJ_DATA *obj;
+    OBJ_DATA* obj;
 
     argument = one_argument(argument, arg1);
 
@@ -12860,9 +12860,9 @@ void do_transmit_broadcast(CHAR_DATA *ch, char *argument)
  * header is included and unmodified. Feel free to modify the
  * code however, improvements are welcome.
  */
-void do_split_s(CHAR_DATA *ch, char *argument)
+void do_split_s(CHAR_DATA* ch, char* argument)
 {
-    SHIP_DATA *ship;
+    SHIP_DATA* ship;
     char buf[MAX_STRING_LENGTH];
     int chance;
     int hx, hy, hz;
@@ -12984,12 +12984,12 @@ void do_split_s(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void do_unload_cargo(CHAR_DATA *ch, char *argument)
+void do_unload_cargo(CHAR_DATA* ch, char* argument)
 {
-    SHIP_DATA *ship;
-    SHIP_DATA *target;
+    SHIP_DATA* ship;
+    SHIP_DATA* target;
     int cost;
-    PLANET_DATA *planet;
+    PLANET_DATA* planet;
 
     if (argument[0] == '\0')
     {
@@ -13073,12 +13073,12 @@ void do_unload_cargo(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void do_load_cargo(CHAR_DATA *ch, char *argument)
+void do_load_cargo(CHAR_DATA* ch, char* argument)
 {
-    SHIP_DATA *ship;
-    SHIP_DATA *target;
+    SHIP_DATA* ship;
+    SHIP_DATA* target;
     int cost, cargo, i;
-    PLANET_DATA *planet;
+    PLANET_DATA* planet;
     char arg1[MAX_INPUT_LENGTH];
 
     argument = one_argument(argument, arg1);

@@ -51,7 +51,7 @@
    Fixed a few glaring errors. It also will not overrun the bounds of a string.
    -- Xorith
 */
-char *strrep(const char *src, const char *sch, const char *rep)
+char* strrep(const char* src, const char* sch, const char* rep)
 {
     int lensrc = strlen(src), lensch = strlen(sch), lenrep = strlen(rep), x, y, in_p;
     static char newsrc[MAX_STRING_LENGTH];
@@ -95,7 +95,7 @@ char *strrep(const char *src, const char *sch, const char *rep)
     return newsrc;
 }
 
-char *strlinwrp(char *src, int length)
+char* strlinwrp(char* src, int length)
 {
     int srclen, in_p, x, last_line;
     char newstr[MAX_STRING_LENGTH];
@@ -141,10 +141,10 @@ char *strlinwrp(char *src, int length)
     return str_dup(newstr);
 }
 
-char *remand(const char *arg)
+char* remand(const char* arg)
 {
     static char ret[MAX_STRING_LENGTH];
-    char *retptr;
+    char* retptr;
     retptr = ret;
 
     if (arg == NULL)
@@ -167,10 +167,10 @@ char *remand(const char *arg)
     return ret;
 }
 
-char *rembg(const char *src)
+char* rembg(const char* src)
 {
     static char ret[MAX_STRING_LENGTH];
-    char *retptr;
+    char* retptr;
     retptr = ret;
 
     if (src == NULL)
@@ -191,10 +191,10 @@ char *rembg(const char *src)
     return ret;
 }
 
-const char *htmlcolor(const char *src)
+const char* htmlcolor(const char* src)
 {
     static char arg[MAX_STRING_LENGTH];
-    char *newarg;
+    char* newarg;
 
     /* This function will format color codes into <font color> strings */
     if (strlen(src) == 0)
@@ -274,7 +274,7 @@ const char *htmlcolor(const char *src)
 }
 */
 
-char *chrmax(char *src, int length)
+char* chrmax(char* src, int length)
 {
     int i, len;
     static char ret[MAX_STRING_LENGTH];
@@ -296,9 +296,9 @@ char *chrmax(char *src, int length)
     }
     return ret;
 }
-int strlen_color(char *argument)
+int strlen_color(char* argument)
 {
-    char *str;
+    char* str;
     int i, length;
 
     str = argument;
@@ -323,7 +323,7 @@ int strlen_color(char *argument)
     return length;
 }
 
-char *format_str(char *src, int len)
+char* format_str(char* src, int len)
 {
     int sp1, sx;
     static char add_len[MAX_STRING_LENGTH];

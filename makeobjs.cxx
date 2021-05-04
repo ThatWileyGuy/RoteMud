@@ -45,9 +45,9 @@
 /*
  * Make a fire.
  */
-void make_fire(ROOM_INDEX_DATA *in_room, sh_int timer)
+void make_fire(ROOM_INDEX_DATA* in_room, sh_int timer)
 {
-    OBJ_DATA *fire;
+    OBJ_DATA* fire;
 
     fire = create_object(get_obj_index(OBJ_VNUM_FIRE), 0);
     fire->timer = number_fuzzy(timer);
@@ -58,9 +58,9 @@ void make_fire(ROOM_INDEX_DATA *in_room, sh_int timer)
 /*
  * Make a trap.
  */
-OBJ_DATA *make_trap(int v0, int v1, int v2, int v3)
+OBJ_DATA* make_trap(int v0, int v1, int v2, int v3)
 {
-    OBJ_DATA *trap;
+    OBJ_DATA* trap;
 
     trap = create_object(get_obj_index(OBJ_VNUM_TRAP), 0);
     trap->timer = 0;
@@ -74,11 +74,11 @@ OBJ_DATA *make_trap(int v0, int v1, int v2, int v3)
 /*
  * Turn an object into scraps.		-Thoric
  */
-void make_scraps(OBJ_DATA *obj)
+void make_scraps(OBJ_DATA* obj)
 {
     char buf[MAX_STRING_LENGTH];
     OBJ_DATA *scraps, *tmpobj;
-    CHAR_DATA *ch = NULL;
+    CHAR_DATA* ch = NULL;
 
     separate_obj(obj);
     scraps = create_object(get_obj_index(OBJ_VNUM_SCRAPS), 0);
@@ -150,13 +150,13 @@ void make_scraps(OBJ_DATA *obj)
 /*
  * Make a corpse out of a character.
  */
-void make_corpse(CHAR_DATA *ch, char *killer)
+void make_corpse(CHAR_DATA* ch, char* killer)
 {
     char buf[MAX_STRING_LENGTH];
-    OBJ_DATA *corpse;
-    OBJ_DATA *obj;
-    OBJ_DATA *obj_next;
-    char *name;
+    OBJ_DATA* corpse;
+    OBJ_DATA* obj;
+    OBJ_DATA* obj_next;
+    char* name;
 
     if (!IS_NPC(ch) && ch->top_level < 10)
         return;
@@ -232,9 +232,9 @@ void make_corpse(CHAR_DATA *ch, char *killer)
     return;
 }
 
-void make_blood(CHAR_DATA *ch)
+void make_blood(CHAR_DATA* ch)
 {
-    OBJ_DATA *obj;
+    OBJ_DATA* obj;
 
     obj = create_object(get_obj_index(OBJ_VNUM_BLOOD), 0);
     obj->timer = number_range(2, 4);
@@ -242,9 +242,9 @@ void make_blood(CHAR_DATA *ch)
     obj_to_room(obj, ch->in_room);
 }
 
-void make_bloodstain(CHAR_DATA *ch)
+void make_bloodstain(CHAR_DATA* ch)
 {
-    OBJ_DATA *obj;
+    OBJ_DATA* obj;
 
     obj = create_object(get_obj_index(OBJ_VNUM_BLOODSTAIN), 0);
     obj->timer = number_range(1, 2);
@@ -254,10 +254,10 @@ void make_bloodstain(CHAR_DATA *ch)
 /*
  * make some coinage
  */
-OBJ_DATA *create_money(int amount)
+OBJ_DATA* create_money(int amount)
 {
     char buf[MAX_STRING_LENGTH];
-    OBJ_DATA *obj;
+    OBJ_DATA* obj;
 
     if (amount <= 0)
     {

@@ -42,12 +42,12 @@
 #include <time.h>
 #include "mud.hxx"
 
-void do_plantbug(CHAR_DATA *ch, char *argument)
+void do_plantbug(CHAR_DATA* ch, char* argument)
 {
-    CHAR_DATA *victim;
-    BUG_DATA *bug;
-    BUG_DATA *cbug;
-    OBJ_DATA *obj;
+    CHAR_DATA* victim;
+    BUG_DATA* bug;
+    BUG_DATA* cbug;
+    OBJ_DATA* obj;
     bool checkbug = false;
     int chance;
 
@@ -134,14 +134,14 @@ void do_plantbug(CHAR_DATA *ch, char *argument)
     }
 }
 
-void do_showbugs(CHAR_DATA *ch, char *argument)
+void do_showbugs(CHAR_DATA* ch, char* argument)
 {
-    DESCRIPTOR_DATA *d;
-    CHAR_DATA *victim;
+    DESCRIPTOR_DATA* d;
+    CHAR_DATA* victim;
     int chance;
     char buf2[MAX_STRING_LENGTH];
-    SHIP_DATA *ship;
-    BUG_DATA *bug;
+    SHIP_DATA* ship;
+    BUG_DATA* bug;
     char buf[MAX_STRING_LENGTH];
     chance = number_percent() - 20;
     if (chance > ch->pcdata->learned[gsn_showbugs])
@@ -173,12 +173,12 @@ void do_showbugs(CHAR_DATA *ch, char *argument)
     learn_from_success(ch, gsn_showbugs);
 }
 
-void do_bind(CHAR_DATA *ch, char *argument)
+void do_bind(CHAR_DATA* ch, char* argument)
 {
-    OBJ_DATA *obj;
-    OBJ_DATA *tobj;
+    OBJ_DATA* obj;
+    OBJ_DATA* tobj;
     int chance;
-    CHAR_DATA *victim;
+    CHAR_DATA* victim;
     bool checkbinders = false;
 
     if (argument[0] == '\0')
@@ -257,12 +257,12 @@ void do_bind(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void do_unbind(CHAR_DATA *ch, char *argument)
+void do_unbind(CHAR_DATA* ch, char* argument)
 {
-    OBJ_DATA *obj;
+    OBJ_DATA* obj;
     bool checkbinders = false;
     char buf[MAX_STRING_LENGTH];
-    CHAR_DATA *victim;
+    CHAR_DATA* victim;
 
     if (IS_NPC(ch))
     {
@@ -340,9 +340,9 @@ void do_unbind(CHAR_DATA *ch, char *argument)
     REMOVE_BIT(victim->pcdata->act2, ACT_BOUND);
 }
 
-void do_gag(CHAR_DATA *ch, char *argument)
+void do_gag(CHAR_DATA* ch, char* argument)
 {
-    CHAR_DATA *victim;
+    CHAR_DATA* victim;
     int chance;
 
     if (argument[0] == '\0')
@@ -395,9 +395,9 @@ void do_gag(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void do_ungag(CHAR_DATA *ch, char *argument)
+void do_ungag(CHAR_DATA* ch, char* argument)
 {
-    CHAR_DATA *victim;
+    CHAR_DATA* victim;
 
     if (argument[0] == '\0')
     {
@@ -444,9 +444,9 @@ void do_ungag(CHAR_DATA *ch, char *argument)
     REMOVE_BIT(victim->pcdata->act2, ACT_GAGGED);
 }
 
-void do_ambush(CHAR_DATA *ch, char *argument)
+void do_ambush(CHAR_DATA* ch, char* argument)
 {
-    CHAR_DATA *victim;
+    CHAR_DATA* victim;
     int percent;
 
     if (argument[0] == '\0')
@@ -522,16 +522,16 @@ void do_ambush(CHAR_DATA *ch, char *argument)
 }
 
 // Contract System by Tawnos.
-void do_contract(CHAR_DATA *ch, char *argument)
+void do_contract(CHAR_DATA* ch, char* argument)
 {
-    CHAR_DATA *victim;
-    CHAR_DATA *target;
+    CHAR_DATA* victim;
+    CHAR_DATA* target;
     char arg1[MAX_INPUT_LENGTH];
     char arg2[MAX_INPUT_LENGTH];
     char arg3[MAX_INPUT_LENGTH];
     long amount = 0;
-    CONTRACT_DATA *ccontract;
-    CONTRACT_DATA *contract;
+    CONTRACT_DATA* ccontract;
+    CONTRACT_DATA* contract;
 
     argument = one_argument(argument, arg1);
     argument = one_argument(argument, arg2);
@@ -622,9 +622,9 @@ void do_contract(CHAR_DATA *ch, char *argument)
               target->name, amount);
 }
 
-void do_showcontracts(CHAR_DATA *ch, char *argument)
+void do_showcontracts(CHAR_DATA* ch, char* argument)
 {
-    CONTRACT_DATA *contract;
+    CONTRACT_DATA* contract;
 
     send_to_char("&R   Target   &W|&R Amount\n\r", ch);
     send_to_char("&W------------|----------\n\r", ch);
@@ -635,10 +635,10 @@ void do_showcontracts(CHAR_DATA *ch, char *argument)
     }
 }
 
-void do_remcontract(CHAR_DATA *ch, char *argument)
+void do_remcontract(CHAR_DATA* ch, char* argument)
 {
-    CONTRACT_DATA *contract;
-    CONTRACT_DATA *scontract = NULL;
+    CONTRACT_DATA* contract;
+    CONTRACT_DATA* scontract = NULL;
 
     if (argument[0] == '\0')
     {

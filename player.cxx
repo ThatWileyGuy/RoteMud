@@ -46,16 +46,16 @@
 /*
  *  Locals
  */
-const char *tiny_affect_loc_name(int location);
+const char* tiny_affect_loc_name(int location);
 
-void do_gold(CHAR_DATA *ch, char *argument)
+void do_gold(CHAR_DATA* ch, char* argument)
 {
     set_char_color(AT_GOLD, ch);
     ch_printf(ch, "You have %d credits.\n\r", ch->gold);
     return;
 }
 
-char *drawlife(int min, int max)
+char* drawlife(int min, int max)
 {
     static char buf[MAX_STRING_LENGTH];
     int per;
@@ -92,7 +92,7 @@ char *drawlife(int min, int max)
     return buf;
 }
 
-char *drawmove(int min, int max)
+char* drawmove(int min, int max)
 {
     static char buf[MAX_STRING_LENGTH];
     int per;
@@ -124,7 +124,7 @@ char *drawmove(int min, int max)
     return buf;
 }
 
-char *drawalign(int align)
+char* drawalign(int align)
 {
     static char buf[MAX_STRING_LENGTH];
     if (align >= 100)
@@ -157,9 +157,9 @@ char *drawalign(int align)
 /*
   New Score by Goku
 */
-void do_score(CHAR_DATA *ch, char *argument)
+void do_score(CHAR_DATA* ch, char* argument)
 {
-    CHAR_DATA *victim;
+    CHAR_DATA* victim;
     int ability;
     if (!argument || argument[0] == '\0')
         victim = ch;
@@ -488,7 +488,7 @@ void do_score(CHAR_DATA * ch, char *argument)
 /*
  * Return ascii name of an affect location.
  */
-const char *tiny_affect_loc_name(int location)
+const char* tiny_affect_loc_name(int location)
 {
     switch (location)
     {
@@ -630,17 +630,17 @@ const char *tiny_affect_loc_name(int location)
     return "(? ? ?)";
 }
 
-const char *get_race(CHAR_DATA *ch)
+const char* get_race(CHAR_DATA* ch)
 {
     if (ch->race < MAX_NPC_RACE && ch->race >= 0)
         return (npc_race[ch->race]);
     return ("Unknown");
 }
 
-void do_oldscore(CHAR_DATA *ch, char *argument)
+void do_oldscore(CHAR_DATA* ch, char* argument)
 {
-    AFFECT_DATA *paf;
-    SKILL_TYPE *skill;
+    AFFECT_DATA* paf;
+    SKILL_TYPE* skill;
 
     if (IS_AFFECTED(ch, AFF_POSSESS))
     {
@@ -884,7 +884,7 @@ void do_oldscore(CHAR_DATA *ch, char *argument)
 /*								-Thoric
  * Display your current exp, level, and surrounding level exp requirements
  */
-void do_level(CHAR_DATA *ch, char *argument)
+void do_level(CHAR_DATA* ch, char* argument)
 {
     int ability;
 
@@ -895,11 +895,11 @@ void do_level(CHAR_DATA *ch, char *argument)
                       exp_level(ch->skill_level[ability] + 1));
 }
 
-void do_affected(CHAR_DATA *ch, char *argument)
+void do_affected(CHAR_DATA* ch, char* argument)
 {
     char arg[MAX_INPUT_LENGTH];
-    AFFECT_DATA *paf;
-    SKILL_TYPE *skill;
+    AFFECT_DATA* paf;
+    SKILL_TYPE* skill;
 
     if (IS_NPC(ch))
         return;
@@ -973,7 +973,7 @@ void do_affected(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void do_inventory(CHAR_DATA *ch, char *argument)
+void do_inventory(CHAR_DATA* ch, char* argument)
 {
     set_char_color(AT_RED, ch);
     send_to_char("You are carrying:\n\r", ch);
@@ -981,9 +981,9 @@ void do_inventory(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void do_equipment(CHAR_DATA *ch, char *argument)
+void do_equipment(CHAR_DATA* ch, char* argument)
 {
-    OBJ_DATA *obj;
+    OBJ_DATA* obj;
     int iWear, dam;
     bool found;
     char buf[MAX_STRING_LENGTH];
@@ -1080,7 +1080,7 @@ void do_equipment(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void set_title(CHAR_DATA *ch, char *title)
+void set_title(CHAR_DATA* ch, char* title)
 {
     char buf[MAX_STRING_LENGTH];
 
@@ -1103,7 +1103,7 @@ void set_title(CHAR_DATA *ch, char *title)
     return;
 }
 
-void do_title(CHAR_DATA *ch, char *argument)
+void do_title(CHAR_DATA* ch, char* argument)
 {
     if (IS_NPC(ch))
         return;
@@ -1131,7 +1131,7 @@ void do_title(CHAR_DATA *ch, char *argument)
     send_to_char("Ok.\n\r", ch);
 }
 
-void do_email(CHAR_DATA *ch, char *argument)
+void do_email(CHAR_DATA* ch, char* argument)
 {
     char buf[MAX_STRING_LENGTH];
 
@@ -1168,7 +1168,7 @@ void do_email(CHAR_DATA *ch, char *argument)
     send_to_char("Email address set.\n\r", ch);
 }
 
-void do_screenname(CHAR_DATA *ch, char *argument)
+void do_screenname(CHAR_DATA* ch, char* argument)
 {
     char buf[MAX_STRING_LENGTH];
 
@@ -1205,7 +1205,7 @@ void do_screenname(CHAR_DATA *ch, char *argument)
     send_to_char("AIM Screnname set.\n\r", ch);
 }
 
-void do_homepage(CHAR_DATA *ch, char *argument)
+void do_homepage(CHAR_DATA* ch, char* argument)
 {
     char buf[MAX_STRING_LENGTH];
 
@@ -1243,7 +1243,7 @@ void do_homepage(CHAR_DATA *ch, char *argument)
     send_to_char("Homepage set.\n\r", ch);
 }
 
-void do_wwwimage(CHAR_DATA *ch, char *argument)
+void do_wwwimage(CHAR_DATA* ch, char* argument)
 {
     char buf[MAX_STRING_LENGTH];
 
@@ -1284,7 +1284,7 @@ void do_wwwimage(CHAR_DATA *ch, char *argument)
 /*
  * Set your personal description				-Thoric
  */
-void do_description(CHAR_DATA *ch, char *argument)
+void do_description(CHAR_DATA* ch, char* argument)
 {
     if (IS_NPC(ch))
     {
@@ -1324,7 +1324,7 @@ void do_description(CHAR_DATA *ch, char *argument)
 }
 
 /* Ripped off do_description for whois bio's -- Scryn*/
-void do_bio(CHAR_DATA *ch, char *argument)
+void do_bio(CHAR_DATA* ch, char* argument)
 {
     if (IS_NPC(ch))
     {
@@ -1363,7 +1363,7 @@ void do_bio(CHAR_DATA *ch, char *argument)
     }
 }
 
-void do_report(CHAR_DATA *ch, char *argument)
+void do_report(CHAR_DATA* ch, char* argument)
 {
     char buf[MAX_INPUT_LENGTH];
 
@@ -1383,7 +1383,7 @@ void do_report(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void do_prompt(CHAR_DATA *ch, char *argument)
+void do_prompt(CHAR_DATA* ch, char* argument)
 {
     char arg[MAX_INPUT_LENGTH];
 

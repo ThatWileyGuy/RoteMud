@@ -47,19 +47,19 @@
  */
 
 #define CD CHAR_DATA
-CD *find_keeper(CHAR_DATA *ch);
-CD *find_fixer(CHAR_DATA *ch);
-int get_cost(CHAR_DATA *ch, CHAR_DATA *keeper, OBJ_DATA *obj, bool fBuy);
-int get_repaircost(CHAR_DATA *keeper, OBJ_DATA *obj);
+CD* find_keeper(CHAR_DATA* ch);
+CD* find_fixer(CHAR_DATA* ch);
+int get_cost(CHAR_DATA* ch, CHAR_DATA* keeper, OBJ_DATA* obj, bool fBuy);
+int get_repaircost(CHAR_DATA* keeper, OBJ_DATA* obj);
 #undef CD
 
 /*
  * Shopping commands.
  */
-CHAR_DATA *find_keeper(CHAR_DATA *ch)
+CHAR_DATA* find_keeper(CHAR_DATA* ch)
 {
-    CHAR_DATA *keeper;
-    SHOP_DATA *pShop;
+    CHAR_DATA* keeper;
+    SHOP_DATA* pShop;
 
     pShop = NULL;
     for (keeper = ch->in_room->first_person; keeper; keeper = keeper->next_in_room)
@@ -99,10 +99,10 @@ CHAR_DATA *find_keeper(CHAR_DATA *ch)
 /*
  * repair commands.
  */
-CHAR_DATA *find_fixer(CHAR_DATA *ch)
+CHAR_DATA* find_fixer(CHAR_DATA* ch)
 {
-    CHAR_DATA *keeper;
-    REPAIR_DATA *rShop;
+    CHAR_DATA* keeper;
+    REPAIR_DATA* rShop;
 
     rShop = NULL;
     for (keeper = ch->in_room->first_person; keeper; keeper = keeper->next_in_room)
@@ -139,9 +139,9 @@ CHAR_DATA *find_fixer(CHAR_DATA *ch)
     return keeper;
 }
 
-int get_cost(CHAR_DATA *ch, CHAR_DATA *keeper, OBJ_DATA *obj, bool fBuy)
+int get_cost(CHAR_DATA* ch, CHAR_DATA* keeper, OBJ_DATA* obj, bool fBuy)
 {
-    SHOP_DATA *pShop;
+    SHOP_DATA* pShop;
     int cost = 0;
     bool richcustomer;
     int profitmod;
@@ -164,7 +164,7 @@ int get_cost(CHAR_DATA *ch, CHAR_DATA *keeper, OBJ_DATA *obj, bool fBuy)
     }
     else
     {
-        OBJ_DATA *obj2;
+        OBJ_DATA* obj2;
         int itype;
 
         profitmod = get_curr_cha(ch) - 13 - (richcustomer ? 15 : 0);
@@ -195,9 +195,9 @@ int get_cost(CHAR_DATA *ch, CHAR_DATA *keeper, OBJ_DATA *obj, bool fBuy)
     return cost;
 }
 
-int get_repaircost(CHAR_DATA *keeper, OBJ_DATA *obj)
+int get_repaircost(CHAR_DATA* keeper, OBJ_DATA* obj)
 {
-    REPAIR_DATA *rShop;
+    REPAIR_DATA* rShop;
     int cost;
     int itype;
     bool found;
@@ -250,12 +250,12 @@ int get_repaircost(CHAR_DATA *keeper, OBJ_DATA *obj)
     return cost;
 }
 
-void do_buy(CHAR_DATA *ch, char *argument)
+void do_buy(CHAR_DATA* ch, char* argument)
 {
     char arg[MAX_INPUT_LENGTH];
     int maxgold;
     bool debit;
-    OBJ_DATA *obj;
+    OBJ_DATA* obj;
 
     argument = one_argument(argument, arg);
 
@@ -268,9 +268,9 @@ void do_buy(CHAR_DATA *ch, char *argument)
     if (IS_SET(ch->in_room->room_flags, ROOM_PET_SHOP))
     {
         char buf[MAX_STRING_LENGTH];
-        CHAR_DATA *pet;
-        ROOM_INDEX_DATA *pRoomIndexNext;
-        ROOM_INDEX_DATA *in_room;
+        CHAR_DATA* pet;
+        ROOM_INDEX_DATA* pRoomIndexNext;
+        ROOM_INDEX_DATA* in_room;
 
         if (argument[0] == '\0')
             debit = false;
@@ -357,7 +357,7 @@ void do_buy(CHAR_DATA *ch, char *argument)
     }
     else
     {
-        CHAR_DATA *keeper;
+        CHAR_DATA* keeper;
         int cost;
         int noi = 1;      /* Number of items */
         sh_int mnoi = 20; /* Max number of items to be bought at once */
@@ -556,12 +556,12 @@ void do_buy(CHAR_DATA *ch, char *argument)
     }
 }
 
-void do_list(CHAR_DATA *ch, char *argument)
+void do_list(CHAR_DATA* ch, char* argument)
 {
     if (IS_SET(ch->in_room->room_flags, ROOM_PET_SHOP))
     {
-        ROOM_INDEX_DATA *pRoomIndexNext;
-        CHAR_DATA *pet;
+        ROOM_INDEX_DATA* pRoomIndexNext;
+        CHAR_DATA* pet;
         bool found;
 
         pRoomIndexNext = get_room_index(ch->in_room->vnum + 1);
@@ -593,8 +593,8 @@ void do_list(CHAR_DATA *ch, char *argument)
     else
     {
         char arg[MAX_INPUT_LENGTH];
-        CHAR_DATA *keeper;
-        OBJ_DATA *obj;
+        CHAR_DATA* keeper;
+        OBJ_DATA* obj;
         int cost;
         int oref = 0;
         bool found;
@@ -643,12 +643,12 @@ void do_list(CHAR_DATA *ch, char *argument)
     }
 }
 
-void do_sell(CHAR_DATA *ch, char *argument)
+void do_sell(CHAR_DATA* ch, char* argument)
 {
     char buf[MAX_STRING_LENGTH];
     char arg[MAX_INPUT_LENGTH];
-    CHAR_DATA *keeper;
-    OBJ_DATA *obj;
+    CHAR_DATA* keeper;
+    OBJ_DATA* obj;
     int cost;
 
     one_argument(argument, arg);
@@ -739,11 +739,11 @@ void do_sell(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void do_value(CHAR_DATA *ch, char *argument)
+void do_value(CHAR_DATA* ch, char* argument)
 {
     char buf[MAX_STRING_LENGTH];
-    CHAR_DATA *keeper;
-    OBJ_DATA *obj;
+    CHAR_DATA* keeper;
+    OBJ_DATA* obj;
     int cost;
 
     if (argument[0] == '\0')
@@ -784,8 +784,8 @@ void do_value(CHAR_DATA *ch, char *argument)
 /*
  * Repair a single object. Used when handling "repair all" - Gorog
  */
-void repair_one_obj(CHAR_DATA *ch, CHAR_DATA *keeper, OBJ_DATA *obj, const char *arg, int maxgold, const char *fixstr,
-                    const char *fixstr2)
+void repair_one_obj(CHAR_DATA* ch, CHAR_DATA* keeper, OBJ_DATA* obj, const char* arg, int maxgold, const char* fixstr,
+                    const char* fixstr2)
 {
     char buf[MAX_STRING_LENGTH];
     int cost;
@@ -845,12 +845,12 @@ void repair_one_obj(CHAR_DATA *ch, CHAR_DATA *keeper, OBJ_DATA *obj, const char 
     }
 }
 
-void do_mobrepair(CHAR_DATA *ch, char *argument)
+void do_mobrepair(CHAR_DATA* ch, char* argument)
 {
-    CHAR_DATA *keeper = nullptr;
-    OBJ_DATA *obj = nullptr;
-    const char *fixstr = nullptr;
-    const char *fixstr2 = nullptr;
+    CHAR_DATA* keeper = nullptr;
+    OBJ_DATA* obj = nullptr;
+    const char* fixstr = nullptr;
+    const char* fixstr2 = nullptr;
     int maxgold;
 
     if (argument[0] == '\0')
@@ -897,9 +897,9 @@ void do_mobrepair(CHAR_DATA *ch, char *argument)
     repair_one_obj(ch, keeper, obj, argument, maxgold, fixstr, fixstr2);
 }
 
-void appraise_all(CHAR_DATA *ch, CHAR_DATA *keeper, const char *fixstr)
+void appraise_all(CHAR_DATA* ch, CHAR_DATA* keeper, const char* fixstr)
 {
-    OBJ_DATA *obj;
+    OBJ_DATA* obj;
     char buf[MAX_STRING_LENGTH], *pbuf = buf;
     int cost, total = 0;
 
@@ -937,14 +937,14 @@ void appraise_all(CHAR_DATA *ch, CHAR_DATA *keeper, const char *fixstr)
     }
 }
 
-void do_appraise(CHAR_DATA *ch, char *argument)
+void do_appraise(CHAR_DATA* ch, char* argument)
 {
     char buf[MAX_STRING_LENGTH];
     char arg[MAX_INPUT_LENGTH];
-    CHAR_DATA *keeper = nullptr;
-    OBJ_DATA *obj = nullptr;
+    CHAR_DATA* keeper = nullptr;
+    OBJ_DATA* obj = nullptr;
     int cost;
-    const char *fixstr;
+    const char* fixstr;
 
     one_argument(argument, arg);
 
@@ -1006,11 +1006,11 @@ void do_appraise(CHAR_DATA *ch, char *argument)
 
 /* ------------------ Shop Building and Editing Section ----------------- */
 
-void do_makeshop(CHAR_DATA *ch, char *argument)
+void do_makeshop(CHAR_DATA* ch, char* argument)
 {
-    SHOP_DATA *shop;
+    SHOP_DATA* shop;
     int vnum;
-    MOB_INDEX_DATA *mob;
+    MOB_INDEX_DATA* mob;
 
     if (!argument || argument[0] == '\0')
     {
@@ -1048,9 +1048,9 @@ void do_makeshop(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void do_shopset(CHAR_DATA *ch, char *argument)
+void do_shopset(CHAR_DATA* ch, char* argument)
 {
-    SHOP_DATA *shop;
+    SHOP_DATA* shop;
     MOB_INDEX_DATA *mob, *mob2;
     char arg1[MAX_INPUT_LENGTH];
     char arg2[MAX_INPUT_LENGTH];
@@ -1230,10 +1230,10 @@ void do_shopset(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void do_shopstat(CHAR_DATA *ch, char *argument)
+void do_shopstat(CHAR_DATA* ch, char* argument)
 {
-    SHOP_DATA *shop;
-    MOB_INDEX_DATA *mob;
+    SHOP_DATA* shop;
+    MOB_INDEX_DATA* mob;
     int vnum;
 
     if (argument[0] == '\0')
@@ -1266,9 +1266,9 @@ void do_shopstat(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void do_shops(CHAR_DATA *ch, char *argument)
+void do_shops(CHAR_DATA* ch, char* argument)
 {
-    SHOP_DATA *shop;
+    SHOP_DATA* shop;
 
     if (!first_shop)
     {
@@ -1286,11 +1286,11 @@ void do_shops(CHAR_DATA *ch, char *argument)
 
 /* -------------- Repair Shop Building and Editing Section -------------- */
 
-void do_makerepair(CHAR_DATA *ch, char *argument)
+void do_makerepair(CHAR_DATA* ch, char* argument)
 {
-    REPAIR_DATA *repair;
+    REPAIR_DATA* repair;
     int vnum;
-    MOB_INDEX_DATA *mob;
+    MOB_INDEX_DATA* mob;
 
     if (!argument || argument[0] == '\0')
     {
@@ -1328,9 +1328,9 @@ void do_makerepair(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void do_repairset(CHAR_DATA *ch, char *argument)
+void do_repairset(CHAR_DATA* ch, char* argument)
 {
-    REPAIR_DATA *repair;
+    REPAIR_DATA* repair;
     MOB_INDEX_DATA *mob, *mob2;
     char arg1[MAX_INPUT_LENGTH];
     char arg2[MAX_INPUT_LENGTH];
@@ -1482,10 +1482,10 @@ void do_repairset(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void do_repairstat(CHAR_DATA *ch, char *argument)
+void do_repairstat(CHAR_DATA* ch, char* argument)
 {
-    REPAIR_DATA *repair;
-    MOB_INDEX_DATA *mob;
+    REPAIR_DATA* repair;
+    MOB_INDEX_DATA* mob;
     int vnum;
 
     if (argument[0] == '\0')
@@ -1517,9 +1517,9 @@ void do_repairstat(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void do_repairshops(CHAR_DATA *ch, char *argument)
+void do_repairshops(CHAR_DATA* ch, char* argument)
 {
-    REPAIR_DATA *repair;
+    REPAIR_DATA* repair;
 
     if (!first_repair)
     {

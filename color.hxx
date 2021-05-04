@@ -68,11 +68,11 @@
 
 DECLARE_DO_FUN(do_color);
 
-void reset_colors(CHAR_DATA *ch);
-void set_char_color(short AType, CHAR_DATA *ch);
-void set_pager_color(short AType, CHAR_DATA *ch);
-const char *color_str(short AType, CHAR_DATA *ch);
-const char *const_color_align(const char *argument, int size, int align);
+void reset_colors(CHAR_DATA* ch);
+void set_char_color(short AType, CHAR_DATA* ch);
+void set_pager_color(short AType, CHAR_DATA* ch);
+const char* color_str(short AType, CHAR_DATA* ch);
+const char* const_color_align(const char* argument, int size, int align);
 
 /*
  * Color Alignment Parameters

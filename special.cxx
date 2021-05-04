@@ -46,7 +46,7 @@
 
 #define ROOM_JAIL_CORUSCANT 0
 
-bool remove_obj(CHAR_DATA *ch, int iWear, bool fReplace);
+bool remove_obj(CHAR_DATA* ch, int iWear, bool fReplace);
 
 /*
  * The following special functions are available for mobiles.
@@ -80,7 +80,7 @@ DECLARE_SPEC_FUN(spec_make_apprentice_sith);
 /*
  * Given a name, return the appropriate spec fun.
  */
-SPEC_FUN *spec_lookup(const char *name)
+SPEC_FUN* spec_lookup(const char* name)
 {
     if (!str_cmp(name, "spec_jedi"))
         return spec_jedi;
@@ -138,7 +138,7 @@ SPEC_FUN *spec_lookup(const char *name)
 /*
  * Given a pointer, return the appropriate spec fun text.
  */
-const char *lookup_spec(SPEC_FUN *special)
+const char* lookup_spec(SPEC_FUN* special)
 {
     if (special == spec_jedi)
         return "spec_jedi";
@@ -193,10 +193,10 @@ const char *lookup_spec(SPEC_FUN *special)
     return "";
 }
 
-bool spec_make_apprentice_jedi(CHAR_DATA *ch)
+bool spec_make_apprentice_jedi(CHAR_DATA* ch)
 {
-    CHAR_DATA *victim;
-    CHAR_DATA *v_next;
+    CHAR_DATA* victim;
+    CHAR_DATA* v_next;
 
     for (victim = ch->in_room->first_person; victim; victim = v_next)
     {
@@ -212,10 +212,10 @@ bool spec_make_apprentice_jedi(CHAR_DATA *ch)
     return false;
 }
 
-bool spec_make_master_jedi(CHAR_DATA *ch)
+bool spec_make_master_jedi(CHAR_DATA* ch)
 {
-    CHAR_DATA *victim;
-    CHAR_DATA *v_next;
+    CHAR_DATA* victim;
+    CHAR_DATA* v_next;
 
     for (victim = ch->in_room->first_person; victim; victim = v_next)
     {
@@ -232,10 +232,10 @@ bool spec_make_master_jedi(CHAR_DATA *ch)
     return false;
 }
 
-bool spec_make_apprentice_sith(CHAR_DATA *ch)
+bool spec_make_apprentice_sith(CHAR_DATA* ch)
 {
-    CHAR_DATA *victim;
-    CHAR_DATA *v_next;
+    CHAR_DATA* victim;
+    CHAR_DATA* v_next;
 
     for (victim = ch->in_room->first_person; victim; victim = v_next)
     {
@@ -251,12 +251,12 @@ bool spec_make_apprentice_sith(CHAR_DATA *ch)
     return false;
 }
 
-bool spec_newbie_pilot(CHAR_DATA *ch)
+bool spec_newbie_pilot(CHAR_DATA* ch)
 {
     int home = 32149;
-    CHAR_DATA *victim;
-    CHAR_DATA *v_next;
-    OBJ_DATA *obj;
+    CHAR_DATA* victim;
+    CHAR_DATA* v_next;
+    OBJ_DATA* obj;
     char buf[MAX_STRING_LENGTH];
     bool diploma = false;
 
@@ -305,15 +305,15 @@ bool spec_newbie_pilot(CHAR_DATA *ch)
     return false;
 }
 
-bool spec_jedi(CHAR_DATA *ch)
+bool spec_jedi(CHAR_DATA* ch)
 {
     return false;
 }
 
-bool spec_clan_guard(CHAR_DATA *ch)
+bool spec_clan_guard(CHAR_DATA* ch)
 {
-    CHAR_DATA *victim;
-    CHAR_DATA *v_next;
+    CHAR_DATA* victim;
+    CHAR_DATA* v_next;
 
     if (!IS_AWAKE(ch) || ch->fighting)
         return false;
@@ -339,10 +339,10 @@ bool spec_clan_guard(CHAR_DATA *ch)
     return false;
 }
 
-bool spec_ground_troop(CHAR_DATA *ch)
+bool spec_ground_troop(CHAR_DATA* ch)
 {
-    CHAR_DATA *victim;
-    CHAR_DATA *v_next;
+    CHAR_DATA* victim;
+    CHAR_DATA* v_next;
     char buf[MAX_STRING_LENGTH];
 
     if (!IS_AWAKE(ch) || ch->fighting)
@@ -376,11 +376,11 @@ bool spec_ground_troop(CHAR_DATA *ch)
     return false;
 }
 
-bool spec_customs_smut(CHAR_DATA *ch)
+bool spec_customs_smut(CHAR_DATA* ch)
 {
-    CHAR_DATA *victim;
-    CHAR_DATA *v_next;
-    OBJ_DATA *obj;
+    CHAR_DATA* victim;
+    CHAR_DATA* v_next;
+    OBJ_DATA* obj;
     char buf[MAX_STRING_LENGTH];
     long ch_exp;
 
@@ -442,7 +442,7 @@ bool spec_customs_smut(CHAR_DATA *ch)
             }
             else if (obj->item_type == ITEM_CONTAINER)
             {
-                OBJ_DATA *content;
+                OBJ_DATA* content;
                 for (content = obj->first_content; content; content = content->next_content)
                 {
                     if (content->pIndexData->item_type == ITEM_SMUT && !IS_SET(content->extra_flags, ITEM_CONTRABAND))
@@ -463,11 +463,11 @@ bool spec_customs_smut(CHAR_DATA *ch)
     return false;
 }
 
-bool spec_customs_weapons(CHAR_DATA *ch)
+bool spec_customs_weapons(CHAR_DATA* ch)
 {
-    CHAR_DATA *victim;
-    CHAR_DATA *v_next;
-    OBJ_DATA *obj;
+    CHAR_DATA* victim;
+    CHAR_DATA* v_next;
+    OBJ_DATA* obj;
     char buf[MAX_STRING_LENGTH];
     long ch_exp;
 
@@ -535,7 +535,7 @@ bool spec_customs_weapons(CHAR_DATA *ch)
             }
             else if (obj->item_type == ITEM_CONTAINER)
             {
-                OBJ_DATA *content;
+                OBJ_DATA* content;
                 for (content = obj->first_content; content; content = content->next_content)
                 {
                     if (content->pIndexData->item_type == ITEM_WEAPON && !IS_SET(content->extra_flags, ITEM_CONTRABAND))
@@ -556,11 +556,11 @@ bool spec_customs_weapons(CHAR_DATA *ch)
     return false;
 }
 
-bool spec_customs_alcohol(CHAR_DATA *ch)
+bool spec_customs_alcohol(CHAR_DATA* ch)
 {
-    CHAR_DATA *victim;
-    CHAR_DATA *v_next;
-    OBJ_DATA *obj;
+    CHAR_DATA* victim;
+    CHAR_DATA* v_next;
+    OBJ_DATA* obj;
     char buf[MAX_STRING_LENGTH];
     int liquid;
     long ch_exp;
@@ -631,7 +631,7 @@ bool spec_customs_alcohol(CHAR_DATA *ch)
             }
             else if (obj->item_type == ITEM_CONTAINER)
             {
-                OBJ_DATA *content;
+                OBJ_DATA* content;
                 for (content = obj->first_content; content; content = content->next_content)
                 {
                     if (content->pIndexData->item_type == ITEM_DRINK_CON &&
@@ -657,11 +657,11 @@ bool spec_customs_alcohol(CHAR_DATA *ch)
     return false;
 }
 
-bool spec_customs_spice(CHAR_DATA *ch)
+bool spec_customs_spice(CHAR_DATA* ch)
 {
-    CHAR_DATA *victim;
-    CHAR_DATA *v_next;
-    OBJ_DATA *obj;
+    CHAR_DATA* victim;
+    CHAR_DATA* v_next;
+    OBJ_DATA* obj;
     char buf[MAX_STRING_LENGTH];
     long ch_exp;
 
@@ -722,7 +722,7 @@ bool spec_customs_spice(CHAR_DATA *ch)
             }
             else if (obj->item_type == ITEM_CONTAINER)
             {
-                OBJ_DATA *content;
+                OBJ_DATA* content;
                 for (content = obj->first_content; content; content = content->next_content)
                 {
                     if (content->pIndexData->item_type == ITEM_SPICE && !IS_SET(content->extra_flags, ITEM_CONTRABAND))
@@ -743,10 +743,10 @@ bool spec_customs_spice(CHAR_DATA *ch)
     return false;
 }
 
-bool spec_police(CHAR_DATA *ch)
+bool spec_police(CHAR_DATA* ch)
 {
-    CHAR_DATA *victim;
-    CHAR_DATA *v_next;
+    CHAR_DATA* victim;
+    CHAR_DATA* v_next;
     int vip;
     char buf[MAX_STRING_LENGTH];
 
@@ -794,10 +794,10 @@ bool spec_police(CHAR_DATA *ch)
     return false;
 }
 
-bool spec_police_attack(CHAR_DATA *ch)
+bool spec_police_attack(CHAR_DATA* ch)
 {
-    CHAR_DATA *victim;
-    CHAR_DATA *v_next;
+    CHAR_DATA* victim;
+    CHAR_DATA* v_next;
     int vip;
     char buf[MAX_STRING_LENGTH];
 
@@ -827,10 +827,10 @@ bool spec_police_attack(CHAR_DATA *ch)
     return false;
 }
 
-bool spec_police_fine(CHAR_DATA *ch)
+bool spec_police_fine(CHAR_DATA* ch)
 {
-    CHAR_DATA *victim;
-    CHAR_DATA *v_next;
+    CHAR_DATA* victim;
+    CHAR_DATA* v_next;
     int vip;
     char buf[MAX_STRING_LENGTH];
 
@@ -871,12 +871,12 @@ bool spec_police_fine(CHAR_DATA *ch)
     return false;
 }
 
-bool spec_police_jail(CHAR_DATA *ch)
+bool spec_police_jail(CHAR_DATA* ch)
 {
 
-    ROOM_INDEX_DATA *jail = NULL;
-    CHAR_DATA *victim;
-    CHAR_DATA *v_next;
+    ROOM_INDEX_DATA* jail = NULL;
+    CHAR_DATA* victim;
+    CHAR_DATA* v_next;
     int vip;
     char buf[MAX_STRING_LENGTH];
 
@@ -915,10 +915,10 @@ bool spec_police_jail(CHAR_DATA *ch)
     return false;
 }
 
-bool spec_jedi_healer(CHAR_DATA *ch)
+bool spec_jedi_healer(CHAR_DATA* ch)
 {
-    CHAR_DATA *victim;
-    CHAR_DATA *v_next;
+    CHAR_DATA* victim;
+    CHAR_DATA* v_next;
 
     if (!IS_AWAKE(ch))
         return false;
@@ -969,11 +969,11 @@ bool spec_jedi_healer(CHAR_DATA *ch)
     return false;
 }
 
-bool spec_dark_jedi(CHAR_DATA *ch)
+bool spec_dark_jedi(CHAR_DATA* ch)
 {
-    CHAR_DATA *victim;
-    CHAR_DATA *v_next;
-    const char *spell;
+    CHAR_DATA* victim;
+    CHAR_DATA* v_next;
+    const char* spell;
     int sn;
 
     if (ch->position != POS_FIGHTING)
@@ -1049,12 +1049,12 @@ bool spec_dark_jedi(CHAR_DATA *ch)
     return true;
 }
 
-bool spec_fido(CHAR_DATA *ch)
+bool spec_fido(CHAR_DATA* ch)
 {
-    OBJ_DATA *corpse;
-    OBJ_DATA *c_next;
-    OBJ_DATA *obj;
-    OBJ_DATA *obj_next;
+    OBJ_DATA* corpse;
+    OBJ_DATA* c_next;
+    OBJ_DATA* obj;
+    OBJ_DATA* obj_next;
 
     if (!IS_AWAKE(ch))
         return false;
@@ -1079,10 +1079,10 @@ bool spec_fido(CHAR_DATA *ch)
     return false;
 }
 
-bool spec_stormtrooper(CHAR_DATA *ch)
+bool spec_stormtrooper(CHAR_DATA* ch)
 {
-    CHAR_DATA *victim;
-    CHAR_DATA *v_next;
+    CHAR_DATA* victim;
+    CHAR_DATA* v_next;
 
     if (!IS_AWAKE(ch) || ch->fighting)
         return false;
@@ -1110,10 +1110,10 @@ bool spec_stormtrooper(CHAR_DATA *ch)
     return false;
 }
 
-bool spec_new_republic_trooper(CHAR_DATA *ch)
+bool spec_new_republic_trooper(CHAR_DATA* ch)
 {
-    CHAR_DATA *victim;
-    CHAR_DATA *v_next;
+    CHAR_DATA* victim;
+    CHAR_DATA* v_next;
 
     if (!IS_AWAKE(ch) || ch->fighting)
         return false;
@@ -1141,13 +1141,13 @@ bool spec_new_republic_trooper(CHAR_DATA *ch)
     return false;
 }
 
-bool spec_guardian(CHAR_DATA *ch)
+bool spec_guardian(CHAR_DATA* ch)
 {
     char buf[MAX_STRING_LENGTH];
-    CHAR_DATA *victim;
-    CHAR_DATA *v_next;
-    CHAR_DATA *ech;
-    const char *crime;
+    CHAR_DATA* victim;
+    CHAR_DATA* v_next;
+    CHAR_DATA* ech;
+    const char* crime;
     int max_evil;
 
     if (!IS_AWAKE(ch) || ch->fighting)
@@ -1192,10 +1192,10 @@ bool spec_guardian(CHAR_DATA *ch)
     return false;
 }
 
-bool spec_janitor(CHAR_DATA *ch)
+bool spec_janitor(CHAR_DATA* ch)
 {
-    OBJ_DATA *trash;
-    OBJ_DATA *trash_next;
+    OBJ_DATA* trash;
+    OBJ_DATA* trash_next;
 
     if (!IS_AWAKE(ch))
         return false;
@@ -1218,9 +1218,9 @@ bool spec_janitor(CHAR_DATA *ch)
     return false;
 }
 
-bool spec_poison(CHAR_DATA *ch)
+bool spec_poison(CHAR_DATA* ch)
 {
-    CHAR_DATA *victim;
+    CHAR_DATA* victim;
 
     if (ch->position != POS_FIGHTING || (victim = who_fighting(ch)) == NULL || number_percent() > 2 * ch->top_level)
         return false;
@@ -1232,10 +1232,10 @@ bool spec_poison(CHAR_DATA *ch)
     return true;
 }
 
-bool spec_thief(CHAR_DATA *ch)
+bool spec_thief(CHAR_DATA* ch)
 {
-    CHAR_DATA *victim;
-    CHAR_DATA *v_next;
+    CHAR_DATA* victim;
+    CHAR_DATA* v_next;
     int gold, maxgold;
 
     if (ch->position != POS_STANDING)
@@ -1273,13 +1273,13 @@ bool spec_thief(CHAR_DATA *ch)
     return false;
 }
 
-bool spec_auth(CHAR_DATA *ch)
+bool spec_auth(CHAR_DATA* ch)
 {
-    CHAR_DATA *victim;
-    CHAR_DATA *v_next;
+    CHAR_DATA* victim;
+    CHAR_DATA* v_next;
     char buf[MAX_STRING_LENGTH];
-    OBJ_INDEX_DATA *pObjIndex;
-    OBJ_DATA *obj;
+    OBJ_INDEX_DATA* pObjIndex;
+    OBJ_DATA* obj;
     bool hasdiploma;
 
     for (victim = ch->in_room->first_person; victim; victim = v_next)
@@ -1316,10 +1316,10 @@ bool spec_auth(CHAR_DATA *ch)
     return false;
 }
 
-bool spec_giveslug(CHAR_DATA *ch)
+bool spec_giveslug(CHAR_DATA* ch)
 {
-    CHAR_DATA *victim;
-    CHAR_DATA *v_next;
+    CHAR_DATA* victim;
+    CHAR_DATA* v_next;
     char buf[MAX_STRING_LENGTH];
 
     for (victim = ch->in_room->first_person; victim; victim = v_next)

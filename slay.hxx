@@ -63,18 +63,18 @@
 
 struct SLAY_DATA
 {
-    SLAY_DATA *next;
-    SLAY_DATA *prev;
-    char *owner;
-    char *type;
+    SLAY_DATA* next;
+    SLAY_DATA* prev;
+    char* owner;
+    char* type;
     int color;
-    char *cmsg;
-    char *vmsg;
-    char *rmsg;
+    char* cmsg;
+    char* vmsg;
+    char* rmsg;
 };
 
-extern SLAY_DATA *first_slay;
-extern SLAY_DATA *last_slay;
+extern SLAY_DATA* first_slay;
+extern SLAY_DATA* last_slay;
 
 #define SLAY_FILE SYSTEM_DIR "slay.dat" /* Slay data file for online editing - Samson 8-3-98 */
 

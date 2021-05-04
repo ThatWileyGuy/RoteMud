@@ -43,9 +43,9 @@
 #include <time.h>
 #include "mud.hxx"
 
-void note_attach(CHAR_DATA *ch);
+void note_attach(CHAR_DATA* ch);
 
-void comment_remove(CHAR_DATA *ch, CHAR_DATA *victim, NOTE_DATA *pnote)
+void comment_remove(CHAR_DATA* ch, CHAR_DATA* victim, NOTE_DATA* pnote)
 {
     if (!victim->comments)
     {
@@ -82,13 +82,13 @@ void comment_remove(CHAR_DATA *ch, CHAR_DATA *victim, NOTE_DATA *pnote)
     return;
 }
 
-void do_comment(CHAR_DATA *ch, char *argument)
+void do_comment(CHAR_DATA* ch, char* argument)
 {
     char buf[MAX_STRING_LENGTH];
     char arg[MAX_INPUT_LENGTH];
     char arg1[MAX_INPUT_LENGTH];
-    NOTE_DATA *pnote;
-    CHAR_DATA *victim;
+    NOTE_DATA* pnote;
+    CHAR_DATA* victim;
     int vnum;
     int anum;
 
@@ -318,7 +318,7 @@ void do_comment(CHAR_DATA *ch, char *argument)
 
     if (!str_cmp(arg, "post"))
     {
-        char *strtime;
+        char* strtime;
 
         if (!ch->pnote)
         {
@@ -435,9 +435,9 @@ void do_comment(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void fwrite_comments(CHAR_DATA *ch, FILE *fp)
+void fwrite_comments(CHAR_DATA* ch, FILE* fp)
 {
-    NOTE_DATA *pnote;
+    NOTE_DATA* pnote;
 
     if (!ch->comments)
         return;
@@ -454,9 +454,9 @@ void fwrite_comments(CHAR_DATA *ch, FILE *fp)
     return;
 }
 
-void fread_comment(CHAR_DATA *ch, FILE *fp)
+void fread_comment(CHAR_DATA* ch, FILE* fp)
 {
-    NOTE_DATA *pnote;
+    NOTE_DATA* pnote;
 
     for (;;)
     {

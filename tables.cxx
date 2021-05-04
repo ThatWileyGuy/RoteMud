@@ -48,7 +48,7 @@
 
 #include "mud.hxx"
 
-void shutdown_mud(char const *reason);
+void shutdown_mud(char const* reason);
 
 #if defined(KEY)
 #undef KEY
@@ -66,12 +66,12 @@ void shutdown_mud(char const *reason);
 int top_sn;
 int top_herb;
 
-SKILL_TYPE *skill_table[MAX_SKILL];
-SKILL_TYPE *herb_table[MAX_HERB];
+SKILL_TYPE* skill_table[MAX_SKILL];
+SKILL_TYPE* herb_table[MAX_HERB];
 
-const char *skill_tname[] = {"unknown", "Spell", "Skill", "Weapon", "Tongue", "Herb"};
+const char* skill_tname[] = {"unknown", "Spell", "Skill", "Weapon", "Tongue", "Herb"};
 
-void *find_symbol(const char *name)
+void* find_symbol(const char* name)
 {
 #ifdef WIN32
     auto module = GetModuleHandle(nullptr);
@@ -85,8 +85,8 @@ void *find_symbol(const char *name)
 
     return proc;
 #else
-    static void *dlHandle = nullptr;
-    void *funHandle = nullptr;
+    static void* dlHandle = nullptr;
+    void* funHandle = nullptr;
 
     if (dlHandle == nullptr)
     {
@@ -112,9 +112,9 @@ void *find_symbol(const char *name)
 #endif
 }
 
-SPELL_FUN *spell_function(char *name)
+SPELL_FUN* spell_function(char* name)
 {
-    auto result = (SPELL_FUN *)find_symbol(name);
+    auto result = (SPELL_FUN*)find_symbol(name);
 
     if (result == nullptr)
     {
@@ -124,9 +124,9 @@ SPELL_FUN *spell_function(char *name)
     return result;
 }
 
-DO_FUN *skill_function(char *name)
+DO_FUN* skill_function(char* name)
 {
-    auto result = (DO_FUN *)find_symbol(name);
+    auto result = (DO_FUN*)find_symbol(name);
 
     if (result == nullptr)
     {
@@ -139,10 +139,10 @@ DO_FUN *skill_function(char *name)
 /*
  * Function used by qsort to sort skills
  */
-int skill_comp(SKILL_TYPE **sk1, SKILL_TYPE **sk2)
+int skill_comp(SKILL_TYPE** sk1, SKILL_TYPE** sk2)
 {
-    SKILL_TYPE *skill1 = (*sk1);
-    SKILL_TYPE *skill2 = (*sk2);
+    SKILL_TYPE* skill1 = (*sk1);
+    SKILL_TYPE* skill2 = (*sk2);
 
     if (!skill1 && skill2)
         return 1;
@@ -163,15 +163,15 @@ int skill_comp(SKILL_TYPE **sk1, SKILL_TYPE **sk2)
 void sort_skill_table()
 {
     log_string("Sorting skill table...");
-    qsort(&skill_table[1], top_sn - 1, sizeof(SKILL_TYPE *), (int (*)(const void *, const void *))skill_comp);
+    qsort(&skill_table[1], top_sn - 1, sizeof(SKILL_TYPE*), (int (*)(const void*, const void*))skill_comp);
 }
 
 /*
  * Write skill data to a file
  */
-void fwrite_skill(FILE *fpout, SKILL_TYPE *skill)
+void fwrite_skill(FILE* fpout, SKILL_TYPE* skill)
 {
-    SMAUG_AFF *aff;
+    SMAUG_AFF* aff;
 
     fprintf(fpout, "Name         %s~\n", skill->name);
     fprintf(fpout, "Type         %s\n", skill_tname[skill->type]);
@@ -256,7 +256,7 @@ void fwrite_skill(FILE *fpout, SKILL_TYPE *skill)
 void save_skill_table(int delnum)
 {
     int x;
-    FILE *fpout;
+    FILE* fpout;
 
     if ((fpout = fopen(SKILL_FILE, "w")) == NULL)
     {
@@ -284,7 +284,7 @@ void save_skill_table(int delnum)
 void save_herb_table()
 {
     int x;
-    FILE *fpout;
+    FILE* fpout;
 
     if ((fpout = fopen(HERB_FILE, "w")) == NULL)
     {
@@ -309,8 +309,8 @@ void save_herb_table()
  */
 void save_socials()
 {
-    FILE *fpout;
-    SOCIALTYPE *social;
+    FILE* fpout;
+    SOCIALTYPE* social;
     int x;
 
     if ((fpout = fopen(SOCIAL_FILE, "w")) == NULL)
@@ -354,7 +354,7 @@ void save_socials()
     fclose(fpout);
 }
 
-int get_skill(char *skilltype)
+int get_skill(char* skilltype)
 {
     if (!str_cmp(skilltype, "Spell"))
         return SKILL_SPELL;
@@ -374,8 +374,8 @@ int get_skill(char *skilltype)
  */
 void save_commands()
 {
-    FILE *fpout;
-    CMDTYPE *command;
+    FILE* fpout;
+    CMDTYPE* command;
     int x;
 
     if ((fpout = fopen(COMMAND_FILE, "w")) == NULL)
@@ -408,12 +408,12 @@ void save_commands()
     fclose(fpout);
 }
 
-SKILL_TYPE *fread_skill(FILE *fp)
+SKILL_TYPE* fread_skill(FILE* fp)
 {
     char buf[MAX_STRING_LENGTH];
-    const char *word;
+    const char* word;
     bool fMatch;
-    SKILL_TYPE *skill;
+    SKILL_TYPE* skill;
 
     CREATE(skill, SKILL_TYPE, 1);
 
@@ -435,7 +435,7 @@ SKILL_TYPE *fread_skill(FILE *fp)
             KEY("Alignment", skill->alignment, fread_number(fp));
             if (!str_cmp(word, "Affect"))
             {
-                SMAUG_AFF *aff;
+                SMAUG_AFF* aff;
 
                 CREATE(aff, SMAUG_AFF, 1);
                 aff->duration = str_dup(fread_word(fp));
@@ -452,9 +452,9 @@ SKILL_TYPE *fread_skill(FILE *fp)
         case 'C':
             if (!str_cmp(word, "Code"))
             {
-                SPELL_FUN *spellfun;
-                DO_FUN *dofun;
-                char *w = fread_word(fp);
+                SPELL_FUN* spellfun;
+                DO_FUN* dofun;
+                char* w = fread_word(fp);
 
                 fMatch = true;
                 if (!str_prefix("do_", w) && (dofun = skill_function(w)) != skill_notfound)
@@ -564,7 +564,7 @@ SKILL_TYPE *fread_skill(FILE *fp)
 
 void load_skill_table()
 {
-    FILE *fp;
+    FILE* fp;
 
     if ((fp = fopen(SKILL_FILE, "r")) != NULL)
     {
@@ -572,7 +572,7 @@ void load_skill_table()
         for (;;)
         {
             char letter;
-            char *word;
+            char* word;
 
             letter = fread_letter(fp);
             if (letter == '*')
@@ -618,7 +618,7 @@ void load_skill_table()
 
 void load_herb_table()
 {
-    FILE *fp;
+    FILE* fp;
 
     if ((fp = fopen(HERB_FILE, "r")) != NULL)
     {
@@ -626,7 +626,7 @@ void load_herb_table()
         for (;;)
         {
             char letter;
-            char *word;
+            char* word;
 
             letter = fread_letter(fp);
             if (letter == '*')
@@ -672,12 +672,12 @@ void load_herb_table()
     }
 }
 
-void fread_social(FILE *fp)
+void fread_social(FILE* fp)
 {
     char buf[MAX_STRING_LENGTH];
-    char const *word;
+    char const* word;
     bool fMatch;
-    SOCIALTYPE *social;
+    SOCIALTYPE* social;
 
     CREATE(social, SOCIALTYPE, 1);
 
@@ -744,7 +744,7 @@ void fread_social(FILE *fp)
 
 void load_socials()
 {
-    FILE *fp;
+    FILE* fp;
 
     if ((fp = fopen(SOCIAL_FILE, "r")) != NULL)
     {
@@ -752,7 +752,7 @@ void load_socials()
         for (;;)
         {
             char letter;
-            char *word;
+            char* word;
 
             letter = fread_letter(fp);
             if (letter == '*')
@@ -790,12 +790,12 @@ void load_socials()
     }
 }
 
-void fread_command(FILE *fp)
+void fread_command(FILE* fp)
 {
     char buf[MAX_STRING_LENGTH];
-    char const *word;
+    char const* word;
     bool fMatch;
-    CMDTYPE *command;
+    CMDTYPE* command;
 
     CREATE(command, CMDTYPE, 1);
 
@@ -878,7 +878,7 @@ void fread_command(FILE *fp)
 
 void load_commands()
 {
-    FILE *fp;
+    FILE* fp;
 
     if ((fp = fopen(COMMAND_FILE, "r")) != NULL)
     {
@@ -886,7 +886,7 @@ void load_commands()
         for (;;)
         {
             char letter;
-            char *word;
+            char* word;
 
             letter = fread_letter(fp);
             if (letter == '*')
@@ -924,7 +924,7 @@ void load_commands()
     }
 }
 
-void copy_files_contents(FILE *fsource, FILE *fdestination)
+void copy_files_contents(FILE* fsource, FILE* fdestination)
 {
     int ch;
     int cnt = 1;
@@ -947,10 +947,10 @@ void copy_files_contents(FILE *fsource, FILE *fdestination)
     }
 }
 
-void write_last_file(char *entry)
+void write_last_file(char* entry)
 {
-    FILE *fpout;
-    FILE *fptemp;
+    FILE* fpout;
+    FILE* fptemp;
     char filename[MAX_INPUT_LENGTH];
     char tempname[MAX_INPUT_LENGTH];
 
@@ -982,17 +982,17 @@ void write_last_file(char *entry)
     return;
 }
 
-void read_last_file(CHAR_DATA *ch, int count, char *name)
+void read_last_file(CHAR_DATA* ch, int count, char* name)
 {
-    FILE *fpout;
+    FILE* fpout;
     char filename[MAX_INPUT_LENGTH];
     char charname[100];
     int cnt = 0;
     int letter = 0;
-    char *ln;
-    char *c;
+    char* ln;
+    char* c;
     char d, e;
-    tm *tme;
+    tm* tme;
     time_t now;
     char day[MAX_INPUT_LENGTH];
     char sday[5];

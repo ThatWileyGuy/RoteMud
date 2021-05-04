@@ -58,10 +58,10 @@
         break;                                                                                                         \
     }
 
-void fread_forcehelp(FORCE_HELP *fhelp, FILE *fp)
+void fread_forcehelp(FORCE_HELP* fhelp, FILE* fp)
 {
     char buf[MAX_STRING_LENGTH];
-    char const *word;
+    char const* word;
     bool fMatch;
 
     for (;;)
@@ -97,11 +97,11 @@ void fread_forcehelp(FORCE_HELP *fhelp, FILE *fp)
     }
 }
 
-bool load_forcehelp(const char *forcehelpfile)
+bool load_forcehelp(const char* forcehelpfile)
 {
     char filename[256];
-    FORCE_HELP *fhelp;
-    FILE *fp;
+    FORCE_HELP* fhelp;
+    FILE* fp;
     bool found;
 
     CREATE(fhelp, FORCE_HELP, 1);
@@ -117,7 +117,7 @@ bool load_forcehelp(const char *forcehelpfile)
         for (;;)
         {
             char letter;
-            char *word;
+            char* word;
 
             letter = fread_letter(fp);
             if (letter == '*')
@@ -159,8 +159,8 @@ bool load_forcehelp(const char *forcehelpfile)
 
 void load_force_help()
 {
-    FILE *fpList;
-    char const *filename;
+    FILE* fpList;
+    char const* filename;
     char forcehelpslist[256];
     char buf[MAX_STRING_LENGTH];
 
@@ -195,8 +195,8 @@ void load_force_help()
 
 void write_forcehelp_list()
 {
-    FORCE_HELP *fhelp;
-    FILE *fpout;
+    FORCE_HELP* fhelp;
+    FILE* fpout;
     char buf[MAX_STRING_LENGTH];
     char filename[256];
 
@@ -218,15 +218,15 @@ void write_forcehelp_list()
 
 void write_all_forcehelps()
 {
-    FORCE_HELP *fhelp;
+    FORCE_HELP* fhelp;
     for (fhelp = first_force_help; fhelp; fhelp = fhelp->next)
         save_forcehelp(fhelp);
     write_forcehelp_list();
 }
 
-void save_forcehelp(FORCE_HELP *fhelp)
+void save_forcehelp(FORCE_HELP* fhelp)
 {
-    FILE *fp;
+    FILE* fp;
     char filename[256];
 
     if (!fhelp)
@@ -263,10 +263,10 @@ void save_forcehelp(FORCE_HELP *fhelp)
     return;
 }
 
-void fread_forceskill(FORCE_SKILL *fskill, FILE *fp)
+void fread_forceskill(FORCE_SKILL* fskill, FILE* fp)
 {
     char buf[MAX_STRING_LENGTH];
-    const char *word;
+    const char* word;
     bool fMatch;
 
     for (;;)
@@ -332,12 +332,12 @@ void fread_forceskill(FORCE_SKILL *fskill, FILE *fp)
     }
 }
 
-bool load_forceskill(const char *forceskillfile)
+bool load_forceskill(const char* forceskillfile)
 {
     char filename[256];
-    FORCE_SKILL *fskill;
-    FILE *fp;
-    DO_FUN *fun;
+    FORCE_SKILL* fskill;
+    FILE* fp;
+    DO_FUN* fun;
     bool found;
 
     CREATE(fskill, FORCE_SKILL, 1);
@@ -353,7 +353,7 @@ bool load_forceskill(const char *forceskillfile)
         for (;;)
         {
             char letter;
-            char *word;
+            char* word;
 
             letter = fread_letter(fp);
             if (letter == '*')
@@ -397,8 +397,8 @@ bool load_forceskill(const char *forceskillfile)
 
 void load_force_skills()
 {
-    FILE *fpList;
-    const char *filename;
+    FILE* fpList;
+    const char* filename;
     char forceskillslist[256];
     char buf[MAX_STRING_LENGTH];
 
@@ -431,7 +431,7 @@ void load_force_skills()
     return;
 }
 
-DO_FUN *get_force_skill_function(char *name)
+DO_FUN* get_force_skill_function(char* name)
 {
     if (!name || name[0] == '\0' || strlen(name) < 8)
         return skill_notfound;
@@ -506,8 +506,8 @@ DO_FUN *get_force_skill_function(char *name)
 
 void write_forceskill_list()
 {
-    FORCE_SKILL *fskill;
-    FILE *fpout;
+    FORCE_SKILL* fskill;
+    FILE* fpout;
     char filename[256];
 
     sprintf_s(filename, "%s%s", FORCE_DIR, "forceskills.lst");
@@ -525,15 +525,15 @@ void write_forceskill_list()
 
 void write_all_forceskills()
 {
-    FORCE_SKILL *fskill;
+    FORCE_SKILL* fskill;
     for (fskill = first_force_skill; fskill; fskill = fskill->next)
         save_forceskill(fskill);
     write_forceskill_list();
 }
 
-void save_forceskill(FORCE_SKILL *fskill)
+void save_forceskill(FORCE_SKILL* fskill)
 {
-    FILE *fp;
+    FILE* fp;
     char filename[256];
 
     if (!fskill)

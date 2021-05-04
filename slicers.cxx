@@ -47,7 +47,7 @@
 char title[MAX_INPUT_LENGTH];
 char disable[MAX_INPUT_LENGTH]; /*stores what portion of the ship will be disabled.*/
                                 /*Used in void do_disable*/
-bool autofly(SHIP_DATA *ship);
+bool autofly(SHIP_DATA* ship);
 
 /*
  * Slicers.c Containing skills created by Ackbar, Eleven, and Tawnos. *plug*
@@ -58,7 +58,7 @@ bool autofly(SHIP_DATA *ship);
  * Tell snoop - modified to set tell_snoop to commfreq, then show all
  *  incoming/outgoing whatnot on tell
  */
-void do_tellsnoop(CHAR_DATA *ch, char *argument)
+void do_tellsnoop(CHAR_DATA* ch, char* argument)
 {
     char buf[MAX_INPUT_LENGTH];
     char arg[MAX_INPUT_LENGTH];
@@ -113,11 +113,11 @@ void do_tellsnoop(CHAR_DATA *ch, char *argument)
 
 char blaha[MAX_STRING_LENGTH];
 
-char *acctname(CHAR_DATA *ch)
+char* acctname(CHAR_DATA* ch)
 {
     static char buf[MAX_STRING_LENGTH];
-    const char *name;
-    char *s;
+    const char* name;
+    char* s;
     int len;
 
     *buf = '\0';
@@ -236,9 +236,9 @@ char *acctname(CHAR_DATA *ch)
     if (len < 15)
     {
         size_t namelen;
-        char *filler;
+        char* filler;
         char fillerbuf[MAX_STRING_LENGTH];
-        const char *const fillers[] = {"gewhinnqnppali", "hmmithinkishou",  "ldinsertsomehi", "ddenmessagesin",
+        const char* const fillers[] = {"gewhinnqnppali", "hmmithinkishou",  "ldinsertsomehi", "ddenmessagesin",
                                        "thisforfuturec", "coderstolaughat", "ireallyshouldb", "esleepingnowbu",
                                        "timaddictedtot", "hisshit"};
 
@@ -592,11 +592,11 @@ char *acctname(CHAR_DATA *ch)
     return buf;
 }
 
-void do_inquire(CHAR_DATA *ch, char *argument)
+void do_inquire(CHAR_DATA* ch, char* argument)
 {
-    DESCRIPTOR_DATA *d;
+    DESCRIPTOR_DATA* d;
     bool checkdata;
-    OBJ_DATA *obj;
+    OBJ_DATA* obj;
     int x;
     long xpgain;
     char arg[MAX_INPUT_LENGTH];
@@ -704,14 +704,14 @@ void do_inquire(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void do_makecommsystem(CHAR_DATA *ch, char *argument)
+void do_makecommsystem(CHAR_DATA* ch, char* argument)
 {
     char arg[MAX_INPUT_LENGTH];
     char buf[MAX_STRING_LENGTH];
     int level, chance;
     bool checktool, checkdura, checkbattery, checkcrystal, checkcircuit;
-    OBJ_DATA *obj;
-    OBJ_INDEX_DATA *pObjIndex;
+    OBJ_DATA* obj;
+    OBJ_INDEX_DATA* pObjIndex;
     int vnum;
     strcpy_s(arg, argument);
 
@@ -797,7 +797,7 @@ void do_makecommsystem(CHAR_DATA *ch, char *argument)
     case 1:
         if (!ch->dest_buf)
             return;
-        strcpy(arg, reinterpret_cast<const char *>(ch->dest_buf));
+        strcpy(arg, reinterpret_cast<const char*>(ch->dest_buf));
         DISPOSE(ch->dest_buf);
         break;
 
@@ -908,14 +908,14 @@ void do_makecommsystem(CHAR_DATA *ch, char *argument)
     learn_from_success(ch, gsn_makecommsystem);
 }
 
-void do_makedatapad(CHAR_DATA *ch, char *argument)
+void do_makedatapad(CHAR_DATA* ch, char* argument)
 {
     char arg[MAX_INPUT_LENGTH];
     char buf[MAX_STRING_LENGTH];
     int level, chance;
     bool checktool, checklens, checkdura, checkbattery, checksuper, checkcircuit;
-    OBJ_DATA *obj;
-    OBJ_INDEX_DATA *pObjIndex;
+    OBJ_DATA* obj;
+    OBJ_INDEX_DATA* pObjIndex;
     int vnum;
     strcpy_s(arg, argument);
 
@@ -1011,7 +1011,7 @@ void do_makedatapad(CHAR_DATA *ch, char *argument)
     case 1:
         if (!ch->dest_buf)
             return;
-        strcpy(arg, reinterpret_cast<const char *>(ch->dest_buf));
+        strcpy(arg, reinterpret_cast<const char*>(ch->dest_buf));
         DISPOSE(ch->dest_buf);
         break;
 
@@ -1129,12 +1129,12 @@ void do_makedatapad(CHAR_DATA *ch, char *argument)
     learn_from_success(ch, gsn_makedatapad);
 }
 
-void do_codecrack(CHAR_DATA *ch, char *argument)
+void do_codecrack(CHAR_DATA* ch, char* argument)
 {
-    SHIP_DATA *ship;
-    CHAR_DATA *victim;
+    SHIP_DATA* ship;
+    CHAR_DATA* victim;
     bool checkdata;
-    OBJ_DATA *obj;
+    OBJ_DATA* obj;
     int x;
     char arg[MAX_INPUT_LENGTH];
     char buf[MAX_INPUT_LENGTH];
@@ -1202,7 +1202,7 @@ void do_codecrack(CHAR_DATA *ch, char *argument)
     case 1:
         if (!ch->dest_buf)
             return;
-        strcpy(arg, reinterpret_cast<const char *>(ch->dest_buf));
+        strcpy(arg, reinterpret_cast<const char*>(ch->dest_buf));
         DISPOSE(ch->dest_buf);
         break;
 
@@ -1293,17 +1293,17 @@ void do_codecrack(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void do_disableship(CHAR_DATA *ch, char *argument)
+void do_disableship(CHAR_DATA* ch, char* argument)
 {
 
-    SHIP_DATA *ship1;
-    SHIP_DATA *ship2;
-    SHIP_DATA *ship;
+    SHIP_DATA* ship1;
+    SHIP_DATA* ship2;
+    SHIP_DATA* ship;
     int chance, x;
     bool checkcomm, checkdata;
     char arg1[MAX_INPUT_LENGTH];
     char arg2[MAX_INPUT_LENGTH];
-    OBJ_DATA *obj;
+    OBJ_DATA* obj;
     long xpgain;
     checkcomm = false;
     checkdata = false;
@@ -1441,7 +1441,7 @@ void do_disableship(CHAR_DATA *ch, char *argument)
     case 1:
         if (!ch->dest_buf)
             return;
-        strcpy(arg1, reinterpret_cast<const char *>(ch->dest_buf));
+        strcpy(arg1, reinterpret_cast<const char*>(ch->dest_buf));
         DISPOSE(ch->dest_buf);
         break;
 
@@ -1544,17 +1544,17 @@ void do_disableship(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void do_assignpilot(CHAR_DATA *ch, char *argument)
+void do_assignpilot(CHAR_DATA* ch, char* argument)
 {
 
-    SHIP_DATA *ship1;
-    SHIP_DATA *ship;
+    SHIP_DATA* ship1;
+    SHIP_DATA* ship;
     int chance;
     long xpgain;
     bool checkdata;
     char arg1[MAX_INPUT_LENGTH];
     char arg2[MAX_INPUT_LENGTH];
-    OBJ_DATA *obj;
+    OBJ_DATA* obj;
     checkdata = false;
     argument = one_argument(argument, arg1);
     switch (ch->substate)
@@ -1607,7 +1607,7 @@ void do_assignpilot(CHAR_DATA *ch, char *argument)
     case 1:
         if (!ch->dest_buf)
             return;
-        strcpy(arg1, reinterpret_cast<const char *>(ch->dest_buf));
+        strcpy(arg1, reinterpret_cast<const char*>(ch->dest_buf));
         DISPOSE(ch->dest_buf);
         break;
 
@@ -1687,11 +1687,11 @@ void do_assignpilot(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void do_slicebank(CHAR_DATA *ch, char *argument)
+void do_slicebank(CHAR_DATA* ch, char* argument)
 {
-    DESCRIPTOR_DATA *d;
+    DESCRIPTOR_DATA* d;
     bool checkdata;
-    OBJ_DATA *obj;
+    OBJ_DATA* obj;
     long xpgain;
     char arg[MAX_INPUT_LENGTH];
     char arg2[MAX_INPUT_LENGTH];
@@ -1761,8 +1761,8 @@ void do_slicebank(CHAR_DATA *ch, char *argument)
         if (!ch->dest_buf_2)
             return;
 
-        strcpy(arg, reinterpret_cast<const char *>(ch->dest_buf));
-        strcpy(arg2, reinterpret_cast<const char *>(ch->dest_buf_2));
+        strcpy(arg, reinterpret_cast<const char*>(ch->dest_buf));
+        strcpy(arg2, reinterpret_cast<const char*>(ch->dest_buf_2));
         DISPOSE(ch->dest_buf);
         DISPOSE(ch->dest_buf_2);
         break;
@@ -1908,11 +1908,11 @@ void do_slicebank(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void do_checkprints(CHAR_DATA *ch, char *argument)
+void do_checkprints(CHAR_DATA* ch, char* argument)
 {
     bool checkdata;
     bool checkcomm;
-    OBJ_DATA *obj;
+    OBJ_DATA* obj;
     int x;
     long xpgain;
     char arg[MAX_INPUT_LENGTH];
@@ -1994,7 +1994,7 @@ void do_checkprints(CHAR_DATA *ch, char *argument)
     case 1:
         if (!ch->dest_buf)
             return;
-        strcpy(arg, reinterpret_cast<const char *>(ch->dest_buf));
+        strcpy(arg, reinterpret_cast<const char*>(ch->dest_buf));
         DISPOSE(ch->dest_buf);
         break;
 

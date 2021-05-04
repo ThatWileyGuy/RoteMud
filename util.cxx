@@ -40,7 +40,7 @@
 #include "mud.hxx"
 
 #ifndef WIN32
-int sprintf_s(char *dest, size_t dest_size, const char *format, ...)
+int sprintf_s(char* dest, size_t dest_size, const char* format, ...)
 {
     va_list args;
 
@@ -51,7 +51,7 @@ int sprintf_s(char *dest, size_t dest_size, const char *format, ...)
     return ret;
 }
 
-char *strcpy_s(char *dest, size_t dest_size, const char *source)
+char* strcpy_s(char* dest, size_t dest_size, const char* source)
 {
     if (strlen(source) >= dest_size)
     {
@@ -62,7 +62,7 @@ char *strcpy_s(char *dest, size_t dest_size, const char *source)
     return strcpy(dest, source);
 }
 
-char *strcat_s(char *dest, size_t dest_size, const char *source)
+char* strcat_s(char* dest, size_t dest_size, const char* source)
 {
     if (strlen(source) + strlen(dest) >= dest_size)
     {

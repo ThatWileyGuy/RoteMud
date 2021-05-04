@@ -44,10 +44,10 @@
 
 extern int top_exit;
 
-void do_buyhome(CHAR_DATA *ch, char *argument)
+void do_buyhome(CHAR_DATA* ch, char* argument)
 {
-    ROOM_INDEX_DATA *room;
-    AREA_DATA *pArea;
+    ROOM_INDEX_DATA* room;
+    AREA_DATA* pArea;
 
     if (!ch->in_room)
         return;
@@ -107,10 +107,10 @@ void do_buyhome(CHAR_DATA *ch, char *argument)
     send_to_char("&GYou buy your home for 25000 credits.\n\r", ch);
 }
 
-void do_sellhome(CHAR_DATA *ch, char *argument)
+void do_sellhome(CHAR_DATA* ch, char* argument)
 {
-    ROOM_INDEX_DATA *room = ch->plr_home;
-    AREA_DATA *pArea;
+    ROOM_INDEX_DATA* room = ch->plr_home;
+    AREA_DATA* pArea;
 
     if (!ch->in_room)
         return;
@@ -155,7 +155,7 @@ void do_sellhome(CHAR_DATA *ch, char *argument)
     send_to_char("&GYou sell your home for 10000 credits.\n\r", ch);
 }
 
-void do_clone(CHAR_DATA *ch, char *argument)
+void do_clone(CHAR_DATA* ch, char* argument)
 {
     long credits, bank;
     long played;
@@ -164,7 +164,7 @@ void do_clone(CHAR_DATA *ch, char *argument)
     char clanname[MAX_STRING_LENGTH];
     char bestowments[MAX_STRING_LENGTH];
     int flags;
-    ROOM_INDEX_DATA *home;
+    ROOM_INDEX_DATA* home;
     bool secondroom;
 
     if (IS_NPC(ch))
@@ -283,7 +283,7 @@ void do_clone(CHAR_DATA *ch, char *argument)
     ch->hit--;
 }
 
-void do_backup(CHAR_DATA *ch, char *argument)
+void do_backup(CHAR_DATA* ch, char* argument)
 {
     long credits, bank;
     long played;
@@ -291,7 +291,7 @@ void do_backup(CHAR_DATA *ch, char *argument)
     char clanname[MAX_STRING_LENGTH];
     char bestowments[MAX_STRING_LENGTH];
     int flags;
-    ROOM_INDEX_DATA *home;
+    ROOM_INDEX_DATA* home;
     bool secondroom;
 
     if (IS_NPC(ch))
@@ -398,10 +398,10 @@ void do_backup(CHAR_DATA *ch, char *argument)
     ch_printf(ch, "&WYour data has been moved to a disaster recovery facility.\n\r");
 }
 
-void do_ammo(CHAR_DATA *ch, char *argument)
+void do_ammo(CHAR_DATA* ch, char* argument)
 {
-    OBJ_DATA *wield;
-    OBJ_DATA *obj;
+    OBJ_DATA* wield;
+    OBJ_DATA* obj;
     bool checkammo = false;
     int charge = 0;
 
@@ -597,10 +597,10 @@ void do_ammo(CHAR_DATA *ch, char *argument)
     wield->value[4] = charge;
 }
 
-void do_setblaster(CHAR_DATA *ch, char *argument)
+void do_setblaster(CHAR_DATA* ch, char* argument)
 {
-    OBJ_DATA *wield;
-    OBJ_DATA *wield2;
+    OBJ_DATA* wield;
+    OBJ_DATA* wield2;
 
     wield = get_eq_char(ch, WEAR_WIELD);
     if (wield && !(wield->item_type == ITEM_WEAPON && wield->value[3] == WEAPON_BLASTER))
@@ -715,13 +715,13 @@ void do_setblaster(CHAR_DATA *ch, char *argument)
         do_setblaster(ch, "");
 }
 
-void do_use(CHAR_DATA *ch, char *argument)
+void do_use(CHAR_DATA* ch, char* argument)
 {
     char arg[MAX_INPUT_LENGTH];
     char argd[MAX_INPUT_LENGTH];
-    CHAR_DATA *victim;
-    OBJ_DATA *device;
-    OBJ_DATA *obj;
+    CHAR_DATA* victim;
+    OBJ_DATA* device;
+    OBJ_DATA* obj;
     ch_ret retcode;
 
     argument = one_argument(argument, argd);
@@ -815,9 +815,9 @@ void do_use(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void do_takedrug(CHAR_DATA *ch, char *argument)
+void do_takedrug(CHAR_DATA* ch, char* argument)
 {
-    OBJ_DATA *obj;
+    OBJ_DATA* obj;
     AFFECT_DATA af;
     int drug;
     int sn;
@@ -970,7 +970,7 @@ void do_takedrug(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void jedi_bonus(CHAR_DATA *ch)
+void jedi_bonus(CHAR_DATA* ch)
 {
     if (number_range(1, 100) == 1)
     {
@@ -980,7 +980,7 @@ void jedi_bonus(CHAR_DATA *ch)
     }
 }
 
-void sith_penalty(CHAR_DATA *ch)
+void sith_penalty(CHAR_DATA* ch)
 {
     if (number_range(1, 100) == 1)
     {
@@ -996,12 +996,12 @@ void sith_penalty(CHAR_DATA *ch)
  * Fill a container
  * Many enhancements added by Thoric (ie: filling non-drink containers)
  */
-void do_fill(CHAR_DATA *ch, char *argument)
+void do_fill(CHAR_DATA* ch, char* argument)
 {
     char arg1[MAX_INPUT_LENGTH];
     char arg2[MAX_INPUT_LENGTH];
-    OBJ_DATA *obj;
-    OBJ_DATA *source;
+    OBJ_DATA* obj;
+    OBJ_DATA* source;
     sh_int dest_item, src_item1, src_item2, src_item3, src_item4;
     int diff;
     bool all = false;
@@ -1134,7 +1134,7 @@ void do_fill(CHAR_DATA *ch, char *argument)
     if (!source)
     {
         bool found = false;
-        OBJ_DATA *src_next;
+        OBJ_DATA* src_next;
 
         found = false;
         separate_obj(obj);
@@ -1199,8 +1199,8 @@ void do_fill(CHAR_DATA *ch, char *argument)
     {
         OBJ_DATA *otmp, *otmp_next;
         char name[MAX_INPUT_LENGTH];
-        CHAR_DATA *gch;
-        char *pd;
+        CHAR_DATA* gch;
+        char* pd;
         bool found = false;
 
         if (source == obj)
@@ -1392,10 +1392,10 @@ void do_fill(CHAR_DATA *ch, char *argument)
     }
 }
 
-void do_drink(CHAR_DATA *ch, char *argument)
+void do_drink(CHAR_DATA* ch, char* argument)
 {
     char arg[MAX_INPUT_LENGTH];
-    OBJ_DATA *obj;
+    OBJ_DATA* obj;
     int amount;
     int liquid;
 
@@ -1541,9 +1541,9 @@ void do_drink(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void do_eat(CHAR_DATA *ch, char *argument)
+void do_eat(CHAR_DATA* ch, char* argument)
 {
-    OBJ_DATA *obj;
+    OBJ_DATA* obj;
     ch_ret retcode;
     int foodcond;
 
@@ -1672,9 +1672,9 @@ void do_eat(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void do_quaff(CHAR_DATA *ch, char *argument)
+void do_quaff(CHAR_DATA* ch, char* argument)
 {
-    OBJ_DATA *obj;
+    OBJ_DATA* obj;
     ch_ret retcode;
 
     if (argument[0] == '\0' || !str_cmp(argument, ""))
@@ -1745,13 +1745,13 @@ void do_quaff(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void do_recite(CHAR_DATA *ch, char *argument)
+void do_recite(CHAR_DATA* ch, char* argument)
 {
     char arg1[MAX_INPUT_LENGTH];
     char arg2[MAX_INPUT_LENGTH];
-    CHAR_DATA *victim;
-    OBJ_DATA *scroll;
-    OBJ_DATA *obj;
+    CHAR_DATA* victim;
+    OBJ_DATA* scroll;
+    OBJ_DATA* obj;
     ch_ret retcode;
 
     argument = one_argument(argument, arg1);
@@ -1824,17 +1824,17 @@ void do_recite(CHAR_DATA *ch, char *argument)
 /*
  * Function to handle the state changing of a triggerobject (lever)  -Thoric
  */
-void pullorpush(CHAR_DATA *ch, OBJ_DATA *obj, bool pull)
+void pullorpush(CHAR_DATA* ch, OBJ_DATA* obj, bool pull)
 {
     char buf[MAX_STRING_LENGTH];
-    CHAR_DATA *rch;
+    CHAR_DATA* rch;
     bool isup;
-    ROOM_INDEX_DATA *room = nullptr;
-    ROOM_INDEX_DATA *to_room = nullptr;
-    EXIT_DATA *pexit = nullptr;
-    EXIT_DATA *pexit_rev = nullptr;
+    ROOM_INDEX_DATA* room = nullptr;
+    ROOM_INDEX_DATA* to_room = nullptr;
+    EXIT_DATA* pexit = nullptr;
+    EXIT_DATA* pexit_rev = nullptr;
     int edir;
-    const char *txt;
+    const char* txt;
 
     if (IS_SET(obj->value[0], TRIG_UP))
         isup = true;
@@ -2057,10 +2057,10 @@ void pullorpush(CHAR_DATA *ch, OBJ_DATA *obj, bool pull)
     }
 }
 
-void do_pull(CHAR_DATA *ch, char *argument)
+void do_pull(CHAR_DATA* ch, char* argument)
 {
     char arg[MAX_INPUT_LENGTH];
-    OBJ_DATA *obj;
+    OBJ_DATA* obj;
 
     one_argument(argument, arg);
     if (arg[0] == '\0')
@@ -2081,10 +2081,10 @@ void do_pull(CHAR_DATA *ch, char *argument)
     pullorpush(ch, obj, true);
 }
 
-void do_push(CHAR_DATA *ch, char *argument)
+void do_push(CHAR_DATA* ch, char* argument)
 {
     char arg[MAX_INPUT_LENGTH];
-    OBJ_DATA *obj;
+    OBJ_DATA* obj;
 
     one_argument(argument, arg);
     if (arg[0] == '\0')
@@ -2106,9 +2106,9 @@ void do_push(CHAR_DATA *ch, char *argument)
 }
 
 /* pipe commands (light, tamp, smoke) by Thoric */
-void do_tamp(CHAR_DATA *ch, char *argument)
+void do_tamp(CHAR_DATA* ch, char* argument)
 {
-    OBJ_DATA *pipe;
+    OBJ_DATA* pipe;
     char arg[MAX_INPUT_LENGTH];
 
     one_argument(argument, arg);
@@ -2141,9 +2141,9 @@ void do_tamp(CHAR_DATA *ch, char *argument)
     send_to_char("It doesn't need tamping.\n\r", ch);
 }
 
-void do_smoke(CHAR_DATA *ch, char *argument)
+void do_smoke(CHAR_DATA* ch, char* argument)
 {
-    OBJ_DATA *pipe;
+    OBJ_DATA* pipe;
     char arg[MAX_INPUT_LENGTH];
 
     one_argument(argument, arg);
@@ -2185,7 +2185,7 @@ void do_smoke(CHAR_DATA *ch, char *argument)
         if (IS_VALID_HERB(pipe->value[2]) && pipe->value[2] < top_herb)
         {
             int sn = pipe->value[2] + TYPE_HERB;
-            SKILL_TYPE *skill = get_skilltype(sn);
+            SKILL_TYPE* skill = get_skilltype(sn);
 
             WAIT_STATE(ch, skill->beats);
             if (skill->spell_fun)
@@ -2206,9 +2206,9 @@ void do_smoke(CHAR_DATA *ch, char *argument)
     }
 }
 
-void do_light(CHAR_DATA *ch, char *argument)
+void do_light(CHAR_DATA* ch, char* argument)
 {
-    OBJ_DATA *pipe;
+    OBJ_DATA* pipe;
     char arg[MAX_INPUT_LENGTH];
 
     one_argument(argument, arg);
@@ -2247,9 +2247,9 @@ void do_light(CHAR_DATA *ch, char *argument)
     send_to_char("It's already lit.\n\r", ch);
 }
 
-void do_empty(CHAR_DATA *ch, char *argument)
+void do_empty(CHAR_DATA* ch, char* argument)
 {
-    OBJ_DATA *obj;
+    OBJ_DATA* obj;
     char arg1[MAX_INPUT_LENGTH];
     char arg2[MAX_INPUT_LENGTH];
 
@@ -2335,7 +2335,7 @@ void do_empty(CHAR_DATA *ch, char *argument)
         }
         else
         {
-            OBJ_DATA *dest = get_obj_here(ch, arg2);
+            OBJ_DATA* dest = get_obj_here(ch, arg2);
 
             if (!dest)
             {
@@ -2375,9 +2375,9 @@ void do_empty(CHAR_DATA *ch, char *argument)
 /*
  * Apply a salve/ointment					-Thoric
  */
-void do_apply(CHAR_DATA *ch, char *argument)
+void do_apply(CHAR_DATA* ch, char* argument)
 {
-    OBJ_DATA *obj;
+    OBJ_DATA* obj;
     ch_ret retcode;
 
     if (argument[0] == '\0')
@@ -2430,15 +2430,15 @@ void do_apply(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void actiondesc(CHAR_DATA *ch, OBJ_DATA *obj, void *vo)
+void actiondesc(CHAR_DATA* ch, OBJ_DATA* obj, void* vo)
 {
     char charbuf[MAX_STRING_LENGTH];
     char roombuf[MAX_STRING_LENGTH];
-    char *srcptr = obj->action_desc;
-    char *charptr = charbuf;
-    char *roomptr = roombuf;
-    const char *ichar = nullptr;
-    const char *iroom = nullptr;
+    char* srcptr = obj->action_desc;
+    char* charptr = charbuf;
+    char* roomptr = roombuf;
+    const char* ichar = nullptr;
+    const char* iroom = nullptr;
 
     while (*srcptr != '\0')
     {
@@ -2550,10 +2550,10 @@ void actiondesc(CHAR_DATA *ch, OBJ_DATA *obj, void *vo)
     return;
 }
 
-void do_hail(CHAR_DATA *ch, char *argument)
+void do_hail(CHAR_DATA* ch, char* argument)
 {
     int vnum;
-    ROOM_INDEX_DATA *room = nullptr;
+    ROOM_INDEX_DATA* room = nullptr;
 
     if (!ch->in_room)
         return;
@@ -2630,10 +2630,10 @@ void do_hail(CHAR_DATA *ch, char *argument)
     do_look(ch, "auto");
 }
 
-void do_train(CHAR_DATA *ch, char *argument)
+void do_train(CHAR_DATA* ch, char* argument)
 {
     char arg[MAX_INPUT_LENGTH];
-    CHAR_DATA *mob;
+    CHAR_DATA* mob;
     bool tfound = false;
     bool successful = false;
 
@@ -2845,10 +2845,10 @@ void do_train(CHAR_DATA *ch, char *argument)
     }
 }
 
-void do_suicide(CHAR_DATA *ch, char *argument)
+void do_suicide(CHAR_DATA* ch, char* argument)
 {
     char logbuf[MAX_STRING_LENGTH];
-    OBJ_DATA *wield;
+    OBJ_DATA* wield;
 
     if (IS_NPC(ch) || !ch->pcdata)
     {
@@ -2940,9 +2940,9 @@ void do_suicide(CHAR_DATA *ch, char *argument)
     raw_kill(ch, ch);
 }
 
-void do_bank(CHAR_DATA *ch, char *argument)
+void do_bank(CHAR_DATA* ch, char* argument)
 {
-    CHAR_DATA *victim;
+    CHAR_DATA* victim;
     char arg1[MAX_INPUT_LENGTH];
     char arg2[MAX_INPUT_LENGTH];
     char arg3[MAX_INPUT_LENGTH];
@@ -3066,9 +3066,9 @@ void do_bank(CHAR_DATA *ch, char *argument)
     }
 }
 
-void do_showsocial(CHAR_DATA *ch, char *argument)
+void do_showsocial(CHAR_DATA* ch, char* argument)
 {
-    SOCIALTYPE *social;
+    SOCIALTYPE* social;
 
     if (argument[0] == '\0' || !argument)
     {
@@ -3143,9 +3143,9 @@ void do_lastname( CHAR_DATA *ch, char *argument )
 }
 */
 
-void do_tune(CHAR_DATA *ch, char *argument)
+void do_tune(CHAR_DATA* ch, char* argument)
 {
-    SHIP_DATA *ship;
+    SHIP_DATA* ship;
     char buf[MAX_STRING_LENGTH];
     int num;
     if ((ship = ship_from_cockpit(ch->in_room->vnum)) == NULL)
@@ -3173,9 +3173,9 @@ void do_tune(CHAR_DATA *ch, char *argument)
     ship->channel = num;
     save_ship(ship);
 }
-void do_whisper(CHAR_DATA *ch, char *argument)
+void do_whisper(CHAR_DATA* ch, char* argument)
 {
-    CHAR_DATA *victim;
+    CHAR_DATA* victim;
     char arg1[MAX_STRING_LENGTH];
     char arg2[MAX_INPUT_LENGTH];
     char buf[MAX_INPUT_LENGTH];
@@ -3194,15 +3194,15 @@ void do_whisper(CHAR_DATA *ch, char *argument)
     send_to_char(buf, victim);
 }
 
-void do_droptroops(CHAR_DATA *ch, char *argument)
+void do_droptroops(CHAR_DATA* ch, char* argument)
 {
     int num, vnum, i;
-    SHIP_DATA *ship;
-    CHAR_DATA *mob;
-    MOB_INDEX_DATA *pMobIndex;
-    OBJ_DATA *blaster;
-    OBJ_INDEX_DATA *pObjIndex;
-    ROOM_INDEX_DATA *room;
+    SHIP_DATA* ship;
+    CHAR_DATA* mob;
+    MOB_INDEX_DATA* pMobIndex;
+    OBJ_DATA* blaster;
+    OBJ_INDEX_DATA* pObjIndex;
+    ROOM_INDEX_DATA* room;
     char tmpbuf[MAX_STRING_LENGTH];
     if (ch->pcdata->clan == NULL)
     {
@@ -3274,10 +3274,10 @@ void do_droptroops(CHAR_DATA *ch, char *argument)
     echo_to_cockpit(AT_RED, ship, tmpbuf);
 }
 
-void do_hale(CHAR_DATA *ch, char *argument)
+void do_hale(CHAR_DATA* ch, char* argument)
 {
-    SHIP_DATA *ship;
-    SHIP_DATA *ship2 = ship_from_cockpit(ch->in_room->vnum);
+    SHIP_DATA* ship;
+    SHIP_DATA* ship2 = ship_from_cockpit(ch->in_room->vnum);
     char buf[MAX_STRING_LENGTH];
     char buf1[MAX_STRING_LENGTH];
     char arg1[MAX_INPUT_LENGTH];
@@ -3324,7 +3324,7 @@ void do_hale(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void do_rpconvert(CHAR_DATA *ch, char *argument)
+void do_rpconvert(CHAR_DATA* ch, char* argument)
 {
     char buf[MAX_STRING_LENGTH];
 
@@ -3445,9 +3445,9 @@ void do_rpconvert(CHAR_DATA *ch, char *argument)
     do_rpconvert(ch, "");
 }
 
-void do_arm(CHAR_DATA *ch, char *argument)
+void do_arm(CHAR_DATA* ch, char* argument)
 {
-    OBJ_DATA *obj;
+    OBJ_DATA* obj;
     char arg[MIL];
     sh_int password, timer;
 
@@ -3509,9 +3509,9 @@ void do_arm(CHAR_DATA *ch, char *argument)
     act(AT_PLAIN, "$n arms $p.", ch, obj, NULL, TO_ROOM);
 }
 
-void do_disarmgrenade(CHAR_DATA *ch, char *argument)
+void do_disarmgrenade(CHAR_DATA* ch, char* argument)
 {
-    OBJ_DATA *obj;
+    OBJ_DATA* obj;
     sh_int password;
 
     if (IS_NPC(ch) || !ch->pcdata)
@@ -3564,11 +3564,11 @@ void do_disarmgrenade(CHAR_DATA *ch, char *argument)
     act(AT_PLAIN, "$n disarms $p.", ch, obj, NULL, TO_ROOM);
 }
 
-void do_invite(CHAR_DATA *ch, char *argument)
+void do_invite(CHAR_DATA* ch, char* argument)
 {
     char arg[MAX_INPUT_LENGTH];
-    ROOM_INDEX_DATA *room;
-    CHAR_DATA *rch;
+    ROOM_INDEX_DATA* room;
+    CHAR_DATA* rch;
 
     one_argument(argument, arg);
 
@@ -3626,9 +3626,9 @@ void do_invite(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void do_buzz(CHAR_DATA *ch, char *argument)
+void do_buzz(CHAR_DATA* ch, char* argument)
 {
-    EXIT_DATA *pexit;
+    EXIT_DATA* pexit;
     char arg[MAX_INPUT_LENGTH];
     char buf[MAX_INPUT_LENGTH];
 
@@ -3646,9 +3646,9 @@ void do_buzz(CHAR_DATA *ch, char *argument)
     }
     if ((pexit = get_exit(ch->in_room, get_dir(arg))) != NULL)
     {
-        ROOM_INDEX_DATA *to_room;
-        EXIT_DATA *pexit_rev;
-        char *keyword;
+        ROOM_INDEX_DATA* to_room;
+        EXIT_DATA* pexit_rev;
+        char* keyword;
 
         if ((to_room = pexit->to_room) != NULL && IS_SET(to_room->room_flags, ROOM_EMPTY_HOME))
         {
@@ -3679,10 +3679,10 @@ void do_buzz(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void do_debitorder(CHAR_DATA *ch, char *argument)
+void do_debitorder(CHAR_DATA* ch, char* argument)
 {
-    OBJ_DATA *obj;
-    OBJ_INDEX_DATA *objindex;
+    OBJ_DATA* obj;
+    OBJ_INDEX_DATA* objindex;
     if (!IS_SET(ch->in_room->room_flags, ROOM_BANK))
     {
         send_to_char("You must be at a bank to order a debit card!\n\r", ch);

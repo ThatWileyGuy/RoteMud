@@ -48,19 +48,19 @@
 /*
  * External functions
  */
-void write_corpses(CHAR_DATA *ch, char *name);
-void show_list_to_char(OBJ_DATA *list, CHAR_DATA *ch, bool fShort, bool fShowNothing);
+void write_corpses(CHAR_DATA* ch, char* name);
+void show_list_to_char(OBJ_DATA* list, CHAR_DATA* ch, bool fShort, bool fShowNothing);
 /*
  * Local functions.
  */
-void get_obj(CHAR_DATA *ch, OBJ_DATA *obj, OBJ_DATA *container);
-bool remove_obj(CHAR_DATA *ch, int iWear, bool fReplace);
-void wear_obj(CHAR_DATA *ch, OBJ_DATA *obj, bool fReplace, sh_int wear_bit);
+void get_obj(CHAR_DATA* ch, OBJ_DATA* obj, OBJ_DATA* container);
+bool remove_obj(CHAR_DATA* ch, int iWear, bool fReplace);
+void wear_obj(CHAR_DATA* ch, OBJ_DATA* obj, bool fReplace, sh_int wear_bit);
 
 /*
  * how resistant an object is to damage				-Thoric
  */
-sh_int get_obj_resistance(OBJ_DATA *obj)
+sh_int get_obj_resistance(OBJ_DATA* obj)
 {
     sh_int resist;
 
@@ -86,9 +86,9 @@ sh_int get_obj_resistance(OBJ_DATA *obj)
     return URANGE(10, resist, 99);
 }
 
-void get_obj(CHAR_DATA *ch, OBJ_DATA *obj, OBJ_DATA *container)
+void get_obj(CHAR_DATA* ch, OBJ_DATA* obj, OBJ_DATA* container)
 {
-    CLAN_DATA *clan;
+    CLAN_DATA* clan;
     int weight;
 
     if (!CAN_WEAR(obj, ITEM_TAKE) && (ch->top_level < sysdata.level_getobjnotake))
@@ -164,13 +164,13 @@ void get_obj(CHAR_DATA *ch, OBJ_DATA *obj, OBJ_DATA *container)
     return;
 }
 
-void do_get(CHAR_DATA *ch, char *argument)
+void do_get(CHAR_DATA* ch, char* argument)
 {
     char arg1[MAX_INPUT_LENGTH];
     char arg2[MAX_INPUT_LENGTH];
-    OBJ_DATA *obj;
-    OBJ_DATA *obj_next;
-    OBJ_DATA *container;
+    OBJ_DATA* obj;
+    OBJ_DATA* obj_next;
+    OBJ_DATA* container;
     sh_int number;
     bool found;
 
@@ -229,7 +229,7 @@ void do_get(CHAR_DATA *ch, char *argument)
         {
             sh_int cnt = 0;
             bool fAll;
-            char *chk;
+            char* chk;
 
             if (IS_SET(ch->in_room->room_flags, ROOM_DONATION))
             {
@@ -345,7 +345,7 @@ void do_get(CHAR_DATA *ch, char *argument)
         {
             int cnt = 0;
             bool fAll;
-            char *chk;
+            char* chk;
 
             /* 'get all container' or 'get all.obj container' */
             if (IS_OBJ_STAT(container, ITEM_DONATION))
@@ -408,14 +408,14 @@ void do_get(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void do_put(CHAR_DATA *ch, char *argument)
+void do_put(CHAR_DATA* ch, char* argument)
 {
     char arg1[MAX_INPUT_LENGTH];
     char arg2[MAX_INPUT_LENGTH];
-    OBJ_DATA *container;
-    OBJ_DATA *obj;
-    OBJ_DATA *obj_next;
-    CLAN_DATA *clan;
+    OBJ_DATA* container;
+    OBJ_DATA* obj;
+    OBJ_DATA* obj_next;
+    CLAN_DATA* clan;
     sh_int count;
     int number;
     bool save_char = false;
@@ -603,7 +603,7 @@ void do_put(CHAR_DATA *ch, char *argument)
         bool found = false;
         int cnt = 0;
         bool fAll;
-        char *chk;
+        char* chk;
 
         if (!str_cmp(arg1, "all"))
             fAll = true;
@@ -674,14 +674,14 @@ void do_put(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void do_drop(CHAR_DATA *ch, char *argument)
+void do_drop(CHAR_DATA* ch, char* argument)
 {
     char arg[MAX_INPUT_LENGTH];
     char logbuf[MAX_STRING_LENGTH];
-    OBJ_DATA *obj;
-    OBJ_DATA *obj_next;
+    OBJ_DATA* obj;
+    OBJ_DATA* obj_next;
     bool found;
-    CLAN_DATA *clan;
+    CLAN_DATA* clan;
     int number;
 
     argument = one_argument(argument, arg);
@@ -808,7 +808,7 @@ void do_drop(CHAR_DATA *ch, char *argument)
     else
     {
         int cnt = 0;
-        char *chk;
+        char* chk;
         bool fAll;
 
         if (!str_cmp(arg, "all"))
@@ -883,14 +883,14 @@ void do_drop(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void do_give(CHAR_DATA *ch, char *argument)
+void do_give(CHAR_DATA* ch, char* argument)
 {
     char arg1[MAX_INPUT_LENGTH];
     char arg2[MAX_INPUT_LENGTH];
     char logbuf[MAX_STRING_LENGTH];
     char buf[MAX_INPUT_LENGTH];
-    CHAR_DATA *victim;
-    OBJ_DATA *obj;
+    CHAR_DATA* victim;
+    OBJ_DATA* obj;
 
     argument = one_argument(argument, arg1);
     argument = one_argument(argument, arg2);
@@ -1045,9 +1045,9 @@ void do_give(CHAR_DATA *ch, char *argument)
  * Make object into scraps if necessary.
  * Send message about damaged object.
  */
-obj_ret damage_obj(OBJ_DATA *obj)
+obj_ret damage_obj(OBJ_DATA* obj)
 {
-    CHAR_DATA *ch;
+    CHAR_DATA* ch;
     obj_ret objcode;
 
     ch = obj->carried_by;
@@ -1108,7 +1108,7 @@ obj_ret damage_obj(OBJ_DATA *obj)
 /*
  * Remove an object.
  */
-bool remove_obj(CHAR_DATA *ch, int iWear, bool fReplace)
+bool remove_obj(CHAR_DATA* ch, int iWear, bool fReplace)
 {
     OBJ_DATA *obj, *tmpobj;
 
@@ -1144,7 +1144,7 @@ bool remove_obj(CHAR_DATA *ch, int iWear, bool fReplace)
 /*
  * See if char could be capable of dual-wielding		-Thoric
  */
-bool could_dual(CHAR_DATA *ch)
+bool could_dual(CHAR_DATA* ch)
 {
     if (IS_NPC(ch))
         return true;
@@ -1159,7 +1159,7 @@ bool could_dual(CHAR_DATA *ch)
  *
  * Original version by Thoric.
  */
-bool can_dual(CHAR_DATA *ch)
+bool can_dual(CHAR_DATA* ch)
 {
     /*
      * We must assume that when they come in, they are NOT wielding something. We
@@ -1241,9 +1241,9 @@ bool can_dual(CHAR_DATA *ch)
  * Check to see if there is room to wear another object on this location
  * (Layered clothing support)
  */
-bool can_layer(CHAR_DATA *ch, OBJ_DATA *obj, sh_int wear_loc)
+bool can_layer(CHAR_DATA* ch, OBJ_DATA* obj, sh_int wear_loc)
 {
-    OBJ_DATA *otmp;
+    OBJ_DATA* otmp;
     sh_int bitlayers = 0;
     sh_int objlayers = obj->pIndexData->layers;
 
@@ -1268,10 +1268,10 @@ bool can_layer(CHAR_DATA *ch, OBJ_DATA *obj, sh_int wear_loc)
  * Big repetitive code, ick.
  * Restructured a bit to allow for specifying body location	-Thoric
  */
-void wear_obj(CHAR_DATA *ch, OBJ_DATA *obj, bool fReplace, sh_int wear_bit)
+void wear_obj(CHAR_DATA* ch, OBJ_DATA* obj, bool fReplace, sh_int wear_bit)
 {
     char buf[MAX_STRING_LENGTH];
-    OBJ_DATA *tmpobj;
+    OBJ_DATA* tmpobj;
     sh_int bit, tmp;
     bool check_size;
 
@@ -2004,11 +2004,11 @@ void wear_obj(CHAR_DATA *ch, OBJ_DATA *obj, bool fReplace, sh_int wear_bit)
     }
 }
 
-void do_wear(CHAR_DATA *ch, char *argument)
+void do_wear(CHAR_DATA* ch, char* argument)
 {
     char arg1[MAX_INPUT_LENGTH];
     char arg2[MAX_INPUT_LENGTH];
-    OBJ_DATA *obj;
+    OBJ_DATA* obj;
     sh_int wear_bit;
 
     argument = one_argument(argument, arg1);
@@ -2027,7 +2027,7 @@ void do_wear(CHAR_DATA *ch, char *argument)
 
     if (!str_cmp(arg1, "all"))
     {
-        OBJ_DATA *obj_next;
+        OBJ_DATA* obj_next;
 
         for (obj = ch->first_carrying; obj; obj = obj_next)
         {
@@ -2064,7 +2064,7 @@ void do_wear(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void do_remove(CHAR_DATA *ch, char *argument)
+void do_remove(CHAR_DATA* ch, char* argument)
 {
     char arg[MAX_INPUT_LENGTH];
     OBJ_DATA *obj, *obj_next;
@@ -2111,10 +2111,10 @@ void do_remove(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void do_bury(CHAR_DATA *ch, char *argument)
+void do_bury(CHAR_DATA* ch, char* argument)
 {
     char arg[MAX_INPUT_LENGTH];
-    OBJ_DATA *obj;
+    OBJ_DATA* obj;
     bool shovel;
     sh_int move;
 
@@ -2189,10 +2189,10 @@ void do_bury(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void do_sacrifice(CHAR_DATA *ch, char *argument)
+void do_sacrifice(CHAR_DATA* ch, char* argument)
 {
     char arg[MAX_INPUT_LENGTH];
-    OBJ_DATA *obj;
+    OBJ_DATA* obj;
 
     one_argument(argument, arg);
 
@@ -2230,11 +2230,11 @@ void do_sacrifice(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void do_brandish(CHAR_DATA *ch, char *argument)
+void do_brandish(CHAR_DATA* ch, char* argument)
 {
-    CHAR_DATA *vch;
-    CHAR_DATA *vch_next;
-    OBJ_DATA *staff;
+    CHAR_DATA* vch;
+    CHAR_DATA* vch_next;
+    OBJ_DATA* staff;
     ch_ret retcode;
     int sn;
 
@@ -2319,12 +2319,12 @@ void do_brandish(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void do_zap(CHAR_DATA *ch, char *argument)
+void do_zap(CHAR_DATA* ch, char* argument)
 {
     char arg[MAX_INPUT_LENGTH];
-    CHAR_DATA *victim;
-    OBJ_DATA *wand;
-    OBJ_DATA *obj;
+    CHAR_DATA* victim;
+    OBJ_DATA* wand;
+    OBJ_DATA* obj;
     ch_ret retcode;
 
     one_argument(argument, arg);
@@ -2412,12 +2412,12 @@ void do_zap(CHAR_DATA *ch, char *argument)
 /*
  * Save items in a clan storage room			-Scryn & Thoric
  */
-void save_clan_storeroom(CHAR_DATA *ch, CLAN_DATA *clan)
+void save_clan_storeroom(CHAR_DATA* ch, CLAN_DATA* clan)
 {
-    FILE *fp = nullptr;
+    FILE* fp = nullptr;
     char filename[256];
     sh_int templvl;
-    OBJ_DATA *contents;
+    OBJ_DATA* contents;
 
     if (!clan)
     {
@@ -2454,13 +2454,13 @@ void save_clan_storeroom(CHAR_DATA *ch, CLAN_DATA *clan)
 }
 
 /* put an item on auction, or see the stats on the current item or bet */
-void do_auction(CHAR_DATA *ch, char *argument)
+void do_auction(CHAR_DATA* ch, char* argument)
 {
-    OBJ_DATA *obj;
+    OBJ_DATA* obj;
     char arg1[MAX_INPUT_LENGTH];
     char arg2[MAX_INPUT_LENGTH];
     char buf[MAX_STRING_LENGTH];
-    AFFECT_DATA *paf;
+    AFFECT_DATA* paf;
 
     argument = one_argument(argument, arg1);
 
@@ -2763,10 +2763,10 @@ void do_auction(CHAR_DATA *ch, char *argument)
 
 /* Make objects in rooms that are nofloor fall - Scryn 1/23/96 */
 
-void obj_fall(OBJ_DATA *obj, bool through)
+void obj_fall(OBJ_DATA* obj, bool through)
 {
-    EXIT_DATA *pexit;
-    ROOM_INDEX_DATA *to_room;
+    EXIT_DATA* pexit;
+    ROOM_INDEX_DATA* to_room;
     static int fall_count;
     char buf[MAX_STRING_LENGTH];
     static bool is_falling; /* Stop loops from the call to obj_to_room()  -- Altrag */
@@ -2825,8 +2825,8 @@ void obj_fall(OBJ_DATA *obj, bool through)
             /* Damage players */
             if (obj->in_room->first_person && number_percent() > 15)
             {
-                CHAR_DATA *rch;
-                CHAR_DATA *vch = NULL;
+                CHAR_DATA* rch;
+                CHAR_DATA* vch = NULL;
                 int chcnt = 0;
 
                 for (rch = obj->in_room->first_person; rch; rch = rch->next_in_room, chcnt++)

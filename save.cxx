@@ -53,7 +53,7 @@
 /*
  * Array to keep track of equipment temporarily.		-Thoric
  */
-OBJ_DATA *save_equipment[MAX_WEAR][MAX_LAYERS];
+OBJ_DATA* save_equipment[MAX_WEAR][MAX_LAYERS];
 CHAR_DATA *quitting_char, *loading_char, *saving_char;
 
 int file_ver;
@@ -61,29 +61,29 @@ int file_ver;
 /*
  * Externals
  */
-void fwrite_comments(CHAR_DATA *ch, FILE *fp);
-void fread_comment(CHAR_DATA *ch, FILE *fp);
+void fwrite_comments(CHAR_DATA* ch, FILE* fp);
+void fread_comment(CHAR_DATA* ch, FILE* fp);
 
 /*
  * Array of containers read for proper re-nesting of objects.
  */
-static OBJ_DATA *rgObjNest[MAX_NEST];
+static OBJ_DATA* rgObjNest[MAX_NEST];
 
 /*
  * Local functions.
  */
-void fwrite_char(CHAR_DATA *ch, FILE *fp);
-void fread_char(CHAR_DATA *ch, FILE *fp, bool preload);
-void write_corpses(CHAR_DATA *ch, char *name);
+void fwrite_char(CHAR_DATA* ch, FILE* fp);
+void fread_char(CHAR_DATA* ch, FILE* fp, bool preload);
+void write_corpses(CHAR_DATA* ch, char* name);
 
-void save_home(CHAR_DATA *ch)
+void save_home(CHAR_DATA* ch)
 {
     if (ch->plr_home)
     {
-        FILE *fp;
+        FILE* fp;
         char filename[256];
         sh_int templvl;
-        OBJ_DATA *contents;
+        OBJ_DATA* contents;
 
         sprintf_s(filename, "%s%c/%s.home", PLAYER_DIR, tolower(ch->name[0]), capitalize(ch->name));
         if ((fp = fopen(filename, "w")) == NULL)
@@ -107,10 +107,10 @@ void save_home(CHAR_DATA *ch)
  * Un-equip character before saving to ensure proper	-Thoric
  * stats are saved in case of changes to or removal of EQ
  */
-void de_equip_char(CHAR_DATA *ch)
+void de_equip_char(CHAR_DATA* ch)
 {
     char buf[MAX_STRING_LENGTH];
-    OBJ_DATA *obj;
+    OBJ_DATA* obj;
     int x, y;
 
     for (x = 0; x < MAX_WEAR; x++)
@@ -140,7 +140,7 @@ void de_equip_char(CHAR_DATA *ch)
 /*
  * Re-equip character					-Thoric
  */
-void re_equip_char(CHAR_DATA *ch)
+void re_equip_char(CHAR_DATA* ch)
 {
     int x, y;
 
@@ -161,11 +161,11 @@ void re_equip_char(CHAR_DATA *ch)
  * Would be cool to save NPC's too for quest purposes,
  *   some of the infrastructure is provided.
  */
-void save_char_obj(CHAR_DATA *ch)
+void save_char_obj(CHAR_DATA* ch)
 {
     char strsave[MAX_INPUT_LENGTH];
     char strback[MAX_INPUT_LENGTH];
-    FILE *fp;
+    FILE* fp;
 
     if (!ch)
     {
@@ -252,11 +252,11 @@ void save_char_obj(CHAR_DATA *ch)
     return;
 }
 
-void save_clone(CHAR_DATA *ch)
+void save_clone(CHAR_DATA* ch)
 {
     char strsave[MAX_INPUT_LENGTH];
     char strback[MAX_INPUT_LENGTH];
-    FILE *fp;
+    FILE* fp;
 
     if (!ch)
     {
@@ -311,15 +311,15 @@ void save_clone(CHAR_DATA *ch)
 /*
  * Write the char.
  */
-void fwrite_char(CHAR_DATA *ch, FILE *fp)
+void fwrite_char(CHAR_DATA* ch, FILE* fp)
 {
-    AFFECT_DATA *paf = nullptr;
+    AFFECT_DATA* paf = nullptr;
     int sn, track, drug;
-    BUG_DATA *bug = nullptr;
-    SKILL_TYPE *skill = nullptr;
-    SHIP_DATA *ship = nullptr;
-    CONTRACT_DATA *contract = nullptr;
-    FELLOW_DATA *fellow = nullptr;
+    BUG_DATA* bug = nullptr;
+    SKILL_TYPE* skill = nullptr;
+    SHIP_DATA* ship = nullptr;
+    CONTRACT_DATA* contract = nullptr;
+    FELLOW_DATA* fellow = nullptr;
 
     fprintf(fp, "#%s\n", IS_NPC(ch) ? "MOB" : "PLAYER");
 
@@ -591,10 +591,10 @@ void fwrite_char(CHAR_DATA *ch, FILE *fp)
 /*
  * Write an object and its contents.
  */
-void fwrite_obj(CHAR_DATA *ch, OBJ_DATA *obj, FILE *fp, int iNest, sh_int os_type)
+void fwrite_obj(CHAR_DATA* ch, OBJ_DATA* obj, FILE* fp, int iNest, sh_int os_type)
 {
-    EXTRA_DESCR_DATA *ed;
-    AFFECT_DATA *paf;
+    EXTRA_DESCR_DATA* ed;
+    AFFECT_DATA* paf;
     sh_int wear, wear_loc, x;
 
     if (iNest >= MAX_NEST)
@@ -739,15 +739,15 @@ void fwrite_obj(CHAR_DATA *ch, OBJ_DATA *obj, FILE *fp, int iNest, sh_int os_typ
 /*
  * Load a char and inventory into a new ch structure.
  */
-bool load_char_obj(DESCRIPTOR_DATA *d, char *name, bool preload)
+bool load_char_obj(DESCRIPTOR_DATA* d, char* name, bool preload)
 {
     char strsave[MAX_INPUT_LENGTH];
-    CHAR_DATA *ch;
-    FILE *fp;
+    CHAR_DATA* ch;
+    FILE* fp;
     bool found;
     struct stat fst;
     int i, x;
-    extern FILE *fpArea;
+    extern FILE* fpArea;
     extern char strArea[MAX_INPUT_LENGTH];
     char buf[MAX_INPUT_LENGTH];
 
@@ -824,7 +824,7 @@ bool load_char_obj(DESCRIPTOR_DATA *d, char *name, bool preload)
         for (;;)
         {
             char letter;
-            char *word;
+            char* word;
 
             letter = fread_letter(fp);
             if (letter == '*')
@@ -950,11 +950,11 @@ bool load_char_obj(DESCRIPTOR_DATA *d, char *name, bool preload)
         break;                                                                                                         \
     }
 
-void fread_char(CHAR_DATA *ch, FILE *fp, bool preload)
+void fread_char(CHAR_DATA* ch, FILE* fp, bool preload)
 {
     char buf[MAX_STRING_LENGTH];
-    char *line;
-    const char *word;
+    char* line;
+    const char* word;
     int x1, x2, x3, x4, x5, x6, x7, x8, x9, x0;
     sh_int killcnt;
     bool fMatch;
@@ -1030,7 +1030,7 @@ void fread_char(CHAR_DATA *ch, FILE *fp, bool preload)
 
             if (!str_cmp(word, "Affect") || !str_cmp(word, "AFFECT_DATA"))
             {
-                AFFECT_DATA *paf;
+                AFFECT_DATA* paf;
 
                 if (preload)
                 {
@@ -1046,7 +1046,7 @@ void fread_char(CHAR_DATA *ch, FILE *fp, bool preload)
                 else
                 {
                     int sn;
-                    char *sname = fread_word(fp);
+                    char* sname = fread_word(fp);
 
                     if ((sn = skill_lookup(sname)) < 0)
                     {
@@ -1108,7 +1108,7 @@ void fread_char(CHAR_DATA *ch, FILE *fp, bool preload)
         case 'B':
             if (!str_cmp(word, "Bugged"))
             {
-                BUG_DATA *bug;
+                BUG_DATA* bug;
                 CREATE(bug, BUG_DATA, 1);
                 bug->name = fread_string(fp);
                 LINK(bug, ch->first_bug, ch->last_bug, next_in_bug, prev_in_bug);
@@ -1176,9 +1176,9 @@ void fread_char(CHAR_DATA *ch, FILE *fp, bool preload)
 
             if (!str_cmp(word, "Contract"))
             {
-                char *s1;
+                char* s1;
                 int s2;
-                CONTRACT_DATA *contract;
+                CONTRACT_DATA* contract;
                 s1 = fread_word(fp);
                 s2 = fread_number(fp);
                 CREATE(contract, CONTRACT_DATA, 1);
@@ -1252,9 +1252,9 @@ void fread_char(CHAR_DATA *ch, FILE *fp, bool preload)
             KEY("Fiance", ch->pcdata->fiance, fread_string(fp));
             if (!str_cmp(word, "Fellow"))
             {
-                char *victim;
-                char *knownas;
-                FELLOW_DATA *fellow;
+                char* victim;
+                char* knownas;
+                FELLOW_DATA* fellow;
                 victim = fread_word(fp);
                 knownas = fread_string(fp);
                 // sprintf_s(buf, "Player %s knows %s as %s.", ch->name, victim, knownas);
@@ -1768,15 +1768,15 @@ void fread_char(CHAR_DATA *ch, FILE *fp, bool preload)
     }
 }
 
-void fread_obj(CHAR_DATA *ch, FILE *fp, sh_int os_type)
+void fread_obj(CHAR_DATA* ch, FILE* fp, sh_int os_type)
 {
-    OBJ_DATA *obj = nullptr;
-    const char *word = nullptr;
+    OBJ_DATA* obj = nullptr;
+    const char* word = nullptr;
     int iNest;
     bool fMatch;
     bool fNest;
     bool fVnum;
-    ROOM_INDEX_DATA *room = nullptr;
+    ROOM_INDEX_DATA* room = nullptr;
 
     CREATE(obj, OBJ_DATA, 1);
     obj->count = 1;
@@ -1802,7 +1802,7 @@ void fread_obj(CHAR_DATA *ch, FILE *fp, sh_int os_type)
         case 'A':
             if (!str_cmp(word, "Affect") || !str_cmp(word, "AFFECT_DATA"))
             {
-                AFFECT_DATA *paf;
+                AFFECT_DATA* paf;
                 int pafmod;
 
                 CREATE(paf, AFFECT_DATA, 1);
@@ -1850,7 +1850,7 @@ void fread_obj(CHAR_DATA *ch, FILE *fp, sh_int os_type)
 
             if (!str_cmp(word, "ExtraDescr"))
             {
-                EXTRA_DESCR_DATA *ed;
+                EXTRA_DESCR_DATA* ed;
 
                 CREATE(ed, EXTRA_DESCR_DATA, 1);
                 ed->keyword = fread_string(fp);
@@ -2006,7 +2006,7 @@ void fread_obj(CHAR_DATA *ch, FILE *fp, sh_int os_type)
             if (!str_cmp(word, "Values"))
             {
                 int x1, x2, x3, x4, x5, x6;
-                char *ln = fread_line(fp);
+                char* ln = fread_line(fp);
 
                 x1 = x2 = x3 = x4 = x5 = x6 = 0;
                 sscanf(ln, "%d %d %d %d %d %d", &x1, &x2, &x3, &x4, &x5, &x6);
@@ -2054,8 +2054,8 @@ void fread_obj(CHAR_DATA *ch, FILE *fp, sh_int os_type)
 
         if (!fMatch)
         {
-            EXTRA_DESCR_DATA *ed;
-            AFFECT_DATA *paf;
+            EXTRA_DESCR_DATA* ed;
+            AFFECT_DATA* paf;
 
             bug("Fread_obj: no match.", 0);
             bug(word, 0);
@@ -2092,7 +2092,7 @@ void set_alarm(long seconds)
 }
 */
 
-void do_last(CHAR_DATA *ch, char *argument)
+void do_last(CHAR_DATA* ch, char* argument)
 {
     char buf[MAX_STRING_LENGTH];
     char arg[MAX_INPUT_LENGTH];
@@ -2143,10 +2143,10 @@ void do_last(CHAR_DATA *ch, char *argument)
     send_to_char(buf, ch);
 }
 
-void write_corpses(CHAR_DATA *ch, char *name)
+void write_corpses(CHAR_DATA* ch, char* name)
 {
-    OBJ_DATA *corpse;
-    FILE *fp = NULL;
+    OBJ_DATA* corpse;
+    FILE* fp = NULL;
 
     /* Name and ch support so that we dont have to have a char to save their
        corpses.. (ie: decayed corpses while offline) */
@@ -2194,7 +2194,7 @@ void write_corpses(CHAR_DATA *ch, char *name)
 void load_corpses(void)
 {
     // TODO why are these extern? What?!?
-    extern FILE *fpArea;
+    extern FILE* fpArea;
     extern char strArea[MAX_INPUT_LENGTH];
     extern int falling;
 
@@ -2210,7 +2210,7 @@ void load_corpses(void)
     */
 
     falling = 1; /* Arbitrary, must be >0 though. */
-    for (const auto &entry : std::filesystem::directory_iterator(CORPSE_DIR))
+    for (const auto& entry : std::filesystem::directory_iterator(CORPSE_DIR))
     {
         auto name = entry.path().filename().u8string();
         if (name[0] != '.')
@@ -2225,7 +2225,7 @@ void load_corpses(void)
             for (;;)
             {
                 char letter;
-                char *word;
+                char* word;
 
                 letter = fread_letter(fpArea);
                 if (letter == '*')
@@ -2261,10 +2261,10 @@ void load_corpses(void)
     return;
 }
 
-void save_profile(CHAR_DATA *ch)
+void save_profile(CHAR_DATA* ch)
 {
     char strprofile[MAX_INPUT_LENGTH];
-    FILE *fp;
+    FILE* fp;
 
     if (!ch)
     {

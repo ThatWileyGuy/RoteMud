@@ -51,17 +51,17 @@
 
 /* Externals */
 extern int top_reset;
-extern const char *wear_locs[];
+extern const char* wear_locs[];
 
-int get_trapflag(const char *flag);
+int get_trapflag(const char* flag);
 
 /*
  * Find some object with a given index data.
  * Used by area-reset 'P', 'T' and 'H' commands.
  */
-OBJ_DATA *get_obj_type(OBJ_INDEX_DATA *pObjIndex)
+OBJ_DATA* get_obj_type(OBJ_INDEX_DATA* pObjIndex)
 {
-    OBJ_DATA *obj;
+    OBJ_DATA* obj;
 
     for (obj = first_object; obj; obj = obj->next)
     {
@@ -71,16 +71,16 @@ OBJ_DATA *get_obj_type(OBJ_INDEX_DATA *pObjIndex)
     return NULL;
 }
 
-char *sprint_reset(RESET_DATA *pReset, short *num)
+char* sprint_reset(RESET_DATA* pReset, short* num)
 {
     RESET_DATA *tReset, *gReset;
     static char buf[MAX_STRING_LENGTH];
     char mobname[MAX_STRING_LENGTH] = {};
     char roomname[MAX_STRING_LENGTH] = {};
     char objname[MAX_STRING_LENGTH] = {};
-    static ROOM_INDEX_DATA *room;
+    static ROOM_INDEX_DATA* room;
     static OBJ_INDEX_DATA *obj, *obj2;
-    static MOB_INDEX_DATA *mob;
+    static MOB_INDEX_DATA* mob;
 
     switch (pReset->command)
     {
@@ -264,9 +264,9 @@ char *sprint_reset(RESET_DATA *pReset, short *num)
 /*
  * Create a new reset (for online building) - Thoric
  */
-RESET_DATA *make_reset(char letter, int extra, int arg1, int arg2, int arg3)
+RESET_DATA* make_reset(char letter, int extra, int arg1, int arg2, int arg3)
 {
-    RESET_DATA *pReset;
+    RESET_DATA* pReset;
 
     CREATE(pReset, RESET_DATA, 1);
     pReset->command = letter;
@@ -278,9 +278,9 @@ RESET_DATA *make_reset(char letter, int extra, int arg1, int arg2, int arg3)
     return pReset;
 }
 
-void add_obj_reset(ROOM_INDEX_DATA *room, char cm, OBJ_DATA *obj, int v2, int v3)
+void add_obj_reset(ROOM_INDEX_DATA* room, char cm, OBJ_DATA* obj, int v2, int v3)
 {
-    OBJ_DATA *inobj;
+    OBJ_DATA* inobj;
     static int iNest;
 
     if ((cm == 'O' || cm == 'P') && obj->pIndexData->vnum == OBJ_VNUM_TRAP)
@@ -306,7 +306,7 @@ void add_obj_reset(ROOM_INDEX_DATA *room, char cm, OBJ_DATA *obj, int v2, int v3
     return;
 }
 
-void delete_reset(RESET_DATA *pReset)
+void delete_reset(RESET_DATA* pReset)
 {
     RESET_DATA *tReset, *tReset_next;
 
@@ -322,10 +322,10 @@ void delete_reset(RESET_DATA *pReset)
     return;
 }
 
-void instaroom(ROOM_INDEX_DATA *pRoom, bool dodoors)
+void instaroom(ROOM_INDEX_DATA* pRoom, bool dodoors)
 {
-    CHAR_DATA *rch;
-    OBJ_DATA *obj;
+    CHAR_DATA* rch;
+    OBJ_DATA* obj;
 
     for (rch = pRoom->first_person; rch; rch = rch->next_in_room)
     {
@@ -346,7 +346,7 @@ void instaroom(ROOM_INDEX_DATA *pRoom, bool dodoors)
         add_obj_reset(pRoom, 'O', obj, obj->count, pRoom->vnum);
     if (dodoors)
     {
-        EXIT_DATA *pexit;
+        EXIT_DATA* pexit;
 
         for (pexit = pRoom->first_exit; pexit; pexit = pexit->next)
         {
@@ -368,7 +368,7 @@ void instaroom(ROOM_INDEX_DATA *pRoom, bool dodoors)
     return;
 }
 
-void wipe_resets(ROOM_INDEX_DATA *room)
+void wipe_resets(ROOM_INDEX_DATA* room)
 {
     RESET_DATA *pReset, *pReset_next;
 
@@ -383,9 +383,9 @@ void wipe_resets(ROOM_INDEX_DATA *room)
     return;
 }
 
-void wipe_area_resets(AREA_DATA *area)
+void wipe_area_resets(AREA_DATA* area)
 {
-    ROOM_INDEX_DATA *room;
+    ROOM_INDEX_DATA* room;
     extern bool mud_down;
 
     if (!mud_down)
@@ -397,7 +397,7 @@ void wipe_area_resets(AREA_DATA *area)
 }
 
 /* Function modified from original form - Samson */
-void do_instaroom(CHAR_DATA *ch, char *argument)
+void do_instaroom(CHAR_DATA* ch, char* argument)
 {
     bool dodoors;
 
@@ -426,10 +426,10 @@ void do_instaroom(CHAR_DATA *ch, char *argument)
 }
 
 /* Function modified from original form - Samson */
-void do_instazone(CHAR_DATA *ch, char *argument)
+void do_instazone(CHAR_DATA* ch, char* argument)
 {
-    AREA_DATA *pArea;
-    ROOM_INDEX_DATA *pRoom;
+    AREA_DATA* pArea;
+    ROOM_INDEX_DATA* pRoom;
     bool dodoors;
 
     if (IS_NPC(ch) || get_trust(ch) < LEVEL_SAVIOR || !ch->pcdata->area)
@@ -449,7 +449,7 @@ void do_instazone(CHAR_DATA *ch, char *argument)
     return;
 }
 
-int generate_itemlevel(AREA_DATA *pArea, OBJ_INDEX_DATA *pObjIndex)
+int generate_itemlevel(AREA_DATA* pArea, OBJ_INDEX_DATA* pObjIndex)
 {
     int olevel;
     int min = UMAX(pArea->low_soft_range, 1);
@@ -491,9 +491,9 @@ int generate_itemlevel(AREA_DATA *pArea, OBJ_INDEX_DATA *pObjIndex)
 /*
  * Count occurrences of an obj in a list.
  */
-int count_obj_list(RESET_DATA *pReset, OBJ_INDEX_DATA *pObjIndex, OBJ_DATA *list)
+int count_obj_list(RESET_DATA* pReset, OBJ_INDEX_DATA* pObjIndex, OBJ_DATA* list)
 {
-    OBJ_DATA *obj;
+    OBJ_DATA* obj;
     int nMatch = 0;
 
     for (obj = list; obj; obj = obj->next_content)
@@ -512,17 +512,17 @@ int count_obj_list(RESET_DATA *pReset, OBJ_INDEX_DATA *pObjIndex, OBJ_DATA *list
 /*
  * Reset one room.
  */
-void reset_room(ROOM_INDEX_DATA *room)
+void reset_room(ROOM_INDEX_DATA* room)
 {
     RESET_DATA *pReset, *tReset, *gReset;
-    OBJ_DATA *nestmap[MAX_NEST];
-    CHAR_DATA *mob;
+    OBJ_DATA* nestmap[MAX_NEST];
+    CHAR_DATA* mob;
     OBJ_DATA *obj, *lastobj, *to_obj;
-    ROOM_INDEX_DATA *pRoomIndex = NULL;
-    MOB_INDEX_DATA *pMobIndex = NULL;
+    ROOM_INDEX_DATA* pRoomIndex = NULL;
+    MOB_INDEX_DATA* pMobIndex = NULL;
     OBJ_INDEX_DATA *pObjIndex = NULL, *pObjToIndex;
-    EXIT_DATA *pexit;
-    char *filename = room->area->filename;
+    EXIT_DATA* pexit;
+    char* filename = room->area->filename;
     int level = 0, n, num = 0, lastnest;
 
     mob = NULL;
@@ -557,7 +557,7 @@ void reset_room(ROOM_INDEX_DATA *room)
             }
             mob = create_mobile(pMobIndex);
             {
-                ROOM_INDEX_DATA *pRoomPrev = get_room_index(pReset->arg3 - 1);
+                ROOM_INDEX_DATA* pRoomPrev = get_room_index(pReset->arg3 - 1);
 
                 if (pRoomPrev && IS_SET(pRoomPrev->room_flags, ROOM_PET_SHOP))
                     SET_BIT(mob->act, ACT_PET);
@@ -748,7 +748,7 @@ void reset_room(ROOM_INDEX_DATA *room)
                             /*
                              * We need to preserve obj for future 'T' checks
                              */
-                            OBJ_DATA *pobj;
+                            OBJ_DATA* pobj;
 
                             if (tReset->arg3 > 0)
                             {
@@ -892,9 +892,9 @@ void reset_room(ROOM_INDEX_DATA *room)
     return;
 }
 
-void reset_area(AREA_DATA *area)
+void reset_area(AREA_DATA* area)
 {
-    ROOM_INDEX_DATA *room;
+    ROOM_INDEX_DATA* room;
 
     if (!area->first_room)
         return;
@@ -905,7 +905,7 @@ void reset_area(AREA_DATA *area)
 
 /* Setup put nesting levels, regardless of whether or not the resets will
    actually reset, or if they're bugged. */
-void renumber_put_resets(ROOM_INDEX_DATA *room)
+void renumber_put_resets(ROOM_INDEX_DATA* room)
 {
     RESET_DATA *pReset, *tReset, *lastobj = NULL;
 
@@ -945,9 +945,9 @@ void renumber_put_resets(ROOM_INDEX_DATA *room)
 /*
  * Add a reset to an area -Thoric
  */
-RESET_DATA *add_reset(ROOM_INDEX_DATA *room, char letter, int extra, int arg1, int arg2, int arg3)
+RESET_DATA* add_reset(ROOM_INDEX_DATA* room, char letter, int extra, int arg1, int arg2, int arg3)
 {
-    RESET_DATA *pReset;
+    RESET_DATA* pReset;
 
     if (!room)
     {
@@ -1015,10 +1015,10 @@ RESET_DATA *add_reset(ROOM_INDEX_DATA *room, char letter, int extra, int arg1, i
     return pReset;
 }
 
-RESET_DATA *find_oreset(ROOM_INDEX_DATA *room, char *oname)
+RESET_DATA* find_oreset(ROOM_INDEX_DATA* room, char* oname)
 {
-    RESET_DATA *pReset;
-    OBJ_INDEX_DATA *pobj;
+    RESET_DATA* pReset;
+    OBJ_INDEX_DATA* pobj;
     char arg[MAX_INPUT_LENGTH];
     int cnt = 0, num = number_argument(oname, arg);
 
@@ -1038,7 +1038,7 @@ RESET_DATA *find_oreset(ROOM_INDEX_DATA *room, char *oname)
     return NULL;
 }
 
-void do_reset(CHAR_DATA *ch, char *argument)
+void do_reset(CHAR_DATA* ch, char* argument)
 {
     char arg[MAX_INPUT_LENGTH];
 
@@ -1127,7 +1127,7 @@ void do_reset(CHAR_DATA *ch, char *argument)
 
     if (!str_cmp(arg, "random"))
     {
-        RESET_DATA *pReset;
+        RESET_DATA* pReset;
         int vnum = get_dir(arg);
         argument = one_argument(argument, arg);
 

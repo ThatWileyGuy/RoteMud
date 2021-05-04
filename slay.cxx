@@ -85,12 +85,12 @@ to the above email address.
 #include <time.h>
 #include "mud.hxx"
 
-SLAY_DATA *first_slay;
-SLAY_DATA *last_slay;
+SLAY_DATA* first_slay;
+SLAY_DATA* last_slay;
 
-SLAY_DATA *get_slay(char *name)
+SLAY_DATA* get_slay(char* name)
 {
-    SLAY_DATA *slay;
+    SLAY_DATA* slay;
     for (slay = first_slay; slay; slay = slay->next)
         if (!str_cmp(name, slay->type))
             return slay;
@@ -111,9 +111,9 @@ SLAY_DATA *get_slay(char *name)
 
 /* Online editing of slays added by Samson 8-3-98 */
 /* Read in an individual slaytype */
-void fread_slay(SLAY_DATA *slay, FILE *fp)
+void fread_slay(SLAY_DATA* slay, FILE* fp)
 {
-    const char *word;
+    const char* word;
     bool fMatch;
 
     for (;;)
@@ -168,8 +168,8 @@ void fread_slay(SLAY_DATA *slay, FILE *fp)
 void load_slays(void)
 {
     char filename[256];
-    SLAY_DATA *slay;
-    FILE *fp;
+    SLAY_DATA* slay;
+    FILE* fp;
     int slaycount;
 
     first_slay = NULL;
@@ -183,7 +183,7 @@ void load_slays(void)
         for (;;)
         {
             char letter;
-            char *word;
+            char* word;
 
             letter = fread_letter(fp);
             if (letter == '*')
@@ -231,8 +231,8 @@ void load_slays(void)
 /* Online slay editing, save the slay table to disk - Samson 8-3-98 */
 void save_slays(void)
 {
-    SLAY_DATA *tslay;
-    FILE *fp;
+    SLAY_DATA* tslay;
+    FILE* fp;
     char filename[256];
 
     snprintf(filename, 256, "%s%s", SYSTEM_DIR, SLAY_FILE);
@@ -273,10 +273,10 @@ void save_slays(void)
  * Updated to work with Smaug 1.4 by Samson 8-3-98
  * v2.0 added support for online editing
  */
-void do_slay(CHAR_DATA *ch, char *argument)
+void do_slay(CHAR_DATA* ch, char* argument)
 {
-    CHAR_DATA *victim;
-    SLAY_DATA *slay;
+    CHAR_DATA* victim;
+    SLAY_DATA* slay;
     char type[MAX_INPUT_LENGTH];
     char who[MAX_INPUT_LENGTH];
     bool found = false;
@@ -363,9 +363,9 @@ void do_slay(CHAR_DATA *ch, char *argument)
 } /* end of func: "do_slay" */
 
 /* Create a slaytype online - Samson 8-3-98 */
-void do_makeslay(CHAR_DATA *ch, char *argument)
+void do_makeslay(CHAR_DATA* ch, char* argument)
 {
-    SLAY_DATA *slay;
+    SLAY_DATA* slay;
 
     if (IS_NPC(ch))
     {
@@ -400,11 +400,11 @@ void do_makeslay(CHAR_DATA *ch, char *argument)
 }
 
 /* Set slay values online - Samson 8-3-98 */
-void do_setslay(CHAR_DATA *ch, char *argument)
+void do_setslay(CHAR_DATA* ch, char* argument)
 {
     char arg1[MAX_INPUT_LENGTH];
     char arg2[MAX_INPUT_LENGTH];
-    SLAY_DATA *slay;
+    SLAY_DATA* slay;
 
     if (IS_NPC(ch))
     {
@@ -422,7 +422,7 @@ void do_setslay(CHAR_DATA *ch, char *argument)
         return;
 
     case SUB_SLAYCMSG:
-        slay = (SLAY_DATA *)ch->dest_buf;
+        slay = (SLAY_DATA*)ch->dest_buf;
         STRFREE(slay->cmsg);
         slay->cmsg = copy_buffer(ch);
         stop_editing(ch);
@@ -430,7 +430,7 @@ void do_setslay(CHAR_DATA *ch, char *argument)
         save_slays();
         return;
     case SUB_SLAYVMSG:
-        slay = (SLAY_DATA *)ch->dest_buf;
+        slay = (SLAY_DATA*)ch->dest_buf;
         STRFREE(slay->vmsg);
         slay->vmsg = copy_buffer(ch);
         stop_editing(ch);
@@ -438,7 +438,7 @@ void do_setslay(CHAR_DATA *ch, char *argument)
         save_slays();
         return;
     case SUB_SLAYRMSG:
-        slay = (SLAY_DATA *)ch->dest_buf;
+        slay = (SLAY_DATA*)ch->dest_buf;
         STRFREE(slay->rmsg);
         slay->rmsg = copy_buffer(ch);
         stop_editing(ch);
@@ -535,9 +535,9 @@ void do_setslay(CHAR_DATA *ch, char *argument)
 }
 
 /* Online slay editor, show details of a slaytype - Samson 8-3-98 */
-void do_showslay(CHAR_DATA *ch, char *argument)
+void do_showslay(CHAR_DATA* ch, char* argument)
 {
-    SLAY_DATA *slay;
+    SLAY_DATA* slay;
 
     if (IS_NPC(ch))
     {
@@ -568,10 +568,10 @@ void do_showslay(CHAR_DATA *ch, char *argument)
 }
 
 /* Of course, to create means you need to be able to destroy as well :P - Samson 8-3-98 */
-void do_remslay(CHAR_DATA *ch, char *argument)
+void do_remslay(CHAR_DATA* ch, char* argument)
 {
     char arg[MAX_INPUT_LENGTH];
-    SLAY_DATA *pslay;
+    SLAY_DATA* pslay;
 
     if (IS_NPC(ch))
     {

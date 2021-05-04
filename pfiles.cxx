@@ -69,8 +69,8 @@
 /* Globals */
 time_t pfile_time;
 HOUR_MIN_SEC set_pfile_time_struct;
-HOUR_MIN_SEC *set_pfile_time;
-tm *new_pfile_time;
+HOUR_MIN_SEC* set_pfile_time;
+tm* new_pfile_time;
 tm new_pfile_struct;
 time_t new_pfile_time_t;
 short num_pfiles; /* Count up number of pfiles */
@@ -78,7 +78,7 @@ sh_int jcount, scount;
 
 void save_timedata(void)
 {
-    FILE *fp;
+    FILE* fp;
     char filename[MIL];
 
     sprintf_s(filename, "%stime.dat", SYSTEM_DIR);
@@ -111,9 +111,9 @@ void save_timedata(void)
     }
 
 /* Reads the actual time file from disk - Samson 1-21-99 */
-void fread_timedata(FILE *fp)
+void fread_timedata(FILE* fp)
 {
-    const char *word = NULL;
+    const char* word = NULL;
     bool fMatch = false;
 
     for (;;)
@@ -149,7 +149,7 @@ void fread_timedata(FILE *fp)
 bool load_timedata(void)
 {
     char filename[MIL];
-    FILE *fp;
+    FILE* fp;
     bool found;
 
     found = false;
@@ -162,7 +162,7 @@ bool load_timedata(void)
         for (;;)
         {
             char letter = '\0';
-            char *word = NULL;
+            char* word = NULL;
 
             letter = fread_letter(fp);
             if (letter == '*')
@@ -241,16 +241,16 @@ time_t now_time;
 short deleted = 0;
 short days = 0;
 
-void fread_pfile(FILE *fp, time_t tdiff, char *fname, bool count)
+void fread_pfile(FILE* fp, time_t tdiff, char* fname, bool count)
 {
-    const char *word = nullptr;
-    char *name = NULL;
-    char *clan = NULL;
+    const char* word = nullptr;
+    char* name = NULL;
+    char* clan = NULL;
     short level = 0;
     short file_ver = 0;
     int pact2;
     bool fMatch;
-    ROOM_INDEX_DATA *plr_home;
+    ROOM_INDEX_DATA* plr_home;
     char homebuf[MSL];
 
     for (;;)
@@ -376,7 +376,7 @@ timecheck:
 
     if (clan != NULL)
     {
-        CLAN_DATA *guild = get_clan(clan);
+        CLAN_DATA* guild = get_clan(clan);
 
         if (guild)
             guild->members++;
@@ -385,9 +385,9 @@ timecheck:
     return;
 }
 
-void read_pfile(const char *dirname, const char *filename, bool count)
+void read_pfile(const char* dirname, const char* filename, bool count)
 {
-    FILE *fp;
+    FILE* fp;
     char fname[MSL];
     struct stat fst;
     time_t tdiff;
@@ -405,7 +405,7 @@ void read_pfile(const char *dirname, const char *filename, bool count)
             for (;;)
             {
                 char letter;
-                const char *word;
+                const char* word;
 
                 letter = fread_letter(fp);
 
@@ -430,7 +430,7 @@ void read_pfile(const char *dirname, const char *filename, bool count)
 
 void pfile_scan(bool count)
 {
-    CLAN_DATA *clan;
+    CLAN_DATA* clan;
     char directory_name[100];
 
     short alpha_loop;
@@ -449,7 +449,7 @@ void pfile_scan(bool count)
         sprintf_s(directory_name, "%s%c", PLAYER_DIR, 'a' + alpha_loop);
 
         // log_string( directory_name );
-        for (const auto &entry : std::filesystem::directory_iterator(directory_name))
+        for (const auto& entry : std::filesystem::directory_iterator(directory_name))
         {
             auto name = entry.path().filename().u8string();
             // Added by Tarl 3 Dec 02 because we are now using CVS
@@ -492,10 +492,10 @@ void pfile_scan(bool count)
     return;
 }
 
-void fread_fpfile(CHAR_DATA *ch, FILE *fp, char *fname)
+void fread_fpfile(CHAR_DATA* ch, FILE* fp, char* fname)
 {
-    const char *word = nullptr;
-    char *name = NULL;
+    const char* word = nullptr;
+    char* name = NULL;
     bool fMatch;
     sh_int ftype, fstatus;
     char buftype[MSL], bufstatus[MSL], buffinal[MSL];
@@ -575,9 +575,9 @@ forcecheck:
     return;
 }
 
-void read_fpfile(CHAR_DATA *ch, const char *dirname, const char *filename)
+void read_fpfile(CHAR_DATA* ch, const char* dirname, const char* filename)
 {
-    FILE *fp;
+    FILE* fp;
     char fname[MSL];
     struct stat fst;
 
@@ -595,7 +595,7 @@ void read_fpfile(CHAR_DATA *ch, const char *dirname, const char *filename)
             for (;;)
             {
                 char letter;
-                const char *word;
+                const char* word;
 
                 letter = fread_letter(fp);
 
@@ -618,7 +618,7 @@ void read_fpfile(CHAR_DATA *ch, const char *dirname, const char *filename)
     return;
 }
 
-void scan_forcers(CHAR_DATA *ch)
+void scan_forcers(CHAR_DATA* ch)
 {
     char directory_name[100];
 
@@ -630,7 +630,7 @@ void scan_forcers(CHAR_DATA *ch)
     {
         sprintf_s(directory_name, "%s%c", PLAYER_DIR, 'a' + alpha_loop);
 
-        for (const auto &entry : std::filesystem::directory_iterator(directory_name))
+        for (const auto& entry : std::filesystem::directory_iterator(directory_name))
         {
             auto name = entry.path().filename().u8string();
             if (name[0] != '.' && str_suffix(".home1", name.c_str()) && str_suffix(".home2", name.c_str()) &&
@@ -644,7 +644,7 @@ void scan_forcers(CHAR_DATA *ch)
     return;
 }
 
-void show_pfiles(CHAR_DATA *ch, char *x)
+void show_pfiles(CHAR_DATA* ch, char* x)
 {
     char directory_name[100];
     sh_int count = 0;
@@ -653,7 +653,7 @@ void show_pfiles(CHAR_DATA *ch, char *x)
     ch_printf(ch, "&B-----------------------\n\r");
     sprintf_s(directory_name, "%s%s", PLAYER_DIR, x);
 
-    for (const auto &entry : std::filesystem::directory_iterator(directory_name))
+    for (const auto& entry : std::filesystem::directory_iterator(directory_name))
     {
         auto name = entry.path().filename().u8string();
         if (name[0] != '.' && str_suffix(".home", name.c_str()) && str_suffix(".clone", name.c_str()))
@@ -675,7 +675,7 @@ void show_pfiles(CHAR_DATA *ch, char *x)
     return;
 }
 
-void do_pfiles(CHAR_DATA *ch, char *argument)
+void do_pfiles(CHAR_DATA* ch, char* argument)
 {
     char buf[MSL];
     char arg1[MIL];
@@ -820,7 +820,7 @@ void check_pfiles(time_t reset)
     return;
 }
 
-void add_member(char *name, char *shortname)
+void add_member(char* name, char* shortname)
 {
     char buf[MAX_STRING_LENGTH];
     char fbuf[MAX_STRING_LENGTH];
@@ -839,11 +839,11 @@ void add_member(char *name, char *shortname)
     sprintf_s(buf, "%s~", name);
     append_to_file(fbuf, buf);
 }
-void remove_member(char *name, char *shortname)
+void remove_member(char* name, char* shortname)
 {
-    FILE *fpList;
-    FILE *fpNew;
-    const char *buf;
+    FILE* fpList;
+    FILE* fpNew;
+    const char* buf;
     char list[MAX_STRING_LENGTH];
     char temp[MAX_STRING_LENGTH];
     if (name[0] == '\0')
@@ -885,9 +885,9 @@ void remove_member(char *name, char *shortname)
     rename(temp, list);
 }
 
-void do_exempt(CHAR_DATA *ch, char *argument)
+void do_exempt(CHAR_DATA* ch, char* argument)
 {
-    CHAR_DATA *victim;
+    CHAR_DATA* victim;
 
     if (argument[0] == '\0')
     {

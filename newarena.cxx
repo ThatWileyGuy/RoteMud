@@ -78,10 +78,10 @@ struct HALL_OF_FAME_ELEMENT
     char name[MAX_INPUT_LENGTH + 1];
     time_t date;
     int award;
-    HALL_OF_FAME_ELEMENT *next;
+    HALL_OF_FAME_ELEMENT* next;
 };
 
-void sportschan(char *);
+void sportschan(char*);
 void start_arena();
 void show_jack_pot();
 void do_game();
@@ -91,12 +91,12 @@ void do_end_game();
 void start_game();
 void silent_end();
 void write_fame_list(void);
-void write_one_fame_node(FILE *fp, HALL_OF_FAME_ELEMENT *node);
+void write_one_fame_node(FILE* fp, HALL_OF_FAME_ELEMENT* node);
 void load_hall_of_fame(void);
-void find_bet_winners(CHAR_DATA *winner);
-void lost_arena(CHAR_DATA *ch);
+void find_bet_winners(CHAR_DATA* winner);
+void lost_arena(CHAR_DATA* ch);
 
-HALL_OF_FAME_ELEMENT *fame_list = NULL;
+HALL_OF_FAME_ELEMENT* fame_list = NULL;
 
 int ppl_challenged = 0;
 int ppl_in_arena = 0;
@@ -111,10 +111,10 @@ int arena_pot;
 int bet_pot;
 int barena = 0;
 
-extern int parsebet(const int currentbet, char *s);
-extern int advatoi(char *s);
+extern int parsebet(const int currentbet, char* s);
+extern int advatoi(char* s);
 
-void do_bet(CHAR_DATA *ch, char *argument)
+void do_bet(CHAR_DATA* ch, char* argument)
 {
     char arg[MAX_INPUT_LENGTH];
     char buf[MAX_INPUT_LENGTH];
@@ -187,10 +187,10 @@ void do_bet(CHAR_DATA *ch, char *argument)
     }
 }
 
-void do_arena(CHAR_DATA *ch, char *argument)
+void do_arena(CHAR_DATA* ch, char* argument)
 {
     char buf[MAX_INPUT_LENGTH];
-    ROOM_INDEX_DATA *location;
+    ROOM_INDEX_DATA* location;
 
     if (IS_NPC(ch))
     {
@@ -243,7 +243,7 @@ void do_arena(CHAR_DATA *ch, char *argument)
     }
 }
 
-void do_chaos(CHAR_DATA *ch, char *argument)
+void do_chaos(CHAR_DATA* ch, char* argument)
 {
     char lolimit[MAX_INPUT_LENGTH];
     char hilimit[MAX_INPUT_LENGTH], start_delay[MAX_INPUT_LENGTH];
@@ -385,8 +385,8 @@ void start_arena()
 
 void start_game()
 {
-    CHAR_DATA *i;
-    DESCRIPTOR_DATA *d;
+    CHAR_DATA* i;
+    DESCRIPTOR_DATA* d;
 
     for (d = first_descriptor; d; d = d->next)
     {
@@ -448,11 +448,11 @@ void find_game_winner()
 {
     char buf[MAX_INPUT_LENGTH];
     //  char buf2[MAX_INPUT_LENGTH];
-    CHAR_DATA *i;
-    DESCRIPTOR_DATA *d;
-    ROOM_INDEX_DATA *location;
+    CHAR_DATA* i;
+    DESCRIPTOR_DATA* d;
+    ROOM_INDEX_DATA* location;
 
-    HALL_OF_FAME_ELEMENT *fame_node;
+    HALL_OF_FAME_ELEMENT* fame_node;
 
     for (d = first_descriptor; d; d = d->next)
     {
@@ -531,9 +531,9 @@ void silent_end()
 void do_end_game()
 {
     char buf[MAX_INPUT_LENGTH];
-    CHAR_DATA *i;
-    DESCRIPTOR_DATA *d;
-    ROOM_INDEX_DATA *location;
+    CHAR_DATA* i;
+    DESCRIPTOR_DATA* d;
+    ROOM_INDEX_DATA* location;
     for (d = first_descriptor; d; d = d->next)
     {
         if (d->connected == CON_PLAYING)
@@ -565,7 +565,7 @@ void do_end_game()
 
 int num_in_arena()
 {
-    DESCRIPTOR_DATA *d;
+    DESCRIPTOR_DATA* d;
     int num = 0;
 
     for (d = first_descriptor; d; d = d->next)
@@ -582,10 +582,10 @@ int num_in_arena()
     return num;
 }
 
-void sportschan(char *argument)
+void sportschan(char* argument)
 {
     char buf1[MAX_INPUT_LENGTH];
-    DESCRIPTOR_DATA *i;
+    DESCRIPTOR_DATA* i;
 
     sprintf_s(buf1, "&RInfo: &W%s\r\n", argument);
 
@@ -601,10 +601,10 @@ void sportschan(char *argument)
     }
 }
 
-void do_awho(CHAR_DATA *ch, char *argument)
+void do_awho(CHAR_DATA* ch, char* argument)
 {
-    DESCRIPTOR_DATA *d;
-    CHAR_DATA *tch;
+    DESCRIPTOR_DATA* d;
+    CHAR_DATA* tch;
     char buf[MAX_INPUT_LENGTH];
     char buf2[MAX_INPUT_LENGTH];
     int phealth;
@@ -641,11 +641,11 @@ void do_awho(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void do_ahall(CHAR_DATA *ch, char *argument)
+void do_ahall(CHAR_DATA* ch, char* argument)
 {
     char site[MAX_INPUT_LENGTH], format[MAX_INPUT_LENGTH], *timestr;
     char format2[MAX_INPUT_LENGTH];
-    HALL_OF_FAME_ELEMENT *fame_node;
+    HALL_OF_FAME_ELEMENT* fame_node;
 
     char buf[MAX_INPUT_LENGTH];
     char buf2[MAX_INPUT_LENGTH];
@@ -689,10 +689,10 @@ void do_ahall(CHAR_DATA *ch, char *argument)
 
 void load_hall_of_fame(void)
 {
-    FILE *fl;
+    FILE* fl;
     int date, award;
     char name[MAX_INPUT_LENGTH + 1];
-    HALL_OF_FAME_ELEMENT *next_node;
+    HALL_OF_FAME_ELEMENT* next_node;
 
     fame_list = 0;
 
@@ -717,7 +717,7 @@ void load_hall_of_fame(void)
 
 void write_fame_list(void)
 {
-    FILE *fl;
+    FILE* fl;
 
     if (!(fl = fopen(HALL_FAME_FILE, "w")))
     {
@@ -730,7 +730,7 @@ void write_fame_list(void)
     return;
 }
 
-void write_one_fame_node(FILE *fp, HALL_OF_FAME_ELEMENT *node)
+void write_one_fame_node(FILE* fp, HALL_OF_FAME_ELEMENT* node)
 {
     if (node)
     {
@@ -739,10 +739,10 @@ void write_one_fame_node(FILE *fp, HALL_OF_FAME_ELEMENT *node)
     }
 }
 
-void find_bet_winners(CHAR_DATA *winner)
+void find_bet_winners(CHAR_DATA* winner)
 {
-    DESCRIPTOR_DATA *d;
-    CHAR_DATA *wch;
+    DESCRIPTOR_DATA* d;
+    CHAR_DATA* wch;
 
     char buf1[MAX_INPUT_LENGTH];
 
@@ -762,11 +762,11 @@ void find_bet_winners(CHAR_DATA *winner)
         }
     }
 }
-void do_challenge(CHAR_DATA *ch, char *argument)
+void do_challenge(CHAR_DATA* ch, char* argument)
 {
-    CHAR_DATA *victim;
+    CHAR_DATA* victim;
     char buf[MAX_INPUT_LENGTH];
-    ROOM_INDEX_DATA *location;
+    ROOM_INDEX_DATA* location;
 
     if ((victim = get_char_world_ooc(ch, argument)) == NULL)
     {
@@ -836,10 +836,10 @@ void do_challenge(CHAR_DATA *ch, char *argument)
     victim->challenged = ch;
 }
 
-void do_aaccept(CHAR_DATA *ch, char *argument)
+void do_aaccept(CHAR_DATA* ch, char* argument)
 {
     char buf[MAX_INPUT_LENGTH];
-    ROOM_INDEX_DATA *location;
+    ROOM_INDEX_DATA* location;
     if (num_in_arena() > 0)
     {
         send_to_char("Please wait until the current arena is closed before you accept.\n\r", ch);
@@ -853,7 +853,7 @@ void do_aaccept(CHAR_DATA *ch, char *argument)
     }
     else
     {
-        CHAR_DATA *dch;
+        CHAR_DATA* dch;
         dch = ch->challenged;
         if (!dch || dch == NULL)
         {
@@ -884,7 +884,7 @@ void do_aaccept(CHAR_DATA *ch, char *argument)
     }
 }
 
-void do_adecline(CHAR_DATA *ch, char *argument)
+void do_adecline(CHAR_DATA* ch, char* argument)
 {
     char buf[MAX_INPUT_LENGTH];
 
@@ -902,7 +902,7 @@ void do_adecline(CHAR_DATA *ch, char *argument)
     }
 }
 
-void lost_arena(CHAR_DATA *ch)
+void lost_arena(CHAR_DATA* ch)
 {
     char buf[MAX_STRING_LENGTH];
 

@@ -87,9 +87,9 @@ typedef enum
 
 struct SHIP_PROTOTYPE
 {
-    char *name;
-    char *sname;
-    char *clan;
+    char* name;
+    char* sname;
+    char* clan;
     int num_rooms;
     int cost;
     int clazz;
@@ -143,43 +143,43 @@ int NUM_PROTOTYPES;
 struct PROTO_ROOM
 {
     int what_prototype;
-    PROTO_ROOM *next;
-    PROTO_ROOM *prev;
-    char *name;
-    char *desc;
-    char *flags;
+    PROTO_ROOM* next;
+    PROTO_ROOM* prev;
+    char* name;
+    char* desc;
+    char* flags;
     int tunnel;
     int exits[10];
     int exflags[10];
     int keys[10];
     int room_num;
     int room_type;
-    char *rprog[10];
-    char *reset[10];
+    char* rprog[10];
+    char* reset[10];
 };
 
-PROTO_ROOM *first_prototype_room;
-PROTO_ROOM *last_prototype_room;
+PROTO_ROOM* first_prototype_room;
+PROTO_ROOM* last_prototype_room;
 
-void instaroom(ROOM_INDEX_DATA *pRoom, bool dodoors);
-void shiplist(CHAR_DATA *ch);
-const char *primary_beam_name_proto(int shiptype);
-const char *secondary_beam_name_proto(int shiptype);
+void instaroom(ROOM_INDEX_DATA* pRoom, bool dodoors);
+void shiplist(CHAR_DATA* ch);
+const char* primary_beam_name_proto(int shiptype);
+const char* secondary_beam_name_proto(int shiptype);
 
-void do_buymobship(CHAR_DATA *ch, char *argument)
+void do_buymobship(CHAR_DATA* ch, char* argument)
 {
     int x, size, ship_type, vnum, count, caps = 0;
-    SHIP_DATA *ship;
-    SHIP_DATA *sship;
+    SHIP_DATA* ship;
+    SHIP_DATA* sship;
     char arg[MAX_STRING_LENGTH];
     char shipname[MAX_STRING_LENGTH];
     char buf[MAX_STRING_LENGTH];
     bool found_proto = false;
-    AREA_DATA *tarea;
-    CLAN_DATA *clan;
-    CLAN_DATA *mainclan;
-    SPACE_DATA *system;
-    PLANET_DATA *planet;
+    AREA_DATA* tarea;
+    CLAN_DATA* clan;
+    CLAN_DATA* mainclan;
+    SPACE_DATA* system;
+    PLANET_DATA* planet;
     bool fsys, fplan, fcap;
 
     argument = one_argument(argument, arg);
@@ -396,15 +396,15 @@ void do_buymobship(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void do_orderclanship(CHAR_DATA *ch, char *argument)
+void do_orderclanship(CHAR_DATA* ch, char* argument)
 {
     int x, size, ship_type, vnum;
-    SHIP_DATA *ship;
+    SHIP_DATA* ship;
     char arg[MAX_STRING_LENGTH];
     bool found_proto = false;
-    AREA_DATA *tarea;
-    CLAN_DATA *clan;
-    CLAN_DATA *mainclan;
+    AREA_DATA* tarea;
+    CLAN_DATA* clan;
+    CLAN_DATA* mainclan;
 
     if (IS_NPC(ch) || !ch->pcdata)
     {
@@ -509,12 +509,12 @@ void do_orderclanship(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void do_upgradeship(CHAR_DATA *ch, char *argument)
+void do_upgradeship(CHAR_DATA* ch, char* argument)
 {
     char arg1[MAX_INPUT_LENGTH];
     char arg2[MAX_INPUT_LENGTH];
     char arg3[MAX_INPUT_LENGTH];
-    SHIP_DATA *ship;
+    SHIP_DATA* ship;
     if (ch->in_room->vnum != 1050)
     {
         send_to_char("Huh?", ch);
@@ -826,10 +826,10 @@ void do_upgradeship(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void do_shipups(CHAR_DATA *ch, char *argument)
+void do_shipups(CHAR_DATA* ch, char* argument)
 {
     char arg1[MAX_INPUT_LENGTH];
-    SHIP_DATA *ship;
+    SHIP_DATA* ship;
     if (ch->in_room->vnum != 1050)
     {
         send_to_char("Huh?", ch);
@@ -857,15 +857,15 @@ void do_shipups(CHAR_DATA *ch, char *argument)
               ship->upshieldcost);
 }
 
-void do_ordership(CHAR_DATA *ch, char *argument)
+void do_ordership(CHAR_DATA* ch, char* argument)
 {
     int x, size, ship_type, vnum, count;
-    SHIP_DATA *ship;
+    SHIP_DATA* ship;
     char arg[MAX_STRING_LENGTH];
     bool found_proto = false;
-    AREA_DATA *tarea;
-    BMARKET_DATA *marketship;
-    char *bmshipname = nullptr;
+    AREA_DATA* tarea;
+    BMARKET_DATA* marketship;
+    char* bmshipname = nullptr;
     int bmshipcost = 0;
 
     count = 0;
@@ -1081,11 +1081,11 @@ void do_ordership(CHAR_DATA *ch, char *argument)
     return;
 }
 
-SHIP_DATA *make_prototype_ship(int ship_type, int vnum, CHAR_DATA *ch, char *ship_name)
+SHIP_DATA* make_prototype_ship(int ship_type, int vnum, CHAR_DATA* ch, char* ship_name)
 {
-    SHIP_DATA *ship;
-    PROTO_ROOM *proom;
-    ROOM_INDEX_DATA *room;
+    SHIP_DATA* ship;
+    PROTO_ROOM* proom;
+    ROOM_INDEX_DATA* room;
     char sp_filename[MAX_STRING_LENGTH];
     CREATE(ship, SHIP_DATA, 1);
     LINK(ship, first_ship, last_ship, next, prev);
@@ -1285,26 +1285,26 @@ SHIP_DATA *make_prototype_ship(int ship_type, int vnum, CHAR_DATA *ch, char *shi
     return ship;
 }
 
-int make_prototype_rooms(int ship_type, int vnum, AREA_DATA *tarea, char *Sname)
+int make_prototype_rooms(int ship_type, int vnum, AREA_DATA* tarea, char* Sname)
 {
-    PROTO_ROOM *proom;
+    PROTO_ROOM* proom;
     ROOM_INDEX_DATA *newroom, *rfrom, *rto;
     int value;
-    char *arg;
+    char* arg;
     char arg2[MAX_STRING_LENGTH];
-    EXIT_DATA *xit;
+    EXIT_DATA* xit;
     int x, y;
-    int *exits;
-    int *keys;
-    int *exflags;
+    int* exits;
+    int* keys;
+    int* exflags;
     char buf[MAX_STRING_LENGTH];
     char newdesc[MAX_STRING_LENGTH];
-    OBJ_INDEX_DATA *pObjIndex;
-    OBJ_DATA *obj;
-    CHAR_DATA *victim;
-    MOB_INDEX_DATA *pMobIndex;
+    OBJ_INDEX_DATA* pObjIndex;
+    OBJ_DATA* obj;
+    CHAR_DATA* victim;
+    MOB_INDEX_DATA* pMobIndex;
     int rvnum;
-    char *rarg;
+    char* rarg;
     char rtype[MAX_STRING_LENGTH];
 
     for (proom = first_prototype_room; proom; proom = proom->next)
@@ -1404,12 +1404,12 @@ int find_vnum_block(int num_needed)
 {
     bool counting = false;
     int count = 0;
-    AREA_DATA *tarea;
+    AREA_DATA* tarea;
     int lrange;
     int trange;
     int vnum;
     int startvnum = -1;
-    ROOM_INDEX_DATA *room;
+    ROOM_INDEX_DATA* room;
 
     for (tarea = first_area; tarea; tarea = tarea->next)
         if (!str_cmp(SHIP_AREA, tarea->filename))
@@ -1440,7 +1440,7 @@ int find_vnum_block(int num_needed)
     return startvnum;
 }
 
-int get_sp_rflag(char *flag)
+int get_sp_rflag(char* flag)
 {
     int x;
 
@@ -1452,12 +1452,12 @@ int get_sp_rflag(char *flag)
 
 void make_rprogs(int ship_type, int vnum)
 {
-    PROTO_ROOM *proom;
+    PROTO_ROOM* proom;
     char argument[MAX_STRING_LENGTH];
     char arg1[MAX_INPUT_LENGTH];
     char arg2[MAX_INPUT_LENGTH];
     MPROG_DATA *mprog, *mprg;
-    ROOM_INDEX_DATA *room;
+    ROOM_INDEX_DATA* room;
     int mptype, x, size;
     for (proom = first_prototype_room; proom; proom = proom->next)
     {
@@ -1499,7 +1499,7 @@ void make_rprogs(int ship_type, int vnum)
     }
 }
 
-char *parse_prog_string(char *inp, int ship_type, int vnum)
+char* parse_prog_string(char* inp, int ship_type, int vnum)
 {
     char sch[MAX_STRING_LENGTH];
     char rep[MAX_STRING_LENGTH];
@@ -1518,8 +1518,8 @@ char *parse_prog_string(char *inp, int ship_type, int vnum)
 
 void save_prototype(int prototype)
 {
-    PROTO_ROOM *proom;
-    FILE *fpout;
+    PROTO_ROOM* proom;
+    FILE* fpout;
     char filename[MAX_STRING_LENGTH];
     int x;
     sprintf_s(filename, "%s%s.proto", SHIP_PROTOTYPE_DIR, ship_prototypes[prototype].sname);
@@ -1613,7 +1613,7 @@ void save_prototype(int prototype)
 
 void write_prototype_list()
 {
-    FILE *fpout;
+    FILE* fpout;
     char filename[MAX_STRING_LENGTH];
     int x;
     sprintf_s(filename, "%sprototype.lst", SHIP_PROTOTYPE_DIR);
@@ -1636,10 +1636,10 @@ void write_all_prototypes()
     write_prototype_list();
 }
 
-bool load_prototype_header(FILE *fp, const std::string& filename, int prototype)
+bool load_prototype_header(FILE* fp, const std::string& filename, int prototype)
 {
     char buf[MAX_STRING_LENGTH];
-    const char *word;
+    const char* word;
     bool done = false;
     bool fMatch;
     while (!done)
@@ -1723,11 +1723,11 @@ bool load_prototype_header(FILE *fp, const std::string& filename, int prototype)
     return true;
 }
 
-bool fread_prototype_room(FILE *fp, int prototype)
+bool fread_prototype_room(FILE* fp, int prototype)
 {
-    PROTO_ROOM *proom;
+    PROTO_ROOM* proom;
     char buf[MAX_STRING_LENGTH];
-    const char *word;
+    const char* word;
     bool done = false;
     bool fMatch;
     CREATE(proom, PROTO_ROOM, 1);
@@ -1818,10 +1818,10 @@ bool fread_prototype_room(FILE *fp, int prototype)
     return true;
 }
 
-bool load_prototype_rooms(FILE *fp, int prototype)
+bool load_prototype_rooms(FILE* fp, int prototype)
 {
     char letter;
-    char *word;
+    char* word;
     bool done = false;
     while (!done)
     {
@@ -1849,12 +1849,12 @@ bool load_prototype_rooms(FILE *fp, int prototype)
 int load_prototype(const std::string& prototypefile, int prototype)
 {
     char filename[256];
-    FILE *fp;
+    FILE* fp;
     bool found = false;
     int stage = -1;
     bool ok = true;
     char letter;
-    char *word;
+    char* word;
 
     sprintf_s(filename, "%s%s", SHIP_PROTOTYPE_DIR, prototypefile.c_str());
 
@@ -1914,8 +1914,8 @@ int load_prototype(const std::string& prototypefile, int prototype)
 
 void load_ship_prototypes()
 {
-    FILE *fpList;
-    const char *filename;
+    FILE* fpList;
+    const char* filename;
     char prototypeslist[256];
     int prototype;
     first_prototype_room = NULL;
@@ -1945,9 +1945,9 @@ void load_ship_prototypes()
     return;
 }
 
-void do_makeprototypeship(CHAR_DATA *ch, char *argument)
+void do_makeprototypeship(CHAR_DATA* ch, char* argument)
 {
-    SHIP_DATA *ship;
+    SHIP_DATA* ship;
     int prototype;
     int cost;
     int count = 0;
@@ -1957,11 +1957,11 @@ void do_makeprototypeship(CHAR_DATA *ch, char *argument)
     char scost[MAX_STRING_LENGTH];
     char buf[MAX_STRING_LENGTH];
     int x, len;
-    ROOM_INDEX_DATA *room;
-    MPROG_DATA *mprg;
-    EXIT_DATA *eroom;
+    ROOM_INDEX_DATA* room;
+    MPROG_DATA* mprg;
+    EXIT_DATA* eroom;
     int room_count = 1;
-    PROTO_ROOM *proom;
+    PROTO_ROOM* proom;
 
     argument = one_argument(argument, ship_name);
     argument = one_argument(argument, scost);
@@ -2144,7 +2144,7 @@ void do_makeprototypeship(CHAR_DATA *ch, char *argument)
 
 char pbname[MAX_STRING_LENGTH];
 
-const char *primary_beam_name_proto(int shiptype)
+const char* primary_beam_name_proto(int shiptype)
 {
     if (ship_prototypes[shiptype].primaryCount != 0)
     {
@@ -2248,7 +2248,7 @@ const char *primary_beam_name_proto(int shiptype)
     else
         return "None.";
 }
-const char *secondary_beam_name_proto(int shiptype)
+const char* secondary_beam_name_proto(int shiptype)
 {
     if (ship_prototypes[shiptype].secondaryCount != 0)
     {
@@ -2353,7 +2353,7 @@ const char *secondary_beam_name_proto(int shiptype)
     else
         return "None.";
 }
-void do_shipstat(CHAR_DATA *ch, char *argument)
+void do_shipstat(CHAR_DATA* ch, char* argument)
 {
     int shiptype;
     char buf1[MAX_STRING_LENGTH];
@@ -2461,10 +2461,10 @@ void do_shipstat(CHAR_DATA *ch, char *argument)
 
 void load_market_list()
 {
-    FILE *fpList;
-    const char *filename;
+    FILE* fpList;
+    const char* filename;
     char list[256];
-    BMARKET_DATA *marketship;
+    BMARKET_DATA* marketship;
     int quantity;
 
     first_market_ship = NULL;
@@ -2498,8 +2498,8 @@ void load_market_list()
 
 void save_market_list()
 {
-    BMARKET_DATA *marketship;
-    FILE *fpout;
+    BMARKET_DATA* marketship;
+    FILE* fpout;
     char filename[256];
 
     sprintf_s(filename, "%s%s", SHIP_PROTOTYPE_DIR, "blackmarket.lst");
@@ -2518,9 +2518,9 @@ void save_market_list()
     fclose(fpout);
 }
 
-void add_market_ship(SHIP_DATA *ship)
+void add_market_ship(SHIP_DATA* ship)
 {
-    BMARKET_DATA *marketship;
+    BMARKET_DATA* marketship;
     bool found;
 
     if (!ship)
@@ -2547,7 +2547,7 @@ void add_market_ship(SHIP_DATA *ship)
     save_market_list();
 }
 
-void remove_market_ship(BMARKET_DATA *marketship)
+void remove_market_ship(BMARKET_DATA* marketship)
 {
     if (marketship->quantity > 1)
         marketship->quantity--;
@@ -2564,8 +2564,8 @@ void remove_market_ship(BMARKET_DATA *marketship)
 void make_random_marketlist()
 {
     // BMARKET_DATA *marketship;
-    BMARKET_DATA *nmarketship;
-    FILE *fpout;
+    BMARKET_DATA* nmarketship;
+    FILE* fpout;
     char filename[256];
     int x, priority, count;
 
@@ -2733,9 +2733,9 @@ void make_random_marketlist()
     save_market_list();
 }
 
-void do_generate_market(CHAR_DATA *ch, char *argument)
+void do_generate_market(CHAR_DATA* ch, char* argument)
 {
-    BMARKET_DATA *marketship;
+    BMARKET_DATA* marketship;
 
     if (IS_NPC(ch))
         return;
@@ -2766,14 +2766,14 @@ void do_generate_market(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void do_installmodule(CHAR_DATA *ch, char *argument)
+void do_installmodule(CHAR_DATA* ch, char* argument)
 {
-    SHIP_DATA *ship;
-    MODULE_DATA *mod;
+    SHIP_DATA* ship;
+    MODULE_DATA* mod;
     int i = 0, maxmod;
     bool checktool, checkmod;
-    OBJ_DATA *obj;
-    OBJ_DATA *modobj = nullptr;
+    OBJ_DATA* obj;
+    OBJ_DATA* modobj = nullptr;
     char arg[MAX_INPUT_LENGTH];
     char buf[MAX_INPUT_LENGTH];
     int x;
@@ -2953,7 +2953,7 @@ void do_installmodule(CHAR_DATA *ch, char *argument)
     case 1:
         if (!ch->dest_buf)
             return;
-        strcpy(arg, reinterpret_cast<const char *>(ch->dest_buf));
+        strcpy(arg, reinterpret_cast<const char*>(ch->dest_buf));
         DISPOSE(ch->dest_buf);
         break;
 
@@ -3051,7 +3051,7 @@ void do_installmodule(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void do_shiplist(CHAR_DATA *ch, char *argument)
+void do_shiplist(CHAR_DATA* ch, char* argument)
 {
     int x;
 

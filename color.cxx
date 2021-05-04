@@ -101,7 +101,7 @@
 #include <stdarg.h>
 #include "mud.hxx"
 
-const char *pc_displays[MAX_COLORS] = {
+const char* pc_displays[MAX_COLORS] = {
     "black",    "dred",     "dgreen",   "orange",  "dblue",  "purple",  "cyan",    "grey",     "dgrey",
     "red",      "green",    "yellow",   "blue",    "pink",   "lblue",   "white", /*0 - 15*/
 
@@ -171,11 +171,11 @@ const sh_int default_set[MAX_COLORS] = {
     AT_DGREEN, AT_CYAN /* 74 */
 };
 
-const char *valid_color[] = {"black", "dred",  "dgreen", "orange", "dblue", "purple", "cyan",  "grey", "dgrey",
+const char* valid_color[] = {"black", "dred",  "dgreen", "orange", "dblue", "purple", "cyan",  "grey", "dgrey",
                              "red",   "green", "yellow", "blue",   "pink",  "lblue",  "white", "\0"};
 
 /* Color align functions by Justice@Aaern */
-int const_color_str_len(const char *argument)
+int const_color_str_len(const char* argument)
 {
     int str, count = 0;
     bool IS_COLOR = false;
@@ -218,7 +218,7 @@ int const_color_str_len(const char *argument)
     return count;
 }
 
-int const_color_strnlen(const char *argument, int maxlength)
+int const_color_strnlen(const char* argument, int maxlength)
 {
     int str, count = 0;
     bool IS_COLOR = false;
@@ -267,7 +267,7 @@ int const_color_strnlen(const char *argument, int maxlength)
     return str;
 }
 
-int color_str_len(char *argument)
+int color_str_len(char* argument)
 {
     int str, count = 0;
     bool IS_COLOR = false;
@@ -310,7 +310,7 @@ int color_str_len(char *argument)
     return count;
 }
 
-int color_strnlen(char *argument, int maxlength)
+int color_strnlen(char* argument, int maxlength)
 {
     int str, count = 0;
     bool IS_COLOR = false;
@@ -359,7 +359,7 @@ int color_strnlen(char *argument, int maxlength)
     return str;
 }
 
-const char *const_color_align(const char *argument, int size, int align)
+const char* const_color_align(const char* argument, int size, int align)
 {
     int space = (size - const_color_str_len(argument));
     static char buf[MAX_STRING_LENGTH];
@@ -376,7 +376,7 @@ const char *const_color_align(const char *argument, int size, int align)
     return buf;
 }
 
-char *color_align(char *argument, int size, int align)
+char* color_align(char* argument, int size, int align)
 {
     int space = (size - color_str_len(argument));
     static char buf[MAX_STRING_LENGTH];
@@ -393,7 +393,7 @@ char *color_align(char *argument, int size, int align)
     return buf;
 }
 
-void show_colors(CHAR_DATA *ch)
+void show_colors(CHAR_DATA* ch)
 {
     sh_int count;
     sh_int columns = 0;
@@ -503,7 +503,7 @@ void show_colors(CHAR_DATA *ch)
     return;
 }
 
-void do_color(CHAR_DATA *ch, char *argument)
+void do_color(CHAR_DATA* ch, char* argument)
 {
     bool dMatch, cMatch;
     sh_int count = 0, y = 0;
@@ -761,12 +761,12 @@ void do_color(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void reset_colors(CHAR_DATA *ch)
+void reset_colors(CHAR_DATA* ch)
 {
     memcpy(&ch->colors, &default_set, sizeof(default_set));
 }
 
-const char *color_str(sh_int AType, CHAR_DATA *ch)
+const char* color_str(sh_int AType, CHAR_DATA* ch)
 {
     if (!ch)
     {
@@ -854,9 +854,9 @@ const char *color_str(sh_int AType, CHAR_DATA *ch)
     }
 }
 
-int colorcode(const char *col, char *code, CHAR_DATA *ch)
+int colorcode(const char* col, char* code, CHAR_DATA* ch)
 {
-    const char *ctype = col;
+    const char* ctype = col;
     int ln;
     bool ansi;
 
@@ -1158,7 +1158,7 @@ int colorcode(const char *col, char *code, CHAR_DATA *ch)
 }
 
 /* Moved from comm.c */
-void set_char_color(sh_int AType, CHAR_DATA *ch)
+void set_char_color(sh_int AType, CHAR_DATA* ch)
 {
     if (!ch || !ch->desc)
         return;
@@ -1174,7 +1174,7 @@ void set_char_color(sh_int AType, CHAR_DATA *ch)
     ch->desc->pagecolor = ch->colors[AType];
 }
 
-void set_pager_color(sh_int AType, CHAR_DATA *ch)
+void set_pager_color(sh_int AType, CHAR_DATA* ch)
 {
     if (!ch || !ch->desc)
         return;
@@ -1191,7 +1191,7 @@ void set_pager_color(sh_int AType, CHAR_DATA *ch)
     ch->desc->pagecolor = ch->colors[AType];
 }
 
-void write_to_pager(DESCRIPTOR_DATA *d, const char *txt, size_t length)
+void write_to_pager(DESCRIPTOR_DATA* d, const char* txt, size_t length)
 {
     int pageroffset; /* Pager fix by thoric */
 
@@ -1241,10 +1241,10 @@ void write_to_pager(DESCRIPTOR_DATA *d, const char *txt, size_t length)
 }
 
 /* Writes to a descriptor, usually best used when there's no character to send to ( like logins ) */
-void send_to_desc_color(const char *txt, DESCRIPTOR_DATA *d)
+void send_to_desc_color(const char* txt, DESCRIPTOR_DATA* d)
 {
-    const char *colstr;
-    const char *prevstr = txt;
+    const char* colstr;
+    const char* prevstr = txt;
     char colbuf[20];
     int ln;
 
@@ -1287,10 +1287,10 @@ void send_to_desc_color(const char *txt, DESCRIPTOR_DATA *d)
 /*
  * Write to one char. Convert color into ANSI sequences.
  */
-void send_to_char_color(const char *txt, CHAR_DATA *ch)
+void send_to_char_color(const char* txt, CHAR_DATA* ch)
 {
-    const char *colstr;
-    const char *prevstr = txt;
+    const char* colstr;
+    const char* prevstr = txt;
     char colbuf[20];
     int ln;
 
@@ -1326,10 +1326,10 @@ void send_to_char_color(const char *txt, CHAR_DATA *ch)
     return;
 }
 
-void send_to_pager_color(const char *txt, CHAR_DATA *ch)
+void send_to_pager_color(const char* txt, CHAR_DATA* ch)
 {
-    const char *colstr;
-    const char *prevstr = txt;
+    const char* colstr;
+    const char* prevstr = txt;
     char colbuf[20];
     int ln;
 
@@ -1341,7 +1341,7 @@ void send_to_pager_color(const char *txt, CHAR_DATA *ch)
 
     if (txt && ch->desc)
     {
-        DESCRIPTOR_DATA *d = ch->desc;
+        DESCRIPTOR_DATA* d = ch->desc;
 
         ch = d->original ? d->original : d->character;
         if (IS_NPC(ch) || !IS_SET(ch->pcdata->flags, PCFLAG_PAGERON))
@@ -1373,19 +1373,19 @@ void send_to_pager_color(const char *txt, CHAR_DATA *ch)
     return;
 }
 
-void send_to_char(const char *txt, CHAR_DATA *ch)
+void send_to_char(const char* txt, CHAR_DATA* ch)
 {
     send_to_char_color(txt, ch);
     return;
 }
 
-void send_to_pager(const char *txt, CHAR_DATA *ch)
+void send_to_pager(const char* txt, CHAR_DATA* ch)
 {
     send_to_pager_color(txt, ch);
     return;
 }
 // newchprintf
-void ch_printf(CHAR_DATA *ch, const char *fmt, ...)
+void ch_printf(CHAR_DATA* ch, const char* fmt, ...)
 {
     char buf[MAX_STRING_LENGTH * 2];
     va_list args;
@@ -1397,7 +1397,7 @@ void ch_printf(CHAR_DATA *ch, const char *fmt, ...)
     send_to_char_color(buf, ch);
 }
 
-void pager_printf(CHAR_DATA *ch, const char *fmt, ...)
+void pager_printf(CHAR_DATA* ch, const char* fmt, ...)
 {
     char buf[MAX_STRING_LENGTH * 2];
     va_list args;
@@ -1413,7 +1413,7 @@ void pager_printf(CHAR_DATA *ch, const char *fmt, ...)
  * The primary output interface for formatted output.
  */
 /* Major overhaul. -- Alty */
-void ch_printf_color(CHAR_DATA *ch, const char *fmt, ...)
+void ch_printf_color(CHAR_DATA* ch, const char* fmt, ...)
 {
     char buf[MAX_STRING_LENGTH * 2];
     va_list args;
@@ -1425,7 +1425,7 @@ void ch_printf_color(CHAR_DATA *ch, const char *fmt, ...)
     send_to_char(buf, ch);
 }
 
-void pager_printf_color(CHAR_DATA *ch, const char *fmt, ...)
+void pager_printf_color(CHAR_DATA* ch, const char* fmt, ...)
 {
     char buf[MSL * 2];
     va_list args;

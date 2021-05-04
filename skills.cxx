@@ -42,46 +42,46 @@
 #include <time.h>
 #include "mud.hxx"
 
-const char *spell_flag[] = {"water",   "earth",         "air",          "astral",       "area",        "distant",
+const char* spell_flag[] = {"water",   "earth",         "air",          "astral",       "area",        "distant",
                             "reverse", "save_half_dam", "save_negates", "accumulative", "recastable",  "noscribe",
                             "nobrew",  "group",         "object",       "character",    "secretskill", "pksensitive"};
 
-const char *spell_saves[] = {"none", "poison_death", "wands", "para_petri", "breath", "spell_staff"};
+const char* spell_saves[] = {"none", "poison_death", "wands", "para_petri", "breath", "spell_staff"};
 
-const char *spell_damage[] = {"none", "fire", "cold", "electricity", "energy", "acid", "poison", "drain"};
+const char* spell_damage[] = {"none", "fire", "cold", "electricity", "energy", "acid", "poison", "drain"};
 
-const char *spell_action[] = {"none", "create", "destroy", "resist", "suscept", "divinate", "obscure", "change"};
+const char* spell_action[] = {"none", "create", "destroy", "resist", "suscept", "divinate", "obscure", "change"};
 
-const char *spell_power[] = {"none", "minor", "greater", "major"};
+const char* spell_power[] = {"none", "minor", "greater", "major"};
 
-const char *spell_class[] = {"none", "lunar", "solar", "travel", "summon", "life", "death", "illusion"};
+const char* spell_class[] = {"none", "lunar", "solar", "travel", "summon", "life", "death", "illusion"};
 
-const char *target_type[] = {"ignore", "offensive", "defensive", "self", "objinv"};
+const char* target_type[] = {"ignore", "offensive", "defensive", "self", "objinv"};
 
-bool autofly(SHIP_DATA *ship);
-void show_char_to_char(CHAR_DATA *list, CHAR_DATA *ch);
-void show_list_to_char(OBJ_DATA *list, CHAR_DATA *ch, bool fShort, bool fShowN);
+bool autofly(SHIP_DATA* ship);
+void show_char_to_char(CHAR_DATA* list, CHAR_DATA* ch);
+void show_list_to_char(OBJ_DATA* list, CHAR_DATA* ch, bool fShort, bool fShowN);
 
-int ris_save(CHAR_DATA *ch, int chance, int ris);
-bool check_illegal_psteal(CHAR_DATA *ch, CHAR_DATA *victim);
+int ris_save(CHAR_DATA* ch, int chance, int ris);
+bool check_illegal_psteal(CHAR_DATA* ch, CHAR_DATA* victim);
 
 /* from magic.c */
-void failed_casting(SKILL_TYPE *skill, CHAR_DATA *ch, CHAR_DATA *victim, OBJ_DATA *obj);
+void failed_casting(SKILL_TYPE* skill, CHAR_DATA* ch, CHAR_DATA* victim, OBJ_DATA* obj);
 
-int xp_compute(CHAR_DATA *gch, CHAR_DATA *victim);
+int xp_compute(CHAR_DATA* gch, CHAR_DATA* victim);
 
-ROOM_INDEX_DATA *generate_exit(ROOM_INDEX_DATA *in_room, EXIT_DATA **pexit);
+ROOM_INDEX_DATA* generate_exit(ROOM_INDEX_DATA* in_room, EXIT_DATA** pexit);
 
 /*
  * Dummy function
  */
-void skill_notfound(CHAR_DATA *ch, char *argument)
+void skill_notfound(CHAR_DATA* ch, char* argument)
 {
     send_to_char("Huh?\n\r", ch);
     return;
 }
 
-int get_ssave(char *name)
+int get_ssave(char* name)
 {
     int x;
 
@@ -91,7 +91,7 @@ int get_ssave(char *name)
     return -1;
 }
 
-int get_starget(char *name)
+int get_starget(char* name)
 {
     int x;
 
@@ -101,7 +101,7 @@ int get_starget(char *name)
     return -1;
 }
 
-int get_sflag(char *name)
+int get_sflag(char* name)
 {
     int x;
 
@@ -111,7 +111,7 @@ int get_sflag(char *name)
     return -1;
 }
 
-int get_sdamage(char *name)
+int get_sdamage(char* name)
 {
     int x;
 
@@ -121,7 +121,7 @@ int get_sdamage(char *name)
     return -1;
 }
 
-int get_saction(char *name)
+int get_saction(char* name)
 {
     int x;
 
@@ -131,7 +131,7 @@ int get_saction(char *name)
     return -1;
 }
 
-int get_spower(char *name)
+int get_spower(char* name)
 {
     int x;
 
@@ -141,7 +141,7 @@ int get_spower(char *name)
     return -1;
 }
 
-int get_sclass(char *name)
+int get_sclass(char* name)
 {
     int x;
 
@@ -151,7 +151,7 @@ int get_sclass(char *name)
     return -1;
 }
 
-bool is_legal_kill(CHAR_DATA *ch, CHAR_DATA *vch)
+bool is_legal_kill(CHAR_DATA* ch, CHAR_DATA* vch)
 {
     if (IS_NPC(ch) || IS_NPC(vch))
         return true;
@@ -160,14 +160,14 @@ bool is_legal_kill(CHAR_DATA *ch, CHAR_DATA *vch)
     return true;
 }
 
-extern const char *target_name; /* from magic.c */
+extern const char* target_name; /* from magic.c */
 
 /*
  * Perform a binary search on a section of the skill table
  * Each different section of the skill table is sorted alphabetically
  * Only match skills player knows				-Thoric
  */
-bool check_skill(CHAR_DATA *ch, const char *command, char *argument)
+bool check_skill(CHAR_DATA* ch, const char* command, char* argument)
 {
     int sn;
     int first = gsn_first_skill;
@@ -223,9 +223,9 @@ bool check_skill(CHAR_DATA *ch, const char *command, char *argument)
     if (!skill_table[sn]->skill_fun)
     {
         ch_ret retcode = rNONE;
-        void *vo = NULL;
-        CHAR_DATA *victim = NULL;
-        OBJ_DATA *obj = NULL;
+        void* vo = NULL;
+        CHAR_DATA* victim = NULL;
+        OBJ_DATA* obj = NULL;
 
         target_name = "";
 
@@ -260,7 +260,7 @@ bool check_skill(CHAR_DATA *ch, const char *command, char *argument)
             }
             if (is_safe(ch, victim))
                 return true;
-            vo = (void *)victim;
+            vo = (void*)victim;
             break;
 
         case TAR_CHAR_DEFENSIVE:
@@ -271,12 +271,12 @@ bool check_skill(CHAR_DATA *ch, const char *command, char *argument)
             }
             if (!victim)
                 victim = ch;
-            vo = (void *)victim;
+            vo = (void*)victim;
             break;
 
         case TAR_CHAR_SELF:
             victim = ch;
-            vo = (void *)ch;
+            vo = (void*)ch;
             break;
 
         case TAR_OBJ_INV:
@@ -285,7 +285,7 @@ bool check_skill(CHAR_DATA *ch, const char *command, char *argument)
                 send_to_char("You can't find that.\n\r", ch);
                 return true;
             }
-            vo = (void *)obj;
+            vo = (void*)obj;
             break;
         }
 
@@ -327,8 +327,8 @@ bool check_skill(CHAR_DATA *ch, const char *command, char *argument)
 
         if (skill_table[sn]->target == TAR_CHAR_OFFENSIVE && victim != ch && !char_died(victim))
         {
-            CHAR_DATA *vch;
-            CHAR_DATA *vch_next;
+            CHAR_DATA* vch;
+            CHAR_DATA* vch_next;
 
             for (vch = ch->in_room->first_person; vch; vch = vch_next)
             {
@@ -362,12 +362,12 @@ bool check_skill(CHAR_DATA *ch, const char *command, char *argument)
  * Lookup a skills information
  * High god command
  */
-void do_slookup(CHAR_DATA *ch, char *argument)
+void do_slookup(CHAR_DATA* ch, char* argument)
 {
     char buf[MAX_STRING_LENGTH];
     char arg[MAX_INPUT_LENGTH];
     int sn;
-    SKILL_TYPE *skill = NULL;
+    SKILL_TYPE* skill = NULL;
 
     one_argument(argument, arg);
     if (arg[0] == '\0')
@@ -389,7 +389,7 @@ void do_slookup(CHAR_DATA *ch, char *argument)
     }
     else
     {
-        SMAUG_AFF *aff;
+        SMAUG_AFF* aff;
         int cnt = 0;
 
         if (arg[0] == 'h' && is_number(arg + 1))
@@ -548,12 +548,12 @@ void do_slookup(CHAR_DATA *ch, char *argument)
  * Set a skill's attributes or what skills a player has.
  * High god command, with support for creating skills/spells/herbs/etc
  */
-void do_sset(CHAR_DATA *ch, char *argument)
+void do_sset(CHAR_DATA* ch, char* argument)
 {
     char arg1[MAX_INPUT_LENGTH];
     char arg2[MAX_INPUT_LENGTH];
     char buf[MAX_STRING_LENGTH];
-    CHAR_DATA *victim;
+    CHAR_DATA* victim;
     int value;
     int sn;
     bool fAll;
@@ -605,7 +605,7 @@ void do_sset(CHAR_DATA *ch, char *argument)
     if (get_trust(ch) > LEVEL_SUB_IMPLEM && !str_cmp(arg1, "create") &&
         (!str_cmp(arg2, "skill") || !str_cmp(arg2, "herb")))
     {
-        SKILL_TYPE *skill;
+        SKILL_TYPE* skill;
         sh_int type = SKILL_UNKNOWN;
 
         if (!str_cmp(arg2, "herb"))
@@ -659,7 +659,7 @@ void do_sset(CHAR_DATA *ch, char *argument)
     if (get_trust(ch) > LEVEL_GREATER && ((arg1[0] == 'h' && is_number(arg1 + 1) && (sn = atoi(arg1 + 1)) >= 0) ||
                                           (is_number(arg1) && (sn = atoi(arg1)) >= 0)))
     {
-        SKILL_TYPE *skill;
+        SKILL_TYPE* skill;
 
         if (arg1[0] == 'h')
         {
@@ -779,8 +779,8 @@ void do_sset(CHAR_DATA *ch, char *argument)
 
         if (!str_cmp(arg2, "code"))
         {
-            SPELL_FUN *spellfun;
-            DO_FUN *dofun;
+            SPELL_FUN* spellfun;
+            DO_FUN* dofun;
 
             if (!str_prefix("do_", argument) && (dofun = skill_function(argument)) != skill_notfound)
             {
@@ -873,8 +873,8 @@ void do_sset(CHAR_DATA *ch, char *argument)
         }
         if (!str_cmp(arg2, "rmaffect"))
         {
-            SMAUG_AFF *aff = skill->affects;
-            SMAUG_AFF *aff_next;
+            SMAUG_AFF* aff = skill->affects;
+            SMAUG_AFF* aff_next;
             int num = atoi(argument);
             int cnt = 1;
 
@@ -917,7 +917,7 @@ void do_sset(CHAR_DATA *ch, char *argument)
             char duration[MAX_INPUT_LENGTH];
             char bitvector[MAX_INPUT_LENGTH];
             int loc, bit, tmpbit;
-            SMAUG_AFF *aff;
+            SMAUG_AFF* aff;
 
             argument = one_argument(argument, location);
             argument = one_argument(argument, modifier);
@@ -1211,7 +1211,7 @@ void do_sset(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void learn_from_success(CHAR_DATA *ch, int sn)
+void learn_from_success(CHAR_DATA* ch, int sn)
 {
     int adept, gain, sklvl, learn, percent, chance;
     if (IS_NPC(ch) || ch->pcdata->learned[sn] == 0)
@@ -1269,7 +1269,7 @@ void learn_from_success(CHAR_DATA *ch, int sn)
     }
 }
 
-void learn_from_failure(CHAR_DATA *ch, int sn)
+void learn_from_failure(CHAR_DATA* ch, int sn)
 {
     int adept, gain, sklvl, learn, percent, chance;
     if (IS_NPC(ch) || ch->pcdata->learned[sn] == 0)
@@ -1317,9 +1317,9 @@ void learn_from_failure(CHAR_DATA *ch, int sn)
     }
 }
 
-void do_gouge(CHAR_DATA *ch, char *argument)
+void do_gouge(CHAR_DATA* ch, char* argument)
 {
-    CHAR_DATA *victim;
+    CHAR_DATA* victim;
     AFFECT_DATA af;
     sh_int dam;
     int percent;
@@ -1391,11 +1391,11 @@ void do_gouge(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void do_detrap(CHAR_DATA *ch, char *argument)
+void do_detrap(CHAR_DATA* ch, char* argument)
 {
     char arg[MAX_INPUT_LENGTH];
-    OBJ_DATA *obj;
-    OBJ_DATA *trap;
+    OBJ_DATA* obj;
+    OBJ_DATA* trap;
     int percent;
     bool found;
 
@@ -1457,7 +1457,7 @@ void do_detrap(CHAR_DATA *ch, char *argument)
             bug("do_detrap: ch->dest_buf NULL!", 0);
             return;
         }
-        strcpy(arg, reinterpret_cast<const char *>(ch->dest_buf));
+        strcpy(arg, reinterpret_cast<const char*>(ch->dest_buf));
         DISPOSE(ch->dest_buf);
         ch->dest_buf = NULL;
         ch->substate = SUB_NONE;
@@ -1511,13 +1511,13 @@ void do_detrap(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void do_dig(CHAR_DATA *ch, char *argument)
+void do_dig(CHAR_DATA* ch, char* argument)
 {
     char arg[MAX_INPUT_LENGTH];
-    OBJ_DATA *obj;
-    OBJ_DATA *startobj;
+    OBJ_DATA* obj;
+    OBJ_DATA* startobj;
     bool found, shovel;
-    EXIT_DATA *pexit;
+    EXIT_DATA* pexit;
 
     switch (ch->substate)
     {
@@ -1581,7 +1581,7 @@ void do_dig(CHAR_DATA *ch, char *argument)
             bug("do_dig: dest_buf NULL", 0);
             return;
         }
-        strcpy(arg, reinterpret_cast<const char *>(ch->dest_buf));
+        strcpy(arg, reinterpret_cast<const char*>(ch->dest_buf));
         DISPOSE(ch->dest_buf);
         break;
 
@@ -1657,12 +1657,12 @@ void do_dig(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void do_search(CHAR_DATA *ch, char *argument)
+void do_search(CHAR_DATA* ch, char* argument)
 {
     char arg[MAX_INPUT_LENGTH];
-    OBJ_DATA *obj = nullptr;
-    OBJ_DATA *container = nullptr;
-    OBJ_DATA *startobj = nullptr;
+    OBJ_DATA* obj = nullptr;
+    OBJ_DATA* container = nullptr;
+    OBJ_DATA* startobj = nullptr;
     int percent, door;
     bool found, room;
 
@@ -1712,7 +1712,7 @@ void do_search(CHAR_DATA *ch, char *argument)
             bug("do_search: dest_buf NULL", 0);
             return;
         }
-        strcpy(arg, reinterpret_cast<const char *>(ch->dest_buf));
+        strcpy(arg, reinterpret_cast<const char*>(ch->dest_buf));
         DISPOSE(ch->dest_buf);
         break;
     case SUB_TIMER_DO_ABORT:
@@ -1756,7 +1756,7 @@ void do_search(CHAR_DATA *ch, char *argument)
 
     if (door != -1)
     {
-        EXIT_DATA *pexit;
+        EXIT_DATA* pexit;
 
         if ((pexit = get_exit(ch->in_room, door)) != NULL && IS_SET(pexit->exit_info, EX_SECRET) &&
             IS_SET(pexit->exit_info, EX_xSEARCHABLE) && percent < (IS_NPC(ch) ? 80 : ch->pcdata->learned[gsn_search]))
@@ -1794,7 +1794,7 @@ void do_search(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void do_steal(CHAR_DATA *ch, char *argument)
+void do_steal(CHAR_DATA* ch, char* argument)
 {
     char buf[MAX_STRING_LENGTH];
     char logbuf[MAX_STRING_LENGTH];
@@ -1995,11 +1995,11 @@ void do_steal(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void do_dualstab(CHAR_DATA *ch, char *argument)
+void do_dualstab(CHAR_DATA* ch, char* argument)
 {
     char arg[MAX_INPUT_LENGTH];
-    CHAR_DATA *victim;
-    OBJ_DATA *obj;
+    CHAR_DATA* victim;
+    OBJ_DATA* obj;
     int percent;
 
     if (IS_NPC(ch) && IS_AFFECTED(ch, AFF_CHARM))
@@ -2078,11 +2078,11 @@ void do_dualstab(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void do_backstab(CHAR_DATA *ch, char *argument)
+void do_backstab(CHAR_DATA* ch, char* argument)
 {
     char arg[MAX_INPUT_LENGTH];
-    CHAR_DATA *victim;
-    OBJ_DATA *obj;
+    CHAR_DATA* victim;
+    OBJ_DATA* obj;
     int percent;
     char buf[MAX_STRING_LENGTH];
 
@@ -2176,11 +2176,11 @@ void do_backstab(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void do_rescue(CHAR_DATA *ch, char *argument)
+void do_rescue(CHAR_DATA* ch, char* argument)
 {
     char arg[MAX_INPUT_LENGTH];
-    CHAR_DATA *victim;
-    CHAR_DATA *fch;
+    CHAR_DATA* victim;
+    CHAR_DATA* fch;
     int percent;
 
     if (IS_NPC(ch) && IS_AFFECTED(ch, AFF_CHARM))
@@ -2266,9 +2266,9 @@ void do_rescue(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void do_kick(CHAR_DATA *ch, char *argument)
+void do_kick(CHAR_DATA* ch, char* argument)
 {
-    CHAR_DATA *victim;
+    CHAR_DATA* victim;
 
     if (IS_NPC(ch) && IS_AFFECTED(ch, AFF_CHARM))
     {
@@ -2296,9 +2296,9 @@ void do_kick(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void do_punch(CHAR_DATA *ch, char *argument)
+void do_punch(CHAR_DATA* ch, char* argument)
 {
-    CHAR_DATA *victim;
+    CHAR_DATA* victim;
 
     if (IS_NPC(ch) && IS_AFFECTED(ch, AFF_CHARM))
     {
@@ -2332,25 +2332,25 @@ void do_punch(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void do_bite(CHAR_DATA *ch, char *argument)
+void do_bite(CHAR_DATA* ch, char* argument)
 {
 }
 
-void do_claw(CHAR_DATA *ch, char *argument)
+void do_claw(CHAR_DATA* ch, char* argument)
 {
 }
 
-void do_sting(CHAR_DATA *ch, char *argument)
+void do_sting(CHAR_DATA* ch, char* argument)
 {
 }
 
-void do_tail(CHAR_DATA *ch, char *argument)
+void do_tail(CHAR_DATA* ch, char* argument)
 {
 }
 
-void do_bash(CHAR_DATA *ch, char *argument)
+void do_bash(CHAR_DATA* ch, char* argument)
 {
-    CHAR_DATA *victim;
+    CHAR_DATA* victim;
     int chance;
 
     if (IS_NPC(ch) && IS_AFFECTED(ch, AFF_CHARM))
@@ -2395,9 +2395,9 @@ void do_bash(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void do_stun(CHAR_DATA *ch, char *argument)
+void do_stun(CHAR_DATA* ch, char* argument)
 {
-    CHAR_DATA *victim;
+    CHAR_DATA* victim;
     AFFECT_DATA af;
     int chance;
     bool fail;
@@ -2474,7 +2474,7 @@ void do_stun(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void do_feed(CHAR_DATA *ch, char *argument)
+void do_feed(CHAR_DATA* ch, char* argument)
 {
     send_to_char("It is not of your nature to feed on living creatures.\n\r", ch);
     return;
@@ -2485,7 +2485,7 @@ void do_feed(CHAR_DATA *ch, char *argument)
  * Caller must check for successful attack.
  * Check for loyalty flag (weapon disarms to inventory) for pkillers -Blodkai
  */
-void disarm(CHAR_DATA *ch, CHAR_DATA *victim)
+void disarm(CHAR_DATA* ch, CHAR_DATA* victim)
 {
     OBJ_DATA *obj, *tmpobj;
 
@@ -2527,10 +2527,10 @@ void disarm(CHAR_DATA *ch, CHAR_DATA *victim)
     return;
 }
 
-void do_disarm(CHAR_DATA *ch, char *argument)
+void do_disarm(CHAR_DATA* ch, char* argument)
 {
-    CHAR_DATA *victim;
-    OBJ_DATA *obj;
+    CHAR_DATA* victim;
+    OBJ_DATA* obj;
     int percent;
 
     if (IS_NPC(ch) && IS_AFFECTED(ch, AFF_CHARM))
@@ -2582,7 +2582,7 @@ void do_disarm(CHAR_DATA *ch, char *argument)
  * Trip a creature.
  * Caller must check for successful attack.
  */
-void trip(CHAR_DATA *ch, CHAR_DATA *victim)
+void trip(CHAR_DATA* ch, CHAR_DATA* victim)
 {
     if (IS_AFFECTED(victim, AFF_FLYING) || IS_AFFECTED(victim, AFF_FLOATING))
         return;
@@ -2614,15 +2614,15 @@ void trip(CHAR_DATA *ch, CHAR_DATA *victim)
     return;
 }
 
-void do_pick(CHAR_DATA *ch, char *argument)
+void do_pick(CHAR_DATA* ch, char* argument)
 {
     char arg[MAX_INPUT_LENGTH];
     int x, y;
-    CHAR_DATA *victim;
-    CHAR_DATA *gch;
-    OBJ_DATA *obj;
-    EXIT_DATA *pexit;
-    SHIP_DATA *ship;
+    CHAR_DATA* victim;
+    CHAR_DATA* gch;
+    OBJ_DATA* obj;
+    EXIT_DATA* pexit;
+    SHIP_DATA* ship;
 
     if (IS_NPC(ch) && IS_AFFECTED(ch, AFF_CHARM))
     {
@@ -2663,7 +2663,7 @@ void do_pick(CHAR_DATA *ch, char *argument)
     {
         /* 'pick door' */
         /*	ROOM_INDEX_DATA *to_room; */ /* Unused */
-        EXIT_DATA *pexit_rev;
+        EXIT_DATA* pexit_rev;
 
         if (!IS_SET(pexit->exit_info, EX_CLOSED))
         {
@@ -2810,7 +2810,7 @@ void do_pick(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void do_sneak(CHAR_DATA *ch, char *argument)
+void do_sneak(CHAR_DATA* ch, char* argument)
 {
     AFFECT_DATA af = {};
 
@@ -2845,7 +2845,7 @@ void do_sneak(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void do_hide(CHAR_DATA *ch, char *argument)
+void do_hide(CHAR_DATA* ch, char* argument)
 {
     if (IS_NPC(ch) && IS_AFFECTED(ch, AFF_CHARM))
     {
@@ -2874,7 +2874,7 @@ void do_hide(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void do_concealment(CHAR_DATA *ch, char *argument)
+void do_concealment(CHAR_DATA* ch, char* argument)
 {
     if (IS_NPC(ch) && IS_AFFECTED(ch, AFF_CHARM))
     {
@@ -2906,7 +2906,7 @@ void do_concealment(CHAR_DATA *ch, char *argument)
 /*
  * Contributed by Alander.
  */
-void do_visible(CHAR_DATA *ch, char *argument)
+void do_visible(CHAR_DATA* ch, char* argument)
 {
     affect_strip(ch, gsn_invis);
     affect_strip(ch, gsn_mass_invis);
@@ -2921,10 +2921,10 @@ void do_visible(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void do_recall(CHAR_DATA *ch, char *argument)
+void do_recall(CHAR_DATA* ch, char* argument)
 {
-    ROOM_INDEX_DATA *location;
-    CHAR_DATA *opponent;
+    ROOM_INDEX_DATA* location;
+    CHAR_DATA* opponent;
 
     location = NULL;
 
@@ -2932,7 +2932,7 @@ void do_recall(CHAR_DATA *ch, char *argument)
 
     if (get_trust(ch) < LEVEL_IMMORTAL)
     {
-        AREA_DATA *pArea;
+        AREA_DATA* pArea;
 
         if (!ch->pcdata || !(pArea = ch->pcdata->area))
         {
@@ -3005,10 +3005,10 @@ void do_recall(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void do_aid(CHAR_DATA *ch, char *argument)
+void do_aid(CHAR_DATA* ch, char* argument)
 {
     char arg[MAX_INPUT_LENGTH];
-    CHAR_DATA *victim;
+    CHAR_DATA* victim;
     int percent;
 
     if (IS_NPC(ch) && IS_AFFECTED(ch, AFF_CHARM))
@@ -3080,9 +3080,9 @@ void do_aid(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void do_mount(CHAR_DATA *ch, char *argument)
+void do_mount(CHAR_DATA* ch, char* argument)
 {
-    CHAR_DATA *victim;
+    CHAR_DATA* victim;
 
     if (!IS_NPC(ch) && ch->pcdata->learned[gsn_mount] <= 0)
     {
@@ -3147,9 +3147,9 @@ void do_mount(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void do_dismount(CHAR_DATA *ch, char *argument)
+void do_dismount(CHAR_DATA* ch, char* argument)
 {
-    CHAR_DATA *victim;
+    CHAR_DATA* victim;
 
     if ((victim = ch->mount) == NULL)
     {
@@ -3187,11 +3187,11 @@ void do_dismount(CHAR_DATA *ch, char *argument)
 /*
  * Check for parry.
  */
-bool check_parry(CHAR_DATA *ch, CHAR_DATA *victim)
+bool check_parry(CHAR_DATA* ch, CHAR_DATA* victim)
 {
     int chances;
-    OBJ_DATA *wield;
-    FORCE_SKILL *fskill;
+    OBJ_DATA* wield;
+    FORCE_SKILL* fskill;
 
     fskill = get_force_skill("parry");
 
@@ -3246,7 +3246,7 @@ bool check_parry(CHAR_DATA *ch, CHAR_DATA *victim)
 /*
  * Check for dodge.
  */
-bool check_dodge(CHAR_DATA *ch, CHAR_DATA *victim)
+bool check_dodge(CHAR_DATA* ch, CHAR_DATA* victim)
 {
     int chances;
 
@@ -3277,11 +3277,11 @@ bool check_dodge(CHAR_DATA *ch, CHAR_DATA *victim)
     return true;
 }
 
-void do_poison_weapon(CHAR_DATA *ch, char *argument)
+void do_poison_weapon(CHAR_DATA* ch, char* argument)
 {
-    OBJ_DATA *obj;
-    OBJ_DATA *pobj;
-    OBJ_DATA *wobj;
+    OBJ_DATA* obj;
+    OBJ_DATA* pobj;
+    OBJ_DATA* wobj;
     char arg[MAX_INPUT_LENGTH];
     int percent;
 
@@ -3399,15 +3399,15 @@ void do_poison_weapon(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void do_scribe(CHAR_DATA *ch, char *argument)
+void do_scribe(CHAR_DATA* ch, char* argument)
 {
 }
 
-void do_brew(CHAR_DATA *ch, char *argument)
+void do_brew(CHAR_DATA* ch, char* argument)
 {
 }
 
-bool check_grip(CHAR_DATA *ch, CHAR_DATA *victim)
+bool check_grip(CHAR_DATA* ch, CHAR_DATA* victim)
 {
     int chance;
 
@@ -3436,11 +3436,11 @@ bool check_grip(CHAR_DATA *ch, CHAR_DATA *victim)
     return true;
 }
 
-void do_circle(CHAR_DATA *ch, char *argument)
+void do_circle(CHAR_DATA* ch, char* argument)
 {
     char arg[MAX_INPUT_LENGTH];
-    CHAR_DATA *victim;
-    OBJ_DATA *obj;
+    CHAR_DATA* victim;
+    OBJ_DATA* obj;
     int percent;
 
     if (IS_NPC(ch) && IS_AFFECTED(ch, AFF_CHARM))
@@ -3520,7 +3520,7 @@ void do_circle(CHAR_DATA *ch, char *argument)
 }
 
 /* Berserk and HitAll. -- Altrag */
-void do_berserk(CHAR_DATA *ch, char *argument)
+void do_berserk(CHAR_DATA* ch, char* argument)
 {
     sh_int percent;
     AFFECT_DATA af = {};
@@ -3562,11 +3562,11 @@ void do_berserk(CHAR_DATA *ch, char *argument)
 }
 
 /* External from fight.c */
-ch_ret one_hit(CHAR_DATA *ch, CHAR_DATA *victim, int dt);
-void do_hitall(CHAR_DATA *ch, char *argument)
+ch_ret one_hit(CHAR_DATA* ch, CHAR_DATA* victim, int dt);
+void do_hitall(CHAR_DATA* ch, char* argument)
 {
-    CHAR_DATA *vch;
-    CHAR_DATA *vch_next;
+    CHAR_DATA* vch;
+    CHAR_DATA* vch_next;
     sh_int nvict = 0;
     sh_int nhit = 0;
     sh_int percent;
@@ -3620,17 +3620,17 @@ void do_hitall(CHAR_DATA *ch, char *argument)
     return;
 }
 
-bool check_illegal_psteal(CHAR_DATA *ch, CHAR_DATA *victim)
+bool check_illegal_psteal(CHAR_DATA* ch, CHAR_DATA* victim)
 {
     return false;
 }
 
-void do_scan(CHAR_DATA *ch, char *argument)
+void do_scan(CHAR_DATA* ch, char* argument)
 {
-    ROOM_INDEX_DATA *was_in_room;
-    ROOM_INDEX_DATA *to_room;
-    EXIT_DATA *pexit;
-    OBJ_DATA *goggles;
+    ROOM_INDEX_DATA* was_in_room;
+    ROOM_INDEX_DATA* to_room;
+    EXIT_DATA* pexit;
+    OBJ_DATA* goggles;
     sh_int dir = -1;
     sh_int dist;
     sh_int max_dist = 3;
@@ -3728,15 +3728,15 @@ void do_scan(CHAR_DATA *ch, char *argument)
     return;
 }
 
-void do_slice(CHAR_DATA *ch, char *argument)
+void do_slice(CHAR_DATA* ch, char* argument)
 {
 }
 
-void do_chandelle(CHAR_DATA *ch, char *argument)
+void do_chandelle(CHAR_DATA* ch, char* argument)
 {
     char buf[MAX_STRING_LENGTH];
     int chance;
-    SHIP_DATA *ship;
+    SHIP_DATA* ship;
 
     /* Standard Piloting Checks */
     if ((ship = ship_from_cockpit(ch->in_room->vnum)) == NULL)

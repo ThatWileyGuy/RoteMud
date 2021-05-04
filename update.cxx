@@ -52,7 +52,7 @@ extern int ppl_challenged;
 extern int num_in_arena();
 
 /* from swskills.c */
-void add_reinforcements(CHAR_DATA *ch);
+void add_reinforcements(CHAR_DATA* ch);
 
 /*ships.c*/
 void make_random_marketlist(void);
@@ -60,10 +60,10 @@ void make_random_marketlist(void);
 /*
  * Local functions.
  */
-int hit_gain(CHAR_DATA *ch);
-int mana_gain(CHAR_DATA *ch);
-int move_gain(CHAR_DATA *ch);
-void gain_addiction(CHAR_DATA *ch);
+int hit_gain(CHAR_DATA* ch);
+int mana_gain(CHAR_DATA* ch);
+int move_gain(CHAR_DATA* ch);
+void gain_addiction(CHAR_DATA* ch);
 void mobile_update(void);
 void weather_update(void);
 void update_taxes(void);
@@ -73,23 +73,23 @@ void aggr_update(void);
 void room_act_update(void);
 void obj_act_update(void);
 void char_check(void);
-void drunk_randoms(CHAR_DATA *ch);
-void halucinations(CHAR_DATA *ch);
+void drunk_randoms(CHAR_DATA* ch);
+void halucinations(CHAR_DATA* ch);
 
 /*
  * Global Variables
  */
 
-CHAR_DATA *gch_prev;
-OBJ_DATA *gobj_prev;
+CHAR_DATA* gch_prev;
+OBJ_DATA* gobj_prev;
 
-CHAR_DATA *timechar;
+CHAR_DATA* timechar;
 
-const char *corpse_descs[] = {"The corpse of %s will soon be gone.", "The corpse of %s lies here.",
+const char* corpse_descs[] = {"The corpse of %s will soon be gone.", "The corpse of %s lies here.",
                               "The corpse of %s lies here.", "The corpse of %s lies here.",
                               "The corpse of %s lies here."};
 
-const char *d_corpse_descs[] = {"The shattered remains %s will soon be gone.", "The shattered remains %s are here.",
+const char* d_corpse_descs[] = {"The shattered remains %s will soon be gone.", "The shattered remains %s are here.",
                                 "The shattered remains %s are here.", "The shattered remains %s are here.",
                                 "The shattered remains %s are here."};
 
@@ -98,7 +98,7 @@ extern int top_exit;
 /*
  * Advancement stuff.
  */
-int max_level(CHAR_DATA *ch, int ability)
+int max_level(CHAR_DATA* ch, int ability)
 {
     int level = 0;
 
@@ -657,7 +657,7 @@ int max_level(CHAR_DATA *ch, int ability)
     return level;
 }
 
-void advance_level(CHAR_DATA *ch, int ability)
+void advance_level(CHAR_DATA* ch, int ability)
 {
 
     if (ch->top_level < ch->skill_level[ability] && ch->top_level < 30)
@@ -671,7 +671,7 @@ void advance_level(CHAR_DATA *ch, int ability)
     return;
 }
 
-void gain_exp2(CHAR_DATA *ch, int gain, int ability)
+void gain_exp2(CHAR_DATA* ch, int gain, int ability)
 {
 
     if (IS_NPC(ch))
@@ -693,7 +693,7 @@ void gain_exp2(CHAR_DATA *ch, int gain, int ability)
     return;
 }
 
-void gain_exp(CHAR_DATA *ch, int gain, int ability)
+void gain_exp(CHAR_DATA* ch, int gain, int ability)
 {
 
     if (IS_NPC(ch))
@@ -726,7 +726,7 @@ void gain_exp(CHAR_DATA *ch, int gain, int ability)
 /*
  * Regeneration stuff.
  */
-int hit_gain(CHAR_DATA *ch)
+int hit_gain(CHAR_DATA* ch)
 {
     int gain;
 
@@ -787,7 +787,7 @@ int hit_gain(CHAR_DATA *ch)
     return UMIN(gain, ch->max_hit - ch->hit);
 }
 
-int mana_gain(CHAR_DATA *ch)
+int mana_gain(CHAR_DATA* ch)
 {
     int gain;
 
@@ -824,7 +824,7 @@ int mana_gain(CHAR_DATA *ch)
     return UMIN(gain, ch->max_mana - ch->mana);
 }
 
-int move_gain(CHAR_DATA *ch)
+int move_gain(CHAR_DATA* ch)
 {
     int gain;
 
@@ -874,7 +874,7 @@ int move_gain(CHAR_DATA *ch)
     return UMIN(gain, ch->max_move - ch->move);
 }
 
-void gain_addiction(CHAR_DATA *ch)
+void gain_addiction(CHAR_DATA* ch)
 {
     short drug;
     ch_ret retcode;
@@ -970,7 +970,7 @@ void gain_addiction(CHAR_DATA *ch)
     }
 }
 
-void gain_condition(CHAR_DATA *ch, int iCond, int value)
+void gain_condition(CHAR_DATA* ch, int iCond, int value)
 {
     int condition;
     ch_ret retcode;
@@ -1113,8 +1113,8 @@ void gain_condition(CHAR_DATA *ch, int iCond, int value)
 void mobile_update(void)
 {
     char buf[MAX_STRING_LENGTH];
-    CHAR_DATA *ch;
-    EXIT_DATA *pexit;
+    CHAR_DATA* ch;
+    EXIT_DATA* pexit;
     int door;
     ch_ret retcode;
 
@@ -1267,8 +1267,8 @@ void mobile_update(void)
         /* Scavenge */
         if (IS_SET(ch->act, ACT_SCAVENGER) && ch->in_room->first_content && number_bits(2) == 0)
         {
-            OBJ_DATA *obj;
-            OBJ_DATA *obj_best;
+            OBJ_DATA* obj;
+            OBJ_DATA* obj_best;
             int max;
 
             max = 1;
@@ -1312,7 +1312,7 @@ void mobile_update(void)
             (pexit = get_exit(ch->in_room, door)) != NULL && pexit->to_room && !IS_SET(pexit->exit_info, EX_CLOSED) &&
             !IS_SET(pexit->to_room->room_flags, ROOM_NO_MOB))
         {
-            CHAR_DATA *rch;
+            CHAR_DATA* rch;
             bool found;
 
             found = false;
@@ -1351,8 +1351,8 @@ void mobile_update(void)
 void update_taxes(void)
 {
     int i;
-    PLANET_DATA *planet;
-    CLAN_DATA *clan;
+    PLANET_DATA* planet;
+    CLAN_DATA* clan;
 
     for (planet = first_planet; planet; planet = planet->next)
     {
@@ -1369,7 +1369,7 @@ void update_taxes(void)
         if (clan)
         {
             int sCount = 0;
-            CLAN_DATA *subclan = NULL;
+            CLAN_DATA* subclan = NULL;
 
             if (clan->first_subclan)
             {
@@ -1401,7 +1401,7 @@ void update_taxes(void)
 void weather_update(void)
 {
     char buf[MAX_STRING_LENGTH];
-    DESCRIPTOR_DATA *d;
+    DESCRIPTOR_DATA* d;
     int diff;
     sh_int AT_TEMP = AT_PLAIN;
 
@@ -1563,8 +1563,8 @@ void weather_update(void)
  */
 void char_update(void)
 {
-    CHAR_DATA *ch;
-    CHAR_DATA *ch_save;
+    CHAR_DATA* ch;
+    CHAR_DATA* ch_save;
     long amount;
     sh_int save_count = 0;
 
@@ -1636,7 +1636,7 @@ void char_update(void)
 
         if (!IS_NPC(ch) && ch->top_level < LEVEL_IMMORTAL)
         {
-            OBJ_DATA *obj;
+            OBJ_DATA* obj;
 
             if ((obj = get_eq_char(ch, WEAR_LIGHT)) != NULL && obj->item_type == ITEM_LIGHT && obj->value[2] > 0)
             {
@@ -1901,13 +1901,13 @@ void char_update(void)
  */
 void obj_update(void)
 {
-    OBJ_DATA *obj;
+    OBJ_DATA* obj;
     sh_int AT_TEMP;
 
     for (obj = last_object; obj; obj = gobj_prev)
     {
-        CHAR_DATA *rch;
-        const char *message;
+        CHAR_DATA* rch;
+        const char* message;
 
         if (obj == first_object && obj->prev)
         {
@@ -1989,7 +1989,7 @@ void obj_update(void)
             {
                 char buf[MAX_STRING_LENGTH];
                 char name[MAX_STRING_LENGTH];
-                char *bufptr;
+                char* bufptr;
                 bufptr = one_argument(obj->short_descr, name);
                 bufptr = one_argument(bufptr, name);
                 bufptr = one_argument(bufptr, name);
@@ -2106,7 +2106,7 @@ void obj_update(void)
 void char_check(void)
 {
     CHAR_DATA *ch, *ch_next;
-    EXIT_DATA *pexit;
+    EXIT_DATA* pexit;
     static int cnt = 0;
     int door, retcode;
 
@@ -2244,11 +2244,11 @@ void char_check(void)
 void aggr_update(void)
 {
     DESCRIPTOR_DATA *d, *dnext;
-    CHAR_DATA *wch;
-    CHAR_DATA *ch;
-    CHAR_DATA *ch_next;
-    CHAR_DATA *victim;
-    ACT_PROG_DATA *apdtmp;
+    CHAR_DATA* wch;
+    CHAR_DATA* ch;
+    CHAR_DATA* ch_next;
+    CHAR_DATA* victim;
+    ACT_PROG_DATA* apdtmp;
 
 #ifdef UNDEFD
     /*
@@ -2276,10 +2276,10 @@ void aggr_update(void)
     /* check mobprog act queue */
     while ((apdtmp = mob_act_list) != NULL)
     {
-        wch = reinterpret_cast<CHAR_DATA *>(mob_act_list->vo);
+        wch = reinterpret_cast<CHAR_DATA*>(mob_act_list->vo);
         if (!char_died(wch) && wch->mpactnum > 0)
         {
-            MPROG_ACT_LIST *tmp_act;
+            MPROG_ACT_LIST* tmp_act;
 
             while ((tmp_act = wch->mpact) != NULL)
             {
@@ -2344,7 +2344,7 @@ void aggr_update(void)
 
             if (IS_NPC(ch) && IS_SET(ch->attacks, ATCK_BACKSTAB))
             {
-                OBJ_DATA *obj;
+                OBJ_DATA* obj;
 
                 if (!ch->mount && (obj = get_eq_char(ch, WEAR_WIELD)) != NULL && obj->value[3] == 11 &&
                     !victim->fighting && victim->hit >= victim->max_hit)
@@ -2370,16 +2370,16 @@ void aggr_update(void)
 }
 
 /* From interp.c */
-bool check_social(CHAR_DATA *ch, const char *command, const char *argument);
+bool check_social(CHAR_DATA* ch, const char* command, const char* argument);
 
 /*
  * drunk randoms	- Tricops
  * (Made part of mobile_update	-Thoric)
  */
-void drunk_randoms(CHAR_DATA *ch)
+void drunk_randoms(CHAR_DATA* ch)
 {
-    CHAR_DATA *rvch = NULL;
-    CHAR_DATA *vch;
+    CHAR_DATA* rvch = NULL;
+    CHAR_DATA* vch;
     sh_int drunk;
     sh_int position;
 
@@ -2413,11 +2413,11 @@ void drunk_randoms(CHAR_DATA *ch)
     return;
 }
 
-void halucinations(CHAR_DATA *ch)
+void halucinations(CHAR_DATA* ch)
 {
     if (ch->mental_state >= 30 && number_bits(5 - (ch->mental_state >= 50) - (ch->mental_state >= 75)) == 0)
     {
-        const char *t;
+        const char* t;
 
         switch (number_range(1, UMIN(20, (ch->mental_state + 5) / 5)))
         {
@@ -2541,8 +2541,8 @@ void auth_update(void)
 
 void auth_update(void)
 {
-    CHAR_DATA *victim;
-    DESCRIPTOR_DATA *d;
+    CHAR_DATA* victim;
+    DESCRIPTOR_DATA* d;
     char buf[MAX_INPUT_LENGTH], log_buf[MAX_INPUT_LENGTH];
     bool found_hit = false; /* was at least one found? */
 
@@ -2705,11 +2705,11 @@ void update_handler(void)
     return;
 }
 
-void remove_portal(OBJ_DATA *portal)
+void remove_portal(OBJ_DATA* portal)
 {
     ROOM_INDEX_DATA *fromRoom, *toRoom;
-    CHAR_DATA *ch;
-    EXIT_DATA *pexit;
+    CHAR_DATA* ch;
+    EXIT_DATA* pexit;
     bool found;
 
     if (!portal)
@@ -2764,7 +2764,7 @@ void remove_portal(OBJ_DATA *portal)
 
 void reboot_check(time_t reset)
 {
-    static const char *tmsg[] = {
+    static const char* tmsg[] = {
         "SYSTEM: Reboot in 10 seconds.", "SYSTEM: Reboot in 30 seconds.", "SYSTEM: Reboot in 1 minute.",
         "SYSTEM: Reboot in 2 minutes.",  "SYSTEM: Reboot in 3 minutes.",  "SYSTEM: Reboot in 4 minutes.",
         "SYSTEM: Reboot in 5 minutes.",  "SYSTEM: Reboot in 10 minutes.",
@@ -2795,7 +2795,7 @@ void reboot_check(time_t reset)
 
     if (new_boot_time_t <= current_time)
     {
-        CHAR_DATA *vch;
+        CHAR_DATA* vch;
         extern bool mud_down;
 
         if (auction->item)
