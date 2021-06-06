@@ -2227,14 +2227,13 @@ void raw_kill(CHAR_DATA* ch, CHAR_DATA* victim)
 
     if (!victim)
     {
-        DESCRIPTOR_DATA* d;
-
         /* Make sure they aren't halfway logged in. */
-        for (d = first_descriptor; d; d = d->next)
+        for (auto d : g_descriptors)
             if ((victim = d->character) && !IS_NPC(victim))
+            {
+                close_socket(d.get(), true);
                 break;
-        if (d)
-            close_socket(d, true);
+            }
     }
     else
     {

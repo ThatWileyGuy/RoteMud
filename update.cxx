@@ -1402,7 +1402,6 @@ void update_taxes(void)
 void weather_update(void)
 {
     char buf[MAX_STRING_LENGTH];
-    DESCRIPTOR_DATA* d;
     int diff;
     sh_int AT_TEMP = AT_PLAIN;
 
@@ -1460,7 +1459,7 @@ void weather_update(void)
 
     if (buf[0] != '\0')
     {
-        for (d = first_descriptor; d; d = d->next)
+        for (auto d : g_descriptors)
         {
             if (d->connected == CON_PLAYING && IS_OUTSIDE(d->character) && IS_AWAKE(d->character) &&
                 d->character->in_room && d->character->in_room->sector_type != SECT_UNDERWATER &&
@@ -1548,7 +1547,7 @@ void weather_update(void)
 
     if (buf[0] != '\0')
     {
-        for (d = first_descriptor; d; d = d->next)
+        for (auto d : g_descriptors)
         {
             if (d->connected == CON_PLAYING && IS_OUTSIDE(d->character) && IS_AWAKE(d->character))
                 act(AT_TEMP, buf, d->character, 0, 0, TO_CHAR);
@@ -2244,12 +2243,11 @@ void char_check(void)
  */
 void aggr_update(void)
 {
-    DESCRIPTOR_DATA *d, *dnext;
-    CHAR_DATA* wch;
-    CHAR_DATA* ch;
-    CHAR_DATA* ch_next;
-    CHAR_DATA* victim;
-    ACT_PROG_DATA* apdtmp;
+    CHAR_DATA* wch = nullptr;
+    CHAR_DATA* ch = nullptr;
+    CHAR_DATA* ch_next = nullptr;
+    CHAR_DATA* victim = nullptr;
+    ACT_PROG_DATA* apdtmp = nullptr;
 
 #ifdef UNDEFD
     /*
@@ -2303,9 +2301,8 @@ void aggr_update(void)
      * Just check descriptors here for victims to aggressive mobs
      * We can check for linkdead victims to mobile_update	-Thoric
      */
-    for (d = first_descriptor; d; d = dnext)
+    for (auto d : g_descriptors)
     {
-        dnext = d->next;
         if (d->connected != CON_PLAYING || (wch = d->character) == NULL)
             continue;
 
@@ -2542,15 +2539,14 @@ void auth_update(void)
 
 void auth_update(void)
 {
-    CHAR_DATA* victim;
-    DESCRIPTOR_DATA* d;
     char buf[MAX_INPUT_LENGTH], log_buf[MAX_INPUT_LENGTH];
     bool found_hit = false; /* was at least one found? */
 
     strcpy_s(log_buf, "Pending authorizations:\n\r");
-    for (d = first_descriptor; d; d = d->next)
+    for (auto d : g_descriptors)
     {
-        if ((victim = d->character) && IS_WAITING_FOR_AUTH(victim))
+        auto victim = d->character;
+        if (victim != nullptr && IS_WAITING_FOR_AUTH(victim))
         {
             found_hit = true;
             sprintf_s(buf, " %s@%s new %s\n\r", victim->name, victim->desc->connection->getHostname().c_str(),

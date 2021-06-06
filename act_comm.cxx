@@ -416,7 +416,6 @@ void talk_channel(CHAR_DATA* ch, const char* argument, int channel, const char* 
     char buf[MAX_STRING_LENGTH];
     char buf2[MAX_STRING_LENGTH];
     char garb[MAX_STRING_LENGTH];
-    DESCRIPTOR_DATA* d;
 
     SHIP_DATA* ship = ship_from_cockpit(ch->in_room->vnum);
     int position;
@@ -607,7 +606,7 @@ void talk_channel(CHAR_DATA* ch, const char* argument, int channel, const char* 
         append_to_file(LOG_FILE, buf2);
     }
 
-    for (d = first_descriptor; d; d = d->next)
+    for (auto d : g_descriptors)
     {
         CHAR_DATA* och;
         CHAR_DATA* vch;
@@ -924,14 +923,13 @@ void do_retune(CHAR_DATA* ch, char* argument)
 void to_channel(const char* argument, int channel, const char* verb, sh_int level)
 {
     char buf[MAX_STRING_LENGTH];
-    DESCRIPTOR_DATA* d;
 
-    if (!first_descriptor || argument[0] == '\0')
+    if (g_descriptors.empty() || argument[0] == '\0')
         return;
 
     sprintf_s(buf, "%s: %s\r\n", verb, argument);
 
-    for (d = first_descriptor; d; d = d->next)
+    for (auto d : g_descriptors)
     {
         CHAR_DATA* och;
         CHAR_DATA* vch;
@@ -1110,7 +1108,6 @@ void do_gocial(CHAR_DATA* ch, char* command, char* argument)
 
 void do_ooc(CHAR_DATA* ch, char* argument)
 {
-    DESCRIPTOR_DATA* d;
     char buf[MAX_INPUT_LENGTH];
 
     if (!IS_NPC(ch) && (IS_SET(ch->act, PLR_NO_EMOTE) || IS_SET(ch->act, PLR_SILENCE)))
@@ -1142,9 +1139,8 @@ void do_ooc(CHAR_DATA* ch, char* argument)
         }
         argument += i;
         sprintf_s(buf, "&Y(&OOOC&Y) &W%s %s\n\r", ch->name, argument);
-        for (d = first_descriptor; d; d = d->next)
+        for (auto d : g_descriptors)
         {
-
             if (d->connected == CON_PLAYING || d->connected == CON_EDITING)
                 send_to_char(buf, d->character);
         }
@@ -1559,7 +1555,7 @@ void do_oldtell(CHAR_DATA* ch, char* argument)
     if (switched_victim)
         victim = switched_victim;
 
-    for (i = first_descriptor; i; i = i->next)
+    for (auto d : g_descriptors)
     {
         if (!i->connected && i->character)
         {
@@ -1575,7 +1571,7 @@ void do_oldtell(CHAR_DATA* ch, char* argument)
         }
     }
 
-    for (i = first_descriptor; i; i = i->next)
+    for (auto i : g_descriptors)
     {
         if (!i->connected && i->character)
         {
@@ -1805,7 +1801,6 @@ void do_tell(CHAR_DATA* ch, char* argument)
 void do_oldreply(CHAR_DATA* ch, char* argument)
 {
     char buf[MAX_STRING_LENGTH];
-    DESCRIPTOR_DATA* i;
     CHAR_DATA* och;
     CHAR_DATA* victim;
     int position;
@@ -1908,7 +1903,7 @@ void do_oldreply(CHAR_DATA* ch, char* argument)
         return;
     }
 
-    for (i = first_descriptor; i; i = i->next)
+    for (auto i : g_descriptors)
     {
         if (!i->connected && i->character)
         {
@@ -1924,7 +1919,7 @@ void do_oldreply(CHAR_DATA* ch, char* argument)
         }
     }
 
-    for (i = first_descriptor; i; i = i->next)
+    for (auto i : g_descriptors)
     {
         if (!i->connected && i->character)
         {
@@ -3056,11 +3051,10 @@ bool is_same_group(CHAR_DATA* ach, CHAR_DATA* bch)
 
 void talk_auction(char* argument)
 {
-    DESCRIPTOR_DATA* d;
     char buf[MAX_STRING_LENGTH];
     CHAR_DATA* original;
 
-    for (d = first_descriptor; d; d = d->next)
+    for (auto d : g_descriptors)
     {
         sprintf_s(buf, "&R&W[&W%sAuction&W] %s", color_str(AT_AUCTION, d->character),
                   argument);                                 /* last %s to reset color */

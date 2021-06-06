@@ -385,17 +385,14 @@ void start_arena()
 
 void start_game()
 {
-    CHAR_DATA* i;
-    DESCRIPTOR_DATA* d;
-
-    for (d = first_descriptor; d; d = d->next)
+    for (auto d : g_descriptors)
     {
         if (d->connected == CON_PLAYING)
         {
-            i = d->character;
+            auto i = d->character;
             if (IS_SET(i->in_room->room_flags2, ROOM_ARENA))
             {
-                send_to_char("\r\nThe floor falls out from bellow, droping you in the arena\r\n", i);
+                send_to_char("\r\nThe floor falls out from below, dropping you in the arena\r\n", i);
                 char_from_room(i);
                 //      i->pcdata->oldac = i->armor;
                 //       i->armor = -1500;
@@ -448,17 +445,15 @@ void find_game_winner()
 {
     char buf[MAX_INPUT_LENGTH];
     //  char buf2[MAX_INPUT_LENGTH];
-    CHAR_DATA* i;
-    DESCRIPTOR_DATA* d;
     ROOM_INDEX_DATA* location;
 
     HALL_OF_FAME_ELEMENT* fame_node;
 
-    for (d = first_descriptor; d; d = d->next)
+    for (auto d : g_descriptors)
     {
         if (d->connected == CON_PLAYING)
         {
-            i = d->original ? d->original : d->character;
+            auto i = d->original ? d->original : d->character;
             if (IS_SET(i->in_room->room_flags2, ROOM_ARENA) && (i->top_level < LEVEL_IMMORTAL))
             {
                 i->hit = i->max_hit;
@@ -531,15 +526,13 @@ void silent_end()
 void do_end_game()
 {
     char buf[MAX_INPUT_LENGTH];
-    CHAR_DATA* i;
-    DESCRIPTOR_DATA* d;
-    ROOM_INDEX_DATA* location;
-    for (d = first_descriptor; d; d = d->next)
+    ROOM_INDEX_DATA* location = nullptr;
+
+    for (auto d : g_descriptors)
     {
         if (d->connected == CON_PLAYING)
-
         {
-            i = d->character;
+            auto i = d->character;
             if (IS_SET(i->in_room->room_flags2, ROOM_ARENA))
             {
                 i->hit = i->max_hit;
@@ -565,31 +558,27 @@ void do_end_game()
 
 int num_in_arena()
 {
-    DESCRIPTOR_DATA* d;
-    int num = 0;
-
-    for (d = first_descriptor; d; d = d->next)
-    {
+    return std::count_if(g_descriptors.begin(), g_descriptors.end(), [](auto d) {
         if (d->connected == CON_PLAYING)
         {
             if (IS_SET(d->character->in_room->room_flags2, ROOM_ARENA))
             {
                 if (d->character->top_level < LEVEL_IMMORTAL)
-                    num++;
+                    return true;
             }
         }
-    }
-    return num;
+
+        return false;
+    });
 }
 
 void sportschan(char* argument)
 {
     char buf1[MAX_INPUT_LENGTH];
-    DESCRIPTOR_DATA* i;
 
     sprintf_s(buf1, "&RInfo: &W%s\r\n", argument);
 
-    for (i = first_descriptor; i; i = i->next)
+    for (auto i : g_descriptors)
     {
         if (!i->connected && i->character)
         {
@@ -603,7 +592,6 @@ void sportschan(char* argument)
 
 void do_awho(CHAR_DATA* ch, char* argument)
 {
-    DESCRIPTOR_DATA* d;
     CHAR_DATA* tch;
     char buf[MAX_INPUT_LENGTH];
     char buf2[MAX_INPUT_LENGTH];
@@ -625,7 +613,7 @@ void do_awho(CHAR_DATA* ch, char* argument)
     sprintf_s(buf, "%s&W-&B-&W-&B-&W-&B-&W-&B-&W-&B-&W-&B-&W-&B-&W-&B-&W-&B-&W-&B-&W-&B-&W-&B-&W-&B", buf);
     sprintf_s(buf, "%s-&W-&B-&W-&B-&W-&B-&W-&B-&W-&B-&W-&B-&W-&B-&W-&B-&W-&B-&W-&B-&W-&B-&W-&B-&W-&B\r\n", buf);
     send_to_char(buf, ch);
-    for (d = first_descriptor; d; d = d->next)
+    for (auto d : g_descriptors)
     {
         if (d->connected == CON_PLAYING)
         {
@@ -741,12 +729,11 @@ void write_one_fame_node(FILE* fp, HALL_OF_FAME_ELEMENT* node)
 
 void find_bet_winners(CHAR_DATA* winner)
 {
-    DESCRIPTOR_DATA* d;
     CHAR_DATA* wch;
 
     char buf1[MAX_INPUT_LENGTH];
 
-    for (d = first_descriptor; d; d = d->next)
+    for (auto d : g_descriptors)
     {
         if (d->connected == CON_PLAYING)
         {

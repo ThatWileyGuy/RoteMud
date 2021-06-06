@@ -740,7 +740,7 @@ void fwrite_obj(CHAR_DATA* ch, OBJ_DATA* obj, FILE* fp, int iNest, sh_int os_typ
 /*
  * Load a char and inventory into a new ch structure.
  */
-bool load_char_obj(DESCRIPTOR_DATA* d, const char* name, bool preload)
+bool load_char_obj(DESCRIPTOR_DATA& d, const char* name, bool preload)
 {
     char strsave[MAX_INPUT_LENGTH];
     CHAR_DATA* ch = nullptr;
@@ -761,8 +761,8 @@ bool load_char_obj(DESCRIPTOR_DATA* d, const char* name, bool preload)
     loading_char = ch;
 
     CREATE(ch->pcdata, PC_DATA, 1);
-    d->character = ch;
-    ch->desc = d;
+    d.character = ch;
+    ch->desc = &d;
     ch->name = STRALLOC(name);
     ch->act = PLR_BLANK | PLR_COMBINE | PLR_PROMPT;
     ch->perm_str = 10;

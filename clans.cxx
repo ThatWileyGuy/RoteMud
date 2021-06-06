@@ -81,7 +81,6 @@ CLAN_DATA* get_clan(const char* name)
 void do_remclan(CHAR_DATA* ch, char* argument)
 {
     CLAN_DATA* clan;
-    DESCRIPTOR_DATA* d;
     CHAR_DATA* vch;
 
     if ((clan = get_clan(argument)) == NULL)
@@ -89,7 +88,7 @@ void do_remclan(CHAR_DATA* ch, char* argument)
         send_to_char("No such clan.\n\r", ch);
         return;
     }
-    for (d = first_descriptor; d; d = d->next)
+    for (auto d : g_descriptors)
     {
         vch = d->original ? d->original : d->character;
 
@@ -612,7 +611,6 @@ void do_outcast(CHAR_DATA* ch, char* argument)
     char arg[MAX_INPUT_LENGTH];
     CHAR_DATA* victim;
     CLAN_DATA* clan;
-    DESCRIPTOR_DATA* d;
 
     if (IS_NPC(ch) || !ch->pcdata->clan)
     {
@@ -686,7 +684,7 @@ void do_outcast(CHAR_DATA* ch, char* argument)
     act(AT_MAGIC, "$n outcasts $N from $t.", ch, clan->name, victim, TO_ROOM);
     act(AT_MAGIC, "$n outcasts you from $t.", ch, clan->name, victim, TO_VICT);
 
-    for (d = first_descriptor; d; d = d->next)
+    for (auto d : g_descriptors)
     {
         if (d->connected == CON_PLAYING)
         {
@@ -1619,7 +1617,6 @@ void do_resign(CHAR_DATA* ch, char* argument)
 {
 
     CLAN_DATA* clan;
-    DESCRIPTOR_DATA* d;
     long lose_exp;
 
     if (IS_NPC(ch) || !ch->pcdata)
@@ -1659,7 +1656,7 @@ void do_resign(CHAR_DATA* ch, char* argument)
 
     act(AT_MAGIC, "You resign your position in $t.", ch, clan->name, NULL, TO_CHAR);
 
-    for (d = first_descriptor; d; d = d->next)
+    for (auto d : g_descriptors)
     {
         if (d->connected == CON_PLAYING)
         {

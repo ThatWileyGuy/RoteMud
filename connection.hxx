@@ -22,20 +22,23 @@ struct Pubkey
     std::string key;
 };
 
+typedef std::shared_ptr<void> ConnectionContext;
+
 struct IOManagerCallbacks
 {
     // Notification of a new command from a connection. Only delivered once per call to IOManager::runUntil
-    void (*commandReceived)(void* context, const std::string& line);
+    void (*commandReceived)(ConnectionContext context, const std::string& line);
     // Notification of a new unauthenticated connection, must return the desired context pointer for future calls.
-    void* (*newUnauthenticatedConnection)(std::shared_ptr<Connection> connection);
+    ConnectionContext (*newUnauthenticatedConnection)(std::shared_ptr<Connection> connection);
     // Request to check if the username/password match a known user
     bool (*authenticateUser)(const std::string& username, const std::string& password);
     // Request to retrieve the public keys of a known user
     std::vector<Pubkey> (*getPublicKeysForUser)(const std::string& username);
     // Notification of a new authenticated connection, with authenticated username. Must return the desired context
     // pointer for future calls.
-    void* (*newAuthenticatedConnection)(std::shared_ptr<Connection> connection, const std::string& username);
-    void (*connectionClosed)(void* context);
+    ConnectionContext (*newAuthenticatedConnection)(std::shared_ptr<Connection> connection,
+                                                                           const std::string& username);
+    void (*connectionClosed)(ConnectionContext context);
 };
 
 class TelnetConnection;
@@ -62,8 +65,8 @@ class IOManager
     friend class SshConnection;
     void notifyGameUnauthenticatedUserConnected(Connection& connection);
     void notifyGameAuthenticatedUserConnected(Connection& connection, const std::string& user);
-    void sendCommandToGame(void* context, const std::string& command);
-    void notifyGameConnectionClosed(void* context);
+    void sendCommandToGame(ConnectionContext context, const std::string& command);
+    void notifyGameConnectionClosed(ConnectionContext context);
     void removeConnection(Connection* connection);
 
   public:
@@ -84,7 +87,7 @@ class Connection
     };
 
     State m_state = State::Open;
-    void* m_context = nullptr;
+    ConnectionContext m_context = nullptr;
     IOManager& m_manager;
     std::unique_ptr<boost::asio::ip::tcp::socket> m_socket;
     boost::circular_buffer<char> m_inputBuffer;
@@ -97,7 +100,7 @@ class Connection
     bool m_readerRunning = false;
 
     friend class IOManager;
-    void setContext(void* context);
+    void setContext(ConnectionContext context);
 
     void scanAndSendCommand(bool newPulse = false);
 

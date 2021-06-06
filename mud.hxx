@@ -52,6 +52,8 @@
 #include <cmath>
 #include <chrono>
 #include <memory>
+#include <vector>
+#include <algorithm>
 #include <boost/asio/ip/tcp.hpp>
 #include <boost/circular_buffer.hpp>
 #include <stdarg.h>
@@ -649,8 +651,6 @@ typedef enum
  */
 struct DESCRIPTOR_DATA
 {
-    DESCRIPTOR_DATA* next;
-    DESCRIPTOR_DATA* prev;
     DESCRIPTOR_DATA* snoop_by;
     std::shared_ptr<Connection> connection;
     CHAR_DATA* character;
@@ -671,6 +671,8 @@ struct DESCRIPTOR_DATA
     int atimes;
     int newstate;
     unsigned char prevcolor;
+
+    ~DESCRIPTOR_DATA();
 };
 
 /*
@@ -4314,8 +4316,7 @@ extern BAN_DATA* first_ban;
 extern BAN_DATA* last_ban;
 extern CHAR_DATA* first_char;
 extern CHAR_DATA* last_char;
-extern DESCRIPTOR_DATA* first_descriptor;
-extern DESCRIPTOR_DATA* last_descriptor;
+extern std::vector<std::shared_ptr<DESCRIPTOR_DATA>> g_descriptors;
 extern BOARD_DATA* first_board;
 extern BOARD_DATA* last_board;
 extern OBJ_DATA* first_object;
@@ -4674,13 +4675,17 @@ void create_ship_rooms(SHIP_DATA* ship);
 const char* PERS(CHAR_DATA* ch, CHAR_DATA* looker);
 FELLOW_DATA* knowsof(CHAR_DATA* ch, CHAR_DATA* victim);
 void close_socket(DESCRIPTOR_DATA* dclose, bool force);
+void close_socket(DESCRIPTOR_DATA* dclose, bool force);
 void write_to_buffer(DESCRIPTOR_DATA* d, std::string_view string);
+void write_to_buffer(std::shared_ptr<DESCRIPTOR_DATA> d, std::string_view string);
 void write_to_buffer(DESCRIPTOR_DATA* d, const char* txt, size_t length);
+void write_to_buffer(std::shared_ptr<DESCRIPTOR_DATA> d, const char* txt, size_t length);
 void write_to_pager(DESCRIPTOR_DATA* d, const char* txt, size_t length);
 void send_to_char(const char* txt, CHAR_DATA* ch);
 void send_to_char_color(const char* txt, CHAR_DATA* ch);
 void send_to_desc_color(const char* txt, DESCRIPTOR_DATA* d);
 void send_to_desc_color2(const char* txt, DESCRIPTOR_DATA* d);
+void send_to_desc_color2(const char* txt, std::shared_ptr<DESCRIPTOR_DATA> d);
 void send_to_char_noand(const char* txt, CHAR_DATA* ch);
 void send_to_pager(const char* txt, CHAR_DATA* ch);
 void send_to_pager_color(const char* txt, CHAR_DATA* ch);
@@ -5041,7 +5046,7 @@ void check_requests(void);
 void save_char_obj(CHAR_DATA* ch);
 void save_clone(CHAR_DATA* ch);
 void save_profile(CHAR_DATA* ch);
-bool load_char_obj(DESCRIPTOR_DATA* d, const char* name, bool preload);
+bool load_char_obj(DESCRIPTOR_DATA& d, const char* name, bool preload);
 void set_alarm(long seconds);
 void requip_char(CHAR_DATA* ch);
 void fwrite_obj(CHAR_DATA* ch, OBJ_DATA* obj, FILE* fp, int iNest, sh_int os_type);

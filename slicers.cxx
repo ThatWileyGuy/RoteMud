@@ -594,7 +594,6 @@ char* acctname(CHAR_DATA* ch)
 
 void do_inquire(CHAR_DATA* ch, char* argument)
 {
-    DESCRIPTOR_DATA* d;
     bool checkdata;
     OBJ_DATA* obj;
     int x;
@@ -683,7 +682,7 @@ void do_inquire(CHAR_DATA* ch, char* argument)
     ch_printf(ch, "&z|&x^g Login accepted...retrieving account data, stand by.                   &z^x|\n\r");
     ch_printf(ch, "&z|&x^g                                                                       &z^x|\n\r");
     ch_printf(ch, "&z|&x^g _______  Account  _____________________________________ Savings _____ &z^x|\n\r");
-    for (d = first_descriptor; d; d = d->next)
+    for (auto d : g_descriptors)
     {
         if (!d->character)
             continue;
@@ -1689,7 +1688,6 @@ void do_assignpilot(CHAR_DATA* ch, char* argument)
 
 void do_slicebank(CHAR_DATA* ch, char* argument)
 {
-    DESCRIPTOR_DATA* d;
     bool checkdata;
     OBJ_DATA* obj;
     long xpgain;
@@ -1698,7 +1696,6 @@ void do_slicebank(CHAR_DATA* ch, char* argument)
     char buf[MAX_INPUT_LENGTH];
     long steal;
     int chance;
-    bool found;
 
     argument = one_argument(argument, arg2);
     strcpy_s(arg, argument);
@@ -1784,23 +1781,23 @@ void do_slicebank(CHAR_DATA* ch, char* argument)
     }
     chance = IS_NPC(ch) ? ch->top_level : (int)(ch->pcdata->learned[gsn_slicebank]);
     chance = UMIN(chance, 70);
-    found = false;
 
-    for (d = first_descriptor; d; d = d->next)
-    {
+    auto iter = std::find_if(g_descriptors.begin(), g_descriptors.end(), [&](std::shared_ptr<DESCRIPTOR_DATA> d) {
         if (!d->character)
-            continue;
+            return false;
         if (d->connected != CON_PLAYING)
-            continue;
+            return false;
         if (IS_IMMORTAL(d->character))
-            continue;
+            return false;
 
         if (!str_cmp(arg2, acctname(d->character)))
         {
-            found = true;
-            break;
+            return true;
         }
-    }
+    });
+
+    std::shared_ptr<DESCRIPTOR_DATA> d = iter == g_descriptors.end() ? nullptr : *iter;
+
     if (number_percent() > chance)
     {
         ch_printf(ch, "&z|+---------------------------------------------------------------------+|&w\n\r");
@@ -1818,7 +1815,7 @@ void do_slicebank(CHAR_DATA* ch, char* argument)
         learn_from_failure(ch, gsn_slicebank);
         return;
     }
-    if (number_percent() > chance * 2 && found)
+    if (number_percent() > chance * 2 && d != nullptr)
     {
         ch_printf(ch, "&z|+---------------------------------------------------------------------+|&w\n\r");
         ch_printf(ch, "&z|&x^g                                                                       &z^x|\n\r");
@@ -1840,7 +1837,7 @@ void do_slicebank(CHAR_DATA* ch, char* argument)
         send_to_char("&R[&YBank: &WALERT&R] &WAn attempt was made on your bank account.\n\r", d->character);
         return;
     }
-    if (!found)
+    if (d == nullptr)
     {
         ch_printf(ch, "&z|+---------------------------------------------------------------------+|&w\n\r");
         ch_printf(ch, "&z|&x^g                                                                       &z^x|\n\r");

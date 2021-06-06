@@ -200,12 +200,11 @@ void do_restrict(CHAR_DATA* ch, char* argument)
  */
 CHAR_DATA* get_waiting_desc(CHAR_DATA* ch, char* name)
 {
-    DESCRIPTOR_DATA* d;
     CHAR_DATA* ret_char = nullptr;
     static unsigned int number_of_hits;
 
     number_of_hits = 0;
-    for (d = first_descriptor; d; d = d->next)
+    for (auto d : g_descriptors)
     {
         if (d->character && (!str_prefix(name, d->character->name)) && IS_WAITING_FOR_AUTH(d->character))
         {
@@ -231,8 +230,7 @@ void do_authorize(CHAR_DATA* ch, char* argument)
     char arg1[MAX_INPUT_LENGTH];
     char arg2[MAX_INPUT_LENGTH];
     char buf[MAX_STRING_LENGTH];
-    CHAR_DATA* victim;
-    DESCRIPTOR_DATA* d;
+    CHAR_DATA* victim = nullptr;
 
     argument = one_argument(argument, arg1);
     argument = one_argument(argument, arg2);
@@ -243,7 +241,7 @@ void do_authorize(CHAR_DATA* ch, char* argument)
         send_to_char("Pending authorizations:\n\r", ch);
         send_to_char(" Chosen Character Name\n\r", ch);
         send_to_char("---------------------------------------------\n\r", ch);
-        for (d = first_descriptor; d; d = d->next)
+        for(auto d : g_descriptors)
             if ((victim = d->character) != NULL && IS_WAITING_FOR_AUTH(victim))
                 ch_printf(ch, " %s@%s new %s...\n\r", victim->name, victim->desc->connection->getHostname().c_str(),
                           race_table[victim->race].race_name);
@@ -450,8 +448,7 @@ void do_deny(CHAR_DATA* ch, char* argument)
 void do_disconnect(CHAR_DATA* ch, char* argument)
 {
     char arg[MAX_INPUT_LENGTH];
-    DESCRIPTOR_DATA* d;
-    CHAR_DATA* victim;
+    CHAR_DATA* victim = nullptr;
 
     one_argument(argument, arg);
     if (arg[0] == '\0')
@@ -478,11 +475,11 @@ void do_disconnect(CHAR_DATA* ch, char* argument)
         return;
     }
 
-    for (d = first_descriptor; d; d = d->next)
+    for (auto d : g_descriptors)
     {
-        if (d == victim->desc)
+        if (d.get() == victim->desc)
         {
-            close_socket(d, false);
+            close_socket(d.get(), false);
             send_to_char("Ok.\n\r", ch);
             return;
         }
@@ -597,12 +594,10 @@ void do_pardon(CHAR_DATA* ch, char* argument)
 
 void echo_to_all(sh_int AT_COLOR, const char* argument, sh_int tar)
 {
-    DESCRIPTOR_DATA* d;
-
     if (!argument || argument[0] == '\0')
         return;
 
-    for (d = first_descriptor; d; d = d->next)
+    for (auto d : g_descriptors)
     {
         /* Added showing echoes to players who are editing, so they won't
            miss out on important info like upcoming reboots. --Narn */
@@ -735,9 +730,8 @@ void do_transfer(CHAR_DATA* ch, char* argument)
 {
     char arg1[MAX_INPUT_LENGTH];
     char arg2[MAX_INPUT_LENGTH];
-    ROOM_INDEX_DATA* location;
-    DESCRIPTOR_DATA* d;
-    CHAR_DATA* victim;
+    ROOM_INDEX_DATA* location = nullptr;
+    CHAR_DATA* victim = nullptr;
 
     argument = one_argument(argument, arg1);
     argument = one_argument(argument, arg2);
@@ -750,7 +744,7 @@ void do_transfer(CHAR_DATA* ch, char* argument)
 
     if (!str_cmp(arg1, "all"))
     {
-        for (d = first_descriptor; d; d = d->next)
+        for (auto d : g_descriptors)
         {
             if (d->connected == CON_PLAYING && d->character != ch && d->character->in_room && d->newstate != 2 &&
                 can_see(ch, d->character))
@@ -1914,7 +1908,6 @@ void do_shutdown(CHAR_DATA* ch, char* argument)
 void do_snoop(CHAR_DATA* ch, char* argument)
 {
     char arg[MAX_INPUT_LENGTH];
-    DESCRIPTOR_DATA* d;
     CHAR_DATA* victim;
 
     one_argument(argument, arg);
@@ -1940,7 +1933,7 @@ void do_snoop(CHAR_DATA* ch, char* argument)
     if (victim == ch)
     {
         send_to_char("Cancelling all snoops.\n\r", ch);
-        for (d = first_descriptor; d; d = d->next)
+        for (auto d : g_descriptors)
             if (d->snoop_by == ch->desc)
                 d->snoop_by = NULL;
         return;
@@ -1964,7 +1957,7 @@ void do_snoop(CHAR_DATA* ch, char* argument)
 
     if (ch->desc)
     {
-        for (d = ch->desc->snoop_by; d; d = d->snoop_by)
+        for (DESCRIPTOR_DATA* d = ch->desc->snoop_by; d; d = d->snoop_by)
             if (d->character == victim || d->original == victim)
             {
                 send_to_char("No snoop loops.\n\r", ch);
@@ -3478,12 +3471,10 @@ void do_noresolve(CHAR_DATA* ch, char* argument)
 void do_users(CHAR_DATA* ch, char* argument)
 {
     char buf[MAX_STRING_LENGTH];
-    DESCRIPTOR_DATA* d;
-    int count;
+    int count = 0;
     char arg[MAX_INPUT_LENGTH];
 
     one_argument(argument, arg);
-    count = 0;
     buf[0] = '\0';
 
     set_pager_color(AT_PLAIN, ch);
@@ -3493,7 +3484,7 @@ void do_users(CHAR_DATA* ch, char* argument)
     strcat_s(buf, "\n\r");
     send_to_pager(buf, ch);
 
-    for (d = first_descriptor; d; d = d->next)
+    for (auto d : g_descriptors)
     {
         if (arg[0] == '\0')
         {
@@ -3962,11 +3953,9 @@ void do_loadup(CHAR_DATA* ch, char* argument)
     if (check_parse_name(name) && std::filesystem::exists(fname))
     {
         CREATE(d, DESCRIPTOR_DATA, 1);
-        d->next = NULL;
-        d->prev = NULL;
         d->connected = CON_GET_NAME;
 
-        loaded = load_char_obj(d, name, false);
+        loaded = load_char_obj(*d, name, false);
 
         add_char(d->character);
         old_room_vnum = d->character->in_room->vnum;
@@ -4601,14 +4590,20 @@ void do_destroy(CHAR_DATA* ch, char* argument)
             break;
     if (!victim)
     {
-        DESCRIPTOR_DATA* d;
+        std::shared_ptr<DESCRIPTOR_DATA> dDesc = nullptr;
 
         /* Make sure they aren't halfway logged in. */
-        for (d = first_descriptor; d; d = d->next)
+        for (auto d : g_descriptors)
+        {
             if ((victim = d->character) && !IS_NPC(victim) && !str_cmp(victim->name, argument))
+            {
+                dDesc = d;
                 break;
-        if (d)
-            close_socket(d, true);
+            }
+        }
+
+        if (dDesc)
+            close_socket(dDesc.get(), true);
     }
     else
     {
@@ -6115,8 +6110,7 @@ void do_restorefile(CHAR_DATA* ch, char* argument)
 
 void do_fslay(CHAR_DATA* ch, char* argument)
 {
-    CHAR_DATA* victim;
-    DESCRIPTOR_DATA* d;
+    CHAR_DATA* victim = nullptr;
     char arg[MAX_INPUT_LENGTH];
     char arg2[MAX_INPUT_LENGTH];
 
@@ -6213,11 +6207,11 @@ void do_fslay(CHAR_DATA* ch, char* argument)
     set_cur_char(victim);
     set_char_color(AT_DIEMSG, victim);
     do_help(victim, "_DIEMSG_");
-    for (d = first_descriptor; d; d = d->next)
+    for (auto d : g_descriptors)
     {
-        if (d == victim->desc)
+        if (d.get() == victim->desc)
         {
-            close_socket(d, false);
+            close_socket(d.get(), false);
             send_to_char("Ok.\n\r", ch);
             return;
         }
@@ -6738,7 +6732,7 @@ void do_zecho(CHAR_DATA* ch, char* argument)
         AREA_DATA* pArea = ch->in_room->area;
         DESCRIPTOR_DATA* d = NULL;
 
-        for (d = first_descriptor; d; d = d->next)
+        for (auto d : g_descriptors)
             if (d->character && d->character->in_room->area == pArea)
                 pager_printf(ch, "%s&g\n\r", argument);
     }

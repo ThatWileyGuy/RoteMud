@@ -136,7 +136,6 @@ void do_plantbug(CHAR_DATA* ch, char* argument)
 
 void do_showbugs(CHAR_DATA* ch, char* argument)
 {
-    DESCRIPTOR_DATA* d;
     CHAR_DATA* victim;
     int chance;
     char buf2[MAX_STRING_LENGTH];
@@ -153,7 +152,8 @@ void do_showbugs(CHAR_DATA* ch, char* argument)
     send_to_char("Player                Planet/Ship        Room Name\n\r", ch);
     send_to_char("------                -----------        ---------\n\r", ch);
 
-    for (d = first_descriptor; d; d = d->next)
+    for (auto d : g_descriptors)
+    {
         if ((d->connected == CON_PLAYING || d->connected == CON_EDITING) && (victim = d->character) != NULL)
         {
             for (bug = victim->first_bug; bug; bug = bug->next_in_bug)
@@ -170,6 +170,7 @@ void do_showbugs(CHAR_DATA* ch, char* argument)
                     break;
                 }
         }
+    }
     learn_from_success(ch, gsn_showbugs);
 }
 

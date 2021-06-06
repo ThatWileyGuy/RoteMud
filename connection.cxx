@@ -13,7 +13,6 @@
 #include <boost/bind.hpp>
 #include <boost/enable_shared_from_this.hpp>
 #include <libssh/callbacks.h>
-#include <iostream>
 
 #define commlog(str, ...) log(str, LOG_COMM, sysdata.log_level, ##__VA_ARGS__)
 
@@ -538,17 +537,11 @@ class SshConnection : public Connection
     {
         if (!m_writerRunning && !m_readerRunning)
         {
-            std::cout << "SSH connection closing" << std::endl;
             ssh_disconnect(m_session);
             // this has the side effect of freeing the channel
             m_channel = nullptr;
             assert(m_context == nullptr);
             removeConnection();
-        }
-        else
-        {
-            std::cout << "SSH connection not ready to close: " << m_writerRunning << " " << m_readerRunning
-                      << std::endl;
         }
     }
 
@@ -795,7 +788,7 @@ void IOManager::notifyGameAuthenticatedUserConnected(Connection& connection, con
     sharedConn->setContext(m_callbacks.newAuthenticatedConnection(sharedConn, user));
 }
 
-void IOManager::sendCommandToGame(void* context, const std::string& command)
+void IOManager::sendCommandToGame(ConnectionContext context, const std::string& command)
 {
     if (context == nullptr)
         bug("command from null context");
@@ -803,7 +796,7 @@ void IOManager::sendCommandToGame(void* context, const std::string& command)
         m_callbacks.commandReceived(context, command);
 }
 
-void IOManager::notifyGameConnectionClosed(void* context)
+void IOManager::notifyGameConnectionClosed(ConnectionContext context)
 {
     if (context != nullptr)
         m_callbacks.connectionClosed(context);
@@ -832,7 +825,7 @@ void IOManager::runUntil(std::chrono::steady_clock::time_point time)
     m_ioContext.run_until(time);
 }
 
-void Connection::setContext(void* context)
+void Connection::setContext(ConnectionContext context)
 {
     m_context = context;
 }

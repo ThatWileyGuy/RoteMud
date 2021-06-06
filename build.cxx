@@ -6296,7 +6296,6 @@ void do_installarea(CHAR_DATA* ch, char* argument)
     char arg[MAX_INPUT_LENGTH];
     char buf[MAX_STRING_LENGTH];
     int num;
-    DESCRIPTOR_DATA* d;
 
     argument = one_argument(argument, arg);
     if (arg[0] == '\0')
@@ -6332,7 +6331,7 @@ void do_installarea(CHAR_DATA* ch, char* argument)
             sort_area(tarea, false);
 
             /* Fix up author if online */
-            for (d = first_descriptor; d; d = d->next)
+            for (auto d : g_descriptors)
                 if (d->character && d->character->pcdata && d->character->pcdata->area == tarea)
                 {
                     /* remove area from author */

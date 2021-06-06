@@ -38,6 +38,7 @@
 
 #include <optional>
 #include <memory>
+#include <algorithm>
 
 #ifdef WIN32
 #include <fcntl.h>
@@ -49,6 +50,8 @@
 #ifdef ECHO
 #undef ECHO // TODO where does this come from on Linux?
 #endif
+
+using ConnectionContextOpaque = DESCRIPTOR_DATA;
 
 /*
  * Socket and TCP/IP stuff.
@@ -78,7 +81,7 @@ const char go_ahead_str[] = {telnet::IAC, telnet::GA, '\0'};
 
 void save_sysdata(SYSTEM_DATA sys);
 void write_ship_list(void);
-void arms(DESCRIPTOR_DATA* d, char* argument);
+void arms(std::shared_ptr<DESCRIPTOR_DATA> d, char* argument);
 void send_main_mail_menu(DESCRIPTOR_DATA* d);
 /*  from act_info?  */
 void show_condition(CHAR_DATA* ch, CHAR_DATA* victim);
@@ -91,10 +94,8 @@ void write_planet_list(void);
 /*
  * Global variables.
  */
-DESCRIPTOR_DATA* first_descriptor; /* First descriptor		*/
-DESCRIPTOR_DATA* last_descriptor;  /* Last descriptor		*/
-DESCRIPTOR_DATA* d_next;           /* Next descriptor in loop	*/
-int num_descriptors;
+
+std::vector<std::shared_ptr<DESCRIPTOR_DATA>> g_descriptors;
 bool mud_down; /* Shutdown			*/
 time_t boot_time;
 HOUR_MIN_SEC set_boot_time_struct;
@@ -119,24 +120,24 @@ void handle_descriptor_read(DESCRIPTOR_DATA* d, size_t read);
  * Other local functions (OS-independent).
  */
 bool check_parse_name(const char* name);
-bool check_reconnect(DESCRIPTOR_DATA* d, char* name, bool fConn);
-bool check_playing(DESCRIPTOR_DATA* d, char* name, bool kick);
-bool check_multi(DESCRIPTOR_DATA* d, char* name);
+bool check_reconnect(std::shared_ptr<DESCRIPTOR_DATA> d, char* name, bool fConn);
+bool check_playing(std::shared_ptr<DESCRIPTOR_DATA> d, char* name, bool kick);
+bool check_multi(std::shared_ptr<DESCRIPTOR_DATA> d, char* name);
 int main(int argc, char** argv);
-void nanny(DESCRIPTOR_DATA* d, char* argument);
+void nanny(std::shared_ptr<DESCRIPTOR_DATA> d, char* argument);
 void stop_idling(CHAR_DATA* ch);
-void free_desc(DESCRIPTOR_DATA* d);
-void display_prompt(DESCRIPTOR_DATA* d);
+void display_prompt(std::shared_ptr<DESCRIPTOR_DATA> d);
 int make_color_sequence(const char* col, char* buf, DESCRIPTOR_DATA* d);
 int make_color_sequence_desc(const char* col, char* buf, DESCRIPTOR_DATA* d);
-void handle_pager_input(DESCRIPTOR_DATA* d, char* argument);
-void handle_command(void* context, const std::string& line);
-void* handle_new_unauthenticated_connection(std::shared_ptr<Connection> connection);
+void handle_pager_input(std::shared_ptr<DESCRIPTOR_DATA> d, char* argument);
+void handle_command(ConnectionContext context, const std::string& line);
+ConnectionContext handle_new_unauthenticated_connection(std::shared_ptr<Connection> connection);
 bool authenticate_user(const std::string& username, const std::string& password);
 std::vector<Pubkey> get_public_keys_for_user(const std::string& username);
-void* handle_new_authenticated_connection(std::shared_ptr<Connection> connection, const std::string& username);
-void connection_closed(void* context);
-void close_socket(DESCRIPTOR_DATA* d, bool closedExternally, bool force);
+ConnectionContext handle_new_authenticated_connection(std::shared_ptr<Connection> connection,
+                                                            const std::string& username);
+void connection_closed(ConnectionContext context);
+void close_socket(DESCRIPTOR_DATA* dclose, bool startedExternally, bool force);
 void send_prompt(DESCRIPTOR_DATA* d);
 
 void mail_count(CHAR_DATA* ch);
@@ -160,9 +161,6 @@ int main(int argc, char** argv)
     _set_fmode(_O_BINARY);
 #endif
 
-    num_descriptors = 0;
-    first_descriptor = NULL;
-    last_descriptor = NULL;
     sysdata.NO_NAME_RESOLVING = true;
     sysdata.WAIT_FOR_AUTH = true; // TODO does this go away along with ident?
 
@@ -244,10 +242,9 @@ int main(int argc, char** argv)
     return 0;
 }
 
-void* handle_new_unauthenticated_connection(std::shared_ptr<Connection> connection)
+ConnectionContext handle_new_unauthenticated_connection(std::shared_ptr<Connection> connection)
 {
-    DESCRIPTOR_DATA* dnew = nullptr;
-    CREATE(dnew, DESCRIPTOR_DATA, 1);
+    auto dnew = std::make_shared<DESCRIPTOR_DATA>();
 
     dnew->connection.swap(connection);
     dnew->connected = CON_GET_NAME;
@@ -261,17 +258,7 @@ void* handle_new_unauthenticated_connection(std::shared_ptr<Connection> connecti
      * Init descriptor data.
      */
 
-    if (!last_descriptor && first_descriptor)
-    {
-        DESCRIPTOR_DATA* d = nullptr;
-
-        bug("New_descriptor: last_desc is NULL, but first_desc is not! ...fixing");
-        for (d = first_descriptor; d; d = d->next)
-            if (!d->next)
-                last_descriptor = d;
-    }
-
-    LINK(dnew, first_descriptor, last_descriptor, next, prev);
+    g_descriptors.push_back(dnew);
 
     /*
      * Send the greeting. Forces new color function - Tawnos
@@ -279,16 +266,15 @@ void* handle_new_unauthenticated_connection(std::shared_ptr<Connection> connecti
     {
         extern char* help_greeting;
         if (help_greeting[0] == '.')
-            send_to_desc_color2(help_greeting + 1, dnew);
+            send_to_desc_color2(help_greeting + 1, dnew.get());
         else
-            send_to_desc_color2(help_greeting, dnew);
+            send_to_desc_color2(help_greeting, dnew.get());
     }
 
-    num_descriptors++;
     char buf[MAX_STRING_LENGTH] = {};
 
-    if (num_descriptors > sysdata.maxplayers)
-        sysdata.maxplayers = num_descriptors;
+    if (g_descriptors.size() > sysdata.maxplayers)
+        sysdata.maxplayers = g_descriptors.size();
     if (sysdata.maxplayers > sysdata.alltimemax)
     {
         if (sysdata.time_of_max)
@@ -305,9 +291,9 @@ void* handle_new_unauthenticated_connection(std::shared_ptr<Connection> connecti
     return dnew;
 }
 
-void handle_command(void* context, const std::string& command)
+void handle_command(ConnectionContext context, const std::string& command)
 {
-    auto d = reinterpret_cast<DESCRIPTOR_DATA*>(context);
+    auto d = std::static_pointer_cast<DESCRIPTOR_DATA>(context);
 
     // TODO close the socket instead of asserting
     assert((command.size() + 1) < MAX_INPUT_LENGTH);
@@ -414,15 +400,8 @@ void game_loop()
         /*
          * Kick out idle descriptors then check for input.
          */
-        for (d = first_descriptor; d; d = d_next)
+        for (auto d : g_descriptors)
         {
-            if (d == d->next)
-            {
-                bug("descriptor_loop: loop found & fixed");
-                d->next = NULL;
-            }
-            d_next = d->next;
-
             d->idle++;                                              /* make it so a descriptor can idle out */
             if (((!d->character && d->idle > 360)                   /* 2 mins */
                  || (d->connected != CON_PLAYING && d->idle > 1200) /* 5 mins */
@@ -430,15 +409,15 @@ void game_loop()
                 && (!IS_IMMORTAL(d->character)))                    /*Possible DC FIX --Keb*/
             {
                 // TODO these probably need to be longer
-                write_to_buffer(d, "Idle timeout... disconnecting.\n\r", 0);
-                close_socket(d, false);
+                write_to_buffer(d.get(), "Idle timeout... disconnecting.\n\r", 0);
+                close_socket(d.get(), false);
                 continue;
             }
             else
             {
                 if (d->fcommand)
                 {
-                    send_prompt(d);
+                    send_prompt(d.get());
                     d->fcommand = false;
                 }
 
@@ -448,8 +427,6 @@ void game_loop()
                     continue;
                 }
             }
-            if (d == last_descriptor)
-                break;
         }
 
         /*
@@ -495,24 +472,21 @@ void log_printf(const char* fmt, ...)
     log_string(buf);
 }
 
-void free_desc(DESCRIPTOR_DATA* d)
+// TODO This needs to be a destructor
+DESCRIPTOR_DATA::~DESCRIPTOR_DATA()
 {
-    if (d->user)
-        STRFREE(d->user); /* identd */
-    if (d->pagebuf)
-        DISPOSE(d->pagebuf);
-    delete d;
-    return;
+    STRFREE(user); /* identd */
+    DISPOSE(pagebuf);
 }
 
-void connection_closed(void* context)
+void connection_closed(ConnectionContext context)
 {
-    DESCRIPTOR_DATA* d = reinterpret_cast<DESCRIPTOR_DATA*>(context);
+    std::shared_ptr<DESCRIPTOR_DATA> d = std::static_pointer_cast<DESCRIPTOR_DATA>(context);
 
     if (d == nullptr)
         return;
 
-    close_socket(d, true, true);
+    close_socket(d.get(), true, true);
 }
 
 void close_socket(DESCRIPTOR_DATA* dclose, bool force)
@@ -520,11 +494,14 @@ void close_socket(DESCRIPTOR_DATA* dclose, bool force)
     close_socket(dclose, false, force);
 }
 
+void close_socket(std::shared_ptr<DESCRIPTOR_DATA> dclose, bool force)
+{
+    close_socket(dclose.get(), force);
+}
+
 void close_socket(DESCRIPTOR_DATA* dclose, bool startedExternally, bool force)
 {
     CHAR_DATA* ch = nullptr;
-    DESCRIPTOR_DATA* d = nullptr;
-    bool DoNotUnlink = false;
 
     /* flush outbuf */
     if (!startedExternally)
@@ -540,9 +517,11 @@ void close_socket(DESCRIPTOR_DATA* dclose, bool startedExternally, bool force)
         write_to_buffer(dclose->snoop_by, "Your victim has left the game.\n\r", 0);
 
     /* stop snooping everyone else */
-    for (d = first_descriptor; d; d = d->next)
+    for (auto d : g_descriptors)
+    {
         if (d->snoop_by == dclose)
             d->snoop_by = NULL;
+    }
 
     /* Check for switched people who go link-dead. -- Altrag */
     if (dclose->original)
@@ -559,33 +538,6 @@ void close_socket(DESCRIPTOR_DATA* dclose, bool startedExternally, bool force)
     }
 
     ch = dclose->character;
-
-    /* sanity check :( */
-    if (!dclose->prev && dclose != first_descriptor)
-    {
-        DESCRIPTOR_DATA *dp, *dn;
-        bug("Close_socket: %s desc:%p != first_desc:%p and desc->prev = NULL!",
-            ch ? ch->name : d->connection->getHostname().c_str(), dclose, first_descriptor);
-        dp = NULL;
-        for (d = first_descriptor; d; d = dn)
-        {
-            dn = d->next;
-            if (d == dclose)
-            {
-                bug("Close_socket: %s desc:%p found, prev should be:%p, fixing.",
-                    ch ? ch->name : d->connection->getHostname().c_str(), dclose, dp);
-                dclose->prev = dp;
-                break;
-            }
-            dp = d;
-        }
-        if (!dclose->prev)
-        {
-            bug("Close_socket: %s desc:%p could not be found!.",
-                ch ? ch->name : dclose->connection->getHostname().c_str(), dclose);
-            DoNotUnlink = true;
-        }
-    }
 
     if (dclose->character)
     {
@@ -608,15 +560,16 @@ void close_socket(DESCRIPTOR_DATA* dclose, bool startedExternally, bool force)
         }
     }
 
-    if (!DoNotUnlink)
-    {
-        /* make sure loop doesn't get messed up */
-        if (d_next == dclose)
-            d_next = d_next->next;
-        UNLINK(dclose, first_descriptor, last_descriptor, next, prev);
-    }
+    auto iter = std::find_if(g_descriptors.begin(), g_descriptors.end(), [&](auto d) { return d.get() == dclose; });
 
-    free_desc(dclose);
+    if (iter == g_descriptors.end())
+    {
+        bug("tried to remove descriptor that was already removed");
+    }
+    else
+    {
+        g_descriptors.erase(iter);
+    }
 }
 
 void handle_descriptor_error(DESCRIPTOR_DATA* d, const boost::system::error_code& error)
@@ -661,6 +614,11 @@ void write_to_buffer(DESCRIPTOR_DATA* d, std::string_view string)
     }
 }
 
+void write_to_buffer(std::shared_ptr<DESCRIPTOR_DATA> d, std::string_view string)
+{
+    write_to_buffer(d.get(), string);
+}
+
 void write_to_buffer(DESCRIPTOR_DATA* d, const char* string, size_t length)
 {
     if (length <= 0)
@@ -671,11 +629,14 @@ void write_to_buffer(DESCRIPTOR_DATA* d, const char* string, size_t length)
     write_to_buffer(d, std::string_view(string, length));
 }
 
-void show_title(DESCRIPTOR_DATA* d)
+void write_to_buffer(std::shared_ptr<DESCRIPTOR_DATA> d, const char* string, size_t length)
 {
-    CHAR_DATA* ch;
+    write_to_buffer(d.get(), string, length);
+}
 
-    ch = d->character;
+void show_title(std::shared_ptr<DESCRIPTOR_DATA> d)
+{
+    CHAR_DATA* ch = d->character;
 
     if (!IS_SET(ch->pcdata->flags, PCFLAG_NOINTRO))
     {
@@ -733,7 +694,7 @@ char* smaug_crypt(const char* pwd)
 /*
  * Deal with sockets that haven't logged in yet.
  */
-void nanny(DESCRIPTOR_DATA* d, char* argument)
+void nanny(std::shared_ptr<DESCRIPTOR_DATA> d, char* argument)
 {
     //	extern int lang_array[];
     //	extern char *lang_names[];
@@ -817,7 +778,7 @@ void nanny(DESCRIPTOR_DATA* d, char* argument)
             return;
         }
 
-        fOld = load_char_obj(d, argument, true);
+        fOld = load_char_obj(*d, argument, true);
         if (!d->character)
         {
             sprintf_s(log_buf, "Bad player file %s@%s.", argument, d->connection->getHostname().c_str());
@@ -938,7 +899,7 @@ void nanny(DESCRIPTOR_DATA* d, char* argument)
         sprintf_s(buf, ch->name);
         d->character->desc = NULL;
         free_char(d->character);
-        fOld = load_char_obj(d, buf, false);
+        fOld = load_char_obj(*d, buf, false);
         ch = d->character;
         sprintf_s(log_buf, "%s@%s(%s) has connected.", ch->name, d->connection->getHostname().c_str(), d->user);
         if (ch->top_level < LEVEL_DEMI)
@@ -1895,7 +1856,7 @@ bool authenticate_user(const std::string& rawName, const std::string& password)
 
     DESCRIPTOR_DATA d = {};
 
-    bool found = load_char_obj(&d, name.c_str(), true);
+    bool found = load_char_obj(d, name.c_str(), true);
 
     CHAR_DATA* ch = d.character;
 
@@ -1943,7 +1904,7 @@ std::vector<Pubkey> get_public_keys_for_user(const std::string& rawName)
     }
 
     DESCRIPTOR_DATA d = {};
-    bool found = load_char_obj(&d, name.c_str(), true);
+    bool found = load_char_obj(d, name.c_str(), true);
     CHAR_DATA* ch = d.character;
 
     if (ch == nullptr)
@@ -1955,15 +1916,13 @@ std::vector<Pubkey> get_public_keys_for_user(const std::string& rawName)
     return {};
 }
 
-void* handle_new_authenticated_connection(std::shared_ptr<Connection> connection, const std::string& rawName)
+std::shared_ptr<void> handle_new_authenticated_connection(std::shared_ptr<Connection> connection, const std::string& rawName)
 {
     std::string name = rawName;
     name[0] = UPPER(name[0]);
 
-    DESCRIPTOR_DATA* dnew = nullptr;
-    CREATE(dnew, DESCRIPTOR_DATA, 1);
-
-    bool found = load_char_obj(dnew, name.c_str(), true);
+    auto dnew = std::make_shared<DESCRIPTOR_DATA>();
+    bool found = load_char_obj(*dnew, name.c_str(), true);
     assert(found);
 
     dnew->connection.swap(connection);
@@ -1973,21 +1932,7 @@ void* handle_new_authenticated_connection(std::shared_ptr<Connection> connection
 
     // TODO this is where IP bans would get processed - skipping for now
 
-    /*
-     * Init descriptor data.
-     */
-
-    if (!last_descriptor && first_descriptor)
-    {
-        DESCRIPTOR_DATA* d = nullptr;
-
-        bug("New_descriptor: last_desc is NULL, but first_desc is not! ...fixing");
-        for (d = first_descriptor; d; d = d->next)
-            if (!d->next)
-                last_descriptor = d;
-    }
-
-    LINK(dnew, first_descriptor, last_descriptor, next, prev);
+    g_descriptors.push_back(dnew);
 
     /*
      * Send the greeting. Forces new color function - Tawnos
@@ -2000,11 +1945,10 @@ void* handle_new_authenticated_connection(std::shared_ptr<Connection> connection
             send_to_desc_color2(help_greeting, dnew);
     }
 
-    num_descriptors++;
     char buf[MAX_STRING_LENGTH] = {};
 
-    if (num_descriptors > sysdata.maxplayers)
-        sysdata.maxplayers = num_descriptors;
+    if (g_descriptors.size() > sysdata.maxplayers)
+        sysdata.maxplayers = g_descriptors.size();
     if (sysdata.maxplayers > sysdata.alltimemax)
     {
         if (sysdata.time_of_max)
@@ -2044,7 +1988,7 @@ void* handle_new_authenticated_connection(std::shared_ptr<Connection> connection
     sprintf_s(buf, ch->name);
     dnew->character->desc = NULL;
     free_char(dnew->character);
-    bool fOld = load_char_obj(dnew, buf, false);
+    bool fOld = load_char_obj(*dnew, buf, false);
     ch = dnew->character;
     sprintf_s(log_buf, "%s@%s(%s) has connected.", ch->name, dnew->connection->getHostname().c_str(), dnew->user);
     if (ch->top_level < LEVEL_DEMI)
@@ -2146,7 +2090,7 @@ bool check_parse_name(const char* name)
 /*
  * Look for link-dead player to reconnect.
  */
-bool check_reconnect(DESCRIPTOR_DATA* d, char* name, bool fConn)
+bool check_reconnect(std::shared_ptr<DESCRIPTOR_DATA> d, char* name, bool fConn)
 {
     CHAR_DATA* ch;
 
@@ -2178,7 +2122,7 @@ bool check_reconnect(DESCRIPTOR_DATA* d, char* name, bool fConn)
                 d->character->desc = NULL;
                 free_char(d->character);
                 d->character = ch;
-                ch->desc = d;
+                ch->desc = d.get();
                 ch->timer = 0;
                 send_to_char("Reconnecting.\n\r", ch);
                 act(AT_ACTION, "$n has reconnected.", ch, NULL, NULL, TO_ROOM);
@@ -2201,16 +2145,15 @@ bool check_reconnect(DESCRIPTOR_DATA* d, char* name, bool fConn)
  * Check if already playing.
  */
 
-bool check_multi(DESCRIPTOR_DATA* d, char* name)
+bool check_multi(std::shared_ptr<DESCRIPTOR_DATA> d, char* name)
 {
-    DESCRIPTOR_DATA* dold;
-
-    for (dold = first_descriptor; dold; dold = dold->next)
+    for (auto dold : g_descriptors)
     {
         if (dold != d && (dold->character || dold->original) &&
             str_cmp(name, dold->original ? dold->original->name : dold->character->name) &&
             !str_cmp(dold->connection->getHostname().c_str(), d->connection->getHostname().c_str()))
         {
+            // TODO hardcoded IPs FTW!
             const char* ok = "194.234.177";
             const char* ok2 = "209.183.133.229";
             int iloop;
@@ -2247,20 +2190,15 @@ bool check_multi(DESCRIPTOR_DATA* d, char* name)
     return false;
 }
 
-bool check_playing(DESCRIPTOR_DATA* d, char* name, bool kick)
+bool check_playing(std::shared_ptr<DESCRIPTOR_DATA> d, char* name, bool kick)
 {
-    CHAR_DATA* ch;
-
-    DESCRIPTOR_DATA* dold;
-    int cstate;
-
-    for (dold = first_descriptor; dold; dold = dold->next)
+    for (auto dold : g_descriptors)
     {
         if (dold != d && (dold->character || dold->original) &&
             !str_cmp(name, dold->original ? dold->original->name : dold->character->name))
         {
-            cstate = dold->connected;
-            ch = dold->original ? dold->original : dold->character;
+            int cstate = dold->connected;
+            auto ch = dold->original ? dold->original : dold->character;
             if (!ch->name || (cstate != CON_PLAYING && cstate != CON_EDITING))
             {
                 write_to_buffer(d, "Already connected - try again.\n\r", 0);
@@ -2277,7 +2215,7 @@ bool check_playing(DESCRIPTOR_DATA* d, char* name, bool kick)
             d->character->desc = NULL;
             free_char(d->character);
             d->character = ch;
-            ch->desc = d;
+            ch->desc = d.get();
             ch->timer = 0;
             if (ch->switched)
                 do_return(ch->switched, "");
@@ -2373,6 +2311,11 @@ void send_to_desc_color2(const char* txt, DESCRIPTOR_DATA* d)
     if (*prevstr)
         write_to_buffer(d, prevstr, 0);
     return;
+}
+
+void send_to_desc_color2(const char* txt, std::shared_ptr<DESCRIPTOR_DATA> d)
+{
+    send_to_desc_color2(txt, d.get());
 }
 
 char* obj_short(OBJ_DATA* obj)
@@ -2998,7 +2941,7 @@ void send_prompt(DESCRIPTOR_DATA* d)
         write_to_buffer(d, go_ahead_str, 0);
 }
 
-void handle_pager_input(DESCRIPTOR_DATA* d, char* argument)
+void handle_pager_input(std::shared_ptr<DESCRIPTOR_DATA> d, char* argument)
 {
     while (isspace(*argument))
         argument++;
@@ -3028,7 +2971,7 @@ void handle_pager_input(DESCRIPTOR_DATA* d, char* argument)
     case 'q':
         d->pagetop = 0;
         d->pagepoint = NULL;
-        send_prompt(d);
+        send_prompt(d.get());
         DISPOSE(d->pagebuf);
         d->pagesize = MAX_STRING_LENGTH;
         return;
@@ -3058,7 +3001,7 @@ void handle_pager_input(DESCRIPTOR_DATA* d, char* argument)
     {
         d->pagetop = 0;
         d->pagepoint = NULL;
-        send_prompt(d);
+        send_prompt(d.get());
         DISPOSE(d->pagebuf);
         d->pagesize = MAX_STRING_LENGTH;
         return;
@@ -3414,7 +3357,7 @@ const char* PERS(CHAR_DATA* ch, CHAR_DATA* looker)
     }
 }
 
-void arms(DESCRIPTOR_DATA* d, char* argument)
+void arms(std::shared_ptr<DESCRIPTOR_DATA> d, char* argument)
 {
     CHAR_DATA* ch;
     char dmsgcmd[50];
@@ -3434,7 +3377,7 @@ void arms(DESCRIPTOR_DATA* d, char* argument)
             send_to_char("In ARIMS, there are 5 basic commands.\n\rl - lists all your mail messages\n\rw - writes a "
                          "message\n\rd - displays a message\n\rh - displays this help message\n\rq - quits ARIMS\n\r",
                          ch);
-            send_main_mail_menu(d);
+            send_main_mail_menu(d.get());
             break;
 
         case 'l':
@@ -3456,7 +3399,7 @@ void arms(DESCRIPTOR_DATA* d, char* argument)
             d->connected = CON_MAIL_WRITE_START;
         default:
             send_to_char("That's not a command!\n\r", ch);
-            send_main_mail_menu(d);
+            send_main_mail_menu(d.get());
             break;
         }
         break;
@@ -3491,7 +3434,7 @@ void arms(DESCRIPTOR_DATA* d, char* argument)
         d->connected = CON_MAIN_MAIL_MENU;
         break;
     default:
-        send_main_mail_menu(d);
+        send_main_mail_menu(d.get());
         d->connected = CON_MAIN_MAIL_MENU;
         break;
     }

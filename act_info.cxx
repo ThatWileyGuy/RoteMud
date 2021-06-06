@@ -2382,7 +2382,6 @@ void do_who(CHAR_DATA* ch, char* argument)
     char char_name[MAX_INPUT_LENGTH];
     char extra_title[MAX_STRING_LENGTH];
     char race_text[MAX_INPUT_LENGTH];
-    DESCRIPTOR_DATA* d;
     int iRace;
     int iLevelLower;
     int iLevelUpper;
@@ -2480,7 +2479,7 @@ void do_who(CHAR_DATA* ch, char* argument)
         whoout = fopen(WHO_FILE, "w");
 
     /* start from last to first to get it in the proper order */
-    for (d = last_descriptor; d; d = d->prev)
+    for (auto d : g_descriptors)
     {
         CHAR_DATA* wch;
         char const* race;
@@ -2930,7 +2929,6 @@ void do_where(CHAR_DATA* ch, char* argument)
 {
     char arg[MAX_INPUT_LENGTH];
     CHAR_DATA* victim;
-    DESCRIPTOR_DATA* d;
     bool found;
 
     if (get_trust(ch) < LEVEL_IMMORTAL)
@@ -2949,7 +2947,7 @@ void do_where(CHAR_DATA* ch, char* argument)
         else
             pager_printf(ch, "Players near you in %s:\n\r", ch->in_room->area->name);
         found = false;
-        for (d = first_descriptor; d; d = d->next)
+        for (auto d : g_descriptors)
             if ((d->connected == CON_PLAYING || d->connected == CON_EDITING) && (victim = d->character) != NULL &&
                 !IS_NPC(victim) && victim->in_room &&
                 (victim->in_room->area == ch->in_room->area || get_trust(ch) >= LEVEL_IMMORTAL) && can_see(ch, victim))
@@ -4482,12 +4480,10 @@ void do_pager(CHAR_DATA* ch, char* argument)
 
 bool is_online(char* argument)
 {
-    DESCRIPTOR_DATA* d;
-
     if (argument[0] == '\0')
         return false;
 
-    for (d = last_descriptor; d; d = d->prev)
+    for (auto d : g_descriptors)
     {
         CHAR_DATA* wch;
 

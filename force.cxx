@@ -108,9 +108,8 @@ int check_force_skill(CHAR_DATA* ch, const char* command, char* argument)
 
 void force_send_to_room(CHAR_DATA* ch, CHAR_DATA* victim, const char* msg)
 {
-    DESCRIPTOR_DATA* i;
     CHAR_DATA* dch;
-    for (i = first_descriptor; i; i = i->next)
+    for (auto i : g_descriptors)
     {
         if (i->connected || !i->character)
             continue;
@@ -402,11 +401,10 @@ FORCE_SKILL* force_test_skill_use(const char* skill_name, CHAR_DATA* ch, int ski
 
 void update_force()
 {
-    DESCRIPTOR_DATA* i;
     FORCE_SKILL* fskill;
     CHAR_DATA* ch;
     int change;
-    for (i = first_descriptor; i; i = i->next)
+    for (auto i : g_descriptors)
     {
         if (i->connected || !i->character)
             continue;
