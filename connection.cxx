@@ -319,9 +319,7 @@ class SshConnection : public Connection
 
     int handlePubkeyAuth(const char* user, ssh_key pubkey, char signatureState)
     {
-        if (signatureState == SSH_PUBLICKEY_STATE_NONE)
-            return SSH_AUTH_SUCCESS;
-        if (signatureState != SSH_PUBLICKEY_STATE_VALID)
+        if (signatureState != SSH_PUBLICKEY_STATE_NONE && signatureState != SSH_PUBLICKEY_STATE_VALID)
             return SSH_AUTH_DENIED;
 
         auto pubkeys = getPubkeysForUser(user);
