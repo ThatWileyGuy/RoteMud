@@ -144,7 +144,7 @@ void mail_count(CHAR_DATA* ch);
 
 std::unique_ptr<boost::asio::ip::tcp::socket> new_socket;
 
-int main(int argc, char** argv)
+int gamemain(int argc, char** argv)
 {
 
     bool fCopyOver = false;

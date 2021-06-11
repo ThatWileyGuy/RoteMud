@@ -1,24 +1,24 @@
 cmake_minimum_required(VERSION 3.13)
+
 project(RoteMud)
+
 set(CMAKE_CXX_STANDARD 17)
 
-find_package(Boost) # header-only for now
+# code
+find_package(Boost REQUIRED) # header-only for now
 include_directories(${Boost_INCLUDE_DIRS})
 
 find_package(libssh CONFIG REQUIRED)
 include_directories(${libssh_INCLUDE_DIRS})
 
-set(SOURCE_FILES 11.cxx act_comm.cxx act_info.cxx act_move.cxx act_obj.cxx act_wiz.cxx boards.cxx bounty.cxx build.cxx changes.cxx clans.cxx
-	color.cxx comm.cxx comments.cxx connection.cxx const.cxx db.cxx editor.cxx fight.cxx finfo.cxx force.cxx fskills.cxx functions.cxx handler.cxx
-	hashstr.cxx hunter.cxx interp.cxx magic.cxx makeobjs.cxx marriage.cxx md5.cxx misc.cxx mud_comm.cxx mud_prog.cxx
-	newarena.cxx pfiles.cxx planets.cxx player.cxx renumber.cxx reset.cxx save.cxx ships.cxx shops.cxx skills.cxx slay.cxx
-	slicers.cxx slotm.cxx space.cxx special.cxx swskills.cxx tables.cxx tech.cxx track.cxx update.cxx util.cxx)
+file(GLOB_RECURSE HEADER_FILES src/*.hxx)
+file(GLOB_RECURSE SOURCE_FILES src/*.cxx)
 
-set(HEADER_FILES bet.hxx color.hxx connection.hxx do_fun.hxx md5.hxx mud.hxx pfiles.hxx slay.hxx)
+add_library(rote_lib OBJECT ${HEADER_FILES} ${SOURCE_FILES})
 
-set(ALL_FILES ${SOURCE_FILES} ${HEADER_FILES})
-
-add_executable(rote_mud ${ALL_FILES})
+#executable
+add_executable(rote_mud main.cxx)
+target_link_libraries(rote_mud rote_lib)
 target_link_libraries(rote_mud ssh)
 
 if(UNIX)
@@ -28,3 +28,19 @@ target_link_libraries(rote_mud Threads::Threads)
 target_link_libraries(rote_mud ${CMAKE_DL_LIBS})
 set_target_properties(rote_mud PROPERTIES ENABLE_EXPORTS true)
 endif()
+
+# tests
+file(GLOB TEST_HEADER_FILES ${PROJECT_SOURCE_DIR}/tests/*.hxx)
+file(GLOB TEST_SOURCE_FILES ${PROJECT_SOURCE_DIR}/tests/*.cxx)
+
+include_directories(${Boost_INCLUDE_DIRS})
+include_directories(src)
+
+add_definitions(-DBOOST_TEST_DYN_LINK)
+add_executable(rote_tests ${TEST_HEADER_FILES} ${TEST_SOURCE_FILES})
+target_link_libraries(rote_tests ${Boost_LIBRARIES})
+target_link_libraries(rote_tests rote_lib)
+target_link_libraries(rote_tests ssh)
+
+enable_testing()
+add_test(RoteTests rote_tests)
