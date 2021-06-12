@@ -5,7 +5,7 @@ project(RoteMud)
 set(CMAKE_CXX_STANDARD 17)
 
 # code
-find_package(Boost REQUIRED) # header-only for now
+find_package(Boost REQUIRED serialization)
 include_directories(${Boost_INCLUDE_DIRS})
 
 find_package(libssh CONFIG REQUIRED)
