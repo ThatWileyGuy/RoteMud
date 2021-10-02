@@ -451,7 +451,7 @@ void pfile_scan(bool count)
         // log_string( directory_name );
         for (const auto& entry : std::filesystem::directory_iterator(directory_name))
         {
-            auto name = entry.path().filename().u8string();
+            auto name = entry.path().filename().string();
             // Added by Tarl 3 Dec 02 because we are now using CVS
             if (!str_cmp(name.c_str(), "CVS"))
             {
@@ -632,7 +632,7 @@ void scan_forcers(CHAR_DATA* ch)
 
         for (const auto& entry : std::filesystem::directory_iterator(directory_name))
         {
-            auto name = entry.path().filename().u8string();
+            auto name = entry.path().filename().string();
             if (name[0] != '.' && str_suffix(".home1", name.c_str()) && str_suffix(".home2", name.c_str()) &&
                 str_suffix(".home3", name.c_str()) && str_suffix(".clone", name.c_str()))
             {
@@ -655,7 +655,7 @@ void show_pfiles(CHAR_DATA* ch, char* x)
 
     for (const auto& entry : std::filesystem::directory_iterator(directory_name))
     {
-        auto name = entry.path().filename().u8string();
+        auto name = entry.path().filename().string();
         if (name[0] != '.' && str_suffix(".home", name.c_str()) && str_suffix(".clone", name.c_str()))
         {
             ch_printf(ch, "&O%s&w&W&W\n\r\n\r", name.c_str());

@@ -1282,6 +1282,6 @@ void do_reset(CHAR_DATA* ch, char* argument)
         send_to_char("Hide reset created.\n\r", ch);
         return;
     }
-    do_reset(ch, "");
+    do_reset(ch, MAKE_TEMP_STRING(""));
     return;
 }

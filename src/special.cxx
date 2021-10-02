@@ -205,7 +205,7 @@ bool spec_make_apprentice_jedi(CHAR_DATA* ch)
         if (!IS_NPC(victim) && victim->pcdata->forcerank == 0 && get_curr_frc(victim) > 0)
         {
             victim->pcdata->forcerank = 1;
-            do_say(ch, "You are now an apprentice of the jedi order.");
+            do_say(ch, MAKE_TEMP_STRING("You are now an apprentice of the jedi order."));
             SET_BIT(victim->pcdata->act2, ACT_JEDI);
         }
     }
@@ -225,7 +225,7 @@ bool spec_make_master_jedi(CHAR_DATA* ch)
             get_curr_frc(victim) > 0)
         {
             victim->pcdata->forcerank = 3;
-            do_say(ch, "Master of the Jedi order you are now.");
+            do_say(ch, MAKE_TEMP_STRING("Master of the Jedi order you are now."));
             SET_BIT(victim->pcdata->act2, ACT_JEDI);
         }
     }
@@ -244,7 +244,7 @@ bool spec_make_apprentice_sith(CHAR_DATA* ch)
         if (!IS_NPC(victim) && victim->pcdata->forcerank == 0 && get_curr_frc(victim) > 0)
         {
             victim->pcdata->forcerank = 1;
-            do_say(ch, "You are now an apprentice of the sith order.");
+            do_say(ch, MAKE_TEMP_STRING("You are now an apprentice of the sith order."));
             SET_BIT(victim->pcdata->act2, ACT_SITH);
         }
     }
@@ -286,8 +286,8 @@ bool spec_newbie_pilot(CHAR_DATA* ch)
             sprintf_s(buf, "Hmm, a %s.", race_table[victim->race].race_name);
             do_look(ch, victim->name);
             do_say(ch, buf);
-            do_say(ch, "You're home planet is a little hard to get to right now.");
-            do_say(ch, "I'll take you to the Pluogus instead.");
+            do_say(ch, MAKE_TEMP_STRING("You're home planet is a little hard to get to right now."));
+            do_say(ch, MAKE_TEMP_STRING("I'll take you to the Pluogus instead."));
             echo_to_room(AT_ACTION, ch->in_room,
                          "After a brief journey the shuttle docks with the Serin Pluogus.\n\r\n\r");
             break;
@@ -296,7 +296,7 @@ bool spec_newbie_pilot(CHAR_DATA* ch)
         char_from_room(victim);
         char_to_room(victim, get_room_index(home));
 
-        do_look(victim, "");
+        do_look(victim, MAKE_TEMP_STRING(""));
 
         sprintf_s(buf, "%s steps out and the shuttle quickly returns to the academy.\n\r", victim->name);
         echo_to_room(AT_ACTION, ch->in_room, buf);
@@ -330,7 +330,7 @@ bool spec_clan_guard(CHAR_DATA* ch)
         if (!IS_NPC(victim) && victim->pcdata && victim->pcdata->clan && IS_AWAKE(victim) && ch->mob_clan &&
             str_cmp(ch->mob_clan, victim->pcdata->clan->name))
         {
-            do_yell(ch, "Hey your not allowed in here!");
+            do_yell(ch, MAKE_TEMP_STRING("Hey your not allowed in here!"));
             multi_hit(ch, victim, TYPE_UNDEFINED);
             return true;
         }
@@ -1101,7 +1101,7 @@ bool spec_stormtrooper(CHAR_DATA* ch)
             (!IS_NPC(victim) && victim->pcdata && victim->pcdata->clan && IS_AWAKE(victim) &&
              nifty_is_name("republic", victim->pcdata->clan->name)))
         {
-            do_yell(ch, "Die Rebel Scum!");
+            do_yell(ch, MAKE_TEMP_STRING("Die Rebel Scum!"));
             multi_hit(ch, victim, TYPE_UNDEFINED);
             return true;
         }
@@ -1132,7 +1132,7 @@ bool spec_new_republic_trooper(CHAR_DATA* ch)
             (!IS_NPC(victim) && victim->pcdata && victim->pcdata->clan && IS_AWAKE(victim) &&
              nifty_is_name("empire", victim->pcdata->clan->name)))
         {
-            do_yell(ch, "Long live the New Republic!");
+            do_yell(ch, MAKE_TEMP_STRING("Long live the New Republic!"));
             multi_hit(ch, victim, TYPE_UNDEFINED);
             return true;
         }

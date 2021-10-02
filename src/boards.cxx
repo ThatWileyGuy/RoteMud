@@ -697,7 +697,7 @@ void do_note(CHAR_DATA* ch, char* arg_passed, bool IS_MAIL)
             write_board(board);
             return;
         }
-        do_note(ch, "", false);
+        do_note(ch, MAKE_TEMP_STRING(""), false);
     }
     if (!str_cmp(arg, "write"))
     {
@@ -1533,7 +1533,7 @@ void do_bset(CHAR_DATA* ch, char* argument)
         return;
     }
 
-    do_bset(ch, "");
+    do_bset(ch, MAKE_TEMP_STRING(""));
     return;
 }
 
@@ -1609,7 +1609,7 @@ void mail_count(CHAR_DATA* ch)
 void do_testmail(CHAR_DATA* ch, char* argument)
 {
     send_to_char("Welcome to ARIMS, the Almost Real Instant Messaging System\n\r", ch);
-    do_mailroom(ch, "list");
+    do_mailroom(ch, MAKE_TEMP_STRING("list"));
     ch->desc->connected = CON_MAIL_BEGIN;
     return;
 }

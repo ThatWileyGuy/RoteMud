@@ -318,7 +318,7 @@ void interpret(CHAR_DATA* ch, char* argument)
 
         tempsub = ch->substate;
         ch->substate = SUB_TIMER_DO_ABORT;
-        (timer->do_fun)(ch, "");
+        (timer->do_fun)(ch, MAKE_TEMP_STRING(""));
         if (char_died(ch))
             return;
         if (ch->substate != SUB_TIMER_CANT_ABORT)

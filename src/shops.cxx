@@ -77,19 +77,19 @@ CHAR_DATA* find_keeper(CHAR_DATA* ch)
      */
     if (time_info.hour < pShop->open_hour)
     {
-        do_say(keeper, "Sorry, come back later.");
+        do_say(keeper, MAKE_TEMP_STRING("Sorry, come back later."));
         return NULL;
     }
 
     if (time_info.hour > pShop->close_hour)
     {
-        do_say(keeper, "Sorry, come back tomorrow.");
+        do_say(keeper, MAKE_TEMP_STRING("Sorry, come back tomorrow."));
         return NULL;
     }
 
     if (!knows_language(keeper, ch->speaking, ch))
     {
-        do_say(keeper, "I can't understand you.");
+        do_say(keeper, MAKE_TEMP_STRING("I can't understand you."));
         return NULL;
     }
 
@@ -120,19 +120,19 @@ CHAR_DATA* find_fixer(CHAR_DATA* ch)
      */
     if (time_info.hour < rShop->open_hour)
     {
-        do_say(keeper, "Sorry, come back later.");
+        do_say(keeper, MAKE_TEMP_STRING("Sorry, come back later."));
         return NULL;
     }
 
     if (time_info.hour > rShop->close_hour)
     {
-        do_say(keeper, "Sorry, come back tomorrow.");
+        do_say(keeper, MAKE_TEMP_STRING("Sorry, come back tomorrow."));
         return NULL;
     }
 
     if (!knows_language(keeper, ch->speaking, ch))
     {
-        do_say(keeper, "I can't understand you.");
+        do_say(keeper, MAKE_TEMP_STRING("I can't understand you."));
         return NULL;
     }
 
@@ -448,7 +448,7 @@ void do_buy(CHAR_DATA* ch, char* argument)
 
         if (!IS_OBJ_STAT(obj, ITEM_INVENTORY) && (noi > 1))
         {
-            interpret(keeper, "laugh");
+            interpret(keeper, MAKE_TEMP_STRING("laugh"));
             act(AT_TELL,
                 "$n tells you 'I don't have enough of those in stock"
                 " to sell more than one at a time.'",
@@ -1226,7 +1226,7 @@ void do_shopset(CHAR_DATA* ch, char* argument)
         return;
     }
 
-    do_shopset(ch, "");
+    do_shopset(ch, MAKE_TEMP_STRING(""));
     return;
 }
 
@@ -1478,7 +1478,7 @@ void do_repairset(CHAR_DATA* ch, char* argument)
         return;
     }
 
-    do_repairset(ch, "");
+    do_repairset(ch, MAKE_TEMP_STRING(""));
     return;
 }
 

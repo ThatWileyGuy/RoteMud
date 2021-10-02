@@ -1649,7 +1649,7 @@ void do_mpapplyb(CHAR_DATA* ch, char* argument)
         char_from_room(victim);
         char_to_room(victim, get_room_index(ROOM_VNUM_SCHOOL));
         act(AT_WHITE, "$n enters this world from within a column of blinding light!", victim, NULL, NULL, TO_ROOM);
-        do_look(victim, "auto");
+        do_look(victim, MAKE_TEMP_STRING("auto"));
         break;
     }
 
@@ -1896,7 +1896,7 @@ ch_ret simple_damage(CHAR_DATA* ch, CHAR_DATA* victim, int dam, int dt)
     {
         if (number_range(0, victim->wait) == 0)
         {
-            do_recall(victim, "");
+            do_recall(victim, MAKE_TEMP_STRING(""));
             return rNONE;
         }
     }
@@ -1911,14 +1911,14 @@ ch_ret simple_damage(CHAR_DATA* ch, CHAR_DATA* victim, int dam, int dt)
         {
             start_fearing(victim, ch);
             stop_hunting(victim);
-            do_flee(victim, "");
+            do_flee(victim, MAKE_TEMP_STRING(""));
         }
     }
 
     if (!npcvict && victim->hit > 0 && victim->hit <= victim->wimpy && victim->wait == 0)
-        do_flee(victim, "");
+        do_flee(victim, MAKE_TEMP_STRING(""));
     else if (!npcvict && IS_SET(victim->act, PLR_FLEE))
-        do_flee(victim, "");
+        do_flee(victim, MAKE_TEMP_STRING(""));
 
     tail_chain();
     return rNONE;

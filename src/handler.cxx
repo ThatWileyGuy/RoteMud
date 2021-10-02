@@ -1614,10 +1614,10 @@ void extract_char(CHAR_DATA* ch, bool fPull)
     }
 
     if (ch->desc && ch->desc->original && IS_SET(ch->act, ACT_POLYMORPHED))
-        do_revert(ch, "");
+        do_revert(ch, MAKE_TEMP_STRING(""));
 
     if (ch->desc && ch->desc->original)
-        do_return(ch, "");
+        do_return(ch, MAKE_TEMP_STRING(""));
 
     for (wch = first_char; wch; wch = wch->next)
         if (wch->reply == ch)

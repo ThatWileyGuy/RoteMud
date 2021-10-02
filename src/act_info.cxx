@@ -999,9 +999,9 @@ void do_look(CHAR_DATA* ch, char* argument)
         if (!IS_NPC(ch) && IS_SET(ch->act, PLR_AUTOEXIT))
         {
             if (IS_SET(ch->pcdata->flags, PCFLAG_MAP))
-                do_newexits(ch, "");
+                do_newexits(ch, MAKE_TEMP_STRING(""));
             else
-                do_exits(ch, "");
+                do_exits(ch, MAKE_TEMP_STRING(""));
         }
 
         show_ships_to_char(ch->in_room->first_ship, ch);
@@ -1061,7 +1061,7 @@ void do_look(CHAR_DATA* ch, char* argument)
                         original = ch->in_room;
                         char_from_room(ch);
                         char_to_room(ch, to_room);
-                        do_glance(ch, "");
+                        do_glance(ch, MAKE_TEMP_STRING(""));
                         char_from_room(ch);
                         char_to_room(ch, original);
                     }
@@ -1161,7 +1161,7 @@ void do_look(CHAR_DATA* ch, char* argument)
                     original = ch->in_room;
                     char_from_room(ch);
                     char_to_room(ch, pexit->to_room);
-                    do_look(ch, "auto");
+                    do_look(ch, MAKE_TEMP_STRING("auto"));
                     char_from_room(ch);
                     char_to_room(ch, original);
                     return;
@@ -1271,7 +1271,7 @@ void do_look(CHAR_DATA* ch, char* argument)
                 char_from_room(ch);
                 char_to_room(ch, pexit->to_room);
             }
-            do_look(ch, "auto");
+            do_look(ch, MAKE_TEMP_STRING("auto"));
             char_from_room(ch);
             char_to_room(ch, original);
         }
@@ -1482,7 +1482,7 @@ void do_glance(CHAR_DATA* ch, char* argument)
     {
         save_act = ch->act;
         SET_BIT(ch->act, PLR_BRIEF);
-        do_look(ch, "auto");
+        do_look(ch, MAKE_TEMP_STRING("auto"));
         ch->act = save_act;
         return;
     }
@@ -2239,7 +2239,7 @@ void do_hset(CHAR_DATA* ch, char* argument)
         return;
     }
 
-    do_hset(ch, "");
+    do_hset(ch, MAKE_TEMP_STRING(""));
 }
 
 /*
@@ -4155,7 +4155,7 @@ void do_config(CHAR_DATA* ch, char* argument)
 
 void do_credits(CHAR_DATA* ch, char* argument)
 {
-    do_help(ch, "credits");
+    do_help(ch, MAKE_TEMP_STRING("credits"));
 }
 
 extern int top_area;
@@ -4461,9 +4461,9 @@ void do_pager(CHAR_DATA* ch, char* argument)
     if (!*arg)
     {
         if (IS_SET(ch->pcdata->flags, PCFLAG_PAGERON))
-            do_config(ch, "-pager");
+            do_config(ch, MAKE_TEMP_STRING("-pager"));
         else
-            do_config(ch, "+pager");
+            do_config(ch, MAKE_TEMP_STRING("+pager"));
         return;
     }
     if (!is_number(arg))

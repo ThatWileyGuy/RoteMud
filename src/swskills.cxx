@@ -2838,7 +2838,7 @@ void add_reinforcements(CHAR_DATA* ch)
                 stop_follower(mob[mob_cnt]);
             add_follower(mob[mob_cnt], ch);
             SET_BIT(mob[mob_cnt]->affected_by, AFF_CHARM);
-            do_setblaster(mob[mob_cnt], "full");
+            do_setblaster(mob[mob_cnt], MAKE_TEMP_STRING("full"));
         }
     }
     else
@@ -3866,7 +3866,7 @@ void do_beg(CHAR_DATA* ch, char* argument)
     if (amount <= 0)
     {
         do_look(victim, ch->name);
-        do_say(victim, "Sorry I have nothing to spare.\n\r");
+        do_say(victim, MAKE_TEMP_STRING("Sorry I have nothing to spare.\n\r"));
         learn_from_failure(ch, gsn_beg);
         return;
     }

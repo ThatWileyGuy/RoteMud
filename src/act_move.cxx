@@ -1113,7 +1113,7 @@ ch_ret move_char(CHAR_DATA* ch, EXIT_DATA* pexit, int fall)
         }
     }
 
-    do_look(ch, "auto");
+    do_look(ch, MAKE_TEMP_STRING("auto"));
     if (brief)
         SET_BIT(ch->act, PLR_BRIEF);
 
@@ -1410,7 +1410,7 @@ void do_open(CHAR_DATA* ch, char* argument)
 
     if (arg[0] == '\0')
     {
-        do_openhatch(ch, "");
+        do_openhatch(ch, MAKE_TEMP_STRING(""));
         return;
     }
 
@@ -1509,7 +1509,7 @@ void do_close(CHAR_DATA* ch, char* argument)
 
     if (arg[0] == '\0')
     {
-        do_closehatch(ch, "");
+        do_closehatch(ch, MAKE_TEMP_STRING(""));
         return;
     }
 
@@ -1967,7 +1967,7 @@ void do_stand(CHAR_DATA* ch, char* argument)
             act(AT_ACTION, "$n wakes and stands in $p.", ch, obj, NULL, TO_ROOM);
         }
         ch->position = POS_STANDING;
-        do_look(ch, "auto");
+        do_look(ch, MAKE_TEMP_STRING("auto"));
         break;
 
     case POS_RESTING:
@@ -2822,7 +2822,7 @@ void teleportch(CHAR_DATA* ch, ROOM_INDEX_DATA* room, bool show)
     char_to_room(ch, room);
     act(AT_ACTION, "$n arrives suddenly!", ch, NULL, NULL, TO_ROOM);
     if (show)
-        do_look(ch, "auto");
+        do_look(ch, MAKE_TEMP_STRING("auto"));
 }
 
 void teleport(CHAR_DATA* ch, int room, int flags)
@@ -2931,7 +2931,7 @@ void do_leave(CHAR_DATA* ch, char* argument)
                 move_char(ch, pexit, 0);
                 return;
             }
-        do_leaveship(ch, "");
+        do_leaveship(ch, MAKE_TEMP_STRING(""));
         return;
     }
 
@@ -2940,7 +2940,7 @@ void do_leave(CHAR_DATA* ch, char* argument)
         move_char(ch, pexit, 0);
         return;
     }
-    do_leaveship(ch, "");
+    do_leaveship(ch, MAKE_TEMP_STRING(""));
     return;
 }
 

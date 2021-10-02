@@ -527,7 +527,7 @@ void close_socket(DESCRIPTOR_DATA* dclose, bool startedExternally, bool force)
     if (dclose->original)
     {
         if ((ch = dclose->character) != NULL)
-            do_return(ch, "");
+            do_return(ch, MAKE_TEMP_STRING(""));
         else
         {
             bug("Close_socket: dclose->original without character %s",
@@ -924,7 +924,7 @@ void nanny(std::shared_ptr<DESCRIPTOR_DATA> d, char* argument)
         show_title(d);
         if (ch->pcdata->area)
         {
-            do_loadarea(ch, "");
+            do_loadarea(ch, MAKE_TEMP_STRING(""));
             assign_area(ch);
         }
         if (ch->max_mana != (ch->force_control + ch->force_sense + ch->force_alter) * 3 * ch->force_level_status)
@@ -1521,12 +1521,12 @@ void nanny(std::shared_ptr<DESCRIPTOR_DATA> d, char* argument)
         if (ch->top_level >= 0)
         {
             send_to_pager("\n\r&WMessage of the Day&w\n\r", ch);
-            do_help(ch, "motd");
+            do_help(ch, MAKE_TEMP_STRING("motd"));
         }
         if (IS_IMMORTAL(ch))
         {
             send_to_pager("&WImmortal Message of the Day&w\n\r", ch);
-            do_help(ch, "imotd");
+            do_help(ch, MAKE_TEMP_STRING("imotd"));
         }
         send_to_pager("\n\r&WPress [ENTER] &w", ch);
         d->connected = CON_READ_MOTD;
@@ -1808,7 +1808,7 @@ void nanny(std::shared_ptr<DESCRIPTOR_DATA> d, char* argument)
         }
 
         //    act( AT_ACTION, "$n has entered the game.", ch, NULL, NULL, TO_ROOM );
-        do_look(ch, "auto");
+        do_look(ch, MAKE_TEMP_STRING("auto"));
         mail_count(ch);
         break;
 
@@ -2013,7 +2013,7 @@ std::shared_ptr<void> handle_new_authenticated_connection(std::shared_ptr<Connec
     show_title(dnew);
     if (ch->pcdata->area)
     {
-        do_loadarea(ch, "");
+        do_loadarea(ch, MAKE_TEMP_STRING(""));
         assign_area(ch);
     }
     if (ch->max_mana != (ch->force_control + ch->force_sense + ch->force_alter) * 3 * ch->force_level_status)
@@ -2218,7 +2218,7 @@ bool check_playing(std::shared_ptr<DESCRIPTOR_DATA> d, char* name, bool kick)
             ch->desc = d.get();
             ch->timer = 0;
             if (ch->switched)
-                do_return(ch->switched, "");
+                do_return(ch->switched, MAKE_TEMP_STRING(""));
             ch->switched = NULL;
             send_to_char("Reconnecting.\n\r", ch);
             act(AT_ACTION, "$n has reconnected, kicking off old link.", ch, NULL, NULL, TO_ROOM);
@@ -3382,7 +3382,7 @@ void arms(std::shared_ptr<DESCRIPTOR_DATA> d, char* argument)
 
         case 'l':
         case 'L':
-            do_mailroom(ch, "list");
+            do_mailroom(ch, MAKE_TEMP_STRING("list"));
             send_to_char("\n\r\n\rPlease enter a command or enter h for help: ", ch);
             break;
         case 'd':
@@ -3429,8 +3429,8 @@ void arms(std::shared_ptr<DESCRIPTOR_DATA> d, char* argument)
         strcat_s(subjcmd, subj);
         do_mailroom(ch, subjcmd);
         send_to_char("/n/rBody: ", ch);
-        do_mailroom(ch, "write");
-        do_mailroom(ch, "post");
+        do_mailroom(ch, MAKE_TEMP_STRING("write"));
+        do_mailroom(ch, MAKE_TEMP_STRING("post"));
         d->connected = CON_MAIN_MAIL_MENU;
         break;
     default:

@@ -954,7 +954,7 @@ void do_goto(CHAR_DATA* ch, char* argument)
             act(AT_IMMORT, "$n $T", ch, NULL, "enters in a swirl of the Force.", TO_ROOM);
     }
 
-    do_look(ch, "auto");
+    do_look(ch, MAKE_TEMP_STRING("auto"));
 
     if (ch->in_room == in_room)
         return;
@@ -1082,13 +1082,15 @@ void do_mset(CHAR_DATA* ch, char* argument)
     if (ch->substate == SUB_REPEATCMD)
     {
         victim = reinterpret_cast<CHAR_DATA*>(ch->dest_buf);
+        bool victimDied = false;
+
         if (char_died(victim))
         {
             send_to_char("Your victim died!\n\r", ch);
             victim = NULL;
-            argument = "done";
+            victimDied = true;
         }
-        if (argument[0] == '\0' || !str_cmp(argument, " ") || !str_cmp(argument, "stat"))
+        if (!victimDied && (argument[0] == '\0' || !str_cmp(argument, " ") || !str_cmp(argument, "stat")))
         {
             if (victim)
                 do_mstat(ch, victim->name);
@@ -1096,7 +1098,7 @@ void do_mset(CHAR_DATA* ch, char* argument)
                 send_to_char("No victim selected.  Type '?' for help.\n\r", ch);
             return;
         }
-        if (!str_cmp(argument, "done") || !str_cmp(argument, "off"))
+        if (victimDied || !str_cmp(argument, "done") || !str_cmp(argument, "off"))
         {
             send_to_char("Mset mode off.\n\r", ch);
             ch->substate = SUB_NONE;
@@ -2851,7 +2853,7 @@ void do_mset(CHAR_DATA* ch, char* argument)
         ch->last_cmd = do_mset;
     }
     else
-        do_mset(ch, "");
+        do_mset(ch, MAKE_TEMP_STRING(""));
     return;
 }
 
@@ -2944,13 +2946,15 @@ void do_oset(CHAR_DATA* ch, char* argument)
     if (ch->substate == SUB_REPEATCMD)
     {
         obj = reinterpret_cast<OBJ_DATA*>(ch->dest_buf);
+        bool objectExtracted = false;
+
         if (obj && obj_extracted(obj))
         {
             send_to_char("Your object was extracted!\n\r", ch);
             obj = NULL;
-            argument = "done";
+            objectExtracted = true;
         }
-        if (argument[0] == '\0' || !str_cmp(argument, " ") || !str_cmp(argument, "stat"))
+        if (!objectExtracted && (argument[0] == '\0' || !str_cmp(argument, " ") || !str_cmp(argument, "stat")))
         {
             if (obj)
                 do_ostat(ch, obj->name);
@@ -2958,7 +2962,7 @@ void do_oset(CHAR_DATA* ch, char* argument)
                 send_to_char("No object selected.  Type '?' for help.\n\r", ch);
             return;
         }
-        if (!str_cmp(argument, "done") || !str_cmp(argument, "off"))
+        if (objectExtracted || !str_cmp(argument, "done") || !str_cmp(argument, "off"))
         {
             send_to_char("Oset mode off.\n\r", ch);
             ch->substate = SUB_NONE;
@@ -3828,7 +3832,9 @@ void do_oset(CHAR_DATA* ch, char* argument)
         ch->last_cmd = do_oset;
     }
     else
-        do_oset(ch, "");
+    {
+        do_oset(ch, MAKE_TEMP_STRING(""));
+    }
     return;
 }
 
@@ -3901,7 +3907,7 @@ void do_rset(CHAR_DATA* ch, char* argument)
     /*
      * Generate usage message.
      */
-    do_rset(ch, "");
+    do_rset(ch, MAKE_TEMP_STRING(""));
     return;
 }
 
@@ -4059,7 +4065,7 @@ void do_redit(CHAR_DATA* ch, char* argument)
     {
         if (arg[0] == '\0')
         {
-            do_rstat(ch, "");
+            do_rstat(ch, MAKE_TEMP_STRING(""));
             return;
         }
         if (!str_cmp(arg, "done") || !str_cmp(arg, "off"))
@@ -4974,7 +4980,7 @@ void do_redit(CHAR_DATA* ch, char* argument)
         ch->last_cmd = do_redit;
     }
     else
-        do_redit(ch, "");
+        do_redit(ch, MAKE_TEMP_STRING(""));
     return;
 }
 
@@ -6693,7 +6699,7 @@ void do_aset(CHAR_DATA* ch, char* argument)
         return;
     }
 
-    do_aset(ch, "");
+    do_aset(ch, MAKE_TEMP_STRING(""));
     return;
 }
 
@@ -7153,7 +7159,7 @@ void do_mpedit(CHAR_DATA* ch, char* argument)
         return;
     }
 
-    do_mpedit(ch, "");
+    do_mpedit(ch, MAKE_TEMP_STRING(""));
 }
 
 void do_opedit(CHAR_DATA* ch, char* argument)
@@ -7431,7 +7437,7 @@ void do_opedit(CHAR_DATA* ch, char* argument)
         return;
     }
 
-    do_opedit(ch, "");
+    do_opedit(ch, MAKE_TEMP_STRING(""));
 }
 
 /*
@@ -7705,7 +7711,7 @@ void do_rpedit(CHAR_DATA* ch, char* argument)
         return;
     }
 
-    do_rpedit(ch, "");
+    do_rpedit(ch, MAKE_TEMP_STRING(""));
 }
 
 void do_rdelete(CHAR_DATA* ch, char* argument)

@@ -688,7 +688,7 @@ void do_setplanet(CHAR_DATA* ch, char* argument)
         return;
     }
 
-    do_setplanet(ch, "");
+    do_setplanet(ch, MAKE_TEMP_STRING(""));
     return;
 }
 

@@ -102,7 +102,7 @@ void do_buyhome(CHAR_DATA* ch, char* argument)
     fold_area(room->area, room->area->filename, false);
 
     ch->plr_home = room;
-    do_save(ch, "");
+    do_save(ch, MAKE_TEMP_STRING(""));
 
     send_to_char("&GYou buy your home for 25000 credits.\n\r", ch);
 }
@@ -150,7 +150,7 @@ void do_sellhome(CHAR_DATA* ch, char* argument)
     fold_area(room->area, room->area->filename, false);
 
     ch->plr_home = NULL;
-    do_save(ch, "");
+    do_save(ch, MAKE_TEMP_STRING(""));
 
     send_to_char("&GYou sell your home for 10000 credits.\n\r", ch);
 }
@@ -274,7 +274,7 @@ void do_clone(CHAR_DATA* ch, char* argument)
         char_from_room(ch);
         char_to_room(ch, get_room_index(1234));
     }
-    do_look(ch, "");
+    do_look(ch, MAKE_TEMP_STRING(""));
 
     ch_printf(ch, "\n\r&WA small tissue sample is taken from your arm.\n\r");
     ch_printf(ch, "&ROuch!\n\r\n\r");
@@ -391,7 +391,7 @@ void do_backup(CHAR_DATA* ch, char* argument)
         char_from_room(ch);
         char_to_room(ch, get_room_index(1234));
     }
-    do_look(ch, "");
+    do_look(ch, MAKE_TEMP_STRING(""));
 
     ch_printf(ch, "\n\r&WYou stick your head interface into a wall socket.\n\r");
     ch_printf(ch, "&RA slight whirr in your brain feels a bit uncomfortable...\n\r\n\r");
@@ -712,7 +712,7 @@ void do_setblaster(CHAR_DATA* ch, char* argument)
         return;
     }
     else
-        do_setblaster(ch, "");
+        do_setblaster(ch, MAKE_TEMP_STRING(""));
 }
 
 void do_use(CHAR_DATA* ch, char* argument)
@@ -2627,7 +2627,7 @@ void do_hail(CHAR_DATA* ch, char* argument)
     act(AT_ACTION, "$n $T", ch, NULL, "arrives on a speederbike, gets off and pays the driver before it leaves.",
         TO_ROOM);
 
-    do_look(ch, "auto");
+    do_look(ch, MAKE_TEMP_STRING("auto"));
 }
 
 void do_train(CHAR_DATA* ch, char* argument)
@@ -2676,7 +2676,7 @@ void do_train(CHAR_DATA* ch, char* argument)
         str_cmp(arg, "con") && str_cmp(arg, "constitution") && str_cmp(arg, "cha") && str_cmp(arg, "charisma") &&
         str_cmp(arg, "wis") && str_cmp(arg, "wisdom") && str_cmp(arg, "int") && str_cmp(arg, "intelligence"))
     {
-        do_train(ch, "");
+        do_train(ch, MAKE_TEMP_STRING(""));
         return;
     }
 
@@ -2976,7 +2976,7 @@ void do_bank(CHAR_DATA* ch, char* argument)
         if (amount <= 0)
         {
             send_to_char("You may only deposit amounts greater than zero.\n\r", ch);
-            do_bank(ch, "");
+            do_bank(ch, MAKE_TEMP_STRING(""));
             return;
         }
 
@@ -2997,7 +2997,7 @@ void do_bank(CHAR_DATA* ch, char* argument)
         if (amount <= 0)
         {
             send_to_char("You may only withdraw amounts greater than zero.\n\r", ch);
-            do_bank(ch, "");
+            do_bank(ch, MAKE_TEMP_STRING(""));
             return;
         }
 
@@ -3061,7 +3061,7 @@ void do_bank(CHAR_DATA* ch, char* argument)
     }
     else
     {
-        do_bank(ch, "");
+        do_bank(ch, MAKE_TEMP_STRING(""));
         return;
     }
 }
@@ -3442,7 +3442,7 @@ void do_rpconvert(CHAR_DATA* ch, char* argument)
         return;
     }
 
-    do_rpconvert(ch, "");
+    do_rpconvert(ch, MAKE_TEMP_STRING(""));
 }
 
 void do_arm(CHAR_DATA* ch, char* argument)

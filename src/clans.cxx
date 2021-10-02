@@ -914,7 +914,7 @@ void do_setclan(CHAR_DATA* ch, char* argument)
 
     if (get_trust(ch) < LEVEL_SUB_IMPLEM)
     {
-        do_setclan(ch, "");
+        do_setclan(ch, MAKE_TEMP_STRING(""));
         return;
     }
 
@@ -978,7 +978,7 @@ void do_setclan(CHAR_DATA* ch, char* argument)
         return;
     }
 
-    do_setclan(ch, "");
+    do_setclan(ch, MAKE_TEMP_STRING(""));
     return;
 }
 
@@ -1326,7 +1326,7 @@ void do_shove(CHAR_DATA* ch, char* argument)
             sprintf_s(buf, "%s is shoved into %s.", victim->name, ship->name);
             echo_to_room(AT_PLAIN, ch->in_room, buf);
             act(AT_PLAIN, "$n is shoved into the ship.", victim, NULL, argument, TO_ROOM);
-            do_look(victim, "auto");
+            do_look(victim, MAKE_TEMP_STRING("auto"));
         }
     }
 
@@ -1900,7 +1900,7 @@ void do_appoint(CHAR_DATA* ch, char* argument)
         ch->pcdata->clan->number2 = STRALLOC(arg);
     }
     else
-        do_appoint(ch, "");
+        do_appoint(ch, MAKE_TEMP_STRING(""));
     save_clan(ch->pcdata->clan);
 }
 

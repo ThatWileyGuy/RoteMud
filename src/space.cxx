@@ -54,8 +54,8 @@ SPACE_DATA* first_starsystem;
 SPACE_DATA* last_starsystem;
 
 extern char bname[MAX_STRING_LENGTH];
-char* primary_beam_name(SHIP_DATA* ship);
-char* secondary_beam_name(SHIP_DATA* ship);
+std::string primary_beam_name(SHIP_DATA* ship);
+std::string secondary_beam_name(SHIP_DATA* ship);
 extern const char* cargo_names[CARGO_MAX];
 extern const char* cargo_names_lower[CARGO_MAX];
 
@@ -2201,7 +2201,7 @@ void do_setstarsystem(CHAR_DATA* ch, char* argument)
         return;
     }
 
-    do_setstarsystem(ch, "");
+    do_setstarsystem(ch, MAKE_TEMP_STRING(""));
     return;
 }
 
@@ -4570,7 +4570,7 @@ void do_setship(CHAR_DATA* ch, char* argument)
         return;
     }
 
-    do_setship(ch, "");
+    do_setship(ch, MAKE_TEMP_STRING(""));
     return;
 }
 
@@ -5940,7 +5940,7 @@ void do_board(CHAR_DATA* ch, char* argument)
         char_from_room(ch);
         char_to_room(ch, toroom);
         act(AT_PLAIN, "$n enters the ship.", ch, NULL, argument, TO_ROOM);
-        do_look(ch, "auto");
+        do_look(ch, MAKE_TEMP_STRING("auto"));
     }
     else
         send_to_char("That ship has no entrance!\n\r", ch);
@@ -6018,7 +6018,7 @@ void do_leaveship(CHAR_DATA* ch, char* argument)
         char_from_room(ch);
         char_to_room(ch, toroom);
         act(AT_PLAIN, "$n steps out of a ship.", ch, NULL, argument, TO_ROOM);
-        do_look(ch, "auto");
+        do_look(ch, MAKE_TEMP_STRING("auto"));
     }
     else
         send_to_char("The exit doesn't seem to be working properly.\n\r", ch);
@@ -6603,7 +6603,7 @@ void do_land(CHAR_DATA* ch, char* argument)
         else
         {
             send_to_char("&RI don't see that here.\n\r&W", ch);
-            do_land(ch, "");
+            do_land(ch, MAKE_TEMP_STRING(""));
             return;
         }
     }
@@ -7649,7 +7649,7 @@ void do_status(CHAR_DATA* ch, char* argument)
               target->shield, target->maxshield, target->energy, target->maxenergy);
 
     ch_printf(ch, "&zPrimary Weapon System:   &w%-7s&W::  &w%s\n\r",
-              target->primaryState == LASER_DAMAGED ? "&ROffline" : "&GOnline", primary_beam_name(target));
+              target->primaryState == LASER_DAMAGED ? "&ROffline" : "&GOnline", primary_beam_name(target).c_str());
 
     switch (ship->primaryType)
     {
@@ -7730,7 +7730,7 @@ void do_status(CHAR_DATA* ch, char* argument)
     if (target->secondaryCount != 0)
     {
         ch_printf(ch, "&zSecondary Weapon System: &w%-7s&W::  &w%s\n\r",
-                  target->secondaryState == LASER_DAMAGED ? "&ROffline" : "&GOnline", secondary_beam_name(target));
+                  target->secondaryState == LASER_DAMAGED ? "&ROffline" : "&GOnline", secondary_beam_name(target).c_str());
         ch_printf(ch, "&z   Linked fire: &w%s\n\r",
                   (x <= 1) ? "Unavailable" : ship->secondaryLinked == true ? "&GON" : "&ROFF");
     }
@@ -8367,7 +8367,7 @@ void do_fire(CHAR_DATA* ch, char* argument)
 
             if (p > 1 && str_cmp(argument, "noloop")) // Infinite recursion == bad
                 for (times = 1; times < p; times++)
-                    do_fire(ch, "primary noloop");
+                    do_fire(ch, MAKE_TEMP_STRING("primary noloop"));
 
             return;
         }
@@ -8420,7 +8420,7 @@ void do_fire(CHAR_DATA* ch, char* argument)
 
         if (p > 1 && str_cmp(argument, "noloop")) // Infinite recursion == bad
             for (times = 1; times < p; times++)
-                do_fire(ch, "primary noloop");
+                do_fire(ch, MAKE_TEMP_STRING("primary noloop"));
 
         return;
     } // End firing primary
@@ -8599,7 +8599,7 @@ void do_fire(CHAR_DATA* ch, char* argument)
 
             if (p > 1 && str_cmp(argument, "noloop")) // Infinite recursion == bad
                 for (times = 1; times < p; times++)
-                    do_fire(ch, "secondary noloop");
+                    do_fire(ch, MAKE_TEMP_STRING("secondary noloop"));
             return;
         }
         if (ship->secondaryType == LIGHT_ION)
@@ -8663,7 +8663,7 @@ void do_fire(CHAR_DATA* ch, char* argument)
 
         if (p > 1 && str_cmp(argument, "noloop")) // Infinite recursion == bad
             for (times = 1; times < p; times++)
-                do_fire(ch, "secondary noloop");
+                do_fire(ch, MAKE_TEMP_STRING("secondary noloop"));
         return;
     } // End secondary fire
 
@@ -8744,9 +8744,9 @@ void do_fire(CHAR_DATA* ch, char* argument)
         if (ship->warheadLinked == true && str_cmp(argument, "noloop"))
         {
             if (ship->maxtorpedos > 0 && ship->torpedos > 0)
-                do_fire(ch, "torpedo noloop");
+                do_fire(ch, MAKE_TEMP_STRING("torpedo noloop"));
             if (ship->maxrockets > 0 && ship->rockets > 0)
-                do_fire(ch, "rocket noloop");
+                do_fire(ch, MAKE_TEMP_STRING("rocket noloop"));
         }
         return;
     }
@@ -8827,9 +8827,9 @@ void do_fire(CHAR_DATA* ch, char* argument)
         if (ship->warheadLinked == true && str_cmp(argument, "noloop"))
         {
             if (ship->maxmissiles > 0 && ship->missiles > 0)
-                do_fire(ch, "missile noloop");
+                do_fire(ch, MAKE_TEMP_STRING("missile noloop"));
             if (ship->maxrockets > 0 && ship->rockets > 0)
-                do_fire(ch, "rocket noloop");
+                do_fire(ch, MAKE_TEMP_STRING("rocket noloop"));
         }
         return;
     }
@@ -8911,9 +8911,9 @@ void do_fire(CHAR_DATA* ch, char* argument)
         if (ship->warheadLinked == true && str_cmp(argument, "noloop"))
         {
             if (ship->maxmissiles > 0 && ship->missiles > 0)
-                do_fire(ch, "missile noloop");
+                do_fire(ch, MAKE_TEMP_STRING("missile noloop"));
             if (ship->maxtorpedos > 0 && ship->torpedos > 0)
-                do_fire(ch, "torpedo noloop");
+                do_fire(ch, MAKE_TEMP_STRING("torpedo noloop"));
         }
         return;
     }
@@ -10609,7 +10609,7 @@ ch_ret drive_ship(CHAR_DATA* ch, SHIP_DATA* ship, EXIT_DATA* pexit, int fall)
         original = rch->in_room;
         char_from_room(rch);
         char_to_room(rch, to_room);
-        do_look(rch, "auto");
+        do_look(rch, MAKE_TEMP_STRING("auto"));
         char_from_room(rch);
         char_to_room(rch, original);
     }
@@ -12606,7 +12606,7 @@ void do_transmit_status(CHAR_DATA* ch, char* argument)
     ch_printf(ch, "&zHull:&w %d&W/%d   &zShields:&w %d&W/%d    &zFuel:&w %d&W/%d\n\r\n\r", ship->hull, ship->maxhull,
               ship->shield, ship->maxshield, ship->energy, ship->maxenergy);
     ch_printf(ch, "&zPrimary Weapon System:   &w%-7s&W::  &w%s\n\r",
-              ship->primaryState == LASER_DAMAGED ? "&ROffline" : "&GOnline", primary_beam_name(ship));
+              ship->primaryState == LASER_DAMAGED ? "&ROffline" : "&GOnline", primary_beam_name(ship).c_str());
     switch (ship->primaryType)
     {
     case 0:

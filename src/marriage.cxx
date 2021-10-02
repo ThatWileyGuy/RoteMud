@@ -207,8 +207,8 @@ void do_divorce(CHAR_DATA* ch, char* argument)
 
     vic1->pcdata->spouse = NULL;
     vic2->pcdata->spouse = NULL;
-    do_say(ch, "500 credits each please.");
-    do_say(ch, "Thank you.");
+    do_say(ch, MAKE_TEMP_STRING("500 credits each please."));
+    do_say(ch, MAKE_TEMP_STRING("Thank you."));
     ch->gold += 1000;
     vic1->gold -= 500;
     vic2->gold -= 500;

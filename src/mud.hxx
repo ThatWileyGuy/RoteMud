@@ -191,6 +191,34 @@ typedef void DO_FUN(CHAR_DATA* ch, char* argument);
 typedef bool SPEC_FUN(CHAR_DATA* ch);
 typedef ch_ret SPELL_FUN(int sn, int level, CHAR_DATA* ch, void* vo);
 
+/*
+ * Template types.
+ */
+template <size_t N> struct TempString
+{
+    char contents[N];
+
+    TempString(const char data[N])
+    {
+        for (size_t i = 0; i < N; i++)
+        {
+            contents[i] = data[i];
+        }
+    }
+
+    operator char*()
+    {
+        return &contents[0];
+    }
+
+    size_t getSize()
+    {
+        return sizeof(contents) / sizeof(char);
+    }
+};
+
+#define MAKE_TEMP_STRING(s) TempString<sizeof(s)>(s)
+
 #define DUR_CONV 23.333333333333333333333333
 #define HIDDEN_TILDE '*'
 

@@ -5759,7 +5759,7 @@ void load_buildlist(void)
 #endif
                 CREATE(pArea, AREA_DATA, 1);
                 sprintf_s(buf, "%s.are", entry.path().filename());
-                pArea->author = STRALLOC(entry.path().filename().u8string().c_str());
+                pArea->author = STRALLOC(entry.path().filename().string().c_str());
                 pArea->filename = str_dup(buf);
 #if !defined(READ_AREA)
                 pArea->name = fread_string_nohash(fp);

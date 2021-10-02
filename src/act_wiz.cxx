@@ -277,7 +277,7 @@ void do_authorize(CHAR_DATA* ch, char* argument)
         sprintf_s(buf, "%s denied authorization to %s", ch->name, victim->name);
         to_channel(buf, CHANNEL_MONITOR, "Monitor", ch->top_level);
         ch_printf(ch, "You have denied %s.\n\r", victim->name);
-        do_quit(victim, "");
+        do_quit(victim, MAKE_TEMP_STRING(""));
     }
 
     else if (!str_cmp(arg2, "name") || !str_cmp(arg2, "n"))
@@ -440,7 +440,7 @@ void do_deny(CHAR_DATA* ch, char* argument)
     SET_BIT(victim->act, PLR_DENY);
     send_to_char("You are denied access!\n\r", victim);
     send_to_char("OK.\n\r", ch);
-    do_quit(victim, "");
+    do_quit(victim, MAKE_TEMP_STRING(""));
 
     return;
 }
@@ -518,7 +518,7 @@ void do_fquit(CHAR_DATA* ch, char* argument)
     }
 
     send_to_char("The MUD administrators force you to quit\n\r", victim);
-    do_quit(victim, "");
+    do_quit(victim, MAKE_TEMP_STRING(""));
     send_to_char("Ok.\n\r", ch);
     return;
 }
@@ -817,7 +817,7 @@ void do_transfer(CHAR_DATA* ch, char* argument)
     act(AT_MAGIC, "$n arrives from a puff of smoke.", victim, NULL, NULL, TO_ROOM);
     if (ch != victim)
         act(AT_IMMORT, "$n has transferred you.", ch, NULL, victim, TO_VICT);
-    do_look(victim, "auto");
+    do_look(victim, MAKE_TEMP_STRING("auto"));
     send_to_char("Ok.\n\r", ch);
     //  if (!IS_IMMORTAL(victim) && !IS_NPC(victim)
     //  &&  !in_hard_range( victim, location->area ) )
@@ -1849,7 +1849,7 @@ void do_reboot(CHAR_DATA* ch, char* argument)
     }
 
     if (auction->item)
-        do_auction(ch, "stop");
+        do_auction(ch, MAKE_TEMP_STRING("stop"));
 
     sprintf_s(buf, "Reboot by %s.", ch->name);
     do_echo(ch, buf);
@@ -1889,7 +1889,7 @@ void do_shutdown(CHAR_DATA* ch, char* argument)
     }
 
     if (auction->item)
-        do_auction(ch, "stop");
+        do_auction(ch, MAKE_TEMP_STRING("stop"));
 
     sprintf_s(buf, "Shutdown by %s.", ch->name);
     append_file(ch, SHUTDOWN_FILE, buf);
@@ -2472,7 +2472,7 @@ void do_balzhur(CHAR_DATA* ch, char* argument)
     }
 
     make_wizlist();
-    do_help(victim, "M_BALZHUR_");
+    do_help(victim, MAKE_TEMP_STRING("M_BALZHUR_"));
     set_char_color(AT_WHITE, victim);
     send_to_char("You awake after a long period of time...\n\r", victim);
     while (victim->first_carrying)
@@ -2542,7 +2542,7 @@ void do_advance(CHAR_DATA* ch, char* argument)
     if (ability == -1)
     {
         send_to_char("No Such Ability.\n\r", ch);
-        do_advance(ch, "");
+        do_advance(ch, MAKE_TEMP_STRING(""));
         return;
     }
 
@@ -2635,7 +2635,7 @@ void do_immortalize(CHAR_DATA* ch, char* argument)
         return;
     }
 
-    do_help(victim, "M_GODLVL1_");
+    do_help(victim, MAKE_TEMP_STRING("M_GODLVL1_"));
     set_char_color(AT_WHITE, victim);
     send_to_char("You awake... all your possessions are gone.\n\r", victim);
     while (victim->first_carrying)
@@ -2726,7 +2726,7 @@ void do_restore(CHAR_DATA* ch, char* argument)
                 if (current_time - last_restore_all_time < RESTORE_INTERVAL)
                 {
                     send_to_char("Sorry, you can't do a restore all yet.\n\r", ch);
-                    do_restoretime(ch, "");
+                    do_restoretime(ch, MAKE_TEMP_STRING(""));
                     return;
                 }
             }
@@ -3328,13 +3328,13 @@ void do_ban(CHAR_DATA* ch, char* argument)
                 break;
         if (!pban)
         {
-            do_ban(ch, "");
+            do_ban(ch, MAKE_TEMP_STRING(""));
             return;
         }
         argument = one_argument(argument, arg);
         if (arg[0] == '\0')
         {
-            do_ban(ch, "help");
+            do_ban(ch, MAKE_TEMP_STRING("help"));
             return;
         }
         if (!str_cmp(arg, "level"))
@@ -3342,7 +3342,7 @@ void do_ban(CHAR_DATA* ch, char* argument)
             argument = one_argument(argument, arg);
             if (arg[0] == '\0' || !is_number(arg))
             {
-                do_ban(ch, "help");
+                do_ban(ch, MAKE_TEMP_STRING("help"));
                 return;
             }
             if (atoi(arg) < 1 || atoi(arg) > LEVEL_SUPREME)
@@ -3370,7 +3370,7 @@ void do_ban(CHAR_DATA* ch, char* argument)
         }
         else
         {
-            do_ban(ch, "help");
+            do_ban(ch, MAKE_TEMP_STRING("help"));
             return;
         }
         save_banlist();
@@ -3962,10 +3962,10 @@ void do_loadup(CHAR_DATA* ch, char* argument)
         char_to_room(d->character, ch->in_room);
         if (get_trust(d->character) >= get_trust(ch))
         {
-            do_say(d->character, "Do *NOT* disturb me again!");
+            do_say(d->character, MAKE_TEMP_STRING("Do *NOT* disturb me again!"));
             send_to_char("I think you'd better leave that player alone!\n\r", ch);
             d->character->desc = NULL;
-            do_quit(d->character, "");
+            do_quit(d->character, MAKE_TEMP_STRING(""));
             return;
         }
         d->character->desc = NULL;
@@ -4517,7 +4517,7 @@ void close_area(AREA_DATA* pArea)
             continue;
         }
         if (ech->in_room && ech->in_room->area == pArea)
-            do_recall(ech, "");
+            do_recall(ech, MAKE_TEMP_STRING(""));
     }
     for (eobj = first_object; eobj; eobj = eobj_next)
     {
@@ -4754,7 +4754,7 @@ void do_for(CHAR_DATA* ch, char* argument)
 
     if (!range[0] || !argument[0]) /* invalid usage? */
     {
-        do_help(ch, "for");
+        do_help(ch, MAKE_TEMP_STRING("for"));
         return;
     }
 
@@ -4784,7 +4784,7 @@ void do_for(CHAR_DATA* ch, char* argument)
     else if (!str_cmp(range, "everywhere"))
         fEverywhere = true;
     else
-        do_help(ch, "for"); /* show syntax */
+        do_help(ch, MAKE_TEMP_STRING("for")); /* show syntax */
 
     /* do not allow # to make it easier */
     if (fEverywhere && strchr(argument, '#'))
@@ -5320,7 +5320,7 @@ void do_hell(CHAR_DATA* ch, char* argument)
     char_from_room(victim);
     char_to_room(victim, get_room_index(6));
     act(AT_MAGIC, "$n appears in a could of hellish light.", victim, NULL, ch, TO_NOTVICT);
-    do_look(victim, "auto");
+    do_look(victim, MAKE_TEMP_STRING("auto"));
     ch_printf(victim,
               "The immortals are not pleased with your actions.\n\r"
               "You shall remain in hell for %d %s%s.\n\r",
@@ -5358,7 +5358,7 @@ void do_unhell(CHAR_DATA* ch, char* argument)
     char_from_room(victim);
     char_to_room(victim, location);
     send_to_char("The gods have smiled on you and released you from hell early!\n\r", victim);
-    do_look(victim, "auto");
+    do_look(victim, MAKE_TEMP_STRING("auto"));
     send_to_char("They have been released.\n\r", ch);
 
     if (victim->pcdata->helled_by)
@@ -5778,7 +5778,7 @@ void do_sedit(CHAR_DATA* ch, char* argument)
     }
 
     /* display usage message */
-    do_sedit(ch, "");
+    do_sedit(ch, MAKE_TEMP_STRING(""));
 }
 
 /*
@@ -5958,7 +5958,7 @@ void do_cedit(CHAR_DATA* ch, char* argument)
 
     if (get_trust(ch) <= LEVEL_SUB_IMPLEM)
     {
-        do_cedit(ch, "");
+        do_cedit(ch, MAKE_TEMP_STRING(""));
         return;
     }
 
@@ -6076,7 +6076,7 @@ void do_cedit(CHAR_DATA* ch, char* argument)
     }
 
     /* display usage message */
-    do_cedit(ch, "");
+    do_cedit(ch, MAKE_TEMP_STRING(""));
 }
 
 /* Pfile Restore by Tawnos */
@@ -6206,7 +6206,7 @@ void do_fslay(CHAR_DATA* ch, char* argument)
 
     set_cur_char(victim);
     set_char_color(AT_DIEMSG, victim);
-    do_help(victim, "_DIEMSG_");
+    do_help(victim, MAKE_TEMP_STRING("_DIEMSG_"));
     for (auto d : g_descriptors)
     {
         if (d.get() == victim->desc)

@@ -3191,7 +3191,7 @@ ch_ret spell_weaken(int sn, int level, CHAR_DATA* ch, void* vo)
  */
 ch_ret spell_word_of_recall(int sn, int level, CHAR_DATA* ch, void* vo)
 {
-    do_recall((CHAR_DATA*)vo, "");
+    do_recall((CHAR_DATA*)vo, MAKE_TEMP_STRING(""));
     return rNONE;
 }
 
@@ -3501,7 +3501,7 @@ ch_ret spell_farsight(int sn, int level, CHAR_DATA* ch, void* vo)
     original = ch->in_room;
     char_from_room(ch);
     char_to_room(ch, location);
-    do_look(ch, "auto");
+    do_look(ch, MAKE_TEMP_STRING("auto"));
     char_from_room(ch);
     char_to_room(ch, original);
     return rNONE;

@@ -163,8 +163,9 @@ PROTO_ROOM* last_prototype_room;
 
 void instaroom(ROOM_INDEX_DATA* pRoom, bool dodoors);
 void shiplist(CHAR_DATA* ch);
-const char* primary_beam_name_proto(int shiptype);
-const char* secondary_beam_name_proto(int shiptype);
+std::string primary_beam_name_proto(int shiptype);
+std::string secondary_beam_name_proto(int shiptype);
+std::string beam_name(sh_int type, bool plural);
 
 void do_buymobship(CHAR_DATA* ch, char* argument)
 {
@@ -2144,215 +2145,22 @@ void do_makeprototypeship(CHAR_DATA* ch, char* argument)
 
 char pbname[MAX_STRING_LENGTH];
 
-const char* primary_beam_name_proto(int shiptype)
+std::string primary_beam_name_proto(int shiptype)
 {
     if (ship_prototypes[shiptype].primaryCount != 0)
-    {
-        sprintf_s(
-            pbname, "%d %s", ship_prototypes[shiptype].primaryCount,
-            (ship_prototypes[shiptype].primaryType == SINGLE_LASER && ship_prototypes[shiptype].primaryCount == 1)
-                ? "Single-laser cannon"
-                : (ship_prototypes[shiptype].primaryType == SINGLE_LASER && ship_prototypes[shiptype].primaryCount != 1)
-                      ? "Single-laser cannons"
-                      : (ship_prototypes[shiptype].primaryType == DUAL_LASER &&
-                         ship_prototypes[shiptype].primaryCount == 1)
-                            ? "Dual-laser cannon"
-                            : (ship_prototypes[shiptype].primaryType == DUAL_LASER &&
-                               ship_prototypes[shiptype].primaryCount != 1)
-                                  ? "Dual-laser cannons"
-                                  : (ship_prototypes[shiptype].primaryType == TRI_LASER &&
-                                     ship_prototypes[shiptype].primaryCount == 1)
-                                        ? "Triple-laser cannon"
-                                        : (ship_prototypes[shiptype].primaryType == TRI_LASER &&
-                                           ship_prototypes[shiptype].primaryCount != 1)
-                                              ? "Triple-laser cannons"
-                                              : (ship_prototypes[shiptype].primaryType == QUAD_LASER &&
-                                                 ship_prototypes[shiptype].primaryCount == 1)
-                                                    ? "Quad-laser cannon"
-                                                    : (ship_prototypes[shiptype].primaryType == QUAD_LASER &&
-                                                       ship_prototypes[shiptype].primaryCount != 1)
-                                                          ? "Quad-laser cannons"
-                                                          : (ship_prototypes[shiptype].primaryType == AUTOBLASTER &&
-                                                             ship_prototypes[shiptype].primaryCount == 1)
-                                                                ? "Autoblaster turret"
-                                                                : (ship_prototypes[shiptype].primaryType ==
-                                                                       AUTOBLASTER &&
-                                                                   ship_prototypes[shiptype].primaryCount != 1)
-                                                                      ? "Autoblaster turrets"
-                                                                      : (ship_prototypes[shiptype].primaryType ==
-                                                                             HEAVY_LASER &&
-                                                                         ship_prototypes[shiptype].primaryCount == 1)
-                                                                            ? "Heavy laser cannon"
-                                                                            : (ship_prototypes[shiptype].primaryType ==
-                                                                                   HEAVY_LASER &&
-                                                                               ship_prototypes[shiptype].primaryCount !=
-                                                                                   1)
-                                                                                  ? "Heavy laser cannons"
-                                                                                  : (ship_prototypes[shiptype]
-                                                                                             .primaryType ==
-                                                                                         LIGHT_ION &&
-                                                                                     ship_prototypes[shiptype]
-                                                                                             .primaryCount == 1)
-                                                                                        ? "Light ion cannon"
-                                                                                        : (ship_prototypes[shiptype]
-                                                                                                   .primaryType ==
-                                                                                               LIGHT_ION &&
-                                                                                           ship_prototypes[shiptype]
-                                                                                                   .primaryCount != 1)
-                                                                                              ? "Light ion cannons"
-                                                                                              : (ship_prototypes[shiptype]
-                                                                                                         .primaryType ==
-                                                                                                     REPEATING_ION &&
-                                                                                                 ship_prototypes[shiptype]
-                                                                                                         .primaryCount ==
-                                                                                                     1)
-                                                                                                    ? "Repeating ion "
-                                                                                                      "cannon"
-                                                                                                    : (ship_prototypes
-                                                                                                               [shiptype]
-                                                                                                                   .primaryType ==
-                                                                                                           REPEATING_ION &&
-                                                                                                       ship_prototypes
-                                                                                                               [shiptype]
-                                                                                                                   .primaryCount !=
-                                                                                                           1)
-                                                                                                          ? "Repeating "
-                                                                                                            "ion "
-                                                                                                            "cannons"
-                                                                                                          : (ship_prototypes
-                                                                                                                     [shiptype]
-                                                                                                                         .primaryType ==
-                                                                                                                 HEAVY_ION &&
-                                                                                                             ship_prototypes
-                                                                                                                     [shiptype]
-                                                                                                                         .primaryCount ==
-                                                                                                                 1)
-                                                                                                                ? "Heav"
-                                                                                                                  "y "
-                                                                                                                  "ion "
-                                                                                                                  "cann"
-                                                                                                                  "on"
-                                                                                                                : (ship_prototypes
-                                                                                                                           [shiptype]
-                                                                                                                               .primaryType ==
-                                                                                                                       HEAVY_ION &&
-                                                                                                                   ship_prototypes
-                                                                                                                           [shiptype]
-                                                                                                                               .primaryCount !=
-                                                                                                                       1)
-                                                                                                                      ? "Heavy ion cannons"
-                                                                                                                      : "unknown");
-
-        return pbname;
-    }
+        return beam_name(ship_prototypes[shiptype].primaryType, ship_prototypes[shiptype].primaryCount > 1);
     else
         return "None.";
 }
-const char* secondary_beam_name_proto(int shiptype)
+
+std::string secondary_beam_name_proto(int shiptype)
 {
     if (ship_prototypes[shiptype].secondaryCount != 0)
-    {
-        sprintf_s(
-            pbname, "%d %s", ship_prototypes[shiptype].secondaryCount,
-            (ship_prototypes[shiptype].secondaryType == SINGLE_LASER && ship_prototypes[shiptype].secondaryCount == 1)
-                ? "Single-laser cannon"
-                : (ship_prototypes[shiptype].secondaryType == SINGLE_LASER &&
-                   ship_prototypes[shiptype].secondaryCount != 1)
-                      ? "Single-laser cannons"
-                      : (ship_prototypes[shiptype].secondaryType == DUAL_LASER &&
-                         ship_prototypes[shiptype].secondaryCount == 1)
-                            ? "Dual-laser cannon"
-                            : (ship_prototypes[shiptype].secondaryType == DUAL_LASER &&
-                               ship_prototypes[shiptype].secondaryCount != 1)
-                                  ? "Dual-laser cannons"
-                                  : (ship_prototypes[shiptype].secondaryType == TRI_LASER &&
-                                     ship_prototypes[shiptype].secondaryCount == 1)
-                                        ? "Triple-laser cannon"
-                                        : (ship_prototypes[shiptype].secondaryType == TRI_LASER &&
-                                           ship_prototypes[shiptype].secondaryCount != 1)
-                                              ? "Triple-laser cannons"
-                                              : (ship_prototypes[shiptype].secondaryType == QUAD_LASER &&
-                                                 ship_prototypes[shiptype].secondaryCount == 1)
-                                                    ? "Quad-laser cannon"
-                                                    : (ship_prototypes[shiptype].secondaryType == QUAD_LASER &&
-                                                       ship_prototypes[shiptype].secondaryCount != 1)
-                                                          ? "Quad-laser cannons"
-                                                          : (ship_prototypes[shiptype].secondaryType == AUTOBLASTER &&
-                                                             ship_prototypes[shiptype].secondaryCount == 1)
-                                                                ? "Autoblaster turret"
-                                                                : (ship_prototypes[shiptype].secondaryType ==
-                                                                       AUTOBLASTER &&
-                                                                   ship_prototypes[shiptype].secondaryCount != 1)
-                                                                      ? "Autoblaster turrets"
-                                                                      : (ship_prototypes[shiptype].secondaryType ==
-                                                                             HEAVY_LASER &&
-                                                                         ship_prototypes[shiptype].secondaryCount == 1)
-                                                                            ? "Heavy laser cannon"
-                                                                            : (ship_prototypes[shiptype]
-                                                                                       .secondaryType == HEAVY_LASER &&
-                                                                               ship_prototypes[shiptype]
-                                                                                       .secondaryCount != 1)
-                                                                                  ? "Heavy laser cannons"
-                                                                                  : (ship_prototypes[shiptype]
-                                                                                             .secondaryType ==
-                                                                                         LIGHT_ION &&
-                                                                                     ship_prototypes[shiptype]
-                                                                                             .secondaryCount == 1)
-                                                                                        ? "Light ion cannon"
-                                                                                        : (ship_prototypes[shiptype]
-                                                                                                   .secondaryType ==
-                                                                                               LIGHT_ION &&
-                                                                                           ship_prototypes[shiptype]
-                                                                                                   .secondaryCount != 1)
-                                                                                              ? "Light ion cannons"
-                                                                                              : (ship_prototypes[shiptype]
-                                                                                                         .secondaryType ==
-                                                                                                     REPEATING_ION &&
-                                                                                                 ship_prototypes[shiptype]
-                                                                                                         .secondaryCount ==
-                                                                                                     1)
-                                                                                                    ? "Repeating ion "
-                                                                                                      "cannon"
-                                                                                                    : (ship_prototypes
-                                                                                                               [shiptype]
-                                                                                                                   .secondaryType ==
-                                                                                                           REPEATING_ION &&
-                                                                                                       ship_prototypes
-                                                                                                               [shiptype]
-                                                                                                                   .secondaryCount !=
-                                                                                                           1)
-                                                                                                          ? "Repeating "
-                                                                                                            "ion "
-                                                                                                            "cannons"
-                                                                                                          : (ship_prototypes
-                                                                                                                     [shiptype]
-                                                                                                                         .secondaryType ==
-                                                                                                                 HEAVY_ION &&
-                                                                                                             ship_prototypes
-                                                                                                                     [shiptype]
-                                                                                                                         .secondaryCount ==
-                                                                                                                 1)
-                                                                                                                ? "Heav"
-                                                                                                                  "y "
-                                                                                                                  "ion "
-                                                                                                                  "cann"
-                                                                                                                  "on"
-                                                                                                                : (ship_prototypes
-                                                                                                                           [shiptype]
-                                                                                                                               .secondaryType ==
-                                                                                                                       HEAVY_ION &&
-                                                                                                                   ship_prototypes
-                                                                                                                           [shiptype]
-                                                                                                                               .secondaryCount !=
-                                                                                                                       1)
-                                                                                                                      ? "Heavy ion cannons"
-                                                                                                                      : "unknown");
-
-        return pbname;
-    }
+        return beam_name(ship_prototypes[shiptype].secondaryType, ship_prototypes[shiptype].secondaryCount > 1);
     else
         return "None.";
 }
+
 void do_shipstat(CHAR_DATA* ch, char* argument)
 {
     int shiptype;

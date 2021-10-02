@@ -223,7 +223,7 @@ void violence_update(void)
             bug("Short-cutting here", 0);
             ch->prev = NULL;
             gch_prev = NULL;
-            do_shout(ch, "Thoric says, 'Prepare for the worst!'");
+            do_shout(ch, MAKE_TEMP_STRING("Thoric says, 'Prepare for the worst!'"));
         }
 
         /*
@@ -272,7 +272,7 @@ void violence_update(void)
 
                     tempsub = ch->substate;
                     ch->substate = timer->value;
-                    (timer->do_fun)(ch, "");
+                    (timer->do_fun)(ch, MAKE_TEMP_STRING(""));
                     if (char_died(ch))
                         break;
                     ch->substate = tempsub;
@@ -717,27 +717,27 @@ ch_ret one_hit(CHAR_DATA* ch, CHAR_DATA* victim, int dt)
         default:
             break;
         case ATCK_BITE:
-            do_bite(ch, "");
+            do_bite(ch, MAKE_TEMP_STRING(""));
             retcode = global_retcode;
             break;
         case ATCK_CLAWS:
-            do_claw(ch, "");
+            do_claw(ch, MAKE_TEMP_STRING(""));
             retcode = global_retcode;
             break;
         case ATCK_TAIL:
-            do_tail(ch, "");
+            do_tail(ch, MAKE_TEMP_STRING(""));
             retcode = global_retcode;
             break;
         case ATCK_STING:
-            do_sting(ch, "");
+            do_sting(ch, MAKE_TEMP_STRING(""));
             retcode = global_retcode;
             break;
         case ATCK_PUNCH:
-            do_punch(ch, "");
+            do_punch(ch, MAKE_TEMP_STRING(""));
             retcode = global_retcode;
             break;
         case ATCK_KICK:
-            do_kick(ch, "");
+            do_kick(ch, MAKE_TEMP_STRING(""));
             retcode = global_retcode;
             break;
         case ATCK_TRIP:
@@ -1509,7 +1509,7 @@ ch_ret damage(CHAR_DATA* ch, CHAR_DATA* victim, int dam, int dt)
         victim->mana = victim->max_mana;
         if (num_in_arena() == 1)
             find_game_winner();
-        do_look(victim, "auto");
+        do_look(victim, MAKE_TEMP_STRING("auto"));
         stop_fighting(victim, true);
         lost_arena(victim);
         return rNONE;
@@ -1695,7 +1695,7 @@ ch_ret damage(CHAR_DATA* ch, CHAR_DATA* victim, int dam, int dt)
             if (IS_SET(ch->act, PLR_AUTOGOLD))
             {
                 init_gold = ch->gold;
-                do_get(ch, "credits corpse");
+                do_get(ch, MAKE_TEMP_STRING("credits corpse"));
                 new_gold = ch->gold;
                 gold_diff = (new_gold - init_gold);
                 if (gold_diff > 0)
@@ -1707,12 +1707,12 @@ ch_ret damage(CHAR_DATA* ch, CHAR_DATA* victim, int dam, int dt)
             if (room && ch && ch->in_room && ch->in_room->vnum == room)
             {
                 if (IS_SET(ch->act, PLR_AUTOLOOT) && nocorpse == 0)
-                    do_get(ch, "all corpse");
+                    do_get(ch, MAKE_TEMP_STRING("all corpse"));
                 else if (nocorpse == 0)
-                    do_look(ch, "in corpse");
+                    do_look(ch, MAKE_TEMP_STRING("in corpse"));
 
                 if (IS_SET(ch->act, PLR_AUTOSAC))
-                    do_sacrifice(ch, "corpse");
+                    do_sacrifice(ch, MAKE_TEMP_STRING("corpse"));
             }
         }
 
@@ -1731,13 +1731,13 @@ ch_ret damage(CHAR_DATA* ch, CHAR_DATA* victim, int dam, int dt)
     {
         if (number_range(0, victim->wait) == 0)
         {
-            do_flee(victim, "");
-            do_flee(victim, "");
-            do_flee(victim, "");
-            do_flee(victim, "");
-            do_flee(victim, "");
-            do_hail(victim, "");
-            do_quit(victim, "");
+            do_flee(victim, MAKE_TEMP_STRING(""));
+            do_flee(victim, MAKE_TEMP_STRING(""));
+            do_flee(victim, MAKE_TEMP_STRING(""));
+            do_flee(victim, MAKE_TEMP_STRING(""));
+            do_flee(victim, MAKE_TEMP_STRING(""));
+            do_hail(victim, MAKE_TEMP_STRING(""));
+            do_quit(victim, MAKE_TEMP_STRING(""));
             return rNONE;
         }
     }
@@ -1982,7 +1982,7 @@ void set_fighting(CHAR_DATA* ch, CHAR_DATA* victim)
     if (victim->switched && IS_AFFECTED(victim->switched, AFF_POSSESS))
     {
         send_to_char("You are disturbed!\n\r", victim->switched);
-        do_return(victim->switched, "");
+        do_return(victim->switched, MAKE_TEMP_STRING(""));
     }
     return;
 }
@@ -2114,7 +2114,7 @@ void raw_kill(CHAR_DATA* ch, CHAR_DATA* victim)
         char_from_room(victim->desc->original);
         char_to_room(victim->desc->original, victim->in_room);
         victmp = victim->desc->original;
-        do_revert(victim, "");
+        do_revert(victim, MAKE_TEMP_STRING(""));
         raw_kill(ch, victmp);
         return;
     }
@@ -2162,7 +2162,7 @@ void raw_kill(CHAR_DATA* ch, CHAR_DATA* victim)
     }
 
     set_char_color(AT_DIEMSG, victim);
-    do_help(victim, "_DIEMSG_");
+    do_help(victim, MAKE_TEMP_STRING("_DIEMSG_"));
 
     /* swreality chnages begin here */
 

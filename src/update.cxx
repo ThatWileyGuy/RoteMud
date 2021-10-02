@@ -1140,7 +1140,7 @@ void mobile_update(void)
             bug("Short-cutting here", 0);
             gch_prev = NULL;
             ch->prev = NULL;
-            do_shout(ch, "Thoric says, 'Prepare for the worst!'");
+            do_shout(ch, MAKE_TEMP_STRING("Thoric says, 'Prepare for the worst!'"));
         }
 
         if (!IS_NPC(ch))
@@ -1235,12 +1235,12 @@ void mobile_update(void)
         if (IS_SET(ch->act, ACT_MOUNTED))
         {
             if (IS_SET(ch->act, ACT_AGGRESSIVE))
-                do_emote(ch, "snarls and growls.");
+                do_emote(ch, MAKE_TEMP_STRING("snarls and growls."));
             continue;
         }
 
         if (IS_SET(ch->in_room->room_flags, ROOM_SAFE) && IS_SET(ch->act, ACT_AGGRESSIVE))
-            do_emote(ch, "glares around and snarls.");
+            do_emote(ch, MAKE_TEMP_STRING("glares around and snarls."));
 
         /* MOBprogram random trigger */
         if (ch->in_room->area && ch->in_room->area->nplayer > 0)
@@ -1788,7 +1788,7 @@ void char_update(void)
                     {
                         if ((ch->position == POS_STANDING || ch->position < POS_FIGHTING) &&
                             number_percent() + 10 < abs(ch->mental_state))
-                            do_sleep(ch, "");
+                            do_sleep(ch, MAKE_TEMP_STRING(""));
                         else
                             send_to_char("You're barely conscious.\n\r", ch);
                     }
@@ -1798,7 +1798,7 @@ void char_update(void)
                     {
                         if ((ch->position == POS_STANDING || ch->position < POS_FIGHTING) &&
                             (number_percent() + 20) < abs(ch->mental_state))
-                            do_sleep(ch, "");
+                            do_sleep(ch, MAKE_TEMP_STRING(""));
                         else
                             send_to_char("You can barely keep your eyes open.\n\r", ch);
                     }
@@ -1807,7 +1807,7 @@ void char_update(void)
                     if (ch->position > POS_SLEEPING)
                     {
                         if (ch->position < POS_SITTING && (number_percent() + 30) < abs(ch->mental_state))
-                            do_sleep(ch, "");
+                            do_sleep(ch, MAKE_TEMP_STRING(""));
                         else
                             send_to_char("You're extremely drowsy.\n\r", ch);
                     }
@@ -1873,7 +1873,7 @@ void char_update(void)
                         ch->hit = UMAX(1, ch->hit);
                         save_char_obj(ch);
                         ch->position = POS_RESTING;
-                        do_quit(ch, "");
+                        do_quit(ch, MAKE_TEMP_STRING(""));
                     }
                     else
                     {
@@ -1882,7 +1882,7 @@ void char_update(void)
                         ch->position = POS_RESTING;
                         ch->hit = UMAX(1, ch->hit);
                         save_char_obj(ch);
-                        do_quit(ch, "");
+                        do_quit(ch, MAKE_TEMP_STRING(""));
                     }
                 }
                 else if (ch == ch_save && IS_SET(sysdata.save_flags, SV_AUTO) &&

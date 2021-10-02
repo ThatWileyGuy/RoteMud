@@ -232,7 +232,7 @@ void do_arena(CHAR_DATA* ch, char* argument)
         char_to_room(ch, get_room_index(PREP_START));
         act(AT_WHITE, "$n is dropped from the sky.", ch, NULL, NULL, TO_ROOM);
         send_to_char("You have been taken to the killing fields\r\n", ch);
-        do_look(ch, "auto");
+        do_look(ch, MAKE_TEMP_STRING("auto"));
         sprintf_s(buf, "%s has joined the blood bath.", ch->name);
         sportschan(buf);
         send_to_char(buf, ch);
@@ -397,7 +397,7 @@ void start_game()
                 //      i->pcdata->oldac = i->armor;
                 //       i->armor = -1500;
                 char_to_room(i, get_room_index(ARENA_START));
-                do_look(i, "auto");
+                do_look(i, MAKE_TEMP_STRING("auto"));
             }
         }
     }
@@ -464,7 +464,7 @@ void find_game_winner()
                 char_from_room(i);
                 location = i->pcdata->roomarena;
                 char_to_room(i, location);
-                do_look(i, "auto");
+                do_look(i, MAKE_TEMP_STRING("auto"));
                 act(AT_YELLOW, "$n falls from the sky.", i, NULL, NULL, TO_ROOM);
                 if (time_left_in_game == 1)
                 {
@@ -544,7 +544,7 @@ void do_end_game()
                 location = i->pcdata->roomarena;
                 char_from_room(i);
                 char_to_room(i, location);
-                do_look(i, "auto");
+                do_look(i, MAKE_TEMP_STRING("auto"));
                 act(AT_TELL, "$n falls from the sky.", i, NULL, NULL, TO_ROOM);
             }
         }
@@ -855,10 +855,10 @@ void do_aaccept(CHAR_DATA* ch, char* argument)
         ch->challenged = NULL;
         char_from_room(ch);
         char_to_room(ch, get_room_index(PREP_END));
-        do_look(ch, "auto");
+        do_look(ch, MAKE_TEMP_STRING("auto"));
         char_from_room(dch);
         char_to_room(dch, get_room_index(PREP_START));
-        do_look(dch, "auto");
+        do_look(dch, MAKE_TEMP_STRING("auto"));
         ppl_in_arena = 0;
         ppl_challenged = 1;
         time_to_start = 2;

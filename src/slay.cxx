@@ -530,7 +530,7 @@ void do_setslay(CHAR_DATA* ch, char* argument)
         return;
     }
 
-    do_setslay(ch, "");
+    do_setslay(ch, MAKE_TEMP_STRING(""));
     return;
 }
 

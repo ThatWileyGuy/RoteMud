@@ -60,155 +60,52 @@ extern char bname[MAX_STRING_LENGTH];
 void do_barrel_roll(CHAR_DATA* ch, char* argument);
 void do_juke(CHAR_DATA* ch, char* argument);
 
-char* primary_beam_name(SHIP_DATA* ship)
+std::string beam_name(sh_int type, bool plural)
+{
+    std::string ending = plural ? "s" : "";
+
+    switch (type)
+    {
+    case SINGLE_LASER:
+        return "Single-laser cannon" + ending;
+    case DUAL_LASER:
+        return "Dual-laser cannon" + ending;
+    case TRI_LASER:
+        return "Triple-laser cannon" + ending;
+    case QUAD_LASER:
+        return "Quad-laser cannon" + ending;
+    case AUTOBLASTER:
+        return "Autoblaster turret" + ending;
+    case HEAVY_LASER:
+        return "Heavy laser cannon" + ending;
+    case LIGHT_ION:
+        return "Light ion cannon" + ending;
+    case REPEATING_ION:
+        return "Repeating ion cannon" + ending;
+    case HEAVY_ION:
+        return "Heavy ion cannon" + ending;
+    default:
+        return "unknown";
+    }
+}
+
+std::string primary_beam_name(SHIP_DATA* ship)
 {
 
     if (ship->primaryCount != 0)
     {
-        sprintf_s(
-            bname, "%d %s", ship->primaryCount,
-            (ship->primaryType == SINGLE_LASER && ship->primaryCount == 1)
-                ? "Single-laser cannon"
-                : (ship->primaryType == SINGLE_LASER && ship->primaryCount != 1)
-                      ? "Single-laser cannons"
-                      : (ship->primaryType == DUAL_LASER && ship->primaryCount == 1)
-                            ? "Dual-laser cannon"
-                            : (ship->primaryType == DUAL_LASER && ship->primaryCount != 1)
-                                  ? "Dual-laser cannons"
-                                  : (ship->primaryType == TRI_LASER && ship->primaryCount == 1)
-                                        ? "Triple-laser cannon"
-                                        : (ship->primaryType == TRI_LASER && ship->primaryCount != 1)
-                                              ? "Triple-laser cannons"
-                                              : (ship->primaryType == QUAD_LASER && ship->primaryCount == 1)
-                                                    ? "Quad-laser cannon"
-                                                    : (ship->primaryType == QUAD_LASER && ship->primaryCount != 1)
-                                                          ? "Quad-laser cannons"
-                                                          : (ship->primaryType == AUTOBLASTER &&
-                                                             ship->primaryCount == 1)
-                                                                ? "Autoblaster turret"
-                                                                : (ship->primaryType == AUTOBLASTER &&
-                                                                   ship->primaryCount != 1)
-                                                                      ? "Autoblaster turrets"
-                                                                      : (ship->primaryType == HEAVY_LASER &&
-                                                                         ship->primaryCount == 1)
-                                                                            ? "Heavy laser cannon"
-                                                                            : (ship->primaryType == HEAVY_LASER &&
-                                                                               ship->primaryCount != 1)
-                                                                                  ? "Heavy laser cannons"
-                                                                                  : (ship->primaryType == LIGHT_ION &&
-                                                                                     ship->primaryCount == 1)
-                                                                                        ? "Light ion cannon"
-                                                                                        : (ship->primaryType ==
-                                                                                               LIGHT_ION &&
-                                                                                           ship->primaryCount != 1)
-                                                                                              ? "Light ion cannons"
-                                                                                              : (ship->primaryType ==
-                                                                                                     REPEATING_ION &&
-                                                                                                 ship->primaryCount ==
-                                                                                                     1)
-                                                                                                    ? "Repeating ion "
-                                                                                                      "cannon"
-                                                                                                    : (ship->primaryType ==
-                                                                                                           REPEATING_ION &&
-                                                                                                       ship->primaryCount !=
-                                                                                                           1)
-                                                                                                          ? "Repeating "
-                                                                                                            "ion "
-                                                                                                            "cannons"
-                                                                                                          : (ship->primaryType ==
-                                                                                                                 HEAVY_ION &&
-                                                                                                             ship->primaryCount ==
-                                                                                                                 1)
-                                                                                                                ? "Heav"
-                                                                                                                  "y "
-                                                                                                                  "ion "
-                                                                                                                  "cann"
-                                                                                                                  "on"
-                                                                                                                : (ship->primaryType ==
-                                                                                                                       HEAVY_ION &&
-                                                                                                                   ship->primaryCount !=
-                                                                                                                       1)
-                                                                                                                      ? "Heavy ion cannons"
-                                                                                                                      : "unknown");
-
-        return bname;
+        return beam_name(ship->primaryType, ship->primaryCount > 1);
     }
     else
         return "None.";
 }
 
-char* secondary_beam_name(SHIP_DATA* ship)
+std::string secondary_beam_name(SHIP_DATA* ship)
 {
 
     if (ship->secondaryCount != 0)
     {
-        sprintf_s(
-            bname, "%d %s", ship->secondaryCount,
-            (ship->secondaryType == SINGLE_LASER && ship->secondaryCount == 1)
-                ? "Single-laser cannon"
-                : (ship->secondaryType == SINGLE_LASER && ship->secondaryCount != 1)
-                      ? "Single-laser cannons"
-                      : (ship->secondaryType == DUAL_LASER && ship->secondaryCount == 1)
-                            ? "Dual-laser cannon"
-                            : (ship->secondaryType == DUAL_LASER && ship->secondaryCount != 1)
-                                  ? "Dual-laser cannons"
-                                  : (ship->secondaryType == TRI_LASER && ship->secondaryCount == 1)
-                                        ? "Triple-laser cannon"
-                                        : (ship->secondaryType == TRI_LASER && ship->secondaryCount != 1)
-                                              ? "Triple-laser cannons"
-                                              : (ship->secondaryType == QUAD_LASER && ship->secondaryCount == 1)
-                                                    ? "Quad-laser cannon"
-                                                    : (ship->secondaryType == QUAD_LASER && ship->secondaryCount != 1)
-                                                          ? "Quad-laser cannons"
-                                                          : (ship->secondaryType == AUTOBLASTER &&
-                                                             ship->secondaryCount == 1)
-                                                                ? "Autoblaster turret"
-                                                                : (ship->secondaryType == AUTOBLASTER &&
-                                                                   ship->secondaryCount != 1)
-                                                                      ? "Autoblaster turrets"
-                                                                      : (ship->secondaryType == HEAVY_LASER &&
-                                                                         ship->secondaryCount == 1)
-                                                                            ? "Heavy laser cannon"
-                                                                            : (ship->secondaryType == HEAVY_LASER &&
-                                                                               ship->secondaryCount != 1)
-                                                                                  ? "Heavy laser cannons"
-                                                                                  : (ship->secondaryType == LIGHT_ION &&
-                                                                                     ship->secondaryCount == 1)
-                                                                                        ? "Light ion cannon"
-                                                                                        : (ship->secondaryType ==
-                                                                                               LIGHT_ION &&
-                                                                                           ship->secondaryCount != 1)
-                                                                                              ? "Light ion cannons"
-                                                                                              : (ship->secondaryType ==
-                                                                                                     REPEATING_ION &&
-                                                                                                 ship->secondaryCount ==
-                                                                                                     1)
-                                                                                                    ? "Repeating ion "
-                                                                                                      "cannon"
-                                                                                                    : (ship->secondaryType ==
-                                                                                                           REPEATING_ION &&
-                                                                                                       ship->secondaryCount !=
-                                                                                                           1)
-                                                                                                          ? "Repeating "
-                                                                                                            "ion "
-                                                                                                            "cannons"
-                                                                                                          : (ship->secondaryType ==
-                                                                                                                 HEAVY_ION &&
-                                                                                                             ship->secondaryCount ==
-                                                                                                                 1)
-                                                                                                                ? "Heav"
-                                                                                                                  "y "
-                                                                                                                  "ion "
-                                                                                                                  "cann"
-                                                                                                                  "on"
-                                                                                                                : (ship->secondaryType ==
-                                                                                                                       HEAVY_ION &&
-                                                                                                                   ship->secondaryCount !=
-                                                                                                                       1)
-                                                                                                                      ? "Heavy ion cannons"
-                                                                                                                      : "unknown");
-
-        return bname;
+        return beam_name(ship->secondaryType, ship->secondaryCount > 1);
     }
     else
         return "None.";

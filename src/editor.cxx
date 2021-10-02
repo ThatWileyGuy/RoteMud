@@ -508,7 +508,7 @@ void edit_buffer(CHAR_DATA* ch, char* argument)
     /* Kludgy fix. Read_from_buffer in comm.c adds a space on
      * empty lines. Don't let this fill up usable buffer space.. */
     if (!str_cmp(argument, " "))
-        argument = "";
+        argument++;
 
     char* line = str_dup(argument);
 
@@ -580,7 +580,7 @@ void editor_format_lines(CHAR_DATA* ch, EDITOR_DATA* edd)
     src[inp] = '\0';
     strcpy_s(newsrc, strrep(src, "(NL)", "\r\n"));
     strcpy_s(newsrc, strlinwrp(newsrc, 60));
-    edit_buffer(ch, "/c");
+    edit_buffer(ch, MAKE_TEMP_STRING("/c"));
     // keb    strfree( newsrc2 );
     //    STRFREE( newsrc2 );
     inp = 0;
@@ -964,7 +964,7 @@ void editor_save(CHAR_DATA* ch, EDITOR_DATA* edd, const char* argument)
     d->connected = CON_PLAYING;
     if (!ch->last_cmd)
         return;
-    (*ch->last_cmd)(ch, "");
+    (*ch->last_cmd)(ch, MAKE_TEMP_STRING(""));
 }
 
 /****************************************************************************

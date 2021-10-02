@@ -1147,7 +1147,7 @@ void do_sset(CHAR_DATA* ch, char* argument)
             send_to_char("Ok.\n\r", ch);
             return;
         }
-        do_sset(ch, "");
+        do_sset(ch, MAKE_TEMP_STRING(""));
         return;
     }
 
@@ -3000,7 +3000,7 @@ void do_recall(CHAR_DATA* ch, char* argument)
         ch->position = POS_STANDING;
     }
     act(AT_ACTION, "$n appears in a swirl of the Force.", ch, NULL, NULL, TO_ROOM);
-    do_look(ch, "auto");
+    do_look(ch, MAKE_TEMP_STRING("auto"));
 
     return;
 }
