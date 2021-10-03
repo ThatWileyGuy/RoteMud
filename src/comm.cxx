@@ -232,6 +232,11 @@ int gamemain(int argc, char** argv)
 
     sprintf_s(log_buf, "%s ready on ports %d and %d.", sysdata.mud_acronym, telnet_port, ssh_port);
     log_string(log_buf);
+
+    using floatseconds = std::chrono::duration<double, std::chrono::seconds::period>;
+    sprintf_s(log_buf, "boot took %.06f seconds", floatseconds(std::chrono::system_clock::now() - now_time).count());
+    log_string(log_buf);
+
     game_loop();
     io_manager.reset();
 
