@@ -376,12 +376,13 @@ class SshConnection : public Connection
     int requestPty(const char* term, int x, int y, int px, int py)
     {
         commlog("PTY requested: %s %d %d %d %d", term, x, y, px, py);
+        notifyGameWindowSizeChanged(x, y);
         return 0;
     }
 
     int updatePty(int x, int y, int px, int py)
     {
-        commlog("PTY updated: %d %d %d %d", x, y, px, py);
+        notifyGameWindowSizeChanged(x, y);
         return 0;
     }
 
@@ -786,6 +787,14 @@ void IOManager::notifyGameAuthenticatedUserConnected(Connection& connection, con
 
     assert(sharedConn.get() != nullptr);
     sharedConn->setContext(m_callbacks.newAuthenticatedConnection(sharedConn, user));
+}
+
+void IOManager::notifyGameWindowSizeChanged(ConnectionContext context, int width, int height)
+{
+    if (context == nullptr)
+        bug("size change from null context");
+    else
+        m_callbacks.windowChangedSize(context, width, height);
 }
 
 void IOManager::sendCommandToGame(ConnectionContext context, const std::string& command)

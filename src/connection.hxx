@@ -28,6 +28,8 @@ struct IOManagerCallbacks
 {
     // Notification of a new command from a connection. Only delivered once per call to IOManager::runUntil
     void (*commandReceived)(ConnectionContext context, const std::string& line);
+    // Notification of a window size change
+    void (*windowChangedSize)(ConnectionContext context, int width, int height);
     // Notification of a new unauthenticated connection, must return the desired context pointer for future calls.
     ConnectionContext (*newUnauthenticatedConnection)(std::shared_ptr<Connection> connection);
     // Request to check if the username/password match a known user
@@ -65,6 +67,7 @@ class IOManager
     friend class SshConnection;
     void notifyGameUnauthenticatedUserConnected(Connection& connection);
     void notifyGameAuthenticatedUserConnected(Connection& connection, const std::string& user);
+    void notifyGameWindowSizeChanged(ConnectionContext context, int width, int height);
     void sendCommandToGame(ConnectionContext context, const std::string& command);
     void notifyGameConnectionClosed(ConnectionContext context);
     void removeConnection(Connection* connection);
@@ -126,6 +129,11 @@ class Connection
     void notifyGameAuthenticatedUserConnected(const std::string& user)
     {
         m_manager.notifyGameAuthenticatedUserConnected(*this, user);
+    }
+
+    void notifyGameWindowSizeChanged(int width, int height)
+    {
+        m_manager.notifyGameWindowSizeChanged(m_context, width, height);
     }
 
     void notifyGameConnectionClosed()

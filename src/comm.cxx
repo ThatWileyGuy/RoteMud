@@ -131,6 +131,7 @@ int make_color_sequence(const char* col, char* buf, DESCRIPTOR_DATA* d);
 int make_color_sequence_desc(const char* col, char* buf, DESCRIPTOR_DATA* d);
 void handle_pager_input(std::shared_ptr<DESCRIPTOR_DATA> d, char* argument);
 void handle_command(ConnectionContext context, const std::string& line);
+void handle_window_size_change(ConnectionContext context, int width, int height);
 ConnectionContext handle_new_unauthenticated_connection(std::shared_ptr<Connection> connection);
 bool authenticate_user(const std::string& username, const std::string& password);
 std::vector<Pubkey> get_public_keys_for_user(const std::string& username);
@@ -219,7 +220,7 @@ int gamemain(int argc, char** argv)
     if (!fCopyOver) /* We have already the port if copyover'ed */
     {
         IOManagerCallbacks callbacks = {
-            &handle_command,           &handle_new_unauthenticated_connection, &authenticate_user,
+            &handle_command,           &handle_window_size_change, &handle_new_unauthenticated_connection, &authenticate_user,
             &get_public_keys_for_user, &handle_new_authenticated_connection,   &connection_closed};
 
         io_manager.emplace(callbacks, telnet_port, ssh_port);
@@ -338,6 +339,11 @@ void handle_command(ConnectionContext context, const std::string& command)
             break;
         }
     }
+}
+
+void handle_window_size_change(ConnectionContext context, int width, int height)
+{
+    log("window size change to %d %d", LOG_COMM, sysdata.log_level, width, height);
 }
 
 /*
