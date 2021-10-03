@@ -1920,7 +1920,6 @@ ch_ret simple_damage(CHAR_DATA* ch, CHAR_DATA* victim, int dam, int dt)
     else if (!npcvict && IS_SET(victim->act, PLR_FLEE))
         do_flee(victim, MAKE_TEMP_STRING(""));
 
-    tail_chain();
     return rNONE;
 }
 

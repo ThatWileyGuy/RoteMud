@@ -2699,7 +2699,6 @@ void update_handler(void)
                   std::chrono::duration_cast<std::chrono::microseconds>(time_taken));
         timechar = NULL;
     }
-    tail_chain();
     return;
 }
 

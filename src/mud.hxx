@@ -4792,7 +4792,6 @@ void fix_area_exits(AREA_DATA* tarea);
 void load_area_file(AREA_DATA* tarea, char* filename);
 void randomize_exits(ROOM_INDEX_DATA* room, sh_int maxdir);
 void make_wizlist(void);
-void tail_chain(void);
 void delete_room(ROOM_INDEX_DATA* room);
 void delete_obj(OBJ_INDEX_DATA* obj);
 void delete_mob(MOB_INDEX_DATA* mob);

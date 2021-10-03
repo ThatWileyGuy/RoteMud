@@ -6553,25 +6553,6 @@ char* centertext(const char* text, int size)
 }
 
 /*
- * This function is here to aid in debugging.
- * If the last expression in a function is another function call,
- *   gcc likes to generate a JMP instead of a CALL.
- * This is called "tail chaining."
- * It hoses the debugger call stack for that call.
- * So I make this the last call in certain critical functions,
- *   where I really need the call stack to be right for debugging!
- *
- * If you don't understand this, then LEAVE IT ALONE.
- * Don't remove any calls to tail_chain anywhere.
- *
- * -- Furey
- */
-void tail_chain(void)
-{
-    return;
-}
-
-/*
  * Read a float number from a file. Turn the result into a float value.
  */
 float fread_float(FILE* fp)

@@ -354,7 +354,6 @@ bool check_skill(CHAR_DATA* ch, const char* command, char* argument)
     auto time_used = std::chrono::steady_clock::now() - start_time;
     update_userec(time_used, &skill_table[sn]->userec);
 
-    tail_chain();
     return true;
 }
 

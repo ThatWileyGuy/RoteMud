@@ -413,7 +413,6 @@ void interpret(CHAR_DATA* ch, char* argument)
         log_string_plus(log_buf, LOG_NORMAL, get_trust(ch));
     }
 
-    tail_chain();
 }
 
 CMDTYPE* find_command(const char* command)
