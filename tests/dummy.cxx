@@ -1,5 +1,5 @@
 #define BOOST_TEST_MODULE example
-#include <boost/test/included/unit_test.hpp>
+#include <boost/test/unit_test.hpp>
 #include <iostream>
 #include <sstream>
 #include <boost/archive/tmpdir.hpp>
@@ -28,7 +28,10 @@ class SuperFun
     }
 };
 
-BOOST_AUTO_TEST_CASE(super_fun_test)
+namespace rote
+{
+
+BOOST_AUTO_TEST_CASE(serialization_test)
 {
     SuperFun s;
 
@@ -39,5 +42,7 @@ BOOST_AUTO_TEST_CASE(super_fun_test)
 
     std::cout << ss.str() << std::endl;
 
-    BOOST_TEST(true /* test assertion */);
+    BOOST_TEST(true);
 }
+
+} // namespace rote

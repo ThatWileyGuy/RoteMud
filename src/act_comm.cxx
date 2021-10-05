@@ -58,7 +58,7 @@ void sportschan(char*);
  * Local functions.
  */
 
-char* scramble(const char* argument, int modifier);
+std::string scramble(const std::string_view& argument, int modifier);
 char* drunk_speech(const char* argument, CHAR_DATA* ch);
 void generate_com_freq(CHAR_DATA* ch);
 void show_spys(CHAR_DATA* ch, CHAR_DATA* victim, char* tell);
@@ -216,23 +216,24 @@ void do_beep(CHAR_DATA* ch, char* argument)
     if (knows_language(victim, ch->speaking, ch) || (IS_NPC(ch) && !ch->speaking))
         act(AT_WHITE, "$n beeps: '$t'", ch, argument, victim, TO_VICT);
     else
-        act(AT_WHITE, "$n beeps: '$t'", ch, scramble(argument, ch->speaking), victim, TO_VICT);
+        act(AT_WHITE, "$n beeps: '$t'", ch, scramble(argument, ch->speaking).c_str(), victim, TO_VICT);
 }
 
 /* Text scrambler -- Altrag */
-char* scramble(const char* argument, int modifier)
+std::string scramble(const std::string_view& argument, int modifier)
 {
-    static char arg[MAX_INPUT_LENGTH];
-    sh_int position;
+    std::string result(argument.size(), ' ');
     sh_int conversion = 0;
 
     modifier %= number_range(80, 300); /* Bitvectors get way too large #s */
-    for (position = 0; position < MAX_INPUT_LENGTH; position++)
+    for (size_t position = 0; position < result.size(); position++)
     {
+        assert(argument[position] != '\0');
+
         if (argument[position] == '\0')
         {
-            arg[position] = '\0';
-            return arg;
+            result[position] = '\0';
+            return result;
         }
         else if (argument[position] >= 'A' && argument[position] <= 'Z')
         {
@@ -242,7 +243,7 @@ char* scramble(const char* argument, int modifier)
                 conversion -= 26;
             while (conversion < 0)
                 conversion += 26;
-            arg[position] = conversion + 'A';
+            result[position] = conversion + 'A';
         }
         else if (argument[position] >= 'a' && argument[position] <= 'z')
         {
@@ -252,7 +253,7 @@ char* scramble(const char* argument, int modifier)
                 conversion -= 26;
             while (conversion < 0)
                 conversion += 26;
-            arg[position] = conversion + 'a';
+            result[position] = conversion + 'a';
         }
         else if (argument[position] >= '0' && argument[position] <= '9')
         {
@@ -262,13 +263,13 @@ char* scramble(const char* argument, int modifier)
                 conversion -= 10;
             while (conversion < 0)
                 conversion += 10;
-            arg[position] = conversion + '0';
+            result[position] = conversion + '0';
         }
         else
-            arg[position] = argument[position];
+            result[position] = argument[position];
     }
-    arg[position] = '\0';
-    return arg;
+
+    return result;
 }
 
 char* drunk_speech(const char* argument, CHAR_DATA* ch)
@@ -616,7 +617,7 @@ void talk_channel(CHAR_DATA* ch, const char* argument, int channel, const char* 
 
         if (d->connected == CON_PLAYING && vch != ch && !IS_SET(och->deaf, channel))
         {
-            const char* sbuf = argument;
+            std::string bufToSend{argument};
             ch_comlink = false;
 
             if (!str_cmp(vch->name, ch->name))
@@ -833,23 +834,23 @@ void talk_channel(CHAR_DATA* ch, const char* argument, int channel, const char* 
             if (!knows_language(vch, ch->speaking, ch) && (!IS_NPC(ch) || ch->speaking != 0) &&
                 (channel != CHANNEL_NEWBIE && channel != CHANNEL_OOC && channel != CHANNEL_AUCTION &&
                  channel != CHANNEL_ASK && channel != CHANNEL_AVTALK))
-                sbuf = scramble(argument, ch->speaking);
+                bufToSend = scramble(argument, ch->speaking);
             MOBtrigger = false;
             if (channel == CHANNEL_IMMTALK || channel == CHANNEL_AVTALK || channel == CHANNEL_103 ||
                 channel == CHANNEL_104 || channel == CHANNEL_105)
             {
-                act(channel == CHANNEL_AVTALK ? AT_AVATAR : AT_IMMORT, buf, ch, sbuf, vch, TO_VICT);
+                act(channel == CHANNEL_AVTALK ? AT_AVATAR : AT_IMMORT, buf, ch, bufToSend.c_str(), vch, TO_VICT);
             }
             else if (channel == CHANNEL_WARTALK)
-                act(AT_WARTALK, buf, ch, sbuf, vch, TO_VICT);
+                act(AT_WARTALK, buf, ch, bufToSend.c_str(), vch, TO_VICT);
             else if (channel == CHANNEL_OOC || channel == CHANNEL_NEWBIE)
-                act(AT_OOC, buf, ch, sbuf, vch, TO_VICT);
+                act(AT_OOC, buf, ch, bufToSend.c_str(), vch, TO_VICT);
             else if (channel == CHANNEL_ASK)
-                act(AT_OOC, buf, ch, sbuf, vch, TO_VICT);
+                act(AT_OOC, buf, ch, bufToSend.c_str(), vch, TO_VICT);
             else if (channel == CHANNEL_SHIP)
-                act(AT_SHIP, buf, ch, sbuf, vch, TO_VICT);
+                act(AT_SHIP, buf, ch, bufToSend.c_str(), vch, TO_VICT);
             else if (channel == CHANNEL_CLAN)
-                act(AT_CLAN, buf, ch, sbuf, vch, TO_VICT);
+                act(AT_CLAN, buf, ch, bufToSend.c_str(), vch, TO_VICT);
             else if (channel == CHANNEL_CHAT)
             {
 
@@ -860,12 +861,12 @@ void talk_channel(CHAR_DATA* ch, const char* argument, int channel, const char* 
             else if (channel == CHANNEL_SYSTEM)
             {
                 if (garble)
-                    act(AT_SHIP, garb, ch, sbuf, vch, TO_VICT);
+                    act(AT_SHIP, garb, ch, bufToSend.c_str(), vch, TO_VICT);
                 else
-                    act(AT_SHIP, buf, ch, sbuf, vch, TO_VICT);
+                    act(AT_SHIP, buf, ch, bufToSend.c_str(), vch, TO_VICT);
             }
             else
-                act(AT_GOSSIP, buf, ch, sbuf, vch, TO_VICT);
+                act(AT_GOSSIP, buf, ch, bufToSend.c_str(), vch, TO_VICT);
             vch->position = position;
         }
     }
@@ -1342,13 +1343,13 @@ void do_say(CHAR_DATA* ch, char* argument)
         REMOVE_BIT(ch->act, ACT_SECRETIVE);
     for (vch = ch->in_room->first_person; vch; vch = vch->next_in_room)
     {
-        char* sbuf = argument;
+        std::string bufToSend{argument};
 
         if (vch == ch)
             continue;
         if (!knows_language(vch, ch->speaking, ch) && (!IS_NPC(ch) || ch->speaking != 0))
-            sbuf = scramble(argument, ch->speaking);
-        sbuf = drunk_speech(sbuf, ch);
+            bufToSend = scramble(argument, ch->speaking);
+        bufToSend = drunk_speech(bufToSend.c_str(), ch);
 
         MOBtrigger = false;
 
@@ -1356,30 +1357,27 @@ void do_say(CHAR_DATA* ch, char* argument)
 
         if (ch && ch->pcdata && IS_SET(ch->pcdata->act2, ACT_GAGGED))
         {
-            for (x = 0; x < strlen(sbuf); x++)
+            for (x = 0; x < bufToSend.size(); x++)
             {
                 if (x == 0)
                 {
-                    sbuf[x] = 'M';
+                    bufToSend[x] = 'M';
                     continue;
                 }
-                if (isspace(sbuf[x]))
+                if (isspace(bufToSend[x]))
                 {
                     if (x != 0)
-                        if (x >= 2 && !isspace(sbuf[x - 2]))
-                            sbuf[x - 1] = 'f';
+                        if (x >= 2 && !isspace(bufToSend[x - 2]))
+                            bufToSend[x - 1] = 'f';
                     continue;
                 }
                 if (number_range(1, 7) == 3)
-                    sbuf[x] = 'M';
+                    bufToSend[x] = 'M';
                 else
-                    sbuf[x] = 'm';
-
-                if (x == strlen(sbuf))
-                    sbuf[x] = 'f';
+                    bufToSend[x] = 'm';
             }
         }
-        act(AT_SAY, "$n says: $t", ch, sbuf, vch, TO_VICT);
+        act(AT_SAY, "$n says: $t", ch, bufToSend.c_str(), vch, TO_VICT);
     }
     /*    MOBtrigger = false;
         act( AT_SAY, "$n says '$T'", ch, NULL, argument, TO_ROOM );*/
@@ -1594,7 +1592,7 @@ void do_oldtell(CHAR_DATA* ch, char* argument)
     if (knows_language(victim, ch->speaking, ch) || (IS_NPC(ch) && !ch->speaking))
         act(AT_TELL, "&W&G[&WTell&G] &G(&WFrom: $n&G)&W '$t'", ch, argument, victim, TO_VICT);
     else
-        act(AT_TELL, "&W&G[&WTell&G] &G(&WFrom: $n&G)&W '$t'", ch, scramble(argument, ch->speaking), victim, TO_VICT);
+        act(AT_TELL, "&W&G[&WTell&G] &G(&WFrom: $n&G)&W '$t'", ch, scramble(argument, ch->speaking).c_str(), victim, TO_VICT);
     victim->position = position;
     victim->reply = ch;
     if (IS_SET(ch->in_room->room_flags, ROOM_LOGSPEECH))
@@ -1942,7 +1940,7 @@ void do_oldreply(CHAR_DATA* ch, char* argument)
     if (knows_language(victim, ch->speaking, ch) || (IS_NPC(ch) && !ch->speaking))
         act(AT_TELL, "&W&G[&WTell&G] &G(&WFrom: $n&G)&W '$t'", ch, argument, victim, TO_VICT);
     else
-        act(AT_TELL, "&W&G[&WTell&G] &G(&WFrom: $n&G)&W '$t'", ch, scramble(argument, ch->speaking), victim, TO_VICT);
+        act(AT_TELL, "&W&G[&WTell&G] &G(&WFrom: $n&G)&W '$t'", ch, scramble(argument, ch->speaking).c_str(), victim, TO_VICT);
     victim->position = position;
     victim->reply = ch;
     if (IS_SET(ch->in_room->room_flags, ROOM_LOGSPEECH))
