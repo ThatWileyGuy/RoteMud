@@ -59,7 +59,7 @@ void sportschan(char*);
  */
 
 std::string scramble(const std::string_view& argument, int modifier);
-char* drunk_speech(const char* argument, CHAR_DATA* ch);
+std::string drunk_speech(const std::string_view& argument, CHAR_DATA* ch);
 void generate_com_freq(CHAR_DATA* ch);
 void show_spys(CHAR_DATA* ch, CHAR_DATA* victim, char* tell);
 
@@ -272,55 +272,33 @@ std::string scramble(const std::string_view& argument, int modifier)
     return result;
 }
 
-char* drunk_speech(const char* argument, CHAR_DATA* ch)
+std::string drunkify_first(const std::string_view& in, const sh_int drunk)
 {
-    const char* arg = argument;
-    static char buf[MAX_INPUT_LENGTH * 2] = {};
-    char buf1[MAX_INPUT_LENGTH * 2] = {};
-    sh_int drunk;
-    char* txt;
-    char* txt1;
+    std::string result;
+    result.reserve(in.size() * 3);
 
-    if (IS_NPC(ch) || !ch->pcdata)
-        return (char*)argument;
-
-    drunk = ch->pcdata->condition[COND_DRUNK];
-
-    if (drunk <= 0)
-        return (char*)argument;
-
-    buf[0] = '\0';
-    buf1[0] = '\0';
-
-    if (!argument)
+    for (char c : in)
     {
-        bug("Drunk_speech: NULL argument", 0);
-        return buf;
-    }
-
-    txt = buf;
-    txt1 = buf1;
-
-    while (*arg != '\0')
-    {
-        if (toupper(*arg) == 'S')
+        if (toupper(c) == 'S')
         {
             if (number_percent() < (drunk * 2)) /* add 'h' after an 's' */
             {
-                *txt++ = *arg;
-                *txt++ = 'h';
+                result.push_back(c);
+                result.push_back('h');
             }
             else
-                *txt++ = *arg;
+                result.push_back(c);
         }
-        else if (toupper(*arg) == 'X')
+        else if (toupper(c) == 'X')
         {
             if (number_percent() < (drunk * 2 / 2))
             {
-                *txt++ = 'c', *txt++ = 's', *txt++ = 'h';
+                result.push_back('c');
+                result.push_back('s');
+                result.push_back('h');
             }
             else
-                *txt++ = *arg;
+                result.push_back(c);
         }
         else if (number_percent() < (drunk * 2 / 5)) /* slurred letters */
         {
@@ -328,85 +306,115 @@ char* drunk_speech(const char* argument, CHAR_DATA* ch)
             sh_int currslur = 0;
 
             while (currslur < slurn)
-                *txt++ = *arg, currslur++;
+            {
+                result.push_back(c);
+                currslur++;
+            }
         }
         else
-            *txt++ = *arg;
-
-        arg++;
+            result.push_back(c);
     };
 
-    *txt = '\0';
+    return result;
+}
 
-    txt = buf;
+std::string drunkify_second(const std::string& in, const sh_int drunk)
+{
+    std::string result;
+    result.reserve(in.size());
 
-    while (*txt != '\0') /* Let's mess with the string's caps */
+    for (char c : in) /* Let's mess with the string's caps */
     {
-        if (number_percent() < (2 * drunk / 2.5))
+        if (number_percent() < (2.0 * drunk / 2.5))
         {
-            if (isupper(*txt))
-                *txt1 = tolower(*txt);
-            else if (islower(*txt))
-                *txt1 = toupper(*txt);
+            if (isupper(c))
+                result.push_back(tolower(c));
+            else if (islower(c))
+                result.push_back(toupper(c));
             else
-                *txt1 = *txt;
+                result.push_back(c);
         }
         else
-            *txt1 = *txt;
-
-        txt1++, txt++;
+            result.push_back(c);
     };
 
-    *txt1 = '\0';
-    txt1 = buf1;
-    txt = buf;
+    return result;
+}
 
-    while (*txt1 != '\0') /* Let's make them stutter */
+std::string drunkify_third(const std::string& in, const sh_int drunk)
+{
+    auto iter = in.begin();
+
+    std::string result;
+    result.reserve(in.size() * 2);
+
+    while (iter != in.end()) /* Let's make them stutter */
     {
-        if (*txt1 == ' ') /* If there's a space, then there's gotta be a */
+        if (*iter == ' ') /* If there's a space, then there's gotta be a */
         {                 /* along there somewhere soon */
 
-            while (*txt1 == ' ') /* Don't stutter on spaces */
-                *txt++ = *txt1++;
+            while (iter != in.end() && *iter == ' ') /* Don't stutter on spaces */
+                result.push_back(*iter++);
 
-            if ((number_percent() < (2 * drunk / 4)) && *txt1 != '\0')
+            if ((number_percent() < (2 * drunk / 4)) && iter != in.end())
             {
                 sh_int offset = number_range(0, 2);
                 sh_int pos = 0;
 
-                while (*txt1 != '\0' && pos < offset)
-                    *txt++ = *txt1++, pos++;
+                while (iter != in.end() && pos < offset)
+                {
+                    result.push_back(*iter++);
+                    pos++;
+                }
 
-                if (*txt1 == ' ') /* Make sure not to stutter a space after */
-                {                 /* the initial offset into the word */
-                    *txt++ = *txt1++;
+                if (iter != in.end() && *iter == ' ') /* Make sure not to stutter a space after */
+                {                                             /* the initial offset into the word */
+                    result.push_back(*iter++);
                     continue;
                 }
 
                 pos = 0;
                 offset = number_range(2, 4);
-                while (*txt1 != '\0' && pos < offset)
+                while (iter != in.end() && pos < offset)
                 {
-                    *txt++ = *txt1;
+                    result.push_back(*iter);
                     pos++;
-                    if (*txt1 == ' ' || pos == offset) /* Make sure we don't stick */
+                    if (*iter == ' ' || pos == offset) /* Make sure we don't stick */
                     {                                  /* A hyphen right before a space	*/
-                        txt1--;
+                        iter--;
                         break;
                     }
-                    *txt++ = '-';
+                    result.push_back('-');
                 }
-                if (*txt1 != '\0')
-                    txt1++;
+                if (iter != in.end())
+                    iter++;
             }
         }
         else
-            *txt++ = *txt1++;
+            result.push_back(*iter++);
     }
 
-    *txt = '\0';
+    return result;
+}
 
-    return buf;
+std::string drunkify(const std::string_view& arg, sh_int drunk)
+{
+    auto firstPass = drunkify_first(arg, drunk);
+    auto secondPass = drunkify_second(firstPass, drunk);
+    return drunkify_third(secondPass, drunk);
+}
+
+std::string drunk_speech(const std::string_view& argument, CHAR_DATA* ch)
+{
+    if (IS_NPC(ch) || !ch->pcdata)
+        return std::string{argument};
+
+    sh_int drunk = ch->pcdata->condition[COND_DRUNK];
+
+    if (drunk <= 0)
+        return std::string{argument};
+
+    return drunkify(argument, drunk);
 }
 
 /*
@@ -1238,7 +1246,7 @@ void do_shout(CHAR_DATA* ch, char* argument)
         send_to_char("Huh?\n\r", ch);
         return;
     }
-    talk_channel(ch, drunk_speech(argument, ch), CHANNEL_SHOUT, "shout");
+    talk_channel(ch, drunk_speech(argument, ch).c_str(), CHANNEL_SHOUT, "shout");
     WAIT_STATE(ch, 12);
     return;
 }
@@ -1250,7 +1258,7 @@ void do_yell(CHAR_DATA* ch, char* argument)
         send_to_char("Huh?\n\r", ch);
         return;
     }
-    talk_channel(ch, drunk_speech(argument, ch), CHANNEL_YELL, "yell");
+    talk_channel(ch, drunk_speech(argument, ch).c_str(), CHANNEL_YELL, "yell");
     return;
 }
 
@@ -1316,7 +1324,7 @@ void do_avtalk(CHAR_DATA* ch, char* argument)
         send_to_char("Huh?\n\r", ch);
         return;
     }
-    talk_channel(ch, drunk_speech(argument, ch), CHANNEL_AVTALK, "avtalk");
+    talk_channel(ch, drunk_speech(argument, ch).c_str(), CHANNEL_AVTALK, "avtalk");
     return;
 }
 
@@ -1349,7 +1357,7 @@ void do_say(CHAR_DATA* ch, char* argument)
             continue;
         if (!knows_language(vch, ch->speaking, ch) && (!IS_NPC(ch) || ch->speaking != 0))
             bufToSend = scramble(argument, ch->speaking);
-        bufToSend = drunk_speech(bufToSend.c_str(), ch);
+        bufToSend = drunk_speech(bufToSend, ch);
 
         MOBtrigger = false;
 
@@ -1384,7 +1392,7 @@ void do_say(CHAR_DATA* ch, char* argument)
     ch->act = actflags;
     MOBtrigger = false;
 
-    act(AT_SAY, "You say: $T", ch, NULL, drunk_speech(argument, ch), TO_CHAR);
+    act(AT_SAY, "You say: $T", ch, NULL, drunk_speech(argument, ch).c_str(), TO_CHAR);
 
     if (IS_SET(ch->in_room->room_flags, ROOM_LOGSPEECH))
     {
