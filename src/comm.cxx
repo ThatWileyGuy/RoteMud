@@ -2279,7 +2279,7 @@ void send_to_char_noand(const char* txt, CHAR_DATA* ch)
     if (txt && ch->desc)
     {
         sprintf_s(buf, "%s", txt);
-        sprintf_s(buf, "%s", remand(buf));
+        sprintf_s(buf, "%s", remand(buf).c_str());
         write_to_buffer(ch->desc, buf, strlen(buf));
     }
     return;

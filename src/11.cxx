@@ -323,7 +323,7 @@ void do_makegoggles(CHAR_DATA* ch, char* argument)
     STRFREE(obj->name);
     strcpy_s(buf, arg2);
     strcat_s(buf, " ");
-    strcat_s(buf, remand(buf));
+    strcat_s(buf, remand(buf).c_str());
     obj->name = STRALLOC(buf);
     strcpy_s(buf, arg2);
     STRFREE(obj->short_descr);
@@ -587,7 +587,7 @@ void do_makemissile(CHAR_DATA* ch, char* argument)
     STRFREE(obj->name);
     strcpy_s(buf, arg);
     strcat_s(buf, " missile ");
-    sprintf_s(buf, "%s", remand(buf));
+    sprintf_s(buf, "%s", remand(buf).c_str());
     obj->name = STRALLOC(buf);
     strcpy_s(buf, arg);
     STRFREE(obj->short_descr);

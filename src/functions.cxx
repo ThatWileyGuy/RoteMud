@@ -141,30 +141,24 @@ char* strlinwrp(char* src, int length)
     return str_dup(newstr);
 }
 
-char* remand(const char* arg)
+std::string remand(const std::string_view& arg)
 {
-    static char ret[MAX_STRING_LENGTH];
-    char* retptr;
-    retptr = ret;
+    std::string result;
+    result.reserve(arg.size());
 
-    if (arg == NULL)
-        return NULL;
-
-    for (; *arg != '\0'; arg++)
+    for (auto iter = arg.begin(); iter != arg.end(); iter++)
     {
-        if (*arg == '&' && *(arg + 1) != '\0')
-            arg++;
-        else if (*arg == '^' && *(arg + 1) != '\0')
-            arg++;
+        if (*iter == '&' && (iter + 1) != arg.end())
+            iter++;
+        else if (*iter == '^' && (iter + 1) != arg.end())
+            iter++;
         else
         {
-            *retptr = *arg;
-            retptr++;
+            result.push_back(*iter);
         }
     }
 
-    *retptr = '\0';
-    return ret;
+    return result;
 }
 
 char* rembg(const char* src)

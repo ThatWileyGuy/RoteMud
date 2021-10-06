@@ -2543,7 +2543,7 @@ void do_who(CHAR_DATA* ch, char* argument)
             }
         }
 
-        if (ch && !nifty_is_name(wch->name, remand(wch->pcdata->title)) && ch->top_level > wch->top_level)
+        if (ch && !nifty_is_name(wch->name, remand(wch->pcdata->title).c_str()) && ch->top_level > wch->top_level)
             sprintf_s(extra_title, " [%s]", wch->name);
         else
             strcpy_s(extra_title, "");
@@ -2813,7 +2813,7 @@ void do_setrank(CHAR_DATA* ch, char* argument)
         return;
     }
 
-    if (strlen(argument) > 40 || strlen(remand(argument)) > 19)
+    if (strlen(argument) > 40 || strlen(remand(argument).c_str()) > 19)
     {
         send_to_char(
             "&RThat rank is too long. Choose one under 40 characters with color codes and under 20 without.\n\r", ch);
@@ -4516,7 +4516,7 @@ void do_whoinvis(CHAR_DATA* ch, char* argument)
     }
 }
 
-void do_introduce(CHAR_DATA* ch, char* argument)
+void do_introduce(CHAR_DATA* ch, char* arg)
 {
     CHAR_DATA* victim = nullptr;
     CHAR_DATA* rch = nullptr;
@@ -4526,20 +4526,20 @@ void do_introduce(CHAR_DATA* ch, char* argument)
     FELLOW_DATA* fellow;
     int count;
 
-    argument = one_argument(argument, arg1);
-    argument = remand(argument);
+    arg = one_argument(arg, arg1);
+    auto prefName = remand(arg);
 
     if (IS_NPC(ch))
         return;
 
-    if (arg1[0] == '\0' || argument[0] == '\0' || (!isalpha(argument[0]) && !isdigit(argument[0])))
+    if (arg1[0] == '\0' || prefName.empty() || (!isalpha(prefName[0]) && !isdigit(prefName[0])))
     {
         send_to_char("&RSyntax: introduce <person/all> <your preferred name>\n\r", ch);
         return;
     }
 
     arg1[0] = UPPER(arg1[0]);
-    argument[0] = UPPER(argument[0]);
+    prefName[0] = UPPER(prefName[0]);
 
     if ((str_cmp(arg1, "all")) && (victim = get_char_room(ch, arg1)) == NULL)
     {
@@ -4559,19 +4559,19 @@ void do_introduce(CHAR_DATA* ch, char* argument)
         return;
     }
 
-    if (strlen(argument) < 3)
+    if (prefName.size() < 3)
     {
         send_to_char("Introductions must be at least 3 characters long.\n\r", ch);
         return;
     }
 
-    if (strlen(argument) > 40)
-        argument[40] = '\0';
+    if (prefName.size() > 40)
+        prefName.resize(40);
 
-    if (argument[1] == '.')
-        argument[1] = 'x';
+    if (prefName[1] == '.')
+        prefName[1] = 'x';
 
-    if (!str_cmp(argument, "Someone"))
+    if (!str_cmp(prefName.c_str(), "Someone"))
     {
         send_to_char("Nice try, ass.\n\r", ch);
         return;
@@ -4588,7 +4588,7 @@ void do_introduce(CHAR_DATA* ch, char* argument)
             if (can_see(ch, rch))
             {
                 sprintf_s(buf, "__%s ", rch->name);
-                strcat_s(buf, argument);
+                strcat_s(buf, prefName.c_str());
                 do_introduce(ch, buf);
                 count++;
             }
@@ -4607,60 +4607,66 @@ void do_introduce(CHAR_DATA* ch, char* argument)
         return;
     }
 
-    smash_tilde(argument);
+    smash_tilde(&prefName[0]);
 
     for (vfellow = victim->first_fellow; vfellow; vfellow = vfellow->next)
     {
         if (!str_cmp(vfellow->victim, ch->name))
         {
-            if (!str_cmp(vfellow->knownas, argument))
+            if (!str_cmp(vfellow->knownas, prefName.c_str()))
             {
-                ch_printf(ch, "They already know you as %s.\n\r", argument);
+                ch_printf(ch, "They already know you as %s.\n\r", prefName.c_str());
                 return;
             }
 
-            ch_printf(ch, "&GYou reintroduce yourself to %s as %s.\n\r", PERS(victim, ch), argument);
+            ch_printf(ch, "&GYou reintroduce yourself to %s as %s.\n\r", PERS(victim, ch), prefName.c_str());
             ch_printf(victim, "&G%s reintroduces %sself as %s.\n\r", PERS(ch, victim),
-                      ch->sex == 2 ? "her" : ch->sex == 1 ? "him" : "it", argument);
+                      ch->sex == 2   ? "her"
+                      : ch->sex == 1 ? "him"
+                                     : "it",
+                      prefName.c_str());
 
             STRFREE(vfellow->knownas);
-            vfellow->knownas = STRALLOC(argument);
+            vfellow->knownas = STRALLOC(prefName.c_str());
             return;
         }
     }
     ch_printf(victim, "&G%s introduces %sself as %s.\n\r", PERS(ch, victim),
-              ch->sex == 2 ? "her" : ch->sex == 1 ? "him" : "it", argument);
+              ch->sex == 2   ? "her"
+              : ch->sex == 1 ? "him"
+                             : "it",
+              prefName.c_str());
 
     CREATE(fellow, FELLOW_DATA, 1);
     fellow->victim = ch->name;
-    fellow->knownas = STRALLOC(argument);
+    fellow->knownas = STRALLOC(prefName.c_str());
     LINK(fellow, victim->first_fellow, victim->last_fellow, next, prev);
 
-    ch_printf(ch, "&GYou introduce yourself to %s as %s.\n\r", PERS(victim, ch), argument);
+    ch_printf(ch, "&GYou introduce yourself to %s as %s.\n\r", PERS(victim, ch), prefName.c_str());
     return;
 }
 
-void do_remember(CHAR_DATA* ch, char* argument)
+void do_remember(CHAR_DATA* ch, char* arg)
 {
     CHAR_DATA* victim;
     char arg1[MAX_INPUT_LENGTH];
     FELLOW_DATA* fellow;
     FELLOW_DATA* nfellow;
 
-    argument = one_argument(argument, arg1);
-    argument = remand(argument);
+    arg = one_argument(arg, arg1);
+    std::string name = remand(arg);
 
     if (IS_NPC(ch))
         return;
 
-    if (arg1[0] == '\0' || argument[0] == '\0')
+    if (arg1[0] == '\0' || name.empty())
     {
         send_to_char("&RSyntax: remember <person> <name>\n\r", ch);
         return;
     }
 
     arg1[0] = UPPER(arg1[0]);
-    argument[0] = UPPER(argument[0]);
+    name[0] = UPPER(name[0]);
 
     if ((victim = get_char_room(ch, arg1)) == NULL)
     {
@@ -4674,19 +4680,19 @@ void do_remember(CHAR_DATA* ch, char* argument)
         return;
     }
 
-    if (strlen(argument) < 3)
+    if (name.size() < 3)
     {
         send_to_char("You find it quite hard to remember them with such a short name.\n\r", ch);
         return;
     }
 
-    if (strlen(argument) > 40)
-        argument[40] = '\0';
+    if (name.size() > 40)
+        name.resize(40);
 
-    if (argument[1] == '.')
-        argument[1] = 'x';
+    if (name[1] == '.')
+        name[1] = 'x';
 
-    if (!str_cmp(argument, "Someone"))
+    if (!str_cmp(name.c_str(), "Someone"))
     {
         send_to_char("Perhaps a little more descriptive?\n\r", ch);
         return;
@@ -4698,35 +4704,35 @@ void do_remember(CHAR_DATA* ch, char* argument)
         return;
     }
 
-    smash_tilde(argument);
+    smash_tilde(&name[0]);
 
     for (fellow = ch->first_fellow; fellow; fellow = fellow->next)
     {
         if (!str_cmp(fellow->victim, victim->name))
         {
-            if (!str_cmp(fellow->knownas, argument))
+            if (!str_cmp(fellow->knownas, name.c_str()))
             {
-                ch_printf(ch, "You already know them as %s.\n\r", argument);
+                ch_printf(ch, "You already know them as %s.\n\r", name.c_str());
                 return;
             }
 
-            ch_printf(ch, "%s will be remembered as %s.\n\r", PERS(victim, ch), argument);
+            ch_printf(ch, "%s will be remembered as %s.\n\r", PERS(victim, ch), name.c_str());
 
             STRFREE(fellow->knownas);
-            fellow->knownas = STRALLOC(argument);
+            fellow->knownas = STRALLOC(name.c_str());
             return;
         }
     }
-    ch_printf(ch, "%s will be remembered as %s.\n\r", PERS(victim, ch), argument);
+    ch_printf(ch, "%s will be remembered as %s.\n\r", PERS(victim, ch), name.c_str());
 
     CREATE(nfellow, FELLOW_DATA, 1);
     nfellow->victim = victim->name;
-    nfellow->knownas = STRALLOC(argument);
+    nfellow->knownas = STRALLOC(name.c_str());
     LINK(nfellow, ch->first_fellow, ch->last_fellow, next, prev);
     return;
 }
 
-void do_describe(CHAR_DATA* ch, char* argument)
+void do_describe(CHAR_DATA* ch, char* arg)
 {
     CHAR_DATA* victim;
     char arg1[MAX_INPUT_LENGTH];
@@ -4734,20 +4740,20 @@ void do_describe(CHAR_DATA* ch, char* argument)
     FELLOW_DATA* nfellow;
     FELLOW_DATA* vfellow;
 
-    argument = one_argument(argument, arg1);
-    argument = remand(argument);
+    arg = one_argument(arg, arg1);
+    std::string person = remand(arg);
 
     if (IS_NPC(ch))
         return;
 
-    if (arg1[0] == '\0' || argument[0] == '\0')
+    if (arg1[0] == '\0' || person.empty())
     {
         send_to_char("&RSyntax: describe <to person> <person you are describing>\n\r", ch);
         return;
     }
 
     arg1[0] = UPPER(arg1[0]);
-    argument[0] = UPPER(argument[0]);
+    person[0] = UPPER(person[0]);
 
     if ((victim = get_char_room(ch, arg1)) == NULL)
     {
@@ -4761,19 +4767,19 @@ void do_describe(CHAR_DATA* ch, char* argument)
         return;
     }
 
-    if (strlen(argument) < 3)
+    if (person.size() < 3)
     {
         send_to_char("You find it hard to describe someone based on such a short name.\n\r", ch);
         return;
     }
 
-    if (strlen(argument) > 40)
-        argument[40] = '\0';
+    if (person.size() > 40)
+        person.resize(40);
 
-    if (argument[1] == '.')
-        argument[1] = 'x';
+    if (person[1] == '.')
+        person[1] = 'x';
 
-    if (!str_cmp(argument, "Someone"))
+    if (!str_cmp(person.c_str(), "Someone"))
     {
         send_to_char("Perhaps a little more descriptive?\n\r", ch);
         return;
@@ -4785,11 +4791,11 @@ void do_describe(CHAR_DATA* ch, char* argument)
         return;
     }
 
-    smash_tilde(argument);
+    smash_tilde(&person[0]);
 
     for (fellow = ch->first_fellow; fellow; fellow = fellow->next)
     {
-        if (nifty_is_name(argument, fellow->knownas))
+        if (nifty_is_name(person.c_str(), fellow->knownas))
         {
             for (vfellow = victim->first_fellow; vfellow; vfellow = vfellow->next)
             {

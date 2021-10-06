@@ -225,7 +225,7 @@ void do_makeblade(CHAR_DATA* ch, char* argument)
     STRFREE(obj->name);
     strcpy_s(buf, arg);
     strcat_s(buf, " vibro-blade blade ");
-    strcat_s(buf, remand(buf));
+    strcat_s(buf, remand(buf).c_str());
     obj->name = STRALLOC(buf);
     strcpy_s(buf, arg);
     STRFREE(obj->short_descr);
@@ -490,7 +490,7 @@ void do_makeblaster(CHAR_DATA* ch, char* argument)
     STRFREE(obj->name);
     strcpy_s(buf, arg);
     strcat_s(buf, " blaster ");
-    strcat_s(buf, remand(buf));
+    strcat_s(buf, remand(buf).c_str());
     obj->name = STRALLOC(buf);
     strcpy_s(buf, arg);
     STRFREE(obj->short_descr);
@@ -942,7 +942,7 @@ void do_makespice(CHAR_DATA* ch, char* argument)
     strcpy_s(buf, obj->name);
     STRFREE(obj->name);
     strcat_s(buf, " drug spice ");
-    strcat_s(buf, remand(buf));
+    strcat_s(buf, remand(buf).c_str());
     obj->name = STRALLOC(buf);
     strcpy_s(buf, "a drug made from ");
     strcat_s(buf, obj->short_descr);
@@ -1150,7 +1150,7 @@ void do_makegrenade(CHAR_DATA* ch, char* argument)
     STRFREE(obj->name);
     strcpy_s(buf, arg);
     strcat_s(buf, " grenade ");
-    strcat_s(buf, remand(buf));
+    strcat_s(buf, remand(buf).c_str());
     obj->name = STRALLOC(buf);
     strcpy_s(buf, arg);
     STRFREE(obj->short_descr);
@@ -1359,7 +1359,7 @@ void do_makelandmine(CHAR_DATA* ch, char* argument)
     STRFREE(obj->name);
     strcpy_s(buf, arg);
     strcat_s(buf, " landmine ");
-    strcat_s(buf, remand(buf));
+    strcat_s(buf, remand(buf).c_str());
     obj->name = STRALLOC(buf);
     strcpy_s(buf, arg);
     STRFREE(obj->short_descr);
@@ -1564,7 +1564,7 @@ void do_makelight(CHAR_DATA* ch, char* argument)
     STRFREE(obj->name);
     strcpy_s(buf, arg);
     strcat_s(buf, " light ");
-    strcat_s(buf, remand(buf));
+    strcat_s(buf, remand(buf).c_str());
     obj->name = STRALLOC(buf);
     strcpy_s(buf, arg);
     STRFREE(obj->short_descr);
@@ -1769,7 +1769,7 @@ void do_makejewelry(CHAR_DATA* ch, char* argument)
     obj->level = level;
     STRFREE(obj->name);
     sprintf_s(buf, "%s ", arg2);
-    strcat_s(buf, remand(buf));
+    strcat_s(buf, remand(buf).c_str());
     obj->name = STRALLOC(buf);
     strcpy_s(buf, arg2);
     STRFREE(obj->short_descr);
@@ -2007,7 +2007,7 @@ void do_makearmor(CHAR_DATA* ch, char* argument)
     obj->level = level;
     STRFREE(obj->name);
     sprintf_s(buf, "%s ", arg2);
-    strcat_s(buf, remand(buf));
+    strcat_s(buf, remand(buf).c_str());
     obj->name = STRALLOC(buf);
     strcpy_s(buf, arg2);
     STRFREE(obj->short_descr);
@@ -2210,7 +2210,7 @@ void do_makecomlink(CHAR_DATA* ch, char* argument)
     STRFREE(obj->name);
     strcpy_s(buf, arg2);
     strcat_s(buf, " comlink ");
-    strcat_s(buf, remand(buf));
+    strcat_s(buf, remand(buf).c_str());
     obj->name = STRALLOC(buf);
     strcpy_s(buf, arg2);
     STRFREE(obj->short_descr);
@@ -2602,7 +2602,7 @@ void do_makecontainer(CHAR_DATA* ch, char* argument)
     STRFREE(obj->name);
     strcpy_s(buf, arg2);
     strcat_s(buf, " ");
-    strcat_s(buf, remand(buf));
+    strcat_s(buf, remand(buf).c_str());
     obj->name = STRALLOC(buf);
     strcpy_s(buf, arg2);
     STRFREE(obj->short_descr);
@@ -5539,7 +5539,7 @@ void do_makepike(CHAR_DATA* ch, char* argument)
     STRFREE(obj->name);
     strcpy_s(buf, arg);
     strcat_s(buf, " force pike");
-    strcat_s(buf, remand(buf));
+    strcat_s(buf, remand(buf).c_str());
     obj->name = STRALLOC(buf);
     strcpy_s(buf, arg);
     STRFREE(obj->short_descr);

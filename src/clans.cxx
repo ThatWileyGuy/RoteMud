@@ -2799,7 +2799,7 @@ void do_members(CHAR_DATA* ch, char* argument)
               !str_cmp(clan->name, "The Empire") ? "&R" : !str_cmp(clan->name, "The New Republic") ? "&B" : "&G");
 
     sprintf_s(thebuf, "%s---------------============<&W%s%s>============---------------\n\r", color,
-              centertext(clan->name, 24), color);
+              centertext(clan->name, 24).c_str(), color);
     send_to_char(thebuf, ch);
 
     for (;;)

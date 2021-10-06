@@ -338,7 +338,7 @@ void do_rank(CHAR_DATA* ch, char* argument)
         return;
     }
 
-    if (strlen(argument) > 40 || strlen(remand(argument)) > 19)
+    if (strlen(argument) > 40 || remand(argument).size() > 19)
     {
         send_to_char(
             "&RThat rank is too long. Choose one under 40 characters with color codes and under 20 without.\n\r", ch);
@@ -350,7 +350,7 @@ void do_rank(CHAR_DATA* ch, char* argument)
     if (!str_cmp(argument, "none"))
         ch->rank = str_dup("");
     else
-        ch->rank = str_dup(centertext(argument, 19));
+        ch->rank = str_dup(centertext(argument, 19).c_str());
 
     ch_printf(ch, "Your rank is now: %s", argument);
     return;
@@ -6966,7 +6966,7 @@ void do_rankset(CHAR_DATA* ch, char* argument)
         return;
     }
 
-    if (strlen(argument) > 40 || strlen(remand(argument)) > 19)
+    if (strlen(argument) > 40 || remand(argument).size() > 19)
     {
         send_to_char(
             "&RThat rank is too long. Choose one under 40 characters with color codes and under 20 without.\n\r", ch);

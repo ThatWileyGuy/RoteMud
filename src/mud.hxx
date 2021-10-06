@@ -4738,7 +4738,7 @@ void reset_area(AREA_DATA* pArea);
 /* db.c */
 void show_file(CHAR_DATA* ch, char const* filename);
 char* str_dup(const char* str);
-char* centertext(const char* text, int size);
+std::string centertext(const std::string_view& text, int size);
 void boot_db(bool fCopyOver);
 void area_update(void);
 void add_char(CHAR_DATA* ch);
@@ -5160,7 +5160,7 @@ void load_ship_prototypes(void);
 char* strrep(const char* src, const char* sch, const char* rep);
 char* strlinwrp(char* src, int length);
 char* line(int num, char inp);
-char* remand(const char* arg);
+std::string remand(const std::string_view& arg);
 char* rembg(const char* arg);
 const char* htmlcolor(const char* arg);
 char* format_str(char* src, int len);

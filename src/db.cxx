@@ -6512,37 +6512,32 @@ void do_check_vnums(CHAR_DATA* ch, char* argument)
 }
 
 /* little proggy to center text with whitespace in between. */
-char* centertext(const char* text, int size)
+std::string centertext(const std::string_view& text, int size)
 {
-    char buf[MAX_STRING_LENGTH] = {};
-    char* sent;
-    int i;
-    int filler = (size - strlen(remand(text))) / 2 - 1;
-    sprintf_s(buf, " ");
+    std::string cleanText = remand(text);
+    int filler = (size - cleanText.size()) / 2 - 1;
 
-    if (size == 0 || size < strlen(remand(text)))
+    std::string result = " ";
+
+    if (size == 0 || size < cleanText.size())
     {
-        strcpy_s(buf, "(null)");
-        return buf;
+        return "(null)";
     }
 
-    if (size == strlen(remand(text)))
+    if (size == cleanText.size())
     {
-        strcpy_s(buf, text);
-        return buf;
+        return cleanText;
     }
 
-    for (i = 0; i < filler; i++)
-        strcat_s(buf, " ");
+    for (int i = 0; i < filler; i++)
+        result += " ";
 
-    strcat_s(buf, text);
+    result += text;
 
-    for (i = 0; i < filler; i++)
-        strcat_s(buf, " ");
+    for (int i = 0; i < filler; i++)
+        result += " ";
 
-    sent = buf;
-
-    return sent;
+    return result;
 }
 
 /*
