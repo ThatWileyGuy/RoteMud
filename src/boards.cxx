@@ -854,7 +854,7 @@ void do_note(CHAR_DATA* ch, char* arg_passed, bool IS_MAIL)
         // arg_passed[0] = UPPER(arg_passed[0]);
         // TODO this seems unnecessary?
 
-        sprintf_s(fname, "%s%c/%s", PLAYER_DIR, tolower(arg_passed[0]), capitalize(arg_passed));
+        sprintf_s(fname, "%s%c/%s", PLAYER_DIR, tolower(arg_passed[0]), capitalize(arg_passed).c_str());
 
         if (!IS_MAIL || stat(fname, &fst) != -1 || !str_cmp(arg_passed, "all"))
         {

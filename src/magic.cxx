@@ -2861,11 +2861,11 @@ ch_ret spell_locate_object(int sn, int level, CHAR_DATA* ch, void* vo)
                 (get_trust(ch) < in_obj->carried_by->pcdata->wizinvis) && IS_SET(in_obj->carried_by->act, PLR_WIZINVIS))
                 continue;
 
-            sprintf_s(buf, "%s carried by %s.\n\r", obj_short(obj), PERS(in_obj->carried_by, ch));
+            sprintf_s(buf, "%s carried by %s.\n\r", obj_short(obj).c_str(), PERS(in_obj->carried_by, ch));
         }
         else
         {
-            sprintf_s(buf, "%s in %s.\n\r", obj_short(obj),
+            sprintf_s(buf, "%s in %s.\n\r", obj_short(obj).c_str(),
                       in_obj->in_room == NULL ? "somewhere" : in_obj->in_room->name);
         }
 

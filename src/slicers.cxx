@@ -1794,6 +1794,8 @@ void do_slicebank(CHAR_DATA* ch, char* argument)
         {
             return true;
         }
+
+        return false;
     });
 
     std::shared_ptr<DESCRIPTOR_DATA> d = iter == g_descriptors.end() ? nullptr : *iter;

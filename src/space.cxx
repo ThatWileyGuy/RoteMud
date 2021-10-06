@@ -2276,7 +2276,7 @@ void do_makestarsystem(CHAR_DATA* ch, char* argument)
     starsystem->star2 = STRALLOC("");
 
     argument = one_argument(argument, arg);
-    sprintf_s(filename, "%s.system", strlower(arg));
+    sprintf_s(filename, "%s.system", strlower(arg).c_str());
     starsystem->filename = str_dup(filename);
     save_starsystem(starsystem);
     write_starsystem_list();

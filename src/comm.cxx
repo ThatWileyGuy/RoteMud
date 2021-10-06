@@ -64,14 +64,14 @@ static OBJ_DATA* rgObjNest[MAX_NEST];
 namespace telnet
 {
 // see RFC 854 for protocol and IANA (https://www.iana.org/assignments/telnet-options/telnet-options.xhtml) for options
-constexpr char IAC = 255;
-constexpr char WILL = 251;
-constexpr char WONT = 252;
-constexpr char GA = 249;
+constexpr unsigned char IAC = 255;
+constexpr unsigned char WILL = 251;
+constexpr unsigned char WONT = 252;
+constexpr unsigned char GA = 249;
 
 namespace option
 {
-constexpr char ECHO = 1;
+constexpr unsigned char ECHO = 1;
 }
 
 }; // namespace telnet
@@ -391,7 +391,6 @@ static void caught_alarm()
 
 void game_loop()
 {
-    char cmdline[MAX_INPUT_LENGTH];
     DESCRIPTOR_DATA* d = nullptr;
     /*  time_t	last_check = 0;  */
 
@@ -1754,7 +1753,7 @@ void nanny(std::shared_ptr<DESCRIPTOR_DATA> d, char* argument)
                 extract_obj(obj);
             }
 
-            sprintf_s(filename, "%s%c/%s.home", PLAYER_DIR, tolower(ch->name[0]), capitalize(ch->name));
+            sprintf_s(filename, "%s%c/%s.home", PLAYER_DIR, tolower(ch->name[0]), capitalize(ch->name).c_str());
             if ((fph = fopen(filename, "r")) != NULL)
             {
                 int iNest;
@@ -2617,7 +2616,7 @@ void do_name(CHAR_DATA* ch, char* argument)
         return;
     }
 
-    sprintf_s(fname, "%s%c/%s", PLAYER_DIR, tolower(argument[0]), capitalize(argument));
+    sprintf_s(fname, "%s%c/%s", PLAYER_DIR, tolower(argument[0]), capitalize(argument).c_str());
     if (stat(fname, &fst) != -1)
     {
         send_to_char("That name is already taken.  Please choose another.\n\r", ch);
@@ -3347,13 +3346,13 @@ const char* PERS(CHAR_DATA* ch, CHAR_DATA* looker)
                 sprintf_s(race, "%s", npc_race[ch->race]);
                 race[0] = tolower(race[0]);
                 if (!IS_DROID(ch))
-                    sprintf_s(buf, "%s %s %s of %s height", aoran(build_name[ch->build]), race,
+                    sprintf_s(buf, "%s %s %s of %s height", aoran(build_name[ch->build]).c_str(), race,
                               ch->sex == 1   ? "male"
                               : ch->sex == 2 ? "female"
                                              : "neutral",
                               height_name[ch->pheight]);
                 else
-                    sprintf_s(buf, "%s %s", aoran(droid_name[ch->build]), race);
+                    sprintf_s(buf, "%s %s", aoran(droid_name[ch->build]).c_str(), race);
                 return buf;
             }
         }

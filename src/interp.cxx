@@ -407,9 +407,10 @@ void interpret(CHAR_DATA* ch, char* argument)
     {
         using namespace std::chrono; // TODO clean up the duration_casts to subtract the seconds from the microseconds
 
-        sprintf_s(log_buf, "[*****] LAG: %s: %s %s (R:%d S:%d.%06d)", ch->name, cmd->name,
+        using floatseconds = std::chrono::duration<double, std::chrono::seconds::period>;
+        sprintf_s(log_buf, "[*****] LAG: %s: %s %s (R:%d S:%.06f)", ch->name, cmd->name,
                   (cmd->log == LOG_NEVER ? "XXX" : argument), ch->in_room ? ch->in_room->vnum : 0,
-                  duration_cast<seconds>(time_used), duration_cast<microseconds>(time_used));
+                  floatseconds(time_used).count());
         log_string_plus(log_buf, LOG_NORMAL, get_trust(ch));
     }
 

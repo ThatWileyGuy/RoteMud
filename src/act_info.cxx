@@ -1818,27 +1818,27 @@ void do_exits(CHAR_DATA* ch, char* argument)
                 if (IS_SET(pexit->exit_info, EX_CLOSED))
                 {
                     sprintf_s(insert_at, remaining, "%s%-5s - (closed)&w&W\n\r", color_str(AT_EXITS, ch),
-                              capitalize(dir_name[pexit->vdir]));
+                              capitalize(dir_name[pexit->vdir]).c_str());
                 }
                 else if (IS_SET(pexit->exit_info, EX_WINDOW))
                 {
                     sprintf_s(insert_at, remaining, "%s%-5s - (window)&w&W\n\r", color_str(AT_EXITS, ch),
-                              capitalize(dir_name[pexit->vdir]));
+                              capitalize(dir_name[pexit->vdir]).c_str());
                 }
                 else if (IS_SET(pexit->exit_info, EX_xAUTO))
                 {
                     sprintf_s(insert_at, remaining, "%s%-5s - %s%s&w&W\n\r", color_str(AT_EXITS, ch),
-                              capitalize(pexit->keyword), color_str(AT_RMNAME, ch),
+                              capitalize(pexit->keyword).c_str(), color_str(AT_RMNAME, ch),
                               room_is_dark(pexit->to_room) ? "Too dark to tell" : pexit->to_room->name);
                 }
                 else
                     sprintf_s(insert_at, remaining, "%s%-5s - %s%s&w&W\n\r", color_str(AT_EXITS, ch),
-                              capitalize(dir_name[pexit->vdir]), color_str(AT_RMNAME, ch),
+                              capitalize(dir_name[pexit->vdir]).c_str(), color_str(AT_RMNAME, ch),
                               room_is_dark(pexit->to_room) ? "Too dark to tell" : pexit->to_room->name);
             }
             else
             {
-                sprintf_s(insert_at, remaining, " %s&w&W", capitalize(dir_name[pexit->vdir]));
+                sprintf_s(insert_at, remaining, " %s&w&W", capitalize(dir_name[pexit->vdir]).c_str());
             }
         }
     }
@@ -2169,9 +2169,9 @@ char* help_fix(char* text)
 
 void do_hset(CHAR_DATA* ch, char* argument)
 {
-    HELP_DATA* pHelp;
-    char arg1[MAX_INPUT_LENGTH];
-    char arg2[MAX_INPUT_LENGTH];
+    HELP_DATA* pHelp = nullptr;
+    char arg1[MAX_INPUT_LENGTH] = {};
+    char arg2[MAX_INPUT_LENGTH] = {};
 
     smash_tilde(argument);
     argument = one_argument(argument, arg1);
@@ -4859,24 +4859,24 @@ void do_newexits(CHAR_DATA* ch, char* argument)
             {
                 if (IS_SET(pexit->exit_info, EX_CLOSED))
                 {
-                    sprintf_s(buf, "&G&W%-9s &R- (closed)", capitalize(dir_name[pexit->vdir]));
+                    sprintf_s(buf, "&G&W%-9s &R- (closed)", capitalize(dir_name[pexit->vdir]).c_str());
                 }
                 else if (IS_SET(pexit->exit_info, EX_WINDOW))
                 {
-                    sprintf_s(buf, "&G&W%-9s &R- (window)", capitalize(dir_name[pexit->vdir]));
+                    sprintf_s(buf, "&G&W%-9s &R- (window)", capitalize(dir_name[pexit->vdir]).c_str());
                 }
                 else if (IS_SET(pexit->exit_info, EX_xAUTO))
                 {
-                    sprintf_s(buf, "&G&W%-9s &R- &G&W%s%s", capitalize(pexit->keyword), color_str(AT_RMNAME, ch),
+                    sprintf_s(buf, "&G&W%-9s &R- &G&W%s%s", capitalize(pexit->keyword).c_str(), color_str(AT_RMNAME, ch),
                               room_is_dark(pexit->to_room) ? "Too dark to tell" : pexit->to_room->name);
                 }
                 else
-                    sprintf_s(buf, "&G&W%-9s &R- &G&W%s%s", capitalize(dir_name[pexit->vdir]), color_str(AT_RMNAME, ch),
+                    sprintf_s(buf, "&G&W%-9s &R- &G&W%s%s", capitalize(dir_name[pexit->vdir]).c_str(), color_str(AT_RMNAME, ch),
                               room_is_dark(pexit->to_room) ? "Too dark to tell" : pexit->to_room->name);
             }
             else
             {
-                sprintf_s(buf, "&R&W %s", capitalize(dir_name[pexit->vdir]));
+                sprintf_s(buf, "&R&W %s", capitalize(dir_name[pexit->vdir]).c_str());
             }
             if (pexit->vdir == 0)
                 nfound = true;

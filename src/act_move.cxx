@@ -1488,7 +1488,6 @@ void do_open(CHAR_DATA* ch, char* argument)
     }
 
     if (!str_cmp(arg, "hatch"))
-        ;
     {
         do_openhatch(ch, argument);
         return;

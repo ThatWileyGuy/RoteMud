@@ -184,7 +184,7 @@ void fread_planet(PLANET_DATA* planet, FILE* fp)
     char buf[MAX_STRING_LENGTH];
     char const* word;
     char* line;
-    int x0, x1, x2, x3, x4, x5;
+    int x0, x1;
     bool fMatch;
 
     for (;;)
@@ -284,7 +284,6 @@ void fread_planet(PLANET_DATA* planet, FILE* fp)
 
         case 'R':
             if (!str_cmp(word, "Resource"))
-                ;
             {
                 line = fread_line(fp);
                 x0 = 0;
@@ -783,7 +782,7 @@ void do_makeplanet(CHAR_DATA* ch, char* argument)
     }
 
     found = false;
-    sprintf_s(filename, "%s%s", PLANET_DIR, strlower(argument));
+    sprintf_s(filename, "%s%s", PLANET_DIR, strlower(argument).c_str());
 
     CREATE(planet, PLANET_DATA, 1);
     LINK(planet, first_planet, last_planet, next, prev);

@@ -3266,10 +3266,10 @@ void showaffect(CHAR_DATA* ch, AFFECT_DATA* paf)
         switch (paf->location)
         {
         default:
-            sprintf_s(buf, "Affects %s by %d.\n\r", affect_loc_name(paf->location), paf->modifier);
+            sprintf_s(buf, "Affects %s by %d.\n\r", affect_loc_name(paf->location).c_str(), paf->modifier);
             break;
         case APPLY_AFFECT:
-            sprintf_s(buf, "Affects %s by", affect_loc_name(paf->location));
+            sprintf_s(buf, "Affects %s by", affect_loc_name(paf->location).c_str());
             for (x = 0; x < 32; x++)
                 if (IS_SET(paf->modifier, 1 << x))
                 {
@@ -3287,7 +3287,7 @@ void showaffect(CHAR_DATA* ch, AFFECT_DATA* paf)
         case APPLY_RESISTANT:
         case APPLY_IMMUNE:
         case APPLY_SUSCEPTIBLE:
-            sprintf_s(buf, "Affects %s by", affect_loc_name(paf->location));
+            sprintf_s(buf, "Affects %s by", affect_loc_name(paf->location).c_str());
             for (x = 0; x < 32; x++)
                 if (IS_SET(paf->modifier, 1 << x))
                 {

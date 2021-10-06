@@ -1077,7 +1077,7 @@ void do_makeclan(CHAR_DATA* ch, char* argument)
     }
 
     found = false;
-    sprintf_s(filename, "%s%s", CLAN_DIR, strlower(argument));
+    sprintf_s(filename, "%s%s", CLAN_DIR, strlower(argument).c_str());
 
     CREATE(clan, CLAN_DATA, 1);
     LINK(clan, first_clan, last_clan, next, prev);

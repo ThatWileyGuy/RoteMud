@@ -157,15 +157,17 @@ void do_sellhome(CHAR_DATA* ch, char* argument)
 
 void do_clone(CHAR_DATA* ch, char* argument)
 {
-    long credits, bank;
-    long played;
-    int frclevel, frc;
-    int salary;
-    char clanname[MAX_STRING_LENGTH];
-    char bestowments[MAX_STRING_LENGTH];
-    int flags;
-    ROOM_INDEX_DATA* home;
-    bool secondroom;
+    long credits = 0;
+    long bank = 0;
+    long played = 0;
+    int frclevel = 0;
+    int frc = 0;
+    int salary = 0;
+    char clanname[MAX_STRING_LENGTH] = {};
+    char bestowments[MAX_STRING_LENGTH] = {};
+    int flags = 0;
+    ROOM_INDEX_DATA* home = nullptr;
+    bool secondroom = false;
 
     if (IS_NPC(ch))
     {
@@ -285,14 +287,16 @@ void do_clone(CHAR_DATA* ch, char* argument)
 
 void do_backup(CHAR_DATA* ch, char* argument)
 {
-    long credits, bank;
-    long played;
-    int frclevel, frc;
-    char clanname[MAX_STRING_LENGTH];
-    char bestowments[MAX_STRING_LENGTH];
-    int flags;
-    ROOM_INDEX_DATA* home;
-    bool secondroom;
+    long credits = 0;
+    long bank = 0;
+    long played = 0;
+    int frclevel = 0;
+    int frc = 0;
+    char clanname[MAX_STRING_LENGTH] = {};
+    char bestowments[MAX_STRING_LENGTH] = {};
+    int flags = 0;
+    ROOM_INDEX_DATA* home = nullptr;
+    bool secondroom = false;
 
     if (IS_NPC(ch))
     {

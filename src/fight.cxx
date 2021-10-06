@@ -2244,18 +2244,18 @@ void raw_kill(CHAR_DATA* ch, CHAR_DATA* victim)
                 save_equipment[x][y] = NULL;
     }
 
-    sprintf_s(buf, "%s%c/%s", PLAYER_DIR, tolower(arg[0]), capitalize(arg));
-    sprintf_s(buf2, "%s%c/%s", BACKUP_DIR, tolower(arg[0]), capitalize(arg));
+    sprintf_s(buf, "%s%c/%s", PLAYER_DIR, tolower(arg[0]), capitalize(arg).c_str());
+    sprintf_s(buf2, "%s%c/%s", BACKUP_DIR, tolower(arg[0]), capitalize(arg).c_str());
 
     rename(buf, buf2);
 
-    sprintf_s(buf, "%s%c/%s.clone", PLAYER_DIR, tolower(arg[0]), capitalize(arg));
-    sprintf_s(buf2, "%s%c/%s", PLAYER_DIR, tolower(arg[0]), capitalize(arg));
+    sprintf_s(buf, "%s%c/%s.clone", PLAYER_DIR, tolower(arg[0]), capitalize(arg).c_str());
+    sprintf_s(buf2, "%s%c/%s", PLAYER_DIR, tolower(arg[0]), capitalize(arg).c_str());
 
     rename(buf, buf2);
 
     // Profile Deletion.
-    sprintf_s(buf, "%s%s.htm", PROFILE_DIR, capitalize(arg));
+    sprintf_s(buf, "%s%s.htm", PROFILE_DIR, capitalize(arg).c_str());
     remove(buf);
 
     return;

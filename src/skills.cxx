@@ -1916,7 +1916,6 @@ void do_steal(CHAR_DATA* ch, char* argument)
         log_string(logbuf);
         learn_from_success(ch, gsn_steal);
         if (IS_NPC(victim))
-            ;
         {
             xp = UMIN(amount * 10, (exp_level(ch->skill_level[SMUGGLING_ABILITY] + 1) -
                                     exp_level(ch->skill_level[SMUGGLING_ABILITY])) /
@@ -1978,7 +1977,6 @@ void do_steal(CHAR_DATA* ch, char* argument)
               IS_NPC(victim) ? victim->short_descr : victim->name);
     log_string(logbuf);
     if (IS_NPC(victim))
-        ;
     {
         xp = UMIN(obj->cost * 10,
                   (exp_level(ch->skill_level[SMUGGLING_ABILITY] + 1) - exp_level(ch->skill_level[SMUGGLING_ABILITY])) /

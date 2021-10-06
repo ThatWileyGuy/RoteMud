@@ -973,8 +973,8 @@ void gain_addiction(CHAR_DATA* ch)
 
 void gain_condition(CHAR_DATA* ch, int iCond, int value)
 {
-    int condition;
-    ch_ret retcode;
+    int condition = 0;
+    ch_ret retcode = 0;
 
     if (value == 0 || IS_NPC(ch) || get_trust(ch) >= LEVEL_IMMORTAL || NOT_AUTHED(ch) || IS_DROID(ch))
         return;
@@ -1351,9 +1351,8 @@ void mobile_update(void)
 
 void update_taxes(void)
 {
-    int i;
-    PLANET_DATA* planet;
-    CLAN_DATA* clan;
+    PLANET_DATA* planet = nullptr;
+    CLAN_DATA* clan = nullptr;
 
     for (planet = first_planet; planet; planet = planet->next)
     {

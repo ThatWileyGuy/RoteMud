@@ -1411,16 +1411,16 @@ void do_say(CHAR_DATA* ch, char* argument)
 
 void do_oldtell(CHAR_DATA* ch, char* argument)
 {
-    char arg[MAX_INPUT_LENGTH];
-    char buf[MAX_INPUT_LENGTH];
-    CHAR_DATA* victim;
-    DESCRIPTOR_DATA* i;
-    CHAR_DATA* och;
-    int position;
-    CHAR_DATA* switched_victim;
-    bool ch_comlink;
-    bool victim_comlink;
-    OBJ_DATA* obj;
+    char arg[MAX_INPUT_LENGTH] = {};
+    char buf[MAX_INPUT_LENGTH] = {};
+    CHAR_DATA* victim = nullptr;
+    DESCRIPTOR_DATA* i = nullptr;
+    CHAR_DATA* och = nullptr;
+    int position = 0;
+    CHAR_DATA* switched_victim = nullptr;
+    bool ch_comlink = false;
+    bool victim_comlink = false;
+    OBJ_DATA* obj = nullptr;
 
     switched_victim = NULL;
 
@@ -2545,14 +2545,14 @@ void do_save(CHAR_DATA* ch, char* argument)
 
     if (NOT_AUTHED(ch))
     {
-        send_to_char("You can't save untill after you've graduated from the acadamey.\n\r", ch);
+        send_to_char("You can't save until after you've graduated from the academy.\n\r", ch);
         return;
     }
 
     // Save backups. Might cause troubles with file accessing.
-    sprintf_s(strsave, "%s%c/%s", PLAYER_DIR, tolower(ch->name[0]), capitalize(ch->name));
+    sprintf_s(strsave, "%s%c/%s", PLAYER_DIR, tolower(ch->name[0]), capitalize(ch->name).c_str());
 
-    sprintf_s(strback, "%s%c/%s", BACKUP_DIR, tolower(ch->name[0]), capitalize(ch->name));
+    sprintf_s(strback, "%s%c/%s", BACKUP_DIR, tolower(ch->name[0]), capitalize(ch->name).c_str());
     rename(strsave, strback);
 
     save_char_obj(ch);

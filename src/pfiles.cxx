@@ -91,7 +91,7 @@ void save_timedata(void)
     else
     {
         fprintf(fp, "%s", "#TIME\n");
-        fprintf(fp, "Purgetime %ld\n", new_pfile_time_t);
+        fprintf(fp, "Purgetime %lld\n", new_pfile_time_t);
         fprintf(fp, "%s", "End\n\n");
         fprintf(fp, "%s", "#END\n");
     }
@@ -251,7 +251,6 @@ void fread_pfile(FILE* fp, time_t tdiff, char* fname, bool count)
     int pact2;
     bool fMatch;
     ROOM_INDEX_DATA* plr_home;
-    char homebuf[MSL];
 
     for (;;)
     {
@@ -496,9 +495,12 @@ void fread_fpfile(CHAR_DATA* ch, FILE* fp, char* fname)
 {
     const char* word = nullptr;
     char* name = NULL;
-    bool fMatch;
-    sh_int ftype, fstatus;
-    char buftype[MSL], bufstatus[MSL], buffinal[MSL];
+    bool fMatch = false;
+    sh_int ftype = 0;
+    sh_int fstatus = 0;
+    char buftype[MSL] = {};
+    char bufstatus[MSL] = {};
+    char buffinal[MSL] = {};
     for (;;)
     {
         word = feof(fp) ? "End" : fread_word(fp);

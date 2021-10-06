@@ -5511,7 +5511,7 @@ void assign_area(CHAR_DATA* ch)
     if (get_trust(ch) >= LEVEL_AVATAR && ch->pcdata->r_range_lo && ch->pcdata->r_range_hi)
     {
         tarea = ch->pcdata->area;
-        sprintf_s(taf, "%s.are", capitalize(ch->name));
+        sprintf_s(taf, "%s.are", capitalize(ch->name).c_str());
         if (!tarea)
         {
             for (tmp = first_build; tmp; tmp = tmp->next)

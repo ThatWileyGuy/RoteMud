@@ -2438,7 +2438,7 @@ void do_balzhur(CHAR_DATA* ch, char* argument)
     victim->mana = victim->max_mana;
     victim->move = victim->max_move;
 
-    sprintf_s(buf, "%s%s", GOD_DIR, capitalize(victim->name));
+    sprintf_s(buf, "%s%s", GOD_DIR, capitalize(victim->name).c_str());
 
     if (!remove(buf))
         send_to_char("Player's immortal data destroyed.\n\r", ch);
@@ -2448,7 +2448,7 @@ void do_balzhur(CHAR_DATA* ch, char* argument)
         sprintf_s(buf2, "%s balzhuring %s", ch->name, buf);
         perror(buf2);
     }
-    sprintf_s(buf2, "%s.are", capitalize(arg));
+    sprintf_s(buf2, "%s.are", capitalize(arg).c_str());
     for (pArea = first_build; pArea; pArea = pArea->next)
     {
         if (!strcmp(pArea->filename, buf2))
@@ -3948,7 +3948,7 @@ void do_loadup(CHAR_DATA* ch, char* argument)
 
     name[0] = UPPER(name[0]);
 
-    sprintf_s(fname, "%s%c/%s", PLAYER_DIR, tolower(name[0]), capitalize(name));
+    sprintf_s(fname, "%s%c/%s", PLAYER_DIR, tolower(name[0]), capitalize(name).c_str());
 
     if (check_parse_name(name) && std::filesystem::exists(fname))
     {
@@ -3973,7 +3973,7 @@ void do_loadup(CHAR_DATA* ch, char* argument)
         d->character = NULL;
         DISPOSE(d);
         ch_printf(ch, "Player %s loaded from room %d.\n\r", capitalize(name), old_room_vnum);
-        sprintf_s(buf, "%s appears from nowhere, eyes glazed over.\n\r", capitalize(name));
+        sprintf_s(buf, "%s appears from nowhere, eyes glazed over.\n\r", capitalize(name).c_str());
         act(AT_IMMORT, buf, ch, NULL, NULL, TO_ROOM);
         send_to_char("Done.\n\r", ch);
         return;
@@ -4618,14 +4618,14 @@ void do_destroy(CHAR_DATA* ch, char* argument)
                 save_equipment[x][y] = NULL;
     }
 
-    sprintf_s(buf, "%s%c/%s", PLAYER_DIR, tolower(argument[0]), capitalize(argument));
-    sprintf_s(buf2, "%s%c/%s", BACKUP_DIR, tolower(argument[0]), capitalize(argument));
+    sprintf_s(buf, "%s%c/%s", PLAYER_DIR, tolower(argument[0]), capitalize(argument).c_str());
+    sprintf_s(buf2, "%s%c/%s", BACKUP_DIR, tolower(argument[0]), capitalize(argument).c_str());
     if (!rename(buf, buf2))
     {
 
         set_char_color(AT_RED, ch);
         send_to_char("Player destroyed.  Pfile saved in backup directory.\n\r", ch);
-        sprintf_s(buf, "%s%s", GOD_DIR, capitalize(argument));
+        sprintf_s(buf, "%s%s", GOD_DIR, capitalize(argument).c_str());
         if (!remove(buf))
             send_to_char("Player's immortal data destroyed.\n\r", ch);
         else if (errno != ENOENT)
@@ -4635,7 +4635,7 @@ void do_destroy(CHAR_DATA* ch, char* argument)
             perror(buf2);
         }
 
-        sprintf_s(buf2, "%s.are", capitalize(argument));
+        sprintf_s(buf2, "%s.are", capitalize(argument).c_str());
         log_string(buf2);
         for (pArea = first_build; pArea; pArea = pArea->next)
         {
@@ -6096,11 +6096,11 @@ void do_restorefile(CHAR_DATA* ch, char* argument)
         return;
     }
 
-    sprintf_s(fname, "%s%c/%s", BACKUP_DIR, tolower(arg[0]), capitalize(arg));
+    sprintf_s(fname, "%s%c/%s", BACKUP_DIR, tolower(arg[0]), capitalize(arg).c_str());
     if (stat(fname, &fst) != -1)
     {
-        sprintf_s(buf2, "%s%c/%s", PLAYER_DIR, tolower(arg[0]), capitalize(arg));
-        sprintf_s(buf, "%s%c/%s", BACKUP_DIR, tolower(arg[0]), capitalize(arg));
+        sprintf_s(buf2, "%s%c/%s", PLAYER_DIR, tolower(arg[0]), capitalize(arg).c_str());
+        sprintf_s(buf, "%s%c/%s", BACKUP_DIR, tolower(arg[0]), capitalize(arg).c_str());
         rename(buf, buf2);
         send_to_char("Player data restored.\n\r", ch);
         return;
@@ -6884,9 +6884,9 @@ void do_pcrename(CHAR_DATA* ch, char* argument)
         send_to_char("I don't think they would like that!\n\r", ch);
         return;
     }
-    sprintf_s(newname, "%s%c/%s", PLAYER_DIR, tolower(arg2[0]), capitalize(arg2));
-    sprintf_s(oldname, "%s%c/%s", PLAYER_DIR, tolower(victim->name[0]), capitalize(victim->name));
-    sprintf_s(backname, "%s%c/%s", BACKUP_DIR, tolower(victim->name[0]), capitalize(victim->name));
+    sprintf_s(newname, "%s%c/%s", PLAYER_DIR, tolower(arg2[0]), capitalize(arg2).c_str());
+    sprintf_s(oldname, "%s%c/%s", PLAYER_DIR, tolower(victim->name[0]), capitalize(victim->name).c_str());
+    sprintf_s(backname, "%s%c/%s", BACKUP_DIR, tolower(victim->name[0]), capitalize(victim->name).c_str());
 
     //  fOld = load_account(null, newname, true);
 
@@ -6901,7 +6901,7 @@ void do_pcrename(CHAR_DATA* ch, char* argument)
     {
         char godname[MSL];
 
-        sprintf_s(godname, "%s%s", GOD_DIR, capitalize(victim->name));
+        sprintf_s(godname, "%s%s", GOD_DIR, capitalize(victim->name).c_str());
         remove(godname);
     }
 
@@ -6912,10 +6912,10 @@ void do_pcrename(CHAR_DATA* ch, char* argument)
         char newfilename[MSL];
 
         sprintf_s(filename, "%s%s.are", BUILD_DIR, victim->name);
-        sprintf_s(newfilename, "%s%s.are", BUILD_DIR, capitalize(arg2));
+        sprintf_s(newfilename, "%s%s.are", BUILD_DIR, capitalize(arg2).c_str());
         rename(filename, newfilename);
         sprintf_s(filename, "%s%s.are.bak", BUILD_DIR, victim->name);
-        sprintf_s(newfilename, "%s%s.are.bak", BUILD_DIR, capitalize(arg2));
+        sprintf_s(newfilename, "%s%s.are.bak", BUILD_DIR, capitalize(arg2).c_str());
         rename(filename, newfilename);
     }
 

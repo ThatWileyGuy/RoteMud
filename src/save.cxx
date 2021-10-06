@@ -86,7 +86,7 @@ void save_home(CHAR_DATA* ch)
         sh_int templvl;
         OBJ_DATA* contents;
 
-        sprintf_s(filename, "%s%c/%s.home", PLAYER_DIR, tolower(ch->name[0]), capitalize(ch->name));
+        sprintf_s(filename, "%s%c/%s.home", PLAYER_DIR, tolower(ch->name[0]), capitalize(ch->name).c_str());
         if ((fp = fopen(filename, "w")) == NULL)
         {
         }
@@ -186,14 +186,14 @@ void save_char_obj(CHAR_DATA* ch)
         ch = ch->desc->original;
 
     ch->save_time = current_time;
-    sprintf_s(strsave, "%s%c/%s", PLAYER_DIR, tolower(ch->name[0]), capitalize(ch->name));
+    sprintf_s(strsave, "%s%c/%s", PLAYER_DIR, tolower(ch->name[0]), capitalize(ch->name).c_str());
 
     /*
      * Auto-backup pfile (can cause lag with high disk access situtations
      */
     if (IS_SET(sysdata.save_flags, SV_BACKUP))
     {
-        sprintf_s(strback, "%s%c/%s", BACKUP_DIR, tolower(ch->name[0]), capitalize(ch->name));
+        sprintf_s(strback, "%s%c/%s", BACKUP_DIR, tolower(ch->name[0]), capitalize(ch->name).c_str());
         rename(strsave, strback);
     }
 
@@ -208,7 +208,7 @@ void save_char_obj(CHAR_DATA* ch)
      */
     if (get_trust(ch) > LEVEL_IMMORTAL - 1)
     {
-        sprintf_s(strback, "%s%s", GOD_DIR, capitalize(ch->name));
+        sprintf_s(strback, "%s%s", GOD_DIR, capitalize(ch->name).c_str());
 
         if ((fp = fopen(strback, "w")) == NULL)
         {
@@ -275,14 +275,14 @@ void save_clone(CHAR_DATA* ch)
 
     ch->save_time = current_time;
     SET_BIT(ch->pcdata->act2, ACT_EXEMPT);
-    sprintf_s(strsave, "%s%c/%s.clone", PLAYER_DIR, tolower(ch->name[0]), capitalize(ch->name));
+    sprintf_s(strsave, "%s%c/%s.clone", PLAYER_DIR, tolower(ch->name[0]), capitalize(ch->name).c_str());
 
     /*
      * Auto-backup pfile (can cause lag with high disk access situtations
      */
     if (IS_SET(sysdata.save_flags, SV_BACKUP))
     {
-        sprintf_s(strback, "%s%c/%s", BACKUP_DIR, tolower(ch->name[0]), capitalize(ch->name));
+        sprintf_s(strback, "%s%c/%s", BACKUP_DIR, tolower(ch->name[0]), capitalize(ch->name).c_str());
         rename(strsave, strback);
     }
 
@@ -795,12 +795,12 @@ bool load_char_obj(DESCRIPTOR_DATA& d, const char* name, bool preload)
     ch->pheight = 0;
     ch->build = 0;
     found = false;
-    sprintf_s(strsave, "%s%c/%s", PLAYER_DIR, tolower(name[0]), capitalize(name));
+    sprintf_s(strsave, "%s%c/%s", PLAYER_DIR, tolower(name[0]), capitalize(name).c_str());
     if (stat(strsave, &fst) != -1)
     {
         if (fst.st_size == 0)
         {
-            sprintf_s(strsave, "%s%c/%s", BACKUP_DIR, tolower(name[0]), capitalize(name));
+            sprintf_s(strsave, "%s%c/%s", BACKUP_DIR, tolower(name[0]), capitalize(name).c_str());
             send_to_char("Restoring your backup player file...", ch);
         }
         else
@@ -2168,7 +2168,7 @@ void write_corpses(CHAR_DATA* ch, char* name)
             {
                 char buf[127];
 
-                sprintf_s(buf, "%s%s", CORPSE_DIR, capitalize(name));
+                sprintf_s(buf, "%s%s", CORPSE_DIR, capitalize(name).c_str());
                 if (!(fp = fopen(buf, "w")))
                 {
                     bug("Write_corpses: Cannot open file.", 0);
@@ -2187,7 +2187,7 @@ void write_corpses(CHAR_DATA* ch, char* name)
     {
         char buf[127];
 
-        sprintf_s(buf, "%s%s", CORPSE_DIR, capitalize(name));
+        sprintf_s(buf, "%s%s", CORPSE_DIR, capitalize(name).c_str());
         remove(buf);
     }
     return;
@@ -2214,7 +2214,7 @@ void load_corpses(void)
     falling = 1; /* Arbitrary, must be >0 though. */
     for (const auto& entry : std::filesystem::directory_iterator(CORPSE_DIR))
     {
-        auto name = entry.path().filename().u8string();
+        auto name = entry.path().filename().string();
         if (name[0] != '.')
         {
             sprintf_s(strArea, "%s%s", CORPSE_DIR, name.c_str());
@@ -2277,7 +2277,7 @@ void save_profile(CHAR_DATA* ch)
     if (IS_NPC(ch) || NOT_AUTHED(ch))
         return;
 
-    sprintf_s(strprofile, "%s%s.php", PROFILE_DIR, capitalize(ch->name));
+    sprintf_s(strprofile, "%s%s.php", PROFILE_DIR, capitalize(ch->name).c_str());
 
     if ((fp = fopen(strprofile, "w")) == NULL)
     {

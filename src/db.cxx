@@ -4072,11 +4072,13 @@ void log(const char* str, sh_int log_type, sh_int level, ...)
 
 void towizfile(const char* line, bool Border)
 {
-    int filler, xx, ofiller;
-    char outline[MAX_STRING_LENGTH];
-    char outline2[MAX_STRING_LENGTH];
-    FILE* wfp;
-    FILE* wwwfp;
+    int filler = 0;
+    int xx = 0;
+    int ofiller = 0;
+    char outline[MAX_STRING_LENGTH] = {};
+    char outline2[MAX_STRING_LENGTH] = {};
+    FILE* wfp = nullptr;
+    FILE* wwwfp = nullptr;
     bool SNIP = false;
     outline[0] = '\0';
     outline2[0] = '\0';
@@ -5692,7 +5694,7 @@ void load_buildlist(void)
     {
         if (entry.path().filename().c_str()[0] != '.')
         {
-            sprintf_s(buf, "%s%s", GOD_DIR, entry.path().filename());
+            sprintf_s(buf, "%s%s", GOD_DIR, entry.path().filename().string().c_str());
             if (!(fp = fopen(buf, "r")))
             {
                 bug("Load_buildlist: invalid file");
@@ -5718,7 +5720,7 @@ void load_buildlist(void)
                 {
                     if (low < LEVEL_AVATAR)
                     {
-                        sprintf_s(buf, "%s: God file with level %d < %d", entry.path().filename(), low, LEVEL_AVATAR);
+                        sprintf_s(buf, "%s: God file with level %d < %d", entry.path().filename().string().c_str(), low, LEVEL_AVATAR);
                         badfile = true;
                     }
                 }
@@ -5732,7 +5734,7 @@ void load_buildlist(void)
             fclose(fp);
             if (rlow && rhi && !badfile)
             {
-                sprintf_s(buf, "%s%s.are", BUILD_DIR, entry.path().filename());
+                sprintf_s(buf, "%s%s.are", BUILD_DIR, entry.path().filename().string().c_str());
                 if (!(fp = fopen(buf, "r")))
                 {
                     bug("Load_buildlist: cannot open area file for read");
@@ -5743,13 +5745,13 @@ void load_buildlist(void)
                 strcpy_s(word, fread_word(fp));
                 if (word[0] != '#' || strcmp(&word[1], "AREA"))
                 {
-                    sprintf_s(buf, "Make_buildlist: %s.are: no #AREA found.", entry.path().filename());
+                    sprintf_s(buf, "Make_buildlist: %s.are: no #AREA found.", entry.path().filename().string().c_str());
                     fclose(fp);
                     continue;
                 }
 #endif
                 CREATE(pArea, AREA_DATA, 1);
-                sprintf_s(buf, "%s.are", entry.path().filename());
+                sprintf_s(buf, "%s.are", entry.path().filename().string().c_str());
                 pArea->author = STRALLOC(entry.path().filename().string().c_str());
                 pArea->filename = str_dup(buf);
 #if !defined(READ_AREA)

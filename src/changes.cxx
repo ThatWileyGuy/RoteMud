@@ -125,7 +125,7 @@ void save_changes(void)
         fprintf(fp, "%s~\n", changes_table[i].change);
         fprintf(fp, "%s~\n", changes_table[i].coder);
         fprintf(fp, "%s~\n", changes_table[i].date);
-        fprintf(fp, "%ld\n", changes_table[i].mudtime);
+        fprintf(fp, "%lld\n", changes_table[i].mudtime);
         fprintf(fp, "\n");
     }
 
