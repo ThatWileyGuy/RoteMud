@@ -12062,68 +12062,69 @@ void do_shiplock(CHAR_DATA* ch, char* argument)
     save_ship(ship);
 }
 
-const char* ship_bit_name(int vector)
+std::string ship_bit_name(int vector)
 {
-    static char buf[512];
+    std::string result;
+    result.reserve(512);
 
-    buf[0] = '\0';
     if (vector & SHIP_NOHIJACK)
-        strcat_s(buf, " nohijack");
+        result += " nohijack";
     if (vector & SHIP_SHIELD_BOOST)
-        strcat_s(buf, " shield_boost");
+        result += " shield_boost";
     if (vector & SHIP_TORP_BOOST)
-        strcat_s(buf, " torp_boost");
+        result += " torp_boost";
     if (vector & SHIP_CHAFF_BOOST)
-        strcat_s(buf, " chaff_boost");
+        result += " chaff_boost";
     if (vector & SHIP_HULL_BOOST)
-        strcat_s(buf, " hull_boost");
+        result += " hull_boost";
     if (vector & SHIP_LASER_BOOST)
-        strcat_s(buf, " laser_boost");
+        result += " laser_boost";
     if (vector & SHIP_MISSILE_BOOST)
-        strcat_s(buf, " missile_boost");
+        result += " missile_boost";
     if (vector & SHIP_ROCKET_BOOST)
-        strcat_s(buf, " rocket_boost");
+        result += " rocket_boost";
     if (vector & SHIP_SIMULATOR)
-        strcat_s(buf, " simulator");
+        result += " simulator";
     if (vector & SHIP_NODESTROY)
-        strcat_s(buf, " nodestroy");
+        result += " nodestroy";
     if (vector & SHIP_NOSLICER)
-        strcat_s(buf, " noslicer");
+        result += " noslicer";
     if (vector & XSHIP_ION_LASERS)
-        strcat_s(buf, " ion_lasers");
+        result += " ion_lasers";
     if (vector & XSHIP_ION_DRIVE)
-        strcat_s(buf, " ion_drive");
+        result += " ion_drive";
     if (vector & XSHIP_ION_ION)
-        strcat_s(buf, " ion_ion");
+        result += " ion_ion";
     if (vector & XSHIP_ION_TURRET1)
-        strcat_s(buf, " ion_turret1");
+        result += " ion_turret1";
     if (vector & XSHIP_ION_TURRET2)
-        strcat_s(buf, " ion_turret2");
+        result += " ion_turret2";
     if (vector & XSHIP_ION_TURRET3)
-        strcat_s(buf, " ion_turret3");
+        result += " ion_turret3";
     if (vector & XSHIP_ION_TURRET4)
-        strcat_s(buf, " ion_turret4");
+        result += " ion_turret4";
     if (vector & XSHIP_ION_TURRET5)
-        strcat_s(buf, " ion_turret5");
+        result += " ion_turret5";
     if (vector & XSHIP_ION_TURRET6)
-        strcat_s(buf, " ion_turret6");
+        result += " ion_turret6";
     if (vector & XSHIP_ION_TURRET7)
-        strcat_s(buf, " ion_turret7");
+        result +=  " ion_turret7";
     if (vector & XSHIP_ION_TURRET8)
-        strcat_s(buf, " ion_turret8");
+        result +=  " ion_turret8";
     if (vector & XSHIP_ION_TURRET9)
-        strcat_s(buf, " ion_turret9");
+        result +=  " ion_turret9";
     if (vector & XSHIP_ION_TURRET10)
-        strcat_s(buf, " ion_turret10");
+        result += " ion_turret10";
     if (vector & SHIP_RESPAWN)
-        strcat_s(buf, " respawn");
+        result += " respawn";
     if (vector & XSHIP_ION_MISSILES)
-        strcat_s(buf, " ion_missiles");
+        result += " ion_missiles";
     if (vector & XSHIP_ION_HYPER)
-        strcat_s(buf, " ion_hyper");
+        result += " ion_hyper";
     if (vector & SHIP_CLOAK)
-        strcat_s(buf, " cloak");
-    return (buf[0] != '\0') ? buf + 1 : "none";
+        result += " cloak";
+
+    return !result.empty() ? result.substr(1) : "none";
 }
 
 void do_cut(CHAR_DATA* ch, char* argument)
