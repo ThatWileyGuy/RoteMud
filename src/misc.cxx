@@ -3648,7 +3648,6 @@ void do_buzz(CHAR_DATA* ch, char* argument)
     {
         ROOM_INDEX_DATA* to_room;
         EXIT_DATA* pexit_rev;
-        char* keyword;
 
         if ((to_room = pexit->to_room) != NULL && IS_SET(to_room->room_flags, ROOM_EMPTY_HOME))
         {
@@ -3660,9 +3659,9 @@ void do_buzz(CHAR_DATA* ch, char* argument)
             send_to_char("Nobody Owns That Home!\n\r", ch);
             return;
         }
-        keyword = capitalize(dir_name[pexit->vdir]);
-        act(AT_ACTION, "You use the intercom to the $d.", ch, NULL, keyword, TO_CHAR);
-        act(AT_ACTION, "$n uses the intercom to the $d.", ch, NULL, keyword, TO_ROOM);
+        std::string keyword = capitalize(dir_name[pexit->vdir]);
+        act(AT_ACTION, "You use the intercom to the $d.", ch, NULL, keyword.c_str(), TO_CHAR);
+        act(AT_ACTION, "$n uses the intercom to the $d.", ch, NULL, keyword.c_str(), TO_ROOM);
         if ((to_room = pexit->to_room) != NULL && (pexit_rev = pexit->rexit) != NULL &&
             pexit_rev->to_room == ch->in_room)
         {

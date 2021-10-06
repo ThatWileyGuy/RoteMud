@@ -6920,9 +6920,9 @@ void do_pcrename(CHAR_DATA* ch, char* argument)
     }
 
     STRFREE(victim->name);
-    victim->name = STRALLOC(capitalize(arg2));
+    victim->name = STRALLOC(capitalize(arg2).c_str());
     STRFREE(victim->name);
-    victim->name = STRALLOC(capitalize(arg2));
+    victim->name = STRALLOC(capitalize(arg2).c_str());
     remove(backname);
     if (remove(oldname))
     {

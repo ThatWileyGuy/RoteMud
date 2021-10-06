@@ -861,7 +861,7 @@ void do_note(CHAR_DATA* ch, char* arg_passed, bool IS_MAIL)
             paper->value[2] = 1;
             ed = SetOExtra(paper, "_to_");
             STRFREE(ed->description);
-            ed->description = STRALLOC(capitalize(arg_passed));
+            ed->description = STRALLOC(capitalize(arg_passed).c_str());
             send_to_char("Ok.\n\r", ch);
             return;
         }
@@ -1330,7 +1330,7 @@ void do_makeboard(CHAR_DATA* ch, char* argument)
     CREATE(board, BOARD_DATA, 1);
 
     LINK(board, first_board, last_board, next, prev);
-    board->note_file = str_dup(strlower(argument));
+    board->note_file = str_dup(strlower(argument).c_str());
     board->read_group = str_dup("");
     board->post_group = str_dup("");
     board->extra_readers = str_dup("");

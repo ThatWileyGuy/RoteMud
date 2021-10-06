@@ -3770,44 +3770,40 @@ bool str_suffix(const char* astr, const char* bstr)
 /*
  * Returns an initial-capped string.
  */
-char* capitalize(const char* str)
+std::string capitalize(const std::string_view& str)
 {
-    static char strcap[MAX_STRING_LENGTH];
-    int i;
+    std::string result = strlower(str);
+    
+    if (!result.empty())
+        result[0] = UPPER(result[0]);
 
-    for (i = 0; str[i] != '\0'; i++)
-        strcap[i] = LOWER(str[i]);
-    strcap[i] = '\0';
-    strcap[0] = UPPER(strcap[0]);
-    return strcap;
+    return result;
 }
 
 /*
  * Returns a lowercase string.
  */
-char* strlower(const char* str)
+std::string strlower(const std::string_view& str)
 {
-    static char strlow[MAX_STRING_LENGTH];
-    int i;
+    std::string result{str};
 
-    for (i = 0; str[i] != '\0'; i++)
-        strlow[i] = LOWER(str[i]);
-    strlow[i] = '\0';
-    return strlow;
+    for (char& c : result)
+        c = LOWER(c);
+
+    return result;
 }
 
 /*
  * Returns an uppercase string.
  */
-char* strupper(const char* str)
+std::string strupper(const std::string_view& str)
 {
-    static char strup[MAX_STRING_LENGTH];
-    int i;
+    std::string result{str};
 
-    for (i = 0; str[i] != '\0'; i++)
-        strup[i] = UPPER(str[i]);
-    strup[i] = '\0';
-    return strup;
+    for (char& c : result)
+        c = UPPER(c);
+
+    return result;
 }
 
 /*
@@ -3827,23 +3823,18 @@ bool isavowel(char letter)
 /*
  * Shove either "a " or "an " onto the beginning of a string	-Thoric
  */
-char* aoran(const char* str)
+std::string aoran(const std::string_view& str)
 {
-    static char temp[MAX_STRING_LENGTH];
-
-    if (!str)
+    if (str.empty())
     {
-        bug("Aoran(): NULL str");
-        temp[0] = '\0';
-        return temp;
+        bug("Aoran(): empty str");
+        return "";
     }
 
-    if (isavowel(str[0]) || (strlen(str) > 1 && tolower(str[0]) == 'y' && !isavowel(str[1])))
-        strcpy_s(temp, "an ");
+    if (isavowel(str[0]) || (str.size() > 1 && tolower(str[0]) == 'y' && !isavowel(str[1])))
+        return std::string{"an "} + std::string{str};
     else
-        strcpy_s(temp, "a ");
-    strcat_s(temp, str);
-    return temp;
+        return std::string{"a "} + std::string{str};
 }
 
 /*

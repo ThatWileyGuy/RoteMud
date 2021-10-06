@@ -2488,7 +2488,7 @@ bool can_drop_obj(CHAR_DATA* ch, OBJ_DATA* obj)
 /*
  * Return ascii name of an item type.
  */
-const char* item_type_name(OBJ_DATA* obj)
+std::string item_type_name(OBJ_DATA* obj)
 {
     if (obj->item_type < 1 || obj->item_type > MAX_ITEM_TYPE)
     {
@@ -2496,13 +2496,13 @@ const char* item_type_name(OBJ_DATA* obj)
         return "(unknown)";
     }
 
-    return o_types[obj->item_type];
+    return std::string{o_types[obj->item_type]};
 }
 
 /*
  * Return ascii name of an affect location.
  */
-const char* affect_loc_name(int location)
+std::string affect_loc_name(int location)
 {
     switch (location)
     {
@@ -2647,156 +2647,153 @@ const char* affect_loc_name(int location)
 /*
  * Return ascii name of an affect bit vector.
  */
-const char* affect_bit_name(int vector)
+std::string affect_bit_name(int vector)
 {
-    static char buf[512];
+    std::string result;
 
-    buf[0] = '\0';
     if (vector & AFF_BLIND)
-        strcat_s(buf, " blind");
+        result += " blind";
     if (vector & AFF_INVISIBLE)
-        strcat_s(buf, " invisible");
+        result += " invisible";
     if (vector & AFF_DETECT_EVIL)
-        strcat_s(buf, " detect_evil");
+        result += " detect_evil";
     if (vector & AFF_DETECT_INVIS)
-        strcat_s(buf, " detect_invis");
+        result += " detect_invis";
     if (vector & AFF_DETECT_MAGIC)
-        strcat_s(buf, " detect_magic");
+        result += " detect_magic";
     if (vector & AFF_DETECT_HIDDEN)
-        strcat_s(buf, " detect_hidden");
+        result += " detect_hidden";
     if (vector & AFF_WEAKEN)
-        strcat_s(buf, " weaken");
+        result += " weaken";
     if (vector & AFF_SANCTUARY)
-        strcat_s(buf, " sanctuary");
+        result += " sanctuary";
     if (vector & AFF_FAERIE_FIRE)
-        strcat_s(buf, " faerie_fire");
+        result += " faerie_fire";
     if (vector & AFF_INFRARED)
-        strcat_s(buf, " infrared");
+        result += " infrared";
     if (vector & AFF_CURSE)
-        strcat_s(buf, " curse");
+        result += " curse";
     if (vector & AFF_COVER_TRAIL)
-        strcat_s(buf, " cover trail");
+        result += " cover trail";
     if (vector & AFF_POISON)
-        strcat_s(buf, " poison");
+        result += " poison";
     if (vector & AFF_PROTECT)
-        strcat_s(buf, " protect");
+        result += " protect";
     if (vector & AFF_PARALYSIS)
-        strcat_s(buf, " paralysis");
+        result += " paralysis";
     if (vector & AFF_SLEEP)
-        strcat_s(buf, " sleep");
+        result += " sleep";
     if (vector & AFF_SNEAK)
-        strcat_s(buf, " sneak");
+        result += " sneak";
     if (vector & AFF_HIDE)
-        strcat_s(buf, " hide");
+        result += " hide";
     if (vector & AFF_CHARM)
-        strcat_s(buf, " charm");
+        result += " charm";
     if (vector & AFF_POSSESS)
-        strcat_s(buf, " possess");
+        result += " possess";
     if (vector & AFF_FLYING)
-        strcat_s(buf, " flying");
+        result += " flying";
     if (vector & AFF_PASS_DOOR)
-        strcat_s(buf, " pass_door");
+        result += " pass_door";
     if (vector & AFF_FLOATING)
-        strcat_s(buf, " floating");
+        result += " floating";
     if (vector & AFF_TRUESIGHT)
-        strcat_s(buf, " true_sight");
+        result += " true_sight";
     if (vector & AFF_DETECTTRAPS)
-        strcat_s(buf, " detect_traps");
+        result += " detect_traps";
     if (vector & AFF_SCRYING)
-        strcat_s(buf, " scrying");
+        result += " scrying";
     if (vector & AFF_FIRESHIELD)
-        strcat_s(buf, " fireshield");
+        result += " fireshield";
     if (vector & AFF_SHOCKSHIELD)
-        strcat_s(buf, " shockshield");
+        result += " shockshield";
     if (vector & AFF_ICESHIELD)
-        strcat_s(buf, " iceshield");
+        result += " iceshield";
     if (vector & AFF_POSSESS)
-        strcat_s(buf, " possess");
+        result += " possess";
     if (vector & AFF_BERSERK)
-        strcat_s(buf, " berserk");
+        result += " berserk";
     if (vector & AFF_AQUA_BREATH)
-        strcat_s(buf, " aqua_breath");
-    return (buf[0] != '\0') ? buf + 1 : "none";
+        result += " aqua_breath";
+    return !result.empty() ? result.substr(1) : "none";
 }
 
 /*
  * Return ascii name of extra flags vector.
  */
-const char* extra_bit_name(int extra_flags)
+std::string extra_bit_name(int extra_flags)
 {
-    static char buf[512];
+    std::string result;
 
-    buf[0] = '\0';
     if (extra_flags & ITEM_GLOW)
-        strcat_s(buf, " glow");
+        result += " glow";
     if (extra_flags & ITEM_HUM)
-        strcat_s(buf, " hum");
+        result += " hum";
     if (extra_flags & ITEM_DARK)
-        strcat_s(buf, " dark");
+        result += " dark";
     if (extra_flags & ITEM_HUTT_SIZE)
-        strcat_s(buf, " hutt_size");
+        result += " hutt_size";
     if (extra_flags & ITEM_CONTRABAND)
-        strcat_s(buf, " contraband");
+        result += " contraband";
     if (extra_flags & ITEM_INVIS)
-        strcat_s(buf, " invis");
+        result += " invis";
     if (extra_flags & ITEM_MAGIC)
-        strcat_s(buf, " magic");
+        result += " magic";
     if (extra_flags & ITEM_NODROP)
-        strcat_s(buf, " nodrop");
+        result += " nodrop";
     if (extra_flags & ITEM_BLESS)
-        strcat_s(buf, " bless");
+        result += " bless";
     if (extra_flags & ITEM_ANTI_GOOD)
-        strcat_s(buf, " anti-good");
+        result += " anti-good";
     if (extra_flags & ITEM_ANTI_EVIL)
-        strcat_s(buf, " anti-evil");
+        result += " anti-evil";
     if (extra_flags & ITEM_ANTI_NEUTRAL)
-        strcat_s(buf, " anti-neutral");
+        result += " anti-neutral";
     if (extra_flags & ITEM_NOREMOVE)
-        strcat_s(buf, " noremove");
+        result += " noremove";
     if (extra_flags & ITEM_INVENTORY)
-        strcat_s(buf, " inventory");
+        result += " inventory";
     if (extra_flags & ITEM_DEATHROT)
-        strcat_s(buf, " deathrot");
+        result += " deathrot";
     if (extra_flags & ITEM_ANTI_SOLDIER)
-        strcat_s(buf, " anti-soldier");
+        result += " anti-soldier";
     if (extra_flags & ITEM_ANTI_THIEF)
-        strcat_s(buf, " anti-thief");
+        result += " anti-thief";
     if (extra_flags & ITEM_ANTI_HUNTER)
-        strcat_s(buf, " anti-hunter");
+        result += " anti-hunter";
     if (extra_flags & ITEM_ANTI_JEDI)
-        strcat_s(buf, " anti-jedi");
+        result += " anti-jedi";
     if (extra_flags & ITEM_ANTI_SITH)
-        strcat_s(buf, " anti-sith");
+        result += " anti-sith";
     if (extra_flags & ITEM_ANTI_PILOT)
-        strcat_s(buf, " anti-pilot");
+        result += " anti-pilot";
     if (extra_flags & ITEM_SMALL_SIZE)
-        strcat_s(buf, " small_size");
+        result += " small_size";
     if (extra_flags & ITEM_LARGE_SIZE)
-        strcat_s(buf, " large_size");
+        result += " large_size";
     if (extra_flags & ITEM_DONATION)
-        strcat_s(buf, " donation");
+        result += " donation";
     if (extra_flags & ITEM_CLANOBJECT)
-        strcat_s(buf, " clan");
+        result += " clan";
     if (extra_flags & ITEM_ANTI_CITIZEN)
-        strcat_s(buf, " anti-citizen");
+        result += " anti-citizen";
     if (extra_flags & ITEM_PROTOTYPE)
-        strcat_s(buf, " prototype");
+        result += " prototype";
     if (extra_flags & ITEM_HUMAN_SIZE)
-        strcat_s(buf, " human_size");
-    return (buf[0] != '\0') ? buf + 1 : "none";
+        result += " human_size";
+    return !result.empty() ? result.substr(1) : "none";
 }
 
 /*
  * Return ascii name of magic flags vector. - Scryn
  */
-const char* magic_bit_name(int magic_flags)
+std::string magic_bit_name(int magic_flags)
 {
-    static char buf[512];
+    std::string result;
 
-    buf[0] = '\0';
     if (magic_flags & ITEM_RETURNING)
-        strcat_s(buf, " returning");
-    return (buf[0] != '\0') ? buf + 1 : "none";
+        result += " returning";
+    return !result.empty() ? result.substr(1) : "none";
 }
 
 /*

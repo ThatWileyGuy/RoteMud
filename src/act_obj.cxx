@@ -2708,7 +2708,7 @@ void do_auction(CHAR_DATA* ch, char* argument)
         {
 
         default:
-            act(AT_TELL, "You cannot auction $Ts.", ch, NULL, item_type_name(obj), TO_CHAR);
+            act(AT_TELL, "You cannot auction $Ts.", ch, NULL, item_type_name(obj).c_str(), TO_CHAR);
             return;
 
             /* insert any more item types here... items with a timer MAY NOT BE

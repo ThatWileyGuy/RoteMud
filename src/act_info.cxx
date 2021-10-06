@@ -2140,7 +2140,7 @@ void do_hedit(CHAR_DATA* ch, char* argument)
         else
             lev = 1;
         CREATE(pHelp, HELP_DATA, 1);
-        pHelp->keyword = STRALLOC(strupper(argument));
+        pHelp->keyword = STRALLOC(strupper(argument).c_str());
         pHelp->text = STRALLOC("");
         pHelp->level = lev;
         add_help(pHelp);
@@ -2234,7 +2234,7 @@ void do_hset(CHAR_DATA* ch, char* argument)
     if (!str_cmp(arg1, "keyword"))
     {
         STRFREE(pHelp->keyword);
-        pHelp->keyword = STRALLOC(strupper(arg2));
+        pHelp->keyword = STRALLOC(strupper(arg2).c_str());
         send_to_char("Done.\n\r", ch);
         return;
     }

@@ -2127,7 +2127,7 @@ void do_last(CHAR_DATA* ch, char* argument)
             read_last_file(ch, atoi(arg), NULL);
         return;
     }
-    strcpy_s(name, capitalize(arg));
+    strcpy_s(name, capitalize(arg).c_str());
     if (argument[0] != '\0')
     {
         send_to_char("&w&RName                     Time                        "

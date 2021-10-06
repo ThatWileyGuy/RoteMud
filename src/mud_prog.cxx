@@ -1219,7 +1219,7 @@ void mprog_translate(char ch, char* t, CHAR_DATA* mob, CHAR_DATA* actor, OBJ_DAT
     case 'a':
         if (obj && !obj_extracted(obj))
         {
-            strcpy_s(t, MAX_INPUT_LENGTH, aoran(obj->name));
+            strcpy_s(t, MAX_INPUT_LENGTH, aoran(obj->name).c_str());
             /*
                       switch ( *( obj->name ) )
                   {
@@ -1237,7 +1237,7 @@ void mprog_translate(char ch, char* t, CHAR_DATA* mob, CHAR_DATA* actor, OBJ_DAT
     case 'A':
         if (v_obj && !obj_extracted(v_obj))
         {
-            strcpy_s(t, MAX_INPUT_LENGTH, aoran(v_obj->name));
+            strcpy_s(t, MAX_INPUT_LENGTH, aoran(v_obj->name).c_str());
         }
         else
             strcpy_s(t, MAX_INPUT_LENGTH, "a");
@@ -1842,9 +1842,9 @@ bool mprog_keyword_check(const char* argu, const char* argl)
     char *arg, *arglist;
     char *start, *end;
 
-    strcpy_s(arg1, strlower(argu));
+    strcpy_s(arg1, strlower(argu).c_str());
     arg = arg1;
-    strcpy_s(arg2, strlower(argl));
+    strcpy_s(arg2, strlower(argl).c_str());
     arglist = arg2;
 
     for (i = 0; i < strlen(arglist); i++)
