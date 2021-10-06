@@ -39,6 +39,7 @@
 #include <optional>
 #include <memory>
 #include <algorithm>
+#include <boost/format.hpp>
 
 #ifdef WIN32
 #include <fcntl.h>
@@ -2329,15 +2330,10 @@ void send_to_desc_color2(const char* txt, std::shared_ptr<DESCRIPTOR_DATA> d)
     send_to_desc_color2(txt, d.get());
 }
 
-char* obj_short(OBJ_DATA* obj)
+std::string obj_short(OBJ_DATA* obj)
 {
-    static char buf[MAX_STRING_LENGTH];
-
     if (obj->count > 1)
-    {
-        sprintf_s(buf, "%s (%d)", obj->short_descr, obj->count);
-        return buf;
-    }
+        return (boost::format{"%s (%d)"} % obj->short_descr % obj->count).str();
     return obj->short_descr;
 }
 
@@ -2363,6 +2359,7 @@ char* act_string(const char* format, CHAR_DATA* to, CHAR_DATA* ch, const void* a
 
     while (*str != '\0')
     {
+        std::string tempString;
         if (*str != '$')
         {
             *point++ = *str++;
@@ -2456,10 +2453,12 @@ char* act_string(const char* format, CHAR_DATA* to, CHAR_DATA* ch, const void* a
                 i = (to == ch) ? "your" : his_her[URANGE(0, ch->sex, 2)];
                 break;
             case 'p':
-                i = (!to || can_see_obj(to, obj1) ? obj_short(obj1) : "something");
+                tempString = obj_short(obj1);
+                i = (!to || can_see_obj(to, obj1) ? tempString.c_str() : "something");
                 break;
             case 'P':
-                i = (!to || can_see_obj(to, obj2) ? obj_short(obj2) : "something");
+                tempString = obj_short(obj2);
+                i = (!to || can_see_obj(to, obj2) ? tempString.c_str() : "something");
                 break;
             case 'd':
                 if (!arg2 || ((char*)arg2)[0] == '\0')

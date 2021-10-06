@@ -1770,11 +1770,11 @@ void do_owhere(CHAR_DATA* ch, char* argument)
         }
         for (; obj->in_obj; obj = obj->in_obj)
         {
-            pager_printf(ch, "[%5d] %-28s in object [%5d] %s\n\r", obj->pIndexData->vnum, obj_short(obj),
+            pager_printf(ch, "[%5d] %-28s in object [%5d] %s\n\r", obj->pIndexData->vnum, obj_short(obj).c_str(),
                          obj->in_obj->pIndexData->vnum, obj->in_obj->short_descr);
             ++icnt;
         }
-        sprintf_s(buf, "[%5d] %-28s in ", obj->pIndexData->vnum, obj_short(obj));
+        sprintf_s(buf, "[%5d] %-28s in ", obj->pIndexData->vnum, obj_short(obj).c_str());
         if (obj->carried_by)
             sprintf_s(buf + strlen(buf), sizeof(buf) - strlen(buf) - 1, "invent [%5d] %s\n\r",
                       (IS_NPC(obj->carried_by) ? obj->carried_by->pIndexData->vnum : 0), PERS(obj->carried_by, ch));
@@ -1804,7 +1804,7 @@ void do_owhere(CHAR_DATA* ch, char* argument)
             continue;
         found = true;
 
-        sprintf_s(buf, "(%3d) [%5d] %-28s in ", ++icnt, obj->pIndexData->vnum, obj_short(obj));
+        sprintf_s(buf, "(%3d) [%5d] %-28s in ", ++icnt, obj->pIndexData->vnum, obj_short(obj).c_str());
         if (obj->carried_by)
             sprintf_s(buf + strlen(buf), sizeof(buf) - strlen(buf), "invent [%5d] %s\n\r",
                       (IS_NPC(obj->carried_by) ? obj->carried_by->pIndexData->vnum : 0), PERS(obj->carried_by, ch));
@@ -1813,7 +1813,7 @@ void do_owhere(CHAR_DATA* ch, char* argument)
                       obj->in_room->name);
         else if (obj->in_obj)
             sprintf_s(buf + strlen(buf), sizeof(buf) - strlen(buf), "object [%5d] %s\n\r",
-                      obj->in_obj->pIndexData->vnum, obj_short(obj->in_obj));
+                      obj->in_obj->pIndexData->vnum, obj_short(obj->in_obj).c_str());
         else
         {
             bug("do_owhere: object doesnt have location!", 0);
@@ -5413,11 +5413,11 @@ void do_vsearch(CHAR_DATA* ch, char* argument)
             ;
 
         if (in_obj->carried_by != NULL)
-            pager_printf(ch, "[%2d] Level %d %s carried by %s.\n\r", obj_counter, obj->level, obj_short(obj),
+            pager_printf(ch, "[%2d] Level %d %s carried by %s.\n\r", obj_counter, obj->level, obj_short(obj).c_str(),
                          PERS(in_obj->carried_by, ch));
         else
             pager_printf(ch, "[%2d] [%-5d] %s in %s.\n\r", obj_counter, ((in_obj->in_room) ? in_obj->in_room->vnum : 0),
-                         obj_short(obj), (in_obj->in_room == NULL) ? "somewhere" : in_obj->in_room->name);
+                         obj_short(obj).c_str(), (in_obj->in_room == NULL) ? "somewhere" : in_obj->in_room->name);
 
         obj_counter++;
     }

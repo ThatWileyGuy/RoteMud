@@ -4536,7 +4536,7 @@ void talk_auction(char* argument);
 bool knows_language(CHAR_DATA* ch, int language, CHAR_DATA* cch);
 bool can_learn_lang(CHAR_DATA* ch, int language);
 int countlangs(int languages);
-char* obj_short(OBJ_DATA* obj);
+std::string obj_short(OBJ_DATA* obj);
 
 /* act_info.c */
 int get_door(char* arg);
