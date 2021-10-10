@@ -82,7 +82,7 @@ const char go_ahead_str[] = {telnet::IAC, telnet::GA, '\0'};
 
 void save_sysdata(SYSTEM_DATA sys);
 void write_ship_list(void);
-void arms(std::shared_ptr<DESCRIPTOR_DATA> d, char* argument);
+void arms(DESCRIPTOR_DATA& d, char* argument);
 void send_main_mail_menu(DESCRIPTOR_DATA* d);
 /*  from act_info?  */
 void show_condition(CHAR_DATA* ch, CHAR_DATA* victim);
@@ -121,16 +121,16 @@ void handle_descriptor_read(DESCRIPTOR_DATA* d, size_t read);
  * Other local functions (OS-independent).
  */
 bool check_parse_name(const char* name);
-bool check_reconnect(std::shared_ptr<DESCRIPTOR_DATA> d, char* name, bool fConn);
-bool check_playing(std::shared_ptr<DESCRIPTOR_DATA> d, char* name, bool kick);
-bool check_multi(std::shared_ptr<DESCRIPTOR_DATA> d, char* name);
+bool check_reconnect(DESCRIPTOR_DATA& d, char* name, bool fConn);
+bool check_playing(DESCRIPTOR_DATA& d, char* name, bool kick);
+bool check_multi(DESCRIPTOR_DATA& d, char* name);
 int main(int argc, char** argv);
-void nanny(std::shared_ptr<DESCRIPTOR_DATA> d, char* argument);
+void nanny(DESCRIPTOR_DATA& d, char* argument);
 void stop_idling(CHAR_DATA* ch);
-void display_prompt(std::shared_ptr<DESCRIPTOR_DATA> d);
+void display_prompt(DESCRIPTOR_DATA& d);
 int make_color_sequence(const char* col, char* buf, DESCRIPTOR_DATA* d);
 int make_color_sequence_desc(const char* col, char* buf, DESCRIPTOR_DATA* d);
-void handle_pager_input(std::shared_ptr<DESCRIPTOR_DATA> d, char* argument);
+void handle_pager_input(DESCRIPTOR_DATA& d, char* argument);
 void handle_command(ConnectionContext context, const std::string& line);
 void handle_window_size_change(ConnectionContext context, int width, int height);
 ConnectionContext handle_new_unauthenticated_connection(std::shared_ptr<Connection> connection);
@@ -249,6 +249,52 @@ int gamemain(int argc, char** argv)
     return 0;
 }
 
+class LegacyShell : public Shell
+{
+  public:
+    void handleCommand(DESCRIPTOR_DATA& desc, const std::string& command) override
+    {
+        // TODO close the socket instead of asserting
+        assert((command.size() + 1) < MAX_INPUT_LENGTH);
+        char cmdline[MAX_INPUT_LENGTH];
+
+        std::memcpy(cmdline, command.c_str(), command.length());
+        cmdline[command.length()] = '\0';
+
+        desc.fcommand = true;
+        stop_idling(desc.character);
+
+        if (desc.character)
+            set_cur_char(desc.character);
+
+        if (desc.pagepoint)
+            handle_pager_input(desc, cmdline);
+        else
+        {
+            switch (desc.connected)
+            {
+            default:
+                nanny(desc, cmdline);
+                break;
+            case CON_PLAYING:
+                interpret(desc.character, cmdline);
+                break;
+            case CON_EDITING:
+                edit_buffer(desc.character, cmdline);
+                break;
+            case CON_MAIL_BEGIN:
+            case CON_MAIN_MAIL_MENU:
+            case CON_MAIL_DISPLAY:
+            case CON_MAIL_WRITE_START:
+            case CON_MAIL_WRITE_TO:
+            case CON_MAIL_WRITE_SUBJECT:
+                arms(desc, cmdline);
+                break;
+            }
+        }
+    }
+};
+
 ConnectionContext handle_new_unauthenticated_connection(std::shared_ptr<Connection> connection)
 {
     auto dnew = std::make_shared<DESCRIPTOR_DATA>();
@@ -258,6 +304,7 @@ ConnectionContext handle_new_unauthenticated_connection(std::shared_ptr<Connecti
     dnew->scrlen = 24;
     dnew->user = STRALLOC("unknown");
     dnew->prevcolor = 0x07;
+    dnew->shell = new LegacyShell();
 
     // TODO this is where IP bans would get processed - skipping for now
 
@@ -302,45 +349,16 @@ void handle_command(ConnectionContext context, const std::string& command)
 {
     auto d = std::static_pointer_cast<DESCRIPTOR_DATA>(context);
 
-    // TODO close the socket instead of asserting
-    assert((command.size() + 1) < MAX_INPUT_LENGTH);
-    char cmdline[MAX_INPUT_LENGTH];
-
-    std::memcpy(cmdline, command.c_str(), command.length());
-    cmdline[command.length()] = '\0';
-
-    d->fcommand = true;
-    stop_idling(d->character);
-
-    if (d->character)
-        set_cur_char(d->character);
-
-    if (d->pagepoint)
-        handle_pager_input(d, cmdline);
-    else
+    if (d->shell == nullptr)
     {
-        switch (d->connected)
-        {
-        default:
-            nanny(d, cmdline);
-            break;
-        case CON_PLAYING:
-            interpret(d->character, cmdline);
-            break;
-        case CON_EDITING:
-            edit_buffer(d->character, cmdline);
-            break;
-        case CON_MAIL_BEGIN:
-        case CON_MAIN_MAIL_MENU:
-        case CON_MAIL_DISPLAY:
-        case CON_MAIL_WRITE_START:
-        case CON_MAIL_WRITE_TO:
-        case CON_MAIL_WRITE_SUBJECT:
-            arms(d, cmdline);
-            break;
-        }
+        bug("Descriptor has null shell!");
+        return;
     }
+
+    d->shell->handleCommand(*d, command);
 }
+
+
 
 void handle_window_size_change(ConnectionContext context, int width, int height)
 {
@@ -505,9 +523,9 @@ void close_socket(DESCRIPTOR_DATA* dclose, bool force)
     close_socket(dclose, false, force);
 }
 
-void close_socket(std::shared_ptr<DESCRIPTOR_DATA> dclose, bool force)
+void close_socket(DESCRIPTOR_DATA& dclose, bool force)
 {
-    close_socket(dclose.get(), force);
+    close_socket(&dclose, force);
 }
 
 void close_socket(DESCRIPTOR_DATA* dclose, bool startedExternally, bool force)
@@ -625,9 +643,9 @@ void write_to_buffer(DESCRIPTOR_DATA* d, std::string_view string)
     }
 }
 
-void write_to_buffer(std::shared_ptr<DESCRIPTOR_DATA> d, std::string_view string)
+void write_to_buffer(DESCRIPTOR_DATA& d, std::string_view string)
 {
-    write_to_buffer(d.get(), string);
+    write_to_buffer(&d, string);
 }
 
 void write_to_buffer(DESCRIPTOR_DATA* d, const char* string, size_t length)
@@ -640,14 +658,14 @@ void write_to_buffer(DESCRIPTOR_DATA* d, const char* string, size_t length)
     write_to_buffer(d, std::string_view(string, length));
 }
 
-void write_to_buffer(std::shared_ptr<DESCRIPTOR_DATA> d, const char* string, size_t length)
+void write_to_buffer(DESCRIPTOR_DATA& d, const char* string, size_t length)
 {
-    write_to_buffer(d.get(), string, length);
+    write_to_buffer(&d, string, length);
 }
 
-void show_title(std::shared_ptr<DESCRIPTOR_DATA> d)
+void show_title(DESCRIPTOR_DATA& d)
 {
-    CHAR_DATA* ch = d->character;
+    CHAR_DATA* ch = d.character;
 
     if (!IS_SET(ch->pcdata->flags, PCFLAG_NOINTRO))
     {
@@ -660,7 +678,7 @@ void show_title(std::shared_ptr<DESCRIPTOR_DATA> d)
     {
         write_to_buffer(d, "Press enter...\n\r", 0);
     }
-    d->connected = CON_PRESS_ENTER;
+    d.connected = CON_PRESS_ENTER;
 }
 
 char* smaug_crypt(const char* pwd)
@@ -705,7 +723,7 @@ char* smaug_crypt(const char* pwd)
 /*
  * Deal with sockets that haven't logged in yet.
  */
-void nanny(std::shared_ptr<DESCRIPTOR_DATA> d, char* argument)
+void nanny(DESCRIPTOR_DATA& d, char* argument)
 {
     //	extern int lang_array[];
     //	extern char *lang_names[];
@@ -726,13 +744,13 @@ void nanny(std::shared_ptr<DESCRIPTOR_DATA> d, char* argument)
     while (isspace(*argument))
         argument++;
 
-    ch = d->character;
+    ch = d.character;
 
-    switch (d->connected)
+    switch (d.connected)
     {
 
     default:
-        bug("Nanny: bad d->connected %d.", d->connected);
+        bug("Nanny: bad d.connected %d.", d.connected);
         close_socket(d, true);
         return;
 
@@ -752,7 +770,7 @@ void nanny(std::shared_ptr<DESCRIPTOR_DATA> d, char* argument)
 
         if (!str_cmp(argument, "New"))
         {
-            if (d->newstate == 0)
+            if (d.newstate == 0)
             {
                 /* New player */
                 /* Don't allow new players if DENY_NEW_PLAYERS is true */
@@ -772,8 +790,8 @@ void nanny(std::shared_ptr<DESCRIPTOR_DATA> d, char* argument)
                                "If the name you select is not acceptable, you will be asked to choose\n\r"
                                "another one.\n\r\n\rPlease choose a name for your character: ");
                 write_to_buffer(d, buf, 0);
-                d->newstate++;
-                d->connected = CON_GET_NAME;
+                d.newstate++;
+                d.connected = CON_GET_NAME;
                 return;
             }
             else
@@ -789,21 +807,21 @@ void nanny(std::shared_ptr<DESCRIPTOR_DATA> d, char* argument)
             return;
         }
 
-        fOld = load_char_obj(*d, argument, true);
-        if (!d->character)
+        fOld = load_char_obj(d, argument, true);
+        if (!d.character)
         {
-            sprintf_s(log_buf, "Bad player file %s@%s.", argument, d->connection->getHostname().c_str());
+            sprintf_s(log_buf, "Bad player file %s@%s.", argument, d.connection->getHostname().c_str());
             log_string(log_buf);
             write_to_buffer(d, "Your playerfile is corrupt...Please notify the Admin.\n\r", 0);
             close_socket(d, false);
             return;
         }
-        ch = d->character;
+        ch = d.character;
 
         for (pban = first_ban; pban; pban = pban->next)
         {
-            if ((!str_prefix(pban->name, d->connection->getHostname().c_str()) ||
-                 !str_suffix(pban->name, d->connection->getHostname().c_str())) &&
+            if ((!str_prefix(pban->name, d.connection->getHostname().c_str()) ||
+                 !str_suffix(pban->name, d.connection->getHostname().c_str())) &&
                 pban->level >= ch->top_level)
             {
                 write_to_buffer(d, "Your site has been banned from this Mud.\n\r", 0);
@@ -813,12 +831,12 @@ void nanny(std::shared_ptr<DESCRIPTOR_DATA> d, char* argument)
         }
         if (IS_SET(ch->act, PLR_DENY))
         {
-            sprintf_s(log_buf, "Denying access to %s@%s.", argument, d->connection->getHostname().c_str());
+            sprintf_s(log_buf, "Denying access to %s@%s.", argument, d.connection->getHostname().c_str());
             log_string_plus(log_buf, LOG_COMM, sysdata.log_level);
-            if (d->newstate != 0)
+            if (d.newstate != 0)
             {
                 write_to_buffer(d, "That name is already taken.  Please choose another: ", 0);
-                d->connected = CON_GET_NAME;
+                d.connected = CON_GET_NAME;
                 return;
             }
             write_to_buffer(d, "You are denied access.\n\r", 0);
@@ -848,16 +866,16 @@ void nanny(std::shared_ptr<DESCRIPTOR_DATA> d, char* argument)
 
         if (fOld)
         {
-            if (d->newstate != 0)
+            if (d.newstate != 0)
             {
                 write_to_buffer(d, "That name is already taken.  Please choose another: ", 0);
-                d->connected = CON_GET_NAME;
+                d.connected = CON_GET_NAME;
                 return;
             }
             /* Old player */
             write_to_buffer(d, "Password: ", 0);
             write_to_buffer(d, echo_off_str, 0);
-            d->connected = CON_GET_OLD_PASSWORD;
+            d.connected = CON_GET_OLD_PASSWORD;
             return;
         }
         else
@@ -865,7 +883,7 @@ void nanny(std::shared_ptr<DESCRIPTOR_DATA> d, char* argument)
             send_to_desc_color2("\n\r&zI don't recognize your name, you must be new here.\n\r\n\r", d);
             sprintf_s(buf, "Did I get that right, &W%s &z(&WY&z/&WN&z)? &w", argument);
             send_to_desc_color2(buf, d);
-            d->connected = CON_CONFIRM_NEW_NAME;
+            d.connected = CON_CONFIRM_NEW_NAME;
             return;
         }
         break;
@@ -878,8 +896,8 @@ void nanny(std::shared_ptr<DESCRIPTOR_DATA> d, char* argument)
         {
             write_to_buffer(d, "Wrong password.\n\r", 0);
             /* clear descriptor pointer to get rid of bug message in log */
-            d->character->desc = NULL;
-            sprintf_s(buf, "%s@%s: Invalid password.", ch->name, d->connection->getHostname().c_str());
+            d.character->desc = NULL;
+            sprintf_s(buf, "%s@%s: Invalid password.", ch->name, d.connection->getHostname().c_str());
             log_string(buf);
             close_socket(d, false);
             return;
@@ -893,8 +911,8 @@ void nanny(std::shared_ptr<DESCRIPTOR_DATA> d, char* argument)
         chk = check_reconnect(d, ch->name, true);
         if (chk == BERR)
         {
-            if (d->character && d->character->desc)
-                d->character->desc = NULL;
+            if (d.character && d.character->desc)
+                d.character->desc = NULL;
             close_socket(d, false);
             return;
         }
@@ -908,11 +926,11 @@ void nanny(std::shared_ptr<DESCRIPTOR_DATA> d, char* argument)
         }
 
         sprintf_s(buf, ch->name);
-        d->character->desc = NULL;
-        free_char(d->character);
-        fOld = load_char_obj(*d, buf, false);
-        ch = d->character;
-        sprintf_s(log_buf, "%s@%s(%s) has connected.", ch->name, d->connection->getHostname().c_str(), d->user);
+        d.character->desc = NULL;
+        free_char(d.character);
+        fOld = load_char_obj(d, buf, false);
+        ch = d.character;
+        sprintf_s(log_buf, "%s@%s(%s) has connected.", ch->name, d.connection->getHostname().c_str(), d.user);
         if (ch->top_level < LEVEL_DEMI)
         {
             /*to_channel( log_buf, CHANNEL_MONITOR, "Monitor", ch->top_level );*/
@@ -928,7 +946,7 @@ void nanny(std::shared_ptr<DESCRIPTOR_DATA> d, char* argument)
             now = time(0);
             tme = localtime(&now);
             strftime(day, 50, "%a %b %d %H:%M:%S %Y", tme);
-            sprintf_s(log_buf, "%-20s     %-24s    %s", ch->name, day, d->connection->getHostname().c_str());
+            sprintf_s(log_buf, "%-20s     %-24s    %s", ch->name, day, d.connection->getHostname().c_str());
             write_last_file(log_buf);
         }
 
@@ -967,17 +985,17 @@ void nanny(std::shared_ptr<DESCRIPTOR_DATA> d, char* argument)
                       "\n\rPick a good password for %s: &w%s",
                       ch->name, echo_off_str);
             send_to_desc_color2(buf, d);
-            d->connected = CON_GET_NEW_PASSWORD;
+            d.connected = CON_GET_NEW_PASSWORD;
             break;
 
         case 'n':
         case 'N':
             send_to_desc_color2("&zOk, what is it, then? &w", d);
             /* clear descriptor pointer to get rid of bug message in log */
-            d->character->desc = NULL;
-            free_char(d->character);
-            d->character = NULL;
-            d->connected = CON_GET_NAME;
+            d.character->desc = NULL;
+            free_char(d.character);
+            d.character = NULL;
+            d.connected = CON_GET_NAME;
             break;
 
         default:
@@ -1008,7 +1026,7 @@ void nanny(std::shared_ptr<DESCRIPTOR_DATA> d, char* argument)
         DISPOSE(ch->pcdata->pwd);
         ch->pcdata->pwd = str_dup(pwdnew);
         send_to_desc_color2("\n\r&zPlease retype the password to confirm: &w", d);
-        d->connected = CON_CONFIRM_NEW_PASSWORD;
+        d.connected = CON_CONFIRM_NEW_PASSWORD;
         break;
 
     case CON_CONFIRM_NEW_PASSWORD:
@@ -1017,13 +1035,13 @@ void nanny(std::shared_ptr<DESCRIPTOR_DATA> d, char* argument)
         if (strcmp(smaug_crypt(argument), ch->pcdata->pwd))
         {
             send_to_desc_color2("&zPasswords don't match.\n\rRetype password: &w", d);
-            d->connected = CON_GET_NEW_PASSWORD;
+            d.connected = CON_GET_NEW_PASSWORD;
             return;
         }
 
         write_to_buffer(d, echo_on_str, 0);
         send_to_desc_color2("\n\r&zWhat is your sex (&WM&z/&WF&z/&WN&z)? &w", d);
-        d->connected = CON_GET_NEW_SEX;
+        d.connected = CON_GET_NEW_SEX;
         break;
 
     case CON_GET_NEW_SEX:
@@ -1083,7 +1101,7 @@ void nanny(std::shared_ptr<DESCRIPTOR_DATA> d, char* argument)
             strcat_s(buf, "\n\r");
         strcat_s(buf, "&z:&w ");
         send_to_desc_color2(buf, d);
-        d->connected = CON_GET_NEW_RACE;
+        d.connected = CON_GET_NEW_RACE;
         break;
     case CON_GET_NEW_RACE:
         argument = one_argument(argument, arg);
@@ -1133,7 +1151,7 @@ void nanny(std::shared_ptr<DESCRIPTOR_DATA> d, char* argument)
         strcat_s(buf, "&z:&w ");
 
         send_to_desc_color2(buf, d);
-        d->connected = CON_GET_NEW_CLASS;
+        d.connected = CON_GET_NEW_CLASS;
         break;
 
     case CON_GET_NEW_CLASS:
@@ -1184,7 +1202,7 @@ void nanny(std::shared_ptr<DESCRIPTOR_DATA> d, char* argument)
         strcat_s(buf, "&z:&w ");
 
         send_to_desc_color2(buf, d);
-        d->connected = CON_GET_NEW_SECOND;
+        d.connected = CON_GET_NEW_SECOND;
         break;
     case CON_GET_NEW_SECOND:
         argument = one_argument(argument, arg);
@@ -1233,7 +1251,7 @@ void nanny(std::shared_ptr<DESCRIPTOR_DATA> d, char* argument)
 
         send_to_desc_color2(buf, d);
         send_to_desc_color2("\n\r&zAre these stats OK?&w ", d);
-        d->connected = CON_STATS_OK;
+        d.connected = CON_STATS_OK;
         break;
 
     case CON_STATS_OK:
@@ -1320,9 +1338,9 @@ void nanny(std::shared_ptr<DESCRIPTOR_DATA> d, char* argument)
 
         send_to_desc_color2(buf, d);
         if (!IS_DROID(ch))
-            d->connected = CON_GET_HEIGHT;
+            d.connected = CON_GET_HEIGHT;
         else
-            d->connected = CON_GET_DROID;
+            d.connected = CON_GET_DROID;
         break;
 
     case CON_GET_HEIGHT:
@@ -1366,7 +1384,7 @@ void nanny(std::shared_ptr<DESCRIPTOR_DATA> d, char* argument)
         strcat_s(buf, "&z:&w ");
 
         send_to_desc_color2(buf, d);
-        d->connected = CON_GET_BUILD;
+        d.connected = CON_GET_BUILD;
         break;
 
     case CON_GET_BUILD:
@@ -1409,7 +1427,7 @@ void nanny(std::shared_ptr<DESCRIPTOR_DATA> d, char* argument)
 
             write_to_buffer( d, "\n\rWould you like ANSI or no graphic/color support, (R/A/N)? ", 0 ); */
         SET_BIT(ch->act, PLR_ANSI);
-        /*	d->connected = CON_GET_WANT_RIPANSI;
+        /*	d.connected = CON_GET_WANT_RIPANSI;
                 break;
 
             case CON_GET_WANT_RIPANSI:
@@ -1423,7 +1441,7 @@ void nanny(std::shared_ptr<DESCRIPTOR_DATA> d, char* argument)
             }
                 reset_colors(ch);
                 write_to_buffer( d, "Does your mud client have the Mud Sound Protocol? ", 0 );
-            d->connected = CON_GET_MSP;
+            d.connected = CON_GET_MSP;
              break;
 
 
@@ -1441,7 +1459,7 @@ void nanny(std::shared_ptr<DESCRIPTOR_DATA> d, char* argument)
             {
         */
 
-        sprintf_s(log_buf, "%s@%s new %s.", ch->name, d->connection->getHostname().c_str(),
+        sprintf_s(log_buf, "%s@%s new %s.", ch->name, d.connection->getHostname().c_str(),
                   race_table[ch->race].race_name);
         log_string_plus(log_buf, LOG_COMM, sysdata.log_level);
         to_channel(log_buf, CHANNEL_MONITOR, "Monitor", LEVEL_IMMORTAL);
@@ -1462,38 +1480,38 @@ void nanny(std::shared_ptr<DESCRIPTOR_DATA> d, char* argument)
         sprintf_s(buf, "%d%d%d.%d%d%d", number_range(0, 9), number_range(0, 9), number_range(0, 9), number_range(0, 9),
                   number_range(0, 9), number_range(0, 9));
         ch->comfreq = STRALLOC(buf);
-        d->connected = CON_PRESS_ENTER;
+        d.connected = CON_PRESS_ENTER;
         return;
         break;
         /*	}
 
             write_to_buffer( d, "\n\rYou now have to wait for a god to authorize you... please be patient...\n\r", 0 );
             sprintf_s( log_buf, "(1) %s@%s new %s applying for authorization...",
-                        ch->name, d->host,
+                        ch->name, d.host,
                         race_table[ch->race].race_name);
             log_string( log_buf );
             to_channel( log_buf, CHANNEL_MONITOR, "Monitor", LEVEL_IMMORTAL );
-            d->connected = CON_WAIT_1;
+            d.connected = CON_WAIT_1;
             break;
 
              case CON_WAIT_1:
             write_to_buffer( d, "\n\rTwo more tries... please be patient...\n\r", 0 );
             sprintf_s( log_buf, "(2) %s@%s new %s applying for authorization...",
-                        ch->name, d->host,
+                        ch->name, d.host,
                         race_table[ch->race].race_name);
             log_string( log_buf );
             to_channel( log_buf, CHANNEL_MONITOR, "Monitor", LEVEL_IMMORTAL );
-            d->connected = CON_WAIT_2;
+            d.connected = CON_WAIT_2;
             break;
 
              case CON_WAIT_2:
             write_to_buffer( d, "\n\rThis is your last try...\n\r", 0 );
             sprintf_s( log_buf, "(3) %s@%s new %s applying for authorization...",
-                        ch->name, d->host,
+                        ch->name, d.host,
                         race_table[ch->race].race_name);
             log_string( log_buf );
             to_channel( log_buf, CHANNEL_MONITOR, "Monitor", LEVEL_IMMORTAL );
-            d->connected = CON_WAIT_3;
+            d.connected = CON_WAIT_3;
             break;
 
             case CON_WAIT_3:
@@ -1504,7 +1522,7 @@ void nanny(std::shared_ptr<DESCRIPTOR_DATA> d, char* argument)
 
             case CON_ACCEPTED:
 
-            sprintf_s( log_buf, "%s@%s new %s.", ch->name, d->host,
+            sprintf_s( log_buf, "%s@%s new %s.", ch->name, d.host,
                         race_table[ch->race].race_name);
             log_string_plus( log_buf, LOG_COMM, sysdata.log_level );
             to_channel( log_buf, CHANNEL_MONITOR, "Monitor", LEVEL_IMMORTAL );
@@ -1521,7 +1539,7 @@ void nanny(std::shared_ptr<DESCRIPTOR_DATA> d, char* argument)
                 }
             ch->top_level = 0;
             ch->position = POS_STANDING;
-            d->connected = CON_PRESS_ENTER;
+            d.connected = CON_PRESS_ENTER;
             break;
         */
     case CON_PRESS_ENTER:
@@ -1540,7 +1558,7 @@ void nanny(std::shared_ptr<DESCRIPTOR_DATA> d, char* argument)
             do_help(ch, MAKE_TEMP_STRING("imotd"));
         }
         send_to_pager("\n\r&WPress [ENTER] &w", ch);
-        d->connected = CON_READ_MOTD;
+        d.connected = CON_READ_MOTD;
         break;
 
     case CON_READ_MOTD:
@@ -1554,7 +1572,7 @@ void nanny(std::shared_ptr<DESCRIPTOR_DATA> d, char* argument)
      }*/
         sprintf_s(buf, " %s has entered the game.", ch->name);
         log_string_plus(buf, LOG_NORMAL, get_trust(ch));
-        d->connected = CON_PLAYING;
+        d.connected = CON_PLAYING;
 
         if (ch->top_level == 0)
         {
@@ -1833,7 +1851,7 @@ void nanny(std::shared_ptr<DESCRIPTOR_DATA> d, char* argument)
                         SET_BIT( ch->speaks, lang_array[iLang] );
                         set_char_color( AT_SAY, ch );
                         ch_printf( ch, "You can now speak %s.\n\r", lang_names[iLang] );
-                        d->connected = CON_PLAYING;
+                        d.connected = CON_PLAYING;
                         return;
                     }
             set_char_color( AT_SAY, ch );
@@ -1940,6 +1958,7 @@ std::shared_ptr<void> handle_new_authenticated_connection(std::shared_ptr<Connec
     dnew->scrlen = 24;
     dnew->user = STRALLOC(name.c_str());
     dnew->prevcolor = 0x07;
+    dnew->shell = new LegacyShell();
 
     // TODO this is where IP bans would get processed - skipping for now
 
@@ -1951,9 +1970,9 @@ std::shared_ptr<void> handle_new_authenticated_connection(std::shared_ptr<Connec
     {
         extern char* help_greeting;
         if (help_greeting[0] == '.')
-            send_to_desc_color2(help_greeting + 1, dnew);
+            send_to_desc_color2(help_greeting + 1, *dnew);
         else
-            send_to_desc_color2(help_greeting, dnew);
+            send_to_desc_color2(help_greeting, *dnew);
     }
 
     char buf[MAX_STRING_LENGTH] = {};
@@ -1973,26 +1992,26 @@ std::shared_ptr<void> handle_new_authenticated_connection(std::shared_ptr<Connec
         save_sysdata(sysdata);
     }
 
-    write_to_buffer(dnew, "\n\r", 2);
+    write_to_buffer(*dnew, "\n\r", 2);
 
-    write_to_buffer(dnew, echo_on_str, 0);
+    write_to_buffer(*dnew, echo_on_str, 0);
 
     CHAR_DATA* ch = dnew->character;
 
-    bool chk = check_reconnect(dnew, ch->name, true);
+    bool chk = check_reconnect(*dnew, ch->name, true);
     if (chk == BERR)
     {
         if (dnew->character && dnew->character->desc)
             dnew->character->desc = NULL;
-        close_socket(dnew, false);
+        close_socket(*dnew, false);
         return nullptr;
     }
     if (chk == true)
         return dnew;
 
-    if (check_multi(dnew, ch->name))
+    if (check_multi(*dnew, ch->name))
     {
-        close_socket(dnew, false);
+        close_socket(*dnew, false);
         return nullptr;
     }
 
@@ -2021,7 +2040,7 @@ std::shared_ptr<void> handle_new_authenticated_connection(std::shared_ptr<Connec
         write_last_file(log_buf);
     }
 
-    show_title(dnew);
+    show_title(*dnew);
     if (ch->pcdata->area)
     {
         do_loadarea(ch, MAKE_TEMP_STRING(""));
@@ -2101,7 +2120,7 @@ bool check_parse_name(const char* name)
 /*
  * Look for link-dead player to reconnect.
  */
-bool check_reconnect(std::shared_ptr<DESCRIPTOR_DATA> d, char* name, bool fConn)
+bool check_reconnect(DESCRIPTOR_DATA& d, char* name, bool fConn)
 {
     CHAR_DATA* ch;
 
@@ -2112,38 +2131,38 @@ bool check_reconnect(std::shared_ptr<DESCRIPTOR_DATA> d, char* name, bool fConn)
             if (fConn && ch->switched)
             {
                 write_to_buffer(d, "Already playing.\n\rName: ", 0);
-                d->connected = CON_GET_NAME;
-                if (d->character)
+                d.connected = CON_GET_NAME;
+                if (d.character)
                 {
                     /* clear descriptor pointer to get rid of bug message in log */
-                    d->character->desc = NULL;
-                    free_char(d->character);
-                    d->character = NULL;
+                    d.character->desc = NULL;
+                    free_char(d.character);
+                    d.character = NULL;
                 }
                 return BERR;
             }
             if (fConn == false)
             {
-                DISPOSE(d->character->pcdata->pwd);
-                d->character->pcdata->pwd = str_dup(ch->pcdata->pwd);
+                DISPOSE(d.character->pcdata->pwd);
+                d.character->pcdata->pwd = str_dup(ch->pcdata->pwd);
             }
             else
             {
                 /* clear descriptor pointer to get rid of bug message in log */
-                d->character->desc = NULL;
-                free_char(d->character);
-                d->character = ch;
-                ch->desc = d.get();
+                d.character->desc = NULL;
+                free_char(d.character);
+                d.character = ch;
+                ch->desc = &d;
                 ch->timer = 0;
                 send_to_char("Reconnecting.\n\r", ch);
                 act(AT_ACTION, "$n has reconnected.", ch, NULL, NULL, TO_ROOM);
-                sprintf_s(log_buf, "%s@%s(%s) reconnected.", ch->name, d->connection->getHostname().c_str(), d->user);
+                sprintf_s(log_buf, "%s@%s(%s) reconnected.", ch->name, d.connection->getHostname().c_str(), d.user);
                 log_string_plus(log_buf, LOG_COMM, UMAX(sysdata.log_level, ch->top_level));
                 /*
                         if ( ch->top_level < LEVEL_SAVIOR )
                           to_channel( log_buf, CHANNEL_MONITOR, "Monitor", ch->top_level );
                 */
-                d->connected = CON_PLAYING;
+                d.connected = CON_PLAYING;
             }
             return true;
         }
@@ -2156,11 +2175,13 @@ bool check_reconnect(std::shared_ptr<DESCRIPTOR_DATA> d, char* name, bool fConn)
  * Check if already playing.
  */
 
-bool check_multi(std::shared_ptr<DESCRIPTOR_DATA> d, char* name)
+bool check_multi(DESCRIPTOR_DATA& dref, char* name)
 {
+    auto d = &dref;
+
     for (auto dold : g_descriptors)
     {
-        if (dold != d && (dold->character || dold->original) &&
+        if (dold.get() != d && (dold->character || dold->original) &&
             str_cmp(name, dold->original ? dold->original->name : dold->character->name) &&
             !str_cmp(dold->connection->getHostname().c_str(), d->connection->getHostname().c_str()))
         {
@@ -2201,11 +2222,13 @@ bool check_multi(std::shared_ptr<DESCRIPTOR_DATA> d, char* name)
     return false;
 }
 
-bool check_playing(std::shared_ptr<DESCRIPTOR_DATA> d, char* name, bool kick)
+bool check_playing(DESCRIPTOR_DATA& dref, char* name, bool kick)
 {
+    auto d = &dref;
+
     for (auto dold : g_descriptors)
     {
-        if (dold != d && (dold->character || dold->original) &&
+        if (dold.get() != d && (dold->character || dold->original) &&
             !str_cmp(name, dold->original ? dold->original->name : dold->character->name))
         {
             int cstate = dold->connected;
@@ -2220,13 +2243,13 @@ bool check_playing(std::shared_ptr<DESCRIPTOR_DATA> d, char* name, bool kick)
             if (!kick)
                 return true;
             write_to_buffer(d, "Already playing... Kicking off old connection.\n\r", 0);
-            write_to_buffer(dold, "Kicking off old connection... bye!\n\r", 0);
-            close_socket(dold, false);
+            write_to_buffer(*dold, "Kicking off old connection... bye!\n\r", 0);
+            close_socket(*dold, false);
             /* clear descriptor pointer to get rid of bug message in log */
             d->character->desc = NULL;
             free_char(d->character);
             d->character = ch;
-            ch->desc = d.get();
+            ch->desc = d;
             ch->timer = 0;
             if (ch->switched)
                 do_return(ch->switched, MAKE_TEMP_STRING(""));
@@ -2324,9 +2347,9 @@ void send_to_desc_color2(const char* txt, DESCRIPTOR_DATA* d)
     return;
 }
 
-void send_to_desc_color2(const char* txt, std::shared_ptr<DESCRIPTOR_DATA> d)
+void send_to_desc_color2(const char* txt, DESCRIPTOR_DATA& d)
 {
-    send_to_desc_color2(txt, d.get());
+    send_to_desc_color2(txt, &d);
 }
 
 std::string obj_short(OBJ_DATA* obj)
@@ -2950,8 +2973,10 @@ void send_prompt(DESCRIPTOR_DATA* d)
         write_to_buffer(d, go_ahead_str, 0);
 }
 
-void handle_pager_input(std::shared_ptr<DESCRIPTOR_DATA> d, char* argument)
+void handle_pager_input(DESCRIPTOR_DATA& dref, char* argument)
 {
+    auto d = &dref;
+
     while (isspace(*argument))
         argument++;
     char pagecmd = *argument;
@@ -2980,7 +3005,7 @@ void handle_pager_input(std::shared_ptr<DESCRIPTOR_DATA> d, char* argument)
     case 'q':
         d->pagetop = 0;
         d->pagepoint = NULL;
-        send_prompt(d.get());
+        send_prompt(d);
         DISPOSE(d->pagebuf);
         d->pagesize = MAX_STRING_LENGTH;
         return;
@@ -3001,7 +3026,7 @@ void handle_pager_input(std::shared_ptr<DESCRIPTOR_DATA> d, char* argument)
         ++last;
     if (last != d->pagepoint)
     {
-        write_to_buffer(d, d->pagepoint, (last - d->pagepoint));
+        write_to_buffer(*d, d->pagepoint, (last - d->pagepoint));
         d->pagepoint = last;
     }
     while (isspace(*last))
@@ -3010,15 +3035,15 @@ void handle_pager_input(std::shared_ptr<DESCRIPTOR_DATA> d, char* argument)
     {
         d->pagetop = 0;
         d->pagepoint = NULL;
-        send_prompt(d.get());
+        send_prompt(d);
         DISPOSE(d->pagebuf);
         d->pagesize = MAX_STRING_LENGTH;
         return;
     }
 
     if (IS_SET(ch->act, PLR_ANSI))
-        write_to_buffer(d, ANSI_LBLUE, 7);
-    write_to_buffer(d, "(C)ontinue, (R)efresh, (B)ack, (Q)uit: [C] ", 0);
+        write_to_buffer(*d, ANSI_LBLUE, 7);
+    write_to_buffer(*d, "(C)ontinue, (R)efresh, (B)ack, (Q)uit: [C] ", 0);
 
     if (IS_SET(ch->act, PLR_ANSI))
     {
@@ -3026,7 +3051,7 @@ void handle_pager_input(std::shared_ptr<DESCRIPTOR_DATA> d, char* argument)
 
         snprintf(buf, 32, "%s", color_str(d->pagecolor, ch));
 
-        write_to_buffer(d, buf, 0);
+        write_to_buffer(*d, buf, 0);
     }
 }
 
@@ -3366,7 +3391,7 @@ const char* PERS(CHAR_DATA* ch, CHAR_DATA* looker)
     }
 }
 
-void arms(std::shared_ptr<DESCRIPTOR_DATA> d, char* argument)
+void arms(DESCRIPTOR_DATA& d, char* argument)
 {
     CHAR_DATA* ch;
     char dmsgcmd[50];
@@ -3374,9 +3399,9 @@ void arms(std::shared_ptr<DESCRIPTOR_DATA> d, char* argument)
     char to[80];
     char subj[100];
     char subjcmd[110];
-    ch = d->character;
+    ch = d.character;
 
-    switch (d->connected)
+    switch (d.connected)
     {
     case CON_MAIN_MAIL_MENU:
         switch (*argument)
@@ -3386,7 +3411,7 @@ void arms(std::shared_ptr<DESCRIPTOR_DATA> d, char* argument)
             send_to_char("In ARIMS, there are 5 basic commands.\n\rl - lists all your mail messages\n\rw - writes a "
                          "message\n\rd - displays a message\n\rh - displays this help message\n\rq - quits ARIMS\n\r",
                          ch);
-            send_main_mail_menu(d.get());
+            send_main_mail_menu(&d);
             break;
 
         case 'l':
@@ -3397,18 +3422,18 @@ void arms(std::shared_ptr<DESCRIPTOR_DATA> d, char* argument)
         case 'd':
         case 'D':
             send_to_char("Which Message? ", ch);
-            d->connected = CON_MAIL_DISPLAY;
+            d.connected = CON_MAIL_DISPLAY;
             break;
         case 'q':
         case 'Q':
-            d->connected = CON_PLAYING;
+            d.connected = CON_PLAYING;
             break;
         case 'w':
         case 'W':
-            d->connected = CON_MAIL_WRITE_START;
+            d.connected = CON_MAIL_WRITE_START;
         default:
             send_to_char("That's not a command!\n\r", ch);
-            send_main_mail_menu(d.get());
+            send_main_mail_menu(&d);
             break;
         }
         break;
@@ -3418,11 +3443,11 @@ void arms(std::shared_ptr<DESCRIPTOR_DATA> d, char* argument)
         strcat_s(dmsgcmd, argument);
         do_mailroom(ch, dmsgcmd);
         send_to_char("\n\r\n\rPlease enter a command or enter h for help: ", ch);
-        d->connected = CON_MAIN_MAIL_MENU;
+        d.connected = CON_MAIN_MAIL_MENU;
         break;
     case CON_MAIL_WRITE_START:
         send_to_char("To: ", ch);
-        d->connected = CON_MAIL_WRITE_TO;
+        d.connected = CON_MAIL_WRITE_TO;
         break;
     case CON_MAIL_WRITE_TO:
         strcpy_s(to, argument);
@@ -3430,7 +3455,7 @@ void arms(std::shared_ptr<DESCRIPTOR_DATA> d, char* argument)
         strcat_s(tocmd, to);
         do_mailroom(ch, tocmd);
         send_to_char("\n\rSubject: ", ch);
-        d->connected = CON_MAIL_WRITE_SUBJECT;
+        d.connected = CON_MAIL_WRITE_SUBJECT;
         break;
     case CON_MAIL_WRITE_SUBJECT:
         strcpy_s(subj, argument);
@@ -3440,11 +3465,11 @@ void arms(std::shared_ptr<DESCRIPTOR_DATA> d, char* argument)
         send_to_char("/n/rBody: ", ch);
         do_mailroom(ch, MAKE_TEMP_STRING("write"));
         do_mailroom(ch, MAKE_TEMP_STRING("post"));
-        d->connected = CON_MAIN_MAIL_MENU;
+        d.connected = CON_MAIN_MAIL_MENU;
         break;
     default:
-        send_main_mail_menu(d.get());
-        d->connected = CON_MAIN_MAIL_MENU;
+        send_main_mail_menu(&d);
+        d.connected = CON_MAIN_MAIL_MENU;
         break;
     }
 }

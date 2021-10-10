@@ -674,6 +674,14 @@ typedef enum
     SUB_TIMER_CANT_ABORT
 } char_substates;
 
+struct DESCRIPTOR_DATA;
+
+class Shell
+{
+  public:
+    virtual void handleCommand(DESCRIPTOR_DATA& desc, const std::string& command) = 0;
+};
+
 /*
  * Descriptor (channel) structure.
  */
@@ -681,6 +689,7 @@ struct DESCRIPTOR_DATA
 {
     DESCRIPTOR_DATA* snoop_by;
     std::shared_ptr<Connection> connection;
+    Shell* shell;
     CHAR_DATA* character;
     CHAR_DATA* original;
     sh_int connected;
@@ -4702,18 +4711,18 @@ void create_ship_rooms(SHIP_DATA* ship);
 /* comm.c */
 const char* PERS(CHAR_DATA* ch, CHAR_DATA* looker);
 FELLOW_DATA* knowsof(CHAR_DATA* ch, CHAR_DATA* victim);
-void close_socket(DESCRIPTOR_DATA* dclose, bool force);
+void close_socket(DESCRIPTOR_DATA& dclose, bool force);
 void close_socket(DESCRIPTOR_DATA* dclose, bool force);
 void write_to_buffer(DESCRIPTOR_DATA* d, std::string_view string);
-void write_to_buffer(std::shared_ptr<DESCRIPTOR_DATA> d, std::string_view string);
+void write_to_buffer(DESCRIPTOR_DATA& d, std::string_view string);
 void write_to_buffer(DESCRIPTOR_DATA* d, const char* txt, size_t length);
-void write_to_buffer(std::shared_ptr<DESCRIPTOR_DATA> d, const char* txt, size_t length);
+void write_to_buffer(DESCRIPTOR_DATA& d, const char* txt, size_t length);
 void write_to_pager(DESCRIPTOR_DATA* d, const char* txt, size_t length);
 void send_to_char(const char* txt, CHAR_DATA* ch);
 void send_to_char_color(const char* txt, CHAR_DATA* ch);
 void send_to_desc_color(const char* txt, DESCRIPTOR_DATA* d);
 void send_to_desc_color2(const char* txt, DESCRIPTOR_DATA* d);
-void send_to_desc_color2(const char* txt, std::shared_ptr<DESCRIPTOR_DATA> d);
+void send_to_desc_color2(const char* txt, DESCRIPTOR_DATA& d);
 void send_to_char_noand(const char* txt, CHAR_DATA* ch);
 void send_to_pager(const char* txt, CHAR_DATA* ch);
 void send_to_pager_color(const char* txt, CHAR_DATA* ch);
