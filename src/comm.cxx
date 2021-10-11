@@ -249,9 +249,37 @@ int gamemain(int argc, char** argv)
     return 0;
 }
 
+std::unique_ptr<Shell> Shell::restoreParentShell(DESCRIPTOR_DATA& d)
+{
+    if (!m_parent)
+    {
+        bug("tried to restore null parent shell");
+        return nullptr;
+    }
+
+    std::unique_ptr<Shell> curShell = std::move(d.shell);
+    d.shell = std::move(m_parent);
+    d.connection->setLineBuffered(d.shell->m_isLineBuffered);
+    return curShell;
+}
+
+Shell::Shell(std::unique_ptr<Shell> parent, DESCRIPTOR_DATA& d, bool lineBuffered)
+    : m_parent(std::move(parent)), m_isLineBuffered(lineBuffered)
+{
+    d.connection->setLineBuffered(m_isLineBuffered);
+}
+
+Shell::~Shell()
+{
+}
+
 class LegacyShell : public Shell
 {
   public:
+    LegacyShell(DESCRIPTOR_DATA& d) : Shell(nullptr, d, true)
+    {
+    }
+
     void handleCommand(DESCRIPTOR_DATA& desc, const std::string& command) override
     {
         // TODO close the socket instead of asserting
@@ -304,7 +332,7 @@ ConnectionContext handle_new_unauthenticated_connection(std::shared_ptr<Connecti
     dnew->scrlen = 24;
     dnew->user = STRALLOC("unknown");
     dnew->prevcolor = 0x07;
-    dnew->shell = new LegacyShell();
+    dnew->shell = std::make_unique<LegacyShell>(*dnew);
 
     // TODO this is where IP bans would get processed - skipping for now
 
@@ -1958,7 +1986,7 @@ std::shared_ptr<void> handle_new_authenticated_connection(std::shared_ptr<Connec
     dnew->scrlen = 24;
     dnew->user = STRALLOC(name.c_str());
     dnew->prevcolor = 0x07;
-    dnew->shell = new LegacyShell();
+    dnew->shell = std::make_unique<LegacyShell>(*dnew);
 
     // TODO this is where IP bans would get processed - skipping for now
 
