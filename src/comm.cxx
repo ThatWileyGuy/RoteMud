@@ -64,10 +64,10 @@ static OBJ_DATA* rgObjNest[MAX_NEST];
 namespace telnet
 {
 // see RFC 854 for protocol and IANA (https://www.iana.org/assignments/telnet-options/telnet-options.xhtml) for options
-constexpr unsigned char IAC = 255;
-constexpr unsigned char WILL = 251;
-constexpr unsigned char WONT = 252;
-constexpr unsigned char GA = 249;
+constexpr char IAC = 255;
+constexpr char WILL = 251;
+constexpr char WONT = 252;
+constexpr char GA = 249;
 
 namespace option
 {
@@ -210,7 +210,7 @@ int gamemain(int argc, char** argv)
      * Get the port number.
      */
     const uint16_t telnet_port = 8787;
-    const uint16_t ssh_port = 22;
+    const uint16_t ssh_port = 8888;
 
     /*
      * Run the game.

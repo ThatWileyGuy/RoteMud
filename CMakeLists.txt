@@ -26,7 +26,7 @@ set(THREADS_PREFER_PTHREAD_FLAG ON)
 find_package(Threads REQUIRED)
 target_link_libraries(rote_mud Threads::Threads)
 target_link_libraries(rote_mud ${CMAKE_DL_LIBS})
-set_target_properties(rote_mud ENABLE_EXPORTS true)
+set_target_properties(rote_mud PROPERTIES ENABLE_EXPORTS true)
 endif()
 
 # tests
@@ -40,6 +40,11 @@ target_link_libraries(rote_tests rote_lib)
 target_link_libraries(rote_tests ssh)
 target_include_directories(rote_tests PRIVATE ${Boost_INCLUDE_DIRS})
 target_include_directories(rote_tests PRIVATE src)
+
+if(UNIX)
+target_link_libraries(rote_tests Threads::Threads)
+target_link_libraries(rote_tests ${CMAKE_DL_LIBS})
+endif()
 
 enable_testing()
 add_test(RoteTests rote_tests)
