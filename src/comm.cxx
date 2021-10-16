@@ -748,6 +748,25 @@ char* smaug_crypt(const char* pwd)
     return (passwd);
 }
 
+class NannyShell : public Shell
+{
+  private:
+    DESCRIPTOR_DATA& m_descriptor;
+
+
+
+  public:
+    NannyShell(DESCRIPTOR_DATA& d) : Shell(nullptr, d, true), m_descriptor(d)
+    {
+    }
+
+    void handleCommand(DESCRIPTOR_DATA& d, const std::string& command) override
+    {
+    }
+
+
+};
+
 /*
  * Deal with sockets that haven't logged in yet.
  */
