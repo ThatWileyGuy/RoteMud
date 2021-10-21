@@ -430,26 +430,26 @@ void show_visible_affects_to_char(CHAR_DATA* victim, CHAR_DATA* ch)
     {
         set_char_color(AT_FIRE, ch);
         ch_printf(ch, "%s is engulfed within a blaze of mystical flame.\n\r",
-                  IS_NPC(victim) ? capitalize(victim->short_descr) : (victim->name));
+                  IS_NPC(victim) ? capitalize(victim->short_descr).c_str() : (victim->name));
     }
     if (IS_AFFECTED(victim, AFF_SHOCKSHIELD))
     {
         set_char_color(AT_BLUE, ch);
         ch_printf(ch, "%s is surrounded by cascading torrents of energy.\n\r",
-                  IS_NPC(victim) ? capitalize(victim->short_descr) : (victim->name));
+                  IS_NPC(victim) ? capitalize(victim->short_descr).c_str() : (victim->name));
     }
     /*Scryn 8/13*/
     if (IS_AFFECTED(victim, AFF_ICESHIELD))
     {
         set_char_color(AT_LBLUE, ch);
         ch_printf(ch, "%s is ensphered by shards of glistening ice.\n\r",
-                  IS_NPC(victim) ? capitalize(victim->short_descr) : (victim->name));
+                  IS_NPC(victim) ? capitalize(victim->short_descr).c_str() : (victim->name));
     }
     if (IS_AFFECTED(victim, AFF_CHARM))
     {
         set_char_color(AT_MAGIC, ch);
         ch_printf(ch, "%s looks ahead free of expression.\n\r",
-                  IS_NPC(victim) ? capitalize(victim->short_descr) : (victim->name));
+                  IS_NPC(victim) ? capitalize(victim->short_descr).c_str() : (victim->name));
     }
     if (!IS_NPC(victim) && !victim->desc && victim->switched && IS_AFFECTED(victim->switched, AFF_POSSESS))
     {
@@ -2777,7 +2777,7 @@ void do_setrank(CHAR_DATA* ch, char* argument)
 
     if ((vict = get_char_room(ch, arg1)) == NULL)
     {
-        ch_printf(ch, "&RThere isn't %s '%s' here.\n\r", aoran(arg1), arg1);
+        ch_printf(ch, "&RThere isn't %s '%s' here.\n\r", aoran(arg1).c_str(), arg1);
         return;
     }
     if (IS_NPC(vict))

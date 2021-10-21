@@ -250,7 +250,7 @@ bool check_skill(CHAR_DATA* ch, const char* command, char* argument)
         case TAR_CHAR_OFFENSIVE:
             if (argument[0] == '\0' && (victim = who_fighting(ch)) == NULL)
             {
-                ch_printf(ch, "%s who?\n\r", capitalize(skill_table[sn]->name));
+                ch_printf(ch, "%s who?\n\r", capitalize(skill_table[sn]->name).c_str());
                 return true;
             }
             else if (argument[0] != '\0' && (victim = get_char_room(ch, argument)) == NULL)

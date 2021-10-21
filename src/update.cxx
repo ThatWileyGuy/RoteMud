@@ -1998,7 +1998,7 @@ void obj_update(void)
                 if (obj->item_type == ITEM_DROID_CORPSE)
                     sprintf_s(buf, d_corpse_descs[UMIN(timerfrac - 1, 4)], bufptr);
                 else
-                    sprintf_s(buf, corpse_descs[UMIN(timerfrac - 1, 4)], capitalize(bufptr));
+                    sprintf_s(buf, corpse_descs[UMIN(timerfrac - 1, 4)], capitalize(bufptr).c_str());
 
                 STRFREE(obj->description);
                 obj->description = STRALLOC(buf);

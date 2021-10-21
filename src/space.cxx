@@ -12687,7 +12687,7 @@ void do_transmit_status(CHAR_DATA* ch, char* argument)
     if (ship->secondaryCount != 0)
     {
         ch_printf(ch, "&zSecondary Weapon System: &w%-7s&W::  &w%s\n\r",
-                  ship->secondaryState == LASER_DAMAGED ? "&ROffline" : "&GOnline", secondary_beam_name(ship));
+                  ship->secondaryState == LASER_DAMAGED ? "&ROffline" : "&GOnline", secondary_beam_name(ship).c_str());
         ch_printf(ch, "&z   Linked fire: &w%s\n\r",
                   (x <= 1) ? "Unavailable" : ship->secondaryLinked == true ? "&GON" : "&ROFF");
     }

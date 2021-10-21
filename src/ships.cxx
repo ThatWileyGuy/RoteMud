@@ -2253,8 +2253,8 @@ void do_shipstat(CHAR_DATA* ch, char* argument)
               ship_prototypes[shiptype].cost);
     ch_printf(ch, "&z+&W---------------------------------------------------------------&z+\n\r\n\r");
 
-    ch_printf(ch, "&W         Primary Weapon System:&w %-30.30s\n\r", primary_beam_name_proto(shiptype));
-    ch_printf(ch, "&W                     Secondary:&w %-30.30s\n\r\n\r", secondary_beam_name_proto(shiptype));
+    ch_printf(ch, "&W         Primary Weapon System:&w %-30.30s\n\r", primary_beam_name_proto(shiptype).c_str());
+    ch_printf(ch, "&W                     Secondary:&w %-30.30s\n\r\n\r", secondary_beam_name_proto(shiptype).c_str());
     ch_printf(ch, "&W          Missiles:&w %-5s&W   Torpedos:&w %-5s&W   Rockets:&w %-5s\n\r", buf3, buf5, buf7);
     ch_printf(ch, "&W   Planetary bombs:&w %-5s&W      Chaff:&w %-5s\n\r", buf8, buf10);
     ch_printf(ch, "\n\r&W   Hull:&w %-5d&W   Shields:&w %-5s&W   Speed:&w %-5d&W   Energy:&w %d\n\r",

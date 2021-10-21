@@ -2492,7 +2492,7 @@ void do_auction(CHAR_DATA* ch, char* argument)
             else
                 sprintf_s(buf, "zero");
             ch_printf(ch, "\n\r&W++\n\r&z||&w Item:&G %s  &wType:&G %s\n\r", obj->short_descr,
-                      aoran(item_type_name(obj)));
+                      aoran(item_type_name(obj)).c_str());
             ch_printf(ch, "&z|| &wCurrent bid on this item is &Y%s&w credits.\n\r", buf);
             ch_printf(ch, "&z||&w Cost:&G %d  &wWeight:&G %d  &wWorn on:&G %s\n\r", obj->cost, obj->weight,
                       flag_string(obj->wear_flags - 1, w_flags));

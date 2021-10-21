@@ -194,7 +194,7 @@ void do_score(CHAR_DATA* ch, char* argument)
                   get_curr_dex(victim));
     else
         ch_printf(ch, "&z|  &cClan:  &g%-25.25s         &cDexterity: &g%-2d  &z|\n\r", "None", get_curr_dex(victim));
-    ch_printf(ch, "&z|  &cRace:  &g%-25.25s      &cConstitution: &g%-2d  &z|\n\r", capitalize(get_race(victim)),
+    ch_printf(ch, "&z|  &cRace:  &g%-25.25s      &cConstitution: &g%-2d  &z|\n\r", capitalize(get_race(victim)).c_str(),
               get_curr_con(victim));
     ch_printf(ch, "&z|  &cArmor: &g%-25d      &cIntelligence: &g%-2d  &z|\n\r", GET_AC(victim), get_curr_int(victim));
     ch_printf(ch, "&z|  &cHP:    %s  &cMove: %s     &cWisdom: &g%-2d  &z|\n\r", drawlife(victim->hit, victim->max_hit),
@@ -859,7 +859,7 @@ void do_oldscore(CHAR_DATA* ch, char* argument)
                 ch_printf(ch, "Spell: '%s'", skill->name);
 
                 if (ch->top_level >= 20)
-                    ch_printf(ch, " modifies %s by %d for %d rounds", affect_loc_name(paf->location), paf->modifier,
+                    ch_printf(ch, " modifies %s by %d for %d rounds", affect_loc_name(paf->location).c_str(), paf->modifier,
                               paf->duration);
 
                 send_to_char(".\n\r", ch);
@@ -911,7 +911,7 @@ void do_affected(CHAR_DATA* ch, char* argument)
         set_char_color(AT_BLUE, ch);
         send_to_char("\n\rImbued with:\n\r", ch);
         set_char_color(AT_OLDSCORE, ch);
-        ch_printf(ch, "%s\n\r", affect_bit_name(ch->affected_by));
+        ch_printf(ch, "%s\n\r", affect_bit_name(ch->affected_by).c_str());
         if (ch->top_level >= 20)
         {
             send_to_char("\n\r", ch);

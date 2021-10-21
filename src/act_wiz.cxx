@@ -1118,7 +1118,7 @@ void do_ostat(CHAR_DATA* ch, char* argument)
         send_to_char(pdesc, ch);
 
     ch_printf(ch, "&GVnum: &W%d  &GType: &W%s  &GCount: &W%d  &GGcount: &W%d\n\r", obj->pIndexData->vnum,
-              item_type_name(obj), obj->pIndexData->count, obj->count);
+              item_type_name(obj).c_str(), obj->pIndexData->count, obj->count);
 
     ch_printf(ch, "&GSerial#: &W%d  &GTopIdxSerial#: &W%d  &GTopSerial#: &W%d\n\r", obj->serial,
               obj->pIndexData->serial, cur_obj_serial);
@@ -1178,10 +1178,10 @@ void do_ostat(CHAR_DATA* ch, char* argument)
     }
 
     for (paf = obj->first_affect; paf; paf = paf->next)
-        ch_printf(ch, "&w&GAffects &W%s&G by &W%d&G. (extra)\n\r", affect_loc_name(paf->location), paf->modifier);
+        ch_printf(ch, "&w&GAffects &W%s&G by &W%d&G. (extra)\n\r", affect_loc_name(paf->location).c_str(), paf->modifier);
 
     for (paf = obj->pIndexData->first_affect; paf; paf = paf->next)
-        ch_printf(ch, "&w&GAffects &W%s&G by &W%d&G.\n\r", affect_loc_name(paf->location), paf->modifier);
+        ch_printf(ch, "&w&GAffects &W%s&G by &W%d&G.\n\r", affect_loc_name(paf->location).c_str(), paf->modifier);
 
     if ((obj->item_type == ITEM_CONTAINER) && (obj->first_content))
     {
@@ -1284,7 +1284,7 @@ void do_mstat(CHAR_DATA* ch, char* argument)
               GET_DAMROLL(victim), victim->emotional_state, victim->master ? victim->master->name : "(none)");
     ch_printf(ch, "&W&z|   &GPosition&W: %-1d                   &GWimpy&W: %-4d           &GLeader&W: %-12s   &z|\n\r",
               victim->position, victim->wimpy, victim->leader ? victim->leader->name : "(none)");
-    ch_printf(ch, "&W&z| &GAffectedBy&W: %-64s &z|\n\r", affect_bit_name(victim->affected_by));
+    ch_printf(ch, "&W&z| &GAffectedBy&W: %-64s &z|\n\r", affect_bit_name(victim->affected_by).c_str());
     ch_printf(ch, "&W&z+------------------------------------------------------------------------------+\n\r");
     if (!IS_NPC(victim))
     {
@@ -1368,8 +1368,8 @@ void do_mstat(CHAR_DATA* ch, char* argument)
     for (paf = victim->first_affect; paf; paf = paf->next)
         if ((skill = get_skilltype(paf->type)) != NULL)
             ch_printf(ch, "&W%s: &G'%s'&W modifies &G%s&W by &G%d&W for %d rounds with bits %s.\n\r",
-                      skill_tname[skill->type], skill->name, affect_loc_name(paf->location), paf->modifier,
-                      paf->duration, affect_bit_name(paf->bitvector));
+                      skill_tname[skill->type], skill->name, affect_loc_name(paf->location).c_str(), paf->modifier,
+                      paf->duration, affect_bit_name(paf->bitvector).c_str());
 
     if (!IS_NPC(victim) && victim->pcdata->release_date != 0)
         ch_printf(ch, "&RHelled until %24.24s by %s.&W\n\r", ctime(&victim->pcdata->release_date),
@@ -1492,7 +1492,7 @@ void do_oldmstat(CHAR_DATA* ch, char* argument)
         ch_printf(ch, "Pcflags: %s\n\r", flag_string(victim->pcdata->flags, pc_flags));
         ch_printf(ch, "Wanted flags: %s\n\r", flag_string(victim->pcdata->wanted_flags, planet_flags));
     }
-    ch_printf(ch, "Affected by: %s\n\r", affect_bit_name(victim->affected_by));
+    ch_printf(ch, "Affected by: %s\n\r", affect_bit_name(victim->affected_by).c_str());
     ch_printf(ch, "Speaks: %d   Speaking: %d\n\r", victim->speaks, victim->speaking);
     send_to_char("Languages: ", ch);
     for (x = 0; lang_array[x] != LANG_UNKNOWN; x++)
@@ -1528,8 +1528,8 @@ void do_oldmstat(CHAR_DATA* ch, char* argument)
     for (paf = victim->first_affect; paf; paf = paf->next)
         if ((skill = get_skilltype(paf->type)) != NULL)
             ch_printf(ch, "%s: '%s' modifies %s by %d for %d rounds with bits %s.\n\r", skill_tname[skill->type],
-                      skill->name, affect_loc_name(paf->location), paf->modifier, paf->duration,
-                      affect_bit_name(paf->bitvector));
+                      skill->name, affect_loc_name(paf->location).c_str(), paf->modifier, paf->duration,
+                      affect_bit_name(paf->bitvector).c_str());
     return;
 }
 
@@ -1591,7 +1591,7 @@ void do_mfind(CHAR_DATA* ch, char* argument)
             if (fAll || nifty_is_name(arg, pMobIndex->player_name))
             {
                 nMatch++;
-                pager_printf(ch, "[%5d] %s\n\r", pMobIndex->vnum, capitalize(pMobIndex->short_descr));
+                pager_printf(ch, "[%5d] %s\n\r", pMobIndex->vnum, capitalize(pMobIndex->short_descr).c_str());
             }
 
     if (nMatch)
@@ -1661,7 +1661,7 @@ void do_ofind(CHAR_DATA* ch, char* argument)
             if (fAll || nifty_is_name(arg, pObjIndex->name))
             {
                 nMatch++;
-                pager_printf(ch, "[%5d] %s\n\r", pObjIndex->vnum, capitalize(pObjIndex->short_descr));
+                pager_printf(ch, "[%5d] %s\n\r", pObjIndex->vnum, capitalize(pObjIndex->short_descr).c_str());
             }
 
     if (nMatch)
@@ -3972,7 +3972,7 @@ void do_loadup(CHAR_DATA* ch, char* argument)
         d->character->retran = old_room_vnum;
         d->character = NULL;
         DISPOSE(d);
-        ch_printf(ch, "Player %s loaded from room %d.\n\r", capitalize(name), old_room_vnum);
+        ch_printf(ch, "Player %s loaded from room %d.\n\r", capitalize(name).c_str(), old_room_vnum);
         sprintf_s(buf, "%s appears from nowhere, eyes glazed over.\n\r", capitalize(name).c_str());
         act(AT_IMMORT, buf, ch, NULL, NULL, TO_ROOM);
         send_to_char("Done.\n\r", ch);

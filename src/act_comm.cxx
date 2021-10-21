@@ -2811,12 +2811,12 @@ void do_group(CHAR_DATA* ch, char* argument)
                 set_char_color(AT_DGREEN, ch);
                 if (IS_AFFECTED(gch, AFF_POSSESS))
                     ch_printf(ch, "[%2d %s] %-16s %4s/%4s hp %4s/%4s mv %5s xp\n\r", gch->top_level,
-                              IS_NPC(gch) ? "Mob" : race_table[gch->race].race_name, capitalize(PERS(gch, ch)), "????",
+                              IS_NPC(gch) ? "Mob" : race_table[gch->race].race_name, capitalize(PERS(gch, ch)).c_str(), "????",
                               "????", "????", "????", "?????");
 
                 else
                     ch_printf(ch, "[%2d %s] %-16s %4d/%4d hp %4d/%4d mv\n\r", gch->top_level,
-                              IS_NPC(gch) ? "Mob" : race_table[gch->race].race_name, capitalize(PERS(gch, ch)),
+                              IS_NPC(gch) ? "Mob" : race_table[gch->race].race_name, capitalize(PERS(gch, ch)).c_str(),
                               gch->hit, gch->max_hit, gch->move, gch->max_move);
             }
         }
@@ -3028,7 +3028,7 @@ void do_gtell(CHAR_DATA* ch, char* argument)
                           color_str(AT_GTELL, gch), argument);
             else
                 ch_printf(gch, "&G&g(&G&W%sGroup Tell: %s&g)&G&W %s%s\n\r", color_str(AT_GTELL, gch), PERS(ch, gch),
-                          color_str(AT_GTELL, gch), scramble(argument, ch->speaking));
+                          color_str(AT_GTELL, gch), scramble(argument, ch->speaking).c_str());
         }
     }
 

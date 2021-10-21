@@ -1461,22 +1461,22 @@ void do_open(CHAR_DATA* ch, char* argument)
         /* 'open object' */
         if (obj->item_type != ITEM_CONTAINER)
         {
-            ch_printf(ch, "%s isn't a container.\n\r", capitalize(obj->short_descr));
+            ch_printf(ch, "%s isn't a container.\n\r", capitalize(obj->short_descr).c_str());
             return;
         }
         if (!IS_SET(obj->value[1], CONT_CLOSED))
         {
-            ch_printf(ch, "%s is already open.\n\r", capitalize(obj->short_descr));
+            ch_printf(ch, "%s is already open.\n\r", capitalize(obj->short_descr).c_str());
             return;
         }
         if (!IS_SET(obj->value[1], CONT_CLOSEABLE))
         {
-            ch_printf(ch, "%s cannot be opened or closed.\n\r", capitalize(obj->short_descr));
+            ch_printf(ch, "%s cannot be opened or closed.\n\r", capitalize(obj->short_descr).c_str());
             return;
         }
         if (IS_SET(obj->value[1], CONT_LOCKED))
         {
-            ch_printf(ch, "%s is locked.\n\r", capitalize(obj->short_descr));
+            ch_printf(ch, "%s is locked.\n\r", capitalize(obj->short_descr).c_str());
             return;
         }
 
@@ -1551,17 +1551,17 @@ void do_close(CHAR_DATA* ch, char* argument)
         /* 'close object' */
         if (obj->item_type != ITEM_CONTAINER)
         {
-            ch_printf(ch, "%s isn't a container.\n\r", capitalize(obj->short_descr));
+            ch_printf(ch, "%s isn't a container.\n\r", capitalize(obj->short_descr).c_str());
             return;
         }
         if (IS_SET(obj->value[1], CONT_CLOSED))
         {
-            ch_printf(ch, "%s is already closed.\n\r", capitalize(obj->short_descr));
+            ch_printf(ch, "%s is already closed.\n\r", capitalize(obj->short_descr).c_str());
             return;
         }
         if (!IS_SET(obj->value[1], CONT_CLOSEABLE))
         {
-            ch_printf(ch, "%s cannot be opened or closed.\n\r", capitalize(obj->short_descr));
+            ch_printf(ch, "%s cannot be opened or closed.\n\r", capitalize(obj->short_descr).c_str());
             return;
         }
 

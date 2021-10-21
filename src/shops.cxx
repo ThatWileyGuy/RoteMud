@@ -620,7 +620,7 @@ void do_list(CHAR_DATA* ch, char* argument)
                         ch_printf(ch, "%s[Price] {ref} Item\n\r", color_str(AT_LIST, ch));
                     }
                     ch_printf(ch, "%s[%5d] {%3d} %s%s%s.\n\r", color_str(AT_LIST, ch), cost, oref,
-                              capitalize(obj->short_descr), color_str(AT_LIST, ch),
+                              capitalize(obj->short_descr).c_str(), color_str(AT_LIST, ch),
                               IS_SET(obj->extra_flags, ITEM_HUTT_SIZE)
                                   ? " (hutt size)"
                                   : (IS_SET(obj->extra_flags, ITEM_LARGE_SIZE)

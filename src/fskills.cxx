@@ -2074,7 +2074,7 @@ void fskill_fhelp(CHAR_DATA* ch, char* argument)
     for (x = 0; x < (70 - len) / 2; x++)
         send_to_char(" ", ch);
     x += len;
-    ch_printf(ch, "&G&W%s\r\n", capitalize(strrep(fhelp->name, "_", " ")));
+    ch_printf(ch, "&G&W%s\r\n", capitalize(strrep(fhelp->name, "_", " ")).c_str());
     draw_force_line_rev(ch, 55);
     send_to_char("\r\n", ch);
     send_to_char(force_parse_string(ch, NULL, fhelp->desc), ch);

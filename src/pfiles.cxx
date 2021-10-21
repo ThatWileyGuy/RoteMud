@@ -651,7 +651,7 @@ void show_pfiles(CHAR_DATA* ch, char* x)
     char directory_name[100];
     sh_int count = 0;
 
-    ch_printf(ch, "&w&W&W&CPfiles Starting With %s\n\r", capitalize(x));
+    ch_printf(ch, "&w&W&W&CPfiles Starting With %s\n\r", capitalize(x).c_str());
     ch_printf(ch, "&B-----------------------\n\r");
     sprintf_s(directory_name, "%s%s", PLAYER_DIR, x);
 
@@ -671,7 +671,7 @@ void show_pfiles(CHAR_DATA* ch, char* x)
     }
     else
     {
-        ch_printf(ch, "&WTotal %s Pfiles: &R%d&w&W&W\n\r", capitalize(x), count);
+        ch_printf(ch, "&WTotal %s Pfiles: &R%d&w&W&W\n\r", capitalize(x).c_str(), count);
     }
     ch_printf(ch, "&B-----------------------");
     return;
