@@ -842,71 +842,66 @@ void Connection::setContext(ConnectionContext context)
 void Connection::scanAndSendCommand(bool newPulse)
 {
     if (newPulse)
+    {
         m_commandThisPulse = false;
+    }
+    else if (m_commandThisPulse)
+    {
+        return;
+    }
 
     if (m_inputBuffer.empty())
         return;
 
-    if (m_buffered)
+    size_t lineEnd = 0;
+    for (lineEnd = 0; lineEnd < m_inputBuffer.size(); lineEnd++)
     {
-        if (m_commandThisPulse)
-            return;
+        char c = m_inputBuffer[lineEnd];
+        if (c == '\n' || c == '\r')
+            break;
 
-        size_t lineEnd = 0;
-        for (lineEnd = 0; lineEnd < m_inputBuffer.size(); lineEnd++)
-        {
-            char c = m_inputBuffer[lineEnd];
-            if (c == '\n' || c == '\r')
-                break;
-
-            assert(c != '\0');
-        }
-
-        if (lineEnd == m_inputBuffer.size())
-        {
-            // no line ending, so no complete command
-            return;
-        }
-
-        std::vector<char> stringBuf(lineEnd + 2, '\0');
-
-        // old telnet clients still like to send the backspace character - handle it here
-        size_t outputPos = 0;
-        for (size_t inputPos = 0; inputPos < lineEnd; inputPos++)
-        {
-            char inputChar = m_inputBuffer[inputPos];
-
-            if (inputChar == '\b' && outputPos > 0)
-                outputPos--;
-            else if (isascii(inputChar) && isprint(inputChar))
-                stringBuf[outputPos++] = inputChar;
-        }
-
-        if (outputPos == 0)
-        {
-            stringBuf[outputPos] = ' ';
-            outputPos++;
-        }
-
-        stringBuf[outputPos] = '\0';
-        // TODO repeat protection, '!' last command substitution need to be done on the engine side
-
-        std::string result(&stringBuf[0]);
-
-        while (m_inputBuffer[lineEnd] == '\n' || m_inputBuffer[lineEnd] == '\r')
-            lineEnd++;
-
-        m_inputBuffer.erase_begin(lineEnd);
-
-        // now dispatch
-        m_manager.sendCommandToGame(m_context, result);
-        m_commandThisPulse = true;
+        assert(c != '\0');
     }
-    else
+
+    if (lineEnd == m_inputBuffer.size())
     {
-        m_manager.sendCommandToGame(m_context, std::string(m_inputBuffer.begin(), m_inputBuffer.end()));
-        m_inputBuffer.clear();
+        // no line ending, so no complete command
+        return;
     }
+
+    std::vector<char> stringBuf(lineEnd + 2, '\0');
+
+    // old telnet clients still like to send the backspace character - handle it here
+    size_t outputPos = 0;
+    for (size_t inputPos = 0; inputPos < lineEnd; inputPos++)
+    {
+        char inputChar = m_inputBuffer[inputPos];
+
+        if (inputChar == '\b' && outputPos > 0)
+            outputPos--;
+        else if (isascii(inputChar) && isprint(inputChar))
+            stringBuf[outputPos++] = inputChar;
+    }
+
+    if (outputPos == 0)
+    {
+        stringBuf[outputPos] = ' ';
+        outputPos++;
+    }
+
+    stringBuf[outputPos] = '\0';
+    // TODO repeat protection, '!' last command substitution need to be done on the engine side
+
+    std::string result(&stringBuf[0]);
+
+    while (m_inputBuffer[lineEnd] == '\n' || m_inputBuffer[lineEnd] == '\r')
+        lineEnd++;
+
+    m_inputBuffer.erase_begin(lineEnd);
+
+    // now dispatch
+    m_manager.sendCommandToGame(m_context, result);
+    m_commandThisPulse = true;
 }
 
 void Connection::write(std::string_view data)
@@ -941,16 +936,6 @@ void Connection::close()
 void Connection::flushAndClose()
 {
     startFlushingAndClose();
-}
-
-void Connection::setLineBuffered(bool buffered)
-{
-    m_buffered = buffered;
-
-    if (!m_buffered)
-    {
-        scanAndSendCommand();
-    }
 }
 
 const std::string& Connection::getHostname() const

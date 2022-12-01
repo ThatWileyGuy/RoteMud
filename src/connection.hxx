@@ -80,7 +80,6 @@ class IOManager
 class Connection
 {
   private:
-    bool m_buffered = true;
 
   protected:
     enum class State
@@ -164,7 +163,6 @@ class Connection
     void close();
     // try to flush buffered data and then close the connection
     void flushAndClose();
-    void setLineBuffered(bool buffered);
 
     const std::string& getHostname() const;
     const std::string& getIpAddress() const;

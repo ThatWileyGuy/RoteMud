@@ -678,19 +678,8 @@ struct DESCRIPTOR_DATA;
 
 class Shell
 {
-  private:
-    std::unique_ptr<Shell> m_parent;
-    const bool m_isLineBuffered;
-
-  protected:
-    std::unique_ptr<Shell> restoreParentShell(DESCRIPTOR_DATA& d);
-
   public:
-    Shell(std::unique_ptr<Shell> parent, DESCRIPTOR_DATA& d, bool lineBuffered);
-
     virtual void handleCommand(DESCRIPTOR_DATA& desc, const std::string& command) = 0;
-
-    virtual ~Shell();
 };
 
 /*
@@ -700,7 +689,7 @@ struct DESCRIPTOR_DATA
 {
     DESCRIPTOR_DATA* snoop_by;
     std::shared_ptr<Connection> connection;
-    std::unique_ptr<Shell> shell;
+    Shell* shell;
     CHAR_DATA* character;
     CHAR_DATA* original;
     sh_int connected;
