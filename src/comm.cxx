@@ -298,10 +298,8 @@ ConnectionContext handle_new_unauthenticated_connection(std::shared_ptr<Connecti
     return dnew;
 }
 
-void handle_command(ConnectionContext context, const std::string& command)
+void handle_command(std::shared_ptr<DESCRIPTOR_DATA> d, const std::string& command)
 {
-    auto d = std::static_pointer_cast<DESCRIPTOR_DATA>(context);
-
     // TODO close the socket instead of asserting
     assert((command.size() + 1) < MAX_INPUT_LENGTH);
     char cmdline[MAX_INPUT_LENGTH];
@@ -340,6 +338,13 @@ void handle_command(ConnectionContext context, const std::string& command)
             break;
         }
     }
+}
+
+void handle_command(ConnectionContext context, const std::string& command)
+{
+    auto d = std::static_pointer_cast<DESCRIPTOR_DATA>(context);
+
+    return handle_command(d, command);
 }
 
 void handle_window_size_change(ConnectionContext context, int width, int height)
@@ -701,25 +706,6 @@ char* smaug_crypt(const char* pwd)
     }
     return (passwd);
 }
-
-class NannyShell : public Shell
-{
-  private:
-    DESCRIPTOR_DATA& m_descriptor;
-
-
-
-  public:
-    NannyShell(DESCRIPTOR_DATA& d) : Shell(nullptr, d, true), m_descriptor(d)
-    {
-    }
-
-    void handleCommand(DESCRIPTOR_DATA& d, const std::string& command) override
-    {
-    }
-
-
-};
 
 /*
  * Deal with sockets that haven't logged in yet.
