@@ -603,7 +603,7 @@ class SshConnection : public Connection
                                                                                       is_stderr);
             };
 
-            m_channelCallbacks.channel_write_wontblock_function = [](ssh_session, ssh_channel, size_t bytes,
+            m_channelCallbacks.channel_write_wontblock_function = [](ssh_session, ssh_channel, uint32_t bytes,
                                                                      void* userdata) {
                 auto connection = reinterpret_cast<SshConnection*>(userdata);
                 connection->m_writableBytes = bytes;
