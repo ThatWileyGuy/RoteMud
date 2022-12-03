@@ -131,16 +131,13 @@ void display_prompt(std::shared_ptr<DESCRIPTOR_DATA> d);
 int make_color_sequence(const char* col, char* buf, DESCRIPTOR_DATA* d);
 int make_color_sequence_desc(const char* col, char* buf, DESCRIPTOR_DATA* d);
 void handle_pager_input(std::shared_ptr<DESCRIPTOR_DATA> d, char* argument);
-void handle_command(ConnectionContext context, const std::string& line);
-void handle_window_size_change(ConnectionContext context, int width, int height);
-ConnectionContext handle_new_unauthenticated_connection(std::shared_ptr<Connection> connection);
+void handle_new_unauthenticated_connection(std::shared_ptr<Connection> connection);
 bool authenticate_user(const std::string& username, const std::string& password);
 std::vector<Pubkey> get_public_keys_for_user(const std::string& username);
-ConnectionContext handle_new_authenticated_connection(std::shared_ptr<Connection> connection,
-                                                            const std::string& username);
-void connection_closed(ConnectionContext context);
+void handle_new_authenticated_connection(std::shared_ptr<Connection> connection, const std::string& username);
 void close_socket(DESCRIPTOR_DATA* dclose, bool startedExternally, bool force);
 void send_prompt(DESCRIPTOR_DATA* d);
+void run_command_loop(std::shared_ptr<DESCRIPTOR_DATA> d);
 
 void mail_count(CHAR_DATA* ch);
 
@@ -221,8 +218,9 @@ int gamemain(int argc, char** argv)
     if (!fCopyOver) /* We have already the port if copyover'ed */
     {
         IOManagerCallbacks callbacks = {
-            &handle_command,           &handle_window_size_change, &handle_new_unauthenticated_connection, &authenticate_user,
-            &get_public_keys_for_user, &handle_new_authenticated_connection,   &connection_closed};
+            &handle_new_unauthenticated_connection, &authenticate_user,
+            &get_public_keys_for_user, &handle_new_authenticated_connection
+        };
 
         io_manager.emplace(callbacks, telnet_port, ssh_port);
         if (!io_manager.has_value())
@@ -249,7 +247,7 @@ int gamemain(int argc, char** argv)
     return 0;
 }
 
-ConnectionContext handle_new_unauthenticated_connection(std::shared_ptr<Connection> connection)
+void handle_new_unauthenticated_connection(std::shared_ptr<Connection> connection)
 {
     auto dnew = std::make_shared<DESCRIPTOR_DATA>();
 
@@ -295,7 +293,7 @@ ConnectionContext handle_new_unauthenticated_connection(std::shared_ptr<Connecti
         save_sysdata(sysdata);
     }
 
-    return dnew;
+    return run_command_loop(dnew);
 }
 
 void handle_command(std::shared_ptr<DESCRIPTOR_DATA> d, const std::string& command)
@@ -340,16 +338,29 @@ void handle_command(std::shared_ptr<DESCRIPTOR_DATA> d, const std::string& comma
     }
 }
 
-void handle_command(ConnectionContext context, const std::string& command)
+boost::asio::awaitable<void> command_loop(std::shared_ptr<DESCRIPTOR_DATA> d)
 {
-    auto d = std::static_pointer_cast<DESCRIPTOR_DATA>(context);
+    co_await d->connection->flushOutput();
 
-    return handle_command(d, command);
+    while (true)
+    {
+        auto line = co_await d->connection->readLine();
+
+        handle_command(d, line);
+
+        if (d->fcommand)
+        {
+            send_prompt(d.get());
+            d->fcommand = false;
+        }
+
+        co_await d->connection->flushOutput();
+    }
 }
 
-void handle_window_size_change(ConnectionContext context, int width, int height)
+void run_command_loop(std::shared_ptr<DESCRIPTOR_DATA> d)
 {
-    log("window size change to %d %d", LOG_COMM, sysdata.log_level, width, height);
+    boost::asio::co_spawn(d->connection->getIOContext(), command_loop(d), boost::asio::detached);
 }
 
 /*
@@ -431,12 +442,6 @@ void game_loop()
             }
             else
             {
-                if (d->fcommand)
-                {
-                    send_prompt(d.get());
-                    d->fcommand = false;
-                }
-
                 if (d->character && d->character->wait > 0)
                 {
                     --d->character->wait;
@@ -493,16 +498,6 @@ DESCRIPTOR_DATA::~DESCRIPTOR_DATA()
 {
     STRFREE(user); /* identd */
     DISPOSE(pagebuf);
-}
-
-void connection_closed(ConnectionContext context)
-{
-    std::shared_ptr<DESCRIPTOR_DATA> d = std::static_pointer_cast<DESCRIPTOR_DATA>(context);
-
-    if (d == nullptr)
-        return;
-
-    close_socket(d.get(), true, true);
 }
 
 void close_socket(DESCRIPTOR_DATA* dclose, bool force)
@@ -1932,7 +1927,7 @@ std::vector<Pubkey> get_public_keys_for_user(const std::string& rawName)
     return {};
 }
 
-std::shared_ptr<void> handle_new_authenticated_connection(std::shared_ptr<Connection> connection, const std::string& rawName)
+void handle_new_authenticated_connection(std::shared_ptr<Connection> connection, const std::string& rawName)
 {
     std::string name = rawName;
     name[0] = UPPER(name[0]);
@@ -1990,15 +1985,15 @@ std::shared_ptr<void> handle_new_authenticated_connection(std::shared_ptr<Connec
         if (dnew->character && dnew->character->desc)
             dnew->character->desc = NULL;
         close_socket(dnew, false);
-        return nullptr;
+        return;
     }
     if (chk == true)
-        return dnew;
+        return run_command_loop(dnew);
 
     if (check_multi(dnew, ch->name))
     {
         close_socket(dnew, false);
-        return nullptr;
+        return;
     }
 
     sprintf_s(buf, ch->name);
@@ -2049,7 +2044,7 @@ std::shared_ptr<void> handle_new_authenticated_connection(std::shared_ptr<Connec
                 ch->force_skill[skill->index] = 50;
     }
 
-    return dnew;
+    return run_command_loop(dnew);
 }
 
 /*

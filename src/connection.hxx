@@ -22,25 +22,17 @@ struct Pubkey
     std::string key;
 };
 
-typedef std::shared_ptr<void> ConnectionContext;
-
 struct IOManagerCallbacks
 {
-    // Notification of a new command from a connection. Only delivered once per call to IOManager::runUntil
-    void (*commandReceived)(ConnectionContext context, const std::string& line);
-    // Notification of a window size change
-    void (*windowChangedSize)(ConnectionContext context, int width, int height);
     // Notification of a new unauthenticated connection, must return the desired context pointer for future calls.
-    ConnectionContext (*newUnauthenticatedConnection)(std::shared_ptr<Connection> connection);
+    void (*newUnauthenticatedConnection)(std::shared_ptr<Connection> connection);
     // Request to check if the username/password match a known user
     bool (*authenticateUser)(const std::string& username, const std::string& password);
     // Request to retrieve the public keys of a known user
     std::vector<Pubkey> (*getPublicKeysForUser)(const std::string& username);
     // Notification of a new authenticated connection, with authenticated username. Must return the desired context
     // pointer for future calls.
-    ConnectionContext (*newAuthenticatedConnection)(std::shared_ptr<Connection> connection,
-                                                                           const std::string& username);
-    void (*connectionClosed)(ConnectionContext context);
+    void (*newAuthenticatedConnection)(std::shared_ptr<Connection> connection, const std::string& username);
 };
 
 class TelnetConnection;
@@ -67,9 +59,6 @@ class IOManager
     friend class SshConnection;
     void notifyGameUnauthenticatedUserConnected(Connection& connection);
     void notifyGameAuthenticatedUserConnected(Connection& connection, const std::string& user);
-    void notifyGameWindowSizeChanged(ConnectionContext context, int width, int height);
-    void sendCommandToGame(ConnectionContext context, const std::string& command);
-    void notifyGameConnectionClosed(ConnectionContext context);
     void removeConnection(Connection* connection);
 
   public:
@@ -80,7 +69,6 @@ class IOManager
 class Connection
 {
   private:
-
   protected:
     enum class State
     {
@@ -90,7 +78,6 @@ class Connection
     };
 
     State m_state = State::Open;
-    ConnectionContext m_context = nullptr;
     IOManager& m_manager;
     std::unique_ptr<boost::asio::ip::tcp::socket> m_socket;
     boost::circular_buffer<char> m_inputBuffer;
@@ -98,18 +85,9 @@ class Connection
 
     std::string m_hostname;
     std::string m_address;
-    bool m_commandThisPulse = false;
-    bool m_writerRunning = false;
-    bool m_readerRunning = false;
+    bool m_waitingForIO = false;
 
     friend class IOManager;
-    void setContext(ConnectionContext context);
-
-    void scanAndSendCommand(bool newPulse = false);
-
-    virtual void startWriting() = 0;
-    virtual void startClosing() = 0;
-    virtual void startFlushingAndClose() = 0;
 
     Connection(IOManager& ioManager, std::unique_ptr<boost::asio::ip::tcp::socket> socket)
         : m_manager(ioManager), m_socket(std::move(socket)), m_inputBuffer(MAX_INBUF_SIZE),
@@ -131,16 +109,6 @@ class Connection
         m_manager.notifyGameAuthenticatedUserConnected(*this, user);
     }
 
-    void notifyGameWindowSizeChanged(int width, int height)
-    {
-        m_manager.notifyGameWindowSizeChanged(m_context, width, height);
-    }
-
-    void notifyGameConnectionClosed()
-    {
-        m_manager.notifyGameConnectionClosed(m_context);
-    }
-
     void removeConnection()
     {
         m_manager.removeConnection(this);
@@ -159,12 +127,19 @@ class Connection
   public:
     // send data to the client (via a buffer)
     void write(std::string_view data);
-    // close the connection immediately
-    void close();
     // try to flush buffered data and then close the connection
-    void flushAndClose();
+    boost::asio::awaitable<void> flushAndClose();
 
     const std::string& getHostname() const;
     const std::string& getIpAddress() const;
     int getPort() const;
+
+    virtual boost::asio::awaitable<std::string> readLine() = 0;
+    virtual boost::asio::awaitable<void> flushOutput() = 0;
+    virtual boost::asio::awaitable<void> close() = 0;
+
+    boost::asio::io_context& getIOContext() const
+    {
+        return m_manager.m_ioContext;
+    }
 };

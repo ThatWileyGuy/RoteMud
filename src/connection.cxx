@@ -19,169 +19,122 @@
 class TelnetConnection : public Connection
 {
   private:
-    std::array<char, MAX_INPUT_LENGTH> m_readBuffer;
-    std::array<char, MAX_OUTPUT_SIZE> m_writeBuffer;
 
-    void startWriting() override
+    boost::asio::awaitable<void> readSome()
     {
-        assert(m_state != State::Closed);
-        assert(!m_outputBuffer.empty());
-        assert(m_writerRunning == false);
-
-        const size_t bytesToSend = std::min(m_writeBuffer.size(), m_outputBuffer.size());
-
-        for (size_t i = 0; i < bytesToSend; i++)
-        {
-            m_writeBuffer[i] = m_outputBuffer[i];
-        }
-
-        m_outputBuffer.erase_begin(bytesToSend);
-
-        m_writerRunning = true;
-
-        m_socket->async_write_some(
-            boost::asio::buffer(&m_writeBuffer[0], m_writeBuffer.size()),
-            [this, size = m_writeBuffer.size()](const boost::system::error_code& error, size_t transferred) {
-                this->finishWriting(error, size, transferred);
-            });
-    }
-
-    void finishWriting(const boost::system::error_code& error, size_t attempted, size_t transferred)
-    {
-        assert(m_writerRunning == true);
-
-        m_writerRunning = false;
-
-        // bail if the socket closed but keep writing if we're flushing
-        if (m_state == State::Closed)
-        {
-            finishClosing();
-            return;
-        }
-
-        if (error)
-        {
-            std::string message = error.message();
-            startClosing();
-            notifyGameConnectionClosed();
-            commlog("write failure: %s", message.c_str());
-            return;
-        }
-
-        if (transferred < attempted)
-        {
-            const size_t stillToWrite = attempted - transferred;
-            std::memmove(&m_writeBuffer[0], &m_writeBuffer[transferred], stillToWrite);
-
-            m_writerRunning = true;
-
-            m_socket->async_write_some(
-                boost::asio::buffer(&m_writeBuffer[0], stillToWrite),
-                [this, stillToWrite](const boost::system::error_code& error, size_t transferred) {
-                    this->finishWriting(error, stillToWrite, transferred);
-                });
-
-            return;
-        }
-
-        if (!m_outputBuffer.empty())
-        {
-            startWriting();
-        }
-        else if (m_state == State::Flushing)
-        {
-            // we're done flushing - time to close down
-            startClosing();
-            finishClosing();
-        }
-    }
-
-    void startReading()
-    {
+        std::array<char, MAX_INPUT_LENGTH> readBuffer;
         assert(m_state == State::Open);
-        assert(m_readerRunning == false);
+        assert(m_waitingForIO == false);
 
-        m_readerRunning = true;
+        m_waitingForIO = true;
 
-        m_socket->async_read_some(boost::asio::buffer(&m_readBuffer[0], m_readBuffer.size()),
-                                  [this](const boost::system::error_code& error, size_t transferred) {
-                                      this->finishReading(error, transferred);
-                                  });
-    }
+        size_t bytesRead = co_await m_socket->async_read_some(
+            boost::asio::buffer(&readBuffer[0], readBuffer.size()),
+            boost::asio::use_awaitable);
 
-    void finishReading(const boost::system::error_code& error, size_t transferred)
-    {
-        assert(m_readerRunning);
+        // TODO error handling
+        // TODO what happens if we overflow m_inputBuffer
+        m_inputBuffer.insert(m_inputBuffer.end(), &readBuffer[0], &readBuffer[bytesRead]);
 
-        m_readerRunning = false;
-
-        // if the socket is going away, go ahead and just stop
-        if (m_state != State::Open)
-        {
-            finishClosing();
-            return;
-        }
-
-        if (error)
-        {
-            std::string message = error.message();
-            commlog("read failure: %s", message.c_str());
-            startClosing(); // if the socket has an error, flushing it probably won't work anyway
-            notifyGameConnectionClosed();
-            return;
-        }
-
-        if (transferred > (m_inputBuffer.capacity() - m_inputBuffer.size()))
-        {
-            commlog("read buffer overflow");
-            write("Too much input. Bye!\r\n");
-            flushAndClose();
-            notifyGameConnectionClosed();
-            return;
-        }
-
-        m_inputBuffer.insert(m_inputBuffer.end(), &m_readBuffer[0], &m_readBuffer[transferred]);
-
-        startReading();
-
-        scanAndSendCommand();
-    }
-
-    void finishClosing()
-    {
-        assert(!m_writerRunning);
-        assert(!m_readerRunning);
-        assert(m_context == nullptr);
-
-        if (m_state == State::Flushing)
-        {
-            startClosing();
-        }
-
-        removeConnection();
+        m_waitingForIO = false;
     }
 
   public:
     TelnetConnection(IOManager& ioManager, std::unique_ptr<boost::asio::ip::tcp::socket> socket)
         : Connection(ioManager, std::move(socket))
     {
-        // nothing fancy for telnet - go straight into reading
-        startReading();
     }
 
-    void startClosing() override
+    boost::asio::awaitable<std::string> readLine() override
     {
+        size_t lineEnd = 0;
+
+        while (true)
+        {
+            for (; lineEnd < m_inputBuffer.size(); lineEnd++)
+            {
+                char c = m_inputBuffer[lineEnd];
+                if (c == '\n' || c == '\r')
+                    break;
+
+                assert(c != '\0');
+            }
+
+            if (lineEnd == m_inputBuffer.size())
+            {
+                co_await readSome();
+                continue;
+            }
+
+            std::vector<char> stringBuf(lineEnd + 2, '\0');
+
+            // old telnet clients still like to send the backspace character - handle it here
+            size_t outputPos = 0;
+            for (size_t inputPos = 0; inputPos < lineEnd; inputPos++)
+            {
+                char inputChar = m_inputBuffer[inputPos];
+
+                if (inputChar == '\b' && outputPos > 0)
+                    outputPos--;
+                else if (isascii(inputChar) && isprint(inputChar))
+                    stringBuf[outputPos++] = inputChar;
+            }
+
+            if (outputPos == 0)
+            {
+                stringBuf[outputPos] = ' ';
+                outputPos++;
+            }
+
+            stringBuf[outputPos] = '\0';
+            // TODO repeat protection, '!' last command substitution need to be done on the engine side
+
+            std::string result(&stringBuf[0]);
+
+            while (m_inputBuffer[lineEnd] == '\n' || m_inputBuffer[lineEnd] == '\r')
+                lineEnd++;
+
+            m_inputBuffer.erase_begin(lineEnd);
+
+            co_return result;
+        }
+    }
+
+    boost::asio::awaitable<void> flushOutput() override
+    {
+        std::array<char, MAX_OUTPUT_SIZE> writeBuffer;
+
         assert(m_state != State::Closed);
-        m_state = State::Closed;
-        m_context = nullptr;
-        m_socket->close();
+        assert(m_waitingForIO == false);
+
+        m_waitingForIO = true;
+
+        while (!m_outputBuffer.empty())
+        {
+            const size_t bytesToSend = std::min(writeBuffer.size(), m_outputBuffer.size());
+
+            for (size_t i = 0; i < bytesToSend; i++)
+            {
+                writeBuffer[i] = m_outputBuffer[i];
+            }
+
+            m_outputBuffer.erase_begin(bytesToSend);
+
+            // TODO error handling
+            const size_t written = co_await m_socket->async_write_some(
+                boost::asio::buffer(&writeBuffer[0], writeBuffer.size()), boost::asio::use_awaitable);
+
+            m_outputBuffer.erase_begin(written);
+        }
+
+        m_waitingForIO = false;
     }
 
-    void startFlushingAndClose() override
+    boost::asio::awaitable<void> close() override
     {
-        assert(m_state == State::Open);
-        m_state = State::Flushing;
-        m_context = nullptr;
+        m_socket->close();
+
+        co_return;
     }
 };
 
@@ -196,113 +149,98 @@ class SshConnection : public Connection
     size_t m_writableBytes = 0;
     std::array<char, MAX_OUTPUT_SIZE> m_writeBuffer;
     std::string m_authenticatedUsername;
+    bool m_shellRequested = false;
 
-    void continueKeyExchange(const boost::system::error_code& error)
+    boost::asio::awaitable<void> runKeyExchange()
     {
-        assert(m_readerRunning && !m_writerRunning);
+        assert(!m_waitingForIO);
 
-        m_readerRunning = false;
+        m_waitingForIO = true;
 
-        if (error)
+        while (true)
         {
-            std::string message = error.message();
-            commlog("SSH connection error during key exchange: %s", message.c_str());
-            startClosing();
-            return;
+            co_await m_socket->async_wait(boost::asio::ip::tcp::socket::wait_read, boost::asio::use_awaitable);
+
+            // TODO error handling
+            /*
+            if (error)
+            {
+                std::string message = error.message();
+                commlog("SSH connection error during key exchange: %s", message.c_str());
+                startClosing();
+                return;
+            }
+            */
+
+            int ret = ssh_handle_key_exchange(m_session);
+
+            if (ret == SSH_AGAIN)
+            {
+                commlog("continuing SSH key exchange...");
+
+                continue;
+
+            }
+            else if (ret == SSH_OK)
+            {
+
+                assert(ret == SSH_OK);
+
+                commlog("completed key exchange");
+
+                ssh_set_auth_methods(m_session, SSH_AUTH_METHOD_PASSWORD | SSH_AUTH_METHOD_PUBLICKEY);
+                ssh_event_add_session(m_loop, m_session);
+
+                m_waitingForIO = false;
+
+                while (!m_shellRequested)
+                {
+                    co_await doIO(IOType::Read);
+                }
+
+                notifyGameAuthenticatedUserConnected(m_authenticatedUsername);
+                co_return;
+            }
+            else
+            {
+                assert(ret = SSH_ERROR);
+                commlog("SSH key exchange failed: %s", ssh_get_error(m_session));
+                commlog("SSH error code: %d", ssh_get_error_code(m_session));
+                close();
+                co_return;
+            }
         }
 
-        int ret = ssh_handle_key_exchange(m_session);
-
-        if (ret == SSH_ERROR)
-        {
-            commlog("SSH key exchange failed: %s", ssh_get_error(m_session));
-            commlog("SSH error code: %d", ssh_get_error_code(m_session));
-            startClosing();
-            return;
-        }
-        else if (ret == SSH_AGAIN)
-        {
-            commlog("continuing SSH key exchange...");
-
-            m_readerRunning = true;
-
-            m_socket->async_wait(boost::asio::ip::tcp::socket::wait_read,
-                                 boost::bind(&SshConnection::continueKeyExchange, this, _1));
-            return;
-        }
-        else
-        {
-            assert(ret == SSH_OK);
-
-            commlog("completed key exchange");
-
-            ssh_set_auth_methods(m_session, SSH_AUTH_METHOD_PASSWORD | SSH_AUTH_METHOD_PUBLICKEY);
-            ssh_event_add_session(m_loop, m_session);
-
-            m_readerRunning = true;
-            normalLoop(boost::system::error_code(), LoopType::Read);
-            m_writerRunning = true;
-            normalLoop(boost::system::error_code(), LoopType::Write);
-            return;
-        }
+        m_waitingForIO = false;
     }
 
-    enum class LoopType
+    enum class IOType
     {
         Read,
         Write
     };
 
-    void normalLoop(const boost::system::error_code& error, LoopType loopType)
+    boost::asio::awaitable<void> doIO(IOType loopType)
     {
-        bool& loopRunning = (loopType == LoopType::Read) ? m_readerRunning : m_writerRunning;
+        assert(!m_waitingForIO);
+        m_waitingForIO = true;
 
-        // This is a bit nasty - because this function runs when Boost thinks the socket is readable or writable
-        // but we can't tell libssh whether it should be reading or writing, we may have finished some work
-        // when we were not supposed to be doing it.
-        if (!loopRunning)
-            return;
+        const auto waitType = (loopType == IOType::Read) ? boost::asio::ip::tcp::socket::wait_read
+                                                     : boost::asio::ip::tcp::socket::wait_write;
 
-        if (m_state == State::Closed || (loopType == LoopType::Read && m_state == State::Flushing))
-        {
-            loopRunning = false;
-            finishClosing();
-            return;
-        }
-
-        if (error)
-        {
-            std::string message = error.message();
-            commlog("SSH socket error: %s", message.c_str());
-            loopRunning = false;
-            startClosing();
-            return;
-        }
+        co_await m_socket->async_wait(waitType, boost::asio::use_awaitable);
 
         int ret = ssh_event_dopoll(m_loop, 0);
+
+        m_waitingForIO = false;
 
         if (ret == SSH_ERROR)
         {
             commlog("SSH connection error: %s", ssh_get_error(m_session));
             commlog("SSH error code: %d", ssh_get_error_code(m_session));
-            loopRunning = false;
-            startClosing();
-            return;
-        }
-
-        if (m_state == State::Closed)
-        {
-            loopRunning = false;
-            finishClosing();
-            return;
-        }
-
-        if (loopRunning)
-        {
-            auto waitType = (loopType == LoopType::Read) ? boost::asio::ip::tcp::socket::wait_read
-                                                         : boost::asio::ip::tcp::socket::wait_write;
-
-            m_socket->async_wait(waitType, boost::bind(&SshConnection::normalLoop, this, _1, loopType));
+            m_waitingForIO = false;
+            // TODO throw exception that the socket needs to close
+            co_return;
         }
     }
 
@@ -376,13 +314,13 @@ class SshConnection : public Connection
     int requestPty(const char* term, int x, int y, int px, int py)
     {
         commlog("PTY requested: %s %d %d %d %d", term, x, y, px, py);
-        notifyGameWindowSizeChanged(x, y);
+        // notifyGameWindowSizeChanged(x, y);
         return 0;
     }
 
     int updatePty(int x, int y, int px, int py)
     {
-        notifyGameWindowSizeChanged(x, y);
+        // notifyGameWindowSizeChanged(x, y);
         return 0;
     }
 
@@ -397,25 +335,53 @@ class SshConnection : public Connection
             return SSH_ERROR;
         }
 
-        notifyGameAuthenticatedUserConnected(m_authenticatedUsername);
+        m_shellRequested = true;
         return 0;
     }
 
-    void startWriting()
+    boost::asio::awaitable<void> flushOutput() override
     {
         assert(m_state != State::Closed);
-        assert(!m_outputBuffer.empty() || m_state == State::Flushing);
-        assert(!m_writerRunning);
 
-        m_writerRunning = true;
+        while (!m_outputBuffer.empty() && m_state != State::Closed)
+        {
+            co_await doIO(IOType::Write);
+        }
 
-        writeData();
+        co_return;
+    }
 
-        // Always get at least one callback so we update m_writableBytes for next time
-        assert(!m_writerRunning);
-        m_writerRunning = true;
-        m_socket->async_wait(boost::asio::ip::tcp::socket::wait_write,
-                             boost::bind(&SshConnection::normalLoop, this, _1, LoopType::Write));
+    boost::asio::awaitable<void> close() override
+    {
+        assert(m_state != State::Closed);
+
+        while (m_state != State::Closed)
+        {
+            int ret = ssh_channel_close(m_channel);
+
+            if (ret == SSH_AGAIN)
+            {
+                co_await m_socket->async_wait(boost::asio::ip::tcp::socket::wait_write, boost::asio::use_awaitable);
+                continue;
+            }
+
+            assert(ret == SSH_OK);
+            m_state = State::Closed;
+        }
+
+        ssh_disconnect(m_session);
+        // this has the side effect of freeing the channel
+        m_channel = nullptr;
+        removeConnection();
+
+        try
+        {
+            m_socket->cancel();
+        }
+        catch (boost::system::system_error e)
+        {
+            commlog("error while cancelling socket IO: %s", e.what());
+        }
     }
 
     int handleIncomingData(ssh_session session, ssh_channel channel, void* data, uint32_t len, int is_stderr)
@@ -426,9 +392,17 @@ class SshConnection : public Connection
         assert(session == m_session);
         assert(channel == m_channel);
         assert(is_stderr == 0);
-        assert(m_readerRunning);
+        assert(m_waitingForIO);
 
         char* dataptr = reinterpret_cast<char*>(data);
+
+        for (char* printptr = dataptr; printptr != (dataptr + len); printptr++)
+        {
+            if (isprint(*printptr))
+                commlog("got %c", *printptr);
+            else
+                commlog("got 0x%x", (unsigned int)*printptr);
+        }
 
         m_inputBuffer.insert(m_inputBuffer.end(), dataptr, dataptr + len);
         // TODO overflow check
@@ -439,14 +413,12 @@ class SshConnection : public Connection
         else
             write(std::string_view(reinterpret_cast<char*>(data), len));
 
-        scanAndSendCommand();
-
         return len;
     }
 
     void writeData()
     {
-        assert(m_writerRunning);
+        assert(m_waitingForIO);
         assert(m_state != State::Closed);
 
         // some gymnastics here - it turns out we only get this notification on the poll call after a write, so we have
@@ -481,68 +453,28 @@ class SshConnection : public Connection
         }
 
         m_writableBytes = leftoverWritableBytes;
+    }
 
-        if (m_outputBuffer.empty())
+    boost::asio::awaitable<std::string> readLine() override
+    {
+        size_t searchStart = 0;
+
+        while (true)
         {
-            if (m_state == State::Flushing)
+            if (!m_inputBuffer.empty())
             {
-                int ret = ssh_channel_close(m_channel);
-
-                if (ret == SSH_AGAIN)
+                for (searchStart; searchStart < m_inputBuffer.size(); searchStart++)
                 {
-                    assert(m_writerRunning);
-                }
-                else
-                {
-                    assert(ret == SSH_OK);
-                    startClosing();
+                    if (m_inputBuffer[searchStart] == '\r') // TODO do all SSH clients only use \r?
+                    {
+                        std::string result{m_inputBuffer.begin(), m_inputBuffer.begin() + searchStart};
+                        m_inputBuffer.erase_begin(searchStart + 1);
+                        co_return result;
+                    }
                 }
             }
-            else
-            {
-                m_writerRunning = false;
-            }
-        }
-    }
 
-    void startClosing() override
-    {
-        assert(m_state != State::Closed);
-        m_state = State::Closed;
-        m_context = nullptr;
-        try
-        {
-            m_socket->cancel();
-        }
-        catch (boost::system::system_error e)
-        {
-            commlog("error while cancelling socket IO: %s", e.what());
-        }
-
-        finishClosing();
-    }
-
-    void startFlushingAndClose() override
-    {
-        assert(m_state == State::Open);
-        m_state = State::Flushing;
-        m_context = nullptr;
-
-        if (!m_writerRunning)
-        {
-            startWriting();
-        }
-    }
-
-    void finishClosing()
-    {
-        if (!m_writerRunning && !m_readerRunning)
-        {
-            ssh_disconnect(m_session);
-            // this has the side effect of freeing the channel
-            m_channel = nullptr;
-            assert(m_context == nullptr);
-            removeConnection();
+            co_await doIO(IOType::Read);
         }
     }
 
@@ -615,8 +547,7 @@ class SshConnection : public Connection
         ssh_set_server_callbacks(m_session, &m_callbacks);
 
         commlog("starting SSH key exchange");
-        m_readerRunning = true;
-        continueKeyExchange(boost::system::error_code());
+        boost::asio::co_spawn(getIOContext(), runKeyExchange(), boost::asio::detached);
     }
 
     // no moves or copies
@@ -708,9 +639,9 @@ void IOManager::handleNewTelnetConnection(const boost::system::error_code& error
         auto connection = std::make_shared<TelnetConnection>(*this, std::move(socket));
 
         m_connections.push_back(connection);
-
-        auto context = m_callbacks.newUnauthenticatedConnection(connection);
-        connection->setContext(context);
+        
+        // TODO this might not return anymore?
+        m_callbacks.newUnauthenticatedConnection(connection);
 
         auto pendingTelnetSocket = std::make_unique<boost::asio::ip::tcp::socket>(m_ioContext);
         auto pendingTelnetSocketBackup = pendingTelnetSocket.get();
@@ -769,7 +700,7 @@ void IOManager::notifyGameUnauthenticatedUserConnected(Connection& connection)
     }
 
     assert(sharedConn.get() != nullptr);
-    sharedConn->setContext(m_callbacks.newUnauthenticatedConnection(sharedConn));
+    m_callbacks.newUnauthenticatedConnection(sharedConn);
 }
 
 void IOManager::notifyGameAuthenticatedUserConnected(Connection& connection, const std::string& user)
@@ -786,29 +717,7 @@ void IOManager::notifyGameAuthenticatedUserConnected(Connection& connection, con
     }
 
     assert(sharedConn.get() != nullptr);
-    sharedConn->setContext(m_callbacks.newAuthenticatedConnection(sharedConn, user));
-}
-
-void IOManager::notifyGameWindowSizeChanged(ConnectionContext context, int width, int height)
-{
-    if (context == nullptr)
-        bug("size change from null context");
-    else
-        m_callbacks.windowChangedSize(context, width, height);
-}
-
-void IOManager::sendCommandToGame(ConnectionContext context, const std::string& command)
-{
-    if (context == nullptr)
-        bug("command from null context");
-    else
-        m_callbacks.commandReceived(context, command);
-}
-
-void IOManager::notifyGameConnectionClosed(ConnectionContext context)
-{
-    if (context != nullptr)
-        m_callbacks.connectionClosed(context);
+    m_callbacks.newAuthenticatedConnection(sharedConn, user);
 }
 
 void IOManager::removeConnection(Connection* connection)
@@ -819,89 +728,13 @@ void IOManager::removeConnection(Connection* connection)
     assert(iter != m_connections.end());
 
     assert((*iter).use_count() == 1);
-    assert(iter->get()->m_context == nullptr);
 
     m_connections.erase(iter);
 }
 
 void IOManager::runUntil(std::chrono::steady_clock::time_point time)
 {
-    for (auto& connection : m_connections)
-    {
-        connection->scanAndSendCommand(true);
-    }
-
     m_ioContext.run_until(time);
-}
-
-void Connection::setContext(ConnectionContext context)
-{
-    m_context = context;
-}
-
-void Connection::scanAndSendCommand(bool newPulse)
-{
-    if (newPulse)
-    {
-        m_commandThisPulse = false;
-    }
-    else if (m_commandThisPulse)
-    {
-        return;
-    }
-
-    if (m_inputBuffer.empty())
-        return;
-
-    size_t lineEnd = 0;
-    for (lineEnd = 0; lineEnd < m_inputBuffer.size(); lineEnd++)
-    {
-        char c = m_inputBuffer[lineEnd];
-        if (c == '\n' || c == '\r')
-            break;
-
-        assert(c != '\0');
-    }
-
-    if (lineEnd == m_inputBuffer.size())
-    {
-        // no line ending, so no complete command
-        return;
-    }
-
-    std::vector<char> stringBuf(lineEnd + 2, '\0');
-
-    // old telnet clients still like to send the backspace character - handle it here
-    size_t outputPos = 0;
-    for (size_t inputPos = 0; inputPos < lineEnd; inputPos++)
-    {
-        char inputChar = m_inputBuffer[inputPos];
-
-        if (inputChar == '\b' && outputPos > 0)
-            outputPos--;
-        else if (isascii(inputChar) && isprint(inputChar))
-            stringBuf[outputPos++] = inputChar;
-    }
-
-    if (outputPos == 0)
-    {
-        stringBuf[outputPos] = ' ';
-        outputPos++;
-    }
-
-    stringBuf[outputPos] = '\0';
-    // TODO repeat protection, '!' last command substitution need to be done on the engine side
-
-    std::string result(&stringBuf[0]);
-
-    while (m_inputBuffer[lineEnd] == '\n' || m_inputBuffer[lineEnd] == '\r')
-        lineEnd++;
-
-    m_inputBuffer.erase_begin(lineEnd);
-
-    // now dispatch
-    m_manager.sendCommandToGame(m_context, result);
-    m_commandThisPulse = true;
 }
 
 void Connection::write(std::string_view data)
@@ -916,26 +749,17 @@ void Connection::write(std::string_view data)
     {
         commlog("output buffer overflow");
         close();
-        notifyGameConnectionClosed();
+        // notifyGameConnectionClosed();
         return;
     }
 
     m_outputBuffer.insert(m_outputBuffer.end(), data.begin(), data.end());
-
-    if (!m_writerRunning)
-    {
-        startWriting();
-    }
 }
 
-void Connection::close()
+boost::asio::awaitable<void> Connection::flushAndClose()
 {
-    startClosing();
-}
-
-void Connection::flushAndClose()
-{
-    startFlushingAndClose();
+    co_await flushOutput();
+    co_await close();
 }
 
 const std::string& Connection::getHostname() const
