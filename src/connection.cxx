@@ -535,8 +535,9 @@ class SshConnection : public Connection
                                                                                       is_stderr);
             };
 
-            m_channelCallbacks.channel_write_wontblock_function = [](ssh_session, ssh_channel, uint32_t bytes,
-                                                                     void* userdata) {
+
+            m_channelCallbacks.channel_write_wontblock_function = [](ssh_session, ssh_channel, auto bytes,
+                                                                        void* userdata) {
                 auto connection = reinterpret_cast<SshConnection*>(userdata);
                 connection->m_writableBytes = bytes;
                 reinterpret_cast<SshConnection*>(userdata)->writeData();
