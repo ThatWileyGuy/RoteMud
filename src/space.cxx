@@ -4600,31 +4600,19 @@ void do_showship(CHAR_DATA* ch, char* argument)
     ch_printf(ch, "%s %s : %s\n\rFilename: %s\n\r",
               (ship->type == CLAN_SHIP ? "Clan" : (ship->type == PLAYER_SHIP ? "Civilian" : "Mob")),
 
-              ship->clazz == SHIP_FIGHTER
-                  ? "Starfighter"
-                  : ship->clazz == SHIP_BOMBER
-                        ? "Bomber"
-                        : ship->clazz == SHIP_SHUTTLE
-                              ? "Shuttle"
-                              : ship->clazz == SHIP_FREIGHTER
-                                    ? "Freighter"
-                                    : ship->clazz == SHIP_FRIGATE
-                                          ? "Frigate"
-                                          : ship->clazz == SHIP_TT
-                                                ? "Troop Transport"
-                                                : ship->clazz == SHIP_CORVETTE
-                                                      ? "Corvette"
-                                                      : ship->clazz == SHIP_CRUISER
-                                                            ? "Cruiser"
-                                                            : ship->clazz == SHIP_DREADNAUGHT
-                                                                  ? "Dreadnaught"
-                                                                  : ship->clazz == SHIP_DESTROYER
-                                                                        ? "Star Destroyer"
-                                                                        : ship->clazz == SHIP_SPACE_STATION
-                                                                              ? "Space Station"
-                                                                              : ship->clazz == LAND_VEHICLE
-                                                                                    ? "Land vehicle"
-                                                                                    : "Unknown",
+              ship->clazz == SHIP_FIGHTER         ? "Starfighter"
+              : ship->clazz == SHIP_BOMBER        ? "Bomber"
+              : ship->clazz == SHIP_SHUTTLE       ? "Shuttle"
+              : ship->clazz == SHIP_FREIGHTER     ? "Freighter"
+              : ship->clazz == SHIP_FRIGATE       ? "Frigate"
+              : ship->clazz == SHIP_TT            ? "Troop Transport"
+              : ship->clazz == SHIP_CORVETTE      ? "Corvette"
+              : ship->clazz == SHIP_CRUISER       ? "Cruiser"
+              : ship->clazz == SHIP_DREADNAUGHT   ? "Dreadnaught"
+              : ship->clazz == SHIP_DESTROYER     ? "Star Destroyer"
+              : ship->clazz == SHIP_SPACE_STATION ? "Space Station"
+              : ship->clazz == LAND_VEHICLE       ? "Land vehicle"
+                                                  : "Unknown",
               ship->name, ship->filename);
     ch_printf(ch, "Home: %s   Description: %s  Current system: %s\n\rOwner: %s   Pilot: %s   Copilot: %s\n\r",
               ship->home, ship->description, ship->starsystem ? ship->starsystem->name : "None", ship->owner,
@@ -7249,31 +7237,19 @@ void do_info(CHAR_DATA* ch, char* argument)
 
     ch_printf(ch, "&G| &W%s %s:&w %s &G|\n\r\n\r",
               (target->type == CLAN_SHIP ? "Clan" : (target->type == PLAYER_SHIP ? "Civilian" : "Mob")),
-              target->clazz == SHIP_FIGHTER
-                  ? "Starfighter"
-                  : target->clazz == SHIP_BOMBER
-                        ? "Bomber"
-                        : target->clazz == SHIP_SHUTTLE
-                              ? "Shuttle"
-                              : target->clazz == SHIP_FREIGHTER
-                                    ? "Freighter"
-                                    : target->clazz == SHIP_FRIGATE
-                                          ? "Frigate"
-                                          : target->clazz == SHIP_TT
-                                                ? "Troop Transport"
-                                                : target->clazz == SHIP_CORVETTE
-                                                      ? "Corvette"
-                                                      : target->clazz == SHIP_CRUISER
-                                                            ? "Cruiser"
-                                                            : target->clazz == SHIP_DREADNAUGHT
-                                                                  ? "Dreadnaught"
-                                                                  : target->clazz == SHIP_DESTROYER
-                                                                        ? "Star Destroyer"
-                                                                        : target->clazz == SHIP_SPACE_STATION
-                                                                              ? "Space Station"
-                                                                              : target->clazz == LAND_VEHICLE
-                                                                                    ? "Land vehicle"
-                                                                                    : "Unknown",
+              target->clazz == SHIP_FIGHTER         ? "Starfighter"
+              : target->clazz == SHIP_BOMBER        ? "Bomber"
+              : target->clazz == SHIP_SHUTTLE       ? "Shuttle"
+              : target->clazz == SHIP_FREIGHTER     ? "Freighter"
+              : target->clazz == SHIP_FRIGATE       ? "Frigate"
+              : target->clazz == SHIP_TT            ? "Troop Transport"
+              : target->clazz == SHIP_CORVETTE      ? "Corvette"
+              : target->clazz == SHIP_CRUISER       ? "Cruiser"
+              : target->clazz == SHIP_DREADNAUGHT   ? "Dreadnaught"
+              : target->clazz == SHIP_DESTROYER     ? "Star Destroyer"
+              : target->clazz == SHIP_SPACE_STATION ? "Space Station"
+              : target->clazz == LAND_VEHICLE       ? "Land vehicle"
+                                                    : "Unknown",
               target->name);
 
     if (!str_cmp(target->owner, ch->name) || !str_cmp(target->pilot, ch->name) || !str_cmp(target->copilot, ch->name))
@@ -7641,9 +7617,9 @@ void do_status(CHAR_DATA* ch, char* argument)
               target->vy, target->vz, target->hx, target->hy, target->hz);
     ch_printf(ch, "&zSpeed:&w %d&W/%d   &zHyperdrive: &wClass %d   %s %s\n\r", target->currspeed, target->realspeed,
               target->hyperspeed, ship->clazz >= SHIP_CRUISER ? "&zBay doors:" : "",
-              (ship->clazz >= SHIP_CRUISER && ship->bayopen == true)
-                  ? "&wOpen"
-                  : (ship->clazz >= SHIP_CRUISER && ship->bayopen == false) ? "&wClosed" : "");
+              (ship->clazz >= SHIP_CRUISER && ship->bayopen == true)    ? "&wOpen"
+              : (ship->clazz >= SHIP_CRUISER && ship->bayopen == false) ? "&wClosed"
+                                                                        : "");
 
     ch_printf(ch, "&zHull:&w %d&W/%d   &zShields:&w %d&W/%d   &zFuel:&w %d&W/%d\n\r\n\r", target->hull, target->maxhull,
               target->shield, target->maxshield, target->energy, target->maxenergy);
@@ -7689,7 +7665,9 @@ void do_status(CHAR_DATA* ch, char* argument)
     }
 
     ch_printf(ch, "&z   Linked fire: &w%s\n\r",
-              (x <= 1) ? "Unavailable" : ship->primaryLinked == true ? "&GON" : "&ROFF");
+              (x <= 1)                      ? "Unavailable"
+              : ship->primaryLinked == true ? "&GON"
+                                            : "&ROFF");
 
     switch (ship->secondaryType)
     {
@@ -7730,9 +7708,12 @@ void do_status(CHAR_DATA* ch, char* argument)
     if (target->secondaryCount != 0)
     {
         ch_printf(ch, "&zSecondary Weapon System: &w%-7s&W::  &w%s\n\r",
-                  target->secondaryState == LASER_DAMAGED ? "&ROffline" : "&GOnline", secondary_beam_name(target).c_str());
+                  target->secondaryState == LASER_DAMAGED ? "&ROffline" : "&GOnline",
+                  secondary_beam_name(target).c_str());
         ch_printf(ch, "&z   Linked fire: &w%s\n\r",
-                  (x <= 1) ? "Unavailable" : ship->secondaryLinked == true ? "&GON" : "&ROFF");
+                  (x <= 1)                        ? "Unavailable"
+                  : ship->secondaryLinked == true ? "&GON"
+                                                  : "&ROFF");
     }
     if (target->turret1)
         ch_printf(ch, "\n\r&zTurret One:  &w %s  &zCurrent Target:&w %s\n\r",
@@ -7776,14 +7757,20 @@ void do_status(CHAR_DATA* ch, char* argument)
                   target->target10 ? target->target10->name : "none");
 
     ch_printf(ch, "\n\r&w          | &zMissile launcher:&w %-15s   &zPayload: &w%d&W/%d\n\r",
-              !ship->maxmissiles ? "&RNot installed" : ship->missilestate == LASER_DAMAGED ? "&ROffline" : "&GOnline",
+              !ship->maxmissiles                    ? "&RNot installed"
+              : ship->missilestate == LASER_DAMAGED ? "&ROffline"
+                                                    : "&GOnline",
               ship->missiles, ship->maxmissiles);
     ch_printf(ch, " %-10s&w | &zTorpedo launcher:&w %-15s   &zPayload: &w%d&W/%d\n\r",
               ship->warheadLinked == true ? "&GLinked" : "&RUnlinked",
-              !ship->maxtorpedos ? "&RNot installed" : ship->torpedostate == LASER_DAMAGED ? "&ROffline" : "&GOnline",
+              !ship->maxtorpedos                    ? "&RNot installed"
+              : ship->torpedostate == LASER_DAMAGED ? "&ROffline"
+                                                    : "&GOnline",
               ship->torpedos, ship->maxtorpedos);
     ch_printf(ch, "          &w| &zRocket launcher: &w %-15s   &zPayload: &w%d&W/%d\n\r",
-              !ship->maxrockets ? "&RNot installed" : ship->rocketstate == LASER_DAMAGED ? "&ROffline" : "&GOnline",
+              !ship->maxrockets                    ? "&RNot installed"
+              : ship->rocketstate == LASER_DAMAGED ? "&ROffline"
+                                                   : "&GOnline",
               ship->rockets, ship->maxrockets);
     if (ship->maxbombs > 0)
         ch_printf(ch, "&zBomb Payload: &w%d&W/%d\n\r", ship->bombs, ship->maxbombs);
@@ -12108,11 +12095,11 @@ std::string ship_bit_name(int vector)
     if (vector & XSHIP_ION_TURRET6)
         result += " ion_turret6";
     if (vector & XSHIP_ION_TURRET7)
-        result +=  " ion_turret7";
+        result += " ion_turret7";
     if (vector & XSHIP_ION_TURRET8)
-        result +=  " ion_turret8";
+        result += " ion_turret8";
     if (vector & XSHIP_ION_TURRET9)
-        result +=  " ion_turret9";
+        result += " ion_turret9";
     if (vector & XSHIP_ION_TURRET10)
         result += " ion_turret10";
     if (vector & SHIP_RESPAWN)
@@ -12601,9 +12588,9 @@ void do_transmit_status(CHAR_DATA* ch, char* argument)
               ship->vy, ship->vz, ship->hx, ship->hy, ship->hz);
     ch_printf(ch, "&zSpeed:&w %d&W/%d   &zHyperdrive: &wClass %d %s %s\n\r", ship->currspeed, ship->realspeed,
               ship->hyperspeed, ship->clazz >= SHIP_CRUISER ? "&zBay doors:" : "",
-              (ship->clazz >= SHIP_CRUISER && ship->bayopen == true)
-                  ? "&wOpen"
-                  : (ship->clazz >= SHIP_CRUISER && ship->bayopen == false) ? "&wClosed" : "");
+              (ship->clazz >= SHIP_CRUISER && ship->bayopen == true)    ? "&wOpen"
+              : (ship->clazz >= SHIP_CRUISER && ship->bayopen == false) ? "&wClosed"
+                                                                        : "");
     ch_printf(ch, "&zHull:&w %d&W/%d   &zShields:&w %d&W/%d    &zFuel:&w %d&W/%d\n\r\n\r", ship->hull, ship->maxhull,
               ship->shield, ship->maxshield, ship->energy, ship->maxenergy);
     ch_printf(ch, "&zPrimary Weapon System:   &w%-7s&W::  &w%s\n\r",
@@ -12646,7 +12633,9 @@ void do_transmit_status(CHAR_DATA* ch, char* argument)
     }
 
     ch_printf(ch, "&z   Linked fire: &w%s\n\r",
-              (x <= 1) ? "Unavailable" : ship->primaryLinked == true ? "&GON" : "&ROFF");
+              (x <= 1)                      ? "Unavailable"
+              : ship->primaryLinked == true ? "&GON"
+                                            : "&ROFF");
 
     switch (ship->secondaryType)
     {
@@ -12689,7 +12678,9 @@ void do_transmit_status(CHAR_DATA* ch, char* argument)
         ch_printf(ch, "&zSecondary Weapon System: &w%-7s&W::  &w%s\n\r",
                   ship->secondaryState == LASER_DAMAGED ? "&ROffline" : "&GOnline", secondary_beam_name(ship).c_str());
         ch_printf(ch, "&z   Linked fire: &w%s\n\r",
-                  (x <= 1) ? "Unavailable" : ship->secondaryLinked == true ? "&GON" : "&ROFF");
+                  (x <= 1)                        ? "Unavailable"
+                  : ship->secondaryLinked == true ? "&GON"
+                                                  : "&ROFF");
     }
     if (ship->turret1)
         ch_printf(ch, "\n\r&zTurret One:  &w %s  &zCurrent Target:&w %s\n\r",
@@ -12732,14 +12723,20 @@ void do_transmit_status(CHAR_DATA* ch, char* argument)
                   ship->statet10 == LASER_DAMAGED ? "Damaged" : "Operational",
                   ship->target10 ? ship->target10->name : "none");
     ch_printf(ch, "\n\r&w          | &zMissile launcher:&w %-15s   &zPayload: &w%d&W/%d\n\r",
-              !ship->maxmissiles ? "&RNot installed" : ship->missilestate == LASER_DAMAGED ? "&ROffline" : "&GOnline",
+              !ship->maxmissiles                    ? "&RNot installed"
+              : ship->missilestate == LASER_DAMAGED ? "&ROffline"
+                                                    : "&GOnline",
               ship->missiles, ship->maxmissiles);
     ch_printf(ch, " %-10s&w | &zTorpedo launcher:&w %-15s   &zPayload: &w%d&W/%d\n\r",
               ship->warheadLinked == true ? "&GLinked" : "&RUnlinked",
-              !ship->maxtorpedos ? "&RNot installed" : ship->torpedostate == LASER_DAMAGED ? "&ROffline" : "&GOnline",
+              !ship->maxtorpedos                    ? "&RNot installed"
+              : ship->torpedostate == LASER_DAMAGED ? "&ROffline"
+                                                    : "&GOnline",
               ship->torpedos, ship->maxtorpedos);
     ch_printf(ch, "          &w| &zRocket launcher: &w %-15s   &zPayload: &w%d&W/%d\n\r",
-              !ship->maxrockets ? "&RNot installed" : ship->rocketstate == LASER_DAMAGED ? "&ROffline" : "&GOnline",
+              !ship->maxrockets                    ? "&RNot installed"
+              : ship->rocketstate == LASER_DAMAGED ? "&ROffline"
+                                                   : "&GOnline",
               ship->rockets, ship->maxrockets);
     if (ship->maxbombs > 0)
         ch_printf(ch, "&zBomb Payload: &w%d&W/%d\n\r", ship->bombs, ship->maxbombs);
@@ -12927,9 +12924,9 @@ void do_split_s(CHAR_DATA* ch, char* argument)
         else
         {
             ch_printf(ch, "%s",
-                      ship->rolling == true ? "You stop rolling, and perform a split-S.\n\r"
-                                            : ship->juking == true ? "You stop juking, and perform a split-S.\n\r"
-                                                                   : "You perform a split-S.\n\r");
+                      ship->rolling == true  ? "You stop rolling, and perform a split-S.\n\r"
+                      : ship->juking == true ? "You stop juking, and perform a split-S.\n\r"
+                                             : "You perform a split-S.\n\r");
             ship->rolling = ship->juking = false;
             ship->hx = number_range(-2000, 3000);
             ship->hy = number_range(-2000, 3000);
@@ -12947,8 +12944,9 @@ void do_split_s(CHAR_DATA* ch, char* argument)
     if (number_percent() > chance)
     {
         ch_printf(ch, "&wYou attempt to do a split-S%s",
-                  ship->rolling == true ? ", breaking out of the roll...\n\r"
-                                        : ship->juking == true ? ", discontinuing the juke...\n\r" : "...\n\r");
+                  ship->rolling == true  ? ", breaking out of the roll...\n\r"
+                  : ship->juking == true ? ", discontinuing the juke...\n\r"
+                                         : "...\n\r");
         ship->rolling = ship->juking = false;
         ship->hx = number_range(-2000, 3000);
         ship->hy = number_range(-2000, 3000);

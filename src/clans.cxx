@@ -1006,8 +1006,9 @@ void do_showclan(CHAR_DATA* ch, char* argument)
     }
 
     ch_printf(ch, "%s      : %s\n\rFilename: %s\n\r",
-              clan->clan_type == CLAN_CRIME ? "Crime Family "
-                                            : clan->clan_type == CLAN_GUILD ? "Guild " : "Organization ",
+              clan->clan_type == CLAN_CRIME   ? "Crime Family "
+              : clan->clan_type == CLAN_GUILD ? "Guild "
+                                              : "Organization ",
               clan->name, clan->filename);
     ch_printf(ch, "Sname: %s\n\rDescription: %s\n\rLeader: %s\n\r", clan->shortname, clan->description, clan->leader);
     ch_printf(ch, "Number1: %s\n\rNumber2: %s\n\rPKills: %6d    PDeaths: %6d\n\r", clan->number1, clan->number2,
@@ -2703,11 +2704,11 @@ void do_clans(CHAR_DATA* ch, char* argument)
             support /= pCount;
 
         ch_printf(ch, "&z| &WOrganization: &w%-25.25s &WType: &w%-15.15s &z|\n\r", clan->name,
-                  clan->clan_type == 0
-                      ? "Government"
-                      : clan->clan_type == 1
-                            ? "Crime Syndicate"
-                            : clan->clan_type == 2 ? "Guild" : clan->clan_type == 4 ? "Corporation" : "Clan");
+                  clan->clan_type == 0   ? "Government"
+                  : clan->clan_type == 1 ? "Crime Syndicate"
+                  : clan->clan_type == 2 ? "Guild"
+                  : clan->clan_type == 4 ? "Corporation"
+                                         : "Clan");
         ch_printf(ch, "&z| &WControlled planets: &w%-2d   &WSupport: &w%3d%%                        &z|\n\r", pCount,
                   support);
         /*
@@ -2735,15 +2736,17 @@ void do_clans(CHAR_DATA* ch, char* argument)
         if (!str_cmp(clan->name, "Neutral"))
             continue;
         ch_printf(ch, "&z| &WOrganization: &w%-25.25s &WType: &w%-15.15s &z|\n\r", clan->name,
-                  clan->clan_type == 0
-                      ? "Government"
-                      : clan->clan_type == 1
-                            ? "Crime Syndicate"
-                            : clan->clan_type == 2 ? "Guild" : clan->clan_type == 4 ? "Corporation" : "Clan");
+                  clan->clan_type == 0   ? "Government"
+                  : clan->clan_type == 1 ? "Crime Syndicate"
+                  : clan->clan_type == 2 ? "Guild"
+                  : clan->clan_type == 4 ? "Corporation"
+                                         : "Clan");
         if (clan->clan_type != 1)
             ch_printf(ch, "&z|       &W%6.6s: &w%-15.15s                                 &z|\n\r",
-                      clan->clan_type == 1 ? "Leader"
-                                           : clan->clan_type == 2 ? "Leader" : clan->clan_type == 4 ? "CEO" : "Leader",
+                      clan->clan_type == 1   ? "Leader"
+                      : clan->clan_type == 2 ? "Leader"
+                      : clan->clan_type == 4 ? "CEO"
+                                             : "Leader",
                       clan->leader);
         ch_printf(ch, "&z+---------------------------------------------------------------+\n\r");
 
@@ -2796,7 +2799,9 @@ void do_members(CHAR_DATA* ch, char* argument)
     }
 
     sprintf_s(color, "%s",
-              !str_cmp(clan->name, "The Empire") ? "&R" : !str_cmp(clan->name, "The New Republic") ? "&B" : "&G");
+              !str_cmp(clan->name, "The Empire")         ? "&R"
+              : !str_cmp(clan->name, "The New Republic") ? "&B"
+                                                         : "&G");
 
     sprintf_s(thebuf, "%s---------------============<&W%s%s>============---------------\n\r", color,
               centertext(clan->name, 24).c_str(), color);

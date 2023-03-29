@@ -368,7 +368,7 @@ std::string drunkify_third(const std::string& in, const sh_int drunk)
                 }
 
                 if (iter != in.end() && *iter == ' ') /* Make sure not to stutter a space after */
-                {                                             /* the initial offset into the word */
+                {                                     /* the initial offset into the word */
                     result.push_back(*iter++);
                     continue;
                 }
@@ -1600,7 +1600,8 @@ void do_oldtell(CHAR_DATA* ch, char* argument)
     if (knows_language(victim, ch->speaking, ch) || (IS_NPC(ch) && !ch->speaking))
         act(AT_TELL, "&W&G[&WTell&G] &G(&WFrom: $n&G)&W '$t'", ch, argument, victim, TO_VICT);
     else
-        act(AT_TELL, "&W&G[&WTell&G] &G(&WFrom: $n&G)&W '$t'", ch, scramble(argument, ch->speaking).c_str(), victim, TO_VICT);
+        act(AT_TELL, "&W&G[&WTell&G] &G(&WFrom: $n&G)&W '$t'", ch, scramble(argument, ch->speaking).c_str(), victim,
+            TO_VICT);
     victim->position = position;
     victim->reply = ch;
     if (IS_SET(ch->in_room->room_flags, ROOM_LOGSPEECH))
@@ -1774,10 +1775,16 @@ void do_tell(CHAR_DATA* ch, char* argument)
             {
                 if (knows_language(vict2, ch->speaking, ch) || (IS_NPC(ch) && !ch->speaking))
                     ch_printf(vict2, "&W&G[&WIncoming Message from: &w%s&G]&W: %s\n\r",
-                              IS_IMMORTAL(ch) ? ch->name : IS_IMMORTAL(vict2) ? ch->name : ch->comfreq, argument);
+                              IS_IMMORTAL(ch)      ? ch->name
+                              : IS_IMMORTAL(vict2) ? ch->name
+                                                   : ch->comfreq,
+                              argument);
                 else
                     ch_printf(vict2, "&W&G[&WIncoming Message from: &w%s&G]&W: %s\n\r",
-                              IS_IMMORTAL(ch) ? ch->name : IS_IMMORTAL(vict2) ? ch->name : ch->comfreq, argument);
+                              IS_IMMORTAL(ch)      ? ch->name
+                              : IS_IMMORTAL(vict2) ? ch->name
+                                                   : ch->comfreq,
+                              argument);
             }
         }
     }
@@ -1948,7 +1955,8 @@ void do_oldreply(CHAR_DATA* ch, char* argument)
     if (knows_language(victim, ch->speaking, ch) || (IS_NPC(ch) && !ch->speaking))
         act(AT_TELL, "&W&G[&WTell&G] &G(&WFrom: $n&G)&W '$t'", ch, argument, victim, TO_VICT);
     else
-        act(AT_TELL, "&W&G[&WTell&G] &G(&WFrom: $n&G)&W '$t'", ch, scramble(argument, ch->speaking).c_str(), victim, TO_VICT);
+        act(AT_TELL, "&W&G[&WTell&G] &G(&WFrom: $n&G)&W '$t'", ch, scramble(argument, ch->speaking).c_str(), victim,
+            TO_VICT);
     victim->position = position;
     victim->reply = ch;
     if (IS_SET(ch->in_room->room_flags, ROOM_LOGSPEECH))
@@ -2069,13 +2077,22 @@ void do_reply(CHAR_DATA* ch, char* argument)
 
     if (knows_language(victim, ch->speaking, ch) || (IS_NPC(ch) && !ch->speaking))
         ch_printf(victim, "&W&G[&WIncoming Message from: &w%s&G]&W: %s\n\r",
-                  IS_IMMORTAL(ch) ? ch->name : IS_IMMORTAL(victim) ? ch->name : ch->comfreq, argument);
+                  IS_IMMORTAL(ch)       ? ch->name
+                  : IS_IMMORTAL(victim) ? ch->name
+                                        : ch->comfreq,
+                  argument);
     else
         ch_printf(victim, "&W&G[&WIncoming Message from: &w%s&G]&W: %s\n\r",
-                  IS_IMMORTAL(ch) ? ch->name : IS_IMMORTAL(victim) ? ch->name : ch->comfreq, argument);
+                  IS_IMMORTAL(ch)       ? ch->name
+                  : IS_IMMORTAL(victim) ? ch->name
+                                        : ch->comfreq,
+                  argument);
 
     ch_printf(ch, "&W&G[&WSent Message to: &w%s&G]&W: %s\n\r",
-              IS_IMMORTAL(ch) ? victim->name : IS_IMMORTAL(victim) ? victim->name : victim->comfreq, argument);
+              IS_IMMORTAL(ch)       ? victim->name
+              : IS_IMMORTAL(victim) ? victim->name
+                                    : victim->comfreq,
+              argument);
 
     position = victim->position;
     victim->position = POS_STANDING;
@@ -2811,8 +2828,8 @@ void do_group(CHAR_DATA* ch, char* argument)
                 set_char_color(AT_DGREEN, ch);
                 if (IS_AFFECTED(gch, AFF_POSSESS))
                     ch_printf(ch, "[%2d %s] %-16s %4s/%4s hp %4s/%4s mv %5s xp\n\r", gch->top_level,
-                              IS_NPC(gch) ? "Mob" : race_table[gch->race].race_name, capitalize(PERS(gch, ch)).c_str(), "????",
-                              "????", "????", "????", "?????");
+                              IS_NPC(gch) ? "Mob" : race_table[gch->race].race_name, capitalize(PERS(gch, ch)).c_str(),
+                              "????", "????", "????", "????", "?????");
 
                 else
                     ch_printf(ch, "[%2d %s] %-16s %4d/%4d hp %4d/%4d mv\n\r", gch->top_level,

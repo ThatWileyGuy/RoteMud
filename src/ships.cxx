@@ -2880,33 +2880,19 @@ void do_shiplist(CHAR_DATA* ch, char* argument)
         if (playercanviewship)
         {
             sprintf_s(type, "%s %s", shiphasclan ? ch->pcdata->clan->adjective : "Civilian",
-                      ship_prototypes[x].clazz == SHIP_FIGHTER
-                          ? "Starfighter"
-                          : ship_prototypes[x].clazz == SHIP_BOMBER
-                                ? "Bomber"
-                                : ship_prototypes[x].clazz == SHIP_SHUTTLE
-                                      ? "Shuttle"
-                                      : ship_prototypes[x].clazz == SHIP_FREIGHTER
-                                            ? "Freighter"
-                                            : ship_prototypes[x].clazz == SHIP_FRIGATE
-                                                  ? "Frigate"
-                                                  : ship_prototypes[x].clazz == SHIP_TT
-                                                        ? "Troop Transport"
-                                                        : ship_prototypes[x].clazz == SHIP_CORVETTE
-                                                              ? "Corvette"
-                                                              : ship_prototypes[x].clazz == SHIP_CRUISER
-                                                                    ? "Cruiser"
-                                                                    : ship_prototypes[x].clazz == SHIP_DREADNAUGHT
-                                                                          ? "Dreadnaught"
-                                                                          : ship_prototypes[x].clazz == SHIP_DESTROYER
-                                                                                ? "Star Destroyer"
-                                                                                : ship_prototypes[x].clazz ==
-                                                                                          SHIP_SPACE_STATION
-                                                                                      ? "Space Station"
-                                                                                      : ship_prototypes[x].clazz ==
-                                                                                                LAND_VEHICLE
-                                                                                            ? "Land vehicle"
-                                                                                            : "Unknown");
+                      ship_prototypes[x].clazz == SHIP_FIGHTER         ? "Starfighter"
+                      : ship_prototypes[x].clazz == SHIP_BOMBER        ? "Bomber"
+                      : ship_prototypes[x].clazz == SHIP_SHUTTLE       ? "Shuttle"
+                      : ship_prototypes[x].clazz == SHIP_FREIGHTER     ? "Freighter"
+                      : ship_prototypes[x].clazz == SHIP_FRIGATE       ? "Frigate"
+                      : ship_prototypes[x].clazz == SHIP_TT            ? "Troop Transport"
+                      : ship_prototypes[x].clazz == SHIP_CORVETTE      ? "Corvette"
+                      : ship_prototypes[x].clazz == SHIP_CRUISER       ? "Cruiser"
+                      : ship_prototypes[x].clazz == SHIP_DREADNAUGHT   ? "Dreadnaught"
+                      : ship_prototypes[x].clazz == SHIP_DESTROYER     ? "Star Destroyer"
+                      : ship_prototypes[x].clazz == SHIP_SPACE_STATION ? "Space Station"
+                      : ship_prototypes[x].clazz == LAND_VEHICLE       ? "Land vehicle"
+                                                                       : "Unknown");
         }
         ch_printf(ch, "&W|&w  &w(&W%2d&w) %s%-35.35s&W Type: %s%-26.26s &W |\r\n", x + 1,
                   playercanviewship ? (shiphasclan ? "&G" : "&w") : "&R",

@@ -241,7 +241,7 @@ void do_authorize(CHAR_DATA* ch, char* argument)
         send_to_char("Pending authorizations:\n\r", ch);
         send_to_char(" Chosen Character Name\n\r", ch);
         send_to_char("---------------------------------------------\n\r", ch);
-        for(auto d : g_descriptors)
+        for (auto d : g_descriptors)
             if ((victim = d->character) != NULL && IS_WAITING_FOR_AUTH(victim))
                 ch_printf(ch, " %s@%s new %s...\n\r", victim->name, victim->desc->connection->getHostname().c_str(),
                           race_table[victim->race].race_name);
@@ -1178,7 +1178,8 @@ void do_ostat(CHAR_DATA* ch, char* argument)
     }
 
     for (paf = obj->first_affect; paf; paf = paf->next)
-        ch_printf(ch, "&w&GAffects &W%s&G by &W%d&G. (extra)\n\r", affect_loc_name(paf->location).c_str(), paf->modifier);
+        ch_printf(ch, "&w&GAffects &W%s&G by &W%d&G. (extra)\n\r", affect_loc_name(paf->location).c_str(),
+                  paf->modifier);
 
     for (paf = obj->pIndexData->first_affect; paf; paf = paf->next)
         ch_printf(ch, "&w&GAffects &W%s&G by &W%d&G.\n\r", affect_loc_name(paf->location).c_str(), paf->modifier);

@@ -3773,7 +3773,7 @@ bool str_suffix(const char* astr, const char* bstr)
 std::string capitalize(const std::string_view& str)
 {
     std::string result = strlower(str);
-    
+
     if (!result.empty())
         result[0] = UPPER(result[0]);
 
@@ -5720,7 +5720,8 @@ void load_buildlist(void)
                 {
                     if (low < LEVEL_AVATAR)
                     {
-                        sprintf_s(buf, "%s: God file with level %d < %d", entry.path().filename().string().c_str(), low, LEVEL_AVATAR);
+                        sprintf_s(buf, "%s: God file with level %d < %d", entry.path().filename().string().c_str(), low,
+                                  LEVEL_AVATAR);
                         badfile = true;
                     }
                 }

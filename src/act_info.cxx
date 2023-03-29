@@ -1139,8 +1139,9 @@ void do_look(CHAR_DATA* ch, char* argument)
             }
 
             ch_printf(ch, "It's %s full of a %s liquid.\n\r",
-                      obj->value[1] < obj->value[0] / 4 ? "less than"
-                                                        : obj->value[1] < 3 * obj->value[0] / 4 ? "about" : "more than",
+                      obj->value[1] < obj->value[0] / 4       ? "less than"
+                      : obj->value[1] < 3 * obj->value[0] / 4 ? "about"
+                                                              : "more than",
                       liq_table[obj->value[2]].liq_color);
 
             if (doexaprog)
@@ -3261,7 +3262,9 @@ void do_practice(CHAR_DATA* ch, char* argument)
 
             ++cnt;
             pager_printf(ch, "&B[&W%3d%%&B] %s%-18.18s ", ch->pcdata->learned[sn],
-                         skill_table[sn]->alignment == 0 ? "&G" : skill_table[sn]->alignment == -1001 ? "&R" : "&B",
+                         skill_table[sn]->alignment == 0       ? "&G"
+                         : skill_table[sn]->alignment == -1001 ? "&R"
+                                                               : "&B",
                          skill_table[sn]->name);
             if (++col % 3 == 0)
                 send_to_pager("\n\r", ch);
@@ -3437,7 +3440,9 @@ void do_viewskills(CHAR_DATA* ch, char* argument)
 
         ++cnt;
         pager_printf(ch, "&R[&W%3d%%&R] %s%-18.18s ", victim->pcdata->learned[sn],
-                     skill_table[sn]->alignment == 0 ? "&G" : skill_table[sn]->alignment == -1001 ? "&R" : "&B",
+                     skill_table[sn]->alignment == 0       ? "&G"
+                     : skill_table[sn]->alignment == -1001 ? "&R"
+                                                           : "&B",
                      skill_table[sn]->name);
         if (++col % 3 == 0)
             send_to_pager("\n\r", ch);
@@ -4294,8 +4299,9 @@ void do_slist(CHAR_DATA* ch, char* argument)
                 if (i == skill_table[sn]->min_level)
                 {
                     pager_printf(ch, "&B(&W%2d&B)%s %s%-18.18s&W  ", i,
-                                 skill_table[sn]->alignment >= 1001 ? "&B"
-                                                                    : skill_table[sn]->alignment <= -1001 ? "&R" : "&W",
+                                 skill_table[sn]->alignment >= 1001    ? "&B"
+                                 : skill_table[sn]->alignment <= -1001 ? "&R"
+                                                                       : "&W",
                                  color_str(AT_SLIST, ch), skill_table[sn]->name);
 
                     if (++col == 3)
@@ -4359,7 +4365,9 @@ void do_whois(CHAR_DATA* ch, char* argument)
     }
 
     ch_printf(ch, "%s is a %s %s", victim->name,
-              victim->sex == SEX_MALE ? "male" : victim->sex == SEX_FEMALE ? "female" : "neutral",
+              victim->sex == SEX_MALE     ? "male"
+              : victim->sex == SEX_FEMALE ? "female"
+                                          : "neutral",
               npc_race[victim->race]);
     if (IS_IMMORTAL(ch))
         ch_printf(ch, " in room %d.\n\r", victim->in_room->vnum);
@@ -4410,7 +4418,9 @@ void do_whois(CHAR_DATA* ch, char* argument)
 
         if (victim->pcdata->release_date != 0)
             ch_printf(ch, "%s was helled by %s, and will be released on %24.24s.\n\r",
-                      victim->sex == SEX_MALE ? "He" : victim->sex == SEX_FEMALE ? "She" : "It",
+                      victim->sex == SEX_MALE     ? "He"
+                      : victim->sex == SEX_FEMALE ? "She"
+                                                  : "It",
                       victim->pcdata->helled_by, buffer);
 
         if (get_trust(victim) < get_trust(ch))
@@ -4873,11 +4883,13 @@ void do_newexits(CHAR_DATA* ch, char* argument)
                 }
                 else if (IS_SET(pexit->exit_info, EX_xAUTO))
                 {
-                    sprintf_s(buf, "&G&W%-9s &R- &G&W%s%s", capitalize(pexit->keyword).c_str(), color_str(AT_RMNAME, ch),
+                    sprintf_s(buf, "&G&W%-9s &R- &G&W%s%s", capitalize(pexit->keyword).c_str(),
+                              color_str(AT_RMNAME, ch),
                               room_is_dark(pexit->to_room) ? "Too dark to tell" : pexit->to_room->name);
                 }
                 else
-                    sprintf_s(buf, "&G&W%-9s &R- &G&W%s%s", capitalize(dir_name[pexit->vdir]).c_str(), color_str(AT_RMNAME, ch),
+                    sprintf_s(buf, "&G&W%-9s &R- &G&W%s%s", capitalize(dir_name[pexit->vdir]).c_str(),
+                              color_str(AT_RMNAME, ch),
                               room_is_dark(pexit->to_room) ? "Too dark to tell" : pexit->to_room->name);
             }
             else

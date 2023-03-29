@@ -12,7 +12,7 @@ BOOST_AUTO_TEST_CASE(obj_short_test)
     obj.count = 1;
 
     BOOST_TEST(obj_short(&obj) == "super beans");
-    
+
     obj.count = 2;
     BOOST_TEST(obj_short(&obj) == "super beans (2)");
 

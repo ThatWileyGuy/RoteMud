@@ -599,8 +599,10 @@ void do_fstat(CHAR_DATA* ch, char* argument)
     draw_force_line(ch, 70);
     send_to_char("\r\n", ch);
     ch_printf(ch, "&G&WLevel: &G&w%-9d &G&WType: &G&w%-10s &G&WIndex: &G&w%-9d &G&WCost: &G&w%-10d\r\n", fskill->status,
-              fskill->type == FORCE_JEDI ? "Jedi" : fskill->type == FORCE_SITH ? "Sith" : "General", fskill->index,
-              fskill->cost);
+              fskill->type == FORCE_JEDI   ? "Jedi"
+              : fskill->type == FORCE_SITH ? "Sith"
+                                           : "General",
+              fskill->index, fskill->cost);
     ch_printf(ch, "&G&WControl: &G&w%-7s &G&WAlter: &G&w%-9s &G&WSense: &G&w%-9s &G&WWaitState: &G&w%-5d\r\n",
               fskill->control ? "Yes" : "No", fskill->alter ? "Yes" : "No", fskill->sense ? "Yes" : "No",
               fskill->wait_state);
@@ -1289,7 +1291,10 @@ void do_fhstat(CHAR_DATA* ch, char* argument)
     else
         fhelp = ghelp;
     ch_printf(ch, "Name: %-20.20s Level: %-3d Type: %-10s Skill Number: %-3d\r\n", fhelp->name, fhelp->status,
-              fhelp->type == FORCE_GENERAL ? "General" : fhelp->type == FORCE_JEDI ? "Jedi" : "Sith", fhelp->skill);
+              fhelp->type == FORCE_GENERAL ? "General"
+              : fhelp->type == FORCE_JEDI  ? "Jedi"
+                                           : "Sith",
+              fhelp->skill);
     draw_force_line(ch, 79);
     ch_printf(ch, "\r\n");
     send_to_char(strrep(strrep(fhelp->desc, "$RN$", "\r\n"), "$RN$", "\r\n"), ch);

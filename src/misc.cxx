@@ -1104,27 +1104,27 @@ void do_fill(CHAR_DATA* ch, char* argument)
                It's nitpicking, but I needed to change it to get a mobprog to work
                right.  Check out Lord Fitzgibbon if you're curious.  -Narn */
             if (dest_item == ITEM_PIPE)
-        {
-            if ((source = get_obj_carry(ch, arg2)) == NULL)
             {
-                send_to_char("You don't have that item.\n\r", ch);
-                return;
+                if ((source = get_obj_carry(ch, arg2)) == NULL)
+                {
+                    send_to_char("You don't have that item.\n\r", ch);
+                    return;
+                }
+                if (source->item_type != src_item1 && source->item_type != src_item2 &&
+                    source->item_type != src_item3 && source->item_type != src_item4)
+                {
+                    act(AT_PLAIN, "You cannot fill $p with $P!", ch, obj, source, TO_CHAR);
+                    return;
+                }
             }
-            if (source->item_type != src_item1 && source->item_type != src_item2 && source->item_type != src_item3 &&
-                source->item_type != src_item4)
+            else
             {
-                act(AT_PLAIN, "You cannot fill $p with $P!", ch, obj, source, TO_CHAR);
-                return;
+                if ((source = get_obj_here(ch, arg2)) == NULL)
+                {
+                    send_to_char("You cannot find that item.\n\r", ch);
+                    return;
+                }
             }
-        }
-        else
-        {
-            if ((source = get_obj_here(ch, arg2)) == NULL)
-            {
-                send_to_char("You cannot find that item.\n\r", ch);
-                return;
-            }
-        }
     }
     else
         source = NULL;

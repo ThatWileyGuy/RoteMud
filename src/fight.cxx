@@ -2444,7 +2444,7 @@ int xp_compute(CHAR_DATA* gch, CHAR_DATA* victim)
     else
         /* penalty for good attacking same alignment */
         if (gch->alignment > 300 && align < 250)
-        xp = (xp * 3) >> 2;
+            xp = (xp * 3) >> 2;
 
     xp = number_range((xp * 3) >> 2, (xp * 5) >> 2);
 

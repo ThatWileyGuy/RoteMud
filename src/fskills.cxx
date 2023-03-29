@@ -201,12 +201,23 @@ void fskill_finfo(CHAR_DATA* ch, char* argument)
                   continue;
                 }*/
         ch_printf(ch, " %s %s%-15s %s(%s%3d%%%s)&w  ",
-                  skill->type == FORCE_JEDI ? "&b" : skill->type == FORCE_SITH ? "&r" : "&W",
-                  skill->type == FORCE_JEDI ? "&B" : skill->type == FORCE_SITH ? "&R" : "&w", skill->name,
-                  skill->type == FORCE_JEDI ? "&b" : skill->type == FORCE_SITH ? "&r" : "&W",
-                  skill->type == FORCE_JEDI ? "&B" : skill->type == FORCE_SITH ? "&R" : "&w",
+                  skill->type == FORCE_JEDI   ? "&b"
+                  : skill->type == FORCE_SITH ? "&r"
+                                              : "&W",
+                  skill->type == FORCE_JEDI   ? "&B"
+                  : skill->type == FORCE_SITH ? "&R"
+                                              : "&w",
+                  skill->name,
+                  skill->type == FORCE_JEDI   ? "&b"
+                  : skill->type == FORCE_SITH ? "&r"
+                                              : "&W",
+                  skill->type == FORCE_JEDI   ? "&B"
+                  : skill->type == FORCE_SITH ? "&R"
+                                              : "&w",
                   ch->force_skill[skill->index],
-                  skill->type == FORCE_JEDI ? "&b" : skill->type == FORCE_SITH ? "&r" : "&W");
+                  skill->type == FORCE_JEDI   ? "&b"
+                  : skill->type == FORCE_SITH ? "&r"
+                                              : "&W");
 
         if (count == 3)
         {
@@ -250,12 +261,23 @@ void fskill_finfo(CHAR_DATA* ch, char* argument)
                       continue;
                     }*/
             ch_printf(ch, " %s %s%-15s %s(%s%3d%%%s)&w  ",
-                      skill->type == FORCE_JEDI ? "&b" : skill->type == FORCE_SITH ? "&r" : "&W",
-                      skill->type == FORCE_JEDI ? "&B" : skill->type == FORCE_SITH ? "&R" : "&w", skill->name,
-                      skill->type == FORCE_JEDI ? "&b" : skill->type == FORCE_SITH ? "&r" : "&W",
-                      skill->type == FORCE_JEDI ? "&B" : skill->type == FORCE_SITH ? "&R" : "&w",
+                      skill->type == FORCE_JEDI   ? "&b"
+                      : skill->type == FORCE_SITH ? "&r"
+                                                  : "&W",
+                      skill->type == FORCE_JEDI   ? "&B"
+                      : skill->type == FORCE_SITH ? "&R"
+                                                  : "&w",
+                      skill->name,
+                      skill->type == FORCE_JEDI   ? "&b"
+                      : skill->type == FORCE_SITH ? "&r"
+                                                  : "&W",
+                      skill->type == FORCE_JEDI   ? "&B"
+                      : skill->type == FORCE_SITH ? "&R"
+                                                  : "&w",
                       ch->force_skill[skill->index],
-                      skill->type == FORCE_JEDI ? "&b" : skill->type == FORCE_SITH ? "&r" : "&W");
+                      skill->type == FORCE_JEDI   ? "&b"
+                      : skill->type == FORCE_SITH ? "&r"
+                                                  : "&W");
 
             if (count == 3)
             {
@@ -300,12 +322,23 @@ void fskill_finfo(CHAR_DATA* ch, char* argument)
                       continue;
                     }*/
             ch_printf(ch, " %s %s%-15s %s(%s%3d%%%s)&w  ",
-                      skill->type == FORCE_JEDI ? "&b" : skill->type == FORCE_SITH ? "&r" : "&W",
-                      skill->type == FORCE_JEDI ? "&B" : skill->type == FORCE_SITH ? "&R" : "&w", skill->name,
-                      skill->type == FORCE_JEDI ? "&b" : skill->type == FORCE_SITH ? "&r" : "&W",
-                      skill->type == FORCE_JEDI ? "&B" : skill->type == FORCE_SITH ? "&R" : "&w",
+                      skill->type == FORCE_JEDI   ? "&b"
+                      : skill->type == FORCE_SITH ? "&r"
+                                                  : "&W",
+                      skill->type == FORCE_JEDI   ? "&B"
+                      : skill->type == FORCE_SITH ? "&R"
+                                                  : "&w",
+                      skill->name,
+                      skill->type == FORCE_JEDI   ? "&b"
+                      : skill->type == FORCE_SITH ? "&r"
+                                                  : "&W",
+                      skill->type == FORCE_JEDI   ? "&B"
+                      : skill->type == FORCE_SITH ? "&R"
+                                                  : "&w",
                       ch->force_skill[skill->index],
-                      skill->type == FORCE_JEDI ? "&b" : skill->type == FORCE_SITH ? "&r" : "&W");
+                      skill->type == FORCE_JEDI   ? "&b"
+                      : skill->type == FORCE_SITH ? "&r"
+                                                  : "&W");
 
             if (count == 3)
             {

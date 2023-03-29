@@ -210,7 +210,9 @@ void do_score(CHAR_DATA* ch, char* argument)
     for (ability = 0; ability < MAX_ABILITY; ability++)
         if (ability != FORCE_ABILITY)
             ch_printf(ch, "&z| &W%s&c%-15s   Level: &g%-3d   &cof  &g%-3d   &cExp: &g%-10ld&z|\n\r",
-                      victim->main_ability == ability ? "+" : victim->secondary_ability == ability ? "-" : " ",
+                      victim->main_ability == ability        ? "+"
+                      : victim->secondary_ability == ability ? "-"
+                                                             : " ",
                       ability_name[ability], victim->skill_level[ability], max_level(victim, ability),
                       victim->experience[ability]);
     send_to_char("&z|----------------------------------------------------------|&W\n\r", ch);
@@ -859,8 +861,8 @@ void do_oldscore(CHAR_DATA* ch, char* argument)
                 ch_printf(ch, "Spell: '%s'", skill->name);
 
                 if (ch->top_level >= 20)
-                    ch_printf(ch, " modifies %s by %d for %d rounds", affect_loc_name(paf->location).c_str(), paf->modifier,
-                              paf->duration);
+                    ch_printf(ch, " modifies %s by %d for %d rounds", affect_loc_name(paf->location).c_str(),
+                              paf->modifier, paf->duration);
 
                 send_to_char(".\n\r", ch);
             }

@@ -2531,8 +2531,8 @@ ch_ret spell_identify(int sn, int level, CHAR_DATA* ch, void* vo)
     {
         set_char_color(AT_LBLUE, ch);
         ch_printf(ch, "Object '%s' is %s, special properties: %s %s.\n\rIts weight is %d, value is %d.\n\r", obj->name,
-                  aoran(item_type_name(obj)).c_str(), extra_bit_name(obj->extra_flags).c_str(), magic_bit_name(obj->magic_flags).c_str(),
-                  obj->weight, obj->cost);
+                  aoran(item_type_name(obj)).c_str(), extra_bit_name(obj->extra_flags).c_str(),
+                  magic_bit_name(obj->magic_flags).c_str(), obj->weight, obj->cost);
         set_char_color(AT_MAGIC, ch);
 
         switch (obj->item_type)

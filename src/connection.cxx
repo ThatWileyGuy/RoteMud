@@ -19,7 +19,6 @@
 class TelnetConnection : public Connection
 {
   private:
-
     boost::asio::awaitable<void> readSome()
     {
         std::array<char, MAX_INPUT_LENGTH> readBuffer;
@@ -28,9 +27,8 @@ class TelnetConnection : public Connection
 
         m_waitingForIO = true;
 
-        size_t bytesRead = co_await m_socket->async_read_some(
-            boost::asio::buffer(&readBuffer[0], readBuffer.size()),
-            boost::asio::use_awaitable);
+        size_t bytesRead = co_await m_socket->async_read_some(boost::asio::buffer(&readBuffer[0], readBuffer.size()),
+                                                              boost::asio::use_awaitable);
 
         // TODO error handling
         // TODO what happens if we overflow m_inputBuffer
@@ -179,7 +177,6 @@ class SshConnection : public Connection
                 commlog("continuing SSH key exchange...");
 
                 continue;
-
             }
             else if (ret == SSH_OK)
             {
@@ -226,7 +223,7 @@ class SshConnection : public Connection
         m_waitingForIO = true;
 
         const auto waitType = (loopType == IOType::Read) ? boost::asio::ip::tcp::socket::wait_read
-                                                     : boost::asio::ip::tcp::socket::wait_write;
+                                                         : boost::asio::ip::tcp::socket::wait_write;
 
         co_await m_socket->async_wait(waitType, boost::asio::use_awaitable);
 
@@ -535,9 +532,8 @@ class SshConnection : public Connection
                                                                                       is_stderr);
             };
 
-
             m_channelCallbacks.channel_write_wontblock_function = [](ssh_session, ssh_channel, auto bytes,
-                                                                        void* userdata) {
+                                                                     void* userdata) {
                 auto connection = reinterpret_cast<SshConnection*>(userdata);
                 connection->m_writableBytes = bytes;
                 reinterpret_cast<SshConnection*>(userdata)->writeData();
@@ -640,7 +636,7 @@ void IOManager::handleNewTelnetConnection(const boost::system::error_code& error
         auto connection = std::make_shared<TelnetConnection>(*this, std::move(socket));
 
         m_connections.push_back(connection);
-        
+
         // TODO this might not return anymore?
         m_callbacks.newUnauthenticatedConnection(connection);
 

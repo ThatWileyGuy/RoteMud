@@ -2518,15 +2518,12 @@ void do_auction(CHAR_DATA* ch, char* argument)
                 break;
             case ITEM_WEAPON:
                 ch_printf(ch, "&z|| &wIt is a &G%s&w.  Average Damage: &G%d&w\n\r",
-                          obj->value[3] == WEAPON_VIBRO_BLADE
-                              ? "vibro blade"
-                              : obj->value[3] == WEAPON_BOWCASTER
-                                    ? "bowcaster"
-                                    : obj->value[3] == WEAPON_FORCE_PIKE
-                                          ? "force pike"
-                                          : obj->value[3] == WEAPON_BLASTER
-                                                ? "blaster"
-                                                : obj->value[3] == WEAPON_LIGHTSABER ? "lightsaber" : "weapon",
+                          obj->value[3] == WEAPON_VIBRO_BLADE  ? "vibro blade"
+                          : obj->value[3] == WEAPON_BOWCASTER  ? "bowcaster"
+                          : obj->value[3] == WEAPON_FORCE_PIKE ? "force pike"
+                          : obj->value[3] == WEAPON_BLASTER    ? "blaster"
+                          : obj->value[3] == WEAPON_LIGHTSABER ? "lightsaber"
+                                                               : "weapon",
                           (obj->value[1] + obj->value[2]) / 2);
                 if (obj->value[3] == WEAPON_BLASTER || obj->value[3] == WEAPON_VIBRO_BLADE ||
                     obj->value[3] == WEAPON_LIGHTSABER || obj->value[3] == WEAPON_FORCE_PIKE)

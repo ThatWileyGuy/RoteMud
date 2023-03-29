@@ -1574,8 +1574,7 @@ void do_mpapply(CHAR_DATA* ch, char* argument)
         return;
 
     sprintf_s(log_buf, "%s@%s new %s applying for authorization...", victim->name,
-              victim->desc->connection->getHostname().c_str(),
-              race_table[victim->race].race_name);
+              victim->desc->connection->getHostname().c_str(), race_table[victim->race].race_name);
     log_string(log_buf);
     to_channel(log_buf, CHANNEL_MONITOR, "Monitor", LEVEL_IMMORTAL);
     victim->pcdata->auth_state = 1;
@@ -1626,8 +1625,7 @@ void do_mpapplyb(CHAR_DATA* ch, char* argument)
     default:
         send_to_char("You attempt to regain the gods' attention.\n\r", victim);
         sprintf_s(log_buf, "%s@%s new %s applying for authorization...", victim->name,
-                  victim->desc->connection->getHostname().c_str(),
-                  race_table[victim->race].race_name);
+                  victim->desc->connection->getHostname().c_str(), race_table[victim->race].race_name);
         log_string(log_buf);
         to_channel(log_buf, CHANNEL_MONITOR, "Monitor", LEVEL_IMMORTAL);
         add_timer(victim, TIMER_APPLIED, 10, NULL, 0);

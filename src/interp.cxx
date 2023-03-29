@@ -413,7 +413,6 @@ void interpret(CHAR_DATA* ch, char* argument)
                   floatseconds(time_used).count());
         log_string_plus(log_buf, LOG_NORMAL, get_trust(ch));
     }
-
 }
 
 CMDTYPE* find_command(const char* command)

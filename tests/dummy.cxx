@@ -119,7 +119,7 @@ template <typename T> struct Awaitable
         m_handle = {};
 
         localHandle.resume();
-        
+
         m_owningThread = {};
         assert(!m_item.has_value());
     }

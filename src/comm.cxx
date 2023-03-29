@@ -217,10 +217,8 @@ int gamemain(int argc, char** argv)
     log_string("Initializing socket");
     if (!fCopyOver) /* We have already the port if copyover'ed */
     {
-        IOManagerCallbacks callbacks = {
-            &handle_new_unauthenticated_connection, &authenticate_user,
-            &get_public_keys_for_user, &handle_new_authenticated_connection
-        };
+        IOManagerCallbacks callbacks = {&handle_new_unauthenticated_connection, &authenticate_user,
+                                        &get_public_keys_for_user, &handle_new_authenticated_connection};
 
         io_manager.emplace(callbacks, telnet_port, ssh_port);
         if (!io_manager.has_value())

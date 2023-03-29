@@ -6019,20 +6019,17 @@ void do_showbeacons(CHAR_DATA* ch, char* argument)
 
             ch_printf(ch, "^g&xACTIVE^x&z: &w%-15.15s&z Location:&w %s &z(&w%s&z)&w\n\r", ship->name,
 
-                      (ship->in_room && ship->in_room->area->planet)
-                          ? ship->in_room->area->planet->name
-                          : (ship->in_room && !ship->in_room->area->planet)
-                                ? buf
-                                : (!ship->in_room && ship->starsystem)
-                                      ? ship->starsystem->name
-                                      : ship->shipstate == SHIP_HYPERSPACE ? "Unknown" : "Unknown",
+                      (ship->in_room && ship->in_room->area->planet)    ? ship->in_room->area->planet->name
+                      : (ship->in_room && !ship->in_room->area->planet) ? buf
+                      : (!ship->in_room && ship->starsystem)            ? ship->starsystem->name
+                      : ship->shipstate == SHIP_HYPERSPACE              ? "Unknown"
+                                                                        : "Unknown",
 
-                      (ship->in_room && ship->in_room->area->planet)
-                          ? ship->in_room->name
-                          : (ship->in_room && !ship->in_room->area->planet)
-                                ? buf2
-                                : ship->shipstate == SHIP_HYPERSPACE ? "In Hyperspace"
-                                                                     : (!ship->in_room) ? buf3 : "Unknown");
+                      (ship->in_room && ship->in_room->area->planet)    ? ship->in_room->name
+                      : (ship->in_room && !ship->in_room->area->planet) ? buf2
+                      : ship->shipstate == SHIP_HYPERSPACE              ? "In Hyperspace"
+                      : (!ship->in_room)                                ? buf3
+                                                                        : "Unknown");
             count++;
         }
     }
