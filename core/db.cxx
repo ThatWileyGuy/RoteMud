@@ -3902,16 +3902,16 @@ void bug(const char* str, ...)
 
     if (fpArea != NULL)
     {
-        int iLine;
         int iChar;
 
         if (fpArea == stdin)
         {
-            iLine = 0;
+            // iLine = 0;
         }
         else
         {
             iChar = ftell(fpArea);
+            /*
             fseek(fpArea, 0, 0);
             for (iLine = 0; ftell(fpArea) < iChar; iLine++)
             {
@@ -3919,9 +3919,10 @@ void bug(const char* str, ...)
                     ;
             }
             fseek(fpArea, iChar, 0);
+            */
         }
 
-        sprintf_s(buf, "[*****] FILE: %s LINE: %d", strArea, iLine);
+        sprintf_s(buf, "[*****] FILE: %s POS: %d", strArea, iChar);
         log_string(buf);
 
         if (stat(SHUTDOWN_FILE, &fst) != -1) /* file exists */
