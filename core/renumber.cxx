@@ -51,6 +51,7 @@
 #include <string.h>
 #include <ctype.h>
 #include "mud.hxx"
+#include "db.hxx"
 
 #define NOT_FOUND (-1)
 enum
@@ -94,11 +95,6 @@ void translate_exits(CHAR_DATA* ch, AREA_DATA* area, RENUMBER_AREA* r_area, bool
 void warn_progs(CHAR_DATA* ch, int low, int high, AREA_DATA* area, RENUMBER_AREA* r_area);
 void warn_in_prog(CHAR_DATA* ch, int low, int high, const char* where, int vnum, MPROG_DATA* mprog,
                   RENUMBER_AREA* r_area);
-
-/* from db.c */
-extern ROOM_INDEX_DATA* room_index_hash[MAX_KEY_HASH];
-extern MOB_INDEX_DATA* mob_index_hash[MAX_KEY_HASH];
-extern OBJ_INDEX_DATA* obj_index_hash[MAX_KEY_HASH];
 
 void do_renumber(CHAR_DATA* ch, char* argument)
 {
@@ -378,9 +374,6 @@ void renumber_area(CHAR_DATA* ch, AREA_DATA* area, RENUMBER_AREA* r_area, bool a
    to the renumber data in "r_area". "ch" is to show messages. */
 {
     RENUMBER_DATA* r_data;
-    ROOM_INDEX_DATA *room, *room_prev, *room_list, *room_next;
-    MOB_INDEX_DATA *mob, *mob_prev, *mob_list, *mob_next;
-    OBJ_INDEX_DATA *obj, *obj_prev, *obj_list, *obj_next;
     RESET_DATA *preset, *treset;
     int iHash;
     int low, high;
@@ -403,13 +396,13 @@ void renumber_area(CHAR_DATA* ch, AREA_DATA* area, RENUMBER_AREA* r_area, bool a
      * vnum).
      */
 
-    room_list = NULL;
+    std::vector<ROOM_INDEX_DATA*> rooms;
     for (r_data = r_area->r_room; r_data; r_data = r_data->next)
     {
         if (verbose)
             pager_printf(ch, "(Room) %d -> %d\n\r", r_data->old_vnum, r_data->new_vnum);
 
-        room = get_room_index(r_data->old_vnum);
+        ROOM_INDEX_DATA* room = get_room_index(r_data->old_vnum);
         if (!room)
         {
             bug("renumber_area: NULL room %d", r_data->old_vnum);
@@ -417,37 +410,22 @@ void renumber_area(CHAR_DATA* ch, AREA_DATA* area, RENUMBER_AREA* r_area, bool a
         }
 
         /* remove it from the hash list */
-        iHash = r_data->old_vnum % MAX_KEY_HASH;
-        if (room_index_hash[iHash] == room)
-            room_index_hash[iHash] = room->next;
-        else
+        if (!g_roomIndex.erase(r_data->old_vnum))
         {
-            for (room_prev = room_index_hash[iHash]; room_prev && room_prev->next != room; room_prev = room_prev->next)
-                ;
-            if (room_prev == NULL)
-            {
-                bug("renumber_area: Couldn't find a room in the hash table! Skipping it.\n\r");
-                continue;
-            }
-            room_prev->next = room->next;
-            room->next = NULL;
+            bug("renumber_area: Couldn't find a room in the hash table! Skipping it.\n\r");
+            continue;
         }
 
         /* change the vnum */
         room->vnum = r_data->new_vnum;
 
         /* move it to the temporary list */
-        room->next = room_list;
-        room_list = room;
+        rooms.push_back(room);
     }
     /* now move everything back into the hash array */
-    for (room = room_list; room; room = room_next)
+    for (auto room : rooms)
     {
-        room_next = room->next;
-        /* add it to the hash list again (new position) */
-        iHash = room->vnum % MAX_KEY_HASH;
-        room->next = room_index_hash[iHash];
-        room_index_hash[iHash] = room;
+        g_roomIndex.insert({room->vnum, room});
     }
     /* if nothing was moved, or if the area is proto, dont change this */
     if (r_area->r_room != NULL && !area_is_proto)
@@ -457,13 +435,13 @@ void renumber_area(CHAR_DATA* ch, AREA_DATA* area, RENUMBER_AREA* r_area, bool a
     }
 
     pager_printf(ch, "(Mobs) Renumbering...\n\r");
-    mob_list = NULL;
+    std::vector<MOB_INDEX_DATA*> mobs;
     for (r_data = r_area->r_mob; r_data; r_data = r_data->next)
     {
         if (verbose)
             pager_printf(ch, "(Mobs) %d -> %d\n\r", r_data->old_vnum, r_data->new_vnum);
 
-        mob = get_mob_index(r_data->old_vnum);
+        MOB_INDEX_DATA* mob = get_mob_index(r_data->old_vnum);
         if (!mob)
         {
             bug("renumber_area: NULL mob %d", r_data->old_vnum);
@@ -485,36 +463,21 @@ void renumber_area(CHAR_DATA* ch, AREA_DATA* area, RENUMBER_AREA* r_area, bool a
         }
 
         /* remove it from the hash list */
-        iHash = r_data->old_vnum % MAX_KEY_HASH;
-        if (mob_index_hash[iHash] == mob)
-            mob_index_hash[iHash] = mob->next;
-        else
+        if (!g_mobIndex.erase(r_data->old_vnum))
         {
-            for (mob_prev = mob_index_hash[iHash]; mob_prev && mob_prev->next != mob; mob_prev = mob_prev->next)
-                ;
-            if (mob_prev == NULL)
-            {
-                bug("renumber_area: Couldn't find a mob in the hash table! Skipping it.\n\r");
-                continue;
-            }
-            mob_prev->next = mob->next;
-            mob->next = NULL;
+            bug("renumber_area: Couldn't find a mob in the hash table! Skipping it.\n\r");
+            continue;
         }
 
         /* change the vnum */
         mob->vnum = r_data->new_vnum;
 
         /* move to private list */
-        mob->next = mob_list;
-        mob_list = mob;
+        mobs.push_back(mob);
     }
-    for (mob = mob_list; mob; mob = mob_next)
+    for (auto mob : mobs)
     {
-        mob_next = mob->next;
-        /* add it to the hash list again */
-        iHash = mob->vnum % MAX_KEY_HASH;
-        mob->next = mob_index_hash[iHash];
-        mob_index_hash[iHash] = mob;
+        g_mobIndex.insert({mob->vnum, mob});
     }
     if (r_area->r_mob && !area_is_proto)
     {
@@ -523,12 +486,12 @@ void renumber_area(CHAR_DATA* ch, AREA_DATA* area, RENUMBER_AREA* r_area, bool a
     }
 
     pager_printf(ch, "(Objs) Renumbering...\n\r");
-    obj_list = NULL;
+    std::vector<OBJ_INDEX_DATA*> objects;
     for (r_data = r_area->r_obj; r_data; r_data = r_data->next)
     {
         if (verbose)
             pager_printf(ch, "(Objs) %d -> %d\n\r", r_data->old_vnum, r_data->new_vnum);
-        obj = get_obj_index(r_data->old_vnum);
+        OBJ_INDEX_DATA* obj = get_obj_index(r_data->old_vnum);
         if (!obj)
         {
             bug("renumber_area: NULL obj %d", r_data->old_vnum);
@@ -536,36 +499,22 @@ void renumber_area(CHAR_DATA* ch, AREA_DATA* area, RENUMBER_AREA* r_area, bool a
         }
 
         /* remove it from the hash list */
-        iHash = r_data->old_vnum % MAX_KEY_HASH;
-        if (obj_index_hash[iHash] == obj)
-            obj_index_hash[iHash] = obj->next;
-        else
+        if (!g_objectIndex.erase(r_data->old_vnum))
         {
-            for (obj_prev = obj_index_hash[iHash]; obj_prev && obj_prev->next != obj; obj_prev = obj_prev->next)
-                ;
-            if (obj_prev == NULL)
-            {
-                bug("renumber_area: Couldn't find an obj in the hash table! Skipping it.\n\r");
-                continue;
-            }
-            obj_prev->next = obj->next;
-            obj->next = NULL;
+            bug("renumber_area: Couldn't find an obj in the hash table! Skipping it.\n\r");
+            continue;
         }
 
         /* change the vnum */
         obj->vnum = r_data->new_vnum;
 
         /* to our list */
-        obj->next = obj_list;
-        obj_list = obj;
+        objects.push_back(obj);
     }
-    for (obj = obj_list; obj; obj = obj_next)
+    for (auto obj : objects)
     {
-        obj_next = obj->next;
         /* add it to the hash list again */
-        iHash = obj->vnum % MAX_KEY_HASH;
-        obj->next = obj_index_hash[iHash];
-        obj_index_hash[iHash] = obj;
+        g_objectIndex.insert({obj->vnum, obj});
     }
     if (r_area->r_obj && !area_is_proto)
     {
@@ -582,7 +531,7 @@ void renumber_area(CHAR_DATA* ch, AREA_DATA* area, RENUMBER_AREA* r_area, bool a
     translate_exits(ch, area, r_area, verbose);
 
     send_to_pager("... fixing resets...\n\r", ch);
-    for (room = area->first_room; room; room = room->next_aroom)
+    for (auto room = area->first_room; room; room = room->next_aroom)
     {
         for (preset = room->first_reset; preset; preset = preset->next)
         {

@@ -2887,8 +2887,6 @@ struct TIMER
  */
 struct MOB_INDEX_DATA
 {
-    MOB_INDEX_DATA* next;
-    MOB_INDEX_DATA* next_sort;
     SPEC_FUN* spec_fun;
     SPEC_FUN* spec_2;
     SHOP_DATA* pShop;
@@ -3291,8 +3289,6 @@ struct EXTRA_DESCR_DATA
  */
 struct OBJ_INDEX_DATA
 {
-    OBJ_INDEX_DATA* next;
-    OBJ_INDEX_DATA* next_sort;
     EXTRA_DESCR_DATA* first_extradesc;
     EXTRA_DESCR_DATA* last_extradesc;
     AFFECT_DATA* first_affect;
@@ -3536,8 +3532,6 @@ struct SYSTEM_DATA
  */
 struct ROOM_INDEX_DATA
 {
-    ROOM_INDEX_DATA* next;
-    ROOM_INDEX_DATA* next_sort;
     CHAR_DATA* first_person;
     CHAR_DATA* last_person;
     OBJ_DATA* first_content;
@@ -4315,7 +4309,6 @@ extern int nummobsloaded;
 extern int physicalobjects;
 extern SYSTEM_DATA sysdata;
 extern int top_sn;
-extern int top_vroom;
 extern int top_herb;
 
 extern CMDTYPE* command_hash[126];

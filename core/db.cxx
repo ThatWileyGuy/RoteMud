@@ -45,7 +45,9 @@
 #include <sys/stat.h>
 #include <math.h>
 #include <filesystem>
+#include <unordered_map>
 #include "mud.hxx"
+#include "db.hxx"
 
 extern int _filbuf(FILE*);
 
@@ -344,9 +346,9 @@ bool MOBtrigger;
 /*
  * Locals.
  */
-MOB_INDEX_DATA* mob_index_hash[MAX_KEY_HASH];
-OBJ_INDEX_DATA* obj_index_hash[MAX_KEY_HASH];
-ROOM_INDEX_DATA* room_index_hash[MAX_KEY_HASH];
+std::unordered_map<int, MOB_INDEX_DATA*> g_mobIndex;
+std::unordered_map<int, OBJ_INDEX_DATA*> g_objectIndex;
+std::unordered_map<int, ROOM_INDEX_DATA*> g_roomIndex;
 
 AREA_DATA* first_area;
 AREA_DATA* last_area;
@@ -364,13 +366,9 @@ int top_area;
 int top_ed;
 int top_exit;
 int top_help;
-int top_mob_index;
-int top_obj_index;
 int top_reset;
-int top_room;
 int top_shop;
 int top_repair;
-int top_vroom;
 
 /*
  * Semi-locals.
@@ -1323,10 +1321,7 @@ void load_mobiles(AREA_DATA* tarea, FILE* fp)
 
         if (!oldmob)
         {
-            iHash = vnum % MAX_KEY_HASH;
-            pMobIndex->next = mob_index_hash[iHash];
-            mob_index_hash[iHash] = pMobIndex;
-            top_mob_index++;
+            g_mobIndex.insert({vnum, pMobIndex});
         }
     }
 
@@ -1515,10 +1510,8 @@ void load_objects(AREA_DATA* tarea, FILE* fp)
 
         if (!oldobj)
         {
-            iHash = vnum % MAX_KEY_HASH;
-            pObjIndex->next = obj_index_hash[iHash];
-            obj_index_hash[iHash] = pObjIndex;
-            top_obj_index++;
+            assert(!g_objectIndex.contains(vnum));
+            g_objectIndex.insert({vnum, pObjIndex});
         }
     }
 
@@ -2010,11 +2003,8 @@ void load_rooms(AREA_DATA* tarea, FILE* fp)
 
         if (!oldroom)
         {
-            iHash = vnum % MAX_KEY_HASH;
-            pRoomIndex->next = room_index_hash[iHash];
-            room_index_hash[iHash] = pRoomIndex;
+            g_roomIndex.insert({vnum, pRoomIndex});
             LINK(pRoomIndex, tarea->first_room, tarea->last_room, next_aroom, prev_aroom);
-            top_room++;
         }
     }
 
@@ -2219,53 +2209,49 @@ void initialize_economy(void)
  */
 void fix_exits(void)
 {
-    ROOM_INDEX_DATA* pRoomIndex;
-    EXIT_DATA *pexit, *pexit_next, *rev_exit;
-    int iHash;
+    EXIT_DATA *pexit = nullptr, *pexit_next = nullptr, *rev_exit = nullptr;
 
-    for (iHash = 0; iHash < MAX_KEY_HASH; iHash++)
+    for (auto pair : g_roomIndex)
     {
-        for (pRoomIndex = room_index_hash[iHash]; pRoomIndex; pRoomIndex = pRoomIndex->next)
+        auto pRoomIndex = pair.second;
+
+        bool fexit;
+
+        fexit = false;
+        for (pexit = pRoomIndex->first_exit; pexit; pexit = pexit_next)
         {
-            bool fexit;
-
-            fexit = false;
-            for (pexit = pRoomIndex->first_exit; pexit; pexit = pexit_next)
+            pexit_next = pexit->next;
+            pexit->rvnum = pRoomIndex->vnum;
+            if (pexit->vnum <= 0 || (pexit->to_room = get_room_index(pexit->vnum)) == NULL)
             {
-                pexit_next = pexit->next;
-                pexit->rvnum = pRoomIndex->vnum;
-                if (pexit->vnum <= 0 || (pexit->to_room = get_room_index(pexit->vnum)) == NULL)
-                {
-                    if (fBootDb)
-                        boot_log("Fix_exits: room %d, exit %s leads to bad vnum (%d)", pRoomIndex->vnum,
-                                 dir_name[pexit->vdir], pexit->vnum);
+                if (fBootDb)
+                    boot_log("Fix_exits: room %d, exit %s leads to bad vnum (%d)", pRoomIndex->vnum,
+                             dir_name[pexit->vdir], pexit->vnum);
 
-                    bug("Deleting %s exit in room %d", dir_name[pexit->vdir], pRoomIndex->vnum);
-                    extract_exit(pRoomIndex, pexit);
-                }
-                else
-                    fexit = true;
+                bug("Deleting %s exit in room %d", dir_name[pexit->vdir], pRoomIndex->vnum);
+                extract_exit(pRoomIndex, pexit);
             }
-            if (!fexit)
-                SET_BIT(pRoomIndex->room_flags, ROOM_NO_MOB);
+            else
+                fexit = true;
         }
+        if (!fexit)
+            SET_BIT(pRoomIndex->room_flags, ROOM_NO_MOB);
     }
 
     /* Set all the rexit pointers 	-Thoric */
-    for (iHash = 0; iHash < MAX_KEY_HASH; iHash++)
+    for (auto pair : g_roomIndex)
     {
-        for (pRoomIndex = room_index_hash[iHash]; pRoomIndex; pRoomIndex = pRoomIndex->next)
+        auto pRoomIndex = pair.second;
+
+        for (pexit = pRoomIndex->first_exit; pexit; pexit = pexit->next)
         {
-            for (pexit = pRoomIndex->first_exit; pexit; pexit = pexit->next)
+            if (pexit->to_room && !pexit->rexit)
             {
-                if (pexit->to_room && !pexit->rexit)
+                rev_exit = get_exit_to(pexit->to_room, rev_dir[pexit->vdir], pRoomIndex->vnum);
+                if (rev_exit)
                 {
-                    rev_exit = get_exit_to(pexit->to_room, rev_dir[pexit->vdir], pRoomIndex->vnum);
-                    if (rev_exit)
-                    {
-                        pexit->rexit = rev_exit;
-                        rev_exit->rexit = pexit;
-                    }
+                    pexit->rexit = rev_exit;
+                    rev_exit->rexit = pexit;
                 }
             }
         }
@@ -2970,9 +2956,12 @@ MOB_INDEX_DATA* get_mob_index(int vnum)
     if (vnum < 0)
         vnum = 0;
 
-    for (pMobIndex = mob_index_hash[vnum % MAX_KEY_HASH]; pMobIndex; pMobIndex = pMobIndex->next)
-        if (pMobIndex->vnum == vnum)
-            return pMobIndex;
+    auto iter = g_mobIndex.find(vnum);
+
+    if (iter != g_mobIndex.end())
+    {
+        return iter->second;
+    }
 
     if (fBootDb)
         bug("Get_mob_index: bad vnum %d.", vnum);
@@ -2991,9 +2980,12 @@ OBJ_INDEX_DATA* get_obj_index(int vnum)
     if (vnum < 0)
         vnum = 0;
 
-    for (pObjIndex = obj_index_hash[vnum % MAX_KEY_HASH]; pObjIndex; pObjIndex = pObjIndex->next)
-        if (pObjIndex->vnum == vnum)
-            return pObjIndex;
+    auto iter = g_objectIndex.find(vnum);
+
+    if (iter != g_objectIndex.end())
+    {
+        return iter->second;
+    }
 
     if (fBootDb)
         bug("Get_obj_index: bad vnum %d.", vnum);
@@ -3012,9 +3004,12 @@ ROOM_INDEX_DATA* get_room_index(int vnum)
     if (vnum < 0)
         vnum = 0;
 
-    for (pRoomIndex = room_index_hash[vnum % MAX_KEY_HASH]; pRoomIndex; pRoomIndex = pRoomIndex->next)
-        if (pRoomIndex->vnum == vnum)
-            return pRoomIndex;
+    auto iter = g_roomIndex.find(vnum);
+
+    if (iter != g_roomIndex.end())
+    {
+        return iter->second;
+    }
 
     if (fBootDb)
         bug("Get_room_index: bad vnum %d.", vnum);
@@ -3442,9 +3437,9 @@ void do_memory(CHAR_DATA* ch, char* argument)
     ch_printf(ch, "Affects %5d    Areas   %5d\n\r", top_affect, top_area);
     ch_printf(ch, "ExtDes  %5d    Exits   %5d\n\r", top_ed, top_exit);
     ch_printf(ch, "Helps   %5d    Resets  %5d\n\r", top_help, top_reset);
-    ch_printf(ch, "IdxMobs %5d    Mobs    %5d\n\r", top_mob_index, nummobsloaded);
-    ch_printf(ch, "IdxObjs %5d    Objs    %5d (%d)\n\r", top_obj_index, numobjsloaded, physicalobjects);
-    ch_printf(ch, "Rooms   %5d    VRooms  %5d\n\r", top_room, top_vroom);
+    ch_printf(ch, "IdxMobs %5zu    Mobs    %5d\n\r", g_mobIndex.size(), nummobsloaded);
+    ch_printf(ch, "IdxObjs %5zu    Objs    %5d (%d)\n\r", g_objectIndex.size(), numobjsloaded, physicalobjects);
+    ch_printf(ch, "Rooms   %5zu    VRooms  %5zu\n\r", g_roomIndex.size(), g_vrooms.size());
     ch_printf(ch, "Shops   %5d    RepShps %5d\n\r", top_shop, top_repair);
     ch_printf(ch, "CurOq's %5d    CurCq's %5d\n\r", cur_qobjs, cur_qchars);
     ch_printf(ch, "Players %5d    Maxplrs %5d\n\r", -1, sysdata.maxplayers); // TODO num_descriptors ded :(
@@ -5017,7 +5012,6 @@ void rprog_read_programs(FILE* fp, ROOM_INDEX_DATA* pRoomIndex)
 */
 void delete_room(ROOM_INDEX_DATA* room)
 {
-    int hash;
     ROOM_INDEX_DATA *prev, *limbo = get_room_index(ROOM_VNUM_LIMBO);
     OBJ_DATA* o;
     CHAR_DATA* ch;
@@ -5070,21 +5064,12 @@ void delete_room(ROOM_INDEX_DATA* room)
     STRFREE(room->name);
     STRFREE(room->description);
 
-    hash = room->vnum % MAX_KEY_HASH;
-    if (room == room_index_hash[hash])
-        room_index_hash[hash] = room->next;
-    else
+    if (!g_roomIndex.erase(room->vnum))
     {
-        for (prev = room_index_hash[hash]; prev; prev = prev->next)
-            if (prev->next == room)
-                break;
-        if (prev)
-            prev->next = room->next;
-        else
-            bug("delete_room: room %d not in hash bucket %d.", room->vnum, hash);
+        bug("delete_room: room %d not in hash bucket.", room->vnum);
     }
+
     DISPOSE(room);
-    --top_room;
     return;
 }
 
@@ -5131,28 +5116,18 @@ void delete_obj(OBJ_INDEX_DATA* obj)
     STRFREE(obj->description);
     STRFREE(obj->action_desc);
 
-    hash = obj->vnum % MAX_KEY_HASH;
-    if (obj == obj_index_hash[hash])
-        obj_index_hash[hash] = obj->next;
-    else
+    if (!g_objectIndex.erase(obj->vnum))
     {
-        for (prev = obj_index_hash[hash]; prev; prev = prev->next)
-            if (prev->next == obj)
-                break;
-        if (prev)
-            prev->next = obj->next;
-        else
-            bug("delete_obj: object %d not in hash bucket %d.", obj->vnum, hash);
+        bug("delete_mob: object %d not in hash bucket.", obj->vnum);
     }
+
     DISPOSE(obj);
-    --top_obj_index;
     return;
 }
 
 /* See comment on delete_room. */
 void delete_mob(MOB_INDEX_DATA* mob)
 {
-    int hash;
     MOB_INDEX_DATA* prev;
     CHAR_DATA *ch, *ch_next;
     MPROG_DATA* mp;
@@ -5190,21 +5165,12 @@ void delete_mob(MOB_INDEX_DATA* mob)
     STRFREE(mob->long_descr);
     STRFREE(mob->description);
 
-    hash = mob->vnum % MAX_KEY_HASH;
-    if (mob == mob_index_hash[hash])
-        mob_index_hash[hash] = mob->next;
-    else
+    if (!g_mobIndex.erase(mob->vnum))
     {
-        for (prev = mob_index_hash[hash]; prev; prev = prev->next)
-            if (prev->next == mob)
-                break;
-        if (prev)
-            prev->next = mob->next;
-        else
-            bug("delete_mob: mobile %d not in hash bucket %d.", mob->vnum, hash);
+        bug("delete_mob: mobile %d not in hash bucket.", mob->vnum);
     }
+
     DISPOSE(mob);
-    --top_mob_index;
     return;
 }
 
@@ -5213,8 +5179,7 @@ void delete_mob(MOB_INDEX_DATA* mob)
  */
 ROOM_INDEX_DATA* make_room(int vnum, AREA_DATA* area)
 {
-    ROOM_INDEX_DATA* pRoomIndex;
-    int iHash;
+    ROOM_INDEX_DATA* pRoomIndex = nullptr;
 
     CREATE(pRoomIndex, ROOM_INDEX_DATA, 1);
     pRoomIndex->first_person = NULL;
@@ -5237,10 +5202,7 @@ ROOM_INDEX_DATA* make_room(int vnum, AREA_DATA* area)
     pRoomIndex->last_exit = NULL;
     LINK(pRoomIndex, area->first_room, area->last_room, next_aroom, prev_aroom);
 
-    iHash = vnum % MAX_KEY_HASH;
-    pRoomIndex->next = room_index_hash[iHash];
-    room_index_hash[iHash] = pRoomIndex;
-    top_room++;
+    g_roomIndex.insert({vnum, pRoomIndex});
 
     return pRoomIndex;
 }
@@ -5253,7 +5215,6 @@ OBJ_INDEX_DATA* make_object(int vnum, int cvnum, char* name)
 {
     OBJ_INDEX_DATA *pObjIndex, *cObjIndex;
     char buf[MAX_STRING_LENGTH];
-    int iHash;
 
     if (cvnum > 0)
         cObjIndex = get_obj_index(cvnum);
@@ -5327,10 +5288,7 @@ OBJ_INDEX_DATA* make_object(int vnum, int cvnum, char* name)
         }
     }
     pObjIndex->count = 0;
-    iHash = vnum % MAX_KEY_HASH;
-    pObjIndex->next = obj_index_hash[iHash];
-    obj_index_hash[iHash] = pObjIndex;
-    top_obj_index++;
+    g_objectIndex.insert({vnum, pObjIndex});
 
     return pObjIndex;
 }
@@ -5341,9 +5299,8 @@ OBJ_INDEX_DATA* make_object(int vnum, int cvnum, char* name)
  */
 MOB_INDEX_DATA* make_mobile(int vnum, int cvnum, char* name)
 {
-    MOB_INDEX_DATA *pMobIndex, *cMobIndex;
+    MOB_INDEX_DATA *pMobIndex = nullptr, *cMobIndex = nullptr;
     char buf[MAX_STRING_LENGTH];
-    int iHash;
 
     if (cvnum > 0)
         cMobIndex = get_mob_index(cvnum);
@@ -5447,10 +5404,8 @@ MOB_INDEX_DATA* make_mobile(int vnum, int cvnum, char* name)
         pMobIndex->attacks = cMobIndex->attacks;
         pMobIndex->defenses = cMobIndex->defenses;
     }
-    iHash = vnum % MAX_KEY_HASH;
-    pMobIndex->next = mob_index_hash[iHash];
-    mob_index_hash[iHash] = pMobIndex;
-    top_mob_index++;
+
+    g_mobIndex.insert({vnum, pMobIndex});
 
     return pMobIndex;
 }

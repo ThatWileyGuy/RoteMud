@@ -52,7 +52,7 @@ const int trap_door[] = {TRAP_N, TRAP_E, TRAP_S, TRAP_W, TRAP_U, TRAP_D, TRAP_NE
 
 const sh_int rev_dir[] = {2, 3, 0, 1, 5, 4, 9, 8, 7, 6, 10};
 
-ROOM_INDEX_DATA* vroom_hash[64];
+std::vector<ROOM_INDEX_DATA*> g_vrooms;
 
 /*
  * Local functions.
@@ -325,33 +325,21 @@ void decorate_room(ROOM_INDEX_DATA* room)
  */
 void clear_vrooms()
 {
-    int hash;
-    ROOM_INDEX_DATA *room, *room_next, *prev;
+    auto vroomIter = g_vrooms.begin();
 
-    for (hash = 0; hash < 64; hash++)
+    while (vroomIter != g_vrooms.end())
     {
-        while (vroom_hash[hash] && !vroom_hash[hash]->first_person && !vroom_hash[hash]->first_content)
+        auto room = (*vroomIter);
+
+        if (!room->first_person && !room->first_content)
         {
-            room = vroom_hash[hash];
-            vroom_hash[hash] = room->next;
+            vroomIter = g_vrooms.erase(vroomIter);
             clean_room(room);
             DISPOSE(room);
-            --top_vroom;
         }
-        prev = NULL;
-        for (room = vroom_hash[hash]; room; room = room_next)
+        else
         {
-            room_next = room->next;
-            if (!room->first_person && !room->first_content)
-            {
-                if (prev)
-                    prev->next = room_next;
-                clean_room(room);
-                DISPOSE(room);
-                --top_vroom;
-            }
-            if (room)
-                prev = room;
+            vroomIter++;
         }
     }
 }
@@ -477,7 +465,6 @@ ROOM_INDEX_DATA* generate_exit(ROOM_INDEX_DATA* in_room, EXIT_DATA** pexit)
     int roomnum;
     int distance = -1;
     int vdir = orig_exit->vdir;
-    sh_int hash;
     bool found = false;
 
     if (in_room->vnum > MAX_VNUMS) /* room is virtual */
@@ -509,14 +496,16 @@ ROOM_INDEX_DATA* generate_exit(ROOM_INDEX_DATA* in_room, EXIT_DATA** pexit)
         distance = orig_exit->distance - 1;
         roomnum = r1 < r2 ? 1 : distance;
     }
-    hash = serial % 64;
 
-    for (room = vroom_hash[hash]; room; room = room->next)
-        if (room->vnum == serial && room->tele_vnum == roomnum)
-        {
-            found = true;
-            break;
-        }
+    auto roomIter = std::find_if(g_vrooms.begin(), g_vrooms.end(),
+                             [&](ROOM_INDEX_DATA* room) { return room->vnum == serial && room->tele_vnum == roomnum; });
+
+    if (roomIter != g_vrooms.end())
+    {
+        found = true;
+        room = *roomIter;
+    }
+
     if (!found)
     {
         CREATE(room, ROOM_INDEX_DATA, 1);
@@ -526,9 +515,7 @@ ROOM_INDEX_DATA* generate_exit(ROOM_INDEX_DATA* in_room, EXIT_DATA** pexit)
         room->sector_type = in_room->sector_type;
         room->room_flags = in_room->room_flags;
         decorate_room(room);
-        room->next = vroom_hash[hash];
-        vroom_hash[hash] = room;
-        ++top_vroom;
+        g_vrooms.push_back(room);
     }
     if (!found || (xit = get_exit(room, vdir)) == NULL)
     {

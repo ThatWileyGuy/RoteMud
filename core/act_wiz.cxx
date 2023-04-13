@@ -45,6 +45,7 @@
 #include <errno.h>
 #include <filesystem>
 #include "mud.hxx"
+#include "db.hxx"
 #include "connection.hxx"
 
 #define RESTORE_INTERVAL 21600
@@ -76,9 +77,6 @@ int get_color(char* argument); /* function proto */
 char reboot_time[50];
 time_t new_boot_time_t;
 extern tm new_boot_struct;
-extern OBJ_INDEX_DATA* obj_index_hash[MAX_KEY_HASH];
-extern MOB_INDEX_DATA* mob_index_hash[MAX_KEY_HASH];
-extern ROOM_INDEX_DATA* room_index_hash[MAX_KEY_HASH];
 
 int get_saveflag(char* name)
 {
@@ -1587,13 +1585,15 @@ void do_mfind(CHAR_DATA* ch, char* argument)
      * your mud... likely under 3000 times.
      * -Thoric
      */
-    for (hash = 0; hash < MAX_KEY_HASH; hash++)
-        for (pMobIndex = mob_index_hash[hash]; pMobIndex; pMobIndex = pMobIndex->next)
-            if (fAll || nifty_is_name(arg, pMobIndex->player_name))
-            {
-                nMatch++;
-                pager_printf(ch, "[%5d] %s\n\r", pMobIndex->vnum, capitalize(pMobIndex->short_descr).c_str());
-            }
+    for (auto pair : g_mobIndex)
+    {
+        auto pMobIndex = pair.second;
+        if (fAll || nifty_is_name(arg, pMobIndex->player_name))
+        {
+            nMatch++;
+            pager_printf(ch, "[%5d] %s\n\r", pMobIndex->vnum, capitalize(pMobIndex->short_descr).c_str());
+        }
+    }
 
     if (nMatch)
         pager_printf(ch, "Number of matches: %d\n", nMatch);
@@ -1657,13 +1657,15 @@ void do_ofind(CHAR_DATA* ch, char* argument)
      * your mud... likely under 3000 times.
      * -Thoric
      */
-    for (hash = 0; hash < MAX_KEY_HASH; hash++)
-        for (pObjIndex = obj_index_hash[hash]; pObjIndex; pObjIndex = pObjIndex->next)
-            if (fAll || nifty_is_name(arg, pObjIndex->name))
-            {
-                nMatch++;
-                pager_printf(ch, "[%5d] %s\n\r", pObjIndex->vnum, capitalize(pObjIndex->short_descr).c_str());
-            }
+    for (auto pair : g_objectIndex)
+    {
+        OBJ_INDEX_DATA* pObjIndex = pair.second;
+        if (fAll || nifty_is_name(arg, pObjIndex->name))
+        {
+            nMatch++;
+            pager_printf(ch, "[%5d] %s\n\r", pObjIndex->vnum, capitalize(pObjIndex->short_descr).c_str());
+        }
+    }
 
     if (nMatch)
         pager_printf(ch, "Number of matches: %d\n", nMatch);
@@ -2067,9 +2069,8 @@ void do_return(CHAR_DATA* ch, char* argument)
 void do_minvoke(CHAR_DATA* ch, char* argument)
 {
     char arg[MAX_INPUT_LENGTH];
-    MOB_INDEX_DATA* pMobIndex;
-    CHAR_DATA* victim;
-    int vnum;
+    CHAR_DATA* victim = nullptr;
+    int vnum = -1;
 
     one_argument(argument, arg);
 
@@ -2082,17 +2083,19 @@ void do_minvoke(CHAR_DATA* ch, char* argument)
     if (!is_number(arg))
     {
         char arg2[MAX_INPUT_LENGTH];
-        int hash, cnt;
+        int cnt = 0;
         int count = number_argument(arg, arg2);
 
-        vnum = -1;
-        for (hash = cnt = 0; hash < MAX_KEY_HASH; hash++)
-            for (pMobIndex = mob_index_hash[hash]; pMobIndex; pMobIndex = pMobIndex->next)
-                if (nifty_is_name(arg2, pMobIndex->player_name) && ++cnt == count)
-                {
-                    vnum = pMobIndex->vnum;
-                    break;
-                }
+        auto mobIter =
+            std::find_if(g_mobIndex.begin(), g_mobIndex.end(), [&](auto& pair) {
+                return nifty_is_name(arg2, pair.second->player_name) && ++cnt == count;
+            });
+
+        if (mobIter != g_mobIndex.end())
+        {
+            vnum = mobIter->second->vnum;
+        }
+
         if (vnum == -1)
         {
             send_to_char("No such mobile exists.\n\r", ch);
@@ -2124,7 +2127,8 @@ void do_minvoke(CHAR_DATA* ch, char* argument)
         }
     }
 
-    if ((pMobIndex = get_mob_index(vnum)) == NULL)
+    MOB_INDEX_DATA* pMobIndex = get_mob_index(vnum);
+    if (pMobIndex == NULL)
     {
         send_to_char("No mobile has that vnum.\n\r", ch);
         return;
@@ -2181,13 +2185,16 @@ void do_oinvoke(CHAR_DATA* ch, char* argument)
         int count = number_argument(arg1, arg);
 
         vnum = -1;
-        for (hash = cnt = 0; hash < MAX_KEY_HASH; hash++)
-            for (pObjIndex = obj_index_hash[hash]; pObjIndex; pObjIndex = pObjIndex->next)
-                if (nifty_is_name(arg, pObjIndex->name) && ++cnt == count)
-                {
-                    vnum = pObjIndex->vnum;
-                    break;
-                }
+        for (auto pair : g_objectIndex)
+        {
+            auto pObjIndex = pair.second;
+            if (nifty_is_name(arg, pObjIndex->name) && ++cnt == count)
+            {
+                vnum = pObjIndex->vnum;
+                break;
+            }
+        }
+
         if (vnum == -1)
         {
             send_to_char("No such object exists.\n\r", ch);
@@ -4498,10 +4505,6 @@ void close_area(AREA_DATA* pArea)
 {
     CHAR_DATA *ech, *ech_next;
     OBJ_DATA *eobj, *eobj_next;
-    ROOM_INDEX_DATA *rid, *rid_next;
-    OBJ_INDEX_DATA *oid, *oid_next;
-    MOB_INDEX_DATA *mid, *mid_next;
-    int icnt;
 
     for (ech = first_char; ech; ech = ech_next)
     {
@@ -4528,35 +4531,41 @@ void close_area(AREA_DATA* pArea)
             (eobj->in_room && eobj->in_room->area == pArea))
             extract_obj(eobj);
     }
-    for (icnt = 0; icnt < MAX_KEY_HASH; icnt++)
+
+    for (auto roomIter = g_roomIndex.begin(); roomIter != g_roomIndex.end();)
     {
-        for (rid = room_index_hash[icnt]; rid; rid = rid_next)
-        {
-            rid_next = rid->next;
+        auto rid = roomIter->second;
+        roomIter++;
 
-            if (rid->area != pArea)
-                continue;
-            delete_room(rid);
-        }
+        if (rid->area != pArea)
+            continue;
 
-        for (mid = mob_index_hash[icnt]; mid; mid = mid_next)
-        {
-            mid_next = mid->next;
-
-            if (mid->vnum < pArea->low_m_vnum || mid->vnum > pArea->hi_m_vnum)
-                continue;
-            delete_mob(mid);
-        }
-
-        for (oid = obj_index_hash[icnt]; oid; oid = oid_next)
-        {
-            oid_next = oid->next;
-
-            if (oid->vnum < pArea->low_o_vnum || oid->vnum > pArea->hi_o_vnum)
-                continue;
-            delete_obj(oid);
-        }
+        delete_room(rid);
     }
+
+    for (auto mobIter = g_mobIndex.begin(); mobIter != g_mobIndex.end();)
+    {
+        auto mid = mobIter->second;
+        mobIter++;
+
+        if (mid->vnum < pArea->low_m_vnum || mid->vnum > pArea->hi_m_vnum)
+            continue;
+
+        delete_mob(mid);
+    }
+
+    for (auto objIter = g_objectIndex.begin(); objIter != g_objectIndex.end();)
+    {
+        auto oid = objIter->second;
+        objIter++;
+
+        if (oid->vnum < pArea->low_o_vnum || oid->vnum > pArea->hi_o_vnum)
+            continue;
+
+        delete_obj(oid);
+
+    }
+
     DISPOSE(pArea->name);
     DISPOSE(pArea->filename);
     DISPOSE(pArea->resetmsg);
@@ -4747,7 +4756,7 @@ void do_for(CHAR_DATA* ch, char* argument)
     char range[MAX_INPUT_LENGTH];
     char buf[MAX_STRING_LENGTH];
     bool fGods = false, fMortals = false, fMobs = false, fEverywhere = false, found;
-    ROOM_INDEX_DATA *room, *old_room;
+    ROOM_INDEX_DATA *old_room;
     CHAR_DATA *p, *p_prev; /* p_next to p_prev -- TRI */
     int i;
 
@@ -4849,50 +4858,51 @@ void do_for(CHAR_DATA* ch, char* argument)
     }
     else /* just for every room with the appropriate people in it */
     {
-        for (i = 0; i < MAX_KEY_HASH; i++) /* run through all the buckets */
-            for (room = room_index_hash[i]; room; room = room->next)
+        for (auto pair : g_roomIndex)
+        {
+            auto room = pair.second;
+
+                            found = false;
+
+            /* Anyone in here at all? */
+            if (fEverywhere) /* Everywhere executes always */
+                found = true;
+            else if (!room->first_person) /* Skip it if room is empty */
+                continue;
+            /* ->people changed to first_person -- TRI */
+
+            /* Check if there is anyone here of the requried type */
+            /* Stop as soon as a match is found or there are no more ppl in room */
+            /* ->people to ->first_person -- TRI */
+            for (p = room->first_person; p && !found; p = p->next_in_room)
             {
-                found = false;
 
-                /* Anyone in here at all? */
-                if (fEverywhere) /* Everywhere executes always */
-                    found = true;
-                else if (!room->first_person) /* Skip it if room is empty */
+                if (p == ch) /* do not execute on oneself */
                     continue;
-                /* ->people changed to first_person -- TRI */
 
-                /* Check if there is anyone here of the requried type */
-                /* Stop as soon as a match is found or there are no more ppl in room */
-                /* ->people to ->first_person -- TRI */
-                for (p = room->first_person; p && !found; p = p->next_in_room)
-                {
+                if (IS_NPC(p) && fMobs)
+                    found = true;
+                else if (!IS_NPC(p) && (get_trust(p) >= LEVEL_IMMORTAL) && fGods)
+                    found = true;
+                else if (!IS_NPC(p) && (get_trust(p) <= LEVEL_IMMORTAL) && fMortals)
+                    found = true;
+            } /* for everyone inside the room */
 
-                    if (p == ch) /* do not execute on oneself */
-                        continue;
+            if (found && !room_is_private(p, room)) /* Any of the required type here AND room not private? */
+            {
+                /* This may be ineffective. Consider moving character out of old_room
+                   once at beginning of command then moving back at the end.
+                   This however, is more safe?
+                */
 
-                    if (IS_NPC(p) && fMobs)
-                        found = true;
-                    else if (!IS_NPC(p) && (get_trust(p) >= LEVEL_IMMORTAL) && fGods)
-                        found = true;
-                    else if (!IS_NPC(p) && (get_trust(p) <= LEVEL_IMMORTAL) && fMortals)
-                        found = true;
-                } /* for everyone inside the room */
-
-                if (found && !room_is_private(p, room)) /* Any of the required type here AND room not private? */
-                {
-                    /* This may be ineffective. Consider moving character out of old_room
-                       once at beginning of command then moving back at the end.
-                       This however, is more safe?
-                    */
-
-                    old_room = ch->in_room;
-                    char_from_room(ch);
-                    char_to_room(ch, room);
-                    interpret(ch, argument);
-                    char_from_room(ch);
-                    char_to_room(ch, old_room);
-                } /* if found */
-            }     /* for every room in a bucket */
+                old_room = ch->in_room;
+                char_from_room(ch);
+                char_to_room(ch, room);
+                interpret(ch, argument);
+                char_from_room(ch);
+                char_to_room(ch, old_room);
+            } /* if found */
+        }
     }             /* if strchr */
 } /* do_for */
 void cset_help(CHAR_DATA* ch)
