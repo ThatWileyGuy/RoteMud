@@ -259,7 +259,6 @@ template <size_t N> struct TempString
 /*
  * String and memory management parameters.
  */
-#define MAX_KEY_HASH 2048
 #define MAX_STRING_LENGTH 4096 /* buf */ // TODO this needs to go away
 #define MAX_INPUT_LENGTH 1024            /* arg */
 #define MAX_INBUF_SIZE 1024
