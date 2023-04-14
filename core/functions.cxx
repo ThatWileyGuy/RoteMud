@@ -185,42 +185,6 @@ char* rembg(const char* src)
     return ret;
 }
 
-const char* htmlcolor(const char* src)
-{
-    static char arg[MAX_STRING_LENGTH];
-    char* newarg;
-
-    /* This function will format color codes into <font color> strings */
-    if (strlen(src) == 0)
-    {
-        bug("Htmlcolor: emptry string!");
-        return "(err)";
-    }
-
-    newarg = strrep(src, "<", "&");
-    newarg = strrep(newarg, ">", "&");
-    newarg = strrep(newarg, "&x", "</font><font color='#333333'>");
-    newarg = strrep(newarg, "&r", "</font><font color='#660000'>");
-    newarg = strrep(newarg, "&g", "</font><font color='#006600'>");
-    newarg = strrep(newarg, "&O", "</font><font color='#666600'>");
-    newarg = strrep(newarg, "&b", "</font><font color='#000066'>");
-    newarg = strrep(newarg, "&p", "</font><font color='#660066'>");
-    newarg = strrep(newarg, "&c", "</font><font color='#666699'>");
-    newarg = strrep(newarg, "&w", "</font><font color='#FFFFFF'>");
-    newarg = strrep(newarg, "&z", "</font><font color='#666666'>");
-    newarg = strrep(newarg, "&R", "</font><font color='#AA0000'>");
-    newarg = strrep(newarg, "&G", "</font><font color='#00AA00'>");
-    newarg = strrep(newarg, "&Y", "</font><font color='#999900'>");
-    newarg = strrep(newarg, "&B", "</font><font color='#0000AA'>");
-    newarg = strrep(newarg, "&P", "</font><font color='#AA00AA'>");
-    newarg = strrep(newarg, "&C", "</font><font color='#9999CC'>");
-    newarg = strrep(newarg, "&W", "</font><font color='#CCCCCC'>");
-    newarg = strrep(newarg, "\r", "");
-
-    strcpy_s(arg, newarg);
-    return arg;
-}
-
 /*char *chrmax( char *src, int length )
 {
 

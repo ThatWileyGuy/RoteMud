@@ -2392,14 +2392,16 @@ void do_who(CHAR_DATA* ch, char* argument)
     bool rgfRace[MAX_RACE];
     bool fRaceRestrict;
     bool fImmortalOnly;
-    bool fShowHomepage;
-    FILE* whoout;
     char mudnamebuffer[MSL];
 
     /*
     #define WT_IMM    0;
     #define WT_MORTAL 1;
     */
+
+    assert(ch);
+    if (!ch)
+        return;
 
     WHO_DATA* cur_who = NULL;
     WHO_DATA* next_who = NULL;
@@ -2414,7 +2416,6 @@ void do_who(CHAR_DATA* ch, char* argument)
     iLevelUpper = MAX_LEVEL;
     fRaceRestrict = false;
     fImmortalOnly = false;
-    fShowHomepage = false;
     for (iRace = 0; iRace < MAX_RACE; iRace++)
         rgfRace[iRace] = false;
 
@@ -2459,8 +2460,6 @@ void do_who(CHAR_DATA* ch, char* argument)
 
             if (!str_cmp(arg, "imm") || !str_cmp(arg, "gods"))
                 fImmortalOnly = true;
-            else if (!str_cmp(arg, "www"))
-                fShowHomepage = true;
         }
     }
 
@@ -2473,11 +2472,6 @@ void do_who(CHAR_DATA* ch, char* argument)
     /*   if ( ch )
        set_pager_color( AT_GREEN, ch );
        else */
-
-    if (fShowHomepage)
-        whoout = fopen(WEBWHO_FILE, "w");
-    else
-        whoout = fopen(WHO_FILE, "w");
 
     /* start from last to first to get it in the proper order */
     for (auto d : g_descriptors)
@@ -2624,31 +2618,16 @@ void do_who(CHAR_DATA* ch, char* argument)
 
     if (first_newbie)
     {
-        if (!ch)
-        {
-            sprintf_s(mudnamebuffer,
-                      "&G===&B[ &P%s &B]&G===&B[ &WMortals "
-                      "&B]&G=====================================================&B[]&W\n\n",
-                      sysdata.mud_acronym);
-            fprintf(whoout, "%s", htmlcolor(mudnamebuffer));
-        }
-
-        else
-        {
-            sprintf_s(mudnamebuffer,
-                      "\n\r&G===&B[ &P%s &B]&G===&B[ &WMortals "
-                      "&B]&G=====================================================&B[]&W\n\r\n\r",
-                      sysdata.mud_acronym);
-            send_to_pager(mudnamebuffer, ch);
-        }
+        sprintf_s(mudnamebuffer,
+                    "\n\r&G===&B[ &P%s &B]&G===&B[ &WMortals "
+                    "&B]&G=====================================================&B[]&W\n\r\n\r",
+                    sysdata.mud_acronym);
+        send_to_pager(mudnamebuffer, ch);
     }
 
     for (cur_who = first_newbie; cur_who; cur_who = next_who)
     {
-        if (!ch)
-            fprintf(whoout, "%s", htmlcolor(cur_who->text));
-        else
-            send_to_pager(cur_who->text, ch);
+        send_to_pager(cur_who->text, ch);
         next_who = cur_who->next;
         DISPOSE(cur_who->text);
         DISPOSE(cur_who);
@@ -2656,31 +2635,16 @@ void do_who(CHAR_DATA* ch, char* argument)
 
     if (first_mortal)
     {
-        if (!ch)
-        {
-            sprintf_s(mudnamebuffer,
-                      "&z(  &rPlayers&z  )&R-_-&r^^-_-^^-&R_-&r^^-_-^^-_-^^-&R_-^^-&r_-^^-_-&R^^&z(=====+ &r%s "
-                      "&z+====&z=)&w\n\n",
-                      sysdata.mudname);
-            fprintf(whoout, "%s", htmlcolor(mudnamebuffer));
-        }
-
-        else
-        {
-            sprintf_s(mudnamebuffer,
+        sprintf_s(mudnamebuffer,
                       "\n\r&z(  &rPlayers&z  )&R-_-&r^^-_-^^-&R_-&r^^-_-^^-_-^^-&R_-^^-&r_-^^-_-&R^^&z(=====+ &r%s "
                       "&z+====&z=)&w\n\r\n\r",
                       sysdata.mudname);
-            send_to_pager(mudnamebuffer, ch);
-        }
+        send_to_pager(mudnamebuffer, ch);
     }
 
     for (cur_who = first_mortal; cur_who; cur_who = next_who)
     {
-        if (!ch)
-            fprintf(whoout, "%s", htmlcolor(cur_who->text));
-        else
-            send_to_pager(cur_who->text, ch);
+        send_to_pager(cur_who->text, ch);
         next_who = cur_who->next;
         DISPOSE(cur_who->text);
         DISPOSE(cur_who);
@@ -2688,49 +2652,21 @@ void do_who(CHAR_DATA* ch, char* argument)
 
     if (first_imm)
     {
-        if (!ch)
-        {
-            sprintf_s(mudnamebuffer,
-                      "&z( &rImmortals&z )&R-_&r-^^-_-&R^&r-_-^^-_-^^&R-_-^^&r-_-^^-_-^^-&R_-^^&z(=====+ &r%s "
-                      "&z+====&z=)&w\n\n",
-                      sysdata.mudname);
-            fprintf(whoout, "%s", htmlcolor(mudnamebuffer));
-        }
-
-        else
-        {
-            sprintf_s(mudnamebuffer,
-                      "\n\r&z( &rImmortals&z )&R-_&r-^^-_-&R^^&r-_-^^-_-^^&R-_-^^&r-_-^^-_-^^-&R_-^^&z(=====+ &r%s "
-                      "&z+====&z=)&w\n\r\n\r",
-                      sysdata.mudname);
-            send_to_pager(mudnamebuffer, ch);
-        }
+        sprintf_s(mudnamebuffer,
+                    "\n\r&z( &rImmortals&z )&R-_&r-^^-_-&R^^&r-_-^^-_-^^&R-_-^^&r-_-^^-_-^^-&R_-^^&z(=====+ &r%s "
+                    "&z+====&z=)&w\n\r\n\r",
+                    sysdata.mudname);
+        send_to_pager(mudnamebuffer, ch);
     }
 
     for (cur_who = first_imm; cur_who; cur_who = next_who)
     {
-        if (!ch)
-            fprintf(whoout, "%s", htmlcolor(cur_who->text));
-        else
-            send_to_pager(cur_who->text, ch);
+        send_to_pager(cur_who->text, ch);
         next_who = cur_who->next;
         DISPOSE(cur_who->text);
         DISPOSE(cur_who);
     }
 
-    if (!ch)
-    {
-        //	fprintf( whoout, "%s", htmlcolor("&z( &R%d &rvisible &zplayer%s. &R%d &rtotal&z player%s.
-        //)&R-_&r-^^-_-&R^^&r-_-^^-_-^^&R-_-^^&r-_-^^-_-^^-&R^^-\n"), 		sMatch, sMatch == 1 ? "" : "s", nMatch,
-        // nMatch
-        //== 1 ? "" : "s" );
-        char* time_string = ctime(&current_time);
-        fprintf(whoout, "<div style='position: absolute; color: white; top: 5px; right: 5px;'>%s</div></font>",
-                time_string);
-        fclose(whoout);
-        return;
-    }
-    fclose(whoout);
     ch_printf(ch,
               "\n\r&z( &R%d &rvisible &zplayer%s. &R%d &rtotal&z player%s. "
               ")&R-_&r-^^-_-&R^^&r-_-^^&R-_-^^&r-_-^^-_-^^-&R_-^^&r-_-^^-_-&R^^-\n\r",

@@ -197,8 +197,6 @@ void do_addchange(CHAR_DATA* ch, char* argument)
     send_to_char("&YType &R'&wchanges&Y'&Y to see the changes.\n\r", ch);
     do_echo(ch, MAKE_TEMP_STRING("&R[&CUPDATE&R] &WNew Change added to the mud, type &R'&wchanges&R'&W to see it.&w"));
     save_changes();
-    sprintf_s(buf1, "<li> %s<br><br>", argument);
-    // prepend_to_file(CHANGEHTML_FILE, buf1);
     return;
 }
 
@@ -232,8 +230,6 @@ void do_chedit(CHAR_DATA* ch, char* argument)
     if (!str_cmp(arg1, "save"))
     {
         save_changes();
-        sprintf_s(buf1, "<li> %s<br><br>", argument);
-        // prepend_to_file(CHANGEHTML_FILE, buf1);
         send_to_char("&GChanges Saved.\n\r", ch);
         return;
     }

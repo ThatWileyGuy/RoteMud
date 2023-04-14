@@ -2254,10 +2254,6 @@ void raw_kill(CHAR_DATA* ch, CHAR_DATA* victim)
 
     rename(buf, buf2);
 
-    // Profile Deletion.
-    sprintf_s(buf, "%s%s.htm", PROFILE_DIR, capitalize(arg).c_str());
-    remove(buf);
-
     return;
 
     /* original player kill started here

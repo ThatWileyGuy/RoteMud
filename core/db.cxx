@@ -4074,7 +4074,6 @@ void towizfile(const char* line, bool Border)
     char outline[MAX_STRING_LENGTH] = {};
     char outline2[MAX_STRING_LENGTH] = {};
     FILE* wfp = nullptr;
-    FILE* wwwfp = nullptr;
     bool SNIP = false;
     outline[0] = '\0';
     outline2[0] = '\0';
@@ -4114,12 +4113,6 @@ void towizfile(const char* line, bool Border)
     {
         fputs(outline2, wfp);
         fclose(wfp);
-    }
-    wwwfp = fopen(WEBWIZLIST_FILE, "a");
-    if (wwwfp)
-    {
-        fputs(htmlcolor(outline2), wwwfp);
-        fclose(wwwfp);
     }
 }
 
@@ -4206,7 +4199,6 @@ void make_wizlist()
 
     buf[0] = '\0';
     unlink(WIZLIST_FILE);
-    unlink(WEBWIZLIST_FILE);
     towizfile(" ", 0);
     towizfile("&B ________   ___   ____                  ", 0);
     towizfile("&B/ __   __| / _ \\ |  _ \\                ", 0);

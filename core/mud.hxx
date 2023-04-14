@@ -4428,7 +4428,6 @@ extern BMARKET_DATA* last_market_ship;
 #define SYSTEM_DIR "system/"                           /* Main system files		*/
 #define PROG_DIR "mudprogs/" /* MUDProg files		*/ // TODO unused?
 #define CORPSE_DIR "corpses/"                          /* Corpses			*/
-#define PROFILE_DIR "../public_html/profiles/"         /* Player Profiles */
 #define AREA_LIST "area.lst"                           /* List of areas		*/
 #define BAN_LIST "ban.lst"                             /* List of bans                 */
 #define CLAN_LIST "clan.lst"                           /* List of clans		*/
@@ -4455,14 +4454,10 @@ extern BMARKET_DATA* last_market_ship;
 #define PLRBUG_FILE SYSTEM_DIR "plrbugs.txt"          /* Used for player bugs */
 #define IDEA_FILE SYSTEM_DIR "ideas.txt"              /* For 'idea'		 */
 #define CHANGE_FILE SYSTEM_DIR "changes.txt"          /* Changes file - txt  */
-#define CHANGEHTML_FILE "../public_html/changes.html" // Changes file - html
 #define DEBUG_FILE SYSTEM_DIR "debug.txt"             /* Catch-all for debug */
 #define TYPO_FILE SYSTEM_DIR "typos.txt"              /* For 'typo'		 */
 #define LOG_FILE SYSTEM_DIR "log.txt"                 /* For talking in logged rooms */
 #define WIZLIST_FILE SYSTEM_DIR "WIZLIST"             /* Wizlist		 */
-#define WEBWIZLIST_FILE "../public_html/WEBWIZLIST"
-#define WHO_FILE SYSTEM_DIR "../html/WHO"      // Who output file
-#define WEBWHO_FILE "../../public_html/WEBWHO" // Web Who File
 #define REQUEST_PIPE SYSTEM_DIR "REQUESTS"     /* Request FIFO	 */
 #define SKILL_FILE SYSTEM_DIR "skills.dat"     /* Skill table	 */
 #define HERB_FILE SYSTEM_DIR "herbs.dat"       /* Herb table		 */
@@ -5065,7 +5060,6 @@ void check_requests(void);
 #define OS_CORPSE 1
 void save_char_obj(CHAR_DATA* ch);
 void save_clone(CHAR_DATA* ch);
-void save_profile(CHAR_DATA* ch);
 bool load_char_obj(DESCRIPTOR_DATA& d, const char* name, bool preload);
 void set_alarm(long seconds);
 void requip_char(CHAR_DATA* ch);
@@ -5155,7 +5149,6 @@ char* strlinwrp(char* src, int length);
 char* line(int num, char inp);
 std::string remand(const std::string_view& arg);
 char* rembg(const char* arg);
-const char* htmlcolor(const char* arg);
 char* format_str(char* src, int len);
 int strlen_color(char* argument);
 char* chrmax(char* src, int length);

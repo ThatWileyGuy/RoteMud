@@ -2660,7 +2660,6 @@ void update_handler(void)
         weather_update();
         char_update();
         obj_update();
-        //	do_who(NULL, "www");
         clear_vrooms(); /* remove virtual rooms */
     }
 

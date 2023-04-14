@@ -2574,8 +2574,6 @@ void do_save(CHAR_DATA* ch, char* argument)
 
     save_char_obj(ch);
     save_home(ch);
-    if (ch->top_level > 10)
-        save_profile(ch);
     saving_char = NULL;
     send_to_char("Ok.\n\r", ch);
     return;
