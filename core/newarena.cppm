@@ -59,13 +59,13 @@
  * tdison@swetland.net - LrdElder 10/24/98
  */
 
-#include <sys/types.h>
-#include <ctype.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <time.h>
+module;
+
 #include "mud.hxx"
+
+export module newarena;
+
+import bet;
 
 #define PREP_START 42                    /* vnum of first prep room */
 #define PREP_END 43                      /* vnum of last prep room */
@@ -81,12 +81,12 @@ struct HALL_OF_FAME_ELEMENT
     HALL_OF_FAME_ELEMENT* next;
 };
 
-void sportschan(char*);
-void start_arena();
+export void sportschan(char*);
+export void start_arena();
 void show_jack_pot();
-void do_game();
-int num_in_arena();
-void find_game_winner();
+export void do_game();
+export int num_in_arena();
+export void find_game_winner();
 void do_end_game();
 void start_game();
 void silent_end();
@@ -94,13 +94,13 @@ void write_fame_list(void);
 void write_one_fame_node(FILE* fp, HALL_OF_FAME_ELEMENT* node);
 void load_hall_of_fame(void);
 void find_bet_winners(CHAR_DATA* winner);
-void lost_arena(CHAR_DATA* ch);
+export void lost_arena(CHAR_DATA* ch);
 
 HALL_OF_FAME_ELEMENT* fame_list = NULL;
 
-int ppl_challenged = 0;
-int ppl_in_arena = 0;
-int in_start_arena = 0;
+export int ppl_challenged = 0;
+export int ppl_in_arena = 0;
+export int in_start_arena = 0;
 int start_time;
 int game_length;
 int lo_lim;
@@ -110,9 +110,6 @@ int time_left_in_game;
 int arena_pot;
 int bet_pot;
 int barena = 0;
-
-extern int parsebet(const int currentbet, char* s);
-extern int advatoi(char* s);
 
 void do_bet(CHAR_DATA* ch, char* argument)
 {

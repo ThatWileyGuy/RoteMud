@@ -36,18 +36,20 @@
  *                                                                                  *
  ***********************************************************************************/
 
-#include <sys/types.h>
-#include <ctype.h>
-#include <stdio.h>
-#include <stdarg.h>
-#include <string.h>
-#include <time.h>
-#include <sys/stat.h>
-#include <math.h>
+module;
+
 #include <filesystem>
 #include <unordered_map>
 #include "mud.hxx"
-#include "db.hxx"
+
+extern void renumber_put_resets(ROOM_INDEX_DATA* room);
+extern void wipe_resets(ROOM_INDEX_DATA* room);
+extern void init_supermob();
+
+export module db;
+
+import act_move;
+import save;
 
 extern int _filbuf(FILE*);
 
@@ -55,7 +57,7 @@ extern int _filbuf(FILE*);
 #undef KEY
 #endif
 
-void init_supermob();
+
 
 #define KEY(literal, field, value)                                                                                     \
     if (!str_cmp(word, literal))                                                                                       \
@@ -72,233 +74,232 @@ void init_supermob();
 WIZENT* first_wiz;
 WIZENT* last_wiz;
 
-time_t last_restore_all_time = 0;
+export time_t last_restore_all_time = 0;
 
-HELP_DATA* first_help;
-HELP_DATA* last_help;
+export HELP_DATA* first_help;
+export HELP_DATA* last_help;
 
-SHOP_DATA* first_shop;
-SHOP_DATA* last_shop;
+export SHOP_DATA* first_shop;
+export SHOP_DATA* last_shop;
 
-REPAIR_DATA* first_repair;
-REPAIR_DATA* last_repair;
+export REPAIR_DATA* first_repair;
+export REPAIR_DATA* last_repair;
 
-TELEPORT_DATA* first_teleport;
-TELEPORT_DATA* last_teleport;
+export TELEPORT_DATA* first_teleport;
+export TELEPORT_DATA* last_teleport;
 
-BMARKET_DATA* first_market_ship;
-BMARKET_DATA* last_market_ship;
+export BMARKET_DATA* first_market_ship;
+export BMARKET_DATA* last_market_ship;
 
-OBJ_DATA* extracted_obj_queue;
-EXTRACT_CHAR_DATA* extracted_char_queue;
+export OBJ_DATA* extracted_obj_queue;
+export EXTRACT_CHAR_DATA* extracted_char_queue;
 
 char bug_buf[2 * MAX_INPUT_LENGTH];
-CHAR_DATA* first_char;
-CHAR_DATA* last_char;
-char* help_greeting;
+export CHAR_DATA* first_char;
+export CHAR_DATA* last_char;
+export char* help_greeting;
 char log_buf[2 * MAX_INPUT_LENGTH];
 
-OBJ_DATA* first_object;
-OBJ_DATA* last_object;
-TIME_INFO_DATA time_info;
-WEATHER_DATA weather_info;
+export OBJ_DATA* first_object;
+export OBJ_DATA* last_object;
+export TIME_INFO_DATA time_info;
+export WEATHER_DATA weather_info;
 
-int cur_qobjs;
-int cur_qchars;
-int nummobsloaded;
-int numobjsloaded;
-int physicalobjects;
+export int cur_qobjs;
+export int cur_qchars;
+export int nummobsloaded;
+export int numobjsloaded;
+export int physicalobjects;
 
 MAP_INDEX_DATA* first_map; /* maps */
 
-AUCTION_DATA* auction; /* auctions */
+export AUCTION_DATA* auction; /* auctions */
 
 /* criminals */
-sh_int gsn_torture;
-sh_int gsn_deception;
-sh_int gsn_disguise;
-sh_int gsn_beg;
-sh_int gsn_pickshiplock;
-sh_int gsn_hijack;
+export sh_int gsn_torture;
+export sh_int gsn_deception;
+export sh_int gsn_disguise;
+export sh_int gsn_beg;
+export sh_int gsn_pickshiplock;
+export sh_int gsn_hijack;
 
-sh_int gsn_plantbug;
-sh_int gsn_showbugs;
-sh_int gsn_silent;
-sh_int gsn_retreat;
+export sh_int gsn_plantbug;
+export sh_int gsn_showbugs;
+export sh_int gsn_silent;
+export sh_int gsn_retreat;
 
 /* Technicians */
-sh_int gsn_makemodule;
-sh_int gsn_installmodule;
-sh_int gsn_showmodules;
-sh_int gsn_removemodule;
-sh_int gsn_removebug;
-sh_int gsn_shipmaintenance;
-sh_int gsn_scanbugs;
-sh_int gsn_makejetpack;
+export sh_int gsn_makemodule;
+export sh_int gsn_installmodule;
+export sh_int gsn_showmodules;
+export sh_int gsn_removemodule;
+export sh_int gsn_removebug;
+export sh_int gsn_shipmaintenance;
+export sh_int gsn_scanbugs;
+export sh_int gsn_makejetpack;
 
 /* slicers */
-sh_int gsn_spy;
-sh_int gsn_makecommsystem;
-sh_int gsn_commsystem;
-sh_int gsn_codecrack;
-sh_int gsn_slicebank;
-sh_int gsn_inquire;
-sh_int gsn_checkprints;
-sh_int gsn_makedatapad;
-sh_int gsn_disable;
-sh_int gsn_assignpilot;
+export sh_int gsn_spy;
+export sh_int gsn_makecommsystem;
+export sh_int gsn_commsystem;
+export sh_int gsn_codecrack;
+export sh_int gsn_slicebank;
+export sh_int gsn_inquire;
+export sh_int gsn_checkprints;
+export sh_int gsn_makedatapad;
+export sh_int gsn_disable;
+export sh_int gsn_assignpilot;
 
 /* soldiers and officers */
-sh_int gsn_battle_command;
-sh_int gsn_reinforcements;
-sh_int gsn_postguard;
-sh_int gsn_mine;
-sh_int gsn_first_aid;
-sh_int gsn_snipe;
-sh_int gsn_throw;
-
-sh_int gsn_addpatrol;
-sh_int gsn_eliteguard;
-sh_int gsn_specialforces;
-sh_int gsn_jail;
-sh_int gsn_smalltalk;
-sh_int gsn_propeganda;
-sh_int gsn_bribe;
-sh_int gsn_seduce;
-sh_int gsn_masspropeganda;
-sh_int gsn_gather_intelligence;
+export sh_int gsn_battle_command;
+export sh_int gsn_reinforcements;
+export sh_int gsn_postguard;
+export sh_int gsn_mine;
+export sh_int gsn_first_aid;
+export sh_int gsn_snipe;
+export sh_int gsn_throw;
+export sh_int gsn_addpatrol;
+export sh_int gsn_eliteguard;
+export sh_int gsn_specialforces;
+export sh_int gsn_jail;
+export sh_int gsn_smalltalk;
+export sh_int gsn_propeganda;
+export sh_int gsn_bribe;
+export sh_int gsn_seduce;
+export sh_int gsn_masspropeganda;
+export sh_int gsn_gather_intelligence;
 
 /* pilots and smugglers */
-sh_int gsn_smallspace;
-sh_int gsn_mediumspace;
-sh_int gsn_largespace;
-sh_int gsn_chandelle;
-sh_int gsn_weaponsystems;
-sh_int gsn_navigation;
-sh_int gsn_shipsystems;
-sh_int gsn_tractorbeams;
-sh_int gsn_shipdesign;
-sh_int gsn_spacecombat;
-sh_int gsn_spacecombat2;
-sh_int gsn_spacecombat3;
-sh_int gsn_bomb;
-sh_int gsn_split_s;
-sh_int gsn_truesight;
+export sh_int gsn_smallspace;
+export sh_int gsn_mediumspace;
+export sh_int gsn_largespace;
+export sh_int gsn_chandelle;
+export sh_int gsn_weaponsystems;
+export sh_int gsn_navigation;
+export sh_int gsn_shipsystems;
+export sh_int gsn_tractorbeams;
+export sh_int gsn_shipdesign;
+export sh_int gsn_spacecombat;
+export sh_int gsn_spacecombat2;
+export sh_int gsn_spacecombat3;
+export sh_int gsn_bomb;
+export sh_int gsn_split_s;
+export sh_int gsn_truesight;
 /* player building skills */
-sh_int gsn_makelightsaber;
-sh_int gsn_makeduallightsaber;
-sh_int gsn_spice_refining;
-sh_int gsn_makeblade;
-sh_int gsn_makepike;
-sh_int gsn_sabotage;
-sh_int gsn_makeblaster;
-sh_int gsn_makelight;
-sh_int gsn_makecomlink;
-sh_int gsn_makegrenade;
-sh_int gsn_makeshipbomb;
-sh_int gsn_makelandmine;
-sh_int gsn_makearmor;
-sh_int gsn_makeshield;
-sh_int gsn_makecontainer;
-sh_int gsn_makemissile;
-sh_int gsn_gemcutting;
-sh_int gsn_makejewelry;
-sh_int gsn_repair;
-sh_int gsn_shiprepair;
-sh_int gsn_makebeacon;
-sh_int gsn_makebug;
-sh_int gsn_plantbeacon;
-sh_int gsn_showbeacons;
-sh_int gsn_checkbeacons;
-sh_int gsn_nullifybeacons;
-sh_int gsn_makebinders;
-sh_int gsn_makeempgrenade;
-sh_int gsn_makegoggles;
-sh_int gsn_barrelroll;
-sh_int gsn_juke;
+export sh_int gsn_makelightsaber;
+export sh_int gsn_makeduallightsaber;
+export sh_int gsn_spice_refining;
+export sh_int gsn_makeblade;
+export sh_int gsn_makepike;
+export sh_int gsn_sabotage;
+export sh_int gsn_makeblaster;
+export sh_int gsn_makelight;
+export sh_int gsn_makecomlink;
+export sh_int gsn_makegrenade;
+export sh_int gsn_makeshipbomb;
+export sh_int gsn_makelandmine;
+export sh_int gsn_makearmor;
+export sh_int gsn_makeshield;
+export sh_int gsn_makecontainer;
+export sh_int gsn_makemissile;
+export sh_int gsn_gemcutting;
+export sh_int gsn_makejewelry;
+export sh_int gsn_repair;
+export sh_int gsn_shiprepair;
+export sh_int gsn_makebeacon;
+export sh_int gsn_makebug;
+export sh_int gsn_plantbeacon;
+export sh_int gsn_showbeacons;
+export sh_int gsn_checkbeacons;
+export sh_int gsn_nullifybeacons;
+export sh_int gsn_makebinders;
+export sh_int gsn_makeempgrenade;
+export sh_int gsn_makegoggles;
+export sh_int gsn_barrelroll;
+export sh_int gsn_juke;
 
 /* weaponry */
-sh_int gsn_blasters;
-sh_int gsn_bowcasters;
-sh_int gsn_force_pikes;
-sh_int gsn_lightsabers;
-sh_int gsn_vibro_blades;
-sh_int gsn_flexible_arms;
-sh_int gsn_talonous_arms;
-sh_int gsn_bludgeons;
+export sh_int gsn_blasters;
+export sh_int gsn_bowcasters;
+export sh_int gsn_force_pikes;
+export sh_int gsn_lightsabers;
+export sh_int gsn_vibro_blades;
+export sh_int gsn_flexible_arms;
+export sh_int gsn_talonous_arms;
+export sh_int gsn_bludgeons;
 sh_int gsn_shieldwork;
-sh_int gsn_launchers;
+export sh_int gsn_launchers;
 
 /* Hunter */
-sh_int gsn_ambush;
-sh_int gsn_bind;
-sh_int gsn_gag;
+export sh_int gsn_ambush;
+export sh_int gsn_bind;
+export sh_int gsn_gag;
 
 /* thief */
-sh_int gsn_detrap;
-sh_int gsn_bargain;
-sh_int gsn_backstab;
-sh_int gsn_dualstab;
-sh_int gsn_circle;
-sh_int gsn_dodge;
-sh_int gsn_concealment;
-sh_int gsn_hide;
-sh_int gsn_peek;
-sh_int gsn_pick_lock;
-sh_int gsn_sneak;
-sh_int gsn_steal;
-sh_int gsn_gouge;
-sh_int gsn_poison_weapon;
+export sh_int gsn_detrap;
+export sh_int gsn_bargain;
+export sh_int gsn_backstab;
+export sh_int gsn_dualstab;
+export sh_int gsn_circle;
+export sh_int gsn_dodge;
+export sh_int gsn_concealment;
+export sh_int gsn_hide;
+export sh_int gsn_peek;
+export sh_int gsn_pick_lock;
+export sh_int gsn_sneak;
+export sh_int gsn_steal;
+export sh_int gsn_gouge;
+export sh_int gsn_poison_weapon;
 
 /* thief & warrior */
-sh_int gsn_disarm;
-sh_int gsn_enhanced_damage;
-sh_int gsn_kick;
-sh_int gsn_parry;
-sh_int gsn_reflect;
-sh_int gsn_rescue;
-sh_int gsn_second_attack;
-sh_int gsn_third_attack;
+export sh_int gsn_disarm;
+export sh_int gsn_enhanced_damage;
+export sh_int gsn_kick;
+export sh_int gsn_parry;
+export sh_int gsn_reflect;
+export sh_int gsn_rescue;
+export sh_int gsn_second_attack;
+export sh_int gsn_third_attack;
 sh_int gsn_fourth_attack;
 sh_int gsn_fifth_attack;
-sh_int gsn_dual_wield;
-sh_int gsn_punch;
-sh_int gsn_bash;
-sh_int gsn_stun;
-sh_int gsn_bashdoor;
-sh_int gsn_grip;
-sh_int gsn_berserk;
-sh_int gsn_hitall;
+export sh_int gsn_dual_wield;
+export sh_int gsn_punch;
+export sh_int gsn_bash;
+export sh_int gsn_stun;
+export sh_int gsn_bashdoor;
+export sh_int gsn_grip;
+export sh_int gsn_berserk;
+export sh_int gsn_hitall;
 
 /* other   */
-sh_int gsn_aid;
-sh_int gsn_track;
-sh_int gsn_search;
-sh_int gsn_dig;
-sh_int gsn_mount;
+export sh_int gsn_aid;
+export sh_int gsn_track;
+export sh_int gsn_search;
+export sh_int gsn_dig;
+export sh_int gsn_mount;
 sh_int gsn_bite;
 sh_int gsn_claw;
 sh_int gsn_sting;
 sh_int gsn_tail;
 sh_int gsn_scribe;
 sh_int gsn_brew;
-sh_int gsn_climb;
-sh_int gsn_scan;
+export sh_int gsn_climb;
+export sh_int gsn_scan;
 sh_int gsn_slice;
 
 /* spells */
 sh_int gsn_aqua_breath;
-sh_int gsn_blindness;
-sh_int gsn_charm_person;
+export sh_int gsn_blindness;
+export sh_int gsn_charm_person;
 sh_int gsn_curse;
-sh_int gsn_invis;
-sh_int gsn_mass_invis;
-sh_int gsn_poison;
-sh_int gsn_sleep;
-sh_int gsn_possess;
-sh_int gsn_fireball;
+export sh_int gsn_invis;
+export sh_int gsn_mass_invis;
+export sh_int gsn_poison;
+export sh_int gsn_sleep;
+export sh_int gsn_possess;
+export sh_int gsn_fireball;
 sh_int gsn_chill_touch;
-sh_int gsn_lightning_bolt;
+export sh_int gsn_lightning_bolt;
 
 /* languages */
 sh_int gsn_basic;
@@ -335,46 +336,46 @@ sh_int gsn_duinuogwuin;
 sh_int gsn_droid;
 
 /* for searching */
-sh_int gsn_first_spell;
-sh_int gsn_first_skill;
-sh_int gsn_first_weapon;
-sh_int gsn_first_tongue;
-sh_int gsn_top_sn;
+export sh_int gsn_first_spell;
+export sh_int gsn_first_skill;
+export sh_int gsn_first_weapon;
+export sh_int gsn_first_tongue;
+export sh_int gsn_top_sn;
 
-bool MOBtrigger;
+export bool MOBtrigger;
 
 /*
  * Locals.
  */
-std::unordered_map<int, MOB_INDEX_DATA*> g_mobIndex;
-std::unordered_map<int, OBJ_INDEX_DATA*> g_objectIndex;
-std::unordered_map<int, ROOM_INDEX_DATA*> g_roomIndex;
+export std::unordered_map<int, MOB_INDEX_DATA*> g_mobIndex;
+export std::unordered_map<int, OBJ_INDEX_DATA*> g_objectIndex;
+export std::unordered_map<int, ROOM_INDEX_DATA*> g_roomIndex;
 
-AREA_DATA* first_area;
-AREA_DATA* last_area;
-AREA_DATA* first_build;
-AREA_DATA* last_build;
-AREA_DATA* first_asort;
-AREA_DATA* last_asort;
-AREA_DATA* first_bsort;
-AREA_DATA* last_bsort;
+export AREA_DATA* first_area;
+export AREA_DATA* last_area;
+export AREA_DATA* first_build;
+export AREA_DATA* last_build;
+export AREA_DATA* first_asort;
+export AREA_DATA* last_asort;
+export AREA_DATA* first_bsort;
+export AREA_DATA* last_bsort;
 
-SYSTEM_DATA sysdata;
+export SYSTEM_DATA sysdata;
 
-int top_affect;
-int top_area;
-int top_ed;
-int top_exit;
+export int top_affect;
+export int top_area;
+export int top_ed;
+export int top_exit;
 int top_help;
-int top_reset;
+export int top_reset;
 int top_shop;
 int top_repair;
 
 /*
  * Semi-locals.
  */
-bool fBootDb;
-FILE* fpArea;
+export bool fBootDb;
+export FILE* fpArea;
 char strArea[MAX_INPUT_LENGTH];
 char bname[MAX_STRING_LENGTH];
 
@@ -404,13 +405,6 @@ void load_banlist(void);
 void initialize_economy(void);
 
 void fix_exits(void);
-
-/*
- * External booting function
- */
-void load_corpses(void);
-void renumber_put_resets(ROOM_INDEX_DATA* room);
-void wipe_resets(ROOM_INDEX_DATA* room);
 
 /*
  * MUDprogram locals
@@ -443,7 +437,7 @@ void shutdown_mud(char const* reason)
 /*
  * Big mama top level function.
  */
-void boot_db(bool fCopyOver)
+export void boot_db(bool fCopyOver)
 {
     sh_int wear, x;
 
@@ -1049,7 +1043,7 @@ void free_help(HELP_DATA* pHelp)
  * Page is insert-sorted by keyword.                    -Thoric
  * (The reason for sorting is to keep do_hlist looking nice)
  */
-void add_help(HELP_DATA* pHelp)
+export void add_help(HELP_DATA* pHelp)
 {
     HELP_DATA* tHelp;
     int match;
@@ -1114,7 +1108,7 @@ void load_helps(AREA_DATA* tarea, FILE* fp)
 /*
  * Add a character to the list of all characters		-Thoric
  */
-void add_char(CHAR_DATA* ch)
+export void add_char(CHAR_DATA* ch)
 {
     LINK(ch, first_char, last_char, next, prev);
 }
@@ -2207,7 +2201,7 @@ void initialize_economy(void)
  * Has to be done after all rooms are read in.
  * Check for bad reverse exits.
  */
-void fix_exits(void)
+export void fix_exits(void)
 {
     EXIT_DATA *pexit = nullptr, *pexit_next = nullptr, *rev_exit = nullptr;
 
@@ -2329,7 +2323,7 @@ void sort_exits(ROOM_INDEX_DATA* room)
     }
 }
 
-void randomize_exits(ROOM_INDEX_DATA* room, sh_int maxdir)
+export void randomize_exits(ROOM_INDEX_DATA* room, sh_int maxdir)
 {
     EXIT_DATA* pexit;
     int nexits, /* maxd, */ d0, d1, count, door; /* Maxd unused */
@@ -2362,7 +2356,7 @@ void randomize_exits(ROOM_INDEX_DATA* room, sh_int maxdir)
 /*
  * Repopulate areas periodically.
  */
-void area_update(void)
+export void area_update(void)
 {
     AREA_DATA* pArea;
 
@@ -2421,7 +2415,7 @@ void area_update(void)
 /*
  * Create an instance of a mobile.
  */
-CHAR_DATA* create_mobile(MOB_INDEX_DATA* pMobIndex)
+export CHAR_DATA* create_mobile(MOB_INDEX_DATA* pMobIndex)
 {
     CHAR_DATA* mob;
 
@@ -2520,7 +2514,7 @@ CHAR_DATA* create_mobile(MOB_INDEX_DATA* pMobIndex)
 /*
  * Create an instance of an object.
  */
-OBJ_DATA* create_object(OBJ_INDEX_DATA* pObjIndex, int level)
+export OBJ_DATA* create_object(OBJ_INDEX_DATA* pObjIndex, int level)
 {
     OBJ_DATA* obj;
 
@@ -2727,7 +2721,7 @@ OBJ_DATA* create_object(OBJ_INDEX_DATA* pObjIndex, int level)
 /*
  * Clear a new character.
  */
-void clear_char(CHAR_DATA* ch)
+export void clear_char(CHAR_DATA* ch)
 {
     ch->editor = NULL;
     ch->hunting = NULL;
@@ -2800,7 +2794,7 @@ void clear_char(CHAR_DATA* ch)
 /*
  * Free a character.
  */
-void free_char(CHAR_DATA* ch)
+export void free_char(CHAR_DATA* ch)
 {
     OBJ_DATA* obj;
     BUG_DATA* bugs;
@@ -2936,7 +2930,7 @@ void free_char(CHAR_DATA* ch)
 /*
  * Get an extra description from a list.
  */
-char* get_extra_descr(const char* name, EXTRA_DESCR_DATA* ed)
+export char* get_extra_descr(const char* name, EXTRA_DESCR_DATA* ed)
 {
     for (; ed; ed = ed->next)
         if (is_name(name, ed->keyword))
@@ -2949,7 +2943,7 @@ char* get_extra_descr(const char* name, EXTRA_DESCR_DATA* ed)
  * Translates mob virtual number to its mob index struct.
  * Hash table lookup.
  */
-MOB_INDEX_DATA* get_mob_index(int vnum)
+export MOB_INDEX_DATA* get_mob_index(int vnum)
 {
     MOB_INDEX_DATA* pMobIndex;
 
@@ -2973,7 +2967,7 @@ MOB_INDEX_DATA* get_mob_index(int vnum)
  * Translates obj virtual number to its obj index struct.
  * Hash table lookup.
  */
-OBJ_INDEX_DATA* get_obj_index(int vnum)
+export OBJ_INDEX_DATA* get_obj_index(int vnum)
 {
     OBJ_INDEX_DATA* pObjIndex;
 
@@ -2997,7 +2991,7 @@ OBJ_INDEX_DATA* get_obj_index(int vnum)
  * Translates room virtual number to its room index struct.
  * Hash table lookup.
  */
-ROOM_INDEX_DATA* get_room_index(int vnum)
+export ROOM_INDEX_DATA* get_room_index(int vnum)
 {
     ROOM_INDEX_DATA* pRoomIndex;
 
@@ -3031,7 +3025,7 @@ ROOM_INDEX_DATA* get_room_index(int vnum)
 /*
  * Read a letter from a file.
  */
-char fread_letter(FILE* fp)
+export char fread_letter(FILE* fp)
 {
     char c;
 
@@ -3053,7 +3047,7 @@ char fread_letter(FILE* fp)
 /*
  * Read a number from a file.
  */
-int fread_number(FILE* fp)
+export int fread_number(FILE* fp)
 {
     int number;
     bool sign;
@@ -3119,7 +3113,7 @@ int fread_number(FILE* fp)
 /*
  * custom str_dup using create					-Thoric
  */
-char* str_dup(char const* str)
+export char* str_dup(char const* str)
 {
     static char* ret;
     int len;
@@ -3137,7 +3131,7 @@ char* str_dup(char const* str)
 /*
  * Read a string from file fp
  */
-char* fread_string(FILE* fp)
+export char* fread_string(FILE* fp)
 {
     char buf[MAX_STRING_LENGTH];
     char* plast;
@@ -3210,7 +3204,7 @@ char* fread_string(FILE* fp)
 /*
  * Read a string from file fp using str_dup (ie: no string hashing)
  */
-char* fread_string_nohash(FILE* fp)
+export char* fread_string_nohash(FILE* fp)
 {
     char buf[MAX_STRING_LENGTH];
     char* plast;
@@ -3283,7 +3277,7 @@ char* fread_string_nohash(FILE* fp)
 /*
  * Read to end of line (for comments).
  */
-void fread_to_eol(FILE* fp)
+export void fread_to_eol(FILE* fp)
 {
     char c;
 
@@ -3311,7 +3305,7 @@ void fread_to_eol(FILE* fp)
 /*
  * Read to end of line into static buffer			-Thoric
  */
-char* fread_line(FILE* fp)
+export char* fread_line(FILE* fp)
 {
     static char line[MAX_STRING_LENGTH];
     char* pline;
@@ -3373,7 +3367,7 @@ char* fread_line(FILE* fp)
 /*
  * Read one word (into static buffer).
  */
-char* fread_word(FILE* fp)
+export char* fread_word(FILE* fp)
 {
     static char word[MAX_INPUT_LENGTH];
     char* pword;
@@ -3483,7 +3477,7 @@ void do_memory(CHAR_DATA* ch, char* argument)
 /*
  * Stick a little fuzz on a number.
  */
-int number_fuzzy(int number)
+export int number_fuzzy(int number)
 {
     switch (number_bits(2))
     {
@@ -3502,7 +3496,7 @@ int number_fuzzy(int number)
  * Generate a random number.
  */
 
-int number_range(int from, int to)
+export int number_range(int from, int to)
 {
     if ((to - from) < 1)
         return from;
@@ -3513,7 +3507,7 @@ int number_range(int from, int to)
  * Generate a percentile roll.
  * number_mm() % 100 only does 0-99, changed to do 1-100 -Shaddai
  */
-int number_percent(void)
+export int number_percent(void)
 {
     return (number_mm() % 100) + 1;
 }
@@ -3521,7 +3515,7 @@ int number_percent(void)
 /*
  * Generate a random door.
  */
-int number_door(void)
+export int number_door(void)
 {
     int door;
 
@@ -3532,7 +3526,7 @@ int number_door(void)
     /*    return number_mm() & 10; */
 }
 
-int number_bits(int width)
+export int number_bits(int width)
 {
     return number_mm() & ((1 << width) - 1);
 }
@@ -3545,7 +3539,7 @@ int number_bits(int width)
  */
 static int rgiState[2 + 55];
 
-void init_mm()
+export void init_mm()
 {
     int* piState;
     int iState;
@@ -3588,7 +3582,7 @@ int number_mm(void)
 /*
  * Roll some dice.						-Thoric
  */
-int dice(int number, int size)
+export int dice(int number, int size)
 {
     int idice;
     int sum;
@@ -3610,7 +3604,7 @@ int dice(int number, int size)
 /*
  * Simple linear interpolation.
  */
-int interpolate(int level, int value_00, int value_32)
+export int interpolate(int level, int value_00, int value_32)
 {
     return value_00 + level * (value_32 - value_00) / 32;
 }
@@ -3619,7 +3613,7 @@ int interpolate(int level, int value_00, int value_32)
  * Removes the tildes from a string.
  * Used for player-entered strings that go into disk files.
  */
-void smash_tilde(char* str)
+export void smash_tilde(char* str)
 {
     for (; *str != '\0'; str++)
         if (*str == '~')
@@ -3632,7 +3626,7 @@ void smash_tilde(char* str)
  * Encodes the tildes in a string.				-Thoric
  * Used for player-entered strings that go into disk files.
  */
-void hide_tilde(char* str)
+export void hide_tilde(char* str)
 {
     for (; *str != '\0'; str++)
         if (*str == '~')
@@ -3641,7 +3635,7 @@ void hide_tilde(char* str)
     return;
 }
 
-char* show_tilde(const char* str)
+export char* show_tilde(const char* str)
 {
     static char buf[MAX_STRING_LENGTH];
     char* bufptr;
@@ -3664,7 +3658,7 @@ char* show_tilde(const char* str)
  * Return true if different
  *   (compatibility with historical functions).
  */
-bool str_cmp(const char* astr, const char* bstr)
+export bool str_cmp(const char* astr, const char* bstr)
 {
     if (!astr)
     {
@@ -3696,7 +3690,7 @@ bool str_cmp(const char* astr, const char* bstr)
  * Return true if astr not a prefix of bstr
  *   (compatibility with historical functions).
  */
-bool str_prefix(const char* astr, const char* bstr)
+export bool str_prefix(const char* astr, const char* bstr)
 {
     if (!astr)
     {
@@ -3724,7 +3718,7 @@ bool str_prefix(const char* astr, const char* bstr)
  * Returns true is astr not part of bstr.
  *   (compatibility with historical functions).
  */
-bool str_infix(const char* astr, const char* bstr)
+export bool str_infix(const char* astr, const char* bstr)
 {
     int sstr1;
     int sstr2;
@@ -3749,7 +3743,7 @@ bool str_infix(const char* astr, const char* bstr)
  * Return true if astr not a suffix of bstr
  *   (compatibility with historical functions).
  */
-bool str_suffix(const char* astr, const char* bstr)
+export bool str_suffix(const char* astr, const char* bstr)
 {
     int sstr1;
     int sstr2;
@@ -3765,7 +3759,7 @@ bool str_suffix(const char* astr, const char* bstr)
 /*
  * Returns an initial-capped string.
  */
-std::string capitalize(const std::string_view& str)
+export std::string capitalize(const std::string_view& str)
 {
     std::string result = strlower(str);
 
@@ -3778,7 +3772,7 @@ std::string capitalize(const std::string_view& str)
 /*
  * Returns a lowercase string.
  */
-std::string strlower(const std::string_view& str)
+export std::string strlower(const std::string_view& str)
 {
     std::string result{str};
 
@@ -3791,7 +3785,7 @@ std::string strlower(const std::string_view& str)
 /*
  * Returns an uppercase string.
  */
-std::string strupper(const std::string_view& str)
+export std::string strupper(const std::string_view& str)
 {
     std::string result{str};
 
@@ -3818,7 +3812,7 @@ bool isavowel(char letter)
 /*
  * Shove either "a " or "an " onto the beginning of a string	-Thoric
  */
-std::string aoran(const std::string_view& str)
+export std::string aoran(const std::string_view& str)
 {
     if (str.empty())
     {
@@ -3835,7 +3829,7 @@ std::string aoran(const std::string_view& str)
 /*
  * Append a string to a file.
  */
-void append_file(CHAR_DATA* ch, const char* file, char* str)
+export void append_file(CHAR_DATA* ch, const char* file, char* str)
 {
     FILE* fp;
 
@@ -3858,7 +3852,7 @@ void append_file(CHAR_DATA* ch, const char* file, char* str)
 /*
  * Append a string to a file.
  */
-void append_to_file(char const* file, char* str)
+export void append_to_file(char const* file, char* str)
 {
     FILE* fp;
 
@@ -3894,7 +3888,7 @@ void prepend_to_file(char* file, char* str)
 /*
  * Reports a bug.
  */
-void bug(const char* str, ...)
+export void bug(const char* str, ...)
 {
     char buf[MAX_STRING_LENGTH];
     FILE* fp;
@@ -3981,7 +3975,7 @@ void boot_log(const char* str, ...)
 /*
  * Dump a text file to a player, a line at a time		-Thoric
  */
-void show_file(CHAR_DATA* ch, char const* filename)
+export void show_file(CHAR_DATA* ch, char const* filename)
 {
     FILE* fp;
     char buf[MAX_STRING_LENGTH];
@@ -4020,7 +4014,7 @@ void do_dmesg(CHAR_DATA* ch, char* argument)
 /*
  * Writes a string to the log, extended version			-Thoric
  */
-void log_string_plus(const char* str, sh_int log_type, sh_int level)
+export void log_string_plus(const char* str, sh_int log_type, sh_int level)
 {
     char* strtime;
     int offset;
@@ -4049,7 +4043,7 @@ void log_string_plus(const char* str, sh_int log_type, sh_int level)
     return;
 }
 
-void log(const char* str, sh_int log_type, sh_int level, ...)
+export void log(const char* str, sh_int log_type, sh_int level, ...)
 {
     char buf[MAX_STRING_LENGTH];
     {
@@ -4161,7 +4155,7 @@ void add_to_wizlist(char const* name, int level)
 /*
  * Wizlist builder						-Thoric
  */
-void make_wizlist()
+export void make_wizlist()
 {
     FILE* gfp;
     char const* word;
@@ -5003,7 +4997,7 @@ void rprog_read_programs(FILE* fp, ROOM_INDEX_DATA* pRoomIndex)
   Don't ask me why they return bool.. :).. oh well.. -- Alty
   Don't ask me either, so I changed it to void. - Samson
 */
-void delete_room(ROOM_INDEX_DATA* room)
+export void delete_room(ROOM_INDEX_DATA* room)
 {
     ROOM_INDEX_DATA *prev, *limbo = get_room_index(ROOM_VNUM_LIMBO);
     OBJ_DATA* o;
@@ -5067,7 +5061,7 @@ void delete_room(ROOM_INDEX_DATA* room)
 }
 
 /* See comment on delete_room. */
-void delete_obj(OBJ_INDEX_DATA* obj)
+export void delete_obj(OBJ_INDEX_DATA* obj)
 {
     int hash;
     OBJ_INDEX_DATA* prev;
@@ -5119,7 +5113,7 @@ void delete_obj(OBJ_INDEX_DATA* obj)
 }
 
 /* See comment on delete_room. */
-void delete_mob(MOB_INDEX_DATA* mob)
+export void delete_mob(MOB_INDEX_DATA* mob)
 {
     MOB_INDEX_DATA* prev;
     CHAR_DATA *ch, *ch_next;
@@ -5170,7 +5164,7 @@ void delete_mob(MOB_INDEX_DATA* mob)
 /*
  * Creat a new room (for online building)			-Thoric
  */
-ROOM_INDEX_DATA* make_room(int vnum, AREA_DATA* area)
+export ROOM_INDEX_DATA* make_room(int vnum, AREA_DATA* area)
 {
     ROOM_INDEX_DATA* pRoomIndex = nullptr;
 
@@ -5204,7 +5198,7 @@ ROOM_INDEX_DATA* make_room(int vnum, AREA_DATA* area)
  * Create a new INDEX object (for online building)		-Thoric
  * Option to clone an existing index object.
  */
-OBJ_INDEX_DATA* make_object(int vnum, int cvnum, char* name)
+export OBJ_INDEX_DATA* make_object(int vnum, int cvnum, char* name)
 {
     OBJ_INDEX_DATA *pObjIndex, *cObjIndex;
     char buf[MAX_STRING_LENGTH];
@@ -5290,7 +5284,7 @@ OBJ_INDEX_DATA* make_object(int vnum, int cvnum, char* name)
  * Create a new INDEX mobile (for online building)		-Thoric
  * Option to clone an existing index mobile.
  */
-MOB_INDEX_DATA* make_mobile(int vnum, int cvnum, char* name)
+export MOB_INDEX_DATA* make_mobile(int vnum, int cvnum, char* name)
 {
     MOB_INDEX_DATA *pMobIndex = nullptr, *cMobIndex = nullptr;
     char buf[MAX_STRING_LENGTH];
@@ -5408,7 +5402,7 @@ MOB_INDEX_DATA* make_mobile(int vnum, int cvnum, char* name)
  * to_room and vnum.						-Thoric
  * Exits are inserted into the linked list based on vdir.
  */
-EXIT_DATA* make_exit(ROOM_INDEX_DATA* pRoomIndex, ROOM_INDEX_DATA* to_room, sh_int door)
+export EXIT_DATA* make_exit(ROOM_INDEX_DATA* pRoomIndex, ROOM_INDEX_DATA* to_room, sh_int door)
 {
     EXIT_DATA *pexit, *texit;
     bool broke;
@@ -5461,7 +5455,7 @@ EXIT_DATA* make_exit(ROOM_INDEX_DATA* pRoomIndex, ROOM_INDEX_DATA* to_room, sh_i
     return pexit;
 }
 
-void fix_area_exits(AREA_DATA* tarea)
+export void fix_area_exits(AREA_DATA* tarea)
 {
     ROOM_INDEX_DATA* pRoomIndex;
     EXIT_DATA *pexit, *rev_exit;
@@ -5507,7 +5501,7 @@ void fix_area_exits(AREA_DATA* tarea)
     }
 }
 
-void load_area_file(AREA_DATA* tarea, char* filename)
+export void load_area_file(AREA_DATA* tarea, char* filename)
 {
     /*    FILE *fpin;
         what intelligent person stopped using fpArea?????
@@ -5736,7 +5730,7 @@ void load_buildlist(void)
 /*
  * Sort by room vnums					-Altrag & Thoric
  */
-void sort_area(AREA_DATA* pArea, bool proto)
+export void sort_area(AREA_DATA* pArea, bool proto)
 {
     AREA_DATA* area = NULL;
     AREA_DATA *first_sort, *last_sort;
@@ -5920,7 +5914,7 @@ void do_newzones(CHAR_DATA* ch, char* argument)
 /*
  * Save system info to data file
  */
-void save_sysdata(SYSTEM_DATA sys)
+export void save_sysdata(SYSTEM_DATA sys)
 {
     FILE* fp;
     char filename[MAX_INPUT_LENGTH];
@@ -6461,7 +6455,7 @@ void do_check_vnums(CHAR_DATA* ch, char* argument)
 }
 
 /* little proggy to center text with whitespace in between. */
-std::string centertext(const std::string_view& text, int size)
+export std::string centertext(const std::string_view& text, int size)
 {
     std::string cleanText = remand(text);
     int filler = (size - cleanText.size()) / 2 - 1;
@@ -6492,7 +6486,7 @@ std::string centertext(const std::string_view& text, int size)
 /*
  * Read a float number from a file. Turn the result into a float value.
  */
-float fread_float(FILE* fp)
+export float fread_float(FILE* fp)
 {
     float number;
     bool sign, decimal;

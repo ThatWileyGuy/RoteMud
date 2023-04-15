@@ -36,6 +36,8 @@
  *                                                                                  *
  ***********************************************************************************/
 
+module;
+
 #include <sys/types.h>
 #include <ctype.h>
 #include <stdio.h>
@@ -47,10 +49,14 @@ extern int top_affect;
 extern int top_reset;
 extern int top_ed;
 extern bool fBootDb;
+extern int top_area;
+
+extern char* sprint_reset(RESET_DATA* pReset, short* num);
+extern void fix_exits(void);
+
+export module build;
 
 int generate_hp(int level, int num, int size, int plus);
-char* sprint_reset(RESET_DATA* pReset, short* num);
-void fix_exits(void);
 
 /* planet constants for vip and wanted flags */
 
@@ -291,7 +297,7 @@ const char* mprog_flags[] = {"act",      "speech", "rand",   "fight", "death", "
                              "look",     "exa",    "custom", "get",   "drop",  "damage",   "repair", "randiw",
                              "speechiw", "pull",   "push",   "sleep", "rest",  "leave",    "script", "use"};
 
-char* flag_string(int bitvector, const char* flagarray[])
+export char* flag_string(int bitvector, const char* flagarray[])
 {
     static char buf[MAX_STRING_LENGTH];
     int x;
@@ -309,7 +315,7 @@ char* flag_string(int bitvector, const char* flagarray[])
     return buf;
 }
 
-bool can_rmodify(CHAR_DATA* ch, ROOM_INDEX_DATA* room)
+export bool can_rmodify(CHAR_DATA* ch, ROOM_INDEX_DATA* room)
 {
     int vnum = room->vnum;
     AREA_DATA* pArea;
@@ -407,7 +413,7 @@ bool can_mmodify(CHAR_DATA* ch, CHAR_DATA* mob)
     return false;
 }
 
-bool can_medit(CHAR_DATA* ch, MOB_INDEX_DATA* mob)
+export bool can_medit(CHAR_DATA* ch, MOB_INDEX_DATA* mob)
 {
     int vnum = mob->vnum;
     AREA_DATA* pArea;
@@ -428,7 +434,7 @@ bool can_medit(CHAR_DATA* ch, MOB_INDEX_DATA* mob)
     return false;
 }
 
-int get_otype(const char* type)
+export int get_otype(const char* type)
 {
     int x;
 
@@ -438,7 +444,7 @@ int get_otype(const char* type)
     return -1;
 }
 
-int get_aflag(const char* flag)
+export int get_aflag(const char* flag)
 {
     int x;
 
@@ -448,7 +454,7 @@ int get_aflag(const char* flag)
     return -1;
 }
 
-int get_trapflag(const char* flag)
+export int get_trapflag(const char* flag)
 {
     int x;
 
@@ -458,7 +464,7 @@ int get_trapflag(const char* flag)
     return -1;
 }
 
-int get_atype(const char* type)
+export int get_atype(const char* type)
 {
     int x;
 
@@ -518,7 +524,7 @@ int get_rflag2(const char* flag)
     return -1;
 }
 
-int get_mpflag(const char* flag)
+export int get_mpflag(const char* flag)
 {
     int x;
 
@@ -548,7 +554,7 @@ int get_areaflag(const char* flag)
     return -1;
 }
 
-int get_wflag(const char* flag)
+export int get_wflag(const char* flag)
 {
     int x;
 
@@ -578,7 +584,7 @@ int get_vip_flag(const char* flag)
     return -1;
 }
 
-int get_wanted_flag(const char* flag)
+export int get_wanted_flag(const char* flag)
 {
     int x;
 
@@ -670,7 +676,7 @@ int get_langflag(const char* flag)
 /*
  * Remove carriage returns from a line
  */
-char* strip_cr(char* str)
+export char* strip_cr(char* str)
 {
     static char newstr[MAX_STRING_LENGTH];
     int i, j;
@@ -3914,7 +3920,7 @@ void do_rset(CHAR_DATA* ch, char* argument)
 /*
  * Returns value 0 - 9 based on directional text.
  */
-int get_dir(char* txt)
+export int get_dir(char* txt)
 {
     int edir;
     char c1, c2;
@@ -5498,7 +5504,7 @@ void edit_buffer( CHAR_DATA *ch, char *argument )
 }
 */
 
-void assign_area(CHAR_DATA* ch)
+export void assign_area(CHAR_DATA* ch)
 {
     char buf[MAX_STRING_LENGTH];
     char buf2[MAX_STRING_LENGTH];
@@ -5662,7 +5668,7 @@ bool DelRExtra(ROOM_INDEX_DATA* room, const char* keywords)
     return true;
 }
 
-EXTRA_DESCR_DATA* SetOExtra(OBJ_DATA* obj, const char* keywords)
+export EXTRA_DESCR_DATA* SetOExtra(OBJ_DATA* obj, const char* keywords)
 {
     EXTRA_DESCR_DATA* ed;
 
@@ -5740,7 +5746,7 @@ bool DelOExtraProto(OBJ_INDEX_DATA* obj, const char* keywords)
     return true;
 }
 
-void fold_area(AREA_DATA* tarea, char* filename, bool install)
+export void fold_area(AREA_DATA* tarea, char* filename, bool install)
 {
     RESET_DATA *pReset, *tReset, *gReset;
     ROOM_INDEX_DATA* room;
@@ -6271,8 +6277,6 @@ void do_foldarea(CHAR_DATA* ch, char* argument)
     send_to_char("No such area exists.\n\r", ch);
     return;
 }
-
-extern int top_area;
 
 void write_area_list()
 {

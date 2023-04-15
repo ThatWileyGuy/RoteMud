@@ -36,6 +36,8 @@
  *                                                                                  *
  ***********************************************************************************/
 
+module;
+
 #include <sys/types.h>
 #include <ctype.h>
 #include <stdio.h>
@@ -43,6 +45,8 @@
 #include <time.h>
 #include <sys/stat.h>
 #include "mud.hxx"
+
+export module boards;
 
 /* Defines for voting on notes. -- Narn */
 #define VOTE_NONE 0
@@ -149,7 +153,7 @@ void write_boards_txt()
     fclose(fpout);
 }
 
-BOARD_DATA* get_board(OBJ_DATA* obj)
+export BOARD_DATA* get_board(OBJ_DATA* obj)
 {
     BOARD_DATA* board;
 
@@ -190,7 +194,7 @@ bool is_note_to(CHAR_DATA* ch, NOTE_DATA* pnote)
     return false;
 }
 
-void note_attach(CHAR_DATA* ch)
+export void note_attach(CHAR_DATA* ch)
 {
     NOTE_DATA* pnote;
 
@@ -239,7 +243,7 @@ void write_board(BOARD_DATA* board)
     return;
 }
 
-void free_note(NOTE_DATA* pnote)
+export void free_note(NOTE_DATA* pnote)
 {
     STRFREE(pnote->text);
     STRFREE(pnote->subject);
@@ -1282,7 +1286,7 @@ NOTE_DATA* read_note(char* notefile, FILE* fp)
 /*
  * Load boards file.
  */
-void load_boards(void)
+export void load_boards(void)
 {
     FILE* board_fp;
     FILE* note_fp;
@@ -1590,7 +1594,7 @@ void do_boards(CHAR_DATA* ch, char* argument)
                   board->max_posts, board->num_posts, board->type);
 }
 
-void mail_count(CHAR_DATA* ch)
+export void mail_count(CHAR_DATA* ch)
 {
     BOARD_DATA* board;
     NOTE_DATA* note;

@@ -36,31 +36,29 @@
  *                                                                                  *
  ***********************************************************************************/
 
-#include <sys/types.h>
-#include <stdio.h>
-#include <string.h>
-#include <time.h>
+module;
+
 #include "mud.hxx"
-#include "bet.hxx"
+
+export module act_obj;
+
+import act_info;
+import bet;
+import save;
 
 /*double sqrt( double x );*/
 
 /*
- * External functions
- */
-void write_corpses(CHAR_DATA* ch, char* name);
-void show_list_to_char(OBJ_DATA* list, CHAR_DATA* ch, bool fShort, bool fShowNothing);
-/*
  * Local functions.
  */
 void get_obj(CHAR_DATA* ch, OBJ_DATA* obj, OBJ_DATA* container);
-bool remove_obj(CHAR_DATA* ch, int iWear, bool fReplace);
+export bool remove_obj(CHAR_DATA* ch, int iWear, bool fReplace);
 void wear_obj(CHAR_DATA* ch, OBJ_DATA* obj, bool fReplace, sh_int wear_bit);
 
 /*
  * how resistant an object is to damage				-Thoric
  */
-sh_int get_obj_resistance(OBJ_DATA* obj)
+export sh_int get_obj_resistance(OBJ_DATA* obj)
 {
     sh_int resist;
 
@@ -1045,7 +1043,7 @@ void do_give(CHAR_DATA* ch, char* argument)
  * Make object into scraps if necessary.
  * Send message about damaged object.
  */
-obj_ret damage_obj(OBJ_DATA* obj)
+export obj_ret damage_obj(OBJ_DATA* obj)
 {
     CHAR_DATA* ch;
     obj_ret objcode;
@@ -2760,7 +2758,7 @@ void do_auction(CHAR_DATA* ch, char* argument)
 
 /* Make objects in rooms that are nofloor fall - Scryn 1/23/96 */
 
-void obj_fall(OBJ_DATA* obj, bool through)
+export void obj_fall(OBJ_DATA* obj, bool through)
 {
     EXIT_DATA* pexit;
     ROOM_INDEX_DATA* to_room;

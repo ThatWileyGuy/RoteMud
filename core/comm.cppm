@@ -36,17 +36,30 @@
  *                                                                                  *
  ***********************************************************************************/
 
+module;
+
 #include <optional>
 #include <memory>
 #include <algorithm>
 #include <boost/format.hpp>
+#include <boost/asio.hpp>
 
 #ifdef WIN32
 #include <fcntl.h>
 #endif
 
 #include "mud.hxx"
-#include "connection.hxx"
+
+extern void write_ship_list(void);
+extern void write_planet_list(void);
+extern void mail_count(CHAR_DATA* ch);
+
+export module comm;
+
+import db;
+import act_info;
+import act_comm;
+import connection;
 
 #ifdef ECHO
 #undef ECHO // TODO where does this come from on Linux?
@@ -80,32 +93,24 @@ const char echo_off_str[] = {telnet::IAC, telnet::WILL, telnet::option::ECHO, '\
 const char echo_on_str[] = {telnet::IAC, telnet::WONT, telnet::option::ECHO, '\0'};
 const char go_ahead_str[] = {telnet::IAC, telnet::GA, '\0'};
 
-void save_sysdata(SYSTEM_DATA sys);
-void write_ship_list(void);
+
 void arms(std::shared_ptr<DESCRIPTOR_DATA> d, char* argument);
 void send_main_mail_menu(DESCRIPTOR_DATA* d);
-/*  from act_info?  */
-void show_condition(CHAR_DATA* ch, CHAR_DATA* victim);
-void generate_com_freq(CHAR_DATA* ch);
-
-// planets.c
-
-void write_planet_list(void);
 
 /*
  * Global variables.
  */
 
-std::vector<std::shared_ptr<DESCRIPTOR_DATA>> g_descriptors;
-bool mud_down; /* Shutdown			*/
-time_t boot_time;
+export std::vector<std::shared_ptr<DESCRIPTOR_DATA>> g_descriptors;
+export bool mud_down; /* Shutdown			*/
+export time_t boot_time;
 HOUR_MIN_SEC set_boot_time_struct;
-HOUR_MIN_SEC* set_boot_time;
-tm* new_boot_time;
-tm new_boot_struct;
+export HOUR_MIN_SEC* set_boot_time;
+export tm* new_boot_time;
+export tm new_boot_struct;
 char str_boot_time[MAX_INPUT_LENGTH];
 char lastplayercmd[MAX_INPUT_LENGTH * 2];
-time_t current_time; /* Time of this pulse		*/
+export time_t current_time; /* Time of this pulse		*/
 std::optional<IOManager> io_manager;
 
 /*
@@ -139,11 +144,11 @@ void close_socket(DESCRIPTOR_DATA* dclose, bool startedExternally, bool force);
 void send_prompt(DESCRIPTOR_DATA* d);
 void run_command_loop(std::shared_ptr<DESCRIPTOR_DATA> d);
 
-void mail_count(CHAR_DATA* ch);
+
 
 std::unique_ptr<boost::asio::ip::tcp::socket> new_socket;
 
-int gamemain(int argc, char** argv)
+export int gamemain(int argc, char** argv)
 {
 
     bool fCopyOver = false;
@@ -498,17 +503,17 @@ DESCRIPTOR_DATA::~DESCRIPTOR_DATA()
     DISPOSE(pagebuf);
 }
 
-void close_socket(DESCRIPTOR_DATA* dclose, bool force)
+export void close_socket(DESCRIPTOR_DATA* dclose, bool force)
 {
     close_socket(dclose, false, force);
 }
 
-void close_socket(std::shared_ptr<DESCRIPTOR_DATA> dclose, bool force)
+export void close_socket(std::shared_ptr<DESCRIPTOR_DATA> dclose, bool force)
 {
     close_socket(dclose.get(), force);
 }
 
-void close_socket(DESCRIPTOR_DATA* dclose, bool startedExternally, bool force)
+export void close_socket(DESCRIPTOR_DATA* dclose, bool startedExternally, bool force)
 {
     CHAR_DATA* ch = nullptr;
 
@@ -591,7 +596,7 @@ void handle_descriptor_error(DESCRIPTOR_DATA* d, const boost::system::error_code
 /*
  * Append onto an output buffer.
  */
-void write_to_buffer(DESCRIPTOR_DATA* d, std::string_view string)
+export void write_to_buffer(DESCRIPTOR_DATA* d, std::string_view string)
 {
     if (!d)
     {
@@ -623,12 +628,12 @@ void write_to_buffer(DESCRIPTOR_DATA* d, std::string_view string)
     }
 }
 
-void write_to_buffer(std::shared_ptr<DESCRIPTOR_DATA> d, std::string_view string)
+export void write_to_buffer(std::shared_ptr<DESCRIPTOR_DATA> d, std::string_view string)
 {
     write_to_buffer(d.get(), string);
 }
 
-void write_to_buffer(DESCRIPTOR_DATA* d, const char* string, size_t length)
+export void write_to_buffer(DESCRIPTOR_DATA* d, const char* string, size_t length)
 {
     if (length <= 0)
     {
@@ -638,7 +643,7 @@ void write_to_buffer(DESCRIPTOR_DATA* d, const char* string, size_t length)
     write_to_buffer(d, std::string_view(string, length));
 }
 
-void write_to_buffer(std::shared_ptr<DESCRIPTOR_DATA> d, const char* string, size_t length)
+export void write_to_buffer(std::shared_ptr<DESCRIPTOR_DATA> d, const char* string, size_t length)
 {
     write_to_buffer(d.get(), string, length);
 }
@@ -661,7 +666,7 @@ void show_title(std::shared_ptr<DESCRIPTOR_DATA> d)
     d->connected = CON_PRESS_ENTER;
 }
 
-char* smaug_crypt(const char* pwd)
+export char* smaug_crypt(const char* pwd)
 {
     md5_state_t state;
     md5_byte_t digest[16];
@@ -2048,7 +2053,7 @@ void handle_new_authenticated_connection(std::shared_ptr<Connection> connection,
 /*
  * Parse a name for acceptability.
  */
-bool check_parse_name(const char* name)
+export bool check_parse_name(const char* name)
 {
     /*
      * Reserved words.
@@ -2266,7 +2271,7 @@ void stop_idling(CHAR_DATA* ch)
  * Used for infrared viewing, bright red on players/mobiles
  * (sets color before sending text, act_info.c send_char_to_char_0)
  */
-void send_to_char_noand(const char* txt, CHAR_DATA* ch)
+export void send_to_char_noand(const char* txt, CHAR_DATA* ch)
 {
     char buf[MAX_STRING_LENGTH];
     if (!ch)
@@ -2327,7 +2332,7 @@ void send_to_desc_color2(const char* txt, std::shared_ptr<DESCRIPTOR_DATA> d)
     send_to_desc_color2(txt, d.get());
 }
 
-std::string obj_short(OBJ_DATA* obj)
+export std::string obj_short(OBJ_DATA* obj)
 {
     if (obj->count > 1)
         return (boost::format{"%s (%d)"} % obj->short_descr % obj->count).str();
@@ -2478,7 +2483,7 @@ char* act_string(const char* format, CHAR_DATA* to, CHAR_DATA* ch, const void* a
 }
 #undef NAME
 
-void act(sh_int AType, const char* format, CHAR_DATA* ch, const void* arg1, const void* arg2, int type)
+export void act(sh_int AType, const char* format, CHAR_DATA* ch, const void* arg1, const void* arg2, int type)
 {
     char* txt;
     CHAR_DATA* to;
@@ -3319,7 +3324,7 @@ FELLOW_DATA* knowsof(CHAR_DATA* ch, CHAR_DATA* victim)
     return NULL;
 }
 
-const char* PERS(CHAR_DATA* ch, CHAR_DATA* looker)
+export const char* PERS(CHAR_DATA* ch, CHAR_DATA* looker)
 {
     static char buf[MAX_STRING_LENGTH];
     char race[MAX_STRING_LENGTH];

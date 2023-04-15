@@ -47,11 +47,14 @@
  *  If you modify this code and use/distribute modified versions
  *  you must give credit to the original author(s).
  */
-#include <stdio.h>
-#include <string.h>
-#include <ctype.h>
+
+module;
+
 #include "mud.hxx"
-#include "db.hxx"
+
+export module renumber;
+
+import db;
 
 #define NOT_FOUND (-1)
 enum

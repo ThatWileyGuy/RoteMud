@@ -45,15 +45,18 @@
  * pRoom->people, rch->carrying, obj->contains, and pArea->reset_first ..
  * pArea->reset_last.  -- Altrag
  */
-#include <string.h>
-#include <stdio.h>
+
+module;
+
 #include "mud.hxx"
 
-/* Externals */
-extern int top_reset;
 extern const char* wear_locs[];
 
-int get_trapflag(const char* flag);
+extern int get_trapflag(const char* flag);
+
+export module reset;
+
+import db;
 
 /*
  * Find some object with a given index data.
@@ -71,7 +74,7 @@ OBJ_DATA* get_obj_type(OBJ_INDEX_DATA* pObjIndex)
     return NULL;
 }
 
-char* sprint_reset(RESET_DATA* pReset, short* num)
+export char* sprint_reset(RESET_DATA* pReset, short* num)
 {
     RESET_DATA *tReset, *gReset;
     static char buf[MAX_STRING_LENGTH];
@@ -306,7 +309,7 @@ void add_obj_reset(ROOM_INDEX_DATA* room, char cm, OBJ_DATA* obj, int v2, int v3
     return;
 }
 
-void delete_reset(RESET_DATA* pReset)
+export void delete_reset(RESET_DATA* pReset)
 {
     RESET_DATA *tReset, *tReset_next;
 
@@ -322,7 +325,7 @@ void delete_reset(RESET_DATA* pReset)
     return;
 }
 
-void instaroom(ROOM_INDEX_DATA* pRoom, bool dodoors)
+export void instaroom(ROOM_INDEX_DATA* pRoom, bool dodoors)
 {
     CHAR_DATA* rch;
     OBJ_DATA* obj;
@@ -368,7 +371,7 @@ void instaroom(ROOM_INDEX_DATA* pRoom, bool dodoors)
     return;
 }
 
-void wipe_resets(ROOM_INDEX_DATA* room)
+export void wipe_resets(ROOM_INDEX_DATA* room)
 {
     RESET_DATA *pReset, *pReset_next;
 
@@ -892,7 +895,7 @@ void reset_room(ROOM_INDEX_DATA* room)
     return;
 }
 
-void reset_area(AREA_DATA* area)
+export void reset_area(AREA_DATA* area)
 {
     ROOM_INDEX_DATA* room;
 
@@ -905,7 +908,7 @@ void reset_area(AREA_DATA* area)
 
 /* Setup put nesting levels, regardless of whether or not the resets will
    actually reset, or if they're bugged. */
-void renumber_put_resets(ROOM_INDEX_DATA* room)
+export void renumber_put_resets(ROOM_INDEX_DATA* room)
 {
     RESET_DATA *pReset, *tReset, *lastobj = NULL;
 
@@ -945,7 +948,7 @@ void renumber_put_resets(ROOM_INDEX_DATA* room)
 /*
  * Add a reset to an area -Thoric
  */
-RESET_DATA* add_reset(ROOM_INDEX_DATA* room, char letter, int extra, int arg1, int arg2, int arg3)
+export RESET_DATA* add_reset(ROOM_INDEX_DATA* room, char letter, int extra, int arg1, int arg2, int arg3)
 {
     RESET_DATA* pReset;
 

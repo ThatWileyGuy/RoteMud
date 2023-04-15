@@ -36,15 +36,17 @@
  *                                                                                  *
  ***********************************************************************************/
 
-#include <sys/types.h>
-#include <stdio.h>
-#include <string.h>
-#include "mud.hxx"
-#include "connection.hxx"
+module;
 
-const char* mprog_type_to_name(int type);
+#include "mud.hxx"
+
+export module mud_comm;
+
+import connection;
+
+export const char* mprog_type_to_name(int type);
 ch_ret simple_damage(CHAR_DATA* ch, CHAR_DATA* victim, int dam, int dt);
-CHAR_DATA* get_char_room_mp(CHAR_DATA* ch, char* argument);
+export CHAR_DATA* get_char_room_mp(CHAR_DATA* ch, char* argument);
 
 const char* mprog_type_to_name(int type)
 {
@@ -389,7 +391,7 @@ void do_mpjunk(CHAR_DATA* ch, char* argument)
  * This function examines a text string to see if the first "word" is a
  * color indicator (e.g. _red, _whi_, _blu).  -  Gorog
  */
-int get_color(char* argument) /* get color code from command string */
+export int get_color(char* argument) /* get color code from command string */
 {
     char color[MAX_INPUT_LENGTH];
     const char* cptr;

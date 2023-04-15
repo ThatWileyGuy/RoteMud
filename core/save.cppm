@@ -36,15 +36,17 @@
  *                                                                                  *
  ***********************************************************************************/
 
-#include <sys/types.h>
-#include <ctype.h>
-#include <stdio.h>
-#include <string.h>
-#include <time.h>
-#include <sys/stat.h>
+module;
+
 #include <filesystem>
 #include "mud.hxx"
-#include "connection.hxx"
+
+extern void fwrite_comments(CHAR_DATA* ch, FILE* fp);
+extern void fread_comment(CHAR_DATA* ch, FILE* fp);
+
+export module save;
+
+import connection;
 
 /*
  * Increment with every major format change.
@@ -55,15 +57,9 @@
  * Array to keep track of equipment temporarily.		-Thoric
  */
 OBJ_DATA* save_equipment[MAX_WEAR][MAX_LAYERS];
-CHAR_DATA *quitting_char, *loading_char, *saving_char;
+export CHAR_DATA *quitting_char, *loading_char, *saving_char;
 
 int file_ver;
-
-/*
- * Externals
- */
-void fwrite_comments(CHAR_DATA* ch, FILE* fp);
-void fread_comment(CHAR_DATA* ch, FILE* fp);
 
 /*
  * Array of containers read for proper re-nesting of objects.
@@ -75,9 +71,9 @@ static OBJ_DATA* rgObjNest[MAX_NEST];
  */
 void fwrite_char(CHAR_DATA* ch, FILE* fp);
 void fread_char(CHAR_DATA* ch, FILE* fp, bool preload);
-void write_corpses(CHAR_DATA* ch, char* name);
+export void write_corpses(CHAR_DATA* ch, char* name);
 
-void save_home(CHAR_DATA* ch)
+export void save_home(CHAR_DATA* ch)
 {
     if (ch->plr_home)
     {
@@ -108,7 +104,7 @@ void save_home(CHAR_DATA* ch)
  * Un-equip character before saving to ensure proper	-Thoric
  * stats are saved in case of changes to or removal of EQ
  */
-void de_equip_char(CHAR_DATA* ch)
+export void de_equip_char(CHAR_DATA* ch)
 {
     char buf[MAX_STRING_LENGTH];
     OBJ_DATA* obj;
@@ -141,7 +137,7 @@ void de_equip_char(CHAR_DATA* ch)
 /*
  * Re-equip character					-Thoric
  */
-void re_equip_char(CHAR_DATA* ch)
+export void re_equip_char(CHAR_DATA* ch)
 {
     int x, y;
 
@@ -162,7 +158,7 @@ void re_equip_char(CHAR_DATA* ch)
  * Would be cool to save NPC's too for quest purposes,
  *   some of the infrastructure is provided.
  */
-void save_char_obj(CHAR_DATA* ch)
+export void save_char_obj(CHAR_DATA* ch)
 {
     char strsave[MAX_INPUT_LENGTH];
     char strback[MAX_INPUT_LENGTH];
@@ -253,7 +249,7 @@ void save_char_obj(CHAR_DATA* ch)
     return;
 }
 
-void save_clone(CHAR_DATA* ch)
+export void save_clone(CHAR_DATA* ch)
 {
     char strsave[MAX_INPUT_LENGTH];
     char strback[MAX_INPUT_LENGTH];
@@ -592,7 +588,7 @@ void fwrite_char(CHAR_DATA* ch, FILE* fp)
 /*
  * Write an object and its contents.
  */
-void fwrite_obj(CHAR_DATA* ch, OBJ_DATA* obj, FILE* fp, int iNest, sh_int os_type)
+export void fwrite_obj(CHAR_DATA* ch, OBJ_DATA* obj, FILE* fp, int iNest, sh_int os_type)
 {
     EXTRA_DESCR_DATA* ed;
     AFFECT_DATA* paf;
@@ -740,7 +736,7 @@ void fwrite_obj(CHAR_DATA* ch, OBJ_DATA* obj, FILE* fp, int iNest, sh_int os_typ
 /*
  * Load a char and inventory into a new ch structure.
  */
-bool load_char_obj(DESCRIPTOR_DATA& d, const char* name, bool preload)
+export bool load_char_obj(DESCRIPTOR_DATA& d, const char* name, bool preload)
 {
     char strsave[MAX_INPUT_LENGTH];
     CHAR_DATA* ch = nullptr;
@@ -1770,7 +1766,7 @@ void fread_char(CHAR_DATA* ch, FILE* fp, bool preload)
     }
 }
 
-void fread_obj(CHAR_DATA* ch, FILE* fp, sh_int os_type)
+export void fread_obj(CHAR_DATA* ch, FILE* fp, sh_int os_type)
 {
     OBJ_DATA* obj = nullptr;
     const char* word = nullptr;
@@ -2193,7 +2189,7 @@ void write_corpses(CHAR_DATA* ch, char* name)
     return;
 }
 
-void load_corpses(void)
+export void load_corpses(void)
 {
     // TODO why are these extern? What?!?
     extern FILE* fpArea;

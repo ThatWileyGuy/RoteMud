@@ -36,15 +36,14 @@
  *                                                                                  *
  ***********************************************************************************/
 
-#include <sys/types.h>
-#include <ctype.h>
-#include <stdio.h>
-#include <string.h>
-#include <time.h>
-#include "mud.hxx"
-#include "connection.hxx"
+module;
 
-ROOM_INDEX_DATA* generate_exit(ROOM_INDEX_DATA* in_room, EXIT_DATA** pexit);
+#include "mud.hxx"
+
+export module act_info;
+
+import act_move;
+import connection;
 
 const char* where_name[] = {
     "&G&b[&wused as light    &b]&G&w ", "&G&b[&wworn on finger   &b]&G&w ", "&G&b[&wworn on finger   &b]&G&w ",
@@ -68,7 +67,7 @@ void show_ships_to_char(SHIP_DATA* ship, CHAR_DATA* ch);
 bool check_blind(CHAR_DATA* ch);
 void show_condition(CHAR_DATA* ch, CHAR_DATA* victim);
 
-char* format_obj_to_char(OBJ_DATA* obj, CHAR_DATA* ch, bool fShort)
+export char* format_obj_to_char(OBJ_DATA* obj, CHAR_DATA* ch, bool fShort)
 {
     static char buf[MAX_STRING_LENGTH];
 
@@ -205,7 +204,7 @@ const char* halucinated_object(int ms, bool fShort)
  * Show a list to a character.
  * Can coalesce duplicated items.
  */
-void show_list_to_char(OBJ_DATA* list, CHAR_DATA* ch, bool fShort, bool fShowNothing)
+export void show_list_to_char(OBJ_DATA* list, CHAR_DATA* ch, bool fShort, bool fShowNothing)
 {
     char** prgpstrShow;
     int* prgnShow;
@@ -459,7 +458,7 @@ void show_visible_affects_to_char(CHAR_DATA* victim, CHAR_DATA* ch)
     }
 }
 
-void show_char_to_char_0(CHAR_DATA* victim, CHAR_DATA* ch)
+export void show_char_to_char_0(CHAR_DATA* victim, CHAR_DATA* ch)
 {
     char buf[MAX_STRING_LENGTH];
     char buf1[MAX_STRING_LENGTH];
@@ -809,7 +808,7 @@ void show_char_to_char_1(CHAR_DATA* victim, CHAR_DATA* ch)
     return;
 }
 
-void show_char_to_char(CHAR_DATA* list, CHAR_DATA* ch)
+export void show_char_to_char(CHAR_DATA* list, CHAR_DATA* ch)
 {
     CHAR_DATA* rch;
 
@@ -876,7 +875,7 @@ bool check_blind(CHAR_DATA* ch)
 /*
  * Returns classical DIKU door direction based on text in arg	-Thoric
  */
-int get_door(char* arg)
+export int get_door(char* arg)
 {
     int door;
 

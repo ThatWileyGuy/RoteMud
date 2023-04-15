@@ -36,6 +36,8 @@
  *                                                                                  *
  ***********************************************************************************/
 
+module;
+
 #include <sys/types.h>
 #include <ctype.h>
 #include <stdio.h>
@@ -44,14 +46,16 @@
 #include <time.h>
 #include "mud.hxx"
 
+extern int xp_compute(CHAR_DATA* ch, CHAR_DATA* victim);
+
+export module bounty;
+
 BOUNTY_DATA* first_bounty;
 BOUNTY_DATA* last_bounty;
 BOUNTY_DATA* first_disintegration;
 BOUNTY_DATA* last_disintegration;
 
 void disintegration(CHAR_DATA* ch, CHAR_DATA* victim, long amount);
-void nodisintegration(CHAR_DATA* ch, CHAR_DATA* victim, long amount);
-int xp_compute(CHAR_DATA* ch, CHAR_DATA* victim);
 
 void save_disintegrations()
 {
@@ -95,7 +99,7 @@ BOUNTY_DATA* get_disintegration(char* target)
     return NULL;
 }
 
-void load_bounties()
+export void load_bounties()
 {
     FILE* fpList;
     const char* target;
@@ -285,7 +289,7 @@ void remove_disintegration(BOUNTY_DATA* bounty)
     save_disintegrations();
 }
 
-void claim_disintegration(CHAR_DATA* ch, CHAR_DATA* victim)
+export void claim_disintegration(CHAR_DATA* ch, CHAR_DATA* victim)
 {
     BOUNTY_DATA* bounty;
     long int exp;

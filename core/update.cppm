@@ -36,24 +36,29 @@
  *                                                                                  *
  ***********************************************************************************/
 
-#include <sys/types.h>
-#include <stdio.h>
-#include <string.h>
-#include <time.h>
-#include <math.h>
-#include "mud.hxx"
-#include "connection.hxx"
+module;
 
-/* From newarena.c -- Tawnos */
+#include "mud.hxx"
+
 extern void start_arena();
 extern void do_game();
 extern int in_start_arena;
 extern int ppl_in_arena;
 extern int ppl_challenged;
 extern int num_in_arena();
+extern void add_reinforcements(CHAR_DATA* ch);
+extern void room_act_update(void);
+extern void obj_act_update(void);
+extern bool check_social(CHAR_DATA* ch, const char* command, const char* argument);
+
+export module update;
+
+import connection;
+
+/* From newarena.c -- Tawnos */
 
 /* from swskills.c */
-void add_reinforcements(CHAR_DATA* ch);
+
 
 /*ships.c*/
 void make_random_marketlist(void);
@@ -71,8 +76,6 @@ void update_taxes(void);
 void char_update(void);
 void obj_update(void);
 void aggr_update(void);
-void room_act_update(void);
-void obj_act_update(void);
 void char_check(void);
 void drunk_randoms(CHAR_DATA* ch);
 void halucinations(CHAR_DATA* ch);
@@ -81,10 +84,10 @@ void halucinations(CHAR_DATA* ch);
  * Global Variables
  */
 
-CHAR_DATA* gch_prev;
-OBJ_DATA* gobj_prev;
+export CHAR_DATA* gch_prev;
+export OBJ_DATA* gobj_prev;
 
-CHAR_DATA* timechar;
+export CHAR_DATA* timechar;
 
 const char* corpse_descs[] = {"The corpse of %s will soon be gone.", "The corpse of %s lies here.",
                               "The corpse of %s lies here.", "The corpse of %s lies here.",
@@ -99,7 +102,7 @@ extern int top_exit;
 /*
  * Advancement stuff.
  */
-int max_level(CHAR_DATA* ch, int ability)
+export int max_level(CHAR_DATA* ch, int ability)
 {
     int level = 0;
 
@@ -672,7 +675,7 @@ void advance_level(CHAR_DATA* ch, int ability)
     return;
 }
 
-void gain_exp2(CHAR_DATA* ch, int gain, int ability)
+export void gain_exp2(CHAR_DATA* ch, int gain, int ability)
 {
 
     if (IS_NPC(ch))
@@ -694,7 +697,7 @@ void gain_exp2(CHAR_DATA* ch, int gain, int ability)
     return;
 }
 
-void gain_exp(CHAR_DATA* ch, int gain, int ability)
+export void gain_exp(CHAR_DATA* ch, int gain, int ability)
 {
 
     if (IS_NPC(ch))
@@ -971,7 +974,7 @@ void gain_addiction(CHAR_DATA* ch)
     }
 }
 
-void gain_condition(CHAR_DATA* ch, int iCond, int value)
+export void gain_condition(CHAR_DATA* ch, int iCond, int value)
 {
     int condition = 0;
     ch_ret retcode = 0;
@@ -2366,9 +2369,6 @@ void aggr_update(void)
     return;
 }
 
-/* From interp.c */
-bool check_social(CHAR_DATA* ch, const char* command, const char* argument);
-
 /*
  * drunk randoms	- Tricops
  * (Made part of mobile_update	-Thoric)
@@ -2565,7 +2565,7 @@ void auth_update(void)
  * Called once per pulse from game loop.
  * Random times to defeat tick-timing clients and players.
  */
-void update_handler(void)
+export void update_handler(void)
 {
     static int pulse_start_arena = PULSE_ARENA;
     static int pulse_arena = PULSE_ARENA;
@@ -2700,7 +2700,7 @@ void update_handler(void)
     return;
 }
 
-void remove_portal(OBJ_DATA* portal)
+export void remove_portal(OBJ_DATA* portal)
 {
     ROOM_INDEX_DATA *fromRoom, *toRoom;
     CHAR_DATA* ch;
@@ -2757,7 +2757,7 @@ void remove_portal(OBJ_DATA* portal)
     return;
 }
 
-void reboot_check(time_t reset)
+export void reboot_check(time_t reset)
 {
     static const char* tmsg[] = {
         "SYSTEM: Reboot in 10 seconds.", "SYSTEM: Reboot in 30 seconds.", "SYSTEM: Reboot in 1 minute.",

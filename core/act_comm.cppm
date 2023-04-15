@@ -36,14 +36,22 @@
  *                                                                                  *
  ***********************************************************************************/
 
+module;
+
+/*
 #include <sys/types.h>
 #include <ctype.h>
 #include <stdio.h>
 #include <string.h>
 #include <time.h>
+*/
 #include <fstream>
 #include <filesystem>
 #include "mud.hxx"
+
+export module act_comm;
+
+import newarena;
 
 /*
  *  Externals
@@ -52,13 +60,12 @@ void send_obj_page_to_char(CHAR_DATA* ch, OBJ_INDEX_DATA* idx, char page);
 void send_room_page_to_char(CHAR_DATA* ch, ROOM_INDEX_DATA* idx, char page);
 void send_page_to_char(CHAR_DATA* ch, MOB_INDEX_DATA* idx, char page);
 void send_control_page_to_char(CHAR_DATA* ch, char page);
-void sportschan(char*);
 
 /*
  * Local functions.
  */
 
-std::string scramble(const std::string_view& argument, int modifier);
+export std::string scramble(const std::string_view& argument, int modifier);
 std::string drunk_speech(const std::string_view& argument, CHAR_DATA* ch);
 void generate_com_freq(CHAR_DATA* ch);
 void show_spys(CHAR_DATA* ch, CHAR_DATA* victim, char* tell);
@@ -76,7 +83,7 @@ void generate_com_freq(CHAR_DATA* ch)
     return;
 }
 
-void sound_to_room(ROOM_INDEX_DATA* room, const char* argument)
+export void sound_to_room(ROOM_INDEX_DATA* room, const char* argument)
 {
     CHAR_DATA* vic;
 
@@ -397,7 +404,7 @@ std::string drunkify_third(const std::string& in, const sh_int drunk)
     return result;
 }
 
-std::string drunkify(const std::string_view& arg, sh_int drunk)
+export std::string drunkify(const std::string_view& arg, sh_int drunk)
 {
     auto firstPass = drunkify_first(arg, drunk);
     auto secondPass = drunkify_second(firstPass, drunk);
@@ -420,7 +427,7 @@ std::string drunk_speech(const std::string_view& argument, CHAR_DATA* ch)
 /*
  * Generic channel function. --Heavily modified for the new color system -->KeB
  */
-void talk_channel(CHAR_DATA* ch, const char* argument, int channel, const char* verb)
+export void talk_channel(CHAR_DATA* ch, const char* argument, int channel, const char* verb)
 {
     char buf[MAX_STRING_LENGTH];
     char buf2[MAX_STRING_LENGTH];
@@ -929,7 +936,7 @@ void do_retune(CHAR_DATA* ch, char* argument)
     return;
 }
 
-void to_channel(const char* argument, int channel, const char* verb, sh_int level)
+export void to_channel(const char* argument, int channel, const char* verb, sh_int level)
 {
     char buf[MAX_STRING_LENGTH];
 
@@ -2450,12 +2457,12 @@ void send_rip_title(CHAR_DATA* ch)
     write_to_buffer(ch->desc, file_to_string(RIPTITLE_FILE));
 }
 
-void send_ansi_title(CHAR_DATA* ch)
+export void send_ansi_title(CHAR_DATA* ch)
 {
     write_to_buffer(ch->desc, file_to_string(ANSITITLE_FILE));
 }
 
-void send_ascii_title(CHAR_DATA* ch)
+export void send_ascii_title(CHAR_DATA* ch)
 {
     write_to_buffer(ch->desc, file_to_string(ASCTITLE_FILE));
 }
@@ -2585,7 +2592,7 @@ void do_save(CHAR_DATA* ch, char* argument)
  * follow in a loop through an exit leading back into the same room
  * (Which exists in many maze areas)			-Thoric
  */
-bool circle_follow(CHAR_DATA* ch, CHAR_DATA* victim)
+export bool circle_follow(CHAR_DATA* ch, CHAR_DATA* victim)
 {
     CHAR_DATA* tmp;
 
@@ -2644,7 +2651,7 @@ void do_follow(CHAR_DATA* ch, char* argument)
     return;
 }
 
-void add_follower(CHAR_DATA* ch, CHAR_DATA* master)
+export void add_follower(CHAR_DATA* ch, CHAR_DATA* master)
 {
     if (ch->master)
     {
@@ -2663,7 +2670,7 @@ void add_follower(CHAR_DATA* ch, CHAR_DATA* master)
     return;
 }
 
-void stop_follower(CHAR_DATA* ch)
+export void stop_follower(CHAR_DATA* ch)
 {
     if (!ch->master)
     {
@@ -2689,7 +2696,7 @@ void stop_follower(CHAR_DATA* ch)
     return;
 }
 
-void die_follower(CHAR_DATA* ch)
+export void die_follower(CHAR_DATA* ch)
 {
     CHAR_DATA* fch;
 
@@ -3056,7 +3063,7 @@ void do_gtell(CHAR_DATA* ch, char* argument)
  * (2) if A ~ B then B ~ A
  * (3) if A ~ B  and B ~ C, then A ~ C
  */
-bool is_same_group(CHAR_DATA* ach, CHAR_DATA* bch)
+export bool is_same_group(CHAR_DATA* ach, CHAR_DATA* bch)
 {
     if (ach->leader)
         ach = ach->leader;
@@ -3070,7 +3077,7 @@ bool is_same_group(CHAR_DATA* ach, CHAR_DATA* bch)
  * I am not too sure if this method is right..
  */
 
-void talk_auction(char* argument)
+export void talk_auction(char* argument)
 {
     char buf[MAX_STRING_LENGTH];
     CHAR_DATA* original;
@@ -3090,7 +3097,7 @@ void talk_auction(char* argument)
  * Language support functions. -- Altrag
  * 07/01/96
  */
-bool knows_language(CHAR_DATA* ch, int language, CHAR_DATA* cch)
+export bool knows_language(CHAR_DATA* ch, int language, CHAR_DATA* cch)
 {
     sh_int sn;
 

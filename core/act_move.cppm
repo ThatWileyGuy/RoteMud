@@ -36,12 +36,11 @@
  *                                                                                  *
  ***********************************************************************************/
 
-#include <sys/types.h>
-#include <stdio.h>
-#include <string.h>
-#include <ctype.h>
-#include <time.h>
+module;
+
 #include "mud.hxx"
+
+export module act_move;
 
 const sh_int movement_loss[SECT_MAX] = {1, 2, 2, 3, 4, 6, 4, 1, 6, 10, 6, 5, 7, 4};
 
@@ -52,7 +51,7 @@ const int trap_door[] = {TRAP_N, TRAP_E, TRAP_S, TRAP_W, TRAP_U, TRAP_D, TRAP_NE
 
 const sh_int rev_dir[] = {2, 3, 0, 1, 5, 4, 9, 8, 7, 6, 10};
 
-std::vector<ROOM_INDEX_DATA*> g_vrooms;
+export std::vector<ROOM_INDEX_DATA*> g_vrooms;
 
 /*
  * Local functions.
@@ -141,7 +140,7 @@ const char* room_sents[SECT_MAX][25] = {
 
 };
 
-int wherehome(CHAR_DATA* ch)
+export int wherehome(CHAR_DATA* ch)
 {
     if (ch->plr_home)
         return ch->plr_home->vnum;
@@ -323,7 +322,7 @@ void decorate_room(ROOM_INDEX_DATA* room)
 /*
  * Remove any unused virtual rooms				-Thoric
  */
-void clear_vrooms()
+export void clear_vrooms()
 {
     auto vroomIter = g_vrooms.begin();
 
@@ -348,7 +347,7 @@ void clear_vrooms()
  * Function to get the equivelant exit of DIR 0-MAXDIR out of linked list.
  * Made to allow old-style diku-merc exit functions to work.	-Thoric
  */
-EXIT_DATA* get_exit(ROOM_INDEX_DATA* room, sh_int dir)
+export EXIT_DATA* get_exit(ROOM_INDEX_DATA* room, sh_int dir)
 {
     EXIT_DATA* xit;
 
@@ -367,7 +366,7 @@ EXIT_DATA* get_exit(ROOM_INDEX_DATA* room, sh_int dir)
 /*
  * Function to get an exit, leading the the specified room
  */
-EXIT_DATA* get_exit_to(ROOM_INDEX_DATA* room, sh_int dir, int vnum)
+export EXIT_DATA* get_exit_to(ROOM_INDEX_DATA* room, sh_int dir, int vnum)
 {
     EXIT_DATA* xit;
 
@@ -386,7 +385,7 @@ EXIT_DATA* get_exit_to(ROOM_INDEX_DATA* room, sh_int dir, int vnum)
 /*
  * Function to get the nth exit of a room			-Thoric
  */
-EXIT_DATA* get_exit_num(ROOM_INDEX_DATA* room, sh_int count)
+export EXIT_DATA* get_exit_num(ROOM_INDEX_DATA* room, sh_int count)
 {
     EXIT_DATA* xit;
     int cnt;
@@ -406,7 +405,7 @@ EXIT_DATA* get_exit_num(ROOM_INDEX_DATA* room, sh_int count)
 /*
  * Modify movement due to encumbrance				-Thoric
  */
-sh_int encumbrance(CHAR_DATA* ch, sh_int move)
+export sh_int encumbrance(CHAR_DATA* ch, sh_int move)
 {
     int cur, max;
 
@@ -431,7 +430,7 @@ sh_int encumbrance(CHAR_DATA* ch, sh_int move)
 /*
  * Check to see if a character can fall down, checks for looping   -Thoric
  */
-bool will_fall(CHAR_DATA* ch, int fall)
+export bool will_fall(CHAR_DATA* ch, int fall)
 {
     if (IS_SET(ch->in_room->room_flags, ROOM_NOFLOOR) && CAN_GO(ch, DIR_DOWN) &&
         (!IS_AFFECTED(ch, AFF_FLYING) || (ch->mount && !IS_AFFECTED(ch->mount, AFF_FLYING))))
@@ -455,7 +454,7 @@ bool will_fall(CHAR_DATA* ch, int fall)
 /*
  * create a 'virtual' room					-Thoric
  */
-ROOM_INDEX_DATA* generate_exit(ROOM_INDEX_DATA* in_room, EXIT_DATA** pexit)
+export ROOM_INDEX_DATA* generate_exit(ROOM_INDEX_DATA* in_room, EXIT_DATA** pexit)
 {
     EXIT_DATA *xit, *bxit;
     EXIT_DATA* orig_exit = (EXIT_DATA*)*pexit;
@@ -546,7 +545,7 @@ ROOM_INDEX_DATA* generate_exit(ROOM_INDEX_DATA* in_room, EXIT_DATA** pexit)
     return room;
 }
 
-ch_ret move_char(CHAR_DATA* ch, EXIT_DATA* pexit, int fall)
+export ch_ret move_char(CHAR_DATA* ch, EXIT_DATA* pexit, int fall)
 {
     ROOM_INDEX_DATA* in_room;
     ROOM_INDEX_DATA* to_room;
@@ -1293,7 +1292,7 @@ void do_southwest(CHAR_DATA* ch, char* argument)
     return;
 }
 
-EXIT_DATA* find_door(CHAR_DATA* ch, const char* arg, bool quiet)
+export EXIT_DATA* find_door(CHAR_DATA* ch, const char* arg, bool quiet)
 {
     EXIT_DATA* pexit;
     int door;
@@ -2811,7 +2810,7 @@ void teleportch(CHAR_DATA* ch, ROOM_INDEX_DATA* room, bool show)
         do_look(ch, MAKE_TEMP_STRING("auto"));
 }
 
-void teleport(CHAR_DATA* ch, int room, int flags)
+export void teleport(CHAR_DATA* ch, int room, int flags)
 {
     CHAR_DATA *nch, *nch_next;
     ROOM_INDEX_DATA* pRoomIndex;

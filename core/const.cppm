@@ -36,10 +36,11 @@
  *                                                                                  *
  ***********************************************************************************/
 
-#include <sys/types.h>
-#include <stdio.h>
-#include <time.h>
+module;
+
 #include "mud.hxx"
+
+export module constants;
 
 /* undef these at EOF */
 #define AM 95

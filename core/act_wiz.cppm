@@ -36,17 +36,17 @@
  *                                                                                  *
  ***********************************************************************************/
 
-#include <stdio.h>
-#include <string.h>
-#include <time.h>
-#include <ctype.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <errno.h>
+module;
+
 #include <filesystem>
 #include "mud.hxx"
-#include "db.hxx"
-#include "connection.hxx"
+
+export module act_wiz;
+
+import db;
+import mud_comm;
+import comm;
+import connection;
 
 #define RESTORE_INTERVAL 21600
 
@@ -55,12 +55,6 @@ const char* save_flag[] = {"death",   "kill", "passwd",  "drop", "put",    "give
                            "r16",     "r17",  "r18",     "r19",  "r20",    "r21",  "r22",  "r23",
                            "r24",     "r25",  "r26",     "r27",  "r28",    "r29",  "r30",  "r31"};
 
-/* from db.c */
-void save_sysdata(SYSTEM_DATA sys);
-
-/* from space.c */
-void remship(SHIP_DATA* ship);
-
 /*
  * Local functions.
  */
@@ -68,15 +62,14 @@ ROOM_INDEX_DATA* find_location(CHAR_DATA* ch, char* arg);
 void save_banlist(void);
 void close_area(AREA_DATA* pArea);
 void ostat_plus(CHAR_DATA* ch, OBJ_DATA* obj);
-int get_color(char* argument); /* function proto */
 
 /*
  * Global variables.
  */
 
 char reboot_time[50];
-time_t new_boot_time_t;
-extern tm new_boot_struct;
+export time_t new_boot_time_t;
+
 
 int get_saveflag(char* name)
 {
@@ -590,7 +583,7 @@ void do_pardon(CHAR_DATA* ch, char* argument)
     return;
 }
 
-void echo_to_all(sh_int AT_COLOR, const char* argument, sh_int tar)
+export void echo_to_all(sh_int AT_COLOR, const char* argument, sh_int tar)
 {
     if (!argument || argument[0] == '\0')
         return;
@@ -659,7 +652,7 @@ void do_echo(CHAR_DATA* ch, char* argument)
     echo_to_all(color, argument, target);
 }
 
-void echo_to_room(sh_int AT_COLOR, ROOM_INDEX_DATA* room, const char* argument)
+export void echo_to_room(sh_int AT_COLOR, ROOM_INDEX_DATA* room, const char* argument)
 {
     CHAR_DATA* vic;
 
@@ -707,7 +700,7 @@ void do_recho(CHAR_DATA* ch, char* argument)
         echo_to_room(AT_IMMORT, ch->in_room, argument);
 }
 
-ROOM_INDEX_DATA* find_location(CHAR_DATA* ch, char* arg)
+export ROOM_INDEX_DATA* find_location(CHAR_DATA* ch, char* arg)
 {
     CHAR_DATA* victim;
     OBJ_DATA* obj;
@@ -2181,7 +2174,7 @@ void do_oinvoke(CHAR_DATA* ch, char* argument)
     if (!is_number(arg1))
     {
         char arg[MAX_INPUT_LENGTH];
-        int hash, cnt;
+        int cnt = 0;
         int count = number_argument(arg1, arg);
 
         vnum = -1;
@@ -3283,8 +3276,8 @@ void do_peace(CHAR_DATA* ch, char* argument)
     return;
 }
 
-BAN_DATA* first_ban;
-BAN_DATA* last_ban;
+export BAN_DATA* first_ban;
+export BAN_DATA* last_ban;
 
 void save_banlist(void)
 {
@@ -4333,7 +4326,7 @@ void do_bestow(CHAR_DATA* ch, char* argument)
     send_to_char("Done.\n\r", ch);
 }
 
-tm* update_time(tm* old_time)
+export tm* update_time(tm* old_time)
 {
     time_t time;
 
@@ -5246,7 +5239,7 @@ void do_cset(CHAR_DATA* ch, char* argument)
     }
 }
 
-void get_reboot_string(void)
+export void get_reboot_string(void)
 {
     sprintf_s(reboot_time, "%s", asctime(new_boot_time));
 }
@@ -5472,7 +5465,7 @@ void do_sober(CHAR_DATA* ch, char* argument)
 /*
  * Free a social structure					-Thoric
  */
-void free_social(SOCIALTYPE* social)
+export void free_social(SOCIALTYPE* social)
 {
     if (social->name)
         DISPOSE(social->name);
@@ -5532,7 +5525,7 @@ void unlink_social(SOCIALTYPE* social)
  * Add a social to the social index table			-Thoric
  * Hashed and insert sorted
  */
-void add_social(SOCIALTYPE* social)
+export void add_social(SOCIALTYPE* social)
 {
     int hash, x;
     SOCIALTYPE *tmp, *prev;
@@ -5794,7 +5787,7 @@ void do_sedit(CHAR_DATA* ch, char* argument)
 /*
  * Free a command structure					-Thoric
  */
-void free_command(CMDTYPE* command)
+export void free_command(CMDTYPE* command)
 {
     if (command->name)
         DISPOSE(command->name);
@@ -5836,7 +5829,7 @@ void unlink_command(CMDTYPE* command)
 /*
  * Add a command to the command hash table			-Thoric
  */
-void add_command(CMDTYPE* command)
+export void add_command(CMDTYPE* command)
 {
     int hash, x;
     CMDTYPE *tmp, *prev;

@@ -36,7 +36,11 @@
  *                                                                                  *
  ***********************************************************************************/
 
-#include <ctype.h>
+module;
+
+#include "mud.hxx"
+
+export module bet;
 
 /*
   util function, converts an 'advanced' ASCII-number-string into a number.
@@ -135,7 +139,7 @@ int advatoi(char* s)
   gives 10,000 etc.
 
 */
-int parsebet(const int currentbet, char* s)
+export int parsebet(const int currentbet, char* s)
 {
     /* check to make sure it's not blank */
     if (s[0] != '\0')
