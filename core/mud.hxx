@@ -1015,6 +1015,7 @@ typedef enum
     SHIP_DISABLED,
     SHIP_FLYING
 } ship_states;
+
 typedef enum
 {
     MISSILE_READY,

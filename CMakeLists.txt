@@ -13,7 +13,7 @@ find_package(libssh CONFIG REQUIRED)
 # core
 file(GLOB_RECURSE CORE_HEADER_FILES core/*.hxx)
 file(GLOB_RECURSE CORE_SOURCE_FILES core/*.cxx)
-file(GLOB_RECURSE CORE_MODULE_FILES core/*.cppm)
+file(GLOB_RECURSE CORE_MODULE_FILES core/*.ixx)
 
 add_compile_options("/experimental:module")
 
