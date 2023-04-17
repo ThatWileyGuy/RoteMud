@@ -39,11 +39,6 @@
 module;
 
 #include <stdexcept>
-
-#ifndef WIN32
-#include <dlfcn.h>
-#endif
-
 #include "mud.hxx"
 
 // void shutdown_mud(char const* reason);

@@ -54,6 +54,7 @@ extern bool check_social(CHAR_DATA* ch, const char* command, const char* argumen
 export module update;
 
 import connection;
+import pfiles;
 
 /* From newarena.c -- Tawnos */
 

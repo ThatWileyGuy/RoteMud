@@ -53,9 +53,9 @@
 #include <memory>
 #include <vector>
 #include <algorithm>
+#include <stdarg.h>
 #include <boost/asio/ip/tcp.hpp>
 #include <boost/circular_buffer.hpp>
-#include <stdarg.h>
 
 typedef int ch_ret;
 typedef int obj_ret;
@@ -122,17 +122,6 @@ char* strcat_s(char* dest, size_t dest_size, const char* source);
 #define DECLARE_DO_FUN(fun) extern "C" EXPORT DO_FUN fun
 #define DECLARE_SPEC_FUN(fun) extern "C" EXPORT SPEC_FUN fun
 #define DECLARE_SPELL_FUN(fun) extern "C" EXPORT SPELL_FUN fun
-
-/* Stuff from newarena.c */
-void show_jack_pot();
-void do_game();
-int num_in_arena();
-void find_game_winner();
-void do_end_game();
-void start_game();
-void silent_end();
-void write_fame_list(void);
-void load_hall_of_fame(void);
 
 /*
  * Short scalar types.
@@ -320,10 +309,7 @@ template <size_t N> struct TempString
 #define LEVEL_AVATAR (MAX_LEVEL - 5)
 #define LEVEL_NOHUNGER 30
 
-#include "pfiles.hxx"
-#include "md5.hxx"
 #include "do_fun.hxx"
-#include "slay.hxx"
 #include "color.hxx"
 
 #define LEVEL_LOG LEVEL_LESSER

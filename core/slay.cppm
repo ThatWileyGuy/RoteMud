@@ -83,6 +83,23 @@ module;
 
 export module slay;
 
+#define SLAY_FILE SYSTEM_DIR "slay.dat" /* Slay data file for online editing - Samson 8-3-98 */
+
+/* Maxslaytypes variable - 50 should be WAY more than enough :P */
+#define MAX_SLAY_TYPES 50
+
+export struct SLAY_DATA
+{
+    SLAY_DATA* next;
+    SLAY_DATA* prev;
+    char* owner;
+    char* type;
+    int color;
+    char* cmsg;
+    char* vmsg;
+    char* rmsg;
+};
+
 SLAY_DATA* first_slay;
 SLAY_DATA* last_slay;
 

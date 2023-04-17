@@ -91,10 +91,20 @@
 
 module;
 
-#include "md5.hxx"
 #include <string.h>
 
 export module md5;
+
+export typedef unsigned char md5_byte_t; /* 8-bit byte */
+export typedef unsigned int md5_word_t;  /* 32-bit word */
+
+/* Define the state of the MD5 Algorithm. */
+export struct md5_state_t
+{
+    md5_word_t count[2]; /* message length in bits, lsw first */
+    md5_word_t abcd[4];  /* digest buffer */
+    md5_byte_t buf[64];  /* accumulate block */
+};
 
 #undef BYTE_ORDER /* 1 = big-endian, -1 = little-endian, 0 = unknown */
 #ifdef ARCH_IS_BIG_ENDIAN

@@ -62,6 +62,8 @@ import db;
 import act_info;
 import act_comm;
 import connection;
+import pfiles;
+import md5;
 
 #ifdef ECHO
 #undef ECHO // TODO where does this come from on Linux?

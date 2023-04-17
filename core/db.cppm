@@ -50,6 +50,7 @@ export module db;
 
 import act_move;
 import save;
+import slay;
 
 extern int _filbuf(FILE*);
 

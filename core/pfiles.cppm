@@ -77,8 +77,8 @@ sh_int jcount, scount;
 
 void save_timedata(void)
 {
-    FILE* fp;
-    char filename[MIL];
+    FILE* fp = nullptr;
+    char filename[MIL] = {};
 
     sprintf_s(filename, "%stime.dat", SYSTEM_DIR);
 
@@ -94,7 +94,7 @@ void save_timedata(void)
         fprintf(fp, "%s", "End\n\n");
         fprintf(fp, "%s", "#END\n");
     }
-    FCLOSE(fp);
+    fclose(fp);
     return;
 }
 
@@ -147,11 +147,10 @@ void fread_timedata(FILE* fp)
 
 bool load_timedata(void)
 {
-    char filename[MIL];
-    FILE* fp;
-    bool found;
+    char filename[MIL] = {};
+    FILE* fp = nullptr;
+    bool found = false;
 
-    found = false;
     sprintf_s(filename, "%stime.dat", SYSTEM_DIR);
 
     if ((fp = fopen(filename, "r")) != NULL)
@@ -190,7 +189,7 @@ bool load_timedata(void)
                 break;
             }
         }
-        FCLOSE(fp);
+        fclose(fp);
     }
 
     return found;
@@ -385,10 +384,10 @@ timecheck:
 
 void read_pfile(const char* dirname, const char* filename, bool count)
 {
-    FILE* fp;
-    char fname[MSL];
-    struct stat fst;
-    time_t tdiff;
+    FILE* fp = nullptr;
+    char fname[MSL] = {};
+    struct stat fst = {};
+    time_t tdiff = {};
 
     now_time = time(0);
 
@@ -420,7 +419,7 @@ void read_pfile(const char* dirname, const char* filename, bool count)
                 else if (!str_cmp(word, "END")) /* Done     */
                     break;
             }
-            FCLOSE(fp);
+            fclose(fp);
         }
     }
     return;
@@ -578,9 +577,9 @@ forcecheck:
 
 void read_fpfile(CHAR_DATA* ch, const char* dirname, const char* filename)
 {
-    FILE* fp;
-    char fname[MSL];
-    struct stat fst;
+    FILE* fp = nullptr;
+    char fname[MSL] = {};
+    struct stat fst = {};
 
     sprintf_s(fname, "%s/%s", dirname, filename);
 
@@ -613,7 +612,7 @@ void read_fpfile(CHAR_DATA* ch, const char* dirname, const char* filename)
                 else if (!str_cmp(word, "END")) /* Done		*/
                     break;
             }
-            FCLOSE(fp);
+            fclose(fp);
         }
     }
     return;
