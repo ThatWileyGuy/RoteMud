@@ -50,13 +50,6 @@
 
 module;
 
-#include <sys/types.h>
-#include <ctype.h>
-#include <stdio.h>
-#include <stdarg.h>
-#include <string.h>
-#include <time.h>
-#include <sys/stat.h>
 #include "mud.hxx"
 
 extern char* strrep(const char* src, const char* sch, const char* rep);

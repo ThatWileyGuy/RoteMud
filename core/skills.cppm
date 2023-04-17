@@ -38,10 +38,6 @@
 
 module;
 
-#include <sys/types.h>
-#include <stdio.h>
-#include <string.h>
-#include <time.h>
 #include "mud.hxx"
 
 extern bool autofly(SHIP_DATA* ship);

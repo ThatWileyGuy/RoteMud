@@ -90,8 +90,6 @@
 
 module;
 
-#include <stdio.h>
-#include <string.h>
 #include "mud.hxx"
 
 export module slotm;

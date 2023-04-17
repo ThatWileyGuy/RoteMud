@@ -38,10 +38,6 @@
 
 module;
 
-#include <time.h>
-#include <stdio.h>
-#include <ctype.h>
-#include <string.h>
 #include <stdexcept>
 
 #ifndef WIN32

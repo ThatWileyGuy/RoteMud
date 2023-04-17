@@ -38,14 +38,6 @@
 
 module;
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <time.h>
-#include <ctype.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <errno.h>
 #include "mud.hxx"
 
 extern void instaroom(ROOM_INDEX_DATA* pRoom, bool dodoors);

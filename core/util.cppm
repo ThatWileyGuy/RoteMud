@@ -38,7 +38,6 @@
 
 module;
 
-#include <string.h>
 #include "mud.hxx"
 
 export module util;

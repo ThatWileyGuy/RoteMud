@@ -38,12 +38,6 @@
 
 module;
 
-#include <sys/types.h>
-#include <ctype.h>
-#include <stdio.h>
-#include <string.h>
-/* #include <stdlib.h> */
-#include <time.h>
 #include "mud.hxx"
 
 export module clans;

@@ -38,10 +38,6 @@
 
 module;
 
-#include <sys/types.h>
-#include <stdio.h>
-#include <string.h>
-#include <ctype.h>
 #include "mud.hxx"
 
 export module mud_prog;

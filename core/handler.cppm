@@ -38,11 +38,6 @@
 
 module;
 
-#include <sys/types.h>
-#include <ctype.h>
-#include <stdio.h>
-#include <string.h>
-#include <time.h>
 #include "mud.hxx"
 
 extern void write_corpses(CHAR_DATA* ch, char* name);

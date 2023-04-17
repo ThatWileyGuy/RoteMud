@@ -38,13 +38,6 @@
 
 module;
 
-#include <stdio.h>
-#include <string.h>
-#include <time.h>
-#include <ctype.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <errno.h>
 #include "mud.hxx"
 
 export module marriage;

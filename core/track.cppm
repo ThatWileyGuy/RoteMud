@@ -38,10 +38,6 @@
 
 module;
 
-#include <sys/types.h>
-#include <stdio.h>
-#include <string.h>
-#include <time.h>
 #include "mud.hxx"
 
 extern bool mob_snipe(CHAR_DATA* ch, CHAR_DATA* victim);

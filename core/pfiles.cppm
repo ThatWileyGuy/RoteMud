@@ -60,11 +60,6 @@
 
 module;
 
-#include <stdio.h>
-#include <ctype.h>
-#include <string.h>
-#include <sys/stat.h>
-#include <time.h>
 #include <filesystem>
 #include "mud.hxx"
 
