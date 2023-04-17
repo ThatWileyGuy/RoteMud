@@ -15,6 +15,8 @@ file(GLOB_RECURSE CORE_HEADER_FILES core/*.hxx)
 file(GLOB_RECURSE CORE_SOURCE_FILES core/*.cxx)
 file(GLOB_RECURSE CORE_MODULE_FILES core/*.cppm)
 
+add_compile_options("/experimental:module")
+
 add_library(rote_core OBJECT ${CORE_HEADER_FILES} ${CORE_SOURCE_FILES})
 target_include_directories(rote_core PRIVATE ${Boost_INCLUDE_DIRS})
 target_include_directories(rote_core PRIVATE ${libssh_INCLUDE_DIRS})
