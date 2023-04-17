@@ -44,6 +44,8 @@ extern int top_affect;
 
 export module fskills;
 
+import functions;
+
 void fskill_refresh(CHAR_DATA* ch, char* argument)
 {
     FORCE_SKILL* fskill;

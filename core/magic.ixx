@@ -44,6 +44,8 @@ extern CHAR_DATA* find_keeper(CHAR_DATA* ch);
 
 export module magic;
 
+import player;
+
 /*
  * Local functions.
  */

@@ -46,6 +46,8 @@ extern void load_force_help(void);
 
 export module force;
 
+import functions;
+
 /* local defs */
 
 export int check_force_skill(CHAR_DATA* ch, const char* command, char* argument);

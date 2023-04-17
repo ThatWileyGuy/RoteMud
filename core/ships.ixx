@@ -42,8 +42,12 @@ module;
 
 extern void instaroom(ROOM_INDEX_DATA* pRoom, bool dodoors);
 extern std::string beam_name(sh_int type, bool plural);
+extern void write_ship_list(void);
+extern void resetship(SHIP_DATA* ship);
 
 export module ships;
+
+import functions;
 
 #if defined(KEY)
 #undef KEY
@@ -163,6 +167,25 @@ PROTO_ROOM* last_prototype_room;
 void shiplist(CHAR_DATA* ch);
 std::string primary_beam_name_proto(int shiptype);
 std::string secondary_beam_name_proto(int shiptype);
+void remove_market_ship(BMARKET_DATA* marketship);
+void load_ship_prototypes();
+int load_prototype(const char* prototypefile, int prototype);
+bool load_prototype_rooms(FILE* fp, int prototype);
+bool fread_prototype_room(FILE* fp, int prototype);
+bool load_prototype_header(FILE* fp, const std::string& filename, int prototype);
+void write_all_prototypes();
+void write_prototype_list();
+void save_prototype(int prototype);
+void write_all_prototypes();
+void write_prototype_list();
+void save_prototype(int prototype);
+int find_vnum_block(int num_needed);
+int make_prototype_rooms(int ship_type, int vnum, AREA_DATA* tarea, char* Sname);
+int get_sp_rflag(char* flag);
+SHIP_DATA* make_prototype_ship(int ship_type, int vnum, CHAR_DATA* ch, char* ship_name);
+char* parse_prog_string(char* inp, int ship_type, int vnum);
+void make_rprogs(int ship_type, int vnum);
+void load_ship_prototypes(void);
 
 void do_buymobship(CHAR_DATA* ch, char* argument)
 {

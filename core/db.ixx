@@ -42,6 +42,7 @@ module;
 #include <unordered_map>
 #include "mud.hxx"
 
+struct ROOM_INDEX_DATA;
 extern void renumber_put_resets(ROOM_INDEX_DATA* room);
 extern void wipe_resets(ROOM_INDEX_DATA* room);
 extern void init_supermob();
@@ -52,6 +53,8 @@ import act_move;
 import save;
 import slay;
 import mud_prog;
+import ships;
+import functions;
 
 extern int _filbuf(FILE*);
 
@@ -68,6 +71,43 @@ extern int _filbuf(FILE*);
         fMatch = true;                                                                                                 \
         break;                                                                                                         \
     }
+
+/*
+ * Enums
+ */
+
+export enum SubstateDirection
+{
+    SUB_NORTH = DIR_NORTH,
+    SUB_EAST = DIR_EAST,
+    SUB_SOUTH = DIR_SOUTH,
+    SUB_WEST = DIR_WEST,
+    SUB_UP = DIR_UP,
+    SUB_DOWN = DIR_DOWN,
+    SUB_NE = DIR_NORTHEAST,
+    SUB_NW = DIR_NORTHWEST,
+    SUB_SE = DIR_SOUTHEAST,
+    SUB_SW = DIR_SOUTHWEST,
+};
+
+/*
+ *  Structures
+ */
+
+export struct MAP_DATA /* contains per-room data */
+{
+    int vnum;   /* which map this room belongs to */
+    int x;      /* horizontal coordinate */
+    int y;      /* vertical coordinate */
+    char entry; /* code that shows up on map */
+};
+
+export struct MAP_INDEX_DATA
+{
+    MAP_INDEX_DATA* next;
+    int vnum;                 /* vnum of the map */
+    int map_of_vnums[49][81]; /* room vnums aranged as a map */
+};
 
 /*
  * Globals.
@@ -2784,10 +2824,6 @@ export void clear_char(CHAR_DATA* ch)
     ch->mod_con = 0;
     ch->mod_lck = 0;
     ch->pagelen = 24;               /* BUILD INTERFACE */
-    ch->inter_page = NO_PAGE;       /* BUILD INTERFACE */
-    ch->inter_type = NO_TYPE;       /* BUILD INTERFACE */
-    ch->inter_editing = NULL;       /* BUILD INTERFACE */
-    ch->inter_editing_vnum = -1;    /* BUILD INTERFACE */
     ch->inter_substate = SUB_NORTH; /* BUILD INTERFACE */
     ch->plr_home = NULL;
     return;
@@ -2849,9 +2885,6 @@ export void free_char(CHAR_DATA* ch)
     STRFREE(ch->description);
     if (ch->editor)
         stop_editing(ch);
-
-    if (ch->inter_editing)
-        DISPOSE(ch->inter_editing);
 
     stop_hunting(ch);
     stop_hating(ch);

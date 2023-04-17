@@ -48,6 +48,8 @@ extern int top_affect;
 
 export module eleven;
 
+import functions;
+
 void explode_emissile(CHAR_DATA* ch, ROOM_INDEX_DATA* proom, int mindam, int maxdam, bool incendiary);
 void do_makegoggles(CHAR_DATA* ch, char* argument);
 void do_makemissile(CHAR_DATA* ch, char* argument);

@@ -51,6 +51,8 @@ extern void fix_exits(void);
 
 export module build;
 
+import db;
+
 int generate_hp(int level, int num, int size, int plus);
 
 /* planet constants for vip and wanted flags */

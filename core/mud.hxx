@@ -3111,10 +3111,6 @@ struct CHAR_DATA
     sh_int mental_state;    /* simplified */
     sh_int emotional_state; /* simplified */
     int pagelen;            /* BUILD INTERFACE */
-    sh_int inter_page;      /* BUILD INTERFACE */
-    sh_int inter_type;      /* BUILD INTERFACE */
-    char* inter_editing;    /* BUILD INTERFACE */
-    int inter_editing_vnum; /* BUILD INTERFACE */
     sh_int inter_substate;  /* BUILD INTERFACE */
     int retran;
     int regoto;
@@ -4462,21 +4458,6 @@ extern BMARKET_DATA* last_market_ship;
  * Our function prototypes.
  * One big lump ... this is every function in Merc.
  */
-#define CD CHAR_DATA
-#define MID MOB_INDEX_DATA
-#define OD OBJ_DATA
-#define OID OBJ_INDEX_DATA
-#define RID ROOM_INDEX_DATA
-#define SF SPEC_FUN
-#define BD BOARD_DATA
-#define EDD EXTRA_DESCR_DATA
-#define RD RESET_DATA
-#define ED EXIT_DATA
-#define ST SOCIALTYPE
-#define CO COUNCIL_DATA
-#define DE DEITY_DATA
-#define SK SKILL_TYPE
-#define SH SHIP_DATA
 
 /* editor.c cronel new editor */
 #define start_editing(ch, data) start_editing_nolimit(ch, data, MAX_STRING_LENGTH)
@@ -4518,10 +4499,10 @@ void show_list_to_char(OBJ_DATA* list, CHAR_DATA* ch, bool fShort, bool fShowNot
 
 /* act_move.c */
 void clear_vrooms(void);
-ED* find_door(CHAR_DATA* ch, const char* arg, bool quiet);
-ED* get_exit(ROOM_INDEX_DATA* room, sh_int dir);
-ED* get_exit_to(ROOM_INDEX_DATA* room, sh_int dir, int vnum);
-ED* get_exit_num(ROOM_INDEX_DATA* room, sh_int count);
+EXIT_DATA* find_door(CHAR_DATA* ch, const char* arg, bool quiet);
+EXIT_DATA* get_exit(ROOM_INDEX_DATA* room, sh_int dir);
+EXIT_DATA* get_exit_to(ROOM_INDEX_DATA* room, sh_int dir, int vnum);
+EXIT_DATA* get_exit_num(ROOM_INDEX_DATA* room, sh_int count);
 ch_ret move_char(CHAR_DATA* ch, EXIT_DATA* pexit, int fall);
 void teleport(CHAR_DATA* ch, int room, int flags);
 sh_int encumbrance(CHAR_DATA* ch, sh_int move);
@@ -4539,7 +4520,7 @@ void obj_fall(OBJ_DATA* obj, bool through);
 /* act_wiz.c */
 void close_area(AREA_DATA* pArea);
 AREA_DATA* get_area(char* argument);
-RID* find_location(CHAR_DATA* ch, char* arg);
+ROOM_INDEX_DATA* find_location(CHAR_DATA* ch, char* arg);
 void echo_to_room(sh_int AT_COLOR, ROOM_INDEX_DATA* room, const char* argument);
 void echo_to_all(sh_int AT_COLOR, const char* argument, sh_int tar);
 void get_reboot_string(void);
@@ -4552,7 +4533,7 @@ void add_command(CMDTYPE* command);
 
 /* boards.c */
 void load_boards(void);
-BD* get_board(OBJ_DATA* obj);
+BOARD_DATA* get_board(OBJ_DATA* obj);
 void free_note(NOTE_DATA* pnote);
 
 /* build.c */
@@ -4623,7 +4604,7 @@ void draw_force_line_rev(CHAR_DATA* ch, int length);
 void update_force(void);
 
 /* space.c */
-SH* get_ship(char* name);
+SHIP_DATA* get_ship(char* name);
 void load_ships(void);
 void placeships(void);
 void save_ship(SHIP_DATA* ship);
@@ -4704,8 +4685,8 @@ void act(sh_int AType, const char* format, CHAR_DATA* ch, const void* arg1, cons
 
 /* reset.c */
 void wipe_resets(ROOM_INDEX_DATA* room);
-RD* make_reset(char letter, int extra, int arg1, int arg2, int arg3);
-RD* add_reset(ROOM_INDEX_DATA* room, char letter, int extra, int arg1, int arg2, int arg3);
+RESET_DATA* make_reset(char letter, int extra, int arg1, int arg2, int arg3);
+RESET_DATA* add_reset(ROOM_INDEX_DATA* room, char letter, int extra, int arg1, int arg2, int arg3);
 void reset_area(AREA_DATA* pArea);
 
 /* db.c */
@@ -4715,14 +4696,14 @@ std::string centertext(const std::string_view& text, int size);
 void boot_db(bool fCopyOver);
 void area_update(void);
 void add_char(CHAR_DATA* ch);
-CD* create_mobile(MOB_INDEX_DATA* pMobIndex);
-OD* create_object(OBJ_INDEX_DATA* pObjIndex, int level);
+CHAR_DATA* create_mobile(MOB_INDEX_DATA* pMobIndex);
+OBJ_DATA* create_object(OBJ_INDEX_DATA* pObjIndex, int level);
 void clear_char(CHAR_DATA* ch);
 void free_char(CHAR_DATA* ch);
 char* get_extra_descr(const char* name, EXTRA_DESCR_DATA* ed);
-MID* get_mob_index(int vnum);
-OID* get_obj_index(int vnum);
-RID* get_room_index(int vnum);
+MOB_INDEX_DATA* get_mob_index(int vnum);
+OBJ_INDEX_DATA* get_obj_index(int vnum);
+ROOM_INDEX_DATA* get_room_index(int vnum);
 char fread_letter(FILE* fp);
 int fread_number(FILE* fp);
 char* fread_string(FILE* fp);
@@ -4755,11 +4736,11 @@ void prepend_to_file(const char* file, char* str);
 void bug(const char* str, ...);
 void log_string_plus(const char* str, sh_int log_type, sh_int level);
 void log(const char* str, sh_int log_type, sh_int level, ...);
-RID* make_room(int vnum, AREA_DATA* area);
-RID* make_ship_room(SHIP_DATA* ship, int vnum);
-OID* make_object(int vnum, int cvnum, char* name);
-MID* make_mobile(int vnum, int cvnum, char* name);
-ED* make_exit(ROOM_INDEX_DATA* pRoomIndex, ROOM_INDEX_DATA* to_room, sh_int door);
+ROOM_INDEX_DATA* make_room(int vnum, AREA_DATA* area);
+ROOM_INDEX_DATA* make_ship_room(SHIP_DATA* ship, int vnum);
+OBJ_INDEX_DATA* make_object(int vnum, int cvnum, char* name);
+MOB_INDEX_DATA* make_mobile(int vnum, int cvnum, char* name);
+EXIT_DATA* make_exit(ROOM_INDEX_DATA* pRoomIndex, ROOM_INDEX_DATA* to_room, sh_int door);
 void add_help(HELP_DATA* pHelp);
 void fix_area_exits(AREA_DATA* tarea);
 void load_area_file(AREA_DATA* tarea, char* filename);
@@ -4783,11 +4764,11 @@ bool can_medit(CHAR_DATA* ch, MOB_INDEX_DATA* mob);
 void free_reset(AREA_DATA* are, RESET_DATA* res);
 void free_area(AREA_DATA* are);
 void assign_area(CHAR_DATA* ch);
-EDD* SetRExtra(ROOM_INDEX_DATA* room, const char* keywords);
+EXTRA_DESCR_DATA* SetRExtra(ROOM_INDEX_DATA* room, const char* keywords);
 bool DelRExtra(ROOM_INDEX_DATA* room, const char* keywords);
-EDD* SetOExtra(OBJ_DATA* obj, const char* keywords);
+EXTRA_DESCR_DATA* SetOExtra(OBJ_DATA* obj, const char* keywords);
 bool DelOExtra(OBJ_DATA* obj, const char* keywords);
-EDD* SetOExtraProto(OBJ_INDEX_DATA* obj, const char* keywords);
+EXTRA_DESCR_DATA* SetOExtraProto(OBJ_INDEX_DATA* obj, const char* keywords);
 bool DelOExtraProto(OBJ_INDEX_DATA* obj, const char* keywords);
 void fold_area(AREA_DATA* tarea, char* filename, bool install);
 int get_otype(const char* type);
@@ -4806,7 +4787,7 @@ void update_pos(CHAR_DATA* victim);
 void set_fighting(CHAR_DATA* ch, CHAR_DATA* victim);
 void stop_fighting(CHAR_DATA* ch, bool fBoth);
 void free_fight(CHAR_DATA* ch);
-CD* who_fighting(CHAR_DATA* ch);
+CHAR_DATA* who_fighting(CHAR_DATA* ch);
 void check_killer(CHAR_DATA* ch, CHAR_DATA* victim);
 void check_attacker(CHAR_DATA* ch, CHAR_DATA* victim);
 void death_cry(CHAR_DATA* ch);
@@ -4832,8 +4813,8 @@ void make_blood(CHAR_DATA* ch);
 void make_bloodstain(CHAR_DATA* ch);
 void make_scraps(OBJ_DATA* obj);
 void make_fire(ROOM_INDEX_DATA* in_room, sh_int timer);
-OD* make_trap(int v0, int v1, int v2, int v3);
-OD* create_money(int amount);
+OBJ_DATA* make_trap(int v0, int v1, int v2, int v3);
+OBJ_DATA* create_money(int amount);
 
 /* misc.c */
 void actiondesc(CHAR_DATA* ch, OBJ_DATA* obj, void* vo);
@@ -4915,17 +4896,17 @@ bool is_affected(CHAR_DATA* ch, int sn);
 void affect_join(CHAR_DATA* ch, AFFECT_DATA* paf);
 void char_from_room(CHAR_DATA* ch);
 void char_to_room(CHAR_DATA* ch, ROOM_INDEX_DATA* pRoomIndex);
-OD* obj_to_char(OBJ_DATA* obj, CHAR_DATA* ch);
+OBJ_DATA* obj_to_char(OBJ_DATA* obj, CHAR_DATA* ch);
 void obj_from_char(OBJ_DATA* obj);
 int apply_ac(OBJ_DATA* obj, int iWear);
-OD* get_eq_char(CHAR_DATA* ch, int iWear);
+OBJ_DATA* get_eq_char(CHAR_DATA* ch, int iWear);
 void equip_char(CHAR_DATA* ch, OBJ_DATA* obj, int iWear);
 void unequip_char(CHAR_DATA* ch, OBJ_DATA* obj);
 int count_obj_list(RESET_DATA* pReset, OBJ_INDEX_DATA* pObjIndex, OBJ_DATA* list);
 int count_mob_in_room(MOB_INDEX_DATA* mob, ROOM_INDEX_DATA* list);
 void obj_from_room(OBJ_DATA* obj);
-OD* obj_to_room(OBJ_DATA* obj, ROOM_INDEX_DATA* pRoomIndex);
-OD* obj_to_obj(OBJ_DATA* obj, OBJ_DATA* obj_to);
+OBJ_DATA* obj_to_room(OBJ_DATA* obj, ROOM_INDEX_DATA* pRoomIndex);
+OBJ_DATA* obj_to_obj(OBJ_DATA* obj, OBJ_DATA* obj_to);
 void obj_from_obj(OBJ_DATA* obj);
 void extract_obj(OBJ_DATA* obj);
 void extract_exit(ROOM_INDEX_DATA* room, EXIT_DATA* pexit);
@@ -4935,17 +4916,17 @@ void clean_obj(OBJ_INDEX_DATA* obj);
 void clean_mob(MOB_INDEX_DATA* mob);
 void clean_resets(ROOM_INDEX_DATA* room);
 void extract_char(CHAR_DATA* ch, bool fPull);
-CD* get_char_room(CHAR_DATA* ch, const char* argument);
-CD* get_char_world(CHAR_DATA* ch, const char* argument);
-CD* get_char_world_ooc(CHAR_DATA* ch, const char* argument);
-CD* get_char_from_comfreq(CHAR_DATA* ch, const char* argument);
-OD* get_obj_type(OBJ_INDEX_DATA* pObjIndexData);
-OD* get_obj_list(CHAR_DATA* ch, const char* argument, OBJ_DATA* list);
-OD* get_obj_list_rev(CHAR_DATA* ch, const char* argument, OBJ_DATA* list);
-OD* get_obj_carry(CHAR_DATA* ch, const char* argument);
-OD* get_obj_wear(CHAR_DATA* ch, const char* argument);
-OD* get_obj_here(CHAR_DATA* ch, const char* argument);
-OD* get_obj_world(CHAR_DATA* ch, const char* argument);
+CHAR_DATA* get_char_room(CHAR_DATA* ch, const char* argument);
+CHAR_DATA* get_char_world(CHAR_DATA* ch, const char* argument);
+CHAR_DATA* get_char_world_ooc(CHAR_DATA* ch, const char* argument);
+CHAR_DATA* get_char_from_comfreq(CHAR_DATA* ch, const char* argument);
+OBJ_DATA* get_obj_type(OBJ_INDEX_DATA* pObjIndexData);
+OBJ_DATA* get_obj_list(CHAR_DATA* ch, const char* argument, OBJ_DATA* list);
+OBJ_DATA* get_obj_list_rev(CHAR_DATA* ch, const char* argument, OBJ_DATA* list);
+OBJ_DATA* get_obj_carry(CHAR_DATA* ch, const char* argument);
+OBJ_DATA* get_obj_wear(CHAR_DATA* ch, const char* argument);
+OBJ_DATA* get_obj_here(CHAR_DATA* ch, const char* argument);
+OBJ_DATA* get_obj_world(CHAR_DATA* ch, const char* argument);
 int get_obj_number(OBJ_DATA* obj);
 int get_obj_weight(OBJ_DATA* obj);
 bool room_is_dark(ROOM_INDEX_DATA* pRoomIndex);
@@ -4961,7 +4942,7 @@ std::string magic_bit_name(int magic_flags);
 ch_ret check_for_trap(CHAR_DATA* ch, OBJ_DATA* obj, int flag);
 ch_ret check_room_for_traps(CHAR_DATA* ch, int flag);
 bool is_trapped(OBJ_DATA* obj);
-OD* get_trap(OBJ_DATA* obj);
+OBJ_DATA* get_trap(OBJ_DATA* obj);
 ch_ret spring_trap(CHAR_DATA* ch, OBJ_DATA* obj);
 void name_stamp_stats(CHAR_DATA* ch);
 void fix_char(CHAR_DATA* ch);
@@ -4983,11 +4964,11 @@ bool in_soft_range(CHAR_DATA* ch, AREA_DATA* tarea);
 bool in_hard_range(CHAR_DATA* ch, AREA_DATA* tarea);
 bool chance(CHAR_DATA* ch, sh_int percent);
 bool chance_attrib(CHAR_DATA* ch, sh_int percent, sh_int attrib);
-OD* clone_object(OBJ_DATA* obj);
+OBJ_DATA* clone_object(OBJ_DATA* obj);
 void split_obj(OBJ_DATA* obj, int num);
 void separate_obj(OBJ_DATA* obj);
 bool empty_obj(OBJ_DATA* obj, OBJ_DATA* destobj, ROOM_INDEX_DATA* destroom);
-OD* find_obj(CHAR_DATA* ch, char* argument, bool carryonly);
+OBJ_DATA* find_obj(CHAR_DATA* ch, char* argument, bool carryonly);
 bool ms_find_obj(CHAR_DATA* ch);
 void worsen_mental_state(CHAR_DATA* ch, int mod);
 void better_mental_state(CHAR_DATA* ch, int mod);
@@ -5007,7 +4988,7 @@ const char* one_argument(const char* argument, char* arg_first);
 char* one_argument(char* argument, char* arg_first);
 const char* one_argument2(const char* argument, char* arg_first);
 char* one_argument2(char* argument, char* arg_first);
-ST* find_social(const char* command);
+SOCIALTYPE* find_social(const char* command);
 CMDTYPE* find_command(const char* command);
 void hash_commands();
 void send_timer(TIMERSET* vtime, CHAR_DATA* ch);
@@ -5033,7 +5014,7 @@ bool saves_breath(int level, CHAR_DATA* victim);
 bool saves_spell_staff(int level, CHAR_DATA* victim);
 ch_ret obj_cast_spell(int sn, int level, CHAR_DATA* ch, CHAR_DATA* victim, OBJ_DATA* obj);
 int dice_parse(CHAR_DATA* ch, int level, char* exp);
-SK* get_skilltype(int sn);
+SKILL_TYPE* get_skilltype(int sn);
 
 /* request.c */
 void init_request_pipe(void);
@@ -5057,7 +5038,7 @@ void save_home(CHAR_DATA* ch);
 /* shops.c */
 
 /* special.c */
-SF* spec_lookup(const char* name);
+SPEC_FUN* spec_lookup(const char* name);
 const char* lookup_spec(SPEC_FUN* special);
 
 /* tables.c */
@@ -5106,226 +5087,4 @@ char* check_hash(char* str);
 void hash_dump(int hash);
 void show_high_hash(int top);
 bool in_hash_table(char* str);
-/* ships.c */
-void load_ship_prototypes();
-int load_prototype(const char* prototypefile, int prototype);
-bool load_prototype_rooms(FILE* fp, int prototype);
-bool fread_prototype_room(FILE* fp, int prototype);
-bool load_prototype_header(FILE* fp, const std::string& filename, int prototype);
-void write_all_prototypes();
-void write_prototype_list();
-void save_prototype(int prototype);
-void write_all_prototypes();
-void write_prototype_list();
-void save_prototype(int prototype);
-int find_vnum_block(int num_needed);
-int make_prototype_rooms(int ship_type, int vnum, AREA_DATA* tarea, char* Sname);
-int get_sp_rflag(char* flag);
-SHIP_DATA* make_prototype_ship(int ship_type, int vnum, CHAR_DATA* ch, char* ship_name);
-void write_ship_list(void);
-void resetship(SHIP_DATA* ship);
-char* parse_prog_string(char* inp, int ship_type, int vnum);
-void make_rprogs(int ship_type, int vnum);
-void load_ship_prototypes(void);
 
-/* functions.c */
-char* strrep(const char* src, const char* sch, const char* rep);
-char* strlinwrp(char* src, int length);
-char* line(int num, char inp);
-std::string remand(const std::string_view& arg);
-char* rembg(const char* arg);
-char* format_str(char* src, int len);
-int strlen_color(char* argument);
-char* chrmax(char* src, int length);
-
-/* newscore.c */
-const char* get_race(CHAR_DATA* ch);
-
-#undef SK
-#undef CO
-#undef ST
-#undef CD
-#undef MID
-#undef OD
-#undef OID
-#undef RID
-#undef SF
-#undef BD
-#undef EDD
-#undef RD
-#undef ED
-
-/* ships.c */
-
-void load_market_list(void);
-void save_market_list(void);
-void add_market_ship(SHIP_DATA* ship);
-void remove_market_ship(BMARKET_DATA* marketship);
-void make_random_marketlist(void);
-void talk_channel(CHAR_DATA* ch, const char* argument, int channel, const char* verb);
-
-/*
- *
- *  New Build Interface Stuff Follows
- *
- */
-
-/*
- *  Data for a menu page
- */
-struct MENU_DATA
-{
-    char* sectionNum;
-    char* charChoice;
-    int x;
-    int y;
-    char* outFormat;
-    void* data;
-    int ptrType;
-    int cmdArgs;
-    char* cmdString;
-};
-
-DECLARE_DO_FUN(do_redraw_page);
-DECLARE_DO_FUN(do_refresh_page);
-DECLARE_DO_FUN(do_pagelen);
-DECLARE_DO_FUN(do_omenu);
-DECLARE_DO_FUN(do_rmenu);
-DECLARE_DO_FUN(do_mmenu);
-DECLARE_DO_FUN(do_clear);
-
-extern MENU_DATA room_page_a_data[];
-extern MENU_DATA room_page_b_data[];
-extern MENU_DATA room_page_c_data[];
-extern MENU_DATA room_help_page_data[];
-
-extern MENU_DATA mob_page_a_data[];
-extern MENU_DATA mob_page_b_data[];
-extern MENU_DATA mob_page_c_data[];
-extern MENU_DATA mob_page_d_data[];
-extern MENU_DATA mob_page_e_data[];
-extern MENU_DATA mob_page_f_data[];
-extern MENU_DATA mob_help_page_data[];
-
-extern MENU_DATA obj_page_a_data[];
-extern MENU_DATA obj_page_b_data[];
-extern MENU_DATA obj_page_c_data[];
-extern MENU_DATA obj_page_d_data[];
-extern MENU_DATA obj_page_e_data[];
-extern MENU_DATA obj_help_page_data[];
-
-extern MENU_DATA control_page_a_data[];
-extern MENU_DATA control_help_page_data[];
-
-extern const char room_page_a[];
-extern const char room_page_b[];
-extern const char room_page_c[];
-extern const char room_help_page[];
-
-extern const char obj_page_a[];
-extern const char obj_page_b[];
-extern const char obj_page_c[];
-extern const char obj_page_d[];
-extern const char obj_page_e[];
-extern const char obj_help_page[];
-
-extern const char mob_page_a[];
-extern const char mob_page_b[];
-extern const char mob_page_c[];
-extern const char mob_page_d[];
-extern const char mob_page_e[];
-extern const char mob_page_f[];
-extern const char mob_help_page[];
-extern const char* npc_sex[3];
-extern const char* ris_strings[];
-
-extern const char control_page_a[];
-extern const char control_help_page[];
-
-#define SH_INT 1
-#define INT 2
-#define CHAR 3
-#define STRING 4
-#define SPECIAL 5
-
-#define NO_PAGE 0
-#define MOB_PAGE_A 1
-#define MOB_PAGE_B 2
-#define MOB_PAGE_C 3
-#define MOB_PAGE_D 4
-#define MOB_PAGE_E 5
-#define MOB_PAGE_F 17
-#define MOB_HELP_PAGE 14
-#define ROOM_PAGE_A 6
-#define ROOM_PAGE_B 7
-#define ROOM_PAGE_C 8
-#define ROOM_HELP_PAGE 15
-#define OBJ_PAGE_A 9
-#define OBJ_PAGE_B 10
-#define OBJ_PAGE_C 11
-#define OBJ_PAGE_D 12
-#define OBJ_PAGE_E 13
-#define OBJ_HELP_PAGE 16
-#define CONTROL_PAGE_A 18
-#define CONTROL_HELP_PAGE 19
-
-#define NO_TYPE 0
-#define MOB_TYPE 1
-#define OBJ_TYPE 2
-#define ROOM_TYPE 3
-#define CONTROL_TYPE 4
-
-#define SUB_NORTH DIR_NORTH
-#define SUB_EAST DIR_EAST
-#define SUB_SOUTH DIR_SOUTH
-#define SUB_WEST DIR_WEST
-#define SUB_UP DIR_UP
-#define SUB_DOWN DIR_DOWN
-#define SUB_NE DIR_NORTHEAST
-#define SUB_NW DIR_NORTHWEST
-#define SUB_SE DIR_SOUTHEAST
-#define SUB_SW DIR_SOUTHWEST
-
-/*
- * defines for use with this get_affect function
- */
-
-#define RIS_000 BV00
-#define RIS_R00 BV01
-#define RIS_0I0 BV02
-#define RIS_RI0 BV03
-#define RIS_00S BV04
-#define RIS_R0S BV05
-#define RIS_0IS BV06
-#define RIS_RIS BV07
-
-#define GA_AFFECTED BV09
-#define GA_RESISTANT BV10
-#define GA_IMMUNE BV11
-#define GA_SUSCEPTIBLE BV12
-#define GA_RIS BV30
-
-/*
- *   Map Structures
- */
-
-DECLARE_DO_FUN(do_mapout);
-DECLARE_DO_FUN(do_lookmap);
-
-struct MAP_DATA /* contains per-room data */
-{
-    int vnum;   /* which map this room belongs to */
-    int x;      /* horizontal coordinate */
-    int y;      /* vertical coordinate */
-    char entry; /* code that shows up on map */
-};
-
-struct MAP_INDEX_DATA
-{
-    MAP_INDEX_DATA* next;
-    int vnum;                 /* vnum of the map */
-    int map_of_vnums[49][81]; /* room vnums aranged as a map */
-};
-
-MAP_INDEX_DATA* get_map_index(int vnum);
-void init_maps();

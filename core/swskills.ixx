@@ -53,6 +53,8 @@ extern int top_affect;
 
 export module swskills;
 
+import functions;
+
 const char* sector_name[SECT_MAX] = {"inside",      "city",         "field",      "forest", "hills",    "mountain",
                                      "water swim",  "water noswim", "underwater", "air",    "desert",   "unknown",
                                      "ocean floor", "underground",  "scrub",      "rocky",  "savanna",  "tundra",

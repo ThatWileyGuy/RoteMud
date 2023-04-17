@@ -46,6 +46,7 @@ import act_move;
 import connection;
 import pfiles;
 import mud_prog;
+import functions;
 
 const char* where_name[] = {
     "&G&b[&wused as light    &b]&G&w ", "&G&b[&wworn on finger   &b]&G&w ", "&G&b[&wworn on finger   &b]&G&w ",

@@ -42,10 +42,13 @@ module;
 
 export module player;
 
+import functions;
+
 /*
  *  Locals
  */
 const char* tiny_affect_loc_name(int location);
+export const char* get_race(CHAR_DATA* ch);
 
 void do_gold(CHAR_DATA* ch, char* argument)
 {

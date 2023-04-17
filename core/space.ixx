@@ -45,6 +45,9 @@ extern std::string secondary_beam_name(SHIP_DATA* ship);
 
 export module space;
 
+import act_comm;
+import ships;
+
 export SHIP_DATA* first_ship;
 export SHIP_DATA* last_ship;
 
