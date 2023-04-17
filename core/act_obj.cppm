@@ -1106,7 +1106,7 @@ export obj_ret damage_obj(OBJ_DATA* obj)
 /*
  * Remove an object.
  */
-bool remove_obj(CHAR_DATA* ch, int iWear, bool fReplace)
+export bool remove_obj(CHAR_DATA* ch, int iWear, bool fReplace)
 {
     OBJ_DATA *obj, *tmpobj;
 
