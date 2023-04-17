@@ -45,6 +45,7 @@ extern int top_exit;
 export module misc;
 
 import mud_prog;
+import hashstr;
 
 void do_buyhome(CHAR_DATA* ch, char* argument)
 {

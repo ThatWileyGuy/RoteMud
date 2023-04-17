@@ -42,6 +42,8 @@ module;
 
 export module boards;
 
+import hashstr;
+
 /* Defines for voting on notes. -- Narn */
 #define VOTE_NONE 0
 #define VOTE_OPEN 1

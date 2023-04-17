@@ -48,6 +48,7 @@ import mud_comm;
 import comm;
 import connection;
 import functions;
+import hashstr;
 
 #define RESTORE_INTERVAL 21600
 

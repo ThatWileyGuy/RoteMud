@@ -43,6 +43,7 @@ module;
 export module shops;
 
 import mud_prog;
+import hashstr;
 
 /*
  * Local functions

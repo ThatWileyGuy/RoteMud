@@ -49,6 +49,7 @@ export module fight;
 
 import newarena;
 import mud_prog;
+import hashstr;
 
 /*
  * Local functions.

@@ -42,6 +42,8 @@ module;
 
 export module hunter;
 
+import hashstr;
+
 void do_plantbug(CHAR_DATA* ch, char* argument)
 {
     CHAR_DATA* victim;

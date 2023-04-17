@@ -48,12 +48,10 @@
 #endif
 
 #include <limits>
-#include <cmath>
 #include <chrono>
 #include <memory>
 #include <vector>
 #include <algorithm>
-#include <stdarg.h>
 #include <boost/asio/ip/tcp.hpp>
 #include <boost/circular_buffer.hpp>
 
@@ -5076,15 +5074,3 @@ void    reboot_check    (char* arg);
 void auction_update(void);
 void remove_portal(OBJ_DATA* portal);
 int max_level(CHAR_DATA* ch, int ability);
-
-/* hashstr.c */
-char* str_alloc(char const* str);
-char* quick_link(char* str);
-int str_free(char* str);
-void show_hash(int count);
-char* hash_stats(void);
-char* check_hash(char* str);
-void hash_dump(int hash);
-void show_high_hash(int top);
-bool in_hash_table(char* str);
-

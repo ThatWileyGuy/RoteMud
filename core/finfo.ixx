@@ -42,6 +42,8 @@ module;
 
 export module finfo;
 
+import hashstr;
+
 #if defined(KEY)
 #undef KEY
 #endif

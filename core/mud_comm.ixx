@@ -44,6 +44,7 @@ export module mud_comm;
 
 import connection;
 import mud_prog;
+import hashstr;
 
 export const char* mprog_type_to_name(int type);
 ch_ret simple_damage(CHAR_DATA* ch, CHAR_DATA* victim, int dam, int dt);

@@ -56,6 +56,10 @@ char* quick_link(char* str);
 int str_free(char* str);
 void show_hash(int count);
 char* hash_stats(void);
+char* check_hash(char* str);
+void hash_dump(int hash);
+void show_high_hash(int top);
+bool in_hash_table(char* str);
 
 HASHSTR_DATA* string_hash[STR_HASH_SIZE];
 

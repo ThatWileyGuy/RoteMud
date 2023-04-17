@@ -42,6 +42,8 @@ module;
 
 export module makeobjs;
 
+import hashstr;
+
 /*
  * Make a fire.
  */

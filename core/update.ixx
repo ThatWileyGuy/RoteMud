@@ -56,6 +56,7 @@ export module update;
 import connection;
 import pfiles;
 import mud_prog;
+import hashstr;
 
 /* From newarena.c -- Tawnos */
 

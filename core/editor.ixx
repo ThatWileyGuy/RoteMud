@@ -57,6 +57,8 @@ extern char* strlinwrp(char* src, int length);
 
 export module editor;
 
+import hashstr;
+
 /****************************************************************************
  * Data types and other definitions
  */

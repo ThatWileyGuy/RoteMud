@@ -66,6 +66,7 @@ import pfiles;
 import md5;
 import mud_prog;
 import functions;
+import hashstr;
 
 #ifdef ECHO
 #undef ECHO // TODO where does this come from on Linux?

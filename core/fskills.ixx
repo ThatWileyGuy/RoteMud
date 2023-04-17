@@ -45,6 +45,7 @@ extern int top_affect;
 export module fskills;
 
 import functions;
+import hashstr;
 
 void fskill_refresh(CHAR_DATA* ch, char* argument)
 {

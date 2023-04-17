@@ -52,6 +52,7 @@ extern void fix_exits(void);
 export module build;
 
 import db;
+import hashstr;
 
 int generate_hp(int level, int num, int size, int plus);
 

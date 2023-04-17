@@ -47,6 +47,7 @@ extern void fread_comment(CHAR_DATA* ch, FILE* fp);
 export module save;
 
 import connection;
+import hashstr;
 
 /*
  * Increment with every major format change.

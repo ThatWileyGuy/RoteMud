@@ -55,6 +55,7 @@ module;
 export module renumber;
 
 import db;
+import hashstr;
 
 #define NOT_FOUND (-1)
 enum

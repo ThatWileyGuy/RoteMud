@@ -44,6 +44,8 @@ module;
 
 export module special;
 
+import hashstr;
+
 /* jails for wanted flags */
 
 #define ROOM_JAIL_CORUSCANT 0

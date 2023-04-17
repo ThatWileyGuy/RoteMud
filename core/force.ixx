@@ -47,6 +47,7 @@ extern void load_force_help(void);
 export module force;
 
 import functions;
+import hashstr;
 
 /* local defs */
 

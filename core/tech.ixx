@@ -42,6 +42,8 @@ module;
 
 export module tech;
 
+import hashstr;
+
 /* This is for the new technician class. The technicians are going to be totally in control of ship related
    abilities. These include, creation of, and use of ship modules. Ship Maintanance, Custom Ship Design, and
    Ship Sabotage. Taking some of the abilities of engineers and getting some more.

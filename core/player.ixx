@@ -43,6 +43,7 @@ module;
 export module player;
 
 import functions;
+import hashstr;
 
 /*
  *  Locals

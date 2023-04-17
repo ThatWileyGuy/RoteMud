@@ -44,6 +44,8 @@ extern bool autofly(SHIP_DATA* ship);
 
 export module slicers;
 
+import hashstr;
+
 /*Global Variables*/
 char title[MAX_INPUT_LENGTH];
 char disable[MAX_INPUT_LENGTH]; /*stores what portion of the ship will be disabled.*/

@@ -102,6 +102,8 @@ module;
 
 export module color;
 
+import hashstr;
+
 const char* pc_displays[MAX_COLORS] = {
     "black",    "dred",     "dgreen",   "orange",  "dblue",  "purple",  "cyan",    "grey",     "dgrey",
     "red",      "green",    "yellow",   "blue",    "pink",   "lblue",   "white", /*0 - 15*/

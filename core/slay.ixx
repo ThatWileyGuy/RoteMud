@@ -83,6 +83,8 @@ module;
 
 export module slay;
 
+import hashstr;
+
 #define SLAY_FILE SYSTEM_DIR "slay.dat" /* Slay data file for online editing - Samson 8-3-98 */
 
 /* Maxslaytypes variable - 50 should be WAY more than enough :P */

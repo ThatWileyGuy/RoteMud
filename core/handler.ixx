@@ -55,6 +55,7 @@ extern int top_reset;
 export module handler;
 
 import mud_prog;
+import hashstr;
 
 #define BFS_MARK BV01
 

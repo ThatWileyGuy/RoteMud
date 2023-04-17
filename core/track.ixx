@@ -48,6 +48,8 @@ extern int top_room;
 
 export module track;
 
+import hashstr;
+
 #define BFS_ERROR -1
 #define BFS_ALREADY_THERE -2
 #define BFS_NO_PATH -3

@@ -42,6 +42,8 @@ module;
 
 export module mud_prog;
 
+import hashstr;
+
 export enum MudProgType
 {
     ERROR_PROG = -1,

@@ -46,6 +46,7 @@ export module act_comm;
 
 import newarena;
 import mud_prog;
+import hashstr;
 
 /*
  *  Externals

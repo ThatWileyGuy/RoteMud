@@ -48,6 +48,8 @@ extern const char* sector_name[SECT_MAX];
 
 export module planets;
 
+import hashstr;
+
 /* local routines */
 void fread_planet(PLANET_DATA* planet, FILE* fp);
 bool load_planet_file(char* planetfile);

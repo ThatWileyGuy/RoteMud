@@ -47,6 +47,7 @@ import connection;
 import pfiles;
 import mud_prog;
 import functions;
+import hashstr;
 
 const char* where_name[] = {
     "&G&b[&wused as light    &b]&G&w ", "&G&b[&wworn on finger   &b]&G&w ", "&G&b[&wworn on finger   &b]&G&w ",

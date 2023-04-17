@@ -48,6 +48,7 @@ extern void resetship(SHIP_DATA* ship);
 export module ships;
 
 import functions;
+import hashstr;
 
 #if defined(KEY)
 #undef KEY

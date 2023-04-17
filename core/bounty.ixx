@@ -44,6 +44,8 @@ extern int xp_compute(CHAR_DATA* ch, CHAR_DATA* victim);
 
 export module bounty;
 
+import hashstr;
+
 BOUNTY_DATA* first_bounty;
 BOUNTY_DATA* last_bounty;
 BOUNTY_DATA* first_disintegration;

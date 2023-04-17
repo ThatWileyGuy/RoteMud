@@ -57,6 +57,7 @@ extern int get_trapflag(const char* flag);
 export module reset;
 
 import db;
+import hashstr;
 
 /*
  * Find some object with a given index data.

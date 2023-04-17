@@ -47,6 +47,7 @@ export module space;
 
 import act_comm;
 import ships;
+import hashstr;
 
 export SHIP_DATA* first_ship;
 export SHIP_DATA* last_ship;

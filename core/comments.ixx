@@ -44,6 +44,7 @@ extern void note_attach(CHAR_DATA* ch);
 
 export module comments;
 
+import hashstr;
 
 
 void comment_remove(CHAR_DATA* ch, CHAR_DATA* victim, NOTE_DATA* pnote)

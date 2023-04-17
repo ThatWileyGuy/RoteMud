@@ -53,6 +53,8 @@ extern const char* target_name; /* from magic.c */
 
 export module skills;
 
+import hashstr;
+
 const char* spell_flag[] = {"water",   "earth",         "air",          "astral",       "area",        "distant",
                             "reverse", "save_half_dam", "save_negates", "accumulative", "recastable",  "noscribe",
                             "nobrew",  "group",         "object",       "character",    "secretskill", "pksensitive"};

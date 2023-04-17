@@ -55,6 +55,7 @@ import slay;
 import mud_prog;
 import ships;
 import functions;
+import hashstr;
 
 extern int _filbuf(FILE*);
 
