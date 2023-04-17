@@ -4434,15 +4434,15 @@ extern BMARKET_DATA* last_market_ship;
 #define RIPTITLE_FILE SYSTEM_DIR "mudtitle.rip"
 #define ANSITITLE_FILE SYSTEM_DIR "mudtitle.ans"
 #define ASCTITLE_FILE SYSTEM_DIR "mudtitle.asc"
-#define BOOTLOG_FILE SYSTEM_DIR "boot.txt"            /* Boot up error file	 */
-#define BUG_FILE SYSTEM_DIR "sysbugs.txt"             /* For 'bug' and bug( )*/
-#define PLRBUG_FILE SYSTEM_DIR "plrbugs.txt"          /* Used for player bugs */
-#define IDEA_FILE SYSTEM_DIR "ideas.txt"              /* For 'idea'		 */
-#define CHANGE_FILE SYSTEM_DIR "changes.txt"          /* Changes file - txt  */
-#define DEBUG_FILE SYSTEM_DIR "debug.txt"             /* Catch-all for debug */
-#define TYPO_FILE SYSTEM_DIR "typos.txt"              /* For 'typo'		 */
-#define LOG_FILE SYSTEM_DIR "log.txt"                 /* For talking in logged rooms */
-#define WIZLIST_FILE SYSTEM_DIR "WIZLIST"             /* Wizlist		 */
+#define BOOTLOG_FILE SYSTEM_DIR "boot.txt"     /* Boot up error file	 */
+#define BUG_FILE SYSTEM_DIR "sysbugs.txt"      /* For 'bug' and bug( )*/
+#define PLRBUG_FILE SYSTEM_DIR "plrbugs.txt"   /* Used for player bugs */
+#define IDEA_FILE SYSTEM_DIR "ideas.txt"       /* For 'idea'		 */
+#define CHANGE_FILE SYSTEM_DIR "changes.txt"   /* Changes file - txt  */
+#define DEBUG_FILE SYSTEM_DIR "debug.txt"      /* Catch-all for debug */
+#define TYPO_FILE SYSTEM_DIR "typos.txt"       /* For 'typo'		 */
+#define LOG_FILE SYSTEM_DIR "log.txt"          /* For talking in logged rooms */
+#define WIZLIST_FILE SYSTEM_DIR "WIZLIST"      /* Wizlist		 */
 #define REQUEST_PIPE SYSTEM_DIR "REQUESTS"     /* Request FIFO	 */
 #define SKILL_FILE SYSTEM_DIR "skills.dat"     /* Skill table	 */
 #define HERB_FILE SYSTEM_DIR "herbs.dat"       /* Herb table		 */
@@ -5329,109 +5329,3 @@ struct MAP_INDEX_DATA
 
 MAP_INDEX_DATA* get_map_index(int vnum);
 void init_maps();
-
-/*
- * mudprograms stuff
- */
-extern CHAR_DATA* supermob;
-
-void oprog_speech_trigger(char* txt, CHAR_DATA* ch);
-void oprog_random_trigger(OBJ_DATA* obj);
-void oprog_wear_trigger(CHAR_DATA* ch, OBJ_DATA* obj);
-bool oprog_use_trigger(CHAR_DATA* ch, OBJ_DATA* obj, CHAR_DATA* vict, OBJ_DATA* targ, void* vo);
-void oprog_remove_trigger(CHAR_DATA* ch, OBJ_DATA* obj);
-void oprog_sac_trigger(CHAR_DATA* ch, OBJ_DATA* obj);
-void oprog_damage_trigger(CHAR_DATA* ch, OBJ_DATA* obj);
-void oprog_repair_trigger(CHAR_DATA* ch, OBJ_DATA* obj);
-void oprog_drop_trigger(CHAR_DATA* ch, OBJ_DATA* obj);
-// void oprog_zap_trigger( CHAR_DATA *ch, OBJ_DATA *obj );
-char* oprog_type_to_name(int type);
-
-/*
- * MUD_PROGS START HERE
- * (object stuff)
- */
-int rprog_custom_trigger(const char* command, const char* argument, CHAR_DATA* ch);
-int mprog_custom_trigger(const char* command, const char* argument, CHAR_DATA* ch);
-int oprog_custom_trigger(const char* command, const char* argument, CHAR_DATA* ch);
-void oprog_greet_trigger(CHAR_DATA* ch);
-void oprog_speech_trigger(char* txt, CHAR_DATA* ch);
-void oprog_random_trigger(OBJ_DATA* obj);
-void oprog_random_trigger(OBJ_DATA* obj);
-void oprog_remove_trigger(CHAR_DATA* ch, OBJ_DATA* obj);
-void oprog_sac_trigger(CHAR_DATA* ch, OBJ_DATA* obj);
-void oprog_get_trigger(CHAR_DATA* ch, OBJ_DATA* obj);
-void oprog_damage_trigger(CHAR_DATA* ch, OBJ_DATA* obj);
-void oprog_repair_trigger(CHAR_DATA* ch, OBJ_DATA* obj);
-void oprog_drop_trigger(CHAR_DATA* ch, OBJ_DATA* obj);
-void oprog_examine_trigger(CHAR_DATA* ch, OBJ_DATA* obj);
-// void oprog_zap_trigger( CHAR_DATA *ch, OBJ_DATA *obj );
-void oprog_pull_trigger(CHAR_DATA* ch, OBJ_DATA* obj);
-void oprog_push_trigger(CHAR_DATA* ch, OBJ_DATA* obj);
-
-/* mud prog defines */
-
-#define ERROR_PROG -1
-#define IN_FILE_PROG 0
-#define ACT_PROG BV00
-#define SPEECH_PROG BV01
-#define RAND_PROG BV02
-#define FIGHT_PROG BV03
-#define RFIGHT_PROG BV03
-#define DEATH_PROG BV04
-#define RDEATH_PROG BV04
-#define HITPRCNT_PROG BV05
-#define ENTRY_PROG BV06
-#define ENTER_PROG BV06
-#define GREET_PROG BV07
-#define RGREET_PROG BV07
-#define OGREET_PROG BV07
-#define ALL_GREET_PROG BV08
-#define GIVE_PROG BV09
-#define BRIBE_PROG BV10
-#define HOUR_PROG BV11
-#define TIME_PROG BV12
-#define WEAR_PROG BV13
-#define REMOVE_PROG BV14
-#define SAC_PROG BV15
-#define LOOK_PROG BV16
-#define EXA_PROG BV17
-#define CUSTOM_PROG BV18
-#define GET_PROG BV19
-#define DROP_PROG BV20
-#define DAMAGE_PROG BV21
-#define REPAIR_PROG BV22
-#define RANDIW_PROG BV23
-#define SPEECHIW_PROG BV24
-#define PULL_PROG BV25
-#define PUSH_PROG BV26
-#define SLEEP_PROG BV27
-#define REST_PROG BV28
-#define LEAVE_PROG BV29
-#define SCRIPT_PROG BV30
-#define USE_PROG BV31
-
-void rprog_leave_trigger(CHAR_DATA* ch);
-void rprog_enter_trigger(CHAR_DATA* ch);
-void rprog_sleep_trigger(CHAR_DATA* ch);
-void rprog_rest_trigger(CHAR_DATA* ch);
-void rprog_rfight_trigger(CHAR_DATA* ch);
-void rprog_death_trigger(CHAR_DATA* killer, CHAR_DATA* ch);
-void rprog_speech_trigger(char* txt, CHAR_DATA* ch);
-void rprog_random_trigger(CHAR_DATA* ch);
-void rprog_time_trigger(CHAR_DATA* ch);
-void rprog_hour_trigger(CHAR_DATA* ch);
-char* rprog_type_to_name(int type);
-
-#define OPROG_ACT_TRIGGER
-#ifdef OPROG_ACT_TRIGGER
-void oprog_act_trigger(char* buf, OBJ_DATA* mobj, CHAR_DATA* ch, OBJ_DATA* obj, void* vo);
-#endif
-#define RPROG_ACT_TRIGGER
-#ifdef RPROG_ACT_TRIGGER
-void rprog_act_trigger(char* buf, ROOM_INDEX_DATA* room, CHAR_DATA* ch, OBJ_DATA* obj, void* vo);
-#endif
-
-#define GET_BETTED_ON(ch) ((ch)->betted_on)
-#define GET_BET_AMT(ch) ((ch)->bet_amt)
-#define IN_ARENA(ch) (IS_SET((ch)->in_room->room_flags2, ROOM_ARENA))

@@ -64,6 +64,7 @@ import act_comm;
 import connection;
 import pfiles;
 import md5;
+import mud_prog;
 
 #ifdef ECHO
 #undef ECHO // TODO where does this come from on Linux?

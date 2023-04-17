@@ -45,6 +45,7 @@ export module act_obj;
 import act_info;
 import bet;
 import save;
+import mud_prog;
 
 /*double sqrt( double x );*/
 

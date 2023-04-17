@@ -44,6 +44,8 @@ extern int top_exit;
 
 export module misc;
 
+import mud_prog;
+
 void do_buyhome(CHAR_DATA* ch, char* argument)
 {
     ROOM_INDEX_DATA* room;

@@ -51,6 +51,7 @@ export module db;
 import act_move;
 import save;
 import slay;
+import mud_prog;
 
 extern int _filbuf(FILE*);
 

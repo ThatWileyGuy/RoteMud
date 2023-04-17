@@ -48,6 +48,7 @@ extern void lost_arena(CHAR_DATA* ch);
 export module fight;
 
 import newarena;
+import mud_prog;
 
 /*
  * Local functions.

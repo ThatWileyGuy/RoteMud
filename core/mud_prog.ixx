@@ -42,6 +42,49 @@ module;
 
 export module mud_prog;
 
+export enum MudProgType
+{
+    ERROR_PROG = -1,
+    IN_FILE_PROG = 0,
+    ACT_PROG = BV00,
+    SPEECH_PROG = BV01,
+    RAND_PROG = BV02,
+    FIGHT_PROG = BV03,
+    RFIGHT_PROG = BV03,
+    DEATH_PROG = BV04,
+    RDEATH_PROG = BV04,
+    HITPRCNT_PROG = BV05,
+    ENTRY_PROG = BV06,
+    ENTER_PROG = BV06,
+    GREET_PROG = BV07,
+    RGREET_PROG = BV07,
+    OGREET_PROG = BV07,
+    ALL_GREET_PROG = BV08,
+    GIVE_PROG = BV09,
+    BRIBE_PROG = BV10,
+    HOUR_PROG = BV11,
+    TIME_PROG = BV12,
+    WEAR_PROG = BV13,
+    REMOVE_PROG = BV14,
+    SAC_PROG = BV15,
+    LOOK_PROG = BV16,
+    EXA_PROG = BV17,
+    CUSTOM_PROG = BV18,
+    GET_PROG = BV19,
+    DROP_PROG = BV20,
+    DAMAGE_PROG = BV21,
+    REPAIR_PROG = BV22,
+    RANDIW_PROG = BV23,
+    SPEECHIW_PROG = BV24,
+    PULL_PROG = BV25,
+    PUSH_PROG = BV26,
+    SLEEP_PROG = BV27,
+    REST_PROG = BV28,
+    LEAVE_PROG = BV29,
+    SCRIPT_PROG = BV30,
+    USE_PROG = BV31,
+};
+
 /* Defines by Narn for new mudprog parsing, used as
    return values from mprog_do_command. */
 #define COMMANDOK 1

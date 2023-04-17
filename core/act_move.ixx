@@ -42,6 +42,8 @@ module;
 
 export module act_move;
 
+import mud_prog;
+
 const sh_int movement_loss[SECT_MAX] = {1, 2, 2, 3, 4, 6, 4, 1, 6, 10, 6, 5, 7, 4};
 
 const char* dir_name[] = {"north",     "east",      "south",     "west",      "up",       "down",

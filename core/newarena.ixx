@@ -67,6 +67,10 @@ export module newarena;
 
 import bet;
 
+#define GET_BETTED_ON(ch) ((ch)->betted_on)
+#define GET_BET_AMT(ch) ((ch)->bet_amt)
+#define IN_ARENA(ch) (IS_SET((ch)->in_room->room_flags2, ROOM_ARENA))
+
 #define PREP_START 42                    /* vnum of first prep room */
 #define PREP_END 43                      /* vnum of last prep room */
 #define ARENA_START number_range(29, 41) /* vnum of first real arena room*/

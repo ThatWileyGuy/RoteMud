@@ -42,6 +42,8 @@ module;
 
 export module clans;
 
+import mud_prog;
+
 #define MAX_NEST 100
 static OBJ_DATA* rgObjNest[MAX_NEST];
 

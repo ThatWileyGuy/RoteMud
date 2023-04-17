@@ -54,6 +54,8 @@ extern int top_reset;
 
 export module handler;
 
+import mud_prog;
+
 #define BFS_MARK BV01
 
 export CHAR_DATA* cur_char;

@@ -42,6 +42,8 @@ module;
 
 export module shops;
 
+import mud_prog;
+
 /*
  * Local functions
  */
