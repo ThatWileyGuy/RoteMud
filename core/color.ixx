@@ -102,6 +102,7 @@ module;
 
 export module color;
 
+import mud;
 import hashstr;
 
 const char* pc_displays[MAX_COLORS] = {

@@ -42,6 +42,7 @@ module;
 
 export module makeobjs;
 
+import mud;
 import hashstr;
 
 /*

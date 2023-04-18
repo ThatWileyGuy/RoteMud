@@ -42,6 +42,8 @@ module;
 
 export module functions;
 
+import mud;
+
 /*
    Original Code from SW:FotE 1.1
    Reworked strrep function.

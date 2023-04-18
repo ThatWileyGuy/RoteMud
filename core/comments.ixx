@@ -40,11 +40,11 @@ module;
 
 #include "mud.hxx"
 
-extern void note_attach(CHAR_DATA* ch);
-
 export module comments;
 
+import mud;
 import hashstr;
+import boards;
 
 
 void comment_remove(CHAR_DATA* ch, CHAR_DATA* victim, NOTE_DATA* pnote)

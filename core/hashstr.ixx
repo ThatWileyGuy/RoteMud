@@ -42,6 +42,8 @@ module;
 
 export module hashstr;
 
+import mud;
+
 #define STR_HASH_SIZE 1024
 
 struct HASHSTR_DATA

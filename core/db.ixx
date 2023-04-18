@@ -49,6 +49,7 @@ extern void init_supermob();
 
 export module db;
 
+import mud;
 import act_move;
 import save;
 import slay;

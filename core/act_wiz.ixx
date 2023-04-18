@@ -43,6 +43,7 @@ module;
 
 export module act_wiz;
 
+import mud;
 import db;
 import mud_comm;
 import comm;
@@ -75,7 +76,6 @@ export time_t new_boot_time_t;
 
 int get_saveflag(char* name)
 {
-    mud_global_test = 5;
     int x;
 
     for (x = 0; x < sizeof(save_flag) / sizeof(save_flag[0]); x++)

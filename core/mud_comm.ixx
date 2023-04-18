@@ -42,6 +42,7 @@ module;
 
 export module mud_comm;
 
+import mud;
 import connection;
 import mud_prog;
 import hashstr;

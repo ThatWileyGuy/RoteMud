@@ -40,22 +40,14 @@ module;
 
 #include "mud.hxx"
 
-extern void write_corpses(CHAR_DATA* ch, char* name);
-extern void delete_reset(RESET_DATA* pReset);
-
-extern int top_exit;
-extern int top_ed;
-extern int top_affect;
-extern int cur_qobjs;
-extern int cur_qchars;
-extern CHAR_DATA* gch_prev;
-extern OBJ_DATA* gobj_prev;
-extern int top_reset;
-
 export module handler;
 
+import mud;
 import mud_prog;
 import hashstr;
+import reset;
+import update;
+import db;
 
 #define BFS_MARK BV01
 

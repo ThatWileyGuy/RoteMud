@@ -40,23 +40,14 @@ module;
 
 #include "mud.hxx"
 
-extern void start_arena();
-extern void do_game();
-extern int in_start_arena;
-extern int ppl_in_arena;
-extern int ppl_challenged;
-extern int num_in_arena();
-extern void add_reinforcements(CHAR_DATA* ch);
-extern void room_act_update(void);
-extern void obj_act_update(void);
-extern bool check_social(CHAR_DATA* ch, const char* command, const char* argument);
-
 export module update;
 
+import mud;
 import connection;
 import pfiles;
 import mud_prog;
 import hashstr;
+import newarena;
 
 /* From newarena.c -- Tawnos */
 

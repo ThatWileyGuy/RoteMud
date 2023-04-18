@@ -54,6 +54,7 @@ module;
 
 export module renumber;
 
+import mud;
 import db;
 import hashstr;
 

@@ -42,6 +42,7 @@ module;
 
 export module hunter;
 
+import mud;
 import hashstr;
 
 void do_plantbug(CHAR_DATA* ch, char* argument)

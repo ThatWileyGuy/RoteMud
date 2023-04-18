@@ -42,6 +42,7 @@ module;
 
 export module clans;
 
+import mud;
 import mud_prog;
 import hashstr;
 

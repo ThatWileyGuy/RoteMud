@@ -42,6 +42,8 @@ module;
 
 export module marriage;
 
+import mud;
+
 void do_marry(CHAR_DATA* ch, char* argument)
 {
     char arg1[MAX_INPUT_LENGTH];

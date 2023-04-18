@@ -40,15 +40,11 @@ module;
 
 #include "mud.hxx"
 
-/*
- * Externals
- */
-
-extern char lastplayercmd[MAX_INPUT_LENGTH * 2];
-
 export module interp;
 
+import mud;
 import mud_prog;
+import comm;
 
 export bool check_social(CHAR_DATA* ch, const char* command, const char* argument);
 

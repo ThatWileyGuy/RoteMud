@@ -42,6 +42,8 @@ module;
 
 export module constants;
 
+import mud;
+
 /* undef these at EOF */
 #define AM 95
 #define AC 95

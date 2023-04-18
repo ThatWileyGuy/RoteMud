@@ -65,6 +65,7 @@ module;
 
 export module newarena;
 
+import mud;
 import bet;
 
 #define GET_BETTED_ON(ch) ((ch)->betted_on)

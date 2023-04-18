@@ -45,6 +45,8 @@ module;
 
 export module tables;
 
+import mud;
+
 #if defined(KEY)
 #undef KEY
 #endif

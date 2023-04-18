@@ -42,6 +42,8 @@ module;
 
 export module changes;
 
+import mud;
+
 /*
  * Globals
  */

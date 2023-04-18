@@ -40,15 +40,13 @@ module;
 
 #include "mud.hxx"
 
-extern bool mob_snipe(CHAR_DATA* ch, CHAR_DATA* victim);
-extern ch_ret one_hit(CHAR_DATA* ch, CHAR_DATA* victim, int dt);
-extern ROOM_INDEX_DATA* generate_exit(ROOM_INDEX_DATA* in_room, EXIT_DATA** pexit);
-
 extern int top_room;
 
 export module track;
 
+import mud;
 import hashstr;
+import fight;
 
 #define BFS_ERROR -1
 #define BFS_ALREADY_THERE -2
@@ -77,6 +75,9 @@ static BFS_QUEUE_ENTRY *queue_head = NULL, *queue_tail = NULL, *room_queue = NUL
 #define MARK(room) (SET_BIT((room)->room_flags, BFS_MARK))
 #define UNMARK(room) (REMOVE_BIT((room)->room_flags, BFS_MARK))
 #define IS_MARKED(room) (IS_SET((room)->room_flags, BFS_MARK))
+
+
+bool mob_snipe(CHAR_DATA* ch, CHAR_DATA* victim);
 
 ROOM_INDEX_DATA* toroom(ROOM_INDEX_DATA* room, sh_int door)
 {

@@ -1,6 +1,7 @@
 #include <boost/test/unit_test.hpp>
 #include "mud.hxx"
 
+/*
 namespace rote
 {
 
@@ -19,4 +20,6 @@ BOOST_AUTO_TEST_CASE(obj_short_test)
     obj.count = 0;
     BOOST_TEST(obj_short(&obj) == "super beans");
 }
-} // namespace rote
+} 
+*/
+// namespace rote

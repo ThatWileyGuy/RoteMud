@@ -42,6 +42,8 @@ module;
 
 export module util;
 
+import mud;
+
 #ifndef WIN32
 int sprintf_s(char* dest, size_t dest_size, const char* format, ...)
 {

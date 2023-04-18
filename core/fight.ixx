@@ -40,16 +40,16 @@ module;
 
 #include "mud.hxx"
 
-extern char lastplayercmd[MAX_INPUT_LENGTH];
-extern CHAR_DATA* gch_prev;
-extern int ris_save(CHAR_DATA* ch, int chance, int ris);
-extern void lost_arena(CHAR_DATA* ch);
-
 export module fight;
 
+import mud;
 import newarena;
 import mud_prog;
 import hashstr;
+import interp;
+import update;
+import comm;
+import magic;
 
 /*
  * Local functions.

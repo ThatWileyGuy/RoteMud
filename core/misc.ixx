@@ -44,6 +44,7 @@ extern int top_exit;
 
 export module misc;
 
+import mud;
 import mud_prog;
 import hashstr;
 

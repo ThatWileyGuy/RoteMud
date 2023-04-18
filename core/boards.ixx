@@ -42,6 +42,7 @@ module;
 
 export module boards;
 
+import mud;
 import hashstr;
 
 /* Defines for voting on notes. -- Narn */

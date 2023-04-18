@@ -65,6 +65,8 @@ module;
 
 export module pfiles;
 
+import mud;
+
 /* Globals */
 time_t pfile_time;
 HOUR_MIN_SEC set_pfile_time_struct;

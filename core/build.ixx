@@ -46,13 +46,14 @@ extern int top_ed;
 extern bool fBootDb;
 extern int top_area;
 
-extern char* sprint_reset(RESET_DATA* pReset, short* num);
 extern void fix_exits(void);
 
 export module build;
 
+import mud;
 import db;
 import hashstr;
+import reset;
 
 int generate_hp(int level, int num, int size, int plus);
 

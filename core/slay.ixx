@@ -83,6 +83,7 @@ module;
 
 export module slay;
 
+import mud;
 import hashstr;
 
 #define SLAY_FILE "system/slay.dat" /* Slay data file for online editing - Samson 8-3-98 */

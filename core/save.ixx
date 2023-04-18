@@ -41,13 +41,12 @@ module;
 #include <filesystem>
 #include "mud.hxx"
 
-extern void fwrite_comments(CHAR_DATA* ch, FILE* fp);
-extern void fread_comment(CHAR_DATA* ch, FILE* fp);
-
 export module save;
 
+import mud;
 import connection;
 import hashstr;
+import comments;
 
 /*
  * Increment with every major format change.

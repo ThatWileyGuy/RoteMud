@@ -40,13 +40,9 @@ module;
 
 #include "mud.hxx"
 
-extern void instaroom(ROOM_INDEX_DATA* pRoom, bool dodoors);
-extern std::string beam_name(sh_int type, bool plural);
-extern void write_ship_list(void);
-extern void resetship(SHIP_DATA* ship);
-
 export module ships;
 
+import mud;
 import functions;
 import hashstr;
 

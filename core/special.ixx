@@ -44,6 +44,7 @@ module;
 
 export module special;
 
+import mud;
 import hashstr;
 
 /* jails for wanted flags */

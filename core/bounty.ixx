@@ -40,11 +40,11 @@ module;
 
 #include "mud.hxx"
 
-extern int xp_compute(CHAR_DATA* ch, CHAR_DATA* victim);
-
 export module bounty;
 
+import mud;
 import hashstr;
+import fight;
 
 BOUNTY_DATA* first_bounty;
 BOUNTY_DATA* last_bounty;

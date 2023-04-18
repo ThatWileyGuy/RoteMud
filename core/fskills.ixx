@@ -44,6 +44,7 @@ extern int top_affect;
 
 export module fskills;
 
+import mud;
 import functions;
 import hashstr;
 

@@ -40,11 +40,11 @@ module;
 
 #include "mud.hxx"
 
-extern bool autofly(SHIP_DATA* ship);
-
 export module slicers;
 
+import mud;
 import hashstr;
+import space;
 
 /*Global Variables*/
 char title[MAX_INPUT_LENGTH];

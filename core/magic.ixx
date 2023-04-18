@@ -40,10 +40,9 @@ module;
 
 #include "mud.hxx"
 
-extern CHAR_DATA* find_keeper(CHAR_DATA* ch);
-
 export module magic;
 
+import mud;
 import player;
 import hashstr;
 

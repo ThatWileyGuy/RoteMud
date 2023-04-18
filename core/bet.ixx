@@ -42,6 +42,7 @@ module;
 
 export module bet;
 
+import mud;
 /*
   util function, converts an 'advanced' ASCII-number-string into a number.
   Used by parsebet() but could also be used by do_give or do_wimpy.

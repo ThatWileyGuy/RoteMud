@@ -40,11 +40,9 @@ module;
 
 #include "mud.hxx"
 
-extern std::string primary_beam_name(SHIP_DATA* ship);
-extern std::string secondary_beam_name(SHIP_DATA* ship);
-
 export module space;
 
+import mud;
 import act_comm;
 import ships;
 import hashstr;

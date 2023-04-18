@@ -44,11 +44,12 @@ extern int top_area;
 extern int top_r_vnum;
 extern void write_area_list();
 extern void write_starsystem_list();
-extern const char* sector_name[SECT_MAX];
 
 export module planets;
 
+import mud;
 import hashstr;
+import swskills;
 
 /* local routines */
 void fread_planet(PLANET_DATA* planet, FILE* fp);

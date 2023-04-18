@@ -40,23 +40,21 @@ module;
 
 #include "mud.hxx"
 
-extern void add_reinforcements(CHAR_DATA* ch);
-extern ch_ret one_hit(CHAR_DATA* ch, CHAR_DATA* victim, int dt);
-extern int xp_compute(CHAR_DATA* ch, CHAR_DATA* victim);
-extern ROOM_INDEX_DATA* generate_exit(ROOM_INDEX_DATA* in_room, EXIT_DATA** pexit);
-extern int ris_save(CHAR_DATA* ch, int chance, int ris);
-extern void explode_emissile(CHAR_DATA* ch, ROOM_INDEX_DATA* proom, int mindam, int maxdam, bool incendiary);
-extern CHAR_DATA* get_char_room_mp(CHAR_DATA* ch, char* argument);
-extern CHAR_DATA* find_keeper(CHAR_DATA* ch);
-
 extern int top_affect;
 
 export module swskills;
 
+import mud;
 import functions;
 import hashstr;
+import fight;
+import magic;
+import mud_comm;
+import shops;
 
-const char* sector_name[SECT_MAX] = {"inside",      "city",         "field",      "forest", "hills",    "mountain",
+void add_reinforcements(CHAR_DATA* ch);
+
+export const char* sector_name[SECT_MAX] = {"inside",      "city",         "field",      "forest", "hills",    "mountain",
                                      "water swim",  "water noswim", "underwater", "air",    "desert",   "unknown",
                                      "ocean floor", "underground",  "scrub",      "rocky",  "savanna",  "tundra",
                                      "glacial",     "rainforest",   "jungle",     "swamp",  "wetlands", "brush",

@@ -42,6 +42,7 @@ module;
 
 export module tech;
 
+import mud;
 import hashstr;
 
 /* This is for the new technician class. The technicians are going to be totally in control of ship related

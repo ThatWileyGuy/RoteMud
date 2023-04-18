@@ -42,14 +42,14 @@ module;
 
 #include "mud.hxx"
 
-extern SHIP_DATA* ship_from_gunseat(int vnum);
-extern SHIP_DATA* ship_from_cockpit(int vnum);
 extern int top_affect;
 
 export module eleven;
 
+import mud;
 import functions;
 import hashstr;
+import space;
 
 void explode_emissile(CHAR_DATA* ch, ROOM_INDEX_DATA* proom, int mindam, int maxdam, bool incendiary);
 void do_makegoggles(CHAR_DATA* ch, char* argument);

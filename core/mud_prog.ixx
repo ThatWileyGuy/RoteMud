@@ -42,6 +42,7 @@ module;
 
 export module mud_prog;
 
+import mud;
 import hashstr;
 
 export enum MudProgType

@@ -22,6 +22,7 @@ module;
 
 export module connection;
 
+import mud;
 // TODO how can new player creation over SSH work? Username "new" and password any?
 
 export struct Pubkey

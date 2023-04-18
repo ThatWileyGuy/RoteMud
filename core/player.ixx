@@ -42,6 +42,7 @@ module;
 
 export module player;
 
+import mud;
 import functions;
 import hashstr;
 

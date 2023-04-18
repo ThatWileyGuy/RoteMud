@@ -40,20 +40,13 @@ module;
 
 #include "mud.hxx"
 
-extern bool autofly(SHIP_DATA* ship);
-extern void show_char_to_char(CHAR_DATA* list, CHAR_DATA* ch);
-extern void show_list_to_char(OBJ_DATA* list, CHAR_DATA* ch, bool fShort, bool fShowN);
-extern int ris_save(CHAR_DATA* ch, int chance, int ris);
-extern void failed_casting(SKILL_TYPE* skill, CHAR_DATA* ch, CHAR_DATA* victim, OBJ_DATA* obj);
-extern int xp_compute(CHAR_DATA* gch, CHAR_DATA* victim);
-extern ROOM_INDEX_DATA* generate_exit(ROOM_INDEX_DATA* in_room, EXIT_DATA** pexit);
-extern ch_ret one_hit(CHAR_DATA* ch, CHAR_DATA* victim, int dt);
-
-extern const char* target_name; /* from magic.c */
-
 export module skills;
 
+import mud;
 import hashstr;
+import space;
+import fight;
+import magic;
 
 const char* spell_flag[] = {"water",   "earth",         "air",          "astral",       "area",        "distant",
                             "reverse", "save_half_dam", "save_negates", "accumulative", "recastable",  "noscribe",

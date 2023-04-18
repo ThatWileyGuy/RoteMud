@@ -42,6 +42,7 @@ module;
 
 export module shops;
 
+import mud;
 import mud_prog;
 import hashstr;
 

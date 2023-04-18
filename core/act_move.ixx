@@ -42,6 +42,7 @@ module;
 
 export module act_move;
 
+import mud;
 import mud_prog;
 import hashstr;
 

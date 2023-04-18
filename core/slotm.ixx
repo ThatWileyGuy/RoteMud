@@ -94,6 +94,8 @@ module;
 
 export module slotm;
 
+import mud;
+
 // Constant multipliers types of winnings
 #define matchingthreebars 5
 #define matchingthreenobar 3

@@ -42,6 +42,7 @@ module;
 
 export module finfo;
 
+import mud;
 import hashstr;
 
 #if defined(KEY)

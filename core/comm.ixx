@@ -52,12 +52,9 @@ module;
 
 #include "mud.hxx"
 
-extern void write_ship_list(void);
-extern void write_planet_list(void);
-extern void mail_count(CHAR_DATA* ch);
-
 export module comm;
 
+import mud;
 import db;
 import act_info;
 import act_comm;
@@ -67,6 +64,7 @@ import md5;
 import mud_prog;
 import functions;
 import hashstr;
+import boards;
 
 #ifdef ECHO
 #undef ECHO // TODO where does this come from on Linux?
@@ -116,7 +114,7 @@ export HOUR_MIN_SEC* set_boot_time;
 export tm* new_boot_time;
 export tm new_boot_struct;
 char str_boot_time[MAX_INPUT_LENGTH];
-char lastplayercmd[MAX_INPUT_LENGTH * 2];
+export char lastplayercmd[MAX_INPUT_LENGTH * 2];
 export time_t current_time; /* Time of this pulse		*/
 std::optional<IOManager> io_manager;
 
