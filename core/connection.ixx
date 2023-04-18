@@ -735,9 +735,11 @@ IOManager::IOManager(IOManagerCallbacks callbacks, uint16_t telnetPort, uint16_t
     m_sshBind = ssh_bind_new();
     int wideSshPort = sshPort;
 
-    int ret = ssh_bind_options_set(m_sshBind, SSH_BIND_OPTIONS_DSAKEY, KEYS_DIR "ssh_dsa_key");
+    std::string dsaKeyPath = std::string(KEYS_DIR) + "ssh_dsa_key";
+    int ret = ssh_bind_options_set(m_sshBind, SSH_BIND_OPTIONS_DSAKEY, dsaKeyPath.c_str());
     assert(ret == SSH_OK);
-    ret = ssh_bind_options_set(m_sshBind, SSH_BIND_OPTIONS_RSAKEY, KEYS_DIR "ssh_rsa_key");
+    std::string rsaKeyPath = std::string(KEYS_DIR) + "ssh_rsa_key";
+    ret = ssh_bind_options_set(m_sshBind, SSH_BIND_OPTIONS_RSAKEY, rsaKeyPath.c_str());
     assert(ret == SSH_OK);
     ret = ssh_bind_options_set(m_sshBind, SSH_BIND_OPTIONS_BINDPORT, &wideSshPort); // probably unnecessary
     assert(ret == SSH_OK);
@@ -746,7 +748,8 @@ IOManager::IOManager(IOManagerCallbacks callbacks, uint16_t telnetPort, uint16_t
     // ret = ssh_bind_options_set(m_sshBind, SSH_BIND_OPTIONS_LOG_VERBOSITY_STR, "4");
     // assert(ret == SSH_OK);
 #ifdef WIN32
-    ssh_bind_options_set(m_sshBind, SSH_BIND_OPTIONS_MODULI, KEYS_DIR "moduli");
+    std::string moduliFilePath = std::string(KEYS_DIR) + "moduli";
+    ssh_bind_options_set(m_sshBind, SSH_BIND_OPTIONS_MODULI, moduliFilePath.c_str());
     assert(ret == SSH_OK);
 #endif
 

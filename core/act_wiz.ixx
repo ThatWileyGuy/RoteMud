@@ -75,6 +75,7 @@ export time_t new_boot_time_t;
 
 int get_saveflag(char* name)
 {
+    mud_global_test = 5;
     int x;
 
     for (x = 0; x < sizeof(save_flag) / sizeof(save_flag[0]); x++)
@@ -3286,9 +3287,9 @@ void save_banlist(void)
     BAN_DATA* pban;
     FILE* fp;
 
-    if (!(fp = fopen(SYSTEM_DIR BAN_LIST, "w")))
+    if (!(fp = fopen(BAN_LIST, "w")))
     {
-        bug("Save_banlist: Cannot open " BAN_LIST, 0);
+        bug("Save_banlist: Cannot open %s", BAN_LIST, 0);
         perror(BAN_LIST);
         return;
     }

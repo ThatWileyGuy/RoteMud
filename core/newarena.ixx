@@ -75,7 +75,7 @@ import bet;
 #define PREP_END 43                      /* vnum of last prep room */
 #define ARENA_START number_range(29, 41) /* vnum of first real arena room*/
 #define ARENA_END 41                     /* vnum of last real arena room*/
-#define HALL_FAME_FILE SYSTEM_DIR "halloffame.lst"
+#define HALL_FAME_FILE "system/halloffame.lst"
 
 struct HALL_OF_FAME_ELEMENT
 {

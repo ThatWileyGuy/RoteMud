@@ -127,20 +127,9 @@ char* strcat_s(char* dest, size_t dest_size, const char* source);
  */
 
 // TODO this needs to go away very rapidly
-#if !defined(BERR)
-#define BERR 255
-#endif
+constexpr int BERR = 255;
 
-#if defined(_AIX)
-#if !defined(const)
-#define const
-#endif
-typedef int sh_int;
-typedef int bool;
-#define unix
-#else
 typedef short int sh_int;
-#endif
 
 /*
  * Structure types.
@@ -205,107 +194,108 @@ template <size_t N> struct TempString
 
 #define MAKE_TEMP_STRING(s) TempString<sizeof(s)>(s)
 
-#define DUR_CONV 23.333333333333333333333333
-#define HIDDEN_TILDE '*'
+constexpr double DUR_CONV = 23.333333333333333333333333;
+constexpr char HIDDEN_TILDE = '*';
 
-#define BV00 (1 << 0)
-#define BV01 (1 << 1)
-#define BV02 (1 << 2)
-#define BV03 (1 << 3)
-#define BV04 (1 << 4)
-#define BV05 (1 << 5)
-#define BV06 (1 << 6)
-#define BV07 (1 << 7)
-#define BV08 (1 << 8)
-#define BV09 (1 << 9)
-#define BV10 (1 << 10)
-#define BV11 (1 << 11)
-#define BV12 (1 << 12)
-#define BV13 (1 << 13)
-#define BV14 (1 << 14)
-#define BV15 (1 << 15)
-#define BV16 (1 << 16)
-#define BV17 (1 << 17)
-#define BV18 (1 << 18)
-#define BV19 (1 << 19)
-#define BV20 (1 << 20)
-#define BV21 (1 << 21)
-#define BV22 (1 << 22)
-#define BV23 (1 << 23)
-#define BV24 (1 << 24)
-#define BV25 (1 << 25)
-#define BV26 (1 << 26)
-#define BV27 (1 << 27)
-#define BV28 (1 << 28)
-#define BV29 (1 << 29)
-#define BV30 (1 << 30)
-#define BV31 (1 << 31)
+enum BitValue
+{
+    BV00 = (1 << 0),
+    BV01 = (1 << 1),
+    BV02 = (1 << 2),
+    BV03 = (1 << 3),
+    BV04 = (1 << 4),
+    BV05 = (1 << 5),
+    BV06 = (1 << 6),
+    BV07 = (1 << 7),
+    BV08 = (1 << 8),
+    BV09 = (1 << 9),
+    BV10 = (1 << 10),
+    BV11 = (1 << 11),
+    BV12 = (1 << 12),
+    BV13 = (1 << 13),
+    BV14 = (1 << 14),
+    BV15 = (1 << 15),
+    BV16 = (1 << 16),
+    BV17 = (1 << 17),
+    BV18 = (1 << 18),
+    BV19 = (1 << 19),
+    BV20 = (1 << 20),
+    BV21 = (1 << 21),
+    BV22 = (1 << 22),
+    BV23 = (1 << 23),
+    BV24 = (1 << 24),
+    BV25 = (1 << 25),
+    BV26 = (1 << 26),
+    BV27 = (1 << 27),
+    BV28 = (1 << 28),
+    BV29 = (1 << 29),
+    BV30 = (1 << 30),
+    BV31 = (1 << 31),
+};
 /* 32 USED! DO NOT ADD MORE! SB */
 
 /*
  * String and memory management parameters.
  */
-#define MAX_STRING_LENGTH 4096 /* buf */ // TODO this needs to go away
-#define MAX_INPUT_LENGTH 1024            /* arg */
-#define MAX_INBUF_SIZE 1024
-#define MAX_OUTPUT_SIZE 4096
-#define LAST_FILE_SIZE 500 // max entries in the last file
-#define MSL MAX_STRING_LENGTH
-#define MIL MAX_INPUT_LENGTH
-#define MAX_MOB_COUNT 10
+constexpr size_t MAX_STRING_LENGTH = 4096; /* buf */ // TODO this needs to go away
+constexpr size_t MAX_INPUT_LENGTH = 1024;            /* arg */
+constexpr size_t MAX_INBUF_SIZE = 1024;
+constexpr size_t MAX_OUTPUT_SIZE = 4096;
+constexpr size_t LAST_FILE_SIZE = 500; // max entries in the last file
+constexpr size_t MSL = MAX_STRING_LENGTH;
+constexpr size_t MIL = MAX_INPUT_LENGTH;
+constexpr int MAX_MOB_COUNT = 10;
 
-#define HASHSTR /* use string hashing */
+constexpr int MAX_LAYERS = 8; /* maximum clothing layers */
+constexpr int MAX_NEST = 100; /* maximum container nesting */
 
-#define MAX_LAYERS 8 /* maximum clothing layers */
-#define MAX_NEST 100 /* maximum container nesting */
-
-#define MAX_KILLTRACK 20 /* track mob vnums killed */
+constexpr int MAX_KILLTRACK = 20; /* track mob vnums killed */
 
 /*
  * Game parameters.
  * Increase the max'es if you add more of something.
  * Adjust the pulse numbers to suit yourself.
  */
-#define MAX_EXP_WORTH 500000
-#define MIN_EXP_WORTH 25
+constexpr int MAX_EXP_WORTH = 500000;
+constexpr int MIN_EXP_WORTH = 25;
 
-#define MAX_REXITS 20 /* Maximum exits allowed in 1 room */
-#define MAX_SKILL 282
-#define MAX_ABILITY 10
-#define MAX_RL_ABILITY 8
-#define MAX_RACE 41
-#define MAX_NPC_RACE 91
-#define MAX_VNUMS 500000
-#define MAX_LEVEL 36
-#define MAX_CLAN 50
-#define MAX_PLANET 100
-#define MAX_SHIP 1000
-#define MAX_SHIP_ROOMS 25
-#define MAX_BOUNTY 255
-#define MAX_GOV 255
+constexpr size_t MAX_REXITS = 20; /* Maximum exits allowed in 1 room */
+constexpr size_t MAX_SKILL = 282;
+constexpr size_t MAX_ABILITY = 10;
+constexpr size_t MAX_RL_ABILITY = 8;
+constexpr size_t MAX_RACE = 41;
+constexpr size_t MAX_NPC_RACE = 91;
+constexpr size_t MAX_VNUMS = 500000;
+constexpr int MAX_LEVEL = 36;
+constexpr size_t MAX_CLAN = 50;
+constexpr size_t MAX_PLANET = 100;
+constexpr size_t MAX_SHIP = 1000;
+constexpr size_t MAX_SHIP_ROOMS = 25;
+constexpr size_t MAX_BOUNTY = 255;
+constexpr size_t MAX_GOV = 255;
 
-#define MAX_HERB 20
+constexpr size_t MAX_HERB = 20;
 
-#define LEVEL_HERO (MAX_LEVEL - 4)
-#define LEVEL_IMMORTAL (MAX_LEVEL - 4)
-#define LEVEL_SUPREME MAX_LEVEL
-#define LEVEL_INFINITE (MAX_LEVEL - 4)
-#define LEVEL_ETERNAL (MAX_LEVEL - 4)
-#define LEVEL_IMPLEMENTOR (MAX_LEVEL)
-#define LEVEL_SUB_IMPLEM (MAX_LEVEL - 1)
-#define LEVEL_ASCENDANT (MAX_LEVEL - 2)
-#define LEVEL_GREATER (MAX_LEVEL - 3)
-#define LEVEL_LESSER (MAX_LEVEL - 4)
-#define LEVEL_RETIRED (MAX_LEVEL - 5)
-#define LEVEL_GOD (MAX_LEVEL - 4)
-#define LEVEL_TRUEIMM (MAX_LEVEL - 4)
-#define LEVEL_DEMI (MAX_LEVEL - 4)
-#define LEVEL_SAVIOR (MAX_LEVEL - 4)
-#define LEVEL_CREATOR (MAX_LEVEL - 4)
-#define LEVEL_ACOLYTE (MAX_LEVEL - 4)
-#define LEVEL_NEOPHYTE (MAX_LEVEL - 4)
-#define LEVEL_AVATAR (MAX_LEVEL - 5)
-#define LEVEL_NOHUNGER 30
+constexpr int LEVEL_HERO = (MAX_LEVEL - 4);
+constexpr int LEVEL_IMMORTAL = (MAX_LEVEL - 4);
+constexpr int LEVEL_SUPREME = MAX_LEVEL;
+constexpr int LEVEL_INFINITE = (MAX_LEVEL - 4);
+constexpr int LEVEL_ETERNAL = (MAX_LEVEL - 4);
+constexpr int LEVEL_IMPLEMENTOR = (MAX_LEVEL);
+constexpr int LEVEL_SUB_IMPLEM = (MAX_LEVEL - 1);
+constexpr int LEVEL_ASCENDANT = (MAX_LEVEL - 2);
+constexpr int LEVEL_GREATER = (MAX_LEVEL - 3);
+constexpr int LEVEL_LESSER = (MAX_LEVEL - 4);
+constexpr int LEVEL_RETIRED = (MAX_LEVEL - 5);
+constexpr int LEVEL_GOD = (MAX_LEVEL - 4);
+constexpr int LEVEL_TRUEIMM = (MAX_LEVEL - 4);
+constexpr int LEVEL_DEMI = (MAX_LEVEL - 4);
+constexpr int LEVEL_SAVIOR = (MAX_LEVEL - 4);
+constexpr int LEVEL_CREATOR = (MAX_LEVEL - 4);
+constexpr int LEVEL_ACOLYTE = (MAX_LEVEL - 4);
+constexpr int LEVEL_NEOPHYTE = (MAX_LEVEL - 4);
+constexpr int LEVEL_AVATAR = (MAX_LEVEL - 5);
+constexpr int LEVEL_NOHUNGER = 30;
 
 // begin do_fun
 
@@ -1112,9 +1102,7 @@ DECLARE_SPELL_FUN(spell_word_of_recall);
  *                      Enhanced ANSI parser by Samson                      *
  ****************************************************************************/
 
-#define COLOR_DIR "../color/"
-
-    DECLARE_DO_FUN(do_color);
+DECLARE_DO_FUN(do_color);
 
 void reset_colors(CHAR_DATA* ch);
 void set_char_color(short AType, CHAR_DATA* ch);
@@ -1125,180 +1113,191 @@ const char* const_color_align(const char* argument, int size, int align);
 /*
  * Color Alignment Parameters
  */
-#define ALIGN_LEFT 1
-#define ALIGN_CENTER 2
-#define ALIGN_RIGHT 3
+
+enum TextAlignment
+{
+    ALIGN_LEFT = 1,
+    ALIGN_CENTER = 2,
+    ALIGN_RIGHT = 3,
+};
+
+#define DEDUPE __declspec(selectany)
 
 /* These are the ANSI codes for foreground text colors */
-#define ANSI_BLACK "\x1b[0;30m"
-#define ANSI_DRED "\x1b[0;31m"
-#define ANSI_DGREEN "\x1b[0;32m"
-#define ANSI_ORANGE "\x1b[0;33m"
-#define ANSI_DBLUE "\x1b[0;34m"
-#define ANSI_PURPLE "\x1b[0;35m"
-#define ANSI_CYAN "\x1b[0;36m"
-#define ANSI_GREY "\x1b[1;37m"
-#define ANSI_DGREY "\x1b[1;30m"
-#define ANSI_RED "\x1b[1;31m"
-#define ANSI_GREEN "\x1b[1;32m"
-#define ANSI_YELLOW "\x1b[1;33m"
-#define ANSI_BLUE "\x1b[1;34m"
-#define ANSI_PINK "\x1b[1;35m"
-#define ANSI_LBLUE "\x1b[1;36m"
-#define ANSI_WHITE "\x1b[0;37m"
-#define ANSI_RESET "\x1b[0m"
+DEDUPE const char* ANSI_BLACK = "\x1b[0;30m";
+DEDUPE const char* ANSI_DRED = "\x1b[0;31m";
+DEDUPE const char* ANSI_DGREEN = "\x1b[0;32m";
+DEDUPE const char* ANSI_ORANGE = "\x1b[0;33m";
+DEDUPE const char* ANSI_DBLUE = "\x1b[0;34m";
+DEDUPE const char* ANSI_PURPLE = "\x1b[0;35m";
+DEDUPE const char* ANSI_CYAN = "\x1b[0;36m";
+DEDUPE const char* ANSI_GREY = "\x1b[1;37m";
+DEDUPE const char* ANSI_DGREY = "\x1b[1;30m";
+DEDUPE const char* ANSI_RED = "\x1b[1;31m";
+DEDUPE const char* ANSI_GREEN = "\x1b[1;32m";
+DEDUPE const char* ANSI_YELLOW = "\x1b[1;33m";
+DEDUPE const char* ANSI_BLUE = "\x1b[1;34m";
+DEDUPE const char* ANSI_PINK = "\x1b[1;35m";
+DEDUPE const char* ANSI_LBLUE = "\x1b[1;36m";
+DEDUPE const char* ANSI_WHITE = "\x1b[0;37m";
+DEDUPE const char* ANSI_RESET = "\x1b[0m";
 
 /* These are the ANSI codes for blinking foreground text colors */
-#define BLINK_BLACK "\x1b[0;5;30m"
-#define BLINK_DRED "\x1b[0;5;31m"
-#define BLINK_DGREEN "\x1b[0;5;32m"
-#define BLINK_ORANGE "\x1b[0;5;33m"
-#define BLINK_DBLUE "\x1b[0;5;34m"
-#define BLINK_PURPLE "\x1b[0;5;35m"
-#define BLINK_CYAN "\x1b[0;5;36m"
-#define BLINK_GREY "\x1b[0;5;37m"
-#define BLINK_DGREY "\x1b[1;5;30m"
-#define BLINK_RED "\x1b[1;5;31m"
-#define BLINK_GREEN "\x1b[1;5;32m"
-#define BLINK_YELLOW "\x1b[1;5;33m"
-#define BLINK_BLUE "\x1b[1;5;34m"
-#define BLINK_PINK "\x1b[1;5;35m"
-#define BLINK_LBLUE "\x1b[1;5;36m"
-#define BLINK_WHITE "\x1b[1;5;37m"
+DEDUPE const char* BLINK_BLACK = "\x1b[0;5;30m";
+DEDUPE const char* BLINK_DRED = "\x1b[0;5;31m";
+DEDUPE const char* BLINK_DGREEN = "\x1b[0;5;32m";
+DEDUPE const char* BLINK_ORANGE = "\x1b[0;5;33m";
+DEDUPE const char* BLINK_DBLUE = "\x1b[0;5;34m";
+DEDUPE const char* BLINK_PURPLE = "\x1b[0;5;35m";
+DEDUPE const char* BLINK_CYAN = "\x1b[0;5;36m";
+DEDUPE const char* BLINK_GREY = "\x1b[0;5;37m";
+DEDUPE const char* BLINK_DGREY = "\x1b[1;5;30m";
+DEDUPE const char* BLINK_RED = "\x1b[1;5;31m";
+DEDUPE const char* BLINK_GREEN = "\x1b[1;5;32m";
+DEDUPE const char* BLINK_YELLOW = "\x1b[1;5;33m";
+DEDUPE const char* BLINK_BLUE = "\x1b[1;5;34m";
+DEDUPE const char* BLINK_PINK = "\x1b[1;5;35m";
+DEDUPE const char* BLINK_LBLUE = "\x1b[1;5;36m";
+DEDUPE const char* BLINK_WHITE = "\x1b[1;5;37m";
 
 /* These are the ANSI codes for background colors */
-#define BACK_BLACK "\x1b[40m"
-#define BACK_DRED "\x1b[41m"
-#define BACK_DGREEN "\x1b[42m"
-#define BACK_ORANGE "\x1b[43m"
-#define BACK_DBLUE "\x1b[44m"
-#define BACK_PURPLE "\x1b[45m"
-#define BACK_CYAN "\x1b[46m"
-#define BACK_GREY "\x1b[47m"
+DEDUPE const char* BACK_BLACK = "\x1b[40m";
+DEDUPE const char* BACK_DRED = "\x1b[41m";
+DEDUPE const char* BACK_DGREEN = "\x1b[42m";
+DEDUPE const char* BACK_ORANGE = "\x1b[43m";
+DEDUPE const char* BACK_DBLUE = "\x1b[44m";
+DEDUPE const char* BACK_PURPLE = "\x1b[45m";
+DEDUPE const char* BACK_CYAN = "\x1b[46m";
+DEDUPE const char* BACK_GREY = "\x1b[47m";
 
 /* Other miscelaneous ANSI tags that can be used */
-#define ANSI_BOLD "\x1b[1m"      /* For bright color stuff */
-#define ANSI_ITALIC "\x1b[3m"    /* Italic text */
-#define ANSI_UNDERLINE "\x1b[4m" /* Underline text */
-#define ANSI_BLINK "\x1b[5m"     /* Blinking text */
-#define ANSI_REVERSE "\x1b[7m"   /* Reverse colors */
-#define ANSI_STRIKEOUT "\x1b[9m" /* Overstrike line */
+DEDUPE const char* ANSI_BOLD = "\x1b[1m"; /* For bright color stuff */
+DEDUPE const char* ANSI_ITALIC = "\x1b[3m"; /* Italic text */
+DEDUPE const char* ANSI_UNDERLINE = "\x1b[4m"; /* Underline text */
+DEDUPE const char* ANSI_BLINK = "\x1b[5m";     /* Blinking text */
+DEDUPE const char* ANSI_REVERSE = "\x1b[7m";   /* Reverse colors */
+DEDUPE const char* ANSI_STRIKEOUT = "\x1b[9m"; /* Overstrike line */
 
-#define AT_BLACK 0
-#define AT_BLOOD 1
-#define AT_DGREEN 2
-#define AT_ORANGE 3
-#define AT_DBLUE 4
-#define AT_PURPLE 5
-#define AT_CYAN 6
-#define AT_GREY 7
-#define AT_DGREY 8
-#define AT_RED 9
-#define AT_GREEN 10
-#define AT_YELLOW 11
-#define AT_BLUE 12
-#define AT_PINK 13
-#define AT_LBLUE 14
-#define AT_WHITE 15
+enum AsciiTextColor
+{
+    AT_BLACK = 0,
+    AT_BLOOD = 1,
+    AT_DGREEN = 2,
+    AT_ORANGE = 3,
+    AT_DBLUE = 4,
+    AT_PURPLE = 5,
+    AT_CYAN = 6,
+    AT_GREY = 7,
+    AT_DGREY = 8,
+    AT_RED = 9,
+    AT_GREEN = 10,
+    AT_YELLOW = 11,
+    AT_BLUE = 12,
+    AT_PINK = 13,
+    AT_LBLUE = 14,
+    AT_WHITE = 15,
 
-/*People, Objects or Room Related*/
-#define AT_IMMORT 16
-#define AT_NOTE 17
-#define AT_OBJECT 18
-#define AT_PERSON 19
-#define AT_RMDESC 20
-#define AT_RMNAME 21
-#define AT_SHIP 22
+    /*People, Objects or Room Related*/
+    AT_IMMORT = 16,
+    AT_NOTE = 17,
+    AT_OBJECT = 18,
+    AT_PERSON = 19,
+    AT_RMDESC = 20,
+    AT_RMNAME = 21,
+    AT_SHIP = 22,
 
-/*Actions or Commands*/
-#define AT_ACTION 23
-#define AT_BLINK 24
-#define AT_CONSIDER 25
-#define AT_EXITS 26
-#define AT_GOLD 27
-#define AT_HELP 28 /* Added by Samson 1-15-01 for helpfiles */
-#define AT_LIST 29
-#define AT_OLDSCORE 30
-#define AT_PLAIN 31
-#define AT_QUIT 32
-#define AT_REPORT 33
-#define AT_SKILL 34
-#define AT_SLIST 35
+    /*Actions or Commands*/
+    AT_ACTION = 23,
+    AT_BLINK = 24,
+    AT_CONSIDER = 25,
+    AT_EXITS = 26,
+    AT_GOLD = 27,
+    AT_HELP = 28, /* Added by Samson 1-15-01 for helpfiles */
+    AT_LIST = 29,
+    AT_OLDSCORE = 30,
+    AT_PLAIN = 31,
+    AT_QUIT = 32,
+    AT_REPORT = 33,
+    AT_SKILL = 34,
+    AT_SLIST = 35,
 
-/*Fighting Stuffs*/
-#define AT_DAMAGE 36
-#define AT_FLEE 37
-#define AT_HIT 38
-#define AT_HITME 39
-#define AT_HURT 40
+    /*Fighting Stuffs*/
+    AT_DAMAGE = 36,
+    AT_FLEE = 37,
+    AT_HIT = 38,
+    AT_HITME = 39,
+    AT_HURT = 40,
 
-/*Continual Messages*/
-#define AT_DEAD 41
-#define AT_DYING 42
-#define AT_FALLING 43
-#define AT_HUNGRY 44
-#define AT_POISON 45
-#define AT_RESET 46
-#define AT_SOBER 47
-#define AT_THIRSTY 48
-#define AT_WEAROFF 49
+    /*Continual Messages*/
+    AT_DEAD = 41,
+    AT_DYING = 42,
+    AT_FALLING = 43,
+    AT_HUNGRY = 44,
+    AT_POISON = 45,
+    AT_RESET = 46,
+    AT_SOBER = 47,
+    AT_THIRSTY = 48,
+    AT_WEAROFF = 49,
 
-/*Mortal Channels*/
-#define AT_ARENA 50
-#define AT_AUCTION 51 /* Added by Samson 12-25-98 for auction channel */
-#define AT_CHAT 52
-#define AT_CLAN 53
-#define AT_GOSSIP 54
-#define AT_GTELL 55
-#define AT_HOLONET 56
-#define AT_OOC 57
-#define AT_MUSIC 58
-#define AT_SAY 59
-#define AT_SHIPTALK 60
-#define AT_SHOUT 61 /* Added by Samson 9-29-98 for shout channel */
-#define AT_SOCIAL 62
-#define AT_TELL 63
-#define AT_WARTALK 64
-#define AT_WHISPER 65 /* Added by Samson 9-29-98 for version 1.4 code */
-#define AT_YELL 66
+    /*Mortal Channels*/
+    AT_ARENA = 50,
+    AT_AUCTION = 51, /* Added by Samson 12-25-98 for auction channel */
+    AT_CHAT = 52,
+    AT_CLAN = 53,
+    AT_GOSSIP = 54,
+    AT_GTELL = 55,
+    AT_HOLONET = 56,
+    AT_OOC = 57,
+    AT_MUSIC = 58,
+    AT_SAY = 59,
+    AT_SHIPTALK = 60,
+    AT_SHOUT = 61, /* Added by Samson 9-29-98 for shout channel */
+    AT_SOCIAL = 62,
+    AT_TELL = 63,
+    AT_WARTALK = 64,
+    AT_WHISPER = 65, /* Added by Samson 9-29-98 for version 1.4 code */
+    AT_YELL = 66,
 
-/*Imm Only Colors*/
-#define AT_AVATAR 67
-#define AT_BUILD 68
-#define AT_COMM 69
-#define AT_IMMTALK 70
-#define AT_LOG 71
-#define AT_RFLAGS1 72
-#define AT_RFLAGS2 73
-#define AT_RVNUM 74
+    /*Imm Only Colors*/
+    AT_AVATAR = 67,
+    AT_BUILD = 68,
+    AT_COMM = 69,
+    AT_IMMTALK = 70,
+    AT_LOG = 71,
+    AT_RFLAGS1 = 72,
+    AT_RFLAGS2 = 73,
+    AT_RVNUM = 74,
 
-/* Should ALWAYS be one more than the last numerical value in the list */
-#define MAX_COLORS 75
+    /* Should ALWAYS be one more than the last numerical value in the list */
+    MAX_COLORS = 75,
 
-#define AT_MAGIC AT_WHITE
-#define AT_FIRE AT_RED
-#define AT_DIEMSG AT_BLOOD
-#define AT_DANGER AT_RED
+    AT_MAGIC = AT_WHITE,
+    AT_FIRE = AT_RED,
+    AT_DIEMSG = AT_BLOOD,
+    AT_DANGER = AT_RED,
+};
+
+
 extern const short default_set[MAX_COLORS];
 
 // end color
 
-#define LEVEL_LOG LEVEL_LESSER
-#define LEVEL_HIGOD LEVEL_GOD
+constexpr int LEVEL_LOG = LEVEL_LESSER;
+constexpr int LEVEL_HIGOD = LEVEL_GOD;
 
-#define OBJ_VNUM_DEED 67 /* vnum of deed */
-#define VNUM_DEBIT_CARD 87
-#define PULSE_PER_SECOND 4
-#define PULSE_MINUTE (60 * PULSE_PER_SECOND)
-#define PULSE_VIOLENCE (3 * PULSE_PER_SECOND)
-#define PULSE_MOBILE (4 * PULSE_PER_SECOND)
-#define PULSE_TICK (70 * PULSE_PER_SECOND)
-#define PULSE_AREA (60 * PULSE_PER_SECOND)
-#define PULSE_AUCTION (10 * PULSE_PER_SECOND)
-#define PULSE_SPACE (10 * PULSE_PER_SECOND)
-#define PULSE_TAXES (60 * PULSE_MINUTE)
-#define PULSE_ARENA (30 * PULSE_PER_SECOND)
-#define PULSE_FORCE PULSE_MINUTE
+constexpr int OBJ_VNUM_DEED = 67; /* vnum of deed */
+constexpr int VNUM_DEBIT_CARD = 87;
+constexpr int PULSE_PER_SECOND = 4;
+constexpr int PULSE_MINUTE = (60 * PULSE_PER_SECOND);
+constexpr int PULSE_VIOLENCE = (3 * PULSE_PER_SECOND);
+constexpr int PULSE_MOBILE = (4 * PULSE_PER_SECOND);
+constexpr int PULSE_TICK = (70 * PULSE_PER_SECOND);
+constexpr int PULSE_AREA = (60 * PULSE_PER_SECOND);
+constexpr int PULSE_AUCTION = (10 * PULSE_PER_SECOND);
+constexpr int PULSE_SPACE = (10 * PULSE_PER_SECOND);
+constexpr int PULSE_TAXES = (60 * PULSE_MINUTE);
+constexpr int PULSE_ARENA = (30 * PULSE_PER_SECOND);
+constexpr int PULSE_FORCE = PULSE_MINUTE;
 
 /*
  * Command logging types.
@@ -1400,7 +1399,7 @@ typedef enum
     FORCE_SITH
 } force_skills_class;
 
-#define MAX_FORCE_SKILL 24
+constexpr int MAX_FORCE_SKILL = 24;
 
 struct FORCE_SKILL
 {
@@ -1428,8 +1427,8 @@ struct FORCE_SKILL
 extern FORCE_SKILL* first_force_skill;
 extern FORCE_SKILL* last_force_skill;
 
-#define MAX_FORCE_ALIGN 100
-#define MIN_FORCE_ALIGN -100
+constexpr int MAX_FORCE_ALIGN = 100;
+constexpr int MIN_FORCE_ALIGN = -100;
 
 struct FORCE_HELP
 {
@@ -1448,15 +1447,21 @@ extern FORCE_HELP* last_force_help;
 /* End force defines */
 
 /* Echo types for echo_to_all */
-#define ECHOTAR_ALL 0
-#define ECHOTAR_PC 1
-#define ECHOTAR_IMM 2
+enum EchoType
+{
+    ECHOTAR_ALL = 0,
+    ECHOTAR_PC = 1,
+    ECHOTAR_IMM = 2,
+};
 
 /* defines for new do_who */
-#define WT_MORTAL 0
-#define WT_IMM 2
-#define WT_AVATAR 1
-#define WT_NEWBIE 3
+enum WhoType
+{
+    WT_MORTAL = 0,
+    WT_IMM = 2,
+    WT_AVATAR = 1,
+    WT_NEWBIE = 3,
+};
 
 /*
  * do_who output structure -- Narn
@@ -1706,118 +1711,129 @@ struct FRC_APP_TYPE
 };
 
 /* ability classes */
-
-#define ABILITY_NONE -1
-#define COMBAT_ABILITY 0
-#define PILOTING_ABILITY 1
-#define ENGINEERING_ABILITY 2
-#define HUNTING_ABILITY 3
-#define SMUGGLING_ABILITY 4
-/*#define DIPLOMACY_ABILITY	5
-#define LEADERSHIP_ABILITY	6*/  /* Gonna replace the diplomacy and leadership abilities and make them POLITICIANs */
-#define POLITICIAN_ABILITY 5
-#define FORCE_ABILITY 6
-#define SLICER_ABILITY 7
-#define ASSASSIN_ABILITY 8
-#define TECHNICIAN_ABILITY 9
+enum AbilityClass
+{
+    ABILITY_NONE = -1,
+    COMBAT_ABILITY = 0,
+    PILOTING_ABILITY = 1,
+    ENGINEERING_ABILITY = 2,
+    HUNTING_ABILITY = 3,
+    SMUGGLING_ABILITY = 4,
+    /*#define DIPLOMACY_ABILITY	5
+    #define LEADERSHIP_ABILITY	6*/  /* Gonna replace the diplomacy and leadership abilities and make them POLITICIANs */
+    POLITICIAN_ABILITY = 5,
+    FORCE_ABILITY = 6,
+    SLICER_ABILITY = 7,
+    ASSASSIN_ABILITY = 8,
+    TECHNICIAN_ABILITY = 9,
+};
 
 /* the races */
-#define RACE_HUMAN 0
-#define RACE_WOOKIEE 1
-#define RACE_TWI_LEK 2
-#define RACE_RODIAN 3
-#define RACE_HUTT 4
-#define RACE_MON_CALAMARI 5
-#define RACE_NOGHRI 6
-#define RACE_GAMORREAN 7
-#define RACE_JAWA 8
-#define RACE_ADARIAN 9
-#define RACE_EWOK 10
-#define RACE_VERPINE 11
-#define RACE_DEFEL 12
-#define RACE_TRANDOSHAN 13
-#define RACE_HAPAN 14
-#define RACE_QUARREN 15
-#define RACE_SHISTAVANEN 16
-#define RACE_FALLEEN 17
-#define RACE_ITHORIAN 18
-#define RACE_DEVARONIAN 19
-#define RACE_GOTAL 20
-#define RACE_DROID 21
-#define RACE_FIRRERREO 22
-#define RACE_BARABEL 23
-#define RACE_BOTHAN 24
-#define RACE_TOGORIAN 25
-#define RACE_DUG 26
-#define RACE_KUBAZ 27
-#define RACE_SELONIAN 28
-#define RACE_GRAN 29
-#define RACE_YEVETHA 30
-#define RACE_GAND 31
-#define RACE_DUROS 32
-#define RACE_COYNITE 33
-#define RACE_SULLUSTAN 34
-#define RACE_PROTOCAL_DROID 35
-#define RACE_ASSASSIN_DROID 36
-#define RACE_GLADIATOR_DROID 37
-#define RACE_ASTROMECH_DROID 38
-#define RACE_INTERROGATION_DROID 39
-
+enum Race
+{
+    RACE_HUMAN = 0,
+    RACE_WOOKIEE = 1,
+    RACE_TWI_LEK = 2,
+    RACE_RODIAN = 3,
+    RACE_HUTT = 4,
+    RACE_MON_CALAMARI = 5,
+    RACE_NOGHRI = 6,
+    RACE_GAMORREAN = 7,
+    RACE_JAWA = 8,
+    RACE_ADARIAN = 9,
+    RACE_EWOK = 10,
+    RACE_VERPINE = 11,
+    RACE_DEFEL = 12,
+    RACE_TRANDOSHAN = 13,
+    RACE_HAPAN = 14,
+    RACE_QUARREN = 15,
+    RACE_SHISTAVANEN = 16,
+    RACE_FALLEEN = 17,
+    RACE_ITHORIAN = 18,
+    RACE_DEVARONIAN = 19,
+    RACE_GOTAL = 20,
+    RACE_DROID = 21,
+    RACE_FIRRERREO = 22,
+    RACE_BARABEL = 23,
+    RACE_BOTHAN = 24,
+    RACE_TOGORIAN = 25,
+    RACE_DUG = 26,
+    RACE_KUBAZ = 27,
+    RACE_SELONIAN = 28,
+    RACE_GRAN = 29,
+    RACE_YEVETHA = 30,
+    RACE_GAND = 31,
+    RACE_DUROS = 32,
+    RACE_COYNITE = 33,
+    RACE_SULLUSTAN = 34,
+    RACE_PROTOCAL_DROID = 35,
+    RACE_ASSASSIN_DROID = 36,
+    RACE_GLADIATOR_DROID = 37,
+    RACE_ASTROMECH_DROID = 38,
+    RACE_INTERROGATION_DROID = 39,
+};
 /*
  * Languages -- Altrag
  */
-#define LANG_BASIC BV00 /* Human base language */
-#define LANG_WOOKIEE BV01
-#define LANG_TWI_LEK BV02
-#define LANG_RODIAN BV03
-#define LANG_HUTT BV04
-#define LANG_MON_CALAMARI BV05
-#define LANG_NOGHRI BV06
-#define LANG_EWOK BV07
-#define LANG_ITHORIAN BV08
-#define LANG_GOTAL BV09
-#define LANG_DEVARONIAN BV10
-#define LANG_BINARY BV11
-#define LANG_FIRRERREO BV12
-#define LANG_CLAN BV13
-#define LANG_GAMORREAN BV14
-#define LANG_TOGORIAN BV15
-#define LANG_SHISTAVANEN BV16
-#define LANG_JAWA BV17
-#define LANG_KUBAZ BV18
-#define LANG_ADARIAN BV19
-#define LANG_VERPINE BV20
-#define LANG_DEFEL BV21
-#define LANG_TRANDOSHAN BV22
-#define LANG_HAPAN BV23
-#define LANG_QUARREN BV24
-#define LANG_SULLUSTAN BV25
-#define LANG_FALLEEN BV26
-#define LANG_BARABEL BV27
-#define LANG_YEVETHAN BV28
-#define LANG_GAND BV29
-#define LANG_DUROS BV30
-#define LANG_COYNITE BV31
-#define LANG_UNKNOWN 0 /* Anything that doesnt fit a category */
-#define VALID_LANGS                                                                                                    \
-    (LANG_BASIC | LANG_WOOKIEE | LANG_TWI_LEK | LANG_RODIAN | LANG_HUTT | LANG_MON_CALAMARI | LANG_NOGHRI |            \
-     LANG_GAMORREAN | LANG_JAWA | LANG_ADARIAN | LANG_EWOK | LANG_VERPINE | LANG_DEFEL | LANG_TRANDOSHAN |             \
-     LANG_HAPAN | LANG_QUARREN | LANG_SULLUSTAN | LANG_BINARY | LANG_FIRRERREO | LANG_CLAN | LANG_TOGORIAN |           \
-     LANG_SHISTAVANEN | LANG_KUBAZ | LANG_YEVETHAN | LANG_GAND | LANG_DUROS | LANG_COYNITE | LANG_GOTAL |              \
-     LANG_DEVARONIAN | LANG_FALLEEN | LANG_ITHORIAN | LANG_BARABEL)
+enum LanguageBit
+{
+    LANG_BASIC = BV00, /* Human base language */
+    LANG_WOOKIEE = BV01,
+    LANG_TWI_LEK = BV02,
+    LANG_RODIAN = BV03,
+    LANG_HUTT = BV04,
+    LANG_MON_CALAMARI = BV05,
+    LANG_NOGHRI = BV06,
+    LANG_EWOK = BV07,
+    LANG_ITHORIAN = BV08,
+    LANG_GOTAL = BV09,
+    LANG_DEVARONIAN = BV10,
+    LANG_BINARY = BV11,
+    LANG_FIRRERREO = BV12,
+    LANG_CLAN = BV13,
+    LANG_GAMORREAN = BV14,
+    LANG_TOGORIAN = BV15,
+    LANG_SHISTAVANEN = BV16,
+    LANG_JAWA = BV17,
+    LANG_KUBAZ = BV18,
+    LANG_ADARIAN = BV19,
+    LANG_VERPINE = BV20,
+    LANG_DEFEL = BV21,
+    LANG_TRANDOSHAN = BV22,
+    LANG_HAPAN = BV23,
+    LANG_QUARREN = BV24,
+    LANG_SULLUSTAN = BV25,
+    LANG_FALLEEN = BV26,
+    LANG_BARABEL = BV27,
+    LANG_YEVETHAN = BV28,
+    LANG_GAND = BV29,
+    LANG_DUROS = BV30,
+    LANG_COYNITE = BV31,
+    LANG_UNKNOWN = 0, /* Anything that doesnt fit a category */
+};
+
+constexpr int VALID_LANGS =
+    (LANG_BASIC | LANG_WOOKIEE | LANG_TWI_LEK | LANG_RODIAN | LANG_HUTT | LANG_MON_CALAMARI | LANG_NOGHRI |
+     LANG_GAMORREAN | LANG_JAWA | LANG_ADARIAN | LANG_EWOK | LANG_VERPINE | LANG_DEFEL | LANG_TRANDOSHAN | LANG_HAPAN |
+     LANG_QUARREN | LANG_SULLUSTAN | LANG_BINARY | LANG_FIRRERREO | LANG_CLAN | LANG_TOGORIAN | LANG_SHISTAVANEN |
+     LANG_KUBAZ | LANG_YEVETHAN | LANG_GAND | LANG_DUROS | LANG_COYNITE | LANG_GOTAL | LANG_DEVARONIAN | LANG_FALLEEN |
+     LANG_ITHORIAN | LANG_BARABEL);
 /*  32 Languages */
 
 /*
  * TO types for act.
  */
-#define TO_ROOM 0
-#define TO_NOTVICT 1
-#define TO_VICT 2
-#define TO_CHAR 3
-#define TO_MUD 4
+enum ActTarget
+{
+    TO_ROOM = 0,
+    TO_NOTVICT = 1,
+    TO_VICT = 2,
+    TO_CHAR = 3,
+    TO_MUD = 4,
+};
 
-#define INIT_WEAPON_CONDITION 12
-#define MAX_ITEM_IMPACT 30
+constexpr int INIT_WEAPON_CONDITION = 12;
+constexpr int MAX_ITEM_IMPACT = 30;
 
 /*
  * Help table types.
@@ -1834,7 +1850,7 @@ struct HELP_DATA
 /*
  * Shop types.
  */
-#define MAX_TRADE 5
+constexpr int MAX_TRADE = 5;
 
 struct SHOP_DATA
 {
@@ -1848,9 +1864,9 @@ struct SHOP_DATA
     sh_int close_hour;          /* First closing hour		*/
 };
 
-#define MAX_FIX 3
-#define SHOP_FIX 1
-#define SHOP_RECHARGE 2
+constexpr int MAX_FIX = 3;
+constexpr int SHOP_FIX = 1;
+constexpr int SHOP_RECHARGE = 2;
 
 struct REPAIR_DATA
 {
@@ -1868,13 +1884,13 @@ struct REPAIR_DATA
 
 /* Mob program structures and defines */
 /* Moved these defines here from mud_prog.c as I need them -rkb */
-#define MAX_IFS 20 /* should always be generous */
-#define IN_IF 0
-#define IN_ELSE 1
-#define DO_IF 2
-#define DO_ELSE 3
+constexpr int MAX_IFS = 20; /* should always be generous */
+constexpr int IN_IF = 0;
+constexpr int IN_ELSE = 1;
+constexpr int DO_IF = 2;
+constexpr int DO_ELSE = 3;
 
-#define MAX_PROG_NEST 20
+constexpr int MAX_PROG_NEST = 20;
 
 struct ACT_PROG_DATA
 {
@@ -2037,18 +2053,21 @@ typedef enum
     HEAVY_BOMB
 } missile_types;
 
-#define LASER_DAMAGED -1
-#define LASER_READY 0
+constexpr int LASER_DAMAGED = -1;
+constexpr int LASER_READY = 0;
 
-#define CARGO_NONE 0
-#define CARGO_FOOD 1
-#define CARGO_WATER 2
-#define CARGO_MEDICAL 3
-#define CARGO_METALS 4
-#define CARGO_RARE_METALS 5
-#define CARGO_ELECTRONICS 6
-#define CARGO_PRODUCTS 7
-#define CARGO_MAX 8
+enum CargoType
+{
+    CARGO_NONE = 0,
+    CARGO_FOOD = 1,
+    CARGO_WATER = 2,
+    CARGO_MEDICAL = 3,
+    CARGO_METALS = 4,
+    CARGO_RARE_METALS = 5,
+    CARGO_ELECTRONICS = 6,
+    CARGO_PRODUCTS = 7,
+    CARGO_MAX = 8,
+};
 
 struct PLANET_DATA
 {
@@ -2225,7 +2244,7 @@ struct SENATE_DATA
     char* name;
 };
 
-#define PLANET_NOCAPTURE BV00
+constexpr int PLANET_NOCAPTURE = BV00;
 
 struct CLAN_DATA
 {
@@ -2585,318 +2604,358 @@ struct SMAUG_AFF
  * Well known mob virtual numbers.
  * Defined in #MOBILES.
  */
-#define MOB_VNUM_ANIMATED_CORPSE 5
-#define MOB_VNUM_POLY_WOLF 10
+constexpr int MOB_VNUM_ANIMATED_CORPSE = 5;
+constexpr int MOB_VNUM_POLY_WOLF = 10;
 
-#define MOB_VNUM_STORMTROOPER 20
-#define MOB_VNUM_IMP_GUARD 21
-#define MOB_VNUM_NR_GUARD 22
-#define MOB_VNUM_NR_TROOPER 23
-#define MOB_VNUM_MERCINARY 24
-#define MOB_VNUM_BOUNCER 25
-#define MOB_VNUM_IMP_ELITE 26
-#define MOB_VNUM_IMP_PATROL 27
-#define MOB_VNUM_IMP_FORCES 28
-#define MOB_VNUM_NR_ELITE 29
-#define MOB_VNUM_NR_PATROL 30
-#define MOB_VNUM_NR_FORCES 31
-#define MOB_VNUM_MERC_ELITE 32
-#define MOB_VNUM_MERC_PATROL 33
-#define MOB_VNUM_MERC_FORCES 34
-#define MOB_VNUM_SHIP_GUARD 35
+constexpr int MOB_VNUM_STORMTROOPER = 20;
+constexpr int MOB_VNUM_IMP_GUARD = 21;
+constexpr int MOB_VNUM_NR_GUARD = 22;
+constexpr int MOB_VNUM_NR_TROOPER = 23;
+constexpr int MOB_VNUM_MERCINARY = 24;
+constexpr int MOB_VNUM_BOUNCER = 25;
+constexpr int MOB_VNUM_IMP_ELITE = 26;
+constexpr int MOB_VNUM_IMP_PATROL = 27;
+constexpr int MOB_VNUM_IMP_FORCES = 28;
+constexpr int MOB_VNUM_NR_ELITE = 29;
+constexpr int MOB_VNUM_NR_PATROL = 30;
+constexpr int MOB_VNUM_NR_FORCES = 31;
+constexpr int MOB_VNUM_MERC_ELITE = 32;
+constexpr int MOB_VNUM_MERC_PATROL = 33;
+constexpr int MOB_VNUM_MERC_FORCES = 34;
+constexpr int MOB_VNUM_SHIP_GUARD = 35;
 
 /* Ship Flags */
-#define SHIP_NOHIJACK BV00
-#define SHIP_SHIELD_BOOST BV01
-#define SHIP_TORP_BOOST BV02
-#define SHIP_CHAFF_BOOST BV03
-#define SHIP_HULL_BOOST BV04
-#define SHIP_LASER_BOOST BV05
-#define SHIP_MISSILE_BOOST BV06
-#define SHIP_ROCKET_BOOST BV07
-#define SHIP_SIMULATOR BV08
-#define SHIP_NODESTROY BV09
-#define SHIP_NOSLICER BV10
-#define XSHIP_ION_LASERS BV11
-#define XSHIP_ION_DRIVE BV12
-#define XSHIP_ION_ION BV13
-#define XSHIP_ION_TURRET1 BV14
-#define XSHIP_ION_TURRET2 BV15
-#define XSHIP_ION_TURRET3 BV16
-#define XSHIP_ION_TURRET4 BV17
-#define XSHIP_ION_TURRET5 BV18
-#define XSHIP_ION_TURRET6 BV19
-#define XSHIP_ION_TURRET7 BV20
-#define XSHIP_ION_TURRET8 BV21
-#define XSHIP_ION_TURRET9 BV22
-#define XSHIP_ION_TURRET10 BV23
-#define SHIP_RESPAWN BV24
-#define XSHIP_ION_HYPER BV25
-#define XSHIP_ION_MISSILES BV26
-#define SHIP_CLOAK BV27
+enum ShipFlag
+{
+    SHIP_NOHIJACK = BV00,
+    SHIP_SHIELD_BOOST = BV01,
+    SHIP_TORP_BOOST = BV02,
+    SHIP_CHAFF_BOOST = BV03,
+    SHIP_HULL_BOOST = BV04,
+    SHIP_LASER_BOOST = BV05,
+    SHIP_MISSILE_BOOST = BV06,
+    SHIP_ROCKET_BOOST = BV07,
+    SHIP_SIMULATOR = BV08,
+    SHIP_NODESTROY = BV09,
+    SHIP_NOSLICER = BV10,
+    XSHIP_ION_LASERS = BV11,
+    XSHIP_ION_DRIVE = BV12,
+    XSHIP_ION_ION = BV13,
+    XSHIP_ION_TURRET1 = BV14,
+    XSHIP_ION_TURRET2 = BV15,
+    XSHIP_ION_TURRET3 = BV16,
+    XSHIP_ION_TURRET4 = BV17,
+    XSHIP_ION_TURRET5 = BV18,
+    XSHIP_ION_TURRET6 = BV19,
+    XSHIP_ION_TURRET7 = BV20,
+    XSHIP_ION_TURRET8 = BV21,
+    XSHIP_ION_TURRET9 = BV22,
+    XSHIP_ION_TURRET10 = BV23,
+    SHIP_RESPAWN = BV24,
+    XSHIP_ION_HYPER = BV25,
+    XSHIP_ION_MISSILES = BV26,
+    SHIP_CLOAK = BV27,
+};
 
-#define SHIP_DAMAGE_DRIVE BV00
-#define SHIP_DAMAGE_HYPERDRIVE BV01
-#define SHIP_DAMAGE_LASER BV02
-#define SHIP_DAMAGE_ION BV03
-#define SHIP_DAMAGE_TURRET1 BV04
-#define SHIP_DAMAGE_TURRET2 BV05
-#define SHIP_DAMAGE_TURRET3 BV06
-#define SHIP_DAMAGE_TURRET4 BV07
-#define SHIP_DAMAGE_TURRET5 BV08
-#define SHIP_DAMAGE_TURRET6 BV09
-#define SHIP_DAMAGE_TURRET7 BV10
-#define SHIP_DAMAGE_TURRET8 BV11
-#define SHIP_DAMAGE_TURRET9 BV12
-#define SHIP_DAMAGE_TURRET10 BV13
-#define SHIP_DAMAGE_SHIELD BV14
-#define SHIP_DAMAGE_PLASMASHIELD BV15
-#define SHIP_DAMAGE_LIFESUPPORT BV16
-#define SHIP_DAMAGE_MISSILE BV17
+enum ShipDamageType
+{
+    SHIP_DAMAGE_DRIVE = BV00,
+    SHIP_DAMAGE_HYPERDRIVE = BV01,
+    SHIP_DAMAGE_LASER = BV02,
+    SHIP_DAMAGE_ION = BV03,
+    SHIP_DAMAGE_TURRET1 = BV04,
+    SHIP_DAMAGE_TURRET2 = BV05,
+    SHIP_DAMAGE_TURRET3 = BV06,
+    SHIP_DAMAGE_TURRET4 = BV07,
+    SHIP_DAMAGE_TURRET5 = BV08,
+    SHIP_DAMAGE_TURRET6 = BV09,
+    SHIP_DAMAGE_TURRET7 = BV10,
+    SHIP_DAMAGE_TURRET8 = BV11,
+    SHIP_DAMAGE_TURRET9 = BV12,
+    SHIP_DAMAGE_TURRET10 = BV13,
+    SHIP_DAMAGE_SHIELD = BV14,
+    SHIP_DAMAGE_PLASMASHIELD = BV15,
+    SHIP_DAMAGE_LIFESUPPORT = BV16,
+    SHIP_DAMAGE_MISSILE = BV17,
+};
 
 /*
  * ACT bits for mobs.
  * Used in #MOBILES.
  */
-#define ACT_IS_NPC BV00     /* Auto set for mobs	*/
-#define ACT_SENTINEL BV01   /* Stays in one room	*/
-#define ACT_SCAVENGER BV02  /* Picks up objects	*/
-#define ACT_NOFLEE BV03     /* Mobs don't flee. -T  */
-#define ACT_AGGRESSIVE BV05 /* Attacks PC's		*/
-#define ACT_STAY_AREA BV06  /* Won't leave area	*/
-#define ACT_WIMPY BV07      /* Flees when hurt	*/
-#define ACT_PET BV08        /* Auto set for pets	*/
-#define ACT_TRAIN BV09      /* Can train PC's	*/
-#define ACT_PRACTICE BV10   /* Can practice PC's	*/
-#define ACT_IMMORTAL BV11   /* Cannot be killed	*/
-#define ACT_DEADLY BV12     /* Has a deadly poison  */
-#define ACT_POLYSELF BV13
-#define ACT_META_AGGR BV14   /* Extremely aggressive */
-#define ACT_GUARDIAN BV15    /* Protects master	*/
-#define ACT_RUNNING BV16     /* Hunts quickly	*/
-#define ACT_NOWANDER BV17    /* Doesn't wander	*/
-#define ACT_MOUNTABLE BV18   /* Can be mounted	*/
-#define ACT_MOUNTED BV19     /* Is mounted		*/
-#define ACT_SCHOLAR BV20     /* Can teach languages  */
-#define ACT_SECRETIVE BV21   /* actions aren't seen	*/
-#define ACT_POLYMORPHED BV22 /* Mob is a ch		*/
-#define ACT_MOBINVIS BV23    /* Like wizinvis	*/
-#define ACT_NOASSIST BV24    /* Doesn't assist mobs	*/
-#define ACT_NOKILL BV25      /* Mob can't die */
-#define ACT_DROID BV26       /* mob is a droid */
-#define ACT_NOCORPSE BV27
-#define ACT_PUEBLO BV28    /* This is the pueblo flag */
-#define ACT_PROTOTYPE BV30 /* A prototype mob	*/
+enum ActFlag
+{
+    ACT_IS_NPC = BV00,     /* Auto set for mobs	*/
+    ACT_SENTINEL = BV01,   /* Stays in one room	*/
+    ACT_SCAVENGER = BV02,  /* Picks up objects	*/
+    ACT_NOFLEE = BV03,     /* Mobs don't flee. -T  */
+    ACT_AGGRESSIVE = BV05, /* Attacks PC's		*/
+    ACT_STAY_AREA = BV06,  /* Won't leave area	*/
+    ACT_WIMPY = BV07,      /* Flees when hurt	*/
+    ACT_PET = BV08,        /* Auto set for pets	*/
+    ACT_TRAIN = BV09,      /* Can train PC's	*/
+    ACT_PRACTICE = BV10,   /* Can practice PC's	*/
+    ACT_IMMORTAL = BV11,   /* Cannot be killed	*/
+    ACT_DEADLY = BV12,     /* Has a deadly poison  */
+    ACT_POLYSELF = BV13,
+    ACT_META_AGGR = BV14,   /* Extremely aggressive */
+    ACT_GUARDIAN = BV15,    /* Protects master	*/
+    ACT_RUNNING = BV16,     /* Hunts quickly	*/
+    ACT_NOWANDER = BV17,    /* Doesn't wander	*/
+    ACT_MOUNTABLE = BV18,   /* Can be mounted	*/
+    ACT_MOUNTED = BV19,     /* Is mounted		*/
+    ACT_SCHOLAR = BV20,     /* Can teach languages  */
+    ACT_SECRETIVE = BV21,   /* actions aren't seen	*/
+    ACT_POLYMORPHED = BV22, /* Mob is a ch		*/
+    ACT_MOBINVIS = BV23,    /* Like wizinvis	*/
+    ACT_NOASSIST = BV24,    /* Doesn't assist mobs	*/
+    ACT_NOKILL = BV25,      /* Mob can't die */
+    ACT_DROID = BV26,       /* mob is a droid */
+    ACT_NOCORPSE = BV27,
+    ACT_PUEBLO = BV28,    /* This is the pueblo flag */
+    ACT_PROTOTYPE = BV30, /* A prototype mob	*/
+};
 
 /* Act2 Flags */
-#define ACT_BOUND BV00  /* This is the bind flag */
-#define ACT_EXEMPT BV01 /* Makes a player exampt from pfile deletion */
-#define ACT_JEDI BV02   /* This is a light jedi */
-#define ACT_SITH BV03   /* This is a dark jedi */
-#define ACT_GAGGED BV04 /* This is a gagged flag */
-/* 21 acts */
+enum Act2Flag
+{
+    ACT_BOUND = BV00,  /* This is the bind flag */
+    ACT_EXEMPT = BV01, /* Makes a player exampt from pfile deletion */
+    ACT_JEDI = BV02,   /* This is a light jedi */
+    ACT_SITH = BV03,   /* This is a dark jedi */
+    ACT_GAGGED = BV04, /* This is a gagged flag */
+};
+    /* 21 acts */
 
 /* bits for vip flags */
-
-#define VIP_CORUSCANT BV00
-#define VIP_YAVIN_IV BV01
-#define VIP_TATOOINE BV02
-#define VIP_KASHYYYK BV03
-#define VIP_MON_CALAMARI BV04
-#define VIP_ENDOR BV05
-#define VIP_ORD_MANTELL BV06
-#define VIP_NAL_HUTTA BV07
-#define VIP_CORELLIA BV08
-#define VIP_BAKURA BV09
+enum VipFlag
+{
+    VIP_CORUSCANT = BV00,
+    VIP_YAVIN_IV = BV01,
+    VIP_TATOOINE = BV02,
+    VIP_KASHYYYK = BV03,
+    VIP_MON_CALAMARI = BV04,
+    VIP_ENDOR = BV05,
+    VIP_ORD_MANTELL = BV06,
+    VIP_NAL_HUTTA = BV07,
+    VIP_CORELLIA = BV08,
+    VIP_BAKURA = BV09,
+};
 
 /* player wanted bits */
-
-#define WANTED_CORUSCANT VIP_CORUSCANT
-#define WANTED_YAVIN_IV VIP_YAVIN_IV
-#define WANTED_TATOOINE VIP_TATOOINE
-#define WANTED_KASHYYYK VIP_KASHYYYK
-#define WANTED_MON_CALAMARI VIP_MON_CALAMARI
-#define WANTED_ENDOR VIP_ENDOR
-#define WANTED_ORD_MANTELL VIP_ORD_MANTELL
-#define WANTED_NAL_HUTTA VIP_NAL_HUTTA
-#define WANTED_CORELLIA VIP_CORELLIA
-#define WANTED_BAKURA VIP_BAKURA
+enum WantedFlag
+{
+    WANTED_CORUSCANT = VIP_CORUSCANT,
+    WANTED_YAVIN_IV = VIP_YAVIN_IV,
+    WANTED_TATOOINE = VIP_TATOOINE,
+    WANTED_KASHYYYK = VIP_KASHYYYK,
+    WANTED_MON_CALAMARI = VIP_MON_CALAMARI,
+    WANTED_ENDOR = VIP_ENDOR,
+    WANTED_ORD_MANTELL = VIP_ORD_MANTELL,
+    WANTED_NAL_HUTTA = VIP_NAL_HUTTA,
+    WANTED_CORELLIA = VIP_CORELLIA,
+    WANTED_BAKURA = VIP_BAKURA,
+};
 
 /*
  * Bits for 'affected_by'.
  * Used in #MOBILES.
  */
-#define AFF_NONE 0
+enum AffectedFlags
+{
+    AFF_NONE = 0,
 
-#define AFF_BLIND BV00
-#define AFF_INVISIBLE BV01
-#define AFF_DETECT_EVIL BV02
-#define AFF_DETECT_INVIS BV03
-#define AFF_DETECT_MAGIC BV04
-#define AFF_DETECT_HIDDEN BV05
-#define AFF_WEAKEN BV06
-#define AFF_SANCTUARY BV07
-#define AFF_FAERIE_FIRE BV08
-#define AFF_INFRARED BV09
-#define AFF_CURSE BV10
-#define AFF_COVER_TRAIL BV11
-#define AFF_POISON BV12
-#define AFF_PROTECT BV13
-#define AFF_PARALYSIS BV14
-#define AFF_SNEAK BV15
-#define AFF_HIDE BV16
-#define AFF_SLEEP BV17
-#define AFF_CHARM BV18
-#define AFF_FLYING BV19
-#define AFF_PASS_DOOR BV20
-#define AFF_FLOATING BV21
-#define AFF_TRUESIGHT BV22
-#define AFF_DETECTTRAPS BV23
-#define AFF_SCRYING BV24
-#define AFF_FIRESHIELD BV25
-#define AFF_SHOCKSHIELD BV26
-#define AFF_FASTHEAL BV27
-#define AFF_ICESHIELD BV28
-#define AFF_POSSESS BV29
-#define AFF_BERSERK BV30
-#define AFF_AQUA_BREATH BV31
+    AFF_BLIND = BV00,
+    AFF_INVISIBLE = BV01,
+    AFF_DETECT_EVIL = BV02,
+    AFF_DETECT_INVIS = BV03,
+    AFF_DETECT_MAGIC = BV04,
+    AFF_DETECT_HIDDEN = BV05,
+    AFF_WEAKEN = BV06,
+    AFF_SANCTUARY = BV07,
+    AFF_FAERIE_FIRE = BV08,
+    AFF_INFRARED = BV09,
+    AFF_CURSE = BV10,
+    AFF_COVER_TRAIL = BV11,
+    AFF_POISON = BV12,
+    AFF_PROTECT = BV13,
+    AFF_PARALYSIS = BV14,
+    AFF_SNEAK = BV15,
+    AFF_HIDE = BV16,
+    AFF_SLEEP = BV17,
+    AFF_CHARM = BV18,
+    AFF_FLYING = BV19,
+    AFF_PASS_DOOR = BV20,
+    AFF_FLOATING = BV21,
+    AFF_TRUESIGHT = BV22,
+    AFF_DETECTTRAPS = BV23,
+    AFF_SCRYING = BV24,
+    AFF_FIRESHIELD = BV25,
+    AFF_SHOCKSHIELD = BV26,
+    AFF_FASTHEAL = BV27,
+    AFF_ICESHIELD = BV28,
+    AFF_POSSESS = BV29,
+    AFF_BERSERK = BV30,
+    AFF_AQUA_BREATH = BV31,
+};
 
 /* 31 aff's (1 left.. :P) */
 /* make that none - ugh - time for another field? :P */
 /*
  * Resistant Immune Susceptible flags
  */
-#define RIS_FIRE BV00
-#define RIS_COLD BV01
-#define RIS_ELECTRICITY BV02
-#define RIS_ENERGY BV03
-#define RIS_BLUNT BV04
-#define RIS_PIERCE BV05
-#define RIS_SLASH BV06
-#define RIS_ACID BV07
-#define RIS_POISON BV08
-#define RIS_DRAIN BV09
-#define RIS_SLEEP BV10
-#define RIS_CHARM BV11
-#define RIS_HOLD BV12
-#define RIS_NONMAGIC BV13
-#define RIS_PLUS1 BV14
-#define RIS_PLUS2 BV15
-#define RIS_PLUS3 BV16
-#define RIS_PLUS4 BV17
-#define RIS_PLUS5 BV18
-#define RIS_PLUS6 BV19
-#define RIS_MAGIC BV20
-#define RIS_PARALYSIS BV21
+enum ResistantImmuneSusceptibleFlag
+{
+    RIS_FIRE = BV00,
+    RIS_COLD = BV01,
+    RIS_ELECTRICITY = BV02,
+    RIS_ENERGY = BV03,
+    RIS_BLUNT = BV04,
+    RIS_PIERCE = BV05,
+    RIS_SLASH = BV06,
+    RIS_ACID = BV07,
+    RIS_POISON = BV08,
+    RIS_DRAIN = BV09,
+    RIS_SLEEP = BV10,
+    RIS_CHARM = BV11,
+    RIS_HOLD = BV12,
+    RIS_NONMAGIC = BV13,
+    RIS_PLUS1 = BV14,
+    RIS_PLUS2 = BV15,
+    RIS_PLUS3 = BV16,
+    RIS_PLUS4 = BV17,
+    RIS_PLUS5 = BV18,
+    RIS_PLUS6 = BV19,
+    RIS_MAGIC = BV20,
+    RIS_PARALYSIS = BV21,
+};
 /* 21 RIS's*/
 
 /*
  * Attack types
  */
-#define ATCK_BITE BV00
-#define ATCK_CLAWS BV01
-#define ATCK_TAIL BV02
-#define ATCK_STING BV03
-#define ATCK_PUNCH BV04
-#define ATCK_KICK BV05
-#define ATCK_TRIP BV06
-#define ATCK_BACKSTAB BV10
+enum AttackType
+{
+    ATCK_BITE = BV00,
+    ATCK_CLAWS = BV01,
+    ATCK_TAIL = BV02,
+    ATCK_STING = BV03,
+    ATCK_PUNCH = BV04,
+    ATCK_KICK = BV05,
+    ATCK_TRIP = BV06,
+    ATCK_BACKSTAB = BV10,
+};
 
 /*
  * Defense types
  */
-#define DFND_PARRY BV00
-#define DFND_DODGE BV01
-#define DFND_DISARM BV19
-#define DFND_GRIP BV21
+enum DefenseType
+{
+    DFND_PARRY = BV00,
+    DFND_DODGE = BV01,
+    DFND_DISARM = BV19,
+    DFND_GRIP = BV21,
+};
 
 /*
  * Body parts
  */
-#define PART_HEAD BV00
-#define PART_ARMS BV01
-#define PART_LEGS BV02
-#define PART_HEART BV03
-#define PART_BRAINS BV04
-#define PART_GUTS BV05
-#define PART_HANDS BV06
-#define PART_FEET BV07
-#define PART_FINGERS BV08
-#define PART_EAR BV09
-#define PART_EYE BV10
-#define PART_LONG_TONGUE BV11
-#define PART_EYESTALKS BV12
-#define PART_TENTACLES BV13
-#define PART_FINS BV14
-#define PART_WINGS BV15
-#define PART_TAIL BV16
-#define PART_SCALES BV17
-/* for combat */
-#define PART_CLAWS BV18
-#define PART_FANGS BV19
-#define PART_HORNS BV20
-#define PART_TUSKS BV21
-#define PART_TAILATTACK BV22
-#define PART_SHARPSCALES BV23
-#define PART_BEAK BV24
+enum BodyPart
+{
+    PART_HEAD = BV00,
+    PART_ARMS = BV01,
+    PART_LEGS = BV02,
+    PART_HEART = BV03,
+    PART_BRAINS = BV04,
+    PART_GUTS = BV05,
+    PART_HANDS = BV06,
+    PART_FEET = BV07,
+    PART_FINGERS = BV08,
+    PART_EAR = BV09,
+    PART_EYE = BV10,
+    PART_LONG_TONGUE = BV11,
+    PART_EYESTALKS = BV12,
+    PART_TENTACLES = BV13,
+    PART_FINS = BV14,
+    PART_WINGS = BV15,
+    PART_TAIL = BV16,
+    PART_SCALES = BV17,
+    /* for combat */
+    PART_CLAWS = BV18,
+    PART_FANGS = BV19,
+    PART_HORNS = BV20,
+    PART_TUSKS = BV21,
+    PART_TAILATTACK = BV22,
+    PART_SHARPSCALES = BV23,
+    PART_BEAK = BV24,
 
-#define PART_HAUNCH BV25
-#define PART_HOOVES BV26
-#define PART_PAWS BV27
-#define PART_FORELEGS BV28
-#define PART_FEATHERS BV29
+    PART_HAUNCH = BV25,
+    PART_HOOVES = BV26,
+    PART_PAWS = BV27,
+    PART_FORELEGS = BV28,
+    PART_FEATHERS = BV29,
+};
 
 /*
  * Autosave flags
  */
-#define SV_DEATH BV00
-#define SV_KILL BV01
-#define SV_PASSCHG BV02
-#define SV_DROP BV03
-#define SV_PUT BV04
-#define SV_GIVE BV05
-#define SV_AUTO BV06
-#define SV_ZAPDROP BV07
-#define SV_AUCTION BV08
-#define SV_GET BV09
-#define SV_RECEIVE BV10
-#define SV_IDLE BV11
-#define SV_BACKUP BV12
+enum AutosaveFlag
+{
+    SV_DEATH = BV00,
+    SV_KILL = BV01,
+    SV_PASSCHG = BV02,
+    SV_DROP = BV03,
+    SV_PUT = BV04,
+    SV_GIVE = BV05,
+    SV_AUTO = BV06,
+    SV_ZAPDROP = BV07,
+    SV_AUCTION = BV08,
+    SV_GET = BV09,
+    SV_RECEIVE = BV10,
+    SV_IDLE = BV11,
+    SV_BACKUP = BV12,
+};
 
 /*
  * Pipe flags
  */
-#define PIPE_TAMPED BV01
-#define PIPE_LIT BV02
-#define PIPE_HOT BV03
-#define PIPE_DIRTY BV04
-#define PIPE_FILTHY BV05
-#define PIPE_GOINGOUT BV06
-#define PIPE_BURNT BV07
-#define PIPE_FULLOFASH BV08
+enum PipeFlag
+{
+    PIPE_TAMPED = BV01,
+    PIPE_LIT = BV02,
+    PIPE_HOT = BV03,
+    PIPE_DIRTY = BV04,
+    PIPE_FILTHY = BV05,
+    PIPE_GOINGOUT = BV06,
+    PIPE_BURNT = BV07,
+    PIPE_FULLOFASH = BV08,
+};
 
 /*
  * Skill/Spell flags	The minimum BV *MUST* be 11!
  */
-#define SF_WATER BV11
-#define SF_EARTH BV12
-#define SF_AIR BV13
-#define SF_ASTRAL BV14
-#define SF_AREA BV15    /* is an area spell		*/
-#define SF_DISTANT BV16 /* affects something far away	*/
-#define SF_REVERSE BV17
-#define SF_SAVE_HALF_DAMAGE BV18 /* save for half damage		*/
-#define SF_SAVE_NEGATES BV19     /* save negates affect		*/
-#define SF_ACCUMULATIVE BV20     /* is accumulative		*/
-#define SF_RECASTABLE BV21       /* can be refreshed		*/
-#define SF_NOSCRIBE BV22         /* cannot be scribed		*/
-#define SF_NOBREW BV23           /* cannot be brewed		*/
-#define SF_GROUPSPELL BV24       /* only affects group members	*/
-#define SF_OBJECT BV25           /* directed at an object	*/
-#define SF_CHARACTER BV26        /* directed at a character	*/
-#define SF_SECRETSKILL BV27      /* hidden unless learned	*/
-#define SF_PKSENSITIVE BV28      /* much harder for plr vs. plr	*/
-#define SF_STOPONFAIL BV29       /* stops spell on first failure */
+enum SkillFlag
+{
+    SF_WATER = BV11,
+    SF_EARTH = BV12,
+    SF_AIR = BV13,
+    SF_ASTRAL = BV14,
+    SF_AREA = BV15,    /* is an area spell		*/
+    SF_DISTANT = BV16, /* affects something far away	*/
+    SF_REVERSE = BV17,
+    SF_SAVE_HALF_DAMAGE = BV18, /* save for half damage		*/
+    SF_SAVE_NEGATES = BV19,     /* save negates affect		*/
+    SF_ACCUMULATIVE = BV20,     /* is accumulative		*/
+    SF_RECASTABLE = BV21,       /* can be refreshed		*/
+    SF_NOSCRIBE = BV22,         /* cannot be scribed		*/
+    SF_NOBREW = BV23,           /* cannot be brewed		*/
+    SF_GROUPSPELL = BV24,       /* only affects group members	*/
+    SF_OBJECT = BV25,           /* directed at an object	*/
+    SF_CHARACTER = BV26,        /* directed at a character	*/
+    SF_SECRETSKILL = BV27,      /* hidden unless learned	*/
+    SF_PKSENSITIVE = BV28,      /* much harder for plr vs. plr	*/
+    SF_STOPONFAIL = BV29,       /* stops spell on first failure */
+};
 
 typedef enum
 {
@@ -2908,11 +2967,11 @@ typedef enum
     SS_SPELL_STAFF
 } save_types;
 
-#define ALL_BITS INT_MAX
-#define SDAM_MASK ALL_BITS & ~(BV00 | BV01 | BV02)
-#define SACT_MASK ALL_BITS & ~(BV03 | BV04 | BV05)
-#define SCLA_MASK ALL_BITS & ~(BV06 | BV07 | BV08)
-#define SPOW_MASK ALL_BITS & ~(BV09 | BV10)
+constexpr int ALL_BITS = INT_MAX;
+constexpr int SDAM_MASK = ALL_BITS & ~(BV00 | BV01 | BV02);
+constexpr int SACT_MASK = ALL_BITS & ~(BV03 | BV04 | BV05);
+constexpr int SCLA_MASK = ALL_BITS & ~(BV06 | BV07 | BV08);
+constexpr int SPOW_MASK = ALL_BITS & ~(BV09 | BV10);
 
 typedef enum
 {
@@ -2988,97 +3047,103 @@ typedef enum
 
 #define MAX_TRAPTYPE TRAP_TYPE_SEX_CHANGE
 
-#define TRAP_ROOM BV00
-#define TRAP_OBJ BV01
-#define TRAP_ENTER_ROOM BV02
-#define TRAP_LEAVE_ROOM BV03
-#define TRAP_OPEN BV04
-#define TRAP_CLOSE BV05
-#define TRAP_GET BV06
-#define TRAP_PUT BV07
-#define TRAP_PICK BV08
-#define TRAP_UNLOCK BV09
-#define TRAP_N BV10
-#define TRAP_S BV11
-#define TRAP_E BV12
-#define TRAP_W BV13
-#define TRAP_U BV14
-#define TRAP_D BV15
-#define TRAP_EXAMINE BV16
-#define TRAP_NE BV17
-#define TRAP_NW BV18
-#define TRAP_SE BV19
-#define TRAP_SW BV20
+enum TrapFlag
+{
+    TRAP_ROOM = BV00,
+    TRAP_OBJ = BV01,
+    TRAP_ENTER_ROOM = BV02,
+    TRAP_LEAVE_ROOM = BV03,
+    TRAP_OPEN = BV04,
+    TRAP_CLOSE = BV05,
+    TRAP_GET = BV06,
+    TRAP_PUT = BV07,
+    TRAP_PICK = BV08,
+    TRAP_UNLOCK = BV09,
+    TRAP_N = BV10,
+    TRAP_S = BV11,
+    TRAP_E = BV12,
+    TRAP_W = BV13,
+    TRAP_U = BV14,
+    TRAP_D = BV15,
+    TRAP_EXAMINE = BV16,
+    TRAP_NE = BV17,
+    TRAP_NW = BV18,
+    TRAP_SE = BV19,
+    TRAP_SW = BV20,
+};
 
 /*
  * Well known object virtual numbers.
  * Defined in #OBJECTS.
  */
-#define OBJ_VNUM_MONEY_ONE 2
-#define OBJ_VNUM_MONEY_SOME 3
+constexpr int OBJ_VNUM_MONEY_ONE = 2;
+constexpr int OBJ_VNUM_MONEY_SOME = 3;
 
-#define COMMSYS_VNUM 62
-#define DATAPAD_VNUM 63
+constexpr int COMMSYS_VNUM = 62;
+constexpr int DATAPAD_VNUM = 63;
 
-#define MODULE_VNUM 73
-#define SABER_VNUM 72
+constexpr int MODULE_VNUM = 73;
+constexpr int SABER_VNUM = 72;
 
-#define OBJ_VNUM_DROID_CORPSE 9
-#define OBJ_VNUM_CORPSE_NPC 10
-#define OBJ_VNUM_CORPSE_PC 11
-#define OBJ_VNUM_SEVERED_HEAD 12
-#define OBJ_VNUM_TORN_HEART 13
-#define OBJ_VNUM_SLICED_ARM 14
-#define OBJ_VNUM_SLICED_LEG 15
-#define OBJ_VNUM_SPILLED_GUTS 16
-#define OBJ_VNUM_BLOOD 17
-#define OBJ_VNUM_BLOODSTAIN 18
-#define OBJ_VNUM_SCRAPS 19
+constexpr int OBJ_VNUM_DROID_CORPSE = 9;
+constexpr int OBJ_VNUM_CORPSE_NPC = 10;
+constexpr int OBJ_VNUM_CORPSE_PC = 11;
+constexpr int OBJ_VNUM_SEVERED_HEAD = 12;
+constexpr int OBJ_VNUM_TORN_HEART = 13;
+constexpr int OBJ_VNUM_SLICED_ARM = 14;
+constexpr int OBJ_VNUM_SLICED_LEG = 15;
+constexpr int OBJ_VNUM_SPILLED_GUTS = 16;
+constexpr int OBJ_VNUM_BLOOD = 17;
+constexpr int OBJ_VNUM_BLOODSTAIN = 18;
+constexpr int OBJ_VNUM_SCRAPS = 19;
 
-#define OBJ_VNUM_MUSHROOM 20
-#define OBJ_VNUM_LIGHT_BALL 21
-#define OBJ_VNUM_SPRING 22
+constexpr int OBJ_VNUM_MUSHROOM = 20;
+constexpr int OBJ_VNUM_LIGHT_BALL = 21;
+constexpr int OBJ_VNUM_SPRING = 22;
 
-#define OBJ_VNUM_SLICE 24
-#define OBJ_VNUM_SHOPPING_BAG 25
+constexpr int OBJ_VNUM_SLICE = 24;
+constexpr int OBJ_VNUM_SHOPPING_BAG = 25;
 
-#define OBJ_VNUM_FIRE 30
-#define OBJ_VNUM_TRAP 31
-#define OBJ_VNUM_PORTAL 32
+constexpr int OBJ_VNUM_FIRE = 30;
+constexpr int OBJ_VNUM_TRAP = 31;
+constexpr int OBJ_VNUM_PORTAL = 32;
 
-#define OBJ_VNUM_BLACK_POWDER 33
-#define OBJ_VNUM_SCROLL_SCRIBING 34
-#define OBJ_VNUM_FLASK_BREWING 35
-#define OBJ_VNUM_NOTE 36
+constexpr int OBJ_VNUM_BLACK_POWDER = 33;
+constexpr int OBJ_VNUM_SCROLL_SCRIBING = 34;
+constexpr int OBJ_VNUM_FLASK_BREWING = 35;
+constexpr int OBJ_VNUM_NOTE = 36;
 
 /* Academy eq */
-#define OBJ_VNUM_SCHOOL_MACE 10315
-#define OBJ_VNUM_SCHOOL_DAGGER 10312
-#define OBJ_VNUM_SCHOOL_SWORD 10313
-#define OBJ_VNUM_SCHOOL_VEST 10308
-#define OBJ_VNUM_SCHOOL_SHIELD 10310
-#define OBJ_VNUM_SCHOOL_BANNER 10311
-#define OBJ_VNUM_SCHOOL_DIPLOMA 10321
+constexpr int OBJ_VNUM_SCHOOL_MACE = 10315;
+constexpr int OBJ_VNUM_SCHOOL_DAGGER = 10312;
+constexpr int OBJ_VNUM_SCHOOL_SWORD = 10313;
+constexpr int OBJ_VNUM_SCHOOL_VEST = 10308;
+constexpr int OBJ_VNUM_SCHOOL_SHIELD = 10310;
+constexpr int OBJ_VNUM_SCHOOL_BANNER = 10311;
+constexpr int OBJ_VNUM_SCHOOL_DIPLOMA = 10321;
 
-#define OBJ_VNUM_BLASTECH_E11 50
-#define OBJ_VNUM_SHIPBOMB 68
+constexpr int OBJ_VNUM_BLASTECH_E11 = 50;
+constexpr int OBJ_VNUM_SHIPBOMB = 68;
 
 /* These are some defines for modules */
-#define AFFECT_PRIMARY 1
-#define AFFECT_SECONDARY 2
-#define AFFECT_MISSILE 3
-#define AFFECT_ROCKET 4
-#define AFFECT_TORPEDO 5
-#define AFFECT_HULL 6
-#define AFFECT_SHIELD 7
-#define AFFECT_SPEED 8
-#define AFFECT_HYPER 9
-#define AFFECT_ENERGY 10
-#define AFFECT_MANUEVER 11
-#define AFFECT_CHAFF 12
-#define AFFECT_ALARM 13
-#define AFFECT_SLAVE 14
-#define AFFECT_TRACTOR 15
+enum ShipModuleAffect
+{
+    AFFECT_PRIMARY = 1,
+    AFFECT_SECONDARY = 2,
+    AFFECT_MISSILE = 3,
+    AFFECT_ROCKET = 4,
+    AFFECT_TORPEDO = 5,
+    AFFECT_HULL = 6,
+    AFFECT_SHIELD = 7,
+    AFFECT_SPEED = 8,
+    AFFECT_HYPER = 9,
+    AFFECT_ENERGY = 10,
+    AFFECT_MANUEVER = 11,
+    AFFECT_CHAFF = 12,
+    AFFECT_ALARM = 13,
+    AFFECT_SLAVE = 14,
+    AFFECT_TRACTOR = 15,
+};
 
 /*
  * Item types.
@@ -3187,154 +3252,180 @@ typedef enum
     ITEM_EMP_GRENADE
 } item_types;
 
-#define MAX_ITEM_TYPE ITEM_EMP_GRENADE
+constexpr int MAX_ITEM_TYPE = ITEM_EMP_GRENADE;
 /*
  * Extra flags.
  * Used in #OBJECTS.
  */
-#define ITEM_GLOW BV00
-#define ITEM_HUM BV01
-#define ITEM_DARK BV02
-#define ITEM_HUTT_SIZE BV03
-#define ITEM_CONTRABAND BV04
-#define ITEM_INVIS BV05
-#define ITEM_MAGIC BV06
-#define ITEM_NODROP BV07
-#define ITEM_BLESS BV08
-#define ITEM_ANTI_GOOD BV09
-#define ITEM_ANTI_EVIL BV10
-#define ITEM_ANTI_NEUTRAL BV11
-#define ITEM_NOREMOVE BV12
-#define ITEM_INVENTORY BV13
-#define ITEM_ANTI_SOLDIER BV14
-#define ITEM_ANTI_THIEF BV15
-#define ITEM_ANTI_HUNTER BV16
-#define ITEM_ANTI_JEDI BV17
-#define ITEM_SMALL_SIZE BV18
-#define ITEM_LARGE_SIZE BV19
-#define ITEM_DONATION BV20
-#define ITEM_CLANOBJECT BV21
-#define ITEM_ANTI_CITIZEN BV22
-#define ITEM_ANTI_SITH BV23
-#define ITEM_ANTI_PILOT BV24
-#define ITEM_HIDDEN BV25
-#define ITEM_POISONED BV26
-#define ITEM_COVERING BV27
-#define ITEM_DEATHROT BV28
-#define ITEM_BURRIED BV29 /* item is underground */
-#define ITEM_PROTOTYPE BV30
-#define ITEM_HUMAN_SIZE BV31
+enum ItemFlag
+{
+    ITEM_GLOW = BV00,
+    ITEM_HUM = BV01,
+    ITEM_DARK = BV02,
+    ITEM_HUTT_SIZE = BV03,
+    ITEM_CONTRABAND = BV04,
+    ITEM_INVIS = BV05,
+    ITEM_MAGIC = BV06,
+    ITEM_NODROP = BV07,
+    ITEM_BLESS = BV08,
+    ITEM_ANTI_GOOD = BV09,
+    ITEM_ANTI_EVIL = BV10,
+    ITEM_ANTI_NEUTRAL = BV11,
+    ITEM_NOREMOVE = BV12,
+    ITEM_INVENTORY = BV13,
+    ITEM_ANTI_SOLDIER = BV14,
+    ITEM_ANTI_THIEF = BV15,
+    ITEM_ANTI_HUNTER = BV16,
+    ITEM_ANTI_JEDI = BV17,
+    ITEM_SMALL_SIZE = BV18,
+    ITEM_LARGE_SIZE = BV19,
+    ITEM_DONATION = BV20,
+    ITEM_CLANOBJECT = BV21,
+    ITEM_ANTI_CITIZEN = BV22,
+    ITEM_ANTI_SITH = BV23,
+    ITEM_ANTI_PILOT = BV24,
+    ITEM_HIDDEN = BV25,
+    ITEM_POISONED = BV26,
+    ITEM_COVERING = BV27,
+    ITEM_DEATHROT = BV28,
+    ITEM_BURRIED = BV29, /* item is underground */
+    ITEM_PROTOTYPE = BV30,
+    ITEM_HUMAN_SIZE = BV31,
+};
 
 /* Magic flags - extra extra_flags for objects that are used in spells */
-#define ITEM_RETURNING BV00
-#define ITEM_BACKSTABBER BV01
-#define ITEM_BANE BV02
-#define ITEM_LOYAL BV03
-#define ITEM_HASTE BV04
-#define ITEM_DRAIN BV05
-#define ITEM_LIGHTNING_BLADE BV06
+enum ItemMagicFlag
+{
+    ITEM_RETURNING = BV00,
+    ITEM_BACKSTABBER = BV01,
+    ITEM_BANE = BV02,
+    ITEM_LOYAL = BV03,
+    ITEM_HASTE = BV04,
+    ITEM_DRAIN = BV05,
+    ITEM_LIGHTNING_BLADE = BV06,
+};
 
 /* Blaster settings - only saves on characters */
-#define BLASTER_NORMAL 0
-#define BLASTER_HALF 2
-#define BLASTER_FULL 5
-#define BLASTER_LOW 1
-#define BLASTER_STUN 3
-#define BLASTER_HIGH 4
+enum BlasterSetting
+{
+    BLASTER_NORMAL = 0,
+    BLASTER_HALF = 2,
+    BLASTER_FULL = 5,
+    BLASTER_LOW = 1,
+    BLASTER_STUN = 3,
+    BLASTER_HIGH = 4,
+};
 
 /* Weapon Types */
-
-#define WEAPON_NONE 0
-#define WEAPON_VIBRO_AXE 1
-#define WEAPON_VIBRO_BLADE 2
-#define WEAPON_LIGHTSABER 3
-#define WEAPON_WHIP 4
-#define WEAPON_CLAW 5
-#define WEAPON_BLASTER 6
-#define WEAPON_BLUDGEON 8
-#define WEAPON_BOWCASTER 9
-#define WEAPON_FORCE_PIKE 11
-#define WEAPON_DUAL_LIGHTSABER 12
+enum WeaponType
+{
+    WEAPON_NONE = 0,
+    WEAPON_VIBRO_AXE = 1,
+    WEAPON_VIBRO_BLADE = 2,
+    WEAPON_LIGHTSABER = 3,
+    WEAPON_WHIP = 4,
+    WEAPON_CLAW = 5,
+    WEAPON_BLASTER = 6,
+    WEAPON_BLUDGEON = 8,
+    WEAPON_BOWCASTER = 9,
+    WEAPON_FORCE_PIKE = 11,
+    WEAPON_DUAL_LIGHTSABER = 12,
+};
 
 /* Lever/dial/switch/button/pullchain flags */
-#define TRIG_UP BV00
-#define TRIG_UNLOCK BV01
-#define TRIG_LOCK BV02
-#define TRIG_D_NORTH BV03
-#define TRIG_D_SOUTH BV04
-#define TRIG_D_EAST BV05
-#define TRIG_D_WEST BV06
-#define TRIG_D_UP BV07
-#define TRIG_D_DOWN BV08
-#define TRIG_DOOR BV09
-#define TRIG_CONTAINER BV10
-#define TRIG_OPEN BV11
-#define TRIG_CLOSE BV12
-#define TRIG_PASSAGE BV13
-#define TRIG_OLOAD BV14
-#define TRIG_MLOAD BV15
-#define TRIG_TELEPORT BV16
-#define TRIG_TELEPORTALL BV17
-#define TRIG_TELEPORTPLUS BV18
-#define TRIG_DEATH BV19
-#define TRIG_CAST BV20
-#define TRIG_FAKEBLADE BV21
-#define TRIG_RAND4 BV22
-#define TRIG_RAND6 BV23
-#define TRIG_TRAPDOOR BV24
-#define TRIG_ANOTHEROOM BV25
-#define TRIG_USEDIAL BV26
-#define TRIG_ABSOLUTEVNUM BV27
-#define TRIG_SHOWROOMDESC BV28
-#define TRIG_AUTORETURN BV29
+enum ControlFlag
+{
+    TRIG_UP = BV00,
+    TRIG_UNLOCK = BV01,
+    TRIG_LOCK = BV02,
+    TRIG_D_NORTH = BV03,
+    TRIG_D_SOUTH = BV04,
+    TRIG_D_EAST = BV05,
+    TRIG_D_WEST = BV06,
+    TRIG_D_UP = BV07,
+    TRIG_D_DOWN = BV08,
+    TRIG_DOOR = BV09,
+    TRIG_CONTAINER = BV10,
+    TRIG_OPEN = BV11,
+    TRIG_CLOSE = BV12,
+    TRIG_PASSAGE = BV13,
+    TRIG_OLOAD = BV14,
+    TRIG_MLOAD = BV15,
+    TRIG_TELEPORT = BV16,
+    TRIG_TELEPORTALL = BV17,
+    TRIG_TELEPORTPLUS = BV18,
+    TRIG_DEATH = BV19,
+    TRIG_CAST = BV20,
+    TRIG_FAKEBLADE = BV21,
+    TRIG_RAND4 = BV22,
+    TRIG_RAND6 = BV23,
+    TRIG_TRAPDOOR = BV24,
+    TRIG_ANOTHEROOM = BV25,
+    TRIG_USEDIAL = BV26,
+    TRIG_ABSOLUTEVNUM = BV27,
+    TRIG_SHOWROOMDESC = BV28,
+    TRIG_AUTORETURN = BV29,
+};
 
-#define TELE_SHOWDESC BV00
-#define TELE_TRANSALL BV01
-#define TELE_TRANSALLPLUS BV02
+enum TeleFlag
+{
+    TELE_SHOWDESC = BV00,
+    TELE_TRANSALL = BV01,
+    TELE_TRANSALLPLUS = BV02,
+};
 
 /* drug types */
-#define SPICE_GLITTERSTIM 0
-#define SPICE_CARSANUM 1
-#define SPICE_RYLL 2
-#define SPICE_ANDRIS 3
+enum DrugType
+{
+    SPICE_GLITTERSTIM = 0,
+    SPICE_CARSANUM = 1,
+    SPICE_RYLL = 2,
+    SPICE_ANDRIS = 3,
+};
 
 /* crystal types */
-#define GEM_NON_ADEGEN 0
-#define GEM_KATHRACITE 1
-#define GEM_RELACITE 2
-#define GEM_DANITE 3
-#define GEM_MEPHITE 4
-#define GEM_PONITE 5
-#define GEM_ILLUM 6
-#define GEM_CORUSCA 7
+enum GemType
+{
+    GEM_NON_ADEGEN = 0,
+    GEM_KATHRACITE = 1,
+    GEM_RELACITE = 2,
+    GEM_DANITE = 3,
+    GEM_MEPHITE = 4,
+    GEM_PONITE = 5,
+    GEM_ILLUM = 6,
+    GEM_CORUSCA = 7,
+};
 
 /*
  * Wear flags.
  * Used in #OBJECTS.
  */
-#define ITEM_TAKE BV00
-#define ITEM_WEAR_FINGER BV01
-#define ITEM_WEAR_NECK BV02
-#define ITEM_WEAR_BODY BV03
-#define ITEM_WEAR_HEAD BV04
-#define ITEM_WEAR_LEGS BV05
-#define ITEM_WEAR_FEET BV06
-#define ITEM_WEAR_HANDS BV07
-#define ITEM_WEAR_ARMS BV08
-#define ITEM_WEAR_SHIELD BV09
-#define ITEM_WEAR_ABOUT BV10
-#define ITEM_WEAR_WAIST BV11
-#define ITEM_WEAR_WRIST BV12
-#define ITEM_WIELD BV13
-#define ITEM_HOLD BV14
-#define ITEM_DUAL_WIELD BV15
-#define ITEM_WEAR_EARS BV16
-#define ITEM_WEAR_EYES BV17
-#define ITEM_MISSILE_WIELD BV18
-#define ITEM_WEAR_BACK BV19
-#define ITEM_WEAR_HOLSTER1 BV20
-#define ITEM_WEAR_HOLSTER2 BV21
-#define ITEM_WEAR_BOTHWRISTS BV22
+enum WearFlag
+{
+    ITEM_TAKE = BV00,
+    ITEM_WEAR_FINGER = BV01,
+    ITEM_WEAR_NECK = BV02,
+    ITEM_WEAR_BODY = BV03,
+    ITEM_WEAR_HEAD = BV04,
+    ITEM_WEAR_LEGS = BV05,
+    ITEM_WEAR_FEET = BV06,
+    ITEM_WEAR_HANDS = BV07,
+    ITEM_WEAR_ARMS = BV08,
+    ITEM_WEAR_SHIELD = BV09,
+    ITEM_WEAR_ABOUT = BV10,
+    ITEM_WEAR_WAIST = BV11,
+    ITEM_WEAR_WRIST = BV12,
+    ITEM_WIELD = BV13,
+    ITEM_HOLD = BV14,
+    ITEM_DUAL_WIELD = BV15,
+    ITEM_WEAR_EARS = BV16,
+    ITEM_WEAR_EYES = BV17,
+    ITEM_MISSILE_WIELD = BV18,
+    ITEM_WEAR_BACK = BV19,
+    ITEM_WEAR_HOLSTER1 = BV20,
+    ITEM_WEAR_HOLSTER2 = BV21,
+    ITEM_WEAR_BOTHWRISTS = BV22,
+};
 
 /*
  * Apply types (for affects).
@@ -3412,80 +3503,84 @@ typedef enum
     MAX_APPLY_TYPE
 } apply_types;
 
-#define REVERSE_APPLY 1000
+constexpr int REVERSE_APPLY = 1000;
 
 /*
  * Values for containers (value[1]).
  * Used in #OBJECTS.
  */
-#define CONT_CLOSEABLE 1
-#define CONT_PICKPROOF 2
-#define CONT_CLOSED 4
-#define CONT_LOCKED 8
+enum ContainerFlag
+{
+    CONT_CLOSEABLE = 1,
+    CONT_PICKPROOF = 2,
+    CONT_CLOSED = 4,
+    CONT_LOCKED = 8,
+};
 
 /*
  * Sitting/Standing/Sleeping/Sitting on/in/at Objects - Xerves
  * Used for furniture (value[2]) in the #OBJECTS Section
  */
-#define SIT_ON BV00
-#define SIT_IN BV01
-#define SIT_AT BV02
+enum SitStandFlag
+{
+    SIT_ON = BV00,
+    SIT_IN = BV01,
+    SIT_AT = BV02,
 
-#define STAND_ON BV03
-#define STAND_IN BV04
-#define STAND_AT BV05
+    STAND_ON = BV03,
+    STAND_IN = BV04,
+    STAND_AT = BV05,
 
-#define SLEEP_ON BV06
-#define SLEEP_IN BV07
-#define SLEEP_AT BV08
+    SLEEP_ON = BV06,
+    SLEEP_IN = BV07,
+    SLEEP_AT = BV08,
 
-#define REST_ON BV09
-#define REST_IN BV10
-#define REST_AT BV11
+    REST_ON = BV09,
+    REST_IN = BV10,
+    REST_AT = BV11,
+};
 
 /*
  * Well known room virtual numbers.
  * Defined in #ROOMS.
  */
-#define ROOM_VNUM_LIMBO 2
-#define ROOM_VNUM_POLY 3
-#define ROOM_VNUM_CHAT 32144
-#define ROOM_VNUM_TEMPLE 32144
-#define ROOM_VNUM_ALTAR 32144
-#define ROOM_VNUM_SCHOOL 115
-#define ROOM_AUTH_START 10300
-#define ROOM_START_HUMAN 211
-#define ROOM_START_WOOKIEE 28600
-#define ROOM_START_TWILEK 32148
-#define ROOM_START_RODIAN 32148
-#define ROOM_START_HUTT 32148
-#define ROOM_START_MON_CALAMARIAN 21069
-#define ROOM_START_NOGHRI 1015
-#define ROOM_START_GAMORREAN 28100
-#define ROOM_START_JAWA 31819
-#define ROOM_START_ADARIAN 29000
-#define ROOM_START_EWOK 32148
-#define ROOM_START_VERPINE 32148
-#define ROOM_START_DEFEL 32148
-#define ROOM_START_TRANDOSHAN 32148
-#define ROOM_START_HAPAN 32148
-#define ROOM_START_DUINUOGWUIN 32148
-#define ROOM_START_QUARREN 21069
-#define ROOM_START_IMMORTAL 100
-#define ROOM_LIMBO_SHIPYARD 45
-#define ROOM_DEFAULT_CRASH 28025
+constexpr int ROOM_VNUM_LIMBO = 2;
+constexpr int ROOM_VNUM_POLY = 3;
+constexpr int ROOM_VNUM_CHAT = 32144;
+constexpr int ROOM_VNUM_TEMPLE = 32144
+;constexpr int ROOM_VNUM_ALTAR = 32144
+;constexpr int ROOM_VNUM_SCHOOL = 115
+;constexpr int ROOM_AUTH_START = 10300
+;constexpr int ROOM_START_HUMAN = 211
+;constexpr int ROOM_START_WOOKIEE = 28600
+;constexpr int ROOM_START_TWILEK = 32148
+;constexpr int ROOM_START_RODIAN = 32148;constexpr int ROOM_START_HUTT = 32148;constexpr int ROOM_START_MON_CALAMARIAN = 21069;
+constexpr int ROOM_START_NOGHRI = 1015;
+constexpr int ROOM_START_GAMORREAN = 28100;
+constexpr int ROOM_START_JAWA = 31819;
+constexpr int ROOM_START_ADARIAN = 29000;
+constexpr int ROOM_START_EWOK = 32148;
+constexpr int ROOM_START_VERPINE = 32148;
+constexpr int ROOM_START_DEFEL = 32148;
+constexpr int ROOM_START_TRANDOSHAN = 32148;
+constexpr int ROOM_START_HAPAN = 32148;
+constexpr int ROOM_START_DUINUOGWUIN = 32148;
+constexpr int ROOM_START_QUARREN = 21069;
+constexpr int ROOM_START_IMMORTAL = 100;
+constexpr int ROOM_LIMBO_SHIPYARD = 45;
+constexpr int ROOM_DEFAULT_CRASH = 28025;
 
-#define ROOM_PLUOGUS_QUIT 905
+constexpr int ROOM_PLUOGUS_QUIT = 905;
 
-#define ROOM_SHUTTLE_BUS 907   /* Sol */
-#define ROOM_SHUTTLE_BUS_2 914 /* Monir*/
-#define ROOM_SHUTTLE_BUS_3 921 /* Fau */
-#define ROOM_SHUTTLE_BUS_4 928 /* Taw */
-#define ROOM_CORUSCANT_SHUTTLE 199
-#define ROOM_SENATE_SHUTTLE 10197
-#define ROOM_CORUSCANT_TURBOCAR 226
+constexpr int ROOM_SHUTTLE_BUS = 907;   /* Sol */
+constexpr int ROOM_SHUTTLE_BUS_2 = 914; /* Monir*/
+constexpr int ROOM_SHUTTLE_BUS_3 = 921; /* Fau */
+constexpr int ROOM_SHUTTLE_BUS_4 = 928; /* Taw */
+constexpr int ROOM_CORUSCANT_SHUTTLE = 199;
+constexpr int ROOM_SENATE_SHUTTLE = 10197;
+constexpr int ROOM_CORUSCANT_TURBOCAR = 226;
 
-#define SHIP_AREA "shipvnum.are"
+DEDUPE const char* SHIP_AREA = "shipvnum.are";
 
 /*
  * Room flags.           Holy cow!  Talked about stripped away..
@@ -3493,54 +3588,61 @@ typedef enum
  *			 Lets put it all back... ;)
  */
 
-#define ROOM_DARK BV00
-/* BV01 now reserved for track  BV01  and hunt */
-#define ROOM_NO_MOB BV02
-#define ROOM_INDOORS BV03
-#define ROOM_CAN_LAND BV04
-#define ROOM_CAN_FLY BV05
-#define ROOM_NO_DRIVING BV06
-#define ROOM_NO_MAGIC BV07
-#define ROOM_BANK BV08
-#define ROOM_PRIVATE BV09
-#define ROOM_SAFE BV10
-#define ROOM_SOLITARY BV11
-#define ROOM_PET_SHOP BV12
-#define ROOM_NO_RECALL BV13
-#define ROOM_DONATION BV14
-#define ROOM_NODROPALL BV15
-#define ROOM_SILENCE BV16
-#define ROOM_LOGSPEECH BV17
-#define ROOM_NODROP BV18
-#define ROOM_CLANSTOREROOM BV19
-#define ROOM_PLR_HOME BV20
-#define ROOM_EMPTY_HOME BV21
-#define ROOM_TELEPORT BV22
-#define ROOM_HOTEL BV23
-#define ROOM_NOFLOOR BV24
-#define ROOM_REFINERY BV25
-#define ROOM_FACTORY BV26
-#define ROOM_R_RECRUIT BV27
-#define ROOM_E_RECRUIT BV28
-#define ROOM_SPACECRAFT BV29
-#define ROOM_PROTOTYPE BV30
-#define ROOM_AUCTION BV31
+enum RoomFlag
+{
+    ROOM_DARK = BV00,
+    /* BV01 now reserved for track  BV01  and hunt */
+    ROOM_NO_MOB = BV02,
+    ROOM_INDOORS = BV03,
+    ROOM_CAN_LAND = BV04,
+    ROOM_CAN_FLY = BV05,
+    ROOM_NO_DRIVING = BV06,
+    ROOM_NO_MAGIC = BV07,
+    ROOM_BANK = BV08,
+    ROOM_PRIVATE = BV09,
+    ROOM_SAFE = BV10,
+    ROOM_SOLITARY = BV11,
+    ROOM_PET_SHOP = BV12,
+    ROOM_NO_RECALL = BV13,
+    ROOM_DONATION = BV14,
+    ROOM_NODROPALL = BV15,
+    ROOM_SILENCE = BV16,
+    ROOM_LOGSPEECH = BV17,
+    ROOM_NODROP = BV18,
+    ROOM_CLANSTOREROOM = BV19,
+    ROOM_PLR_HOME = BV20,
+    ROOM_EMPTY_HOME = BV21,
+    ROOM_TELEPORT = BV22,
+    ROOM_HOTEL = BV23,
+    ROOM_NOFLOOR = BV24,
+    ROOM_REFINERY = BV25,
+    ROOM_FACTORY = BV26,
+    ROOM_R_RECRUIT = BV27,
+    ROOM_E_RECRUIT = BV28,
+    ROOM_SPACECRAFT = BV29,
+    ROOM_PROTOTYPE = BV30,
+    ROOM_AUCTION = BV31,
+};
 
 /* Second Set of Room Flags */
-#define ROOM_EMPTY_SHOP BV00
-#define ROOM_PLR_SHOP BV01
-#define ROOM_SHIPYARD BV02
-#define ROOM_GARAGE BV03
-#define ROOM_BARRACKS BV04
-#define ROOM_CONTROL BV05
-#define ROOM_CLANLAND BV06
-#define ROOM_ARENA BV07
-#define ROOM_CLANJAIL BV08
-#define ROOM_BLACKMARKET BV09
-#define ROOM_HIDDENPAD BV10
-#define ROOM_SLOTS BV11
-#define ROOM_IMPORT BV12
-#define ROOM_STORAGEDOCK BV13
+enum RoomFlag2
+{
+    ROOM_EMPTY_SHOP = BV00,
+    ROOM_PLR_SHOP = BV01,
+    ROOM_SHIPYARD = BV02,
+    ROOM_GARAGE = BV03,
+    ROOM_BARRACKS = BV04,
+    ROOM_CONTROL = BV05,
+    ROOM_CLANLAND = BV06,
+    ROOM_ARENA = BV07,
+    ROOM_CLANJAIL = BV08,
+    ROOM_BLACKMARKET = BV09,
+    ROOM_HIDDENPAD = BV10,
+    ROOM_SLOTS = BV11,
+    ROOM_IMPORT = BV12,
+    ROOM_STORAGEDOCK = BV13,
+};
+
 /*
  * Directions.
  * Used in #ROOMS.
@@ -3567,34 +3669,37 @@ typedef enum
  * Exit flags.
  * Used in #ROOMS.
  */
-#define EX_ISDOOR BV00
-#define EX_CLOSED BV01
-#define EX_LOCKED BV02
-#define EX_SECRET BV03
-#define EX_SWIM BV04
-#define EX_PICKPROOF BV05
-#define EX_FLY BV06
-#define EX_CLIMB BV07
-#define EX_DIG BV08
-#define EX_RES1 BV09 /* are these res[1-4] important? */
-#define EX_NOPASSDOOR BV10
-#define EX_HIDDEN BV11
-#define EX_PASSAGE BV12
-#define EX_PORTAL BV13
-#define EX_RES2 BV14
-#define EX_RES3 BV15
-#define EX_xCLIMB BV16
-#define EX_xENTER BV17
-#define EX_xLEAVE BV18
-#define EX_xAUTO BV19
-#define EX_RES4 BV20
-#define EX_xSEARCHABLE BV21
-#define EX_BASHED BV22
-#define EX_BASHPROOF BV23
-#define EX_NOMOB BV24
-#define EX_WINDOW BV25
-#define EX_xLOOK BV26
-#define MAX_EXFLAG 26
+enum ExitFlag
+{
+    EX_ISDOOR = BV00,
+    EX_CLOSED = BV01,
+    EX_LOCKED = BV02,
+    EX_SECRET = BV03,
+    EX_SWIM = BV04,
+    EX_PICKPROOF = BV05,
+    EX_FLY = BV06,
+    EX_CLIMB = BV07,
+    EX_DIG = BV08,
+    EX_RES1 = BV09, /* are these res[1-4] important? */
+    EX_NOPASSDOOR = BV10,
+    EX_HIDDEN = BV11,
+    EX_PASSAGE = BV12,
+    EX_PORTAL = BV13,
+    EX_RES2 = BV14,
+    EX_RES3 = BV15,
+    EX_xCLIMB = BV16,
+    EX_xENTER = BV17,
+    EX_xLEAVE = BV18,
+    EX_xAUTO = BV19,
+    EX_RES4 = BV20,
+    EX_xSEARCHABLE = BV21,
+    EX_BASHED = BV22,
+    EX_BASHPROOF = BV23,
+    EX_NOMOB = BV24,
+    EX_WINDOW = BV25,
+    EX_xLOOK = BV26,
+    MAX_EXFLAG = 26,
+};
 
 /*
  * Sector types.
@@ -3720,57 +3825,63 @@ typedef enum
 /*
  * ACT bits for players.
  */
-#define PLR_IS_NPC BV00 /* Don't EVER set.	*/
-#define PLR_BOUGHT_PET BV01
-#define PLR_SHOVEDRAG BV02
-#define PLR_AUTOEXIT BV03
-#define PLR_AUTOLOOT BV04
-#define PLR_AUTOSAC BV05
-#define PLR_BLANK BV06
-#define PLR_OUTCAST BV07
-#define PLR_BRIEF BV08
-#define PLR_COMBINE BV09
-#define PLR_PROMPT BV10
-#define PLR_TELNET_GA BV11
+enum PlayerActFlag
+{
+    PLR_IS_NPC = BV00, /* Don't EVER set.	*/
+    PLR_BOUGHT_PET = BV01,
+    PLR_SHOVEDRAG = BV02,
+    PLR_AUTOEXIT = BV03,
+    PLR_AUTOLOOT = BV04,
+    PLR_AUTOSAC = BV05,
+    PLR_BLANK = BV06,
+    PLR_OUTCAST = BV07,
+    PLR_BRIEF = BV08,
+    PLR_COMBINE = BV09,
+    PLR_PROMPT = BV10,
+    PLR_TELNET_GA = BV11,
 
-#define PLR_HOLYLIGHT BV12
-#define PLR_WIZINVIS BV13
-#define PLR_ROOMVNUM BV14
+    PLR_HOLYLIGHT = BV12,
+    PLR_WIZINVIS = BV13,
+    PLR_ROOMVNUM = BV14,
 
-#define PLR_SILENCE BV15
-#define PLR_NO_EMOTE BV16
-#define PLR_ATTACKER BV17
-#define PLR_NO_TELL BV18
-#define PLR_LOG BV19
-#define PLR_DENY BV20
-#define PLR_FREEZE BV21
-#define PLR_KILLER BV22
-#define PLR_WHOINVIS BV23
-#define PLR_LITTERBUG BV24
-#define PLR_ANSI BV25
-#define PLR_SOUND BV26
-#define PLR_NICE BV27
-#define PLR_FLEE BV28
-#define PLR_AUTOGOLD BV29
-#define PLR_SLOG BV30
-#define PLR_AFK BV31
+    PLR_SILENCE = BV15,
+    PLR_NO_EMOTE = BV16,
+    PLR_ATTACKER = BV17,
+    PLR_NO_TELL = BV18,
+    PLR_LOG = BV19,
+    PLR_DENY = BV20,
+    PLR_FREEZE = BV21,
+    PLR_KILLER = BV22,
+    PLR_WHOINVIS = BV23,
+    PLR_LITTERBUG = BV24,
+    PLR_ANSI = BV25,
+    PLR_SOUND = BV26,
+    PLR_NICE = BV27,
+    PLR_FLEE = BV28,
+    PLR_AUTOGOLD = BV29,
+    PLR_SLOG = BV30,
+    PLR_AFK = BV31,
+};
 
-/* Bits for pc_data->flags. */
-#define PCFLAG_R1 BV00
-/*
-#define PCFLAG_                    BV01     extra flag
-*/
-#define PCFLAG_UNAUTHED BV02
-#define PCFLAG_NORECALL BV03
-#define PCFLAG_NOINTRO BV04
-#define PCFLAG_GAG BV05
-#define PCFLAG_RETIRED BV06
-#define PCFLAG_GUEST BV07
-#define PCFLAG_HASSLUG BV08
-#define PCFLAG_PAGERON BV09
-#define PCFLAG_NOTITLE BV10
-#define PCFLAG_ROOM BV11
-#define PCFLAG_MAP BV12
+enum PCFlag
+{
+    /* Bits for pc_data->flags. */
+    PCFLAG_R1 = BV00,
+    /*
+    #define PCFLAG_                    BV01     extra flag
+    */
+    PCFLAG_UNAUTHED = BV02,
+    PCFLAG_NORECALL = BV03,
+    PCFLAG_NOINTRO = BV04,
+    PCFLAG_GAG = BV05,
+    PCFLAG_RETIRED = BV06,
+    PCFLAG_GUEST = BV07,
+    PCFLAG_HASSLUG = BV08,
+    PCFLAG_PAGERON = BV09,
+    PCFLAG_NOTITLE = BV10,
+    PCFLAG_ROOM = BV11,
+    PCFLAG_MAP = BV12,
+};
 
 typedef enum
 {
@@ -3795,47 +3906,56 @@ struct TIMER
 /*
  * Channel bits.
  */
-#define CHANNEL_AUCTION BV00
-#define CHANNEL_CHAT BV01
-#define CHANNEL_QUEST BV02
-#define CHANNEL_IMMTALK BV03
-#define CHANNEL_MUSIC BV04
-#define CHANNEL_ASK BV05
-#define CHANNEL_SHOUT BV06
-#define CHANNEL_YELL BV07
-#define CHANNEL_MONITOR BV08
-#define CHANNEL_LOG BV09
-#define CHANNEL_104 BV10
-#define CHANNEL_CLAN BV11
-#define CHANNEL_BUILD BV12
-#define CHANNEL_105 BV13
-#define CHANNEL_AVTALK BV14
-#define CHANNEL_PRAY BV15
-#define CHANNEL_COUNCIL BV16
-#define CHANNEL_GUILD BV17
-#define CHANNEL_COMM BV18
-#define CHANNEL_TELLS BV19
-#define CHANNEL_ORDER BV20
-#define CHANNEL_NEWBIE BV21
-#define CHANNEL_WARTALK BV22
-#define CHANNEL_OOC BV23
-#define CHANNEL_SHIP BV24
-#define CHANNEL_SYSTEM BV25
-#define CHANNEL_SPACE BV26
-#define CHANNEL_103 BV27
-#define CHANNEL_SPORTS BV27
-#define CHANNEL_HOLONET BV31
+enum ChannelFlag
+{
+    CHANNEL_AUCTION = BV00,
+    CHANNEL_CHAT = BV01,
+    CHANNEL_QUEST = BV02,
+    CHANNEL_IMMTALK = BV03,
+    CHANNEL_MUSIC = BV04,
+    CHANNEL_ASK = BV05,
+    CHANNEL_SHOUT = BV06,
+    CHANNEL_YELL = BV07,
+    CHANNEL_MONITOR = BV08,
+    CHANNEL_LOG = BV09,
+    CHANNEL_104 = BV10,
+    CHANNEL_CLAN = BV11,
+    CHANNEL_BUILD = BV12,
+    CHANNEL_105 = BV13,
+    CHANNEL_AVTALK = BV14,
+    CHANNEL_PRAY = BV15,
+    CHANNEL_COUNCIL = BV16,
+    CHANNEL_GUILD = BV17,
+    CHANNEL_COMM = BV18,
+    CHANNEL_TELLS = BV19,
+    CHANNEL_ORDER = BV20,
+    CHANNEL_NEWBIE = BV21,
+    CHANNEL_WARTALK = BV22,
+    CHANNEL_OOC = BV23,
+    CHANNEL_SHIP = BV24,
+    CHANNEL_SYSTEM = BV25,
+    CHANNEL_SPACE = BV26,
+    CHANNEL_103 = BV27,
+    CHANNEL_SPORTS = BV27,
+    CHANNEL_HOLONET = BV31,
 
-#define CHANNEL_CLANTALK CHANNEL_CLAN
+    CHANNEL_CLANTALK = CHANNEL_CLAN,
+};
 
 /* Area defines - Scryn 8/11
  *
  */
-#define AREA_DELETED BV00
-#define AREA_LOADED BV01
+enum AreaStateFlags
+{
+    AREA_DELETED = BV00,
+    AREA_LOADED = BV01,
+};
 
 /* Area flags - Narn Mar/96 */
-#define AFLAG_NOPKILL BV00
+enum AreaFlags
+{
+    AFLAG_NOPKILL = BV00,
+};
 
 /*
  * Prototype for a mob.
@@ -4215,8 +4335,8 @@ struct PC_DATA
 /*
  * Liquids.
  */
-#define LIQ_WATER 0
-#define LIQ_MAX 19
+constexpr int LIQ_WATER = 0;
+constexpr int LIQ_MAX = 19;
 
 struct LIQ_TYPE
 {
@@ -4364,16 +4484,19 @@ struct RESET_DATA
 };
 
 /* Constants for arg2 of 'B' resets. */
-#define BIT_RESET_DOOR 0
-#define BIT_RESET_OBJECT 1
-#define BIT_RESET_MOBILE 2
-#define BIT_RESET_ROOM 3
-#define BIT_RESET_TYPE_MASK 0xFF /* 256 should be enough */
-#define BIT_RESET_DOOR_THRESHOLD 8
-#define BIT_RESET_DOOR_MASK 0xFF00 /* 256 should be enough */
-#define BIT_RESET_SET BV30
-#define BIT_RESET_TOGGLE BV31
-#define BIT_RESET_FREEBITS 0x3FFF0000 /* For reference */
+enum ResetBits
+{
+    BIT_RESET_DOOR = 0,
+    BIT_RESET_OBJECT = 1,
+    BIT_RESET_MOBILE = 2,
+    BIT_RESET_ROOM = 3,
+    BIT_RESET_TYPE_MASK = 0xFF, /* 256 should be enough */
+    BIT_RESET_DOOR_THRESHOLD = 8,
+    BIT_RESET_DOOR_MASK = 0xFF00, /* 256 should be enough */
+    BIT_RESET_SET = BV30,
+    BIT_RESET_TOGGLE = BV31,
+    BIT_RESET_FREEBITS = 0x3FFF0000, /* For reference */
+};
 
 /*
  * Area definition.
@@ -4540,11 +4663,11 @@ struct TELEPORT_DATA
  * Must be non-overlapping with spell/skill types,
  * but may be arbitrary beyond that.
  */
-#define TYPE_UNDEFINED -1
-#define TYPE_MISSILE 111
-#define TYPE_HIT 1000      /* allows for 1000 skills/spells */
-#define TYPE_HERB 2000     /* allows for 1000 attack types  */
-#define TYPE_PERSONAL 3000 /* allows for 1000 herb types    */
+constexpr int TYPE_UNDEFINED = -1;
+constexpr int TYPE_MISSILE = 111;
+constexpr int TYPE_HIT = 1000;      /* allows for 1000 skills/spells */
+constexpr int TYPE_HERB = 2000;     /* allows for 1000 attack types  */
+constexpr int TYPE_PERSONAL = 3000; /* allows for 1000 herb types    */
 
 /*
  *  Target types.
@@ -4906,7 +5029,6 @@ extern sh_int gsn_droid;
         }                                                                                                              \
     } while (0)
 
-#ifdef HASHSTR
 #define STRALLOC(point) str_alloc((point))
 #define QUICKLINK(point) quick_link((point))
 #define STRFREE(point)                                                                                                 \
@@ -4925,12 +5047,6 @@ extern sh_int gsn_droid;
             (point) = NULL;                                                                                            \
         }                                                                                                              \
     } while (0)
-#else
-#define STRALLOC(point) str_dup((point))
-#define QUICKLINK(point) str_dup((point))
-#define QUICKMATCH(p1, p2) strcmp((p1), (p2)) == 0
-#define STRFREE(point) DISPOSE((point))
-#endif
 
 /* double-linked list handling macros -Thoric */
 /* Updated by Scion 8/6/1999 */
@@ -5357,73 +5473,72 @@ extern BMARKET_DATA* last_market_ship;
  *   so players can go ahead and telnet to all the other descriptors.
  * Then we close it whenever we need to open a file (e.g. a save file).
  */
-#define AREA_DIR "area/"
-#define PLAYER_DIR "player/" /* Player files			*/
-#define BACKUP_DIR "backup/" /* Backup Player files		*/
-#define GOD_DIR "gods/"      /* God Info Dir			*/
-#define BOARD_DIR "boards/"  /* Board data dir		*/
-#define KEYS_DIR "keys/"
-#define CLAN_DIR "clans/" /* Clan data dir		*/
-#define SHIP_DIR "space/" // TODO duplicate?
-#define SPACE_DIR "space/"
-#define SHIP_PROTOTYPE_DIR "ships/"
-#define FORCE_DIR "force/"
-#define FORCE_HELP_DIR "force/help/"
-#define PLANET_DIR "planets/"
-#define GUARD_DIR "planets/"                           // TODO duplicate?
-#define GUILD_DIR "guilds/"                            /* Guild data dir               */
-#define HELP_FILE SYSTEM_DIR "help.txt"                /*For undefined helps*/
-#define SLAY_FILE SYSTEM_DIR "slay.dat"                /* Slay data file for online editing - Samson 8-3-98 */
-#define LAST_LIST SYSTEM_DIR "last.lst"                // last list
-#define LAST_TEMP_LIST SYSTEM_DIR "ltemp.lst"          // temp file for the last list so the data can be copyover over
-#define BUILD_DIR "building/"                          /* Online building save dir     */
-#define SYSTEM_DIR "system/"                           /* Main system files		*/
-#define PROG_DIR "mudprogs/" /* MUDProg files		*/ // TODO unused?
-#define CORPSE_DIR "corpses/"                          /* Corpses			*/
-#define AREA_LIST "area.lst"                           /* List of areas		*/
-#define BAN_LIST "ban.lst"                             /* List of bans                 */
-#define CLAN_LIST "clan.lst"                           /* List of clans		*/
-#define SHIP_LIST "ship.lst"
-#define PROTOTYPE_LIST "prototype.lst"
-#define PLANET_LIST "planet.lst"
-#define SPACE_LIST "space.lst"
-#define BOUNTY_LIST "bounty.lst"
-#define disintegration_LIST "disintegration.lst"
-#define SENATE_LIST "senate.lst" /* List of senators		*/
-#define GUILD_LIST "guild.lst"   /* List of guilds               */
-#define GOD_LIST "gods.lst"      /* List of gods			*/
-#define GUARD_LIST "guard.lst"
+DEDUPE const char* AREA_DIR = "area/";
+DEDUPE const char* PLAYER_DIR = "player/"; /* Player files			*/
+DEDUPE const char* BACKUP_DIR = "backup/"; /* Backup Player files		*/
+DEDUPE const char* GOD_DIR = "gods/";      /* God Info Dir			*/
+DEDUPE const char* BOARD_DIR = "boards/";  /* Board data dir		*/
+DEDUPE const char* KEYS_DIR = "keys/";
+DEDUPE const char* CLAN_DIR = "clans/"; /* Clan data dir		*/
+DEDUPE const char* SHIP_DIR = "space/"; // TODO duplicate?
+DEDUPE const char* SPACE_DIR = "space/";
+DEDUPE const char* SHIP_PROTOTYPE_DIR = "ships/";
+DEDUPE const char* FORCE_DIR = "force/";
+DEDUPE const char* FORCE_HELP_DIR = "force/help/";
+DEDUPE const char* PLANET_DIR = "planets/";
+DEDUPE const char* GUARD_DIR = "planets/";                           // TODO duplicate?
+DEDUPE const char* GUILD_DIR = "guilds/";                            /* Guild data dir               */
+DEDUPE const char* HELP_FILE = "system/help.txt";                    /*For undefined helps*/
+DEDUPE const char* SLAY_FILE = "system/slay.dat";      /* Slay data file for online editing - Samson 8-3-98 */
+DEDUPE const char* LAST_LIST = "system/last.lst"; // last list
+DEDUPE const char* LAST_TEMP_LIST = "system/ltemp.lst"; // temp file for the last list so the data can be copyover over
+DEDUPE const char* BUILD_DIR = "building/";                          /* Online building save dir     */
+DEDUPE const char* SYSTEM_DIR = "system/";                           /* Main system files		*/
+DEDUPE const char* PROG_DIR = "mudprogs/"; /* MUDProg files		*/ // TODO unused?
+DEDUPE const char* CORPSE_DIR = "corpses/";                          /* Corpses			*/
+DEDUPE const char* AREA_LIST = "area/area.lst";                           /* List of areas		*/
+DEDUPE const char* BAN_LIST = "system/ban.lst";                             /* List of bans                 */
+DEDUPE const char* CLAN_LIST = "clan.lst";                           /* List of clans		*/
+DEDUPE const char* SHIP_LIST = "ship.lst";
+DEDUPE const char* PROTOTYPE_LIST = "prototype.lst";
+DEDUPE const char* PLANET_LIST = "planet.lst";
+DEDUPE const char* SPACE_LIST = "space.lst";
+DEDUPE const char* BOUNTY_LIST = "bounty.lst";
+DEDUPE const char* disintegration_LIST = "disintegration.lst";
+DEDUPE const char* SENATE_LIST = "senate.lst"; /* List of senators		*/
+DEDUPE const char* GUILD_LIST = "guild.lst";   /* List of guilds               */
+DEDUPE const char* GOD_LIST = "gods.lst";      /* List of gods			*/
+DEDUPE const char* GUARD_LIST = "guard.lst";
 
-#define BOARD_FILE "boards.txt"      /* For bulletin boards	 */
-#define SHUTDOWN_FILE "shutdown.txt" /* For 'shutdown'	 */
+DEDUPE const char* BOARD_FILE = "boards.txt";      /* For bulletin boards	 */
+DEDUPE const char* SHUTDOWN_FILE = "shutdown.txt"; /* For 'shutdown'	 */
 
-#define RIPSCREEN_FILE SYSTEM_DIR "mudrip.rip"
-#define RIPTITLE_FILE SYSTEM_DIR "mudtitle.rip"
-#define ANSITITLE_FILE SYSTEM_DIR "mudtitle.ans"
-#define ASCTITLE_FILE SYSTEM_DIR "mudtitle.asc"
-#define BOOTLOG_FILE SYSTEM_DIR "boot.txt"     /* Boot up error file	 */
-#define BUG_FILE SYSTEM_DIR "sysbugs.txt"      /* For 'bug' and bug( )*/
-#define PLRBUG_FILE SYSTEM_DIR "plrbugs.txt"   /* Used for player bugs */
-#define IDEA_FILE SYSTEM_DIR "ideas.txt"       /* For 'idea'		 */
-#define CHANGE_FILE SYSTEM_DIR "changes.txt"   /* Changes file - txt  */
-#define DEBUG_FILE SYSTEM_DIR "debug.txt"      /* Catch-all for debug */
-#define TYPO_FILE SYSTEM_DIR "typos.txt"       /* For 'typo'		 */
-#define LOG_FILE SYSTEM_DIR "log.txt"          /* For talking in logged rooms */
-#define WIZLIST_FILE SYSTEM_DIR "WIZLIST"      /* Wizlist		 */
-#define REQUEST_PIPE SYSTEM_DIR "REQUESTS"     /* Request FIFO	 */
-#define SKILL_FILE SYSTEM_DIR "skills.dat"     /* Skill table	 */
-#define HERB_FILE SYSTEM_DIR "herbs.dat"       /* Herb table		 */
-#define SOCIAL_FILE SYSTEM_DIR "socials.dat"   /* Socials		 */
-#define COMMAND_FILE SYSTEM_DIR "commands.dat" /* Commands		 */
-#define NAMEBAN_FILE SYSTEM_DIR "nameban.dat"  /* Nameban		 */
-#define USAGE_FILE                                                                                                     \
-    SYSTEM_DIR "usage.txt"                      /* How many people are on                                              \
+DEDUPE const char* RIPSCREEN_FILE = "system/mudrip.rip";
+DEDUPE const char* RIPTITLE_FILE = "system/mudtitle.rip";
+DEDUPE const char* ANSITITLE_FILE = "system/mudtitle.ans";
+DEDUPE const char* ASCTITLE_FILE = "system/mudtitle.asc";
+DEDUPE const char* BOOTLOG_FILE = "system/boot.txt";          /* Boot up error file	 */
+DEDUPE const char* BUG_FILE = "system/sysbugs.txt";           /* For 'bug' and bug( )*/
+DEDUPE const char* PLRBUG_FILE = "system/plrbugs.txt";        /* Used for player bugs */
+DEDUPE const char* IDEA_FILE = "system/ideas.txt";            /* For 'idea'		 */
+DEDUPE const char* CHANGE_FILE = "system/changes.txt";        /* Changes file - txt  */
+DEDUPE const char* DEBUG_FILE = "system/debug.txt";           /* Catch-all for debug */
+DEDUPE const char* TYPO_FILE = "system/typos.txt";            /* For 'typo'		 */
+DEDUPE const char* LOG_FILE = "system/log.txt";               /* For talking in logged rooms */
+DEDUPE const char* WIZLIST_FILE = "system/WIZLIST";           /* Wizlist		 */
+DEDUPE const char* REQUEST_PIPE = "system/REQUESTS";          /* Request FIFO	 */
+DEDUPE const char* SKILL_FILE = "system/skills.dat";          /* Skill table	 */
+DEDUPE const char* HERB_FILE = "system/herbs.dat";            /* Herb table		 */
+DEDUPE const char* SOCIAL_FILE = "system/socials.dat";        /* Socials		 */
+DEDUPE const char* COMMAND_FILE = "system/commands.dat";      /* Commands		 */
+DEDUPE const char* NAMEBAN_FILE = "system/nameban.dat";       /* Nameban		 */
+DEDUPE const char* USAGE_FILE = "system/usage.txt";           /* How many people are on           \
                                every half hour - trying to                                                             \
                                determine best reboot time */
-#define TEMP_FILE SYSTEM_DIR "charsave.tmp"     /* More char save protect */
-#define COPYOVER_FILE SYSTEM_DIR "copyover.dat" /* for warm reboots	 */
-#define EXE_FILE "../bin/swr"                   /* executable path	 */
-#define SLOG_FILE "../.slog/slog.txt"           /* Secret Log		 */
+DEDUPE const char* TEMP_FILE = "system/charsave.tmp";         /* More char save protect */
+DEDUPE const char* COPYOVER_FILE = "system/copyover.dat";     /* for warm reboots	 */
+DEDUPE const char* EXE_FILE = "../bin/swr";                   /* executable path	 */
+DEDUPE const char* SLOG_FILE = "../.slog/slog.txt";           /* Secret Log		 */
 
 /*
  * Our function prototypes.
@@ -5993,8 +6108,8 @@ void check_requests(void);
 
 /* save.c */
 /* object saving defines for fread/write_obj. -- Altrag */
-#define OS_CARRY 0
-#define OS_CORPSE 1
+constexpr int OS_CARRY = 0;
+constexpr int OS_CORPSE = 1;
 void save_char_obj(CHAR_DATA* ch);
 void save_clone(CHAR_DATA* ch);
 bool load_char_obj(DESCRIPTOR_DATA& d, const char* name, bool preload);

@@ -856,7 +856,7 @@ export void boot_db(bool fCopyOver)
         FILE* fpList;
 
         log_string("Reading in area files...");
-        if ((fpList = fopen(AREA_DIR AREA_LIST, "r")) == NULL)
+        if ((fpList = fopen(AREA_LIST, "r")) == NULL)
         {
             shutdown_mud("Unable to open area list");
             exit(1);
@@ -3477,20 +3477,12 @@ void do_memory(CHAR_DATA* ch, char* argument)
     ch_printf(ch, "MaxEver time recorded at:   %s\n\r", sysdata.time_of_max);
     if (!str_cmp(arg, "check"))
     {
-#ifdef HASHSTR
         send_to_char(check_hash(argument), ch);
-#else
-        send_to_char("Hash strings not enabled.\n\r", ch);
-#endif
         return;
     }
     if (!str_cmp(arg, "showhigh"))
     {
-#ifdef HASHSTR
         show_high_hash(atoi(argument));
-#else
-        send_to_char("Hash strings not enabled.\n\r", ch);
-#endif
         return;
     }
     if (argument[0] != '\0')
@@ -3499,13 +3491,9 @@ void do_memory(CHAR_DATA* ch, char* argument)
         hash = -1;
     if (!str_cmp(arg, "hash"))
     {
-#ifdef HASHSTR
         ch_printf(ch, "Hash statistics:\n\r%s", hash_stats());
         if (hash != -1)
             hash_dump(hash);
-#else
-        send_to_char("Hash strings not enabled.\n\r", ch);
-#endif
     }
     return;
 }
@@ -6180,7 +6168,7 @@ void load_banlist(void)
     int number;
     char letter;
 
-    if (!(fp = fopen(SYSTEM_DIR BAN_LIST, "r")))
+    if (!(fp = fopen(BAN_LIST, "r")))
         return;
 
     for (;;)

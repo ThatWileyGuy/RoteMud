@@ -85,7 +85,7 @@ export module slay;
 
 import hashstr;
 
-#define SLAY_FILE SYSTEM_DIR "slay.dat" /* Slay data file for online editing - Samson 8-3-98 */
+#define SLAY_FILE "system/slay.dat" /* Slay data file for online editing - Samson 8-3-98 */
 
 /* Maxslaytypes variable - 50 should be WAY more than enough :P */
 #define MAX_SLAY_TYPES 50
@@ -252,7 +252,7 @@ void save_slays(void)
     FILE* fp;
     char filename[256];
 
-    snprintf(filename, 256, "%s%s", SYSTEM_DIR, SLAY_FILE);
+    snprintf(filename, 256, "%s", SLAY_FILE);
 
     if ((fp = fopen(filename, "w")) == NULL)
     {
