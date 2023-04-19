@@ -42,6 +42,7 @@ module;
 
 export module fight;
 
+import std.core;
 import mud;
 import newarena;
 import mud_prog;

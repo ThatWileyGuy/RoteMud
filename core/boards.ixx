@@ -42,6 +42,7 @@ module;
 
 export module boards;
 
+import std.core;
 import mud;
 import hashstr;
 

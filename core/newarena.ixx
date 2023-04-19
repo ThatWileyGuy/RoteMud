@@ -65,6 +65,7 @@ module;
 
 export module newarena;
 
+import std.core;
 import mud;
 import bet;
 

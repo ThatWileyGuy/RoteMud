@@ -42,6 +42,7 @@ module;
 
 export module constants;
 
+import std.core;
 import mud;
 
 /* undef these at EOF */

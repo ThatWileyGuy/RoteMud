@@ -44,6 +44,7 @@ extern int top_room;
 
 export module track;
 
+import std.core;
 import mud;
 import hashstr;
 import fight;

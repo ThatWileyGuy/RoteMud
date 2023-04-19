@@ -42,6 +42,7 @@ module;
 
 export module act_obj;
 
+import std.core;
 import mud;
 import act_info;
 import bet;

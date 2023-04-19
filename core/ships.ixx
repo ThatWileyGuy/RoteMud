@@ -42,6 +42,7 @@ module;
 
 export module ships;
 
+import std.core;
 import mud;
 import functions;
 import hashstr;

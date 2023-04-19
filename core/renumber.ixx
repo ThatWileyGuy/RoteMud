@@ -54,6 +54,7 @@ module;
 
 export module renumber;
 
+import std.core;
 import mud;
 import db;
 import hashstr;

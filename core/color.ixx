@@ -98,10 +98,12 @@
 
 module;
 
+#include <cstdarg>
 #include "mud.hxx"
 
 export module color;
 
+import std.core;
 import mud;
 import hashstr;
 

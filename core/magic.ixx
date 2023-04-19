@@ -42,6 +42,7 @@ module;
 
 export module magic;
 
+import std.core;
 import mud;
 import player;
 import hashstr;

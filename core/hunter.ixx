@@ -42,6 +42,7 @@ module;
 
 export module hunter;
 
+import std.core;
 import mud;
 import hashstr;
 

@@ -50,6 +50,7 @@ extern void fix_exits(void);
 
 export module build;
 
+import std.core;
 import mud;
 import db;
 import hashstr;

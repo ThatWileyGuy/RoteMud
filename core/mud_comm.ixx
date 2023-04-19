@@ -38,10 +38,21 @@
 
 module;
 
+#ifdef WIN32
+
+#ifndef NOMINMAX
+#define NOMINMAX
+#endif
+
+#include <SDKDDKVer.h>
+#endif
+
+#include <boost/asio.hpp> // TODO why is this needed here?
 #include "mud.hxx"
 
 export module mud_comm;
 
+import std.core;
 import mud;
 import connection;
 import mud_prog;

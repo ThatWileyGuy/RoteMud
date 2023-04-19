@@ -42,6 +42,7 @@ module;
 
 export module bet;
 
+import std.core;
 import mud;
 /*
   util function, converts an 'advanced' ASCII-number-string into a number.

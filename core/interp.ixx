@@ -38,10 +38,12 @@
 
 module;
 
+#include <chrono>
 #include "mud.hxx"
 
 export module interp;
 
+import std.core;
 import mud;
 import mud_prog;
 import comm;

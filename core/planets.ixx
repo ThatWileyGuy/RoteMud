@@ -47,6 +47,7 @@ extern void write_starsystem_list();
 
 export module planets;
 
+import std.core;
 import mud;
 import hashstr;
 import swskills;

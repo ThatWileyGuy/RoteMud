@@ -94,6 +94,7 @@ module;
 
 export module slotm;
 
+import std.core;
 import mud;
 
 // Constant multipliers types of winnings

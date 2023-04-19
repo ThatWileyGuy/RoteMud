@@ -38,7 +38,7 @@
 
 module;
 
-#include <filesystem>
+#include <cstdarg>
 #include <unordered_map>
 #include "mud.hxx"
 
@@ -49,6 +49,9 @@ extern void init_supermob();
 
 export module db;
 
+import std.filesystem;
+
+import std.core;
 import mud;
 import act_move;
 import save;

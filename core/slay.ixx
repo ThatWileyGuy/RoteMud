@@ -83,6 +83,7 @@ module;
 
 export module slay;
 
+import std.core;
 import mud;
 import hashstr;
 

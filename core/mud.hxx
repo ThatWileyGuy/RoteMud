@@ -38,22 +38,9 @@
 
 #pragma once
 
-#ifdef WIN32
-
-#ifndef NOMINMAX
-#define NOMINMAX
-#endif
-
-#include <SDKDDKVer.h>
-#endif
-
-
-#include <memory>
-#include <vector>
-#include <algorithm>
-#include <boost/asio/ip/tcp.hpp>
-#include <boost/circular_buffer.hpp>
-
+#include <cctype>
+#include <cstdio>
+#include <cstdlib>
 
 /*
  * Utility macros.

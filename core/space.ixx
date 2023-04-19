@@ -42,6 +42,7 @@ module;
 
 export module space;
 
+import std.core;
 import mud;
 import act_comm;
 import ships;

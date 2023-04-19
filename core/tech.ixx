@@ -42,6 +42,7 @@ module;
 
 export module tech;
 
+import std.core;
 import mud;
 import hashstr;
 

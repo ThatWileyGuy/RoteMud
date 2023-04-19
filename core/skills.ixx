@@ -38,10 +38,12 @@
 
 module;
 
+#include <chrono>
 #include "mud.hxx"
 
 export module skills;
 
+import std.core;
 import mud;
 import hashstr;
 import space;

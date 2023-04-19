@@ -42,6 +42,7 @@ module;
 
 export module bounty;
 
+import std.core;
 import mud;
 import hashstr;
 import fight;

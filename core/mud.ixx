@@ -1,18 +1,31 @@
 module;
 
-#include <limits>
+#include <cassert>
+#include <limits.h>
+#include <memory>
 #include <chrono>
-
 #include "mud.hxx"
 
 export module mud;
 
-#define GLOBAL DEDUPE
+#define GLOBAL extern "C++"
+
+void internal_assert(bool thing)
+{
+    assert(thing);
+}
 
 export
 {
     typedef int ch_ret;
     typedef int obj_ret;
+
+    #undef assert
+
+    void assert(bool thing)
+    {
+        internal_assert(thing);
+    }
 
 #ifndef WIN32
     // Linux doesn't define the safe CRT functions that use template deduction, but it's easy enough

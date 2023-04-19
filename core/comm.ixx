@@ -38,11 +38,15 @@
 
 module;
 
-/*
-#include <optional>
-#include <memory>
-#include <algorithm>
-*/
+#ifdef WIN32
+
+#ifndef NOMINMAX
+#define NOMINMAX
+#endif
+
+#include <SDKDDKVer.h>
+#endif
+
 #include <boost/format.hpp>
 #include <boost/asio.hpp>
 
@@ -54,6 +58,7 @@ module;
 
 export module comm;
 
+import std.core;
 import mud;
 import db;
 import act_info;

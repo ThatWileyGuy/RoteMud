@@ -42,6 +42,7 @@ module;
 
 export module slicers;
 
+import std.core;
 import mud;
 import hashstr;
 import space;

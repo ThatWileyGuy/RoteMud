@@ -42,6 +42,7 @@ module;
 
 export module changes;
 
+import std.core;
 import mud;
 
 /*

@@ -46,6 +46,7 @@ extern void load_force_help(void);
 
 export module force;
 
+import std.core;
 import mud;
 import functions;
 import hashstr;

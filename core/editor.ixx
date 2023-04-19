@@ -50,6 +50,7 @@
 
 module;
 
+#include <cstdarg>
 #include "mud.hxx"
 
 extern char* strrep(const char* src, const char* sch, const char* rep);
@@ -57,6 +58,7 @@ extern char* strlinwrp(char* src, int length);
 
 export module editor;
 
+import std.core;
 import mud;
 import hashstr;
 

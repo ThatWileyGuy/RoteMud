@@ -38,6 +38,7 @@
 
 module;
 
+#include <Windows.h>
 #include <stdexcept>
 #include "mud.hxx"
 
@@ -45,6 +46,7 @@ module;
 
 export module tables;
 
+import std.core;
 import mud;
 
 #if defined(KEY)

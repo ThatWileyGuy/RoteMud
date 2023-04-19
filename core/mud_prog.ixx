@@ -42,6 +42,7 @@ module;
 
 export module mud_prog;
 
+import std.core;
 import mud;
 import hashstr;
 

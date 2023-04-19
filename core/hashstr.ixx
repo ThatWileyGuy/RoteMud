@@ -42,6 +42,7 @@ module;
 
 export module hashstr;
 
+import std.core;
 import mud;
 
 #define STR_HASH_SIZE 1024

@@ -42,6 +42,7 @@ module;
 
 export module shops;
 
+import std.core;
 import mud;
 import mud_prog;
 import hashstr;

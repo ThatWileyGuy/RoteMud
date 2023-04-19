@@ -56,6 +56,7 @@ extern int get_trapflag(const char* flag);
 
 export module reset;
 
+import std.core;
 import mud;
 import db;
 import hashstr;

@@ -42,6 +42,7 @@ module;
 
 export module finfo;
 
+import std.core;
 import mud;
 import hashstr;
 

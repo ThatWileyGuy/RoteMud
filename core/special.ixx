@@ -44,6 +44,7 @@ module;
 
 export module special;
 
+import std.core;
 import mud;
 import hashstr;
 

@@ -38,10 +38,22 @@
 
 module;
 
+#ifdef WIN32
+
+#ifndef NOMINMAX
+#define NOMINMAX
+#endif
+
+#include <SDKDDKVer.h>
+#endif
+
+#include <chrono>
+#include <boost/asio.hpp> // TODO why is this needed here?
 #include "mud.hxx"
 
 export module update;
 
+import std.core;
 import mud;
 import connection;
 import pfiles;
