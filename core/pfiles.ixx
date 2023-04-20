@@ -87,7 +87,7 @@ void save_timedata(void)
 
     sprintf_s(filename, "%stime.dat", SYSTEM_DIR);
 
-    if ((fp = fopen(filename, "w")) == NULL)
+    if ((fp = fopen(filename, "w")) == nullptr)
     {
         bug("save_timedata: fopen");
         perror(filename);
@@ -117,7 +117,7 @@ void save_timedata(void)
 /* Reads the actual time file from disk - Samson 1-21-99 */
 void fread_timedata(FILE* fp)
 {
-    const char* word = NULL;
+    const char* word = nullptr;
     bool fMatch = false;
 
     for (;;)
@@ -158,14 +158,14 @@ bool load_timedata(void)
 
     sprintf_s(filename, "%stime.dat", SYSTEM_DIR);
 
-    if ((fp = fopen(filename, "r")) != NULL)
+    if ((fp = fopen(filename, "r")) != nullptr)
     {
 
         found = true;
         for (;;)
         {
             char letter = '\0';
-            char* word = NULL;
+            char* word = nullptr;
 
             letter = fread_letter(fp);
             if (letter == '*')
@@ -247,8 +247,8 @@ short days = 0;
 void fread_pfile(FILE* fp, time_t tdiff, char* fname, bool count)
 {
     const char* word = nullptr;
-    char* name = NULL;
-    char* clan = NULL;
+    char* name = nullptr;
+    char* clan = nullptr;
     short level = 0;
     short file_ver = 0;
     int pact2;
@@ -258,7 +258,7 @@ void fread_pfile(FILE* fp, time_t tdiff, char* fname, bool count)
     for (;;)
     {
         word = feof(fp) ? "End" : fread_word(fp);
-        if (word == NULL)
+        if (word == nullptr)
         {
             bug("fread_word error on character %s.", fname);
             return;
@@ -376,7 +376,7 @@ timecheck:
     }
     */
 
-    if (clan != NULL)
+    if (clan != nullptr)
     {
         CLAN_DATA* guild = get_clan(clan);
 
@@ -402,7 +402,7 @@ void read_pfile(const char* dirname, const char* filename, bool count)
     {
         tdiff = (now_time - fst.st_mtime) / 86400;
 
-        if ((fp = fopen(fname, "r")) != NULL)
+        if ((fp = fopen(fname, "r")) != nullptr)
         {
             for (;;)
             {
@@ -497,7 +497,7 @@ void pfile_scan(bool count)
 void fread_fpfile(CHAR_DATA* ch, FILE* fp, char* fname)
 {
     const char* word = nullptr;
-    char* name = NULL;
+    char* name = nullptr;
     bool fMatch = false;
     sh_int ftype = 0;
     sh_int fstatus = 0;
@@ -595,7 +595,7 @@ void read_fpfile(CHAR_DATA* ch, const char* dirname, const char* filename)
     if (stat(fname, &fst) != -1)
     {
 
-        if ((fp = fopen(fname, "r")) != NULL)
+        if ((fp = fopen(fname, "r")) != nullptr)
         {
             for (;;)
             {
@@ -865,12 +865,12 @@ export void remove_member(char* name, char* shortname)
 
     sprintf_s(list, "%s%s.list", CLAN_DIR, shortname);
     sprintf_s(temp, "%s.temp", list);
-    if ((fpList = fopen(list, "r")) == NULL)
+    if ((fpList = fopen(list, "r")) == nullptr)
     {
         bug("Unable to open member list");
         return;
     }
-    if ((fpNew = fopen(temp, "w")) == NULL)
+    if ((fpNew = fopen(temp, "w")) == nullptr)
     {
         bug("remove_member: Unable to write temp list");
         return;
@@ -901,7 +901,7 @@ void do_exempt(CHAR_DATA* ch, char* argument)
         return;
     }
 
-    if ((victim = get_char_world(ch, argument)) == NULL)
+    if ((victim = get_char_world(ch, argument)) == nullptr)
     {
         send_to_char("They must be online to exempt them.\n\r", ch);
         return;

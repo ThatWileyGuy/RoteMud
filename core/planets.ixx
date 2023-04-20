@@ -67,7 +67,7 @@ export PLANET_DATA* get_planet(char* name)
     PLANET_DATA* planet;
 
     if (name[0] == '\0')
-        return NULL;
+        return nullptr;
 
     for (planet = first_planet; planet; planet = planet->next)
         if (!str_cmp(name, planet->name))
@@ -85,7 +85,7 @@ export PLANET_DATA* get_planet(char* name)
         if (nifty_is_name_prefix(name, planet->name))
             return planet;
 
-    return NULL;
+    return nullptr;
 }
 
 void write_planet_list()
@@ -129,7 +129,7 @@ export void save_planet(PLANET_DATA* planet)
 
     sprintf_s(filename, "%s%s", PLANET_DIR, planet->filename);
 
-    if ((fp = fopen(filename, "w")) == NULL)
+    if ((fp = fopen(filename, "w")) == nullptr)
     {
         bug("save_planet: fopen", 0);
         perror(filename);
@@ -340,19 +340,19 @@ bool load_planet_file(const char* planetfile)
 
     CREATE(planet, PLANET_DATA, 1);
 
-    planet->governed_by = NULL;
-    planet->next_in_system = NULL;
-    planet->prev_in_system = NULL;
-    planet->starsystem = NULL;
-    planet->area = NULL;
-    planet->first_guard = NULL;
-    planet->last_guard = NULL;
+    planet->governed_by = nullptr;
+    planet->next_in_system = nullptr;
+    planet->prev_in_system = nullptr;
+    planet->starsystem = nullptr;
+    planet->area = nullptr;
+    planet->first_guard = nullptr;
+    planet->last_guard = nullptr;
 
     found = false;
 
     auto filename = std::string(PLANET_DIR) + planetfile;
 
-    if ((fp = fopen(filename.c_str(), "r")) != NULL)
+    if ((fp = fopen(filename.c_str(), "r")) != nullptr)
     {
 
         found = true;
@@ -409,13 +409,13 @@ export void load_planets()
     char planetlist[256];
     char buf[MAX_STRING_LENGTH];
 
-    first_planet = NULL;
-    last_planet = NULL;
+    first_planet = nullptr;
+    last_planet = nullptr;
 
     log_string("Loading planets...");
 
     sprintf_s(planetlist, "%s%s", PLANET_DIR, PLANET_LIST);
-    if ((fpList = fopen(planetlist, "r")) == NULL)
+    if ((fpList = fopen(planetlist, "r")) == nullptr)
     {
         perror(planetlist);
         exit(1);
@@ -446,7 +446,7 @@ AREA_DATA* get_area(char* argument)
         if (pArea->filename && !str_cmp(pArea->filename, argument))
             return pArea;
 
-    return NULL;
+    return nullptr;
 }
 
 void do_setplanet(CHAR_DATA* ch, char* argument)
@@ -540,7 +540,7 @@ void do_setplanet(CHAR_DATA* ch, char* argument)
     {
         SPACE_DATA* starsystem;
 
-        if ((starsystem = planet->starsystem) != NULL)
+        if ((starsystem = planet->starsystem) != nullptr)
             UNLINK(planet, starsystem->first_planet, starsystem->last_planet, next_in_system, prev_in_system);
         if ((planet->starsystem = starsystem_from_name(argument)))
         {
@@ -788,14 +788,14 @@ void do_makeplanet(CHAR_DATA* ch, char* argument)
 
     CREATE(planet, PLANET_DATA, 1);
     LINK(planet, first_planet, last_planet, next, prev);
-    planet->governed_by = NULL;
-    planet->next_in_system = NULL;
-    planet->prev_in_system = NULL;
-    planet->starsystem = NULL;
-    planet->first_area = NULL;
-    planet->last_area = NULL;
-    planet->first_guard = NULL;
-    planet->last_guard = NULL;
+    planet->governed_by = nullptr;
+    planet->next_in_system = nullptr;
+    planet->prev_in_system = nullptr;
+    planet->starsystem = nullptr;
+    planet->first_area = nullptr;
+    planet->last_area = nullptr;
+    planet->first_guard = nullptr;
+    planet->last_guard = nullptr;
     planet->name = STRALLOC(argument);
     planet->flags = 0;
 }
@@ -877,7 +877,7 @@ void do_capture(CHAR_DATA* ch, char* argument)
 
     clan = ch->pcdata->clan;
 
-    if ((planet = ch->in_room->area->planet) == NULL)
+    if ((planet = ch->in_room->area->planet) == nullptr)
     {
         send_to_char("You must be on a planet to capture it.\n\r", ch);
         return;
@@ -919,7 +919,7 @@ void do_capture(CHAR_DATA* ch, char* argument)
         send_to_char("You will have to eliminate all enemy forces before you can capture it.\n\r", ch);
         return;
     }
-    if (planet->governed_by->name && planet->governed_by->name != NULL)
+    if (planet->governed_by->name && planet->governed_by->name != nullptr)
     {
         if (!str_cmp(planet->governed_by->name, "Neutral"))
         {

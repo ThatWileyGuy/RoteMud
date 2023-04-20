@@ -111,8 +111,8 @@ export void interpret(CHAR_DATA* ch, char* argument)
     char command[MAX_INPUT_LENGTH];
     char logline[MAX_INPUT_LENGTH];
     char logname[MAX_INPUT_LENGTH];
-    TIMER* timer = NULL;
-    CMDTYPE* cmd = NULL;
+    TIMER* timer = nullptr;
+    CMDTYPE* cmd = nullptr;
     int trust;
     int loglvl;
     bool found;
@@ -129,10 +129,10 @@ export void interpret(CHAR_DATA* ch, char* argument)
     {
         DO_FUN* fun;
 
-        if ((fun = ch->last_cmd) == NULL)
+        if ((fun = ch->last_cmd) == nullptr)
         {
             ch->substate = SUB_NONE;
-            bug("interpret: SUB_REPEATCMD with NULL last_cmd", 0);
+            bug("interpret: SUB_REPEATCMD with nullptr last_cmd", 0);
             return;
         }
         else
@@ -156,7 +156,7 @@ export void interpret(CHAR_DATA* ch, char* argument)
             }
             if (!found)
             {
-                cmd = NULL;
+                cmd = nullptr;
                 bug("interpret: SUB_REPEATCMD: last_cmd invalid", 0);
                 return;
             }
@@ -231,7 +231,7 @@ export void interpret(CHAR_DATA* ch, char* argument)
         if (!IS_NPC(ch) && IS_SET(ch->act, PLR_AFK) && (str_cmp(command, "AFK")))
         {
             REMOVE_BIT(ch->act, PLR_AFK);
-            act(AT_GREY, "$n is no longer afk.", ch, NULL, NULL, TO_ROOM);
+            act(AT_GREY, "$n is no longer afk.", ch, nullptr, nullptr, TO_ROOM);
         }
     }
 
@@ -344,13 +344,13 @@ export void interpret(CHAR_DATA* ch, char* argument)
             EXIT_DATA* pexit;
 
             /* check for an auto-matic exit command */
-            if ((pexit = find_door(ch, command, true)) != NULL && IS_SET(pexit->exit_info, EX_xAUTO))
+            if ((pexit = find_door(ch, command, true)) != nullptr && IS_SET(pexit->exit_info, EX_xAUTO))
             {
                 if (IS_SET(pexit->exit_info, EX_CLOSED) &&
                     (!IS_AFFECTED(ch, AFF_PASS_DOOR) || IS_SET(pexit->exit_info, EX_NOPASSDOOR)))
                 {
                     if (!IS_SET(pexit->exit_info, EX_SECRET))
-                        act(AT_PLAIN, "The $d is closed.", ch, NULL, pexit->keyword, TO_CHAR);
+                        act(AT_PLAIN, "The $d is closed.", ch, nullptr, pexit->keyword, TO_CHAR);
                     else
                         send_to_char("You cannot do that here.\n\r", ch);
                     return;
@@ -422,7 +422,7 @@ export CMDTYPE* find_command(const char* command)
         if (!str_prefix(command, cmd->name))
             return cmd;
 
-    return NULL;
+    return nullptr;
 }
 
 export SOCIALTYPE* find_social(const char* command)
@@ -439,7 +439,7 @@ export SOCIALTYPE* find_social(const char* command)
         if (!str_prefix(command, social->name))
             return social;
 
-    return NULL;
+    return nullptr;
 }
 
 bool check_social(CHAR_DATA* ch, const char* command, const char* argument)
@@ -448,7 +448,7 @@ bool check_social(CHAR_DATA* ch, const char* command, const char* argument)
     CHAR_DATA* victim;
     SOCIALTYPE* social;
 
-    if ((social = find_social(command)) == NULL)
+    if ((social = find_social(command)) == nullptr)
         return false;
 
     if (!IS_NPC(ch) && IS_SET(ch->act, PLR_NO_EMOTE))
@@ -484,26 +484,26 @@ bool check_social(CHAR_DATA* ch, const char* command, const char* argument)
     }
 
     one_argument(argument, arg);
-    victim = NULL;
+    victim = nullptr;
     if (arg[0] == '\0')
     {
-        act(AT_SOCIAL, social->others_no_arg, ch, NULL, victim, TO_ROOM);
-        act(AT_SOCIAL, social->char_no_arg, ch, NULL, victim, TO_CHAR);
+        act(AT_SOCIAL, social->others_no_arg, ch, nullptr, victim, TO_ROOM);
+        act(AT_SOCIAL, social->char_no_arg, ch, nullptr, victim, TO_CHAR);
     }
-    else if ((victim = get_char_room(ch, arg)) == NULL)
+    else if ((victim = get_char_room(ch, arg)) == nullptr)
     {
         send_to_char("They aren't here.\n\r", ch);
     }
     else if (victim == ch)
     {
-        act(AT_SOCIAL, social->others_auto, ch, NULL, victim, TO_ROOM);
-        act(AT_SOCIAL, social->char_auto, ch, NULL, victim, TO_CHAR);
+        act(AT_SOCIAL, social->others_auto, ch, nullptr, victim, TO_ROOM);
+        act(AT_SOCIAL, social->char_auto, ch, nullptr, victim, TO_CHAR);
     }
     else
     {
-        act(AT_SOCIAL, social->others_found, ch, NULL, victim, TO_NOTVICT);
-        act(AT_SOCIAL, social->char_found, ch, NULL, victim, TO_CHAR);
-        act(AT_SOCIAL, social->vict_found, ch, NULL, victim, TO_VICT);
+        act(AT_SOCIAL, social->others_found, ch, nullptr, victim, TO_NOTVICT);
+        act(AT_SOCIAL, social->char_found, ch, nullptr, victim, TO_CHAR);
+        act(AT_SOCIAL, social->vict_found, ch, nullptr, victim, TO_VICT);
 
         if (!IS_NPC(ch) && IS_NPC(victim) && !IS_AFFECTED(victim, AFF_CHARM) && IS_AWAKE(victim) &&
             !IS_SET(victim->pIndexData->progtypes, ACT_PROG))
@@ -515,15 +515,15 @@ bool check_social(CHAR_DATA* ch, const char* command, const char* argument)
                     multi_hit(victim, ch, TYPE_UNDEFINED);
                 else if (IS_NEUTRAL(ch))
                 {
-                    act(AT_ACTION, "$n slaps $N.", victim, NULL, ch, TO_NOTVICT);
-                    act(AT_ACTION, "You slap $N.", victim, NULL, ch, TO_CHAR);
-                    act(AT_ACTION, "$n slaps you.", victim, NULL, ch, TO_VICT);
+                    act(AT_ACTION, "$n slaps $N.", victim, nullptr, ch, TO_NOTVICT);
+                    act(AT_ACTION, "You slap $N.", victim, nullptr, ch, TO_CHAR);
+                    act(AT_ACTION, "$n slaps you.", victim, nullptr, ch, TO_VICT);
                 }
                 else
                 {
-                    act(AT_ACTION, "$n acts like $N doesn't even exist.", victim, NULL, ch, TO_NOTVICT);
-                    act(AT_ACTION, "You just ignore $N.", victim, NULL, ch, TO_CHAR);
-                    act(AT_ACTION, "$n appears to be ignoring you.", victim, NULL, ch, TO_VICT);
+                    act(AT_ACTION, "$n acts like $N doesn't even exist.", victim, nullptr, ch, TO_NOTVICT);
+                    act(AT_ACTION, "You just ignore $N.", victim, nullptr, ch, TO_CHAR);
+                    act(AT_ACTION, "$n appears to be ignoring you.", victim, nullptr, ch, TO_VICT);
                 }
                 break;
 
@@ -535,18 +535,18 @@ bool check_social(CHAR_DATA* ch, const char* command, const char* argument)
             case 6:
             case 7:
             case 8:
-                act(AT_SOCIAL, social->others_found, victim, NULL, ch, TO_NOTVICT);
-                act(AT_SOCIAL, social->char_found, victim, NULL, ch, TO_CHAR);
-                act(AT_SOCIAL, social->vict_found, victim, NULL, ch, TO_VICT);
+                act(AT_SOCIAL, social->others_found, victim, nullptr, ch, TO_NOTVICT);
+                act(AT_SOCIAL, social->char_found, victim, nullptr, ch, TO_CHAR);
+                act(AT_SOCIAL, social->vict_found, victim, nullptr, ch, TO_VICT);
                 break;
 
             case 9:
             case 10:
             case 11:
             case 12:
-                act(AT_ACTION, "$n slaps $N.", victim, NULL, ch, TO_NOTVICT);
-                act(AT_ACTION, "You slap $N.", victim, NULL, ch, TO_CHAR);
-                act(AT_ACTION, "$n slaps you.", victim, NULL, ch, TO_VICT);
+                act(AT_ACTION, "$n slaps $N.", victim, nullptr, ch, TO_NOTVICT);
+                act(AT_ACTION, "You slap $N.", victim, nullptr, ch, TO_CHAR);
+                act(AT_ACTION, "$n slaps you.", victim, nullptr, ch, TO_VICT);
                 break;
             }
         }

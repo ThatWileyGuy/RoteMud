@@ -89,7 +89,7 @@ void* find_symbol(const char* name)
 
     if (dlHandle == nullptr)
     {
-        dlHandle = dlopen(NULL, RTLD_LAZY);
+        dlHandle = dlopen(nullptr, RTLD_LAZY);
     }
 
     if (dlHandle == nullptr)
@@ -257,7 +257,7 @@ export void save_skill_table(int delnum)
     int x;
     FILE* fpout;
 
-    if ((fpout = fopen(SKILL_FILE, "w")) == NULL)
+    if ((fpout = fopen(SKILL_FILE, "w")) == nullptr)
     {
         bug("Cannot open skills.dat for writting", 0);
         perror(SKILL_FILE);
@@ -285,7 +285,7 @@ export void save_herb_table()
     int x;
     FILE* fpout;
 
-    if ((fpout = fopen(HERB_FILE, "w")) == NULL)
+    if ((fpout = fopen(HERB_FILE, "w")) == nullptr)
     {
         bug("Cannot open herbs.dat for writting", 0);
         perror(HERB_FILE);
@@ -312,7 +312,7 @@ export void save_socials()
     SOCIALTYPE* social;
     int x;
 
-    if ((fpout = fopen(SOCIAL_FILE, "w")) == NULL)
+    if ((fpout = fopen(SOCIAL_FILE, "w")) == nullptr)
     {
         bug("Cannot open socials.dat for writting", 0);
         perror(SOCIAL_FILE);
@@ -333,7 +333,7 @@ export void save_socials()
             if (social->char_no_arg)
                 fprintf(fpout, "CharNoArg   %s~\n", social->char_no_arg);
             else
-                bug("Save_socials: NULL char_no_arg in hash bucket %d", x);
+                bug("Save_socials: nullptr char_no_arg in hash bucket %d", x);
             if (social->others_no_arg)
                 fprintf(fpout, "OthersNoArg %s~\n", social->others_no_arg);
             if (social->char_found)
@@ -377,7 +377,7 @@ export void save_commands()
     CMDTYPE* command;
     int x;
 
-    if ((fpout = fopen(COMMAND_FILE, "w")) == NULL)
+    if ((fpout = fopen(COMMAND_FILE, "w")) == nullptr)
     {
         bug("Cannot open commands.dat for writing", 0);
         perror(COMMAND_FILE);
@@ -459,13 +459,13 @@ SKILL_TYPE* fread_skill(FILE* fp)
                 if (!str_prefix("do_", w) && (dofun = skill_function(w)) != skill_notfound)
                 {
                     skill->skill_fun = dofun;
-                    skill->spell_fun = NULL;
+                    skill->spell_fun = nullptr;
                     skill->skill_fun_name = str_dup(w);
                 }
                 else if (str_prefix("do_", w) && (spellfun = spell_function(w)) != spell_notfound)
                 {
                     skill->spell_fun = spellfun;
-                    skill->skill_fun = NULL;
+                    skill->skill_fun = nullptr;
                     skill->spell_fun_name = str_dup(w);
                 }
                 else
@@ -565,7 +565,7 @@ export void load_skill_table()
 {
     FILE* fp;
 
-    if ((fp = fopen(SKILL_FILE, "r")) != NULL)
+    if ((fp = fopen(SKILL_FILE, "r")) != nullptr)
     {
         top_sn = 0;
         for (;;)
@@ -619,7 +619,7 @@ export void load_herb_table()
 {
     FILE* fp;
 
-    if ((fp = fopen(HERB_FILE, "r")) != NULL)
+    if ((fp = fopen(HERB_FILE, "r")) != nullptr)
     {
         top_herb = 0;
         for (;;)
@@ -745,7 +745,7 @@ export void load_socials()
 {
     FILE* fp;
 
-    if ((fp = fopen(SOCIAL_FILE, "r")) != NULL)
+    if ((fp = fopen(SOCIAL_FILE, "r")) != nullptr)
     {
         top_sn = 0;
         for (;;)
@@ -879,7 +879,7 @@ export void load_commands()
 {
     FILE* fp;
 
-    if ((fp = fopen(COMMAND_FILE, "r")) != NULL)
+    if ((fp = fopen(COMMAND_FILE, "r")) != nullptr)
     {
         top_sn = 0;
         for (;;)
@@ -955,20 +955,20 @@ export void write_last_file(char* entry)
 
     sprintf_s(filename, "%s", LAST_LIST);
     sprintf_s(tempname, "%s", LAST_TEMP_LIST);
-    if ((fptemp = fopen(tempname, "w")) == NULL)
+    if ((fptemp = fopen(tempname, "w")) == nullptr)
     {
         bug("Cannot open: %s for writing", tempname);
         return;
     }
     fprintf(fptemp, "%s\n", entry); // adds new entry to top of the file
-    if ((fpout = fopen(filename, "r")) != NULL)
+    if ((fpout = fopen(filename, "r")) != nullptr)
     {
         copy_files_contents(fpout, fptemp); // copy the rest to the file
         fclose(fpout);                      // close the files since writing is done
     }
     fclose(fptemp);
 
-    if (remove(filename) != 0 && fopen(filename, "r") != NULL)
+    if (remove(filename) != 0 && fopen(filename, "r") != nullptr)
     {
         bug("Do not have permission to delete the %s file", filename);
         return;
@@ -998,7 +998,7 @@ export void read_last_file(CHAR_DATA* ch, int count, char* name)
     int fnd = 0;
 
     sprintf_s(filename, "%s", LAST_LIST);
-    if ((fpout = fopen(filename, "r")) == NULL)
+    if ((fpout = fopen(filename, "r")) == nullptr)
     {
         send_to_char("There is no last file to look at.\n\r", ch);
         return;

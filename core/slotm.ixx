@@ -146,7 +146,7 @@ void do_playslots(CHAR_DATA* ch, char* argument)
     if (IS_NPC(ch))
         return;
 
-    if (argument == NULL)
+    if (argument == nullptr)
     {
         playslots_help(ch);
         return;

@@ -70,7 +70,7 @@ struct BFS_QUEUE_ENTRY
     BFS_QUEUE_ENTRY* next;
 };
 
-static BFS_QUEUE_ENTRY *queue_head = NULL, *queue_tail = NULL, *room_queue = NULL;
+static BFS_QUEUE_ENTRY *queue_head = nullptr, *queue_tail = nullptr, *room_queue = nullptr;
 
 /* Utility macros */
 #define MARK(room) (SET_BIT((room)->room_flags, BFS_MARK))
@@ -91,7 +91,7 @@ bool valid_edge(ROOM_INDEX_DATA* room, sh_int door)
     ROOM_INDEX_DATA* to_room;
 
     pexit = get_exit(room, door);
-    if (pexit && (to_room = pexit->to_room) != NULL
+    if (pexit && (to_room = pexit->to_room) != nullptr
 #ifndef TRACK_THROUGH_DOORS
         && !IS_SET(pexit->exit_info, EX_CLOSED)
 #endif
@@ -108,7 +108,7 @@ void bfs_enqueue(ROOM_INDEX_DATA* room, char dir)
     CREATE(curr, BFS_QUEUE_ENTRY, 1);
     curr->room = room;
     curr->dir = dir;
-    curr->next = NULL;
+    curr->next = nullptr;
 
     if (queue_tail)
     {
@@ -126,7 +126,7 @@ void bfs_dequeue(void)
     curr = queue_head;
 
     if (!(queue_head = queue_head->next))
-        queue_tail = NULL;
+        queue_tail = nullptr;
     DISPOSE(curr);
 }
 
@@ -157,7 +157,7 @@ void clean_room_queue(void)
         curr_next = curr->next;
         DISPOSE(curr);
     }
-    room_queue = NULL;
+    room_queue = nullptr;
 }
 
 int find_first_step(ROOM_INDEX_DATA* src, ROOM_INDEX_DATA* target, int maxdist)
@@ -286,19 +286,19 @@ export void found_prey(CHAR_DATA* ch, CHAR_DATA* victim)
     char buf[MAX_STRING_LENGTH];
     char victname[MAX_STRING_LENGTH];
 
-    if (victim == NULL)
+    if (victim == nullptr)
     {
         bug("Found_prey: null victim", 0);
         return;
     }
 
-    if (ch == NULL)
+    if (ch == nullptr)
     {
         bug("Found_prey: null ch", 0);
         return;
     }
 
-    if (victim->in_room == NULL)
+    if (victim->in_room == nullptr)
     {
         bug("Found_prey: null victim->in_room", 0);
         return;
@@ -317,9 +317,9 @@ export void found_prey(CHAR_DATA* ch, CHAR_DATA* victim)
             do_say(ch, buf);
             break;
         case 1:
-            act(AT_ACTION, "$n sniffs around the room for $N.", ch, NULL, victim, TO_NOTVICT);
-            act(AT_ACTION, "You sniff around the room for $N.", ch, NULL, victim, TO_CHAR);
-            act(AT_ACTION, "$n sniffs around the room for you.", ch, NULL, victim, TO_VICT);
+            act(AT_ACTION, "$n sniffs around the room for $N.", ch, nullptr, victim, TO_NOTVICT);
+            act(AT_ACTION, "You sniff around the room for $N.", ch, nullptr, victim, TO_CHAR);
+            act(AT_ACTION, "$n sniffs around the room for you.", ch, nullptr, victim, TO_VICT);
             sprintf_s(buf, "I can smell your blood!");
             do_say(ch, buf);
             break;
@@ -354,9 +354,9 @@ export void found_prey(CHAR_DATA* ch, CHAR_DATA* victim)
             do_yell(ch, buf);
             break;
         case 3:
-            act(AT_ACTION, "$n takes a few swipes at $N.", ch, NULL, victim, TO_NOTVICT);
-            act(AT_ACTION, "You try to take a few swipes $N.", ch, NULL, victim, TO_CHAR);
-            act(AT_ACTION, "$n takes a few swipes at you.", ch, NULL, victim, TO_VICT);
+            act(AT_ACTION, "$n takes a few swipes at $N.", ch, nullptr, victim, TO_NOTVICT);
+            act(AT_ACTION, "You try to take a few swipes $N.", ch, nullptr, victim, TO_CHAR);
+            act(AT_ACTION, "$n takes a few swipes at you.", ch, nullptr, victim, TO_VICT);
             break;
         }
         return;
@@ -377,9 +377,9 @@ export void found_prey(CHAR_DATA* ch, CHAR_DATA* victim)
         do_say(ch, buf);
         break;
     case 3:
-        act(AT_ACTION, "$n lunges at $N from out of nowhere!", ch, NULL, victim, TO_NOTVICT);
-        act(AT_ACTION, "You lunge at $N catching $M off guard!", ch, NULL, victim, TO_CHAR);
-        act(AT_ACTION, "$n lunges at you from out of nowhere!", ch, NULL, victim, TO_VICT);
+        act(AT_ACTION, "$n lunges at $N from out of nowhere!", ch, nullptr, victim, TO_NOTVICT);
+        act(AT_ACTION, "You lunge at $N catching $M off guard!", ch, nullptr, victim, TO_CHAR);
+        act(AT_ACTION, "$n lunges at you from out of nowhere!", ch, nullptr, victim, TO_VICT);
     }
     stop_hunting(ch);
     set_fighting(ch, victim);
@@ -421,7 +421,7 @@ export void hunt_victim(CHAR_DATA* ch)
         OBJ_DATA* wield;
 
         wield = get_eq_char(ch, WEAR_WIELD);
-        if (wield != NULL && wield->value[3] == WEAPON_BLASTER)
+        if (wield != nullptr && wield->value[3] == WEAPON_BLASTER)
         {
             if (mob_snipe(ch, ch->hunting->who) == true)
                 return;
@@ -439,7 +439,7 @@ export void hunt_victim(CHAR_DATA* ch)
         for (attempt = 0; attempt < 25; attempt++)
         {
             ret = number_door();
-            if ((pexit = get_exit(ch->in_room, ret)) == NULL || !pexit->to_room ||
+            if ((pexit = get_exit(ch->in_room, ret)) == nullptr || !pexit->to_room ||
                 IS_SET(pexit->exit_info, EX_CLOSED) || IS_SET(pexit->to_room->room_flags, ROOM_NO_MOB))
                 continue;
         }
@@ -493,7 +493,7 @@ bool mob_snipe(CHAR_DATA* ch, CHAR_DATA* victim)
 
     for (dir = 0; dir <= 10; dir++)
     {
-        if ((pexit = get_exit(ch->in_room, dir)) == NULL)
+        if ((pexit = get_exit(ch->in_room, dir)) == nullptr)
             continue;
 
         if (IS_SET(pexit->exit_info, EX_CLOSED))
@@ -509,11 +509,11 @@ bool mob_snipe(CHAR_DATA* ch, CHAR_DATA* victim)
             if (!pexit->to_room)
                 break;
 
-            to_room = NULL;
+            to_room = nullptr;
             if (pexit->distance > 1)
                 to_room = generate_exit(ch->in_room, &pexit);
 
-            if (to_room == NULL)
+            if (to_room == nullptr)
                 to_room = pexit->to_room;
 
             char_from_room(ch);
@@ -525,7 +525,7 @@ bool mob_snipe(CHAR_DATA* ch, CHAR_DATA* victim)
                 break;
             }
 
-            if ((pexit = get_exit(ch->in_room, dir)) == NULL)
+            if ((pexit = get_exit(ch->in_room, dir)) == nullptr)
                 break;
         }
 
@@ -581,10 +581,10 @@ bool mob_snipe(CHAR_DATA* ch, CHAR_DATA* victim)
         char_to_room(ch, victim->in_room);
 
         sprintf_s(buf, "A blaster shot fires at you from the %s.", dir_name[dir]);
-        act(AT_ACTION, buf, victim, NULL, ch, TO_CHAR);
-        act(AT_ACTION, "You fire at $N.", ch, NULL, victim, TO_CHAR);
+        act(AT_ACTION, buf, victim, nullptr, ch, TO_CHAR);
+        act(AT_ACTION, "You fire at $N.", ch, nullptr, victim, TO_CHAR);
         sprintf_s(buf, "A blaster shot fires at $N from the %s.", dir_name[dir]);
-        act(AT_ACTION, buf, ch, NULL, victim, TO_NOTVICT);
+        act(AT_ACTION, buf, ch, nullptr, victim, TO_NOTVICT);
 
         one_hit(ch, victim, TYPE_UNDEFINED);
 

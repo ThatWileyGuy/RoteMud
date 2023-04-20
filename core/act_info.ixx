@@ -579,7 +579,7 @@ export void show_char_to_char_0(CHAR_DATA* victim, CHAR_DATA* ch)
            Furniture 1.01 is provided by Xerves
            Info rewrite for sleeping/resting/standing/sitting on Objects -- Xerves */
     case POS_SLEEPING:
-        if (victim->on != NULL)
+        if (victim->on != nullptr)
         {
             if (IS_SET(victim->on->value[2], SLEEP_AT))
             {
@@ -607,7 +607,7 @@ export void show_char_to_char_0(CHAR_DATA* victim, CHAR_DATA* ch)
         }
         break;
     case POS_RESTING:
-        if (victim->on != NULL)
+        if (victim->on != nullptr)
         {
             if (IS_SET(victim->on->value[2], REST_AT))
             {
@@ -636,7 +636,7 @@ export void show_char_to_char_0(CHAR_DATA* victim, CHAR_DATA* ch)
         }
         break;
     case POS_SITTING:
-        if (victim->on != NULL)
+        if (victim->on != nullptr)
         {
             if (IS_SET(victim->on->value[2], SIT_AT))
             {
@@ -658,7 +658,7 @@ export void show_char_to_char_0(CHAR_DATA* victim, CHAR_DATA* ch)
             strcat_s(buf, " is sitting here.");
         break;
     case POS_STANDING:
-        if (victim->on != NULL)
+        if (victim->on != nullptr)
         {
             if (IS_SET(victim->on->value[2], STAND_AT))
             {
@@ -759,11 +759,11 @@ void show_char_to_char_1(CHAR_DATA* victim, CHAR_DATA* ch)
 
     if (can_see(victim, ch))
     {
-        act(AT_ACTION, "$n looks at you.", ch, NULL, victim, TO_VICT);
+        act(AT_ACTION, "$n looks at you.", ch, nullptr, victim, TO_VICT);
         if (ch != victim)
-            act(AT_ACTION, "$n looks at $N.", ch, NULL, victim, TO_NOTVICT);
+            act(AT_ACTION, "$n looks at $N.", ch, nullptr, victim, TO_NOTVICT);
         else
-            act(AT_ACTION, "$n looks $Mself over.", ch, NULL, victim, TO_NOTVICT);
+            act(AT_ACTION, "$n looks $Mself over.", ch, nullptr, victim, TO_NOTVICT);
     }
 
     if (victim == ch && !IS_NPC(ch))
@@ -783,7 +783,7 @@ void show_char_to_char_1(CHAR_DATA* victim, CHAR_DATA* ch)
     }
     else
     {
-        act(AT_PLAIN, "You see nothing special about $M.", ch, NULL, victim, TO_CHAR);
+        act(AT_PLAIN, "You see nothing special about $M.", ch, nullptr, victim, TO_CHAR);
     }
 
     show_condition(ch, victim);
@@ -791,12 +791,12 @@ void show_char_to_char_1(CHAR_DATA* victim, CHAR_DATA* ch)
     found = false;
     for (iWear = 0; iWear < MAX_WEAR; iWear++)
     {
-        if ((obj = get_eq_char(victim, iWear)) != NULL && can_see_obj(ch, obj))
+        if ((obj = get_eq_char(victim, iWear)) != nullptr && can_see_obj(ch, obj))
         {
             if (!found)
             {
                 send_to_char("\n\r", ch);
-                act(AT_PLAIN, "$N is using:", ch, NULL, victim, TO_CHAR);
+                act(AT_PLAIN, "$N is using:", ch, nullptr, victim, TO_CHAR);
                 found = true;
             }
             send_to_char(where_name[iWear], ch);
@@ -854,12 +854,12 @@ export void show_char_to_char(CHAR_DATA* list, CHAR_DATA* ch)
 void show_ships_to_char(SHIP_DATA* ship, CHAR_DATA* ch)
 {
     SHIP_DATA* rship;
-    SHIP_DATA* nship = NULL;
+    SHIP_DATA* nship = nullptr;
 
     for (rship = ship; rship; rship = nship)
     {
         ch_printf(ch, "&W%s%-35s     ", color_str(AT_SHIP, ch), rship->name);
-        if ((nship = rship->next_in_room) != NULL)
+        if ((nship = rship->next_in_room) != nullptr)
         {
             ch_printf(ch, "%-35s", nship->name);
             nship = nship->next_in_room;
@@ -1023,7 +1023,7 @@ void do_look(CHAR_DATA* ch, char* argument)
         show_char_to_char(ch->in_room->first_person, ch);
 
         if (str_cmp(arg1, "auto"))
-            if ((ship = ship_from_cockpit(ch->in_room->vnum)) != NULL)
+            if ((ship = ship_from_cockpit(ch->in_room->vnum)) != nullptr)
             {
                 set_char_color(AT_WHITE, ch);
                 ch_printf(ch, "\n\rThrough the transparisteel windows you see:\n\r");
@@ -1069,7 +1069,7 @@ void do_look(CHAR_DATA* ch, char* argument)
                 {
                     ROOM_INDEX_DATA* to_room;
                     to_room = ship->in_room;
-                    if (to_room) // get_room_index( ship->location ) ) != NULL )
+                    if (to_room) // get_room_index( ship->location ) ) != nullptr )
                     {
                         ch_printf(ch, "\n\r");
                         original = ch->in_room;
@@ -1096,7 +1096,7 @@ void do_look(CHAR_DATA* ch, char* argument)
             return;
         }
 
-        if ((obj = get_obj_here(ch, arg2)) == NULL)
+        if ((obj = get_obj_here(ch, arg2)) == nullptr)
         {
             send_to_char("You do not see that here.\n\r", ch);
             return;
@@ -1108,8 +1108,8 @@ void do_look(CHAR_DATA* ch, char* argument)
         }
         count = obj->count;
         obj->count = 1;
-        act(AT_PLAIN, "You lift $p and look beneath it:", ch, obj, NULL, TO_CHAR);
-        act(AT_PLAIN, "$n lifts $p and looks beneath it:", ch, obj, NULL, TO_ROOM);
+        act(AT_PLAIN, "You lift $p and look beneath it:", ch, obj, nullptr, TO_CHAR);
+        act(AT_PLAIN, "$n lifts $p and looks beneath it:", ch, obj, nullptr, TO_ROOM);
         obj->count = count;
         if (IS_OBJ_STAT(obj, ITEM_COVERING))
             show_list_to_char(obj->first_content, ch, true, true);
@@ -1131,7 +1131,7 @@ void do_look(CHAR_DATA* ch, char* argument)
             return;
         }
 
-        if ((obj = get_obj_here(ch, arg2)) == NULL)
+        if ((obj = get_obj_here(ch, arg2)) == nullptr)
         {
             send_to_char("You do not see that here.\n\r", ch);
             return;
@@ -1196,7 +1196,7 @@ void do_look(CHAR_DATA* ch, char* argument)
 
             count = obj->count;
             obj->count = 1;
-            act(AT_PLAIN, "$p contains:", ch, obj, NULL, TO_CHAR);
+            act(AT_PLAIN, "$p contains:", ch, obj, nullptr, TO_CHAR);
             obj->count = count;
             show_list_to_char(obj->first_content, ch, true, true);
             if (doexaprog)
@@ -1206,14 +1206,14 @@ void do_look(CHAR_DATA* ch, char* argument)
         return;
     }
 
-    if ((pdesc = get_extra_descr(arg1, ch->in_room->first_extradesc)) != NULL)
+    if ((pdesc = get_extra_descr(arg1, ch->in_room->first_extradesc)) != nullptr)
     {
         send_to_char(pdesc, ch);
         return;
     }
 
     door = get_door(arg1);
-    if ((pexit = find_door(ch, arg1, true)) != NULL)
+    if ((pexit = find_door(ch, arg1, true)) != nullptr)
     {
         if (pexit->keyword)
         {
@@ -1222,11 +1222,11 @@ void do_look(CHAR_DATA* ch, char* argument)
                 if (IS_SET(pexit->exit_info, EX_SECRET) && door != -1)
                     send_to_char("Nothing special there.\n\r", ch);
                 else
-                    act(AT_PLAIN, "The $d is closed.", ch, NULL, pexit->keyword, TO_CHAR);
+                    act(AT_PLAIN, "The $d is closed.", ch, nullptr, pexit->keyword, TO_CHAR);
                 return;
             }
             if (IS_SET(pexit->exit_info, EX_BASHED))
-                act(AT_RED, "The $d has been bashed from its hinges!", ch, NULL, pexit->keyword, TO_CHAR);
+                act(AT_RED, "The $d has been bashed from its hinges!", ch, nullptr, pexit->keyword, TO_CHAR);
         }
 
         if (pexit->description && pexit->description[0] != '\0')
@@ -1270,7 +1270,7 @@ void do_look(CHAR_DATA* ch, char* argument)
             if (pexit->distance > 1)
             {
                 ROOM_INDEX_DATA* to_room;
-                if ((to_room = generate_exit(ch->in_room, &pexit)) != NULL)
+                if ((to_room = generate_exit(ch->in_room, &pexit)) != nullptr)
                 {
                     char_from_room(ch);
                     char_to_room(ch, to_room);
@@ -1298,7 +1298,7 @@ void do_look(CHAR_DATA* ch, char* argument)
         return;
     }
 
-    if ((victim = get_char_room(ch, arg1)) != NULL)
+    if ((victim = get_char_room(ch, arg1)) != nullptr)
     {
         show_char_to_char_1(victim, ch);
         return;
@@ -1310,7 +1310,7 @@ void do_look(CHAR_DATA* ch, char* argument)
     {
         if (can_see_obj(ch, obj))
         {
-            if ((pdesc = get_extra_descr(arg, obj->first_extradesc)) != NULL)
+            if ((pdesc = get_extra_descr(arg, obj->first_extradesc)) != nullptr)
             {
                 if ((cnt += obj->count) < number)
                     continue;
@@ -1320,7 +1320,7 @@ void do_look(CHAR_DATA* ch, char* argument)
                 return;
             }
 
-            if ((pdesc = get_extra_descr(arg, obj->pIndexData->first_extradesc)) != NULL)
+            if ((pdesc = get_extra_descr(arg, obj->pIndexData->first_extradesc)) != nullptr)
             {
                 if ((cnt += obj->count) < number)
                     continue;
@@ -1352,7 +1352,7 @@ void do_look(CHAR_DATA* ch, char* argument)
     {
         if (can_see_obj(ch, obj))
         {
-            if ((pdesc = get_extra_descr(arg, obj->first_extradesc)) != NULL)
+            if ((pdesc = get_extra_descr(arg, obj->first_extradesc)) != nullptr)
             {
                 if ((cnt += obj->count) < number)
                     continue;
@@ -1362,7 +1362,7 @@ void do_look(CHAR_DATA* ch, char* argument)
                 return;
             }
 
-            if ((pdesc = get_extra_descr(arg, obj->pIndexData->first_extradesc)) != NULL)
+            if ((pdesc = get_extra_descr(arg, obj->pIndexData->first_extradesc)) != nullptr)
             {
                 if ((cnt += obj->count) < number)
                     continue;
@@ -1502,7 +1502,7 @@ void do_glance(CHAR_DATA* ch, char* argument)
         return;
     }
 
-    if ((victim = get_char_room(ch, arg1)) == NULL)
+    if ((victim = get_char_room(ch, arg1)) == nullptr)
     {
         send_to_char("They're not here.", ch);
         return;
@@ -1511,8 +1511,8 @@ void do_glance(CHAR_DATA* ch, char* argument)
     {
         if (can_see(victim, ch))
         {
-            act(AT_ACTION, "$n glances at you.", ch, NULL, victim, TO_VICT);
-            act(AT_ACTION, "$n glances at $N.", ch, NULL, victim, TO_NOTVICT);
+            act(AT_ACTION, "$n glances at you.", ch, nullptr, victim, TO_VICT);
+            act(AT_ACTION, "$n glances at $N.", ch, nullptr, victim, TO_NOTVICT);
         }
 
         show_condition(ch, victim);
@@ -1557,9 +1557,9 @@ void do_examine(CHAR_DATA* ch, char* argument)
      * Support for looking at boards, checking equipment conditions,
      * and support for trigger positions by Thoric
      */
-    if ((obj = get_obj_here(ch, arg)) != NULL)
+    if ((obj = get_obj_here(ch, arg)) != nullptr)
     {
-        if ((board = get_board(obj)) != NULL)
+        if ((board = get_board(obj)) != nullptr)
         {
             if (board->num_posts)
                 ch_printf(ch, "There are about %d notes posted here.  Type 'note list' to list them.\n\r",
@@ -1975,7 +1975,7 @@ HELP_DATA* get_help(CHAR_DATA* ch, const char* argument)
             return pHelp;
     }
 
-    return NULL;
+    return nullptr;
 }
 
 sh_int str_similarity(const char* astr, const char* bstr)
@@ -1999,7 +1999,7 @@ sh_int str_similarity(const char* astr, const char* bstr)
 
 void similar_help_files(CHAR_DATA* ch, const char* argument)
 {
-    HELP_DATA* pHelp = NULL;
+    HELP_DATA* pHelp = nullptr;
     char buf[MAX_STRING_LENGTH];
     char* extension;
     sh_int lvl = 0;
@@ -2083,7 +2083,7 @@ void do_help(CHAR_DATA* ch, char* argument)
 
     strcpy_s(nohelp, argument);
 
-    if ((pHelp = get_help(ch, argument)) == NULL)
+    if ((pHelp = get_help(ch, argument)) == nullptr)
     {
         send_to_char("No help on that word.\n\r", ch);
         similar_help_files(ch, argument);
@@ -2131,9 +2131,9 @@ void do_hedit(CHAR_DATA* ch, char* argument)
     default:
         break;
     case SUB_HELP_EDIT:
-        if ((pHelp = reinterpret_cast<HELP_DATA*>(ch->dest_buf)) == NULL)
+        if ((pHelp = reinterpret_cast<HELP_DATA*>(ch->dest_buf)) == nullptr)
         {
-            bug("hedit: sub_help_edit: NULL ch->dest_buf", 0);
+            bug("hedit: sub_help_edit: nullptr ch->dest_buf", 0);
             stop_editing(ch);
             return;
         }
@@ -2142,7 +2142,7 @@ void do_hedit(CHAR_DATA* ch, char* argument)
         stop_editing(ch);
         return;
     }
-    if ((pHelp = get_help(ch, argument)) == NULL) /* new help */
+    if ((pHelp = get_help(ch, argument)) == nullptr) /* new help */
     {
         char argnew[MAX_INPUT_LENGTH];
         int lev;
@@ -2207,7 +2207,7 @@ void do_hset(CHAR_DATA* ch, char* argument)
 
         rename("help.are", "help.are.bak");
         fpout = fopen("help.are", "w");
-        if (fpout == NULL)
+        if (fpout == nullptr)
         {
             bug("hset save: fopen", 0);
             perror("help.are");
@@ -2226,7 +2226,7 @@ void do_hset(CHAR_DATA* ch, char* argument)
     if (str_cmp(arg1, "remove"))
         argument = one_argument(argument, arg2);
 
-    if ((pHelp = get_help(ch, argument)) == NULL)
+    if ((pHelp = get_help(ch, argument)) == nullptr)
     {
         send_to_char("Cannot find help on that subject.\n\r", ch);
         return;
@@ -2276,7 +2276,7 @@ void do_hlist(CHAR_DATA* ch, char* argument)
     min = minlimit;
     max = maxlimit;
 
-    idx = NULL;
+    idx = nullptr;
     minfound = false;
     maxfound = false;
 
@@ -2417,11 +2417,11 @@ void do_who(CHAR_DATA* ch, char* argument)
     if (!ch)
         return;
 
-    WHO_DATA* cur_who = NULL;
-    WHO_DATA* next_who = NULL;
-    WHO_DATA* first_mortal = NULL;
-    WHO_DATA* first_newbie = NULL;
-    WHO_DATA* first_imm = NULL;
+    WHO_DATA* cur_who = nullptr;
+    WHO_DATA* next_who = nullptr;
+    WHO_DATA* first_mortal = nullptr;
+    WHO_DATA* first_newbie = nullptr;
+    WHO_DATA* first_imm = nullptr;
 
     /*
      * Set default arguments.
@@ -2516,7 +2516,7 @@ void do_who(CHAR_DATA* ch, char* argument)
             else
         */
         strcpy_s(char_name, "");
-        if ((wch->rank == NULL || !str_cmp(wch->rank, "(null)")) && !IS_IMMORTAL(wch))
+        if ((wch->rank == nullptr || !str_cmp(wch->rank, "(null)")) && !IS_IMMORTAL(wch))
             wch->rank = str_dup("   ");
 
         sprintf_s(race_text, "&G&w%s&G&c &G&w", wch->rank);
@@ -2726,7 +2726,7 @@ void do_setrank(CHAR_DATA* ch, char* argument)
     else
         isleader = true;
 
-    if ((vict = get_char_room(ch, arg1)) == NULL)
+    if ((vict = get_char_room(ch, arg1)) == nullptr)
     {
         ch_printf(ch, "&RThere isn't %s '%s' here.\n\r", aoran(arg1).c_str(), arg1);
         return;
@@ -2800,7 +2800,7 @@ void do_compare(CHAR_DATA* ch, char* argument)
         return;
     }
 
-    if ((obj1 = get_obj_carry(ch, arg1)) == NULL)
+    if ((obj1 = get_obj_carry(ch, arg1)) == nullptr)
     {
         send_to_char("You do not have that item.\n\r", ch);
         return;
@@ -2823,14 +2823,14 @@ void do_compare(CHAR_DATA* ch, char* argument)
     }
     else
     {
-        if ((obj2 = get_obj_carry(ch, arg2)) == NULL)
+        if ((obj2 = get_obj_carry(ch, arg2)) == nullptr)
         {
             send_to_char("You do not have that item.\n\r", ch);
             return;
         }
     }
 
-    msg = NULL;
+    msg = nullptr;
     value1 = 0;
     value2 = 0;
 
@@ -2899,7 +2899,7 @@ void do_where(CHAR_DATA* ch, char* argument)
             pager_printf(ch, "Players near you in %s:\n\r", ch->in_room->area->name);
         found = false;
         for (auto d : g_descriptors)
-            if ((d->connected == CON_PLAYING || d->connected == CON_EDITING) && (victim = d->character) != NULL &&
+            if ((d->connected == CON_PLAYING || d->connected == CON_EDITING) && (victim = d->character) != nullptr &&
                 !IS_NPC(victim) && victim->in_room &&
                 (victim->in_room->area == ch->in_room->area || get_trust(ch) >= LEVEL_IMMORTAL) && can_see(ch, victim))
             {
@@ -2921,7 +2921,7 @@ void do_where(CHAR_DATA* ch, char* argument)
                 break;
             }
         if (!found)
-            act(AT_PLAIN, "You didn't find any $T.", ch, NULL, arg, TO_CHAR);
+            act(AT_PLAIN, "You didn't find any $T.", ch, nullptr, arg, TO_CHAR);
     }
 
     return;
@@ -2942,15 +2942,15 @@ void do_consider(CHAR_DATA* ch, char* argument)
      * a simple enough formula to determine who's most likely to win :).
      */
 
-    if ((victim = get_char_room(ch, argument)) == NULL)
+    if ((victim = get_char_room(ch, argument)) == nullptr)
     {
         send_to_char("They are not here.\n\r", ch);
         return;
     }
 
-    //  act(AT_WHITE, "$n examines $N closely looking for any weaknesses.", ch, NULL, victim, TO_NOTVICT);
-    act(AT_CONSIDER, "You examine $N closely looking for any weaknesses.", ch, NULL, victim, TO_CHAR);
-    //  act(AT_WHITE, "$n examines you closely looking for weaknesses.", ch, NULL, victim, TO_VICT);
+    //  act(AT_WHITE, "$n examines $N closely looking for any weaknesses.", ch, nullptr, victim, TO_NOTVICT);
+    act(AT_CONSIDER, "You examine $N closely looking for any weaknesses.", ch, nullptr, victim, TO_CHAR);
+    //  act(AT_WHITE, "$n examines you closely looking for weaknesses.", ch, nullptr, victim, TO_VICT);
 
     overall = 0;
     con_hp = victim->hit;
@@ -2990,7 +2990,7 @@ void do_consider(CHAR_DATA* ch, char* argument)
         msg = "You are currently FAR healthier than $M.";
         overall = overall + 3;
     }
-    act(AT_CONSIDER, msg, ch, NULL, victim, TO_CHAR);
+    act(AT_CONSIDER, msg, ch, nullptr, victim, TO_CHAR);
 
     diff = victim->armor - ch->armor;
     if (diff <= -100)
@@ -3027,7 +3027,7 @@ void do_consider(CHAR_DATA* ch, char* argument)
         msg = "You are FAR better armoured than $M.";
         overall = overall + 3;
     }
-    act(AT_CONSIDER, msg, ch, NULL, victim, TO_CHAR);
+    act(AT_CONSIDER, msg, ch, nullptr, victim, TO_CHAR);
 
     diff = victim->top_level - ch->top_level + GET_HITROLL(victim) - GET_HITROLL(ch);
     if (diff <= -35)
@@ -3064,7 +3064,7 @@ void do_consider(CHAR_DATA* ch, char* argument)
         msg = "$E is FAR more skilled than you.";
         overall = overall - 3;
     }
-    act(AT_CONSIDER, msg, ch, NULL, victim, TO_CHAR);
+    act(AT_CONSIDER, msg, ch, nullptr, victim, TO_CHAR);
 
     diff = victim->top_level - ch->top_level + GET_DAMROLL(victim) - GET_DAMROLL(ch);
     if (diff <= -35)
@@ -3101,7 +3101,7 @@ void do_consider(CHAR_DATA* ch, char* argument)
         msg = "$E is FAR more powerful than you.";
         overall = overall - 3;
     }
-    act(AT_CONSIDER, msg, ch, NULL, victim, TO_CHAR);
+    act(AT_CONSIDER, msg, ch, nullptr, victim, TO_CHAR);
 
     diff = overall;
     if (diff <= -11)
@@ -3132,7 +3132,7 @@ void do_consider(CHAR_DATA* ch, char* argument)
     {
         msg = "Conclusion: $E wouldn't last more than a few seconds against you.";
     }
-    act(AT_CONSIDER, msg, ch, NULL, victim, TO_CHAR);
+    act(AT_CONSIDER, msg, ch, nullptr, victim, TO_CHAR);
 
     return;
 }
@@ -3249,25 +3249,25 @@ void do_practice(CHAR_DATA* ch, char* argument)
 
         if (sn == -1)
         {
-            act(AT_TELL, "&R&C$n says:&W I've never heard of that one.", mob, NULL, ch, TO_VICT);
+            act(AT_TELL, "&R&C$n says:&W I've never heard of that one.", mob, nullptr, ch, TO_VICT);
             return;
         }
 
         if (skill_table[sn]->guild < 0 || skill_table[sn]->guild >= MAX_ABILITY)
         {
-            act(AT_TELL, "&R&C$n says:&W I can't teach you that.", mob, NULL, ch, TO_VICT);
+            act(AT_TELL, "&R&C$n says:&W I can't teach you that.", mob, nullptr, ch, TO_VICT);
             return;
         }
 
         if (can_prac && !IS_NPC(ch) && ch->skill_level[skill_table[sn]->guild] < skill_table[sn]->min_level)
         {
-            act(AT_TELL, "&R&C$n says:&W I don't think you're ready to learn that yet.", mob, NULL, ch, TO_VICT);
+            act(AT_TELL, "&R&C$n says:&W I don't think you're ready to learn that yet.", mob, nullptr, ch, TO_VICT);
             return;
         }
 
         if (is_name(skill_tname[skill_table[sn]->type], CANT_PRAC))
         {
-            act(AT_TELL, "&R&C$n says:&W I don't know how to do that.", mob, NULL, ch, TO_VICT);
+            act(AT_TELL, "&R&C$n says:&W I don't know how to do that.", mob, nullptr, ch, TO_VICT);
             return;
         }
 
@@ -3279,13 +3279,13 @@ void do_practice(CHAR_DATA* ch, char* argument)
             sprintf_s(buf, "%d", mob->pIndexData->vnum);
             if (!is_name(buf, skill_table[sn]->teachers))
             {
-                act(AT_TELL, "&R&C$n says:&W I don't know how to do that.", mob, NULL, ch, TO_VICT);
+                act(AT_TELL, "&R&C$n says:&W I don't know how to do that.", mob, nullptr, ch, TO_VICT);
                 return;
             }
         }
         else
         {
-            act(AT_TELL, "&R&C$n says:&W I don't know how to do that.", mob, NULL, ch, TO_VICT);
+            act(AT_TELL, "&R&C$n says:&W I don't know how to do that.", mob, nullptr, ch, TO_VICT);
             return;
         }
 
@@ -3294,18 +3294,18 @@ void do_practice(CHAR_DATA* ch, char* argument)
         if (ch->pcdata->learned[sn] >= adept)
         {
             sprintf_s(buf, "$n tells you, 'I've taught you everything I can about %s.'", skill_table[sn]->name);
-            act(AT_TELL, buf, mob, NULL, ch, TO_VICT);
-            act(AT_TELL, "&R&C$n says:&W You'll have to practice it on your own now.", mob, NULL, ch, TO_VICT);
+            act(AT_TELL, buf, mob, nullptr, ch, TO_VICT);
+            act(AT_TELL, "&R&C$n says:&W You'll have to practice it on your own now.", mob, nullptr, ch, TO_VICT);
         }
         else
         {
             ch->pcdata->learned[sn] += int_app[get_curr_int(ch)].learn;
-            act(AT_ACTION, "You practice $T.", ch, NULL, skill_table[sn]->name, TO_CHAR);
-            act(AT_ACTION, "$n practices $T.", ch, NULL, skill_table[sn]->name, TO_ROOM);
+            act(AT_ACTION, "You practice $T.", ch, nullptr, skill_table[sn]->name, TO_CHAR);
+            act(AT_ACTION, "$n practices $T.", ch, nullptr, skill_table[sn]->name, TO_ROOM);
             if (ch->pcdata->learned[sn] >= adept)
             {
                 ch->pcdata->learned[sn] = adept;
-                act(AT_TELL, "&R&C$n says:&W You'll have to practice it on your own now.", mob, NULL, ch, TO_VICT);
+                act(AT_TELL, "&R&C$n says:&W You'll have to practice it on your own now.", mob, nullptr, ch, TO_VICT);
             }
         }
     }
@@ -3328,7 +3328,7 @@ void do_viewskills(CHAR_DATA* ch, char* argument)
         return;
     }
 
-    if ((victim = get_char_world(ch, argument)) == NULL)
+    if ((victim = get_char_world(ch, argument)) == nullptr)
     {
         send_to_char("No such player online.\n\r", ch);
         return;
@@ -3431,7 +3431,7 @@ void do_teach(CHAR_DATA* ch, char* argument)
             return;
         }
 
-        if ((victim = get_char_room(ch, arg)) == NULL)
+        if ((victim = get_char_room(ch, arg)) == nullptr)
         {
             send_to_char("They don't seem to be here...\n\r", ch);
             return;
@@ -3447,25 +3447,25 @@ void do_teach(CHAR_DATA* ch, char* argument)
 
         if (sn == -1)
         {
-            act(AT_TELL, "You have no idea what that is.", victim, NULL, ch, TO_VICT);
+            act(AT_TELL, "You have no idea what that is.", victim, nullptr, ch, TO_VICT);
             return;
         }
 
         if (skill_table[sn]->guild < 0 || skill_table[sn]->guild >= MAX_ABILITY)
         {
-            act(AT_TELL, "Thats just not going to happen.", victim, NULL, ch, TO_VICT);
+            act(AT_TELL, "Thats just not going to happen.", victim, nullptr, ch, TO_VICT);
             return;
         }
 
         if (victim->skill_level[skill_table[sn]->guild] < skill_table[sn]->min_level)
         {
-            act(AT_TELL, "$n isn't ready to learn that yet.", victim, NULL, ch, TO_VICT);
+            act(AT_TELL, "$n isn't ready to learn that yet.", victim, nullptr, ch, TO_VICT);
             return;
         }
 
         if (is_name(skill_tname[skill_table[sn]->type], CANT_PRAC))
         {
-            act(AT_TELL, "You are unable to teach that skill.", victim, NULL, ch, TO_VICT);
+            act(AT_TELL, "You are unable to teach that skill.", victim, nullptr, ch, TO_VICT);
             return;
         }
 
@@ -3473,21 +3473,21 @@ void do_teach(CHAR_DATA* ch, char* argument)
 
         if (victim->pcdata->learned[sn] >= adept)
         {
-            act(AT_TELL, "$n must practice that on their own.", victim, NULL, ch, TO_VICT);
+            act(AT_TELL, "$n must practice that on their own.", victim, nullptr, ch, TO_VICT);
             return;
         }
         if (ch->pcdata->learned[sn] < 100)
         {
-            act(AT_TELL, "You must perfect that yourself before teaching others.", victim, NULL, ch, TO_VICT);
+            act(AT_TELL, "You must perfect that yourself before teaching others.", victim, nullptr, ch, TO_VICT);
             return;
         }
         else
         {
             victim->pcdata->learned[sn] += int_app[get_curr_int(ch)].learn;
             sprintf_s(buf, "You teach %s $T.", PERS(victim, ch));
-            act(AT_ACTION, buf, ch, NULL, skill_table[sn]->name, TO_CHAR);
+            act(AT_ACTION, buf, ch, nullptr, skill_table[sn]->name, TO_CHAR);
             sprintf_s(buf, "%s teaches you $T.", PERS(ch, victim));
-            act(AT_ACTION, buf, victim, NULL, skill_table[sn]->name, TO_CHAR);
+            act(AT_ACTION, buf, victim, nullptr, skill_table[sn]->name, TO_CHAR);
         }
     }
     return;
@@ -4169,13 +4169,13 @@ void do_afk(CHAR_DATA* ch, char* argument)
     {
         REMOVE_BIT(ch->act, PLR_AFK);
         send_to_char("You are no longer afk.\n\r", ch);
-        act(AT_GREY, "$n is no longer afk.", ch, NULL, NULL, TO_ROOM);
+        act(AT_GREY, "$n is no longer afk.", ch, nullptr, nullptr, TO_ROOM);
     }
     else
     {
         SET_BIT(ch->act, PLR_AFK);
         send_to_char("You are now afk.\n\r", ch);
-        act(AT_GREY, "$n is now afk.", ch, NULL, NULL, TO_ROOM);
+        act(AT_GREY, "$n is now afk.", ch, nullptr, nullptr, TO_ROOM);
         return;
     }
 }
@@ -4290,7 +4290,7 @@ void do_whois(CHAR_DATA* ch, char* argument)
 
     strcat_s(buf, "0.");
     strcat_s(buf, argument);
-    if (((victim = get_char_world_ooc(ch, buf)) == NULL))
+    if (((victim = get_char_world_ooc(ch, buf)) == nullptr))
     {
         send_to_char("No such player online. Remember, you must input the whole name of the player.\n\r", ch);
         return;
@@ -4501,7 +4501,7 @@ void do_introduce(CHAR_DATA* ch, char* arg)
     arg1[0] = UPPER(arg1[0]);
     prefName[0] = UPPER(prefName[0]);
 
-    if ((str_cmp(arg1, "all")) && (victim = get_char_room(ch, arg1)) == NULL)
+    if ((str_cmp(arg1, "all")) && (victim = get_char_room(ch, arg1)) == nullptr)
     {
         send_to_char("They aren't here.\n\r", ch);
         return;
@@ -4628,7 +4628,7 @@ void do_remember(CHAR_DATA* ch, char* arg)
     arg1[0] = UPPER(arg1[0]);
     name[0] = UPPER(name[0]);
 
-    if ((victim = get_char_room(ch, arg1)) == NULL)
+    if ((victim = get_char_room(ch, arg1)) == nullptr)
     {
         send_to_char("They aren't here.\n\r", ch);
         return;
@@ -4715,7 +4715,7 @@ void do_describe(CHAR_DATA* ch, char* arg)
     arg1[0] = UPPER(arg1[0]);
     person[0] = UPPER(person[0]);
 
-    if ((victim = get_char_room(ch, arg1)) == NULL)
+    if ((victim = get_char_room(ch, arg1)) == nullptr)
     {
         send_to_char("They aren't here.\n\r", ch);
         return;

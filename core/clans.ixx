@@ -78,7 +78,7 @@ export CLAN_DATA* get_clan(const char* name)
     for (clan = first_clan; clan; clan = clan->next)
         if (!str_cmp(name, clan->name))
             return clan;
-    return NULL;
+    return nullptr;
 }
 
 void do_remclan(CHAR_DATA* ch, char* argument)
@@ -86,7 +86,7 @@ void do_remclan(CHAR_DATA* ch, char* argument)
     CLAN_DATA* clan;
     CHAR_DATA* vch;
 
-    if ((clan = get_clan(argument)) == NULL)
+    if ((clan = get_clan(argument)) == nullptr)
     {
         send_to_char("No such clan.\n\r", ch);
         return;
@@ -101,7 +101,7 @@ void do_remclan(CHAR_DATA* ch, char* argument)
         if (vch->pcdata->clan == clan)
         {
             STRFREE(vch->pcdata->clan_name);
-            vch->pcdata->clan = NULL;
+            vch->pcdata->clan = nullptr;
             ch_printf(ch, "The clan known as &B%s&w has been destroyed by the gods.\n\r", clan->name);
         }
     }
@@ -153,7 +153,7 @@ export void save_clan(CLAN_DATA* clan)
 
     sprintf_s(filename, "%s%s", CLAN_DIR, clan->filename);
 
-    if ((fp = fopen(filename, "w")) == NULL)
+    if ((fp = fopen(filename, "w")) == nullptr)
     {
         bug("save_clan: fopen", 0);
         perror(filename);
@@ -193,7 +193,7 @@ export void save_clan(CLAN_DATA* clan)
         fprintf(fp, "End\n\n");
         fprintf(fp, "#END\n");
         fclose(fp);
-        fp = NULL;
+        fp = nullptr;
     }
     return;
 }
@@ -338,16 +338,16 @@ bool load_clan_file(const char* clanfile)
     bool found;
 
     CREATE(clan, CLAN_DATA, 1);
-    clan->next_subclan = NULL;
-    clan->prev_subclan = NULL;
-    clan->last_subclan = NULL;
-    clan->first_subclan = NULL;
-    clan->mainclan = NULL;
+    clan->next_subclan = nullptr;
+    clan->prev_subclan = nullptr;
+    clan->last_subclan = nullptr;
+    clan->first_subclan = nullptr;
+    clan->mainclan = nullptr;
 
     found = false;
     sprintf_s(filename, "%s%s", CLAN_DIR, clanfile);
 
-    if ((fp = fopen(filename, "r")) != NULL)
+    if ((fp = fopen(filename, "r")) != nullptr)
     {
 
         found = true;
@@ -395,14 +395,14 @@ bool load_clan_file(const char* clanfile)
 
         LINK(clan, first_clan, last_clan, next, prev);
 
-        if (clan->storeroom == 0 || (storeroom = get_room_index(clan->storeroom)) == NULL)
+        if (clan->storeroom == 0 || (storeroom = get_room_index(clan->storeroom)) == nullptr)
         {
             log_string("Storeroom not found");
             return found;
         }
 
         sprintf_s(filename, "%s%s.vault", CLAN_DIR, clan->filename);
-        if ((fp = fopen(filename, "r")) != NULL)
+        if ((fp = fopen(filename, "r")) != nullptr)
         {
             int iNest;
             bool found;
@@ -411,7 +411,7 @@ bool load_clan_file(const char* clanfile)
             log_string("Loading clan storage room");
             rset_supermob(storeroom);
             for (iNest = 0; iNest < MAX_NEST; iNest++)
-                rgObjNest[iNest] = NULL;
+                rgObjNest[iNest] = nullptr;
 
             found = true;
             for (;;)
@@ -475,13 +475,13 @@ export void load_clans()
     CLAN_DATA* clan;
     CLAN_DATA* bosclan;
 
-    first_clan = NULL;
-    last_clan = NULL;
+    first_clan = nullptr;
+    last_clan = nullptr;
 
     log_string("Loading clans...");
 
     sprintf_s(clanlist, "%s%s", CLAN_DIR, CLAN_LIST);
-    if ((fpList = fopen(clanlist, "r")) == NULL)
+    if ((fpList = fopen(clanlist, "r")) == nullptr)
     {
         perror(clanlist);
         exit(1);
@@ -557,7 +557,7 @@ void do_induct(CHAR_DATA* ch, char* argument)
         return;
     }
 
-    if ((victim = get_char_room(ch, arg)) == NULL)
+    if ((victim = get_char_room(ch, arg)) == nullptr)
     {
         send_to_char("That player is not here.\n\r", ch);
         return;
@@ -640,7 +640,7 @@ void do_outcast(CHAR_DATA* ch, char* argument)
         return;
     }
 
-    if ((victim = get_char_world(ch, arg)) == NULL)
+    if ((victim = get_char_world(ch, arg)) == nullptr)
     {
         send_to_char("That player is not here.\n\r", ch);
         return;
@@ -706,7 +706,7 @@ void do_outcast(CHAR_DATA* ch, char* argument)
     remove_member(victim->name, victim->pcdata->clan->shortname);
     if (victim->pcdata->salary)
         victim->pcdata->salary = 0;
-    victim->pcdata->clan = NULL;
+    victim->pcdata->clan = nullptr;
     STRFREE(victim->pcdata->clan_name);
     victim->pcdata->clan_name = STRALLOC("");
 
@@ -926,7 +926,7 @@ void do_setclan(CHAR_DATA* ch, char* argument)
         if (clan->mainclan)
         {
             UNLINK(clan, clan->mainclan->first_subclan, clan->mainclan->last_subclan, next_subclan, prev_subclan);
-            clan->mainclan = NULL;
+            clan->mainclan = nullptr;
         }
         if (!str_cmp(argument, "crime"))
             clan->clan_type = CLAN_CRIME;
@@ -1040,7 +1040,7 @@ void do_buytroops(CHAR_DATA* ch, char* argument)
     cost = (num * 5000);
 
     clan = ch->pcdata->clan;
-    if (clan == NULL)
+    if (clan == nullptr)
     {
         send_to_char("You are not a member of a clan.\n\r", ch);
         return;
@@ -1085,11 +1085,11 @@ void do_makeclan(CHAR_DATA* ch, char* argument)
 
     CREATE(clan, CLAN_DATA, 1);
     LINK(clan, first_clan, last_clan, next, prev);
-    clan->next_subclan = NULL;
-    clan->prev_subclan = NULL;
-    clan->last_subclan = NULL;
-    clan->first_subclan = NULL;
-    clan->mainclan = NULL;
+    clan->next_subclan = nullptr;
+    clan->prev_subclan = nullptr;
+    clan->last_subclan = nullptr;
+    clan->first_subclan = nullptr;
+    clan->mainclan = nullptr;
     clan->name = STRALLOC(argument);
     clan->description = STRALLOC("");
     clan->leader = STRALLOC("");
@@ -1204,7 +1204,7 @@ void do_shove(CHAR_DATA* ch, char* argument)
         return;
     }
 
-    if ((victim = get_char_room(ch, arg)) == NULL)
+    if ((victim = get_char_room(ch, arg)) == nullptr)
     {
         send_to_char("They aren't here.\n\r", ch);
         return;
@@ -1233,7 +1233,7 @@ void do_shove(CHAR_DATA* ch, char* argument)
 
     if ((victim->position) != POS_STANDING)
     {
-        act(AT_PLAIN, "$N isn't standing up.", ch, NULL, victim, TO_CHAR);
+        act(AT_PLAIN, "$N isn't standing up.", ch, nullptr, victim, TO_CHAR);
         return;
     }
 
@@ -1256,7 +1256,7 @@ void do_shove(CHAR_DATA* ch, char* argument)
     }
     else if ((dir = get_door(arg2)) != -1)
     {
-        if ((pexit = get_exit(ch->in_room, dir)) == NULL)
+        if ((pexit = get_exit(ch->in_room, dir)) == nullptr)
         {
             send_to_char("Shove them into a wall? Bully!\n\r", ch);
             return;
@@ -1287,15 +1287,15 @@ void do_shove(CHAR_DATA* ch, char* argument)
             victim->position = POS_STANDING;
             return;
         }
-        act(AT_ACTION, "You shove $M.", ch, NULL, victim, TO_CHAR);
-        act(AT_ACTION, "$n shoves you.", ch, NULL, victim, TO_VICT);
+        act(AT_ACTION, "You shove $M.", ch, nullptr, victim, TO_CHAR);
+        act(AT_ACTION, "$n shoves you.", ch, nullptr, victim, TO_VICT);
         move_char(victim, get_exit(ch->in_room, dir), 0);
         if (!char_died(victim))
             victim->position = POS_STANDING;
         WAIT_STATE(ch, 12);
         /* Remove protection from shove/drag if char shoves -- Blodkai */
         if (IS_SET(ch->in_room->room_flags, ROOM_SAFE) && get_timer(ch, TIMER_SHOVEDRAG) <= 0)
-            add_timer(ch, TIMER_SHOVEDRAG, 10, NULL, 0);
+            add_timer(ch, TIMER_SHOVEDRAG, 10, nullptr, 0);
     }
     else
     {
@@ -1305,9 +1305,9 @@ void do_shove(CHAR_DATA* ch, char* argument)
             return;
         }
 
-        if ((ship = ship_in_room(ch->in_room, arg2)) == NULL)
+        if ((ship = ship_in_room(ch->in_room, arg2)) == nullptr)
         {
-            act(AT_PLAIN, "Thats not a direction or a ship.", ch, NULL, argument, TO_CHAR);
+            act(AT_PLAIN, "Thats not a direction or a ship.", ch, nullptr, argument, TO_CHAR);
             return;
         }
         else
@@ -1318,18 +1318,18 @@ void do_shove(CHAR_DATA* ch, char* argument)
                 return;
             }
 
-            if ((to_room = get_room_index(ship->entrance)) == NULL)
+            if ((to_room = get_room_index(ship->entrance)) == nullptr)
             {
                 send_to_char("That ship has no entrance!\n\r", ch);
                 return;
             }
 
-            act(AT_PLAIN, "You are shoved into $T.", victim, NULL, ship->name, TO_CHAR);
+            act(AT_PLAIN, "You are shoved into $T.", victim, nullptr, ship->name, TO_CHAR);
             char_from_room(victim);
             char_to_room(victim, to_room);
             sprintf_s(buf, "%s is shoved into %s.", victim->name, ship->name);
             echo_to_room(AT_PLAIN, ch->in_room, buf);
-            act(AT_PLAIN, "$n is shoved into the ship.", victim, NULL, argument, TO_ROOM);
+            act(AT_PLAIN, "$n is shoved into the ship.", victim, nullptr, argument, TO_ROOM);
             do_look(victim, MAKE_TEMP_STRING("auto"));
         }
     }
@@ -1359,7 +1359,7 @@ void do_shove( CHAR_DATA *ch, char *argument )
     return;
     }
 
-    if ( ( victim = get_char_room( ch, arg ) ) == NULL )
+    if ( ( victim = get_char_room( ch, arg ) ) == nullptr )
     {
     send_to_char( "They aren't here.\n\r", ch);
     return;
@@ -1388,7 +1388,7 @@ void do_shove( CHAR_DATA *ch, char *argument )
 
     if ( (victim->position) != POS_STANDING )
     {
-    act( AT_PLAIN, "$N isn't standing up.", ch, NULL, victim, TO_CHAR );
+    act( AT_PLAIN, "$N isn't standing up.", ch, nullptr, victim, TO_CHAR );
     return;
     }
 
@@ -1407,7 +1407,7 @@ void do_shove( CHAR_DATA *ch, char *argument )
     send_to_char( "Shove them in which direction?\n\r", ch);
     return;
     }
-    else if((pexit = get_exit(ch->in_room, (exit_dir = get_dir( arg2 )))) == NULL)
+    else if((pexit = get_exit(ch->in_room, (exit_dir = get_dir( arg2 )))) == nullptr)
        nogo = true;
     else
     if ( IS_SET(pexit->exit_info, EX_CLOSED)
@@ -1448,15 +1448,15 @@ if (chance < number_percent( ))
   victim->position = POS_STANDING;
   return;
 }
-    act( AT_ACTION, "You shove $M.", ch, NULL, victim, TO_CHAR );
-    act( AT_ACTION, "$n shoves you.", ch, NULL, victim, TO_VICT );
+    act( AT_ACTION, "You shove $M.", ch, nullptr, victim, TO_CHAR );
+    act( AT_ACTION, "$n shoves you.", ch, nullptr, victim, TO_VICT );
     move_char( victim, get_exit(ch->in_room,exit_dir), 0);
     if ( !char_died(victim) )
       victim->position = POS_STANDING;
     WAIT_STATE(ch, 12);
     if ( IS_SET(ch->in_room->room_flags, ROOM_SAFE)
     &&   get_timer(ch, TIMER_SHOVEDRAG) <= 0 )
-      add_timer( ch, TIMER_SHOVEDRAG, 10, NULL, 0 );
+      add_timer( ch, TIMER_SHOVEDRAG, 10, nullptr, 0 );
 }
 */
 
@@ -1481,7 +1481,7 @@ void do_drag(CHAR_DATA* ch, char* argument)
         return;
     }
 
-    if ((victim = get_char_room(ch, arg)) == NULL)
+    if ((victim = get_char_room(ch, arg)) == nullptr)
     {
         send_to_char("They aren't here.\n\r", ch);
         return;
@@ -1522,7 +1522,7 @@ void do_drag(CHAR_DATA* ch, char* argument)
     temp = victim->position;
 
     nogo = false;
-    if ((pexit = get_exit(ch->in_room, exit_dir)) == NULL)
+    if ((pexit = get_exit(ch->in_room, exit_dir)) == nullptr)
         nogo = true;
     else if (IS_SET(pexit->exit_info, EX_CLOSED) &&
              (!IS_AFFECTED(victim, AFF_PASS_DOOR) || IS_SET(pexit->exit_info, EX_NOPASSDOOR)))
@@ -1546,7 +1546,7 @@ void do_drag(CHAR_DATA* ch, char* argument)
 
     /*
     sprintf_s(buf, "Drag percentage of %s = %d", ch->name, chance);
-    act( AT_ACTION, buf, ch, NULL, NULL, TO_ROOM );
+    act( AT_ACTION, buf, ch, nullptr, nullptr, TO_ROOM );
     */
     if (chance < number_percent())
     {
@@ -1557,8 +1557,8 @@ void do_drag(CHAR_DATA* ch, char* argument)
     if (victim->position < POS_STANDING)
     {
         victim->position = POS_DRAG;
-        act(AT_ACTION, "You drag $M into the next room.", ch, NULL, victim, TO_CHAR);
-        act(AT_ACTION, "$n grabs your hair and drags you.", ch, NULL, victim, TO_VICT);
+        act(AT_ACTION, "You drag $M into the next room.", ch, nullptr, victim, TO_CHAR);
+        act(AT_ACTION, "$n grabs your hair and drags you.", ch, nullptr, victim, TO_VICT);
         move_char(victim, get_exit(ch->in_room, exit_dir), 0);
         victim->position = temp;
         move_char(ch, get_exit(ch->in_room, exit_dir), 0);
@@ -1631,7 +1631,7 @@ void do_resign(CHAR_DATA* ch, char* argument)
 
     clan = ch->pcdata->clan;
 
-    if (clan == NULL)
+    if (clan == nullptr)
     {
         send_to_char("You have to join an organization before you can quit it.\n\r", ch);
         return;
@@ -1658,7 +1658,7 @@ void do_resign(CHAR_DATA* ch, char* argument)
         ch->pcdata->clan->number2 = STRALLOC("");
     }
 
-    act(AT_MAGIC, "You resign your position in $t.", ch, clan->name, NULL, TO_CHAR);
+    act(AT_MAGIC, "You resign your position in $t.", ch, clan->name, nullptr, TO_CHAR);
 
     for (auto d : g_descriptors)
     {
@@ -1677,7 +1677,7 @@ void do_resign(CHAR_DATA* ch, char* argument)
     }
 
     remove_member(ch->name, ch->pcdata->clan->shortname);
-    ch->pcdata->clan = NULL;
+    ch->pcdata->clan = nullptr;
     STRFREE(ch->pcdata->clan_name);
     ch->pcdata->clan_name = STRALLOC("");
 
@@ -1982,7 +1982,7 @@ void do_war(CHAR_DATA* ch, char* argument)
         return;
     }
 
-    if ((wclan = get_clan(argument)) == NULL)
+    if ((wclan = get_clan(argument)) == nullptr)
     {
         send_to_char("No such clan.\n\r", ch);
         return;
@@ -2136,7 +2136,7 @@ void do_empower(CHAR_DATA* ch, char* argument)
         return;
     }
 
-    if ((victim = get_char_room(ch, arg)) == NULL)
+    if ((victim = get_char_room(ch, arg)) == nullptr)
     {
         send_to_char("That player is not here.\n\r", ch);
         return;
@@ -2258,8 +2258,8 @@ void save_senate()
 
 export void load_senate()
 {
-    first_senator = NULL;
-    last_senator = NULL;
+    first_senator = nullptr;
+    last_senator = nullptr;
     /*
         FILE *fpList;
         char *target;
@@ -2267,16 +2267,16 @@ export void load_senate()
         BOUNTY_DATA *bounty;
         long int  amount;
 
-        first_bounty = NULL;
-        last_bounty	= NULL;
+        first_bounty = nullptr;
+        last_bounty	= nullptr;
 
-        first_disintegration = NULL;
-        last_disintegration	= NULL;
+        first_disintegration = nullptr;
+        last_disintegration	= nullptr;
 
         log_string( "Loading disintegrations..." );
 
         sprintf_s( bountylist, "%s%s", SYSTEM_DIR, disintegration_LIST );
-        if ( ( fpList = fopen( bountylist, "r" ) ) == NULL )
+        if ( ( fpList = fopen( bountylist, "r" ) ) == nullptr )
         {
         perror( bountylist );
         exit( 1 );
@@ -2398,7 +2398,7 @@ void do_outlaw(CHAR_DATA* ch, char* argument)
         return;
     }
 
-    if ((victim = get_char_world(ch, arg)) == NULL)
+    if ((victim = get_char_world(ch, arg)) == nullptr)
     {
         send_to_char("That player is not here.\n\r", ch);
         return;
@@ -2461,7 +2461,7 @@ void do_unoutlaw(CHAR_DATA* ch, char* argument)
         return;
     }
 
-    if ((victim = get_char_world(ch, arg)) == NULL)
+    if ((victim = get_char_world(ch, arg)) == nullptr)
     {
         send_to_char("That player is not here.\n\r", ch);
         return;
@@ -2606,7 +2606,7 @@ void do_setwage(CHAR_DATA* ch, char* argument)
         return;
     }
 
-    if ((victim = get_char_world(ch, arg)) == NULL)
+    if ((victim = get_char_world(ch, arg)) == nullptr)
     {
         send_to_char("That player is not here.\n\r", ch);
         return;
@@ -2794,7 +2794,7 @@ void do_members(CHAR_DATA* ch, char* argument)
 
     sprintf_s(list, "%s%s.list", CLAN_DIR, clan->shortname);
 
-    if ((fpList = fopen(list, "r")) == NULL)
+    if ((fpList = fopen(list, "r")) == nullptr)
     {
         send_to_char("Something wen't wrong. The imms have been notified.\n\r", ch);
         bug("Do_members: Unable to open member list");

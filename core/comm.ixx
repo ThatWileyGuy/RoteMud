@@ -544,20 +544,20 @@ export void close_socket(DESCRIPTOR_DATA* dclose, bool startedExternally, bool f
     for (auto d : g_descriptors)
     {
         if (d->snoop_by == dclose)
-            d->snoop_by = NULL;
+            d->snoop_by = nullptr;
     }
 
     /* Check for switched people who go link-dead. -- Altrag */
     if (dclose->original)
     {
-        if ((ch = dclose->character) != NULL)
+        if ((ch = dclose->character) != nullptr)
             do_return(ch, MAKE_TEMP_STRING(""));
         else
         {
             bug("Close_socket: dclose->original without character %s",
                 (dclose->original->name ? dclose->original->name : "unknown"));
             dclose->character = dclose->original;
-            dclose->original = NULL;
+            dclose->original = nullptr;
         }
     }
 
@@ -573,13 +573,13 @@ export void close_socket(DESCRIPTOR_DATA* dclose, bool startedExternally, bool f
         */
         if (dclose->connected == CON_PLAYING || dclose->connected == CON_EDITING)
         {
-            act(AT_ACTION, "$n has lost $s link.", ch, NULL, NULL, TO_ROOM);
-            ch->desc = NULL;
+            act(AT_ACTION, "$n has lost $s link.", ch, nullptr, nullptr, TO_ROOM);
+            ch->desc = nullptr;
         }
         else
         {
             /* clear descriptor pointer to get rid of bug message in log */
-            dclose->character->desc = NULL;
+            dclose->character->desc = nullptr;
             free_char(dclose->character);
         }
     }
@@ -610,7 +610,7 @@ export void write_to_buffer(DESCRIPTOR_DATA* d, std::string_view string)
 {
     if (!d)
     {
-        bug("Write_to_buffer: NULL descriptor");
+        bug("Write_to_buffer: nullptr descriptor");
         return;
     }
 
@@ -891,7 +891,7 @@ void nanny(std::shared_ptr<DESCRIPTOR_DATA> d, char* argument)
         {
             write_to_buffer(d, "Wrong password.\n\r", 0);
             /* clear descriptor pointer to get rid of bug message in log */
-            d->character->desc = NULL;
+            d->character->desc = nullptr;
             sprintf_s(buf, "%s@%s: Invalid password.", ch->name, d->connection->getHostname().c_str());
             log_string(buf);
             close_socket(d, false);
@@ -907,7 +907,7 @@ void nanny(std::shared_ptr<DESCRIPTOR_DATA> d, char* argument)
         if (chk == BERR)
         {
             if (d->character && d->character->desc)
-                d->character->desc = NULL;
+                d->character->desc = nullptr;
             close_socket(d, false);
             return;
         }
@@ -921,7 +921,7 @@ void nanny(std::shared_ptr<DESCRIPTOR_DATA> d, char* argument)
         }
 
         sprintf_s(buf, ch->name);
-        d->character->desc = NULL;
+        d->character->desc = nullptr;
         free_char(d->character);
         fOld = load_char_obj(*d, buf, false);
         ch = d->character;
@@ -987,9 +987,9 @@ void nanny(std::shared_ptr<DESCRIPTOR_DATA> d, char* argument)
         case 'N':
             send_to_desc_color2("&zOk, what is it, then? &w", d);
             /* clear descriptor pointer to get rid of bug message in log */
-            d->character->desc = NULL;
+            d->character->desc = nullptr;
             free_char(d->character);
-            d->character = NULL;
+            d->character = nullptr;
             d->connected = CON_GET_NAME;
             break;
 
@@ -1559,7 +1559,7 @@ void nanny(std::shared_ptr<DESCRIPTOR_DATA> d, char* argument)
     case CON_READ_MOTD:
         write_to_buffer(d, "\n\r\n\r", 0);
         add_char(ch);
-        /* if(ch->comfreq == NULL)
+        /* if(ch->comfreq == nullptr)
          {
           generate_com_freq(ch);
       sprintf_s(buf, "%s has no comfreq. Generating.", ch->name);
@@ -1574,7 +1574,7 @@ void nanny(std::shared_ptr<DESCRIPTOR_DATA> d, char* argument)
             OBJ_DATA* obj;
             int iLang;
 
-            ch->pcdata->clan = NULL;
+            ch->pcdata->clan = nullptr;
             ch->pcdata->learned[gsn_smallspace] = 25;
             ch->pcdata->learned[gsn_shipsystems] = 25;
             ch->pcdata->learned[gsn_navigation] = 25;
@@ -1752,7 +1752,7 @@ void nanny(std::shared_ptr<DESCRIPTOR_DATA> d, char* argument)
 
         if (get_timer(ch, TIMER_PKILLED) > 0)
             remove_timer(ch, TIMER_PKILLED);
-        if (ch->plr_home != NULL)
+        if (ch->plr_home != nullptr)
         {
             char filename[256];
             FILE* fph;
@@ -1767,7 +1767,7 @@ void nanny(std::shared_ptr<DESCRIPTOR_DATA> d, char* argument)
             }
 
             sprintf_s(filename, "%s%c/%s.home", PLAYER_DIR, tolower(ch->name[0]), capitalize(ch->name).c_str());
-            if ((fph = fopen(filename, "r")) != NULL)
+            if ((fph = fopen(filename, "r")) != nullptr)
             {
                 int iNest;
                 bool found;
@@ -1775,7 +1775,7 @@ void nanny(std::shared_ptr<DESCRIPTOR_DATA> d, char* argument)
 
                 rset_supermob(storeroom);
                 for (iNest = 0; iNest < MAX_NEST; iNest++)
-                    rgObjNest[iNest] = NULL;
+                    rgObjNest[iNest] = nullptr;
 
                 found = true;
                 for (;;)
@@ -1831,7 +1831,7 @@ void nanny(std::shared_ptr<DESCRIPTOR_DATA> d, char* argument)
                     ch->skill_level[ability] = max_level(ch, ability);
         }
 
-        //    act( AT_ACTION, "$n has entered the game.", ch, NULL, NULL, TO_ROOM );
+        //    act( AT_ACTION, "$n has entered the game.", ch, nullptr, nullptr, TO_ROOM );
         do_look(ch, MAKE_TEMP_STRING("auto"));
         mail_count(ch);
         break;
@@ -1996,7 +1996,7 @@ void handle_new_authenticated_connection(std::shared_ptr<Connection> connection,
     if (chk == BERR)
     {
         if (dnew->character && dnew->character->desc)
-            dnew->character->desc = NULL;
+            dnew->character->desc = nullptr;
         close_socket(dnew, false);
         return;
     }
@@ -2010,7 +2010,7 @@ void handle_new_authenticated_connection(std::shared_ptr<Connection> connection,
     }
 
     sprintf_s(buf, ch->name);
-    dnew->character->desc = NULL;
+    dnew->character->desc = nullptr;
     free_char(dnew->character);
     bool fOld = load_char_obj(*dnew, buf, false);
     ch = dnew->character;
@@ -2129,9 +2129,9 @@ bool check_reconnect(std::shared_ptr<DESCRIPTOR_DATA> d, char* name, bool fConn)
                 if (d->character)
                 {
                     /* clear descriptor pointer to get rid of bug message in log */
-                    d->character->desc = NULL;
+                    d->character->desc = nullptr;
                     free_char(d->character);
-                    d->character = NULL;
+                    d->character = nullptr;
                 }
                 return BERR;
             }
@@ -2143,13 +2143,13 @@ bool check_reconnect(std::shared_ptr<DESCRIPTOR_DATA> d, char* name, bool fConn)
             else
             {
                 /* clear descriptor pointer to get rid of bug message in log */
-                d->character->desc = NULL;
+                d->character->desc = nullptr;
                 free_char(d->character);
                 d->character = ch;
                 ch->desc = d.get();
                 ch->timer = 0;
                 send_to_char("Reconnecting.\n\r", ch);
-                act(AT_ACTION, "$n has reconnected.", ch, NULL, NULL, TO_ROOM);
+                act(AT_ACTION, "$n has reconnected.", ch, nullptr, nullptr, TO_ROOM);
                 sprintf_s(log_buf, "%s@%s(%s) reconnected.", ch->name, d->connection->getHostname().c_str(), d->user);
                 log_string_plus(log_buf, LOG_COMM, UMAX(sysdata.log_level, ch->top_level));
                 /*
@@ -2205,7 +2205,7 @@ bool check_multi(std::shared_ptr<DESCRIPTOR_DATA> d, char* name)
             sprintf_s(log_buf, "%s attempting to multiplay with %s.",
                       dold->original ? dold->original->name : dold->character->name, d->character->name);
             log_string_plus(log_buf, LOG_COMM, sysdata.log_level);
-            d->character = NULL;
+            d->character = nullptr;
             free_char(d->character);
             return true;
         }
@@ -2236,16 +2236,16 @@ bool check_playing(std::shared_ptr<DESCRIPTOR_DATA> d, char* name, bool kick)
             write_to_buffer(dold, "Kicking off old connection... bye!\n\r", 0);
             close_socket(dold, false);
             /* clear descriptor pointer to get rid of bug message in log */
-            d->character->desc = NULL;
+            d->character->desc = nullptr;
             free_char(d->character);
             d->character = ch;
             ch->desc = d.get();
             ch->timer = 0;
             if (ch->switched)
                 do_return(ch->switched, MAKE_TEMP_STRING(""));
-            ch->switched = NULL;
+            ch->switched = nullptr;
             send_to_char("Reconnecting.\n\r", ch);
-            act(AT_ACTION, "$n has reconnected, kicking off old link.", ch, NULL, NULL, TO_ROOM);
+            act(AT_ACTION, "$n has reconnected, kicking off old link.", ch, nullptr, nullptr, TO_ROOM);
             sprintf_s(log_buf, "%s@%s reconnected, kicking off old link.", ch->name,
                       d->connection->getHostname().c_str());
             log_string_plus(log_buf, LOG_COMM, UMAX(sysdata.log_level, ch->top_level));
@@ -2270,8 +2270,8 @@ void stop_idling(CHAR_DATA* ch)
     ch->timer = 0;
     char_from_room(ch);
     char_to_room(ch, ch->was_in_room);
-    ch->was_in_room = NULL;
-    act(AT_ACTION, "$n has returned from the void.", ch, NULL, NULL, TO_ROOM);
+    ch->was_in_room = nullptr;
+    act(AT_ACTION, "$n has returned from the void.", ch, nullptr, nullptr, TO_ROOM);
     return;
 }
 
@@ -2286,7 +2286,7 @@ export void send_to_char_noand(const char* txt, CHAR_DATA* ch)
     char buf[MAX_STRING_LENGTH];
     if (!ch)
     {
-        bug("Send_to_char: NULL *ch");
+        bug("Send_to_char: nullptr *ch");
         return;
     }
     if (txt && ch->desc)
@@ -2311,14 +2311,14 @@ void send_to_desc_color2(const char* txt, DESCRIPTOR_DATA* d)
 
     if (!d)
     {
-        bug("send_to_desc_color2: NULL *d");
+        bug("send_to_desc_color2: nullptr *d");
         return;
     }
     if (!txt || !d)
         return;
 
     /* Clear out old color stuff */
-    while ((colstr = strpbrk(prevstr, "&^")) != NULL)
+    while ((colstr = strpbrk(prevstr, "&^")) != nullptr)
     {
         if (colstr > prevstr)
             write_to_buffer(d, prevstr, (colstr - prevstr));
@@ -2512,7 +2512,7 @@ export void act(sh_int AType, const char* format, CHAR_DATA* ch, const void* arg
     }
 
     if (!ch->in_room)
-        to = NULL;
+        to = nullptr;
     else if (type == TO_CHAR)
         to = ch;
     else if (type == TO_MUD)
@@ -2536,7 +2536,7 @@ export void act(sh_int AType, const char* format, CHAR_DATA* ch, const void* arg
         }
         if (!vch->in_room)
         {
-            bug("Act: vch in NULL room!");
+            bug("Act: vch in nullptr room!");
             bug("%s -> %s (%s)", ch->name, vch->name, format);
             return;
         }
@@ -2548,7 +2548,7 @@ export void act(sh_int AType, const char* format, CHAR_DATA* ch, const void* arg
     {
         OBJ_DATA* to_obj;
 
-        txt = act_string(format, NULL, ch, arg1, arg2);
+        txt = act_string(format, nullptr, ch, arg1, arg2);
 
         if (to && IS_SET(to->in_room->progtypes, ACT_PROG))
             rprog_act_trigger(txt, to->in_room, ch, (OBJ_DATA*)arg1, (void*)arg2);
@@ -2559,7 +2559,7 @@ export void act(sh_int AType, const char* format, CHAR_DATA* ch, const void* arg
 
     /* Anyone feel like telling me the point of looping through the whole
        room when we're only sending to one char anyways..? -- Alty */
-    for (; to; to = (type == TO_MUD) ? to->next : (type == TO_CHAR || type == TO_VICT) ? NULL : to->next_in_room)
+    for (; to; to = (type == TO_MUD) ? to->next : (type == TO_CHAR || type == TO_VICT) ? nullptr : to->next_in_room)
 
     {
         if ((!to->desc && (IS_NPC(to) && !IS_SET(to->pIndexData->progtypes, ACT_PROG))) || !IS_AWAKE(to))
@@ -2648,7 +2648,7 @@ char* hit_prompt(CHAR_DATA* ch)
     CHAR_DATA* victim;
     int percent;
     static char pbuf[MAX_STRING_LENGTH];
-    if ((victim = who_fighting(ch)) != NULL)
+    if ((victim = who_fighting(ch)) != nullptr)
     {
         if (victim->max_hit > 0)
             percent = (100 * victim->hit) / victim->max_hit;
@@ -2718,7 +2718,7 @@ void display_prompt(DESCRIPTOR_DATA* d)
 
     if (!ch)
     {
-        bug("display_prompt: NULL ch");
+        bug("display_prompt: nullptr ch");
         return;
     }
 
@@ -2737,7 +2737,7 @@ void display_prompt(DESCRIPTOR_DATA* d)
     }
 
     /* Clear out old color stuff */
-    /*  make_color_sequence(NULL, NULL, NULL);*/
+    /*  make_color_sequence(nullptr, nullptr, nullptr);*/
     for (; *prompt; prompt++)
     {
         /*
@@ -2992,7 +2992,7 @@ void handle_pager_input(std::shared_ptr<DESCRIPTOR_DATA> d, char* argument)
         break;
     case 'q':
         d->pagetop = 0;
-        d->pagepoint = NULL;
+        d->pagepoint = nullptr;
         send_prompt(d.get());
         DISPOSE(d->pagebuf);
         d->pagesize = MAX_STRING_LENGTH;
@@ -3022,7 +3022,7 @@ void handle_pager_input(std::shared_ptr<DESCRIPTOR_DATA> d, char* argument)
     if (!*last)
     {
         d->pagetop = 0;
-        d->pagepoint = NULL;
+        d->pagepoint = nullptr;
         send_prompt(d.get());
         DISPOSE(d->pagebuf);
         d->pagesize = MAX_STRING_LENGTH;
@@ -3087,7 +3087,7 @@ void do_copyover(CHAR_DATA* ch, char* argument)
 
     // Consider changing all saved areas here, if you use OLC
 
-    // do_asave (NULL, ""); - autosave changed areas
+    // do_asave (nullptr, ""); - autosave changed areas
 
     // Save ships
 
@@ -3141,7 +3141,7 @@ void do_copyover(CHAR_DATA* ch, char* argument)
     sprintf_s(buf2, "%d", control);
 
     execl(EXE_FILE, "swr", buf, "copyover", buf2, buf3,
-        buf4, buf5, (char*)NULL);
+        buf4, buf5, (char*)nullptr);
 
     // Failed - sucessful exec will not return
 
@@ -3152,7 +3152,7 @@ void do_copyover(CHAR_DATA* ch, char* argument)
     // Since I'm a neophyte type guy, I'll assume this is
     // a good idea and cut and past from main()
 
-    if ((fpLOG = fopen(NULL_FILE, "r")) == NULL)
+    if ((fpLOG = fopen(NULL_FILE, "r")) == nullptr)
     {
         perror(NULL_FILE);
         exit(1);
@@ -3228,7 +3228,7 @@ void copyover_recover()
 
             char_to_room(d->character, d->character->in_room);
             do_look(d->character, "auto noprog");
-            act(AT_ACTION, "$n materializes!", d->character, NULL, NULL, TO_ROOM);
+            act(AT_ACTION, "$n materializes!", d->character, nullptr, nullptr, TO_ROOM);
             d->connected = CON_PLAYING;
         }
 
@@ -3283,7 +3283,7 @@ void do_giveslug(CHAR_DATA* ch, char* argument)
         return;
        }
 
-       if ( (victim = get_char_world(ch, argument)) == NULL)
+       if ( (victim = get_char_world(ch, argument)) == nullptr)
        {
         send_to_char("They aren't here.\n\r", ch);
         return;
@@ -3331,7 +3331,7 @@ FELLOW_DATA* knowsof(CHAR_DATA* ch, CHAR_DATA* victim)
             return fellow;
     }
 
-    return NULL;
+    return nullptr;
 }
 
 export const char* PERS(CHAR_DATA* ch, CHAR_DATA* looker)
@@ -3350,7 +3350,7 @@ export const char* PERS(CHAR_DATA* ch, CHAR_DATA* looker)
                 return ch->name;
             else if (ch->pcdata->disguise && ch->pcdata->disguise[0] != '\0')
                 return ch->pcdata->disguise;
-            else if ((fellow = knowsof(looker, ch)) != NULL)
+            else if ((fellow = knowsof(looker, ch)) != nullptr)
                 return fellow->knownas;
             else
             {

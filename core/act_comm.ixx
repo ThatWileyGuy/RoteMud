@@ -84,7 +84,7 @@ export void sound_to_room(ROOM_INDEX_DATA* room, const char* argument)
 {
     CHAR_DATA* vic;
 
-    if (room == NULL)
+    if (room == nullptr)
         return;
 
     for (vic = room->first_person; vic; vic = vic->next_in_room)
@@ -126,7 +126,7 @@ void do_beep(CHAR_DATA* ch, char* argument)
         return;
     }
 
-    if ((victim = get_char_world(ch, arg)) == NULL || (IS_NPC(victim) && victim->in_room != ch->in_room) ||
+    if ((victim = get_char_world(ch, arg)) == nullptr || (IS_NPC(victim) && victim->in_room != ch->in_room) ||
         (!NOT_AUTHED(ch) && NOT_AUTHED(victim) && !IS_IMMORTAL(ch)))
     {
         send_to_char("They aren't here.\n\r", ch);
@@ -188,7 +188,7 @@ void do_beep(CHAR_DATA* ch, char* argument)
 
     if (IS_SET(victim->deaf, CHANNEL_TELLS) && (!IS_IMMORTAL(ch) || (get_trust(ch) < get_trust(victim))))
     {
-        act(AT_PLAIN, "$E has $S tells turned off.", ch, NULL, victim, TO_CHAR);
+        act(AT_PLAIN, "$E has $S tells turned off.", ch, nullptr, victim, TO_CHAR);
         return;
     }
 
@@ -432,12 +432,12 @@ export void talk_channel(CHAR_DATA* ch, const char* argument, int channel, const
 
     SHIP_DATA* ship = ship_from_cockpit(ch->in_room->vnum);
     int position;
-    CLAN_DATA* clan = NULL;
+    CLAN_DATA* clan = nullptr;
 
     bool ch_comlink = false;
     bool garble = false;
 
-    if (ch->comfreq == NULL || !str_cmp(ch->comfreq, "(null)") || (strlen(ch->comfreq) != 7))
+    if (ch->comfreq == nullptr || !str_cmp(ch->comfreq, "(null)") || (strlen(ch->comfreq) != 7))
         generate_com_freq(ch);
 
     if (channel != CHANNEL_SHOUT && channel != CHANNEL_YELL && channel != CHANNEL_IMMTALK && channel != CHANNEL_OOC &&
@@ -990,7 +990,7 @@ void do_shiptalk(CHAR_DATA* ch, char* argument)
 {
     SHIP_DATA* ship;
 
-    if ((ship = ship_from_cockpit(ch->in_room->vnum)) == NULL)
+    if ((ship = ship_from_cockpit(ch->in_room->vnum)) == nullptr)
     {
         send_to_char("&RYou must be in the cockpit of a ship to do that!\n\r", ch);
         return;
@@ -1003,7 +1003,7 @@ void do_systemtalk(CHAR_DATA* ch, char* argument)
 {
     SHIP_DATA* ship;
 
-    if ((ship = ship_from_cockpit(ch->in_room->vnum)) == NULL)
+    if ((ship = ship_from_cockpit(ch->in_room->vnum)) == nullptr)
     {
         send_to_char("&RYou must be in the cockpit of a ship to do that!\n\r", ch);
         return;
@@ -1016,7 +1016,7 @@ void do_spacetalk(CHAR_DATA* ch, char* argument)
 {
     SHIP_DATA* ship;
 
-    if ((ship = ship_from_cockpit(ch->in_room->vnum)) == NULL)
+    if ((ship = ship_from_cockpit(ch->in_room->vnum)) == nullptr)
     {
         send_to_char("&RYou must be in the cockpit of a ship to do that!\n\r", ch);
         return;
@@ -1031,7 +1031,7 @@ void do_gocial(CHAR_DATA* ch, char* command, char* argument)
     CHAR_DATA* victim;
     SOCIALTYPE* social;
 
-    if ((social = find_social(command)) == NULL)
+    if ((social = find_social(command)) == nullptr)
     {
         send_to_char("That is not a social.\n\r", ch);
         return;
@@ -1067,23 +1067,23 @@ void do_gocial(CHAR_DATA* ch, char* command, char* argument)
     }
 
     one_argument(argument, arg);
-    victim = NULL;
+    victim = nullptr;
 
     if (arg[0] == '\0')
     {
-        if (social->others_no_arg == NULL)
+        if (social->others_no_arg == nullptr)
         {
             send_to_char("You need a social that others can see!\n\r", ch);
             return;
         }
         sprintf_s(buf, "&Y(&OOOC&Y)&W %s", social->others_no_arg);
-        act(AT_SOCIAL, buf, ch, NULL, victim, TO_MUD);
+        act(AT_SOCIAL, buf, ch, nullptr, victim, TO_MUD);
         sprintf_s(buf, "&Y(&OOOC&Y)&W %s", social->char_no_arg);
-        act(AT_SOCIAL, buf, ch, NULL, victim, TO_CHAR);
+        act(AT_SOCIAL, buf, ch, nullptr, victim, TO_CHAR);
         return;
     }
 
-    if ((victim = get_char_world(ch, arg)) == NULL)
+    if ((victim = get_char_world(ch, arg)) == nullptr)
     {
         send_to_char("You really shouldn't talk about people who aren't logged in.\n\r", ch);
         return;
@@ -1091,30 +1091,30 @@ void do_gocial(CHAR_DATA* ch, char* command, char* argument)
 
     if (victim == ch)
     {
-        if (social->others_auto == NULL)
+        if (social->others_auto == nullptr)
         {
             send_to_char("You need a social that others can see!\n\r", ch);
             return;
         }
         sprintf_s(buf, "&Y(&OOOC&Y)&W %s", social->others_auto);
-        act(AT_SOCIAL, buf, ch, NULL, victim, TO_MUD);
+        act(AT_SOCIAL, buf, ch, nullptr, victim, TO_MUD);
         sprintf_s(buf, "&Y(&OOOC&Y)&W %s", social->char_auto);
-        act(AT_SOCIAL, buf, ch, NULL, victim, TO_CHAR);
+        act(AT_SOCIAL, buf, ch, nullptr, victim, TO_CHAR);
         return;
     }
     else
     {
-        if (social->others_found == NULL)
+        if (social->others_found == nullptr)
         {
             send_to_char("You need a social that others can see!\n\r", ch);
             return;
         }
         sprintf_s(buf, "&Y(&OOOC&Y)&W %s", social->others_found);
-        act(AT_SOCIAL, buf, ch, NULL, victim, TO_MUD);
+        act(AT_SOCIAL, buf, ch, nullptr, victim, TO_MUD);
         sprintf_s(buf, "&Y(&OOOC&Y)&W %s", social->char_found);
-        act(AT_SOCIAL, buf, ch, NULL, victim, TO_CHAR);
+        act(AT_SOCIAL, buf, ch, nullptr, victim, TO_CHAR);
         sprintf_s(buf, "&Y(&OOOC&Y)&W %s", social->vict_found);
-        act(AT_SOCIAL, buf, ch, NULL, victim, TO_VICT);
+        act(AT_SOCIAL, buf, ch, nullptr, victim, TO_VICT);
         return;
     }
 }
@@ -1392,11 +1392,11 @@ void do_say(CHAR_DATA* ch, char* argument)
         act(AT_SAY, "$n says: $t", ch, bufToSend.c_str(), vch, TO_VICT);
     }
     /*    MOBtrigger = false;
-        act( AT_SAY, "$n says '$T'", ch, NULL, argument, TO_ROOM );*/
+        act( AT_SAY, "$n says '$T'", ch, nullptr, argument, TO_ROOM );*/
     ch->act = actflags;
     MOBtrigger = false;
 
-    act(AT_SAY, "You say: $T", ch, NULL, drunk_speech(argument, ch).c_str(), TO_CHAR);
+    act(AT_SAY, "You say: $T", ch, nullptr, drunk_speech(argument, ch).c_str(), TO_CHAR);
 
     if (IS_SET(ch->in_room->room_flags, ROOM_LOGSPEECH))
     {
@@ -1426,11 +1426,11 @@ void do_oldtell(CHAR_DATA* ch, char* argument)
     bool victim_comlink = false;
     OBJ_DATA* obj = nullptr;
 
-    switched_victim = NULL;
+    switched_victim = nullptr;
 
     if (IS_SET(ch->deaf, CHANNEL_TELLS) && !IS_IMMORTAL(ch))
     {
-        act(AT_PLAIN, "You have tells turned off... try chan +tells first", ch, NULL, NULL, TO_CHAR);
+        act(AT_PLAIN, "You have tells turned off... try chan +tells first", ch, nullptr, nullptr, TO_CHAR);
         return;
     }
 
@@ -1460,7 +1460,7 @@ void do_oldtell(CHAR_DATA* ch, char* argument)
         return;
     }
 
-    if ((victim = get_char_world(ch, arg)) == NULL || (IS_NPC(victim) && victim->in_room != ch->in_room) ||
+    if ((victim = get_char_world(ch, arg)) == nullptr || (IS_NPC(victim) && victim->in_room != ch->in_room) ||
         (!NOT_AUTHED(ch) && NOT_AUTHED(victim) && !IS_IMMORTAL(ch)))
     {
         send_to_char("They aren't here.\n\r", ch);
@@ -1538,7 +1538,7 @@ void do_oldtell(CHAR_DATA* ch, char* argument)
 
     if (IS_SET(victim->deaf, CHANNEL_TELLS) && (!IS_IMMORTAL(ch) || (get_trust(ch) < get_trust(victim))))
     {
-        act(AT_PLAIN, "$E has $S tells turned off.", ch, NULL, victim, TO_CHAR);
+        act(AT_PLAIN, "$E has $S tells turned off.", ch, nullptr, victim, TO_CHAR);
         return;
     }
 
@@ -1631,11 +1631,11 @@ void do_tell(CHAR_DATA* ch, char* argument)
     OBJ_DATA* obj;
     CHAR_DATA* vict2;
 
-    switched_victim = NULL;
+    switched_victim = nullptr;
 
     if (IS_SET(ch->deaf, CHANNEL_TELLS) && !IS_IMMORTAL(ch))
     {
-        act(AT_PLAIN, "You have tells turned off... try chan +tells first", ch, NULL, NULL, TO_CHAR);
+        act(AT_PLAIN, "You have tells turned off... try chan +tells first", ch, nullptr, nullptr, TO_CHAR);
         return;
     }
 
@@ -1665,7 +1665,7 @@ void do_tell(CHAR_DATA* ch, char* argument)
         return;
     }
 
-    if ((victim = get_char_from_comfreq(ch, arg)) == NULL || (IS_NPC(victim) && victim->in_room != ch->in_room) ||
+    if ((victim = get_char_from_comfreq(ch, arg)) == nullptr || (IS_NPC(victim) && victim->in_room != ch->in_room) ||
         (!NOT_AUTHED(ch) && NOT_AUTHED(victim) && !IS_IMMORTAL(ch)) || (IS_IMMORTAL(victim) && !can_see(ch, victim)))
     {
         send_to_char("There is no response.\n\r", ch);
@@ -1743,7 +1743,7 @@ void do_tell(CHAR_DATA* ch, char* argument)
 
     if (IS_SET(victim->deaf, CHANNEL_TELLS) && (!IS_IMMORTAL(ch) || (get_trust(ch) < get_trust(victim))))
     {
-        act(AT_PLAIN, "$E has $S tells turned off.", ch, NULL, victim, TO_CHAR);
+        act(AT_PLAIN, "$E has $S tells turned off.", ch, nullptr, victim, TO_CHAR);
         return;
     }
 
@@ -1850,7 +1850,7 @@ void do_oldreply(CHAR_DATA* ch, char* argument)
         return;
     }
 
-    if ((victim = ch->reply) == NULL)
+    if ((victim = ch->reply) == nullptr)
     {
         send_to_char("They aren't here.\n\r", ch);
         return;
@@ -1875,7 +1875,7 @@ void do_oldreply(CHAR_DATA* ch, char* argument)
 
     if (IS_SET(victim->deaf, CHANNEL_TELLS) && (!IS_IMMORTAL(ch) || (get_trust(ch) < get_trust(victim))))
     {
-        act(AT_PLAIN, "$E has $S tells turned off.", ch, NULL, victim, TO_CHAR);
+        act(AT_PLAIN, "$E has $S tells turned off.", ch, nullptr, victim, TO_CHAR);
         return;
     }
 
@@ -2007,7 +2007,7 @@ void do_reply(CHAR_DATA* ch, char* argument)
         return;
     }
 
-    if ((victim = ch->reply) == NULL)
+    if ((victim = ch->reply) == nullptr)
     {
         send_to_char("There is no response.\n\r", ch);
         return;
@@ -2032,7 +2032,7 @@ void do_reply(CHAR_DATA* ch, char* argument)
 
     if (IS_SET(victim->deaf, CHANNEL_TELLS) && (!IS_IMMORTAL(ch) || (get_trust(ch) < get_trust(victim))))
     {
-        act(AT_PLAIN, "$E has $S tells turned off.", ch, NULL, victim, TO_CHAR);
+        act(AT_PLAIN, "$E has $S tells turned off.", ch, nullptr, victim, TO_CHAR);
         return;
     }
 
@@ -2141,9 +2141,9 @@ void do_emote(CHAR_DATA* ch, char* argument)
         strcat_s(buf, ".");
 
     MOBtrigger = false;
-    act(AT_ACTION, "$n $T", ch, NULL, buf, TO_ROOM);
+    act(AT_ACTION, "$n $T", ch, nullptr, buf, TO_ROOM);
     MOBtrigger = false;
-    act(AT_ACTION, "$n $T", ch, NULL, buf, TO_CHAR);
+    act(AT_ACTION, "$n $T", ch, nullptr, buf, TO_CHAR);
     ch->act = actflags;
     if (IS_SET(ch->in_room->room_flags, ROOM_LOGSPEECH))
     {
@@ -2356,7 +2356,7 @@ void do_quit(CHAR_DATA* ch, char* argument)
         return;
     }
 
-    if (auction->item != NULL && ((ch == auction->buyer) || (ch == auction->seller)))
+    if (auction->item != nullptr && ((ch == auction->buyer) || (ch == auction->seller)))
     {
         send_to_char("Wait until you have bought/sold the item on auction.\n\r", ch);
         return;
@@ -2376,13 +2376,13 @@ void do_quit(CHAR_DATA* ch, char* argument)
                  ch);
     set_char_color(AT_QUIT, ch);
     ch_printf(ch, "A strange voice says, 'We await your return, %s...'", ch->name);
-    //    act( AT_BYE, "$n has left the game.", ch, NULL, NULL, TO_ROOM );
+    //    act( AT_BYE, "$n has left the game.", ch, nullptr, nullptr, TO_ROOM );
     //    set_char_color( AT_GREY, ch);
 
     if (ch->challenged)
     {
         sprintf_s(qbuf, "%s has quit! Challenge is void!", ch->name);
-        ch->challenged = NULL;
+        ch->challenged = nullptr;
         sportschan(qbuf);
     }
 
@@ -2392,7 +2392,7 @@ void do_quit(CHAR_DATA* ch, char* argument)
             continue;
 
         if (fch->challenged && fch->challenged == ch)
-            fch->challenged = NULL;
+            fch->challenged = nullptr;
     }
 
     sprintf_s(log_buf, "%s has quit.", ch->name);
@@ -2411,7 +2411,7 @@ void do_quit(CHAR_DATA* ch, char* argument)
         }
     }
 
-    saving_char = NULL;
+    saving_char = nullptr;
 
     level = get_trust(ch);
     /*
@@ -2420,7 +2420,7 @@ void do_quit(CHAR_DATA* ch, char* argument)
     extract_char(ch, true);
     for (x = 0; x < MAX_WEAR; x++)
         for (y = 0; y < MAX_LAYERS; y++)
-            save_equipment[x][y] = NULL;
+            save_equipment[x][y] = nullptr;
 
     /* don't show who's logging off to leaving player */
     /*
@@ -2578,7 +2578,7 @@ void do_save(CHAR_DATA* ch, char* argument)
 
     save_char_obj(ch);
     save_home(ch);
-    saving_char = NULL;
+    saving_char = nullptr;
     send_to_char("Ok.\n\r", ch);
     return;
 }
@@ -2612,7 +2612,7 @@ void do_follow(CHAR_DATA* ch, char* argument)
         return;
     }
 
-    if ((victim = get_char_room(ch, arg)) == NULL)
+    if ((victim = get_char_room(ch, arg)) == nullptr)
     {
         send_to_char("They aren't here.\n\r", ch);
         return;
@@ -2620,7 +2620,7 @@ void do_follow(CHAR_DATA* ch, char* argument)
 
     if (IS_AFFECTED(ch, AFF_CHARM) && ch->master)
     {
-        act(AT_PLAIN, "But you'd rather follow $N!", ch, NULL, ch->master, TO_CHAR);
+        act(AT_PLAIN, "But you'd rather follow $N!", ch, nullptr, ch->master, TO_CHAR);
         return;
     }
 
@@ -2657,12 +2657,12 @@ export void add_follower(CHAR_DATA* ch, CHAR_DATA* master)
     }
 
     ch->master = master;
-    ch->leader = NULL;
+    ch->leader = nullptr;
 
     if (can_see(master, ch))
-        act(AT_ACTION, "$n now follows you.", ch, NULL, master, TO_VICT);
+        act(AT_ACTION, "$n now follows you.", ch, nullptr, master, TO_VICT);
 
-    act(AT_ACTION, "You now follow $N.", ch, NULL, master, TO_CHAR);
+    act(AT_ACTION, "You now follow $N.", ch, nullptr, master, TO_CHAR);
 
     return;
 }
@@ -2684,12 +2684,12 @@ export void stop_follower(CHAR_DATA* ch)
     if (ch->master)
     {
         if (can_see(ch->master, ch))
-            act(AT_ACTION, "$n stops following you.", ch, NULL, ch->master, TO_VICT);
-        act(AT_ACTION, "You stop following $N.", ch, NULL, ch->master, TO_CHAR);
+            act(AT_ACTION, "$n stops following you.", ch, nullptr, ch->master, TO_VICT);
+        act(AT_ACTION, "You stop following $N.", ch, nullptr, ch->master, TO_CHAR);
     }
 
-    ch->master = NULL;
-    ch->leader = NULL;
+    ch->master = nullptr;
+    ch->leader = nullptr;
     return;
 }
 
@@ -2700,7 +2700,7 @@ export void die_follower(CHAR_DATA* ch)
     if (ch->master)
         stop_follower(ch);
 
-    ch->leader = NULL;
+    ch->leader = nullptr;
 
     for (fch = first_char; fch; fch = fch->next)
     {
@@ -2746,12 +2746,12 @@ void do_order(CHAR_DATA* ch, char* argument)
     if (!str_cmp(arg, "all"))
     {
         fAll = true;
-        victim = NULL;
+        victim = nullptr;
     }
     else
     {
         fAll = false;
-        if ((victim = get_char_room(ch, arg)) == NULL)
+        if ((victim = get_char_room(ch, arg)) == nullptr)
         {
             send_to_char("They aren't here.\n\r", ch);
             return;
@@ -2857,8 +2857,8 @@ void do_group(CHAR_DATA* ch, char* argument)
         {
             if (is_same_group(ch, gch) && (ch != gch))
             {
-                gch->leader = NULL;
-                gch->master = NULL;
+                gch->leader = nullptr;
+                gch->master = nullptr;
                 count++;
                 send_to_char("Your group is disbanded.\n\r", gch);
             }
@@ -2890,13 +2890,13 @@ void do_group(CHAR_DATA* ch, char* argument)
             send_to_char("You have no eligible group members.\n\r", ch);
         else
         {
-            act(AT_ACTION, "$n groups $s followers.", ch, NULL, victim, TO_ROOM);
+            act(AT_ACTION, "$n groups $s followers.", ch, nullptr, victim, TO_ROOM);
             send_to_char("You group your followers.\n\r", ch);
         }
         return;
     }
 
-    if ((victim = get_char_room(ch, arg)) == NULL)
+    if ((victim = get_char_room(ch, arg)) == nullptr)
     {
         send_to_char("They aren't here.\n\r", ch);
         return;
@@ -2910,23 +2910,23 @@ void do_group(CHAR_DATA* ch, char* argument)
 
     if (victim->master != ch && ch != victim)
     {
-        act(AT_PLAIN, "$N isn't following you.", ch, NULL, victim, TO_CHAR);
+        act(AT_PLAIN, "$N isn't following you.", ch, nullptr, victim, TO_CHAR);
         return;
     }
 
     if (is_same_group(victim, ch) && ch != victim)
     {
-        victim->leader = NULL;
-        act(AT_ACTION, "$n removes $N from $s group.", ch, NULL, victim, TO_NOTVICT);
-        act(AT_ACTION, "$n removes you from $s group.", ch, NULL, victim, TO_VICT);
-        act(AT_ACTION, "You remove $N from your group.", ch, NULL, victim, TO_CHAR);
+        victim->leader = nullptr;
+        act(AT_ACTION, "$n removes $N from $s group.", ch, nullptr, victim, TO_NOTVICT);
+        act(AT_ACTION, "$n removes you from $s group.", ch, nullptr, victim, TO_VICT);
+        act(AT_ACTION, "You remove $N from your group.", ch, nullptr, victim, TO_CHAR);
         return;
     }
 
     victim->leader = ch;
-    act(AT_ACTION, "$N joins $n's group.", ch, NULL, victim, TO_NOTVICT);
-    act(AT_ACTION, "You join $n's group.", ch, NULL, victim, TO_VICT);
-    act(AT_ACTION, "$N joins your group.", ch, NULL, victim, TO_CHAR);
+    act(AT_ACTION, "$N joins $n's group.", ch, nullptr, victim, TO_NOTVICT);
+    act(AT_ACTION, "You join $n's group.", ch, nullptr, victim, TO_VICT);
+    act(AT_ACTION, "$N joins your group.", ch, nullptr, victim, TO_CHAR);
     return;
 }
 
@@ -3008,7 +3008,7 @@ void do_split(CHAR_DATA* ch, char* argument)
     {
         if (gch != ch && is_same_group(gch, ch))
         {
-            act(AT_GOLD, buf, ch, NULL, gch, TO_VICT);
+            act(AT_GOLD, buf, ch, nullptr, gch, TO_VICT);
             gch->gold += share;
         }
     }
@@ -3086,7 +3086,7 @@ export void talk_auction(char* argument)
         original = d->original ? d->original : d->character; /* if switched */
         if ((d->connected == CON_PLAYING) && !IS_SET(original->deaf, CHANNEL_AUCTION) &&
             !IS_SET(original->in_room->room_flags, ROOM_SILENCE) && !NOT_AUTHED(original))
-            act(AT_GOSSIP, buf, original, NULL, NULL, TO_CHAR);
+            act(AT_GOSSIP, buf, original, nullptr, nullptr, TO_CHAR);
     }
 }
 
@@ -3113,7 +3113,7 @@ export bool knows_language(CHAR_DATA* ch, int language, CHAR_DATA* cch)
         /* Clan = basic for mobs.. snicker.. -- Altrag */
         if (IS_NPC(ch) || IS_NPC(cch))
             return true;
-        if (ch->pcdata->clan == cch->pcdata->clan && ch->pcdata->clan != NULL)
+        if (ch->pcdata->clan == cch->pcdata->clan && ch->pcdata->clan != nullptr)
             return true;
     }
     if (!IS_NPC(ch))
@@ -3288,7 +3288,7 @@ void do_languages(CHAR_DATA* ch, char* argument)
         }
         if (race_table[ch->race].language & lang_array[lang] || ch->pcdata->learned[sn] >= 99)
         {
-            act(AT_PLAIN, "You are already fluent in $t.", ch, lang_names[lang], NULL, TO_CHAR);
+            act(AT_PLAIN, "You are already fluent in $t.", ch, lang_names[lang], nullptr, TO_CHAR);
             return;
         }
         for (sch = ch->in_room->first_person; sch; sch = sch->next)
@@ -3307,15 +3307,15 @@ void do_languages(CHAR_DATA* ch, char* argument)
         ch->pcdata->learned[sn] = UMIN(ch->pcdata->learned[sn], 99);
         SET_BIT(ch->speaks, lang_array[lang]);
         if (ch->pcdata->learned[sn] == prct)
-            act(AT_PLAIN, "You begin lessons in $t.", ch, lang_names[lang], NULL, TO_CHAR);
+            act(AT_PLAIN, "You begin lessons in $t.", ch, lang_names[lang], nullptr, TO_CHAR);
         else if (ch->pcdata->learned[sn] < 60)
-            act(AT_PLAIN, "You continue lessons in $t.", ch, lang_names[lang], NULL, TO_CHAR);
+            act(AT_PLAIN, "You continue lessons in $t.", ch, lang_names[lang], nullptr, TO_CHAR);
         else if (ch->pcdata->learned[sn] < 60 + prct)
-            act(AT_PLAIN, "You feel you can start communicating in $t.", ch, lang_names[lang], NULL, TO_CHAR);
+            act(AT_PLAIN, "You feel you can start communicating in $t.", ch, lang_names[lang], nullptr, TO_CHAR);
         else if (ch->pcdata->learned[sn] < 99)
-            act(AT_PLAIN, "You become more fluent in $t.", ch, lang_names[lang], NULL, TO_CHAR);
+            act(AT_PLAIN, "You become more fluent in $t.", ch, lang_names[lang], nullptr, TO_CHAR);
         else
-            act(AT_PLAIN, "You now speak perfect $t.", ch, lang_names[lang], NULL, TO_CHAR);
+            act(AT_PLAIN, "You now speak perfect $t.", ch, lang_names[lang], nullptr, TO_CHAR);
         return;
     }
     for (lang = 0; lang_array[lang] != LANG_UNKNOWN; lang++)

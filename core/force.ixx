@@ -121,14 +121,14 @@ CHAR_DATA* force_get_victim(CHAR_DATA* ch, char* argument, int loc)
     if (!argument || argument[0] == '\0')
     {
         send_to_char("You don't see anyone like that here.\r\n", ch);
-        return NULL;
+        return nullptr;
     }
     argument = one_argument(argument, target);
     victim = get_char_world(ch, target);
     if (!victim || (loc == FORCE_INROOM && victim->in_room != ch->in_room))
     {
         send_to_char("You don't see anyone like that here.\r\n", ch);
-        return NULL;
+        return nullptr;
     }
     return victim;
 }
@@ -313,44 +313,44 @@ FORCE_SKILL* force_test_skill_use(const char* skill_name, CHAR_DATA* ch, int ski
     if (!SKILL_FOUND)
     {
         send_to_char("ERROR: skill not found.\r\n", ch);
-        return NULL;
+        return nullptr;
     }
     if (ch->force_identified != 1)
     {
         send_to_char("Huh?\r\n", ch);
-        return NULL;
+        return nullptr;
     }
     if (ch->force_level_status < fskill->status && !ch->force_converted)
     {
         send_to_char("Huh?\r\n", ch);
-        return NULL;
+        return nullptr;
     }
     if (ch->force_converted && fskill->type == ch->force_type && ch->force_level_status < fskill->status)
     {
         send_to_char("Huh?\r\n", ch);
-        return NULL;
+        return nullptr;
     }
     if (ch->force_skill[fskill->index] == 0 && fskill->notskill == 0)
     {
         send_to_char("Huh?\r\n", ch);
-        return NULL;
+        return nullptr;
     }
     if (fskill->disabled == 1)
     {
         send_to_char("That force skill is disabled.\r\n", ch);
-        return NULL;
+        return nullptr;
     }
     if (skill_type != FORCE_NORESTRICT)
     {
-        if (skill_type == FORCE_COMBAT && ch->fighting == NULL && str_cmp(fskill->name, "slash"))
+        if (skill_type == FORCE_COMBAT && ch->fighting == nullptr && str_cmp(fskill->name, "slash"))
         {
             send_to_char("You must be fighting to use this skill!\r\n", ch);
-            return NULL;
+            return nullptr;
         }
-        if (skill_type == FORCE_NONCOMBAT && ch->fighting != NULL)
+        if (skill_type == FORCE_NONCOMBAT && ch->fighting != nullptr)
         {
             send_to_char("You cannot use this skill while fighting.\r\n", ch);
-            return NULL;
+            return nullptr;
         }
     }
     if (ch->substate == 1 || ch->substate == SUB_TIMER_DO_ABORT)
@@ -358,14 +358,14 @@ FORCE_SKILL* force_test_skill_use(const char* skill_name, CHAR_DATA* ch, int ski
     if (fskill->wait_state > 0 && ch->wait_state != 0)
     {
         send_to_char("You have not recovered yet.\r\n", ch);
-        return NULL;
+        return nullptr;
     }
     if (fskill->cost < 0)
         fskill->cost = 0;
     if (fskill->cost != 0 && ch->mana < fskill->cost)
     {
         send_to_char("You do not feel strong enough in the force.\r\n", ch);
-        return NULL;
+        return nullptr;
     }
     if (fskill->cost != 0)
     {
@@ -376,13 +376,13 @@ FORCE_SKILL* force_test_skill_use(const char* skill_name, CHAR_DATA* ch, int ski
     if (ch->force_type == FORCE_JEDI && fskill->type == FORCE_SITH)
     {
         send_to_char("&RYou feel the hatred grow within you.&G&w\r\n", ch);
-        force_send_to_room(ch, NULL, force_parse_string(ch, NULL, "&R$n's eyes glow red.&G&w\r\n"));
+        force_send_to_room(ch, nullptr, force_parse_string(ch, nullptr, "&R$n's eyes glow red.&G&w\r\n"));
         ch->force_align -= number_range(1, 5);
     }
     if (ch->force_type == FORCE_SITH && fskill->type == FORCE_JEDI)
     {
         send_to_char("&BYou grimace in pain as you embrace the light side of the force.&G&w\r\n", ch);
-        force_send_to_room(ch, NULL, force_parse_string(ch, NULL, "&B$n grimaces in pain.&G&w\r\n"));
+        force_send_to_room(ch, nullptr, force_parse_string(ch, nullptr, "&B$n grimaces in pain.&G&w\r\n"));
         ch->force_align += number_range(1, 5);
     }
     if (ch->force_align > MAX_FORCE_ALIGN)
@@ -612,11 +612,11 @@ void do_fstat(CHAR_DATA* ch, char* argument)
         if (fskill->room_effect[x][0] != '\0' || fskill->room_effect[x][0] != '\0' || fskill->room_effect[x][0] != '\0')
             ch_printf(ch, "Effect Messages [%d]\r\n", x);
         if (fskill->room_effect[x][0] != '\0')
-            ch_printf(ch, "&G&W[&GR&G&W] %s\r\n", force_parse_string(NULL, NULL, fskill->room_effect[x]));
+            ch_printf(ch, "&G&W[&GR&G&W] %s\r\n", force_parse_string(nullptr, nullptr, fskill->room_effect[x]));
         if (fskill->victim_effect[x][0] != '\0')
-            ch_printf(ch, "&G&W[&GV&G&W] %s\r\n", force_parse_string(NULL, NULL, fskill->victim_effect[x]));
+            ch_printf(ch, "&G&W[&GV&G&W] %s\r\n", force_parse_string(nullptr, nullptr, fskill->victim_effect[x]));
         if (fskill->ch_effect[x][0] != '\0')
-            ch_printf(ch, "&G&W[&GC&G&W] %s\r\n", force_parse_string(NULL, NULL, fskill->ch_effect[x]));
+            ch_printf(ch, "&G&W[&GC&G&W] %s\r\n", force_parse_string(nullptr, nullptr, fskill->ch_effect[x]));
     }
     return;
 }
@@ -1417,9 +1417,9 @@ FORCE_HELP* get_force_help(const char* fname, char* type)
     bool found_sith = false;
     bool match = false;
     if (!fname || fname[0] == '\0')
-        return NULL;
+        return nullptr;
     if (!type || type[0] == '\0')
-        return NULL;
+        return nullptr;
     for (fhelp = first_force_help; fhelp; fhelp = fhelp->next)
     {
         if (nifty_is_name_prefix(fname, fhelp->name))
@@ -1443,17 +1443,17 @@ FORCE_HELP* get_force_help(const char* fname, char* type)
         }
     }
     if (!match)
-        return NULL;
+        return nullptr;
     if (found_jedi + found_sith + found_general > 1 && strcmp(type, "jedi") && strcmp(type, "general") &&
         strcmp(type, "sith"))
-        return NULL;
+        return nullptr;
     ;
     if (!strcmp(type, "jedi") && !found_jedi)
-        return NULL;
+        return nullptr;
     if (!strcmp(type, "sith") && !found_sith)
-        return NULL;
+        return nullptr;
     if (!strcmp(type, "general") && !found_general)
-        return NULL;
+        return nullptr;
     if (found_jedi && !strcmp(type, "jedi"))
         fhelp = jhelp;
     else if (found_sith && !strcmp(type, "sith"))

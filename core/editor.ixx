@@ -317,7 +317,7 @@ char* editdata_to_str(EDITOR_DATA* edd)
     while (eline)
     {
         /* ignore the last empty line */
-        if (eline->next == NULL && eline->line[0] == '\0')
+        if (eline->next == nullptr && eline->line[0] == '\0')
             break;
         src = eline->line;
         while (*src)
@@ -419,10 +419,10 @@ void stop_editing(CHAR_DATA* ch)
 {
     set_char_color(AT_PLAIN, ch);
     discard_editdata(ch->editor);
-    ch->editor = NULL;
+    ch->editor = nullptr;
     send_to_char("Done.\n\r", ch);
-    ch->dest_buf = NULL;
-    ch->spare_ptr = NULL;
+    ch->dest_buf = nullptr;
+    ch->spare_ptr = nullptr;
     ch->substate = SUB_NONE;
     if (!ch->desc)
     {
@@ -443,7 +443,7 @@ void edit_buffer(CHAR_DATA* ch, char* argument)
     char* p;
 
     d = ch->desc;
-    if (d == NULL)
+    if (d == nullptr)
     {
         send_to_char("You have no descriptor.\n\r", ch);
         return;
@@ -632,7 +632,7 @@ void editor_print_info(CHAR_DATA* ch, EDITOR_DATA* edd, const char* argument)
 void editor_help(CHAR_DATA* ch, EDITOR_DATA* edd, const char* argument)
 {
     sh_int i;
-    const char* arg[] = {"", "l", "c", "d", "g", "i", "r", "a", "p", "!", "s", NULL};
+    const char* arg[] = {"", "l", "c", "d", "g", "i", "r", "a", "p", "!", "s", nullptr};
     const char* editor_help[] = {
         /* general help */
         "Editing commands\n\r"
@@ -679,13 +679,13 @@ void editor_help(CHAR_DATA* ch, EDITOR_DATA* edd, const char* argument)
         "/s: Saves the current buffer, terminating the edition session.\n\r",
     };
 
-    for (i = 0; arg[i] != NULL; i++)
+    for (i = 0; arg[i] != nullptr; i++)
     {
         if (!str_cmp(argument, arg[i]))
             break;
     }
 
-    if (arg[i] == NULL)
+    if (arg[i] == nullptr)
         send_to_char("No editor help about that.\n\r", ch);
     else
         send_to_char(editor_help[i], ch);
@@ -827,7 +827,7 @@ void editor_delete_line(CHAR_DATA* ch, EDITOR_DATA* edd, const char* argument)
         return;
     }
 
-    prev_line = NULL;
+    prev_line = nullptr;
     if (lineindex == 1)
     {
         if (edd->line_count == 1)
@@ -864,7 +864,7 @@ void editor_delete_line(CHAR_DATA* ch, EDITOR_DATA* edd, const char* argument)
     {
         if (del_line->next)
             edd->on_line = del_line->next;
-        else if (prev_line != NULL)
+        else if (prev_line != nullptr)
             edd->on_line = prev_line;
         else
             edd->on_line = edd->first_line;
@@ -1000,7 +1000,7 @@ char* text_replace(char* src, char* word_src, char* word_dst, sh_int* pnew_size,
     {
         /* look for next instance of word */
         next_found = strstr(last_found, word_src);
-        if (next_found == NULL)
+        if (next_found == nullptr)
         {
             /* if theres no more instances of word,
              * copy the rest of the src */

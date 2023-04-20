@@ -240,7 +240,7 @@ void do_makegoggles(CHAR_DATA* ch, char* argument)
                 send_to_char("&GYou begin the long process of creating a pair of infrared goggles.\n\r", ch);
             else
                 send_to_char("&GYou begin the long process of creating a pair of magnifying goggles.\n\r", ch);
-            act(AT_PLAIN, "$n takes $s toolkit and begins putting something together.", ch, NULL, argument, TO_ROOM);
+            act(AT_PLAIN, "$n takes $s toolkit and begins putting something together.", ch, nullptr, argument, TO_ROOM);
             add_timer(ch, TIMER_DO_FUN, 12, do_makegoggles, 1);
             ch->dest_buf = str_dup(arg);
             ch->dest_buf_2 = str_dup(arg2);
@@ -358,7 +358,7 @@ void do_makegoggles(CHAR_DATA* ch, char* argument)
         aff->location = APPLY_AFFECT;
         aff->modifier = 512;
         aff->bitvector = 0;
-        aff->next = NULL;
+        aff->next = nullptr;
         LINK(aff, obj->first_affect, obj->last_affect, next, prev);
         ++top_affect;
     }
@@ -372,7 +372,7 @@ void do_makegoggles(CHAR_DATA* ch, char* argument)
     else
         send_to_char("&GYou finish making a pair of magnifying goggles.&w\n\r", ch);
 
-    act(AT_PLAIN, "$n finishes contstructing a pair of goggles.", ch, NULL, argument, TO_ROOM);
+    act(AT_PLAIN, "$n finishes contstructing a pair of goggles.", ch, nullptr, argument, TO_ROOM);
 
     {
         long xpgain;
@@ -466,7 +466,7 @@ void do_makemissile(CHAR_DATA* ch, char* argument)
         if (number_percent() < chance)
         {
             send_to_char("&GYou begin the long process of making a missile.\n\r", ch);
-            act(AT_PLAIN, "$n takes $s tools and a few parts, beginning to work on something.", ch, NULL, argument,
+            act(AT_PLAIN, "$n takes $s tools and a few parts, beginning to work on something.", ch, nullptr, argument,
                 TO_ROOM);
             add_timer(ch, TIMER_DO_FUN, 22, do_makemissile, 1);
             ch->dest_buf = str_dup(arg);
@@ -495,7 +495,7 @@ void do_makemissile(CHAR_DATA* ch, char* argument)
     level = IS_NPC(ch) ? ch->top_level : (int)(ch->pcdata->learned[gsn_makemissile]);
     vnum = 80;
 
-    if ((pObjIndex = get_obj_index(vnum)) == NULL)
+    if ((pObjIndex = get_obj_index(vnum)) == nullptr)
     {
         send_to_char("&RThe item you are trying to create is missing from the database.\n\rPlease inform the "
                      "administration of this error.\n\r",
@@ -612,7 +612,7 @@ void do_makemissile(CHAR_DATA* ch, char* argument)
     obj = obj_to_char(obj, ch);
 
     send_to_char("&GYou finish your work and hold up your newly created missile.&w\n\r", ch);
-    act(AT_PLAIN, "$n finishes making $s new missile.", ch, NULL, argument, TO_ROOM);
+    act(AT_PLAIN, "$n finishes making $s new missile.", ch, nullptr, argument, TO_ROOM);
 
     {
         long xpgain;
@@ -653,7 +653,7 @@ void do_launch2(CHAR_DATA* ch, char* argument)
         return;
     }
 
-    if (get_eq_char(ch, WEAR_DUAL_WIELD) != NULL)
+    if (get_eq_char(ch, WEAR_DUAL_WIELD) != nullptr)
     {
         send_to_char("You can't do that while wielding two weapons.\n\r", ch);
         return;
@@ -690,10 +690,10 @@ void do_launch2(CHAR_DATA* ch, char* argument)
             return;
         }
         max_dist = wield->value[0];
-        if ((pexit = get_exit(ch->in_room, dir)) == NULL)
+        if ((pexit = get_exit(ch->in_room, dir)) == nullptr)
         {
             send_to_char("Your ignorance of common sense shows as you fire the missile into a wall!\n\r", ch);
-            act(AT_ACTION, "$n fires a missile into the wall!", ch, NULL, NULL, TO_ROOM);
+            act(AT_ACTION, "$n fires a missile into the wall!", ch, nullptr, nullptr, TO_ROOM);
 
             if (wield->value[1] == 1)
                 explode_emissile(ch, ch->in_room, wield->value[3], wield->value[4], 1);
@@ -780,7 +780,7 @@ void do_launch2(CHAR_DATA* ch, char* argument)
                         }
                         send_to_char("&RThe missile flies directly into the doorway, and EXPLODES!\n\r", ch);
                         send_to_char("&wThe doorway is reduced to nothing but debris.\n\r", ch);
-                        act(AT_ACTION, "&RThe doorway is reduced to nothing but debris.&w\n\r", ch, NULL, NULL,
+                        act(AT_ACTION, "&RThe doorway is reduced to nothing but debris.&w\n\r", ch, nullptr, nullptr,
                             TO_ROOM);
                         if (wield->value[1] == 1)
                             explode_emissile(ch, ch->in_room, wield->value[3], wield->value[4], 1);
@@ -794,7 +794,7 @@ void do_launch2(CHAR_DATA* ch, char* argument)
                                 ch_printf(rch, "&RYou are too close to the door, and the EXPLOSION knocks you to the "
                                                "ground!&w\n\r");
                                 act(AT_RED, "$n is too close to the door, and the EXPLOSION knocks them to the ground!",
-                                    rch, NULL, NULL, TO_ROOM);
+                                    rch, nullptr, nullptr, TO_ROOM);
                                 rch->position = POS_SITTING;
                             }
                         }
@@ -811,7 +811,7 @@ void do_launch2(CHAR_DATA* ch, char* argument)
                         }
                         send_to_char("&RThe missile flies directly into the doorway, and EXPLODES!\n\r", ch);
                         send_to_char("&wThe door remains undamaged, aside from some carbon scoring.\n\r", ch);
-                        act(AT_ACTION, "&RThe door remains undamaged, aside from some carbon scoring.", ch, NULL, NULL,
+                        act(AT_ACTION, "&RThe door remains undamaged, aside from some carbon scoring.", ch, nullptr, nullptr,
                             TO_ROOM);
                         if (wield->value[1] == 1)
                             explode_emissile(ch, ch->in_room, wield->value[3], wield->value[4], 1);
@@ -828,7 +828,7 @@ void do_launch2(CHAR_DATA* ch, char* argument)
                     return;
                 } // end if door in way
 
-                act(AT_WHITE, "&w$n launches a missile $d!", ch, NULL, dtxt, TO_ROOM);
+                act(AT_WHITE, "&w$n launches a missile $d!", ch, nullptr, dtxt, TO_ROOM);
                 missroom = pexit->vnum;
                 proom = get_room_index(missroom);
                 dist = 1;
@@ -934,7 +934,7 @@ void do_launch2(CHAR_DATA* ch, char* argument)
                 if (ch->aiming_at)
                 {
                     send_to_char("&G*&gbeep&G* Target lost. Target acquisition necessary for relaunch.\n\r", ch);
-                    ch->aiming_at = NULL;
+                    ch->aiming_at = nullptr;
                 }
             }
             // end ?target
@@ -1098,7 +1098,7 @@ void do_launch2(CHAR_DATA* ch, char* argument)
          send_to_char("This launcher isn't capable of firing a grenade that far.\n\r", ch);
          return;
         }
-        if ( ( pexit = get_exit( ch->in_room, dir ) ) == NULL )
+        if ( ( pexit = get_exit( ch->in_room, dir ) ) == nullptr )
         {
         }
         */
@@ -1141,7 +1141,7 @@ void do_load(CHAR_DATA* ch, char* argument)
                       launcher->value[1] == 0 ? "explosive" : "incendiary");
             return;
         }
-        if ((obj = get_obj_carry(ch, arg1)) == NULL)
+        if ((obj = get_obj_carry(ch, arg1)) == nullptr)
         {
             ch_printf(ch, "You don't seem to be carrying a '%s'.\n\r", arg1);
             return;
@@ -1267,7 +1267,7 @@ void do_link(CHAR_DATA* ch, char* argument)
     if (IS_NPC(ch))
         return;
 
-    if ((ship = ship_from_gunseat(ch->in_room->vnum)) == NULL)
+    if ((ship = ship_from_gunseat(ch->in_room->vnum)) == nullptr)
     {
         send_to_char("&RYou must be in the gunseat of a ship to link weapon systems.\n\r", ch);
         return;
@@ -1417,7 +1417,7 @@ void do_unlink(CHAR_DATA* ch, char* argument)
 {
     SHIP_DATA* ship;
 
-    if ((ship = ship_from_gunseat(ch->in_room->vnum)) == NULL)
+    if ((ship = ship_from_gunseat(ch->in_room->vnum)) == nullptr)
     {
         send_to_char("&RYou must be in the gunseat of a ship to unlink weapon systems.\n\r", ch);
         return;
@@ -1444,7 +1444,7 @@ void do_unlink(CHAR_DATA* ch, char* argument)
         }
         ship->primaryLinked = false;
         send_to_char("You unlink the primary weapon systems.\n\r", ch);
-        act(AT_PLAIN, "$n presses a few buttons on the console.\n\r", ch, NULL, NULL, TO_ROOM);
+        act(AT_PLAIN, "$n presses a few buttons on the console.\n\r", ch, nullptr, nullptr, TO_ROOM);
         return;
     }
     if (!str_prefix(argument, "secondary"))
@@ -1461,7 +1461,7 @@ void do_unlink(CHAR_DATA* ch, char* argument)
         }
         ship->secondaryLinked = false;
         send_to_char("You unlink the secondary weapon systems.\n\r", ch);
-        act(AT_PLAIN, "$n presses a few buttons on the console.\n\r", ch, NULL, NULL, TO_ROOM);
+        act(AT_PLAIN, "$n presses a few buttons on the console.\n\r", ch, nullptr, nullptr, TO_ROOM);
         return;
     }
     if (!str_prefix(argument, "launchers"))
@@ -1473,7 +1473,7 @@ void do_unlink(CHAR_DATA* ch, char* argument)
         }
         ship->warheadLinked = false;
         send_to_char("You unlink the launcher systems.\n\r", ch);
-        act(AT_PLAIN, "$n presses a few buttons on the console.\n\r", ch, NULL, NULL, TO_ROOM);
+        act(AT_PLAIN, "$n presses a few buttons on the console.\n\r", ch, nullptr, nullptr, TO_ROOM);
         return;
     }
     if (!str_prefix(argument, "all"))
@@ -1508,7 +1508,7 @@ void do_barrel_roll(CHAR_DATA* ch, char* argument)
     char buf[MAX_STRING_LENGTH];
     int chance;
 
-    if ((ship = ship_from_cockpit(ch->in_room->vnum)) == NULL)
+    if ((ship = ship_from_cockpit(ch->in_room->vnum)) == nullptr)
     {
         send_to_char("&RYou must be in the cockpit of a ship to perform a maneuver.\n\r", ch);
         return;
@@ -1544,14 +1544,14 @@ void do_barrel_roll(CHAR_DATA* ch, char* argument)
         {
             send_to_char("&YYou stop juking from side to side, and perform a barrel roll.\n\r", ch);
             sprintf_s(buf, "%s stops juking from side to side.", ship->name);
-            echo_to_system(AT_YELLOW, ship, buf, NULL);
+            echo_to_system(AT_YELLOW, ship, buf, nullptr);
             ship->juking = false;
         }
         ship->rolling = true;
         send_to_char("&GThe ship starts rolling...\n\r", ch);
-        act(AT_PLAIN, "$n performs a barrel roll.", ch, NULL, NULL, TO_ROOM);
+        act(AT_PLAIN, "$n performs a barrel roll.", ch, nullptr, nullptr, TO_ROOM);
         sprintf_s(buf, "%s performs a barrel roll.", ship->name);
-        echo_to_system(AT_YELLOW, ship, buf, NULL);
+        echo_to_system(AT_YELLOW, ship, buf, nullptr);
         learn_from_success(ch, gsn_barrelroll);
         add_timer(ch, TIMER_DO_FUN, number_range(3, 6), do_barrel_roll, 1);
         return;
@@ -1561,23 +1561,23 @@ void do_barrel_roll(CHAR_DATA* ch, char* argument)
 
     case SUB_TIMER_DO_ABORT:
         ch->substate = SUB_NONE;
-        if ((ship = ship_from_cockpit(ch->in_room->vnum)) == NULL)
+        if ((ship = ship_from_cockpit(ch->in_room->vnum)) == nullptr)
             return;
         send_to_char("&YYou level out your flight pattern.\n\r", ch);
-        act(AT_PLAIN, "$n levels out $s flight pattern.\n\r", ch, NULL, NULL, TO_ROOM);
+        act(AT_PLAIN, "$n levels out $s flight pattern.\n\r", ch, nullptr, nullptr, TO_ROOM);
         sprintf_s(buf, "%s levels out its flight pattern.", ship->name);
-        echo_to_system(AT_YELLOW, ship, buf, NULL);
+        echo_to_system(AT_YELLOW, ship, buf, nullptr);
         ship->rolling = false;
         return;
     }
 
     ch->substate = SUB_NONE;
-    if ((ship = ship_from_cockpit(ch->in_room->vnum)) == NULL)
+    if ((ship = ship_from_cockpit(ch->in_room->vnum)) == nullptr)
         return;
     send_to_char("&YYou level out your flight pattern.\n\r", ch);
-    act(AT_PLAIN, "$n levels out $s flight pattern.\n\r", ch, NULL, NULL, TO_ROOM);
+    act(AT_PLAIN, "$n levels out $s flight pattern.\n\r", ch, nullptr, nullptr, TO_ROOM);
     sprintf_s(buf, "%s levels out its flight pattern.", ship->name);
-    echo_to_system(AT_YELLOW, ship, buf, NULL);
+    echo_to_system(AT_YELLOW, ship, buf, nullptr);
     ship->rolling = false;
     return;
 }
@@ -1588,7 +1588,7 @@ void do_juke(CHAR_DATA* ch, char* argument)
     char buf[MAX_STRING_LENGTH];
     int chance;
 
-    if ((ship = ship_from_cockpit(ch->in_room->vnum)) == NULL)
+    if ((ship = ship_from_cockpit(ch->in_room->vnum)) == nullptr)
     {
         send_to_char("&RYou must be in the cockpit of a ship to perform a maneuver.\n\r", ch);
         return;
@@ -1624,14 +1624,14 @@ void do_juke(CHAR_DATA* ch, char* argument)
         {
             send_to_char("&YYou break out of the barrel roll, and start juking.\n\r", ch);
             sprintf_s(buf, "%s stops rolling.", ship->name);
-            echo_to_system(AT_YELLOW, ship, buf, NULL);
+            echo_to_system(AT_YELLOW, ship, buf, nullptr);
             ship->rolling = false;
         }
         ship->juking = true;
         send_to_char("&GYou perform the maneuver, and the ship jukes from side to side.\n\r", ch);
-        act(AT_PLAIN, "$n jukes the ship from side to side.", ch, NULL, NULL, TO_ROOM);
+        act(AT_PLAIN, "$n jukes the ship from side to side.", ch, nullptr, nullptr, TO_ROOM);
         sprintf_s(buf, "%s starts juking from side to side.", ship->name);
-        echo_to_system(AT_YELLOW, ship, buf, NULL);
+        echo_to_system(AT_YELLOW, ship, buf, nullptr);
         learn_from_success(ch, gsn_juke);
         add_timer(ch, TIMER_DO_FUN, number_range(3, 6), do_juke, 1);
         return;
@@ -1641,23 +1641,23 @@ void do_juke(CHAR_DATA* ch, char* argument)
 
     case SUB_TIMER_DO_ABORT:
         ch->substate = SUB_NONE;
-        if ((ship = ship_from_cockpit(ch->in_room->vnum)) == NULL)
+        if ((ship = ship_from_cockpit(ch->in_room->vnum)) == nullptr)
             return;
         send_to_char("&YYou level out your flight pattern.\n\r", ch);
-        act(AT_PLAIN, "$n levels out $s flight pattern.\n\r", ch, NULL, NULL, TO_ROOM);
+        act(AT_PLAIN, "$n levels out $s flight pattern.\n\r", ch, nullptr, nullptr, TO_ROOM);
         sprintf_s(buf, "%s levels out its flight pattern.", ship->name);
-        echo_to_system(AT_YELLOW, ship, buf, NULL);
+        echo_to_system(AT_YELLOW, ship, buf, nullptr);
         ship->juking = false;
         return;
     }
 
     ch->substate = SUB_NONE;
-    if ((ship = ship_from_cockpit(ch->in_room->vnum)) == NULL)
+    if ((ship = ship_from_cockpit(ch->in_room->vnum)) == nullptr)
         return;
     send_to_char("You level out your flight pattern.\n\r", ch);
-    act(AT_PLAIN, "$n levels out $s flight pattern.\n\r", ch, NULL, NULL, TO_ROOM);
+    act(AT_PLAIN, "$n levels out $s flight pattern.\n\r", ch, nullptr, nullptr, TO_ROOM);
     sprintf_s(buf, "%s levels out its flight pattern.", ship->name);
-    echo_to_system(AT_YELLOW, ship, buf, NULL);
+    echo_to_system(AT_YELLOW, ship, buf, nullptr);
     ship->juking = false;
     return;
 }

@@ -109,7 +109,7 @@ bool load_forcehelp(const char* forcehelpfile)
     found = false;
     sprintf_s(filename, "%s%s", FORCE_HELP_DIR, forcehelpfile);
 
-    if ((fp = fopen(filename, "r")) != NULL)
+    if ((fp = fopen(filename, "r")) != nullptr)
     {
 
         found = true;
@@ -164,13 +164,13 @@ export void load_force_help()
     char forcehelpslist[256];
     char buf[MAX_STRING_LENGTH];
 
-    first_force_help = NULL;
-    last_force_help = NULL;
+    first_force_help = nullptr;
+    last_force_help = nullptr;
 
     log_string("Loading force helps...");
 
     sprintf_s(forcehelpslist, "%sforcehelps.lst", FORCE_HELP_DIR);
-    if ((fpList = fopen(forcehelpslist, "r")) == NULL)
+    if ((fpList = fopen(forcehelpslist, "r")) == nullptr)
     {
         perror(forcehelpslist);
         exit(1);
@@ -237,7 +237,7 @@ export void save_forcehelp(FORCE_HELP* fhelp)
 
     sprintf_s(filename, "%s%s_%d", FORCE_HELP_DIR, fhelp->name, fhelp->type);
 
-    if ((fp = fopen(filename, "w")) == NULL)
+    if ((fp = fopen(filename, "w")) == nullptr)
     {
         bug("save_forcehelp: fopen", 0);
         perror(filename);
@@ -345,7 +345,7 @@ bool load_forceskill(const char* forceskillfile)
     found = false;
     sprintf_s(filename, "%s%s", FORCE_DIR, forceskillfile);
 
-    if ((fp = fopen(filename, "r")) != NULL)
+    if ((fp = fopen(filename, "r")) != nullptr)
     {
 
         found = true;
@@ -402,13 +402,13 @@ export void load_force_skills()
     char forceskillslist[256];
     char buf[MAX_STRING_LENGTH];
 
-    first_force_skill = NULL;
-    last_force_skill = NULL;
+    first_force_skill = nullptr;
+    last_force_skill = nullptr;
 
     log_string("Loading force skills...");
 
     sprintf_s(forceskillslist, "%sforceskills.lst", FORCE_DIR);
-    if ((fpList = fopen(forceskillslist, "r")) == NULL)
+    if ((fpList = fopen(forceskillslist, "r")) == nullptr)
     {
         perror(forceskillslist);
         exit(1);
@@ -544,7 +544,7 @@ export void save_forceskill(FORCE_SKILL* fskill)
 
     sprintf_s(filename, "%s%s", FORCE_DIR, fskill->name);
 
-    if ((fp = fopen(filename, "w")) == NULL)
+    if ((fp = fopen(filename, "w")) == nullptr)
     {
         bug("save_forceskill: fopen", 0);
         perror(filename);

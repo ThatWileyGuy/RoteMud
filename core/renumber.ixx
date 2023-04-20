@@ -120,7 +120,7 @@ void do_renumber(CHAR_DATA* ch, char* argument)
         return;
     }
     area = find_area(arg1, &is_proto);
-    if (area == NULL)
+    if (area == nullptr)
     {
         ch_printf(ch, "No such area '%s'.\n\r", arg1);
         return;
@@ -220,10 +220,10 @@ void do_renumber(CHAR_DATA* ch, char* argument)
         return;
 
     /* another sanity check :) */
-    if (r_area == NULL || (r_area->r_obj == NULL && r_area->r_mob == NULL && r_area->r_room == NULL))
+    if (r_area == nullptr || (r_area->r_obj == nullptr && r_area->r_mob == nullptr && r_area->r_room == nullptr))
     {
         ch_printf(ch, "No changes to make.\n\r");
-        if (r_area != NULL)
+        if (r_area != nullptr)
             DISPOSE(r_area);
         return;
     }
@@ -235,11 +235,11 @@ void do_renumber(CHAR_DATA* ch, char* argument)
     pager_printf(ch, "Done.\n\r");
 
     /* clean up and goodbye */
-    if (r_area->r_room != NULL)
+    if (r_area->r_room != nullptr)
         free_renumber_data(r_area->r_room);
-    if (r_area->r_obj != NULL)
+    if (r_area->r_obj != nullptr)
         free_renumber_data(r_area->r_obj);
-    if (r_area->r_mob != NULL)
+    if (r_area->r_mob != nullptr)
         free_renumber_data(r_area->r_mob);
     DISPOSE(r_area);
 }
@@ -271,7 +271,7 @@ bool check_vnums(CHAR_DATA* ch, AREA_DATA* tarea, RENUMBER_AREA* r_area)
         }
 
         area = area->next;
-        if (area == NULL && !proto)
+        if (area == nullptr && !proto)
         {
             area = first_build;
             proto = true;
@@ -327,17 +327,17 @@ RENUMBER_DATA* gather_one_list(short type, int low, int high, int new_base, bool
         {
         case REN_ROOM:
             room = get_room_index(i);
-            if (room != NULL)
+            if (room != nullptr)
                 found = true;
             break;
         case REN_OBJ:
             obj = get_obj_index(i);
-            if (obj != NULL)
+            if (obj != nullptr)
                 found = true;
             break;
         case REN_MOB:
             mob = get_mob_index(i);
-            if (mob != NULL)
+            if (mob != nullptr)
                 found = true;
             break;
         }
@@ -367,7 +367,7 @@ void free_renumber_data(RENUMBER_DATA* r_data)
 {
     RENUMBER_DATA* r_next;
 
-    while (r_data != NULL)
+    while (r_data != nullptr)
     {
         r_next = r_data->next;
         DISPOSE(r_data);
@@ -411,7 +411,7 @@ void renumber_area(CHAR_DATA* ch, AREA_DATA* area, RENUMBER_AREA* r_area, bool a
         ROOM_INDEX_DATA* room = get_room_index(r_data->old_vnum);
         if (!room)
         {
-            bug("renumber_area: NULL room %d", r_data->old_vnum);
+            bug("renumber_area: nullptr room %d", r_data->old_vnum);
             continue;
         }
 
@@ -434,7 +434,7 @@ void renumber_area(CHAR_DATA* ch, AREA_DATA* area, RENUMBER_AREA* r_area, bool a
         g_roomIndex.insert({room->vnum, room});
     }
     /* if nothing was moved, or if the area is proto, dont change this */
-    if (r_area->r_room != NULL && !area_is_proto)
+    if (r_area->r_room != nullptr && !area_is_proto)
     {
         area->low_r_vnum = r_area->low_room;
         area->hi_r_vnum = r_area->hi_room;
@@ -450,7 +450,7 @@ void renumber_area(CHAR_DATA* ch, AREA_DATA* area, RENUMBER_AREA* r_area, bool a
         MOB_INDEX_DATA* mob = get_mob_index(r_data->old_vnum);
         if (!mob)
         {
-            bug("renumber_area: NULL mob %d", r_data->old_vnum);
+            bug("renumber_area: nullptr mob %d", r_data->old_vnum);
             continue;
         }
 
@@ -500,7 +500,7 @@ void renumber_area(CHAR_DATA* ch, AREA_DATA* area, RENUMBER_AREA* r_area, bool a
         OBJ_INDEX_DATA* obj = get_obj_index(r_data->old_vnum);
         if (!obj)
         {
-            bug("renumber_area: NULL obj %d", r_data->old_vnum);
+            bug("renumber_area: nullptr obj %d", r_data->old_vnum);
             continue;
         }
 
@@ -745,7 +745,7 @@ void translate_reset(RESET_DATA* reset, RENUMBER_AREA* r_data)
        of having a bunch of several instances of very
        similar code, i just made this array that tells the
        code what to do. it's pretty straightforward */
-    const char* action_table[] = {"Mm1r3", "Oo1r3", "Ho1", "Po1o3", "Go1", "Eo1", "Dr1", "Rr1", NULL};
+    const char* action_table[] = {"Mm1r3", "Oo1r3", "Ho1", "Po1o3", "Go1", "Eo1", "Dr1", "Rr1", nullptr};
     const char* p;
     RENUMBER_DATA* r_table;
     int *parg, new_vnum, i;
@@ -782,7 +782,7 @@ void translate_reset(RESET_DATA* reset, RENUMBER_AREA* r_data)
         return;
     }
 
-    for (i = 0; action_table[i] != NULL; i++)
+    for (i = 0; action_table[i] != nullptr; i++)
     {
         if (reset->command == action_table[i][0])
         {
@@ -825,7 +825,7 @@ void translate_reset(RESET_DATA* reset, RENUMBER_AREA* r_data)
         }
     }
 
-    if (action_table[i] == NULL)
+    if (action_table[i] == nullptr)
         bug("translate_reset: Invalid reset '%c' found.\n\r", reset->command);
 }
 
@@ -845,7 +845,7 @@ int find_translation(int vnum, RENUMBER_DATA* r_data)
 }
 
 AREA_DATA* find_area(char* filename, bool* p_is_proto)
-/* simply returns a pointer to a "filename" or NULL if no such area. stores
+/* simply returns a pointer to a "filename" or nullptr if no such area. stores
    true in *p_is_proto if the area is proto */
 {
     bool found;
@@ -883,5 +883,5 @@ AREA_DATA* find_area(char* filename, bool* p_is_proto)
         return area;
     }
     else
-        return NULL;
+        return nullptr;
 }

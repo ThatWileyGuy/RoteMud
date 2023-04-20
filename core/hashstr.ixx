@@ -112,7 +112,7 @@ export char* quick_link(char* str)
     if (ptr->links == 0)
     {
         fprintf(stderr, "quick_link: bad pointer\n");
-        return NULL;
+        return nullptr;
     }
     if (ptr->links < 65535)
         ++ptr->links;
@@ -207,7 +207,7 @@ export char* check_hash(char* str)
     len = strlen(str);
     psize = sizeof(HASHSTR_DATA);
     hash = len % STR_HASH_SIZE;
-    for (fnd = NULL, ptr = string_hash[hash], c = 0; ptr; ptr = ptr->next, c++)
+    for (fnd = nullptr, ptr = string_hash[hash], c = 0; ptr; ptr = ptr->next, c++)
         if (len == ptr->length && !strcmp(str, (char*)ptr + psize))
         {
             fnd = ptr;

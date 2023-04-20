@@ -102,7 +102,7 @@ void load_hall_of_fame(void);
 void find_bet_winners(CHAR_DATA* winner);
 export void lost_arena(CHAR_DATA* ch);
 
-HALL_OF_FAME_ELEMENT* fame_list = NULL;
+HALL_OF_FAME_ELEMENT* fame_list = nullptr;
 
 export int ppl_challenged = 0;
 export int ppl_in_arena = 0;
@@ -230,10 +230,10 @@ void do_arena(CHAR_DATA* ch, char* argument)
 
         location = ch->in_room;
         ch->pcdata->roomarena = location;
-        act(AT_RED, "$n has been whisked away to the killing fields.", ch, NULL, NULL, TO_ROOM);
+        act(AT_RED, "$n has been whisked away to the killing fields.", ch, nullptr, nullptr, TO_ROOM);
         char_from_room(ch);
         char_to_room(ch, get_room_index(PREP_START));
-        act(AT_WHITE, "$n is dropped from the sky.", ch, NULL, NULL, TO_ROOM);
+        act(AT_WHITE, "$n is dropped from the sky.", ch, nullptr, nullptr, TO_ROOM);
         send_to_char("You have been taken to the killing fields\r\n", ch);
         do_look(ch, MAKE_TEMP_STRING("auto"));
         sprintf_s(buf, "%s has joined the blood bath.", ch->name);
@@ -462,13 +462,13 @@ void find_game_winner()
                 i->hit = i->max_hit;
                 i->mana = i->max_mana;
                 i->move = i->max_move;
-                i->challenged = NULL;
+                i->challenged = nullptr;
                 //          i->armor = i->pcdata->oldac;
                 char_from_room(i);
                 location = i->pcdata->roomarena;
                 char_to_room(i, location);
                 do_look(i, MAKE_TEMP_STRING("auto"));
-                act(AT_YELLOW, "$n falls from the sky.", i, NULL, NULL, TO_ROOM);
+                act(AT_YELLOW, "$n falls from the sky.", i, nullptr, nullptr, TO_ROOM);
                 if (time_left_in_game == 1)
                 {
                     sprintf_s(buf, "After 1 hour of battle %s is declared the winner", i->name);
@@ -541,14 +541,14 @@ void do_end_game()
                 i->hit = i->max_hit;
                 i->mana = i->max_mana;
                 i->move = i->max_move;
-                i->challenged = NULL;
+                i->challenged = nullptr;
                 //          i->armor = i->pcdata->oldac;
                 stop_fighting(i, true);
                 location = i->pcdata->roomarena;
                 char_from_room(i);
                 char_to_room(i, location);
                 do_look(i, MAKE_TEMP_STRING("auto"));
-                act(AT_TELL, "$n falls from the sky.", i, NULL, NULL, TO_ROOM);
+                act(AT_TELL, "$n falls from the sky.", i, nullptr, nullptr, TO_ROOM);
             }
         }
     }
@@ -746,7 +746,7 @@ void find_bet_winners(CHAR_DATA* winner)
                 sprintf_s(buf1, "You have won %d coins on your bet.\r\n", (GET_BET_AMT(wch)) * 2);
                 send_to_char(buf1, wch);
                 wch->gold += GET_BET_AMT(wch) * 2;
-                GET_BETTED_ON(wch) = NULL;
+                GET_BETTED_ON(wch) = nullptr;
                 GET_BET_AMT(wch) = 0;
             }
         }
@@ -758,7 +758,7 @@ void do_challenge(CHAR_DATA* ch, char* argument)
     char buf[MAX_INPUT_LENGTH];
     ROOM_INDEX_DATA* location;
 
-    if ((victim = get_char_world_ooc(ch, argument)) == NULL)
+    if ((victim = get_char_world_ooc(ch, argument)) == nullptr)
     {
         send_to_char("&WThat character is not of these realms!\n\r", ch);
         return;
@@ -845,17 +845,17 @@ void do_aaccept(CHAR_DATA* ch, char* argument)
     {
         CHAR_DATA* dch;
         dch = ch->challenged;
-        if (!dch || dch == NULL)
+        if (!dch || dch == nullptr)
         {
             send_to_char("Your challenger has left!\n\r", ch);
-            ch->challenged = NULL;
+            ch->challenged = nullptr;
             return;
         }
         location = ch->in_room;
         ch->pcdata->roomarena = location;
         sprintf_s(buf, "%s has accepted %s's challenge!", ch->name, dch->name);
         sportschan(buf);
-        ch->challenged = NULL;
+        ch->challenged = nullptr;
         char_from_room(ch);
         char_to_room(ch, get_room_index(PREP_END));
         do_look(ch, MAKE_TEMP_STRING("auto"));
@@ -882,7 +882,7 @@ void do_adecline(CHAR_DATA* ch, char* argument)
     {
         sprintf_s(buf, "%s has DECLINED %s's challenge! WHAT A WUSS!!!\n\r", ch->name, ch->challenged->name);
         sportschan(buf);
-        ch->challenged = NULL;
+        ch->challenged = nullptr;
         return;
     }
     else

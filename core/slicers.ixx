@@ -80,7 +80,7 @@ void do_tellsnoop(CHAR_DATA* ch, char* argument)
     if (!str_cmp(arg, "clear") || !str_cmp(arg, "self"))
     {
         send_to_char("You turn your radio off.\n\r", ch);
-        ch->pcdata->tell_snoop = NULL;
+        ch->pcdata->tell_snoop = nullptr;
         return;
     }
 
@@ -634,7 +634,7 @@ void do_inquire(CHAR_DATA* ch, char* argument)
 
             send_to_char("&GYou begin the long process of trying to slice into the banking computer system.\n\r", ch);
             sprintf_s(buf, "$n takes $s datapad and hooks into a data port.");
-            act(AT_PLAIN, buf, ch, NULL, argument, TO_ROOM);
+            act(AT_PLAIN, buf, ch, nullptr, argument, TO_ROOM);
             add_timer(ch, TIMER_DO_FUN, 10, do_inquire, 1);
             return;
         }
@@ -788,7 +788,7 @@ void do_makecommsystem(CHAR_DATA* ch, char* argument)
         if (number_percent() < chance)
         {
             send_to_char("&GYou begin the long process of making a commsystem.\n\r", ch);
-            act(AT_PLAIN, "$n takes $s tools and begins to work on something.", ch, NULL, argument, TO_ROOM);
+            act(AT_PLAIN, "$n takes $s tools and begins to work on something.", ch, nullptr, argument, TO_ROOM);
             add_timer(ch, TIMER_DO_FUN, 5, do_makecommsystem, 1);
             ch->dest_buf = str_dup(arg);
             return;
@@ -816,7 +816,7 @@ void do_makecommsystem(CHAR_DATA* ch, char* argument)
     level = IS_NPC(ch) ? ch->top_level : (int)(ch->pcdata->learned[gsn_makecommsystem]);
     vnum = COMMSYS_VNUM;
 
-    if ((pObjIndex = get_obj_index(vnum)) == NULL)
+    if ((pObjIndex = get_obj_index(vnum)) == nullptr)
     {
         send_to_char("&RThe item you are trying to create is missing from the database.\n\rPlease inform the "
                      "administration of this error.\n\r",
@@ -898,7 +898,7 @@ void do_makecommsystem(CHAR_DATA* ch, char* argument)
     obj = obj_to_char(obj, ch);
 
     send_to_char("&GYou finish your work and hold up your new commsystem.&w\n\r", ch);
-    act(AT_PLAIN, "$n finishes making $s new commsystem.", ch, NULL, argument, TO_ROOM);
+    act(AT_PLAIN, "$n finishes making $s new commsystem.", ch, nullptr, argument, TO_ROOM);
 
     {
         long xpgain;
@@ -1002,7 +1002,7 @@ void do_makedatapad(CHAR_DATA* ch, char* argument)
         if (number_percent() < chance)
         {
             send_to_char("&GYou begin the long process of making a datapad.\n\r", ch);
-            act(AT_PLAIN, "$n takes $s tools and begins to work on something.", ch, NULL, argument, TO_ROOM);
+            act(AT_PLAIN, "$n takes $s tools and begins to work on something.", ch, nullptr, argument, TO_ROOM);
             add_timer(ch, TIMER_DO_FUN, 5, do_makedatapad, 1);
             ch->dest_buf = str_dup(arg);
             return;
@@ -1030,7 +1030,7 @@ void do_makedatapad(CHAR_DATA* ch, char* argument)
     level = IS_NPC(ch) ? ch->top_level : (int)(ch->pcdata->learned[gsn_makedatapad]);
     vnum = DATAPAD_VNUM;
 
-    if ((pObjIndex = get_obj_index(vnum)) == NULL)
+    if ((pObjIndex = get_obj_index(vnum)) == nullptr)
     {
         send_to_char("&RThe item you are trying to create is missing from the database.\n\rPlease inform the "
                      "administration of this error.\n\r",
@@ -1119,7 +1119,7 @@ void do_makedatapad(CHAR_DATA* ch, char* argument)
     obj = obj_to_char(obj, ch);
 
     send_to_char("&GYou finish your work and hold up your new datpad.&w\n\r", ch);
-    act(AT_PLAIN, "$n finishes making $s new datapad.", ch, NULL, argument, TO_ROOM);
+    act(AT_PLAIN, "$n finishes making $s new datapad.", ch, nullptr, argument, TO_ROOM);
 
     {
         long xpgain;
@@ -1153,7 +1153,7 @@ void do_codecrack(CHAR_DATA* ch, char* argument)
             send_to_char("Syntax: Codecrack <ship>\n\r", ch);
             return;
         }
-        else if ((ship = ship_in_room(ch->in_room, arg)) != NULL)
+        else if ((ship = ship_in_room(ch->in_room, arg)) != nullptr)
         {
             ship = ship_in_room(ch->in_room, arg);
             strcpy_s(arg, ship->name);
@@ -1180,13 +1180,13 @@ void do_codecrack(CHAR_DATA* ch, char* argument)
         if (number_percent() < chance)
         {
 
-            if ((ship = ship_in_room(ch->in_room, arg)) != NULL)
+            if ((ship = ship_in_room(ch->in_room, arg)) != nullptr)
             {
                 ship = get_ship(arg);
                 ch->dest_buf = str_dup(arg);
                 send_to_char("&GYou begin the long process of trying to slice into a ships computer.\n\r", ch);
                 sprintf_s(buf, "$n takes $s datapad and hooks into the %s's data port.\n\r", ship->name);
-                act(AT_PLAIN, buf, ch, NULL, argument, TO_ROOM);
+                act(AT_PLAIN, buf, ch, nullptr, argument, TO_ROOM);
                 add_timer(ch, TIMER_DO_FUN, 25, do_codecrack, 1);
                 return;
             }
@@ -1251,7 +1251,7 @@ void do_codecrack(CHAR_DATA* ch, char* argument)
         learn_from_failure(ch, gsn_codecrack);
         if (ship->alarm == 1)
         {
-            if ((victim = get_char_world_ooc(ch, ship->owner)) != NULL)
+            if ((victim = get_char_world_ooc(ch, ship->owner)) != nullptr)
                 ch_printf(victim, "&RYou have received a signal from the alarm module installed in %s.&W", ship->name);
         }
         ch->pcdata->is_hacking = false;
@@ -1322,7 +1322,7 @@ void do_disableship(CHAR_DATA* ch, char* argument)
             return;
         }
 
-        if ((ship1 = ship_from_cockpit(ch->in_room->vnum)) == NULL)
+        if ((ship1 = ship_from_cockpit(ch->in_room->vnum)) == nullptr)
         {
             send_to_char("You need to be in a ships cockpit to use this skill.\n\r", ch);
             return;
@@ -1391,8 +1391,8 @@ void do_disableship(CHAR_DATA* ch, char* argument)
                 strcpy_s(disable, arg2);
                 send_to_char("You take out your datapad and commsystem and begin working on disabling the ship.\n\r",
                              ch);
-                act(AT_PLAIN, "$n takes out $s datapad and begins working on disabling a ships launcher.\n\r", ch, NULL,
-                    NULL, TO_ROOM);
+                act(AT_PLAIN, "$n takes out $s datapad and begins working on disabling a ships launcher.\n\r", ch, nullptr,
+                    nullptr, TO_ROOM);
                 ch->dest_buf = str_dup(arg1);
                 add_timer(ch, TIMER_DO_FUN, 5, do_disableship, 1);
                 return;
@@ -1403,8 +1403,8 @@ void do_disableship(CHAR_DATA* ch, char* argument)
                 strcpy_s(disable, arg2);
                 send_to_char("You take out your datapad and commsystem and begin working on disabling the ship.\n\r",
                              ch);
-                act(AT_PLAIN, "$n takes out $s datapad and begins working on disabling a ships shields.\n\r", ch, NULL,
-                    NULL, TO_ROOM);
+                act(AT_PLAIN, "$n takes out $s datapad and begins working on disabling a ships shields.\n\r", ch, nullptr,
+                    nullptr, TO_ROOM);
                 ch->dest_buf = str_dup(arg1);
                 add_timer(ch, TIMER_DO_FUN, 15, do_disableship, 1);
                 return;
@@ -1418,7 +1418,7 @@ void do_disableship(CHAR_DATA* ch, char* argument)
                 send_to_char("You take out your datapad and commsystem and begin working on disabling the ship.\n\r",
                              ch);
                 act(AT_PLAIN, "$n takes out $s datapad and begins working on disabling a ships hyperdrive.\n\r", ch,
-                    NULL, NULL, TO_ROOM);
+                    nullptr, nullptr, TO_ROOM);
                 ch->dest_buf = str_dup(arg1);
                 add_timer(ch, TIMER_DO_FUN, 10, do_disableship, 1);
                 return;
@@ -1431,7 +1431,7 @@ void do_disableship(CHAR_DATA* ch, char* argument)
                              ch);
                 act(AT_PLAIN,
                     "$n takes out $s datapad and begins working on disabling a ships primary weapons system.\n\r", ch,
-                    NULL, NULL, TO_ROOM);
+                    nullptr, nullptr, TO_ROOM);
                 ch->dest_buf = str_dup(arg1);
                 add_timer(ch, TIMER_DO_FUN, 30, do_disableship, 1);
                 return;
@@ -1569,7 +1569,7 @@ void do_assignpilot(CHAR_DATA* ch, char* argument)
             return;
         }
 
-        if ((ship1 = ship_from_cockpit(ch->in_room->vnum)) == NULL)
+        if ((ship1 = ship_from_cockpit(ch->in_room->vnum)) == nullptr)
         {
             send_to_char("You need to be in a ships cockpit to use this skill.\n\r", ch);
             return;
@@ -1598,7 +1598,7 @@ void do_assignpilot(CHAR_DATA* ch, char* argument)
         {
             strcpy_s(disable, arg2);
             send_to_char("You take out your datapad working on changing this ships pilot.\n\r", ch);
-            act(AT_PLAIN, "$n takes out $s datapad and begins working on something.\n\r", ch, NULL, argument, TO_ROOM);
+            act(AT_PLAIN, "$n takes out $s datapad and begins working on something.\n\r", ch, nullptr, argument, TO_ROOM);
             ch->dest_buf = str_dup(arg1);
             add_timer(ch, TIMER_DO_FUN, 5, do_assignpilot, 1);
             return;
@@ -1630,7 +1630,7 @@ void do_assignpilot(CHAR_DATA* ch, char* argument)
     chance = IS_NPC(ch) ? ch->top_level : (int)(ch->pcdata->learned[gsn_assignpilot]);
 
     ship = ship_from_cockpit(ch->in_room->vnum);
-    if (ship == NULL)
+    if (ship == nullptr)
         return;
     if (number_percent() > chance * 2 || (!checkdata) || (!ship))
     {
@@ -1752,7 +1752,7 @@ void do_slicebank(CHAR_DATA* ch, char* argument)
         ch->dest_buf_2 = str_dup(arg2);
         send_to_char("&GYou begin the long process of trying to slice into the banking computer system.\n\r", ch);
         sprintf_s(buf, "$n takes $s datapad and hooks it into a data port.");
-        act(AT_PLAIN, buf, ch, NULL, argument, TO_ROOM);
+        act(AT_PLAIN, buf, ch, nullptr, argument, TO_ROOM);
         add_timer(ch, TIMER_DO_FUN, 10, do_slicebank, 1);
         return;
 
@@ -1986,7 +1986,7 @@ void do_checkprints(CHAR_DATA* ch, char* argument)
             ch->dest_buf = str_dup(arg);
             send_to_char("&GYou begin the long process of cross checking fingerprints.\n\r", ch);
             sprintf_s(buf, "$n takes $s datapad and hooks into a commsystem.\n\r");
-            act(AT_PLAIN, buf, ch, NULL, argument, TO_ROOM);
+            act(AT_PLAIN, buf, ch, nullptr, argument, TO_ROOM);
             add_timer(ch, TIMER_DO_FUN, 5, do_checkprints, 1);
             return;
         }

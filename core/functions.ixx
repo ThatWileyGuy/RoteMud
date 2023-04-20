@@ -167,8 +167,8 @@ export char* rembg(const char* src)
     char* retptr;
     retptr = ret;
 
-    if (src == NULL)
-        return NULL;
+    if (src == nullptr)
+        return nullptr;
 
     for (; *src != '\0'; src++)
     {
@@ -260,7 +260,7 @@ int strlen_color(char* argument)
     int i, length;
 
     str = argument;
-    if (argument == NULL)
+    if (argument == nullptr)
         return 0;
 
     for (length = i = 0; i < strlen(argument); ++i)
