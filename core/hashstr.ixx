@@ -38,11 +38,14 @@
 
 module;
 
+#include <cstdio>
+#include <cstring>
+#include <cstdlib>
 #include "mud.hxx"
 
 export module hashstr;
 
-import std.core;
+
 import mud;
 
 #define STR_HASH_SIZE 1024
@@ -277,4 +280,36 @@ export bool in_hash_table(char* str)
         if (len == ptr->length && str == ((char*)ptr + psize))
             return true;
     return false;
+}
+
+export template <typename T> void internal_dispose(T* ptr)
+{
+    if (ptr == nullptr)
+    {
+        return;
+    }
+
+    if (in_hash_table((char*)(ptr)))
+    {
+        bug("&RDISPOSE called on STRALLOC pointer: %s, line %d", __FILE__, __LINE__);
+        log_string("Attempting to correct.");
+        if (str_free((char*)(ptr)) == -1)
+            bug("&RSTRFREEing bad pointer: %s, line %d", __FILE__, __LINE__);
+    }
+    else
+    {
+        std::free(ptr);
+    }
+}
+
+export template <typename T> void internal_strfree(T* pointer)
+{
+    if (!in_hash_table(pointer))
+    {
+        bug("&RSTRFREE called on str_dup pointer: %s, line %d", __FILE__, __LINE__);
+        log_string("Attempting to correct.");
+        std::free(pointer);
+    }
+    else if (str_free(pointer) == -1)
+        bug("&RSTRFREEing bad pointer: %s, line %d", __FILE__, __LINE__);
 }

@@ -38,11 +38,14 @@
 
 module;
 
+#include <cstdio>
+#include <cstdlib>
+#include <ctime>
+#include <cstring>
 #include "mud.hxx"
 
 export module changes;
 
-import std.core;
 import mud;
 
 /*

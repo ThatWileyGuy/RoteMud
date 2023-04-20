@@ -38,11 +38,13 @@
 
 module;
 
+#include <cstdio>
+#include <cstdlib>
 #include "mud.hxx"
 
 export module hunter;
 
-import std.core;
+
 import mud;
 import hashstr;
 

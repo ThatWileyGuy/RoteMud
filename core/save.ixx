@@ -47,14 +47,14 @@ module;
 #include <SDKDDKVer.h>
 #endif
 
+#include <memory>
+#include <filesystem>
+
 #include <boost/asio.hpp> // TODO why is this needed here?
 #include "mud.hxx"
 
 export module save;
 
-import std.filesystem;
-
-import std.core;
 import mud;
 import connection;
 import hashstr;

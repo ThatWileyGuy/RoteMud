@@ -38,11 +38,12 @@
 
 module;
 
+#include <cstdio>
 #include "mud.hxx"
 
 export module marriage;
 
-import std.core;
+
 import mud;
 
 void do_marry(CHAR_DATA* ch, char* argument)

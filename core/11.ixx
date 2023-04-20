@@ -40,13 +40,14 @@
 
 module;
 
+#include <string>
 #include "mud.hxx"
 
 extern int top_affect;
 
 export module eleven;
 
-import std.core;
+
 import mud;
 import functions;
 import hashstr;

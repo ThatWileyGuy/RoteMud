@@ -38,13 +38,12 @@
 
 module;
 
+#include <fstream>
+#include <filesystem>
 #include "mud.hxx"
 
 export module act_comm;
 
-import std.filesystem;
-
-import std.core;
 import mud;
 import newarena;
 import mud_prog;

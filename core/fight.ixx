@@ -38,11 +38,15 @@
 
 module;
 
+#include <cstring>
+#include <cstdio>
+#include <cstdlib>
+#include <cctype>
 #include "mud.hxx"
 
 export module fight;
 
-import std.core;
+
 import mud;
 import newarena;
 import mud_prog;

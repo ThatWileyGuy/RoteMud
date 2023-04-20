@@ -38,11 +38,15 @@
 
 module;
 
+#include <cctype>
+#include <cstdio>
+#include <cstring>
+#include <cstdlib>
 #include "mud.hxx"
 
 export module mud_prog;
 
-import std.core;
+
 import mud;
 import hashstr;
 

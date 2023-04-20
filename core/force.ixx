@@ -38,6 +38,9 @@
 
 module;
 
+#include <cstring>
+#include <cstdlib>
+#include <cstdio>
 #include "mud.hxx"
 
 extern void write_all_forceskills();
@@ -46,7 +49,7 @@ extern void load_force_help(void);
 
 export module force;
 
-import std.core;
+
 import mud;
 import functions;
 import hashstr;

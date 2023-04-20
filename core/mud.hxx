@@ -38,10 +38,6 @@
 
 #pragma once
 
-#include <cctype>
-#include <cstdio>
-#include <cstdlib>
-
 /*
  * Utility macros.
  */
@@ -59,67 +55,43 @@
 /*
  * Memory allocation macros.
  */
-#define CREATE(result, type, number)                                                                                   \
-    do                                                                                                                 \
-    {                                                                                                                  \
-        if (!((result) = (type*)calloc((number), sizeof(type))))                                                       \
-        {                                                                                                              \
-            perror("malloc failure");                                                                                  \
-            fprintf(stderr, "Malloc failure @ %s:%d\n", __FILE__, __LINE__);                                           \
-            abort();                                                                                                   \
-        }                                                                                                              \
+#define CREATE(result, type, number) \
+    do \
+    { \
+        result = internal_alloc<type>(number); \
     } while (0)
 
-#define RECREATE(result, type, number)                                                                                 \
-    do                                                                                                                 \
-    {                                                                                                                  \
-        if (!((result) = (type*)realloc((result), sizeof(type) * (number))))                                           \
-        {                                                                                                              \
-            perror("realloc failure");                                                                                 \
-            fprintf(stderr, "Realloc failure @ %s:%d\n", __FILE__, __LINE__);                                          \
-            abort();                                                                                                   \
-        }                                                                                                              \
+#define RECREATE(result, type, number) \
+    do \
+    { \
+        result = internal_realloc<type>(result, number); \
     } while (0)
 
-#define DISPOSE(point)                                                                                                 \
-    do                                                                                                                 \
-    {                                                                                                                  \
-        if ((point))                                                                                                   \
-        {                                                                                                              \
-            if (in_hash_table((char*)(point)))                                                                         \
-            {                                                                                                          \
-                bug("&RDISPOSE called on STRALLOC pointer: %s, line %d", __FILE__, __LINE__);                          \
-                log_string("Attempting to correct.");                                                                  \
-                if (str_free((char*)(point)) == -1)                                                                    \
-                    bug("&RSTRFREEing bad pointer: %s, line %d", __FILE__, __LINE__);                                  \
-            }                                                                                                          \
-            else                                                                                                       \
-                free((point));                                                                                         \
-            (point) = nullptr;                                                                                            \
-        }                                                                                                              \
+#define DISPOSE(point) \
+    do \
+    { \
+        if ((point)) \
+        { \
+            internal_dispose((point)); \
+            (point) = nullptr; \
+        } \
     } while (0)
 
 #define STRALLOC(point) str_alloc((point))
 #define QUICKLINK(point) quick_link((point))
-#define STRFREE(point)                                                                                                 \
-    do                                                                                                                 \
-    {                                                                                                                  \
-        if ((point))                                                                                                   \
-        {                                                                                                              \
-            if (!in_hash_table((point)))                                                                               \
-            {                                                                                                          \
-                bug("&RSTRFREE called on str_dup pointer: %s, line %d", __FILE__, __LINE__);                           \
-                log_string("Attempting to correct.");                                                                  \
-                free((point));                                                                                         \
-            }                                                                                                          \
-            else if (str_free((point)) == -1)                                                                          \
-                bug("&RSTRFREEing bad pointer: %s, line %d", __FILE__, __LINE__);                                      \
-            (point) = nullptr;                                                                                            \
-        }                                                                                                              \
+
+#define STRFREE(point) \
+    do \
+    { \
+        if ((point)) \
+        { \
+            internal_strfree((point)); \
+            (point) = nullptr; \
+        } \
     } while (0)
 
 /* double-linked list handling macros -Thoric */
-/* Updated by Scion 8/6/1999 */
+    /* Updated by Scion 8/6/1999 */
 #define LINK(link, first, last, next, prev)                                                                            \
     do                                                                                                                 \
     {                                                                                                                  \
@@ -130,9 +102,9 @@
         }                                                                                                              \
         else                                                                                                           \
             (last)->next = (link);                                                                                     \
-        (link)->next = nullptr;                                                                                           \
+        (link)->next = nullptr;                                                                                        \
         if ((first) == (link))                                                                                         \
-            (link)->prev = nullptr;                                                                                       \
+            (link)->prev = nullptr;                                                                                    \
         else                                                                                                           \
             (link)->prev = (last);                                                                                     \
         (last) = (link);                                                                                               \
@@ -157,7 +129,7 @@
         {                                                                                                              \
             (first) = (link)->next;                                                                                    \
             if ((first))                                                                                               \
-                (first)->prev = nullptr;                                                                                  \
+                (first)->prev = nullptr;                                                                               \
         }                                                                                                              \
         else                                                                                                           \
         {                                                                                                              \
@@ -167,7 +139,7 @@
         {                                                                                                              \
             (last) = (link)->prev;                                                                                     \
             if ((last))                                                                                                \
-                (last)->next = nullptr;                                                                                   \
+                (last)->next = nullptr;                                                                                \
         }                                                                                                              \
         else                                                                                                           \
         {                                                                                                              \
@@ -178,19 +150,19 @@
 #define CHECK_LINKS(first, last, next, prev, type)                                                                     \
     do                                                                                                                 \
     {                                                                                                                  \
-        type *ptr, *pptr = nullptr;                                                                                       \
+        type *ptr, *pptr = nullptr;                                                                                    \
         if (!(first) && !(last))                                                                                       \
             break;                                                                                                     \
         if (!(first))                                                                                                  \
         {                                                                                                              \
-            bug("CHECK_LINKS: last with nullptr first!  %s.", __STRING(first));                                           \
+            bug("CHECK_LINKS: last with nullptr first!  %s.", __STRING(first));                                        \
             for (ptr = (last); ptr->prev; ptr = ptr->prev)                                                             \
                 ;                                                                                                      \
             (first) = ptr;                                                                                             \
         }                                                                                                              \
         else if (!(last))                                                                                              \
         {                                                                                                              \
-            bug("CHECK_LINKS: first with nullptr last!  %s.", __STRING(first));                                           \
+            bug("CHECK_LINKS: first with nullptr last!  %s.", __STRING(first));                                        \
             for (ptr = (first); ptr->next; ptr = ptr->next)                                                            \
                 ;                                                                                                      \
             (last) = ptr;                                                                                              \
@@ -211,7 +183,7 @@
                 }                                                                                                      \
                 pptr = ptr;                                                                                            \
             }                                                                                                          \
-            pptr = nullptr;                                                                                               \
+            pptr = nullptr;                                                                                            \
         }                                                                                                              \
         if ((last))                                                                                                    \
         {                                                                                                              \
@@ -249,9 +221,9 @@
         }                                                                                                              \
     } while (0)
 
-/*
- * Character macros.
- */
+    /*
+     * Character macros.
+     */
 #define IS_NPC(ch) (!(ch)->pcdata)
 #define IS_IMMORTAL(ch) (get_trust((ch)) >= LEVEL_IMMORTAL)
 #define IS_DROID(ch)                                                                                                   \
@@ -285,7 +257,8 @@
 #define EXIT(ch, door) (get_exit((ch)->in_room, door))
 
 #define CAN_GO(ch, door)                                                                                               \
-    (EXIT((ch), (door)) && (EXIT((ch), (door))->to_room != nullptr) && !IS_SET(EXIT((ch), (door))->exit_info, EX_CLOSED))
+    (EXIT((ch), (door)) && (EXIT((ch), (door))->to_room != nullptr) &&                                                 \
+     !IS_SET(EXIT((ch), (door))->exit_info, EX_CLOSED))
 
 #define IS_VALID_SN(sn) ((sn) >= 0 && (sn) < MAX_SKILL && skill_table[(sn)] && skill_table[(sn)]->name)
 
@@ -301,12 +274,12 @@
 #define SET_SCLA(skill, val) ((skill)->flags = ((skill)->flags & SCLA_MASK) + (((val)&7) << 6))
 #define SET_SPOW(skill, val) ((skill)->flags = ((skill)->flags & SPOW_MASK) + (((val)&3) << 9))
 
-/* Retired and guest imms. */
+    /* Retired and guest imms. */
 #define IS_RETIRED(ch) (ch->pcdata && IS_SET(ch->pcdata->flags, PCFLAG_RETIRED))
 #define IS_GUEST(ch) (ch->pcdata && IS_SET(ch->pcdata->flags, PCFLAG_GUEST))
 
-/* RIS by gsn lookups. -- Altrag.
-   Will need to add some || stuff for spells that need a special GSN. */
+    /* RIS by gsn lookups. -- Altrag.
+       Will need to add some || stuff for spells that need a special GSN. */
 
 #define IS_FIRE(dt) (IS_VALID_SN(dt) && SPELL_DAMAGE(skill_table[(dt)]) == SD_FIRE)
 #define IS_COLD(dt) (IS_VALID_SN(dt) && SPELL_DAMAGE(skill_table[(dt)]) == SD_COLD)
@@ -324,21 +297,21 @@
 #define IS_WAITING_FOR_AUTH(ch)                                                                                        \
     (!IS_NPC(ch) && ch->desc && ch->pcdata->auth_state == 1 && IS_SET(ch->pcdata->flags, PCFLAG_UNAUTHED))
 
-/*
- * Object macros.
- */
+    /*
+     * Object macros.
+     */
 #define CAN_WEAR(obj, part) (IS_SET((obj)->wear_flags, (part)))
 #define IS_OBJ_STAT(obj, stat) (IS_SET((obj)->extra_flags, (stat)))
 
-/*
- * Description macros.
- */
-/* PERS WILL NOW BE HANDLED IN COMM.C
-#define PERS(ch, looker)	( can_see( (looker), (ch) ) ?		\
-                ( IS_NPC(ch) ? (ch)->short_descr	\
-                : (ch)->name ) : IS_IMMORTAL(ch) ? "Immortal" : "someone" )
+    /*
+     * Description macros.
+     */
+    /* PERS WILL NOW BE HANDLED IN COMM.C
+    #define PERS(ch, looker)	( can_see( (looker), (ch) ) ?		\
+                    ( IS_NPC(ch) ? (ch)->short_descr	\
+                    : (ch)->name ) : IS_IMMORTAL(ch) ? "Immortal" : "someone" )
 
-*/
+    */
 
 #define log_string(txt) (log_string_plus((txt), LOG_NORMAL, LEVEL_LOG))
 
@@ -353,4 +326,3 @@
 #define DECLARE_DO_FUN(fun) extern "C" EXPORT DO_FUN fun
 #define DECLARE_SPEC_FUN(fun) extern "C" EXPORT SPEC_FUN fun
 #define DECLARE_SPELL_FUN(fun) extern "C" EXPORT SPELL_FUN fun
-

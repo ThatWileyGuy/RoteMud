@@ -38,11 +38,14 @@
 
 module;
 
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
 #include "mud.hxx"
 
 export module clans;
 
-import std.core;
+
 import mud;
 import mud_prog;
 import hashstr;

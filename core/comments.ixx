@@ -38,11 +38,16 @@
 
 module;
 
+#include <cstdlib>
+#include <cstdio>
+#include <ctime>
+#include <cstring>
+#include <cctype>
 #include "mud.hxx"
 
 export module comments;
 
-import std.core;
+
 import mud;
 import hashstr;
 import boards;

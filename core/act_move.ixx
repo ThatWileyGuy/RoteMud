@@ -38,11 +38,15 @@
 
 module;
 
+#include <vector>
+#include <cctype>
+#include <cstring>
+#include <cstdio>
 #include "mud.hxx"
 
 export module act_move;
 
-import std.core;
+
 import mud;
 import mud_prog;
 import hashstr;

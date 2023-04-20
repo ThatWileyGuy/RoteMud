@@ -38,6 +38,10 @@
 
 module;
 
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+#include <string>
 #include "mud.hxx"
 
 extern int top_area;
@@ -47,7 +51,7 @@ extern void write_starsystem_list();
 
 export module planets;
 
-import std.core;
+
 import mud;
 import hashstr;
 import swskills;

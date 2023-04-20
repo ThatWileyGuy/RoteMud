@@ -40,13 +40,14 @@ module;
 
 #include <Windows.h>
 #include <stdexcept>
+#include <ctime>
 #include "mud.hxx"
 
 // void shutdown_mud(char const* reason);
 
 export module tables;
 
-import std.core;
+
 import mud;
 
 #if defined(KEY)

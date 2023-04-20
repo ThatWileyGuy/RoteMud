@@ -60,14 +60,13 @@
 
 module;
 
+#include <ctime>
+#include <cstdio>
+#include <filesystem>
 #include "mud.hxx"
 
 export module pfiles;
 
-import std.filesystem;
-
-
-import std.core;
 import mud;
 
 /* Globals */

@@ -47,12 +47,12 @@ module;
 #include <SDKDDKVer.h>
 #endif
 
+#include <memory>
 #include <boost/asio.hpp> // TODO why is this needed here?
 #include "mud.hxx"
 
 export module act_info;
 
-import std.core;
 import mud;
 import act_move;
 import connection;

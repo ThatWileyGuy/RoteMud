@@ -38,11 +38,16 @@
 
 module;
 
+#include <cstring>
+#include <cstdlib>
+#include <cctype>
+#include <cstdio>
+#include <chrono>
 #include "mud.hxx"
 
 export module magic;
 
-import std.core;
+
 import mud;
 import player;
 import hashstr;

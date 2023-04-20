@@ -38,6 +38,9 @@
 
 module;
 
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
 #include "mud.hxx"
 
 extern int top_affect;
@@ -50,7 +53,7 @@ extern void fix_exits(void);
 
 export module build;
 
-import std.core;
+
 import mud;
 import db;
 import hashstr;

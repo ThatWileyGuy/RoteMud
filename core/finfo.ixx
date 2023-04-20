@@ -38,11 +38,14 @@
 
 module;
 
+#include <cstdlib>
+#include <cstring>
+#include <cstdio>
 #include "mud.hxx"
 
 export module finfo;
 
-import std.core;
+
 import mud;
 import hashstr;
 

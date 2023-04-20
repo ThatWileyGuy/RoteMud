@@ -90,11 +90,14 @@
 
 module;
 
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
 #include "mud.hxx"
 
 export module slotm;
 
-import std.core;
+
 import mud;
 
 // Constant multipliers types of winnings

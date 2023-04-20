@@ -47,14 +47,12 @@ module;
 #include <SDKDDKVer.h>
 #endif
 
+#include <filesystem>
 #include <boost/asio.hpp> // TODO why is this needed here?
 #include "mud.hxx"
 
 export module act_wiz;
 
-import std.filesystem;
-
-import std.core;
 import mud;
 import db;
 import mud_comm;

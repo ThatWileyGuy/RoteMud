@@ -50,11 +50,15 @@
 
 module;
 
+#include <cstdlib>
+#include <cstring>
+#include <cctype>
+#include <vector>
 #include "mud.hxx"
 
 export module renumber;
 
-import std.core;
+
 import mud;
 import db;
 import hashstr;

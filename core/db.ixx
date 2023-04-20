@@ -39,7 +39,9 @@
 module;
 
 #include <cstdarg>
+#include <cstdio>
 #include <unordered_map>
+#include <filesystem>
 #include "mud.hxx"
 
 struct ROOM_INDEX_DATA;
@@ -49,9 +51,6 @@ extern void init_supermob();
 
 export module db;
 
-import std.filesystem;
-
-import std.core;
 import mud;
 import act_move;
 import save;

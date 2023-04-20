@@ -38,11 +38,16 @@
 
 module;
 
+#include <cstdio>
+#include <cstring>
+#include <cstdlib>
+#include <cctype>
+#include <string>
 #include "mud.hxx"
 
 export module space;
 
-import std.core;
+// 
 import mud;
 import act_comm;
 import ships;

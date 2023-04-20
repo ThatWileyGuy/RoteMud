@@ -38,11 +38,13 @@
 
 module;
 
+#include <cstring>
+#include <string>
 #include "mud.hxx"
 
 export module functions;
 
-import std.core;
+
 import mud;
 
 /*

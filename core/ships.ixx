@@ -38,11 +38,12 @@
 
 module;
 
+#include <string>
 #include "mud.hxx"
 
 export module ships;
 
-import std.core;
+
 import mud;
 import functions;
 import hashstr;

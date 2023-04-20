@@ -38,13 +38,15 @@
 
 module;
 
+#include <cstdio>
+#include <cstring>
 #include "mud.hxx"
 
 // extern bool remove_obj(CHAR_DATA* ch, int iWear, bool fReplace);
 
 export module special;
 
-import std.core;
+
 import mud;
 import hashstr;
 

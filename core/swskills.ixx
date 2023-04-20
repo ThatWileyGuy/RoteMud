@@ -38,13 +38,16 @@
 
 module;
 
+#include <cstring>
+#include <cstdlib>
+#include <cstdio>
 #include "mud.hxx"
 
 extern int top_affect;
 
 export module swskills;
 
-import std.core;
+
 import mud;
 import functions;
 import hashstr;

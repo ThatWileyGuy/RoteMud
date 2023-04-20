@@ -61,11 +61,16 @@
 
 module;
 
+#include <ctime>
+#include <cstdio>
+#include <cstring>
+#include <cstdlib>
+#include <algorithm>
 #include "mud.hxx"
 
 export module newarena;
 
-import std.core;
+
 import mud;
 import bet;
 

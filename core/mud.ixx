@@ -6,6 +6,8 @@ module;
 #include <chrono>
 #include "mud.hxx"
 
+extern void bug(const char* str, ...);
+
 export module mud;
 
 #define GLOBAL extern "C++"
@@ -5842,4 +5844,36 @@ void    reboot_check    (char* arg);
     std::string beam_name(sh_int type, bool plural);
     std::string primary_beam_name(SHIP_DATA * ship);
     std::string secondary_beam_name(SHIP_DATA * ship);
+}
+
+
+/*
+ * Memory allocation macros.
+ */
+export template <typename T> T* internal_alloc(size_t count)
+{
+    auto result = (T*)calloc(count, sizeof(T));
+
+    if (result == nullptr)
+    {
+        perror("malloc failure");
+        fprintf(stderr, "Malloc failure @ %s:%d\n", __FILE__, __LINE__);
+        abort();
+    }
+
+    return result;
+}
+
+export template <typename T> T* internal_realloc(T* orig, size_t count)
+{
+    auto result = (T*)realloc(orig, count);
+
+    if (result == nullptr)
+    {
+        perror("realloc failure");
+        fprintf(stderr, "Realloc failure @ %s:%d\n", __FILE__, __LINE__);
+        abort();
+    }
+
+    return result;
 }

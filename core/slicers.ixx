@@ -38,11 +38,17 @@
 
 module;
 
+#include <cstring>
+#include <cctype>
+#include <cstdio>
+#include <cstdlib>
+#include <algorithm>
+#include <memory>
 #include "mud.hxx"
 
 export module slicers;
 
-import std.core;
+
 import mud;
 import hashstr;
 import space;

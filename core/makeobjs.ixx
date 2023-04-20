@@ -38,9 +38,11 @@
 
 module;
 
+#include <cstdio>
 #include "mud.hxx"
 
 export module makeobjs;
+
 
 import mud;
 import hashstr;

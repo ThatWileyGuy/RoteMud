@@ -38,11 +38,14 @@
 
 module;
 
+#include <cstdlib>
+#include <cstring>
+#include <cctype>
 #include "mud.hxx"
 
 export module bet;
 
-import std.core;
+
 import mud;
 /*
   util function, converts an 'advanced' ASCII-number-string into a number.

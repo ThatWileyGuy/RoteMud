@@ -38,11 +38,14 @@
 
 module;
 
+#include <cstring>
+#include <cstdio>
+#include <cstdlib>
 #include "mud.hxx"
 
 export module tech;
 
-import std.core;
+
 import mud;
 import hashstr;
 

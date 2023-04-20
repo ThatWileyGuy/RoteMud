@@ -58,7 +58,7 @@ module;
 
 export module comm;
 
-import std.core;
+
 import mud;
 import db;
 import act_info;

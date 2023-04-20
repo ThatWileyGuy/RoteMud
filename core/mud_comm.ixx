@@ -52,7 +52,6 @@ module;
 
 export module mud_comm;
 
-import std.core;
 import mud;
 import connection;
 import mud_prog;

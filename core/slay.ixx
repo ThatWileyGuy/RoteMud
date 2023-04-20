@@ -79,11 +79,14 @@ to the above email address.
 
 module;
 
+#include <cstdio>
+#include <cstring>
+#include <cstdlib>
 #include "mud.hxx"
 
 export module slay;
 
-import std.core;
+
 import mud;
 import hashstr;
 

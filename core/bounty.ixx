@@ -38,11 +38,13 @@
 
 module;
 
+#include <cstdio>
+#include <cstdlib>
 #include "mud.hxx"
 
 export module bounty;
 
-import std.core;
+
 import mud;
 import hashstr;
 import fight;
