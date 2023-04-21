@@ -7,3 +7,6 @@
 /linux
 /out
 /CMakeSettings.json
+
+std.ixx
+std.compat.ixx

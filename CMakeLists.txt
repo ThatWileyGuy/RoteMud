@@ -15,7 +15,10 @@ file(GLOB_RECURSE CORE_HEADER_FILES core/*.hxx)
 file(GLOB_RECURSE CORE_SOURCE_FILES core/*.cxx)
 file(GLOB_RECURSE CORE_MODULE_FILES core/*.ixx)
 
-add_compile_options("/experimental:module")
+# add_compile_options("/experimental:module")
+
+configure_file($ENV{VCToolsInstallDir}/modules/std.ixx ${CMAKE_SOURCE_DIR}/std.ixx COPYONLY)
+# configure_file($ENV{VCToolsInstallDir}/modules/std.compat.ixx ${CMAKE_SOURCE_DIR}/std.compat.ixx COPYONLY)
 
 add_library(rote_core OBJECT ${CORE_HEADER_FILES} ${CORE_SOURCE_FILES})
 target_include_directories(rote_core PRIVATE ${Boost_INCLUDE_DIRS})
@@ -23,7 +26,7 @@ target_include_directories(rote_core PRIVATE ${libssh_INCLUDE_DIRS})
 target_sources(rote_core
   PUBLIC
     FILE_SET cxx_modules TYPE CXX_MODULES FILES
-    ${CORE_MODULE_FILES}
+    ${CORE_MODULE_FILES} std.ixx
 )
 
 
