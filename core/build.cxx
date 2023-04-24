@@ -740,7 +740,7 @@ void start_editing( CHAR_DATA *ch, char *data )
     edit->size     = 0;
     size = 0;  lpos = 0;  lines = 0;
     if ( !data )
-        bug("editor: data is NULL!\n\r",0);
+        bug("editor: data is nullptr!\n\r",0);
     else
     for ( ;; )
     {
@@ -813,10 +813,10 @@ void stop_editing( CHAR_DATA *ch )
 {
     set_char_color( AT_PLAIN, ch );
     DISPOSE( ch->editor );
-    ch->editor = NULL;
+    ch->editor = nullptr;
     send_to_char( "Done.\n\r", ch );
-    ch->dest_buf  = NULL;
-    ch->spare_ptr = NULL;
+    ch->dest_buf  = nullptr;
+    ch->spare_ptr = nullptr;
     ch->substate  = SUB_NONE;
     if ( !ch->desc )
     {
@@ -845,7 +845,7 @@ void do_goto(CHAR_DATA* ch, char* argument)
         return;
     }
 
-    if ((location = find_location(ch, arg)) == NULL)
+    if ((location = find_location(ch, arg)) == nullptr)
     {
         vnum = atoi(arg);
         if (vnum < 0 || get_room_index(vnum))
@@ -922,9 +922,9 @@ void do_goto(CHAR_DATA* ch, char* argument)
     if (!IS_SET(ch->act, PLR_WIZINVIS))
     {
         if (ch->pcdata && ch->pcdata->bamfout[0] != '\0')
-            act(AT_IMMORT, "$T", ch, NULL, ch->pcdata->bamfout, TO_ROOM);
+            act(AT_IMMORT, "$T", ch, nullptr, ch->pcdata->bamfout, TO_ROOM);
         else
-            act(AT_IMMORT, "$n $T", ch, NULL, "leaves in a swirl of the force.", TO_ROOM);
+            act(AT_IMMORT, "$n $T", ch, nullptr, "leaves in a swirl of the force.", TO_ROOM);
     }
 
     ch->regoto = ch->in_room->vnum;
@@ -938,7 +938,7 @@ void do_goto(CHAR_DATA* ch, char* argument)
 
     if (ch->on)
     {
-        ch->on = NULL;
+        ch->on = nullptr;
         ch->position = POS_STANDING;
     }
     if (ch->position != POS_STANDING)
@@ -949,9 +949,9 @@ void do_goto(CHAR_DATA* ch, char* argument)
     if (!IS_SET(ch->act, PLR_WIZINVIS))
     {
         if (ch->pcdata && ch->pcdata->bamfin[0] != '\0')
-            act(AT_IMMORT, "$T", ch, NULL, ch->pcdata->bamfin, TO_ROOM);
+            act(AT_IMMORT, "$T", ch, nullptr, ch->pcdata->bamfin, TO_ROOM);
         else
-            act(AT_IMMORT, "$n $T", ch, NULL, "enters in a swirl of the Force.", TO_ROOM);
+            act(AT_IMMORT, "$n $T", ch, nullptr, "enters in a swirl of the Force.", TO_ROOM);
     }
 
     do_look(ch, MAKE_TEMP_STRING("auto"));
@@ -963,7 +963,7 @@ void do_goto(CHAR_DATA* ch, char* argument)
         fch_next = fch->next_in_room;
         if (fch->master == ch && IS_IMMORTAL(fch))
         {
-            act(AT_ACTION, "You follow $N.", fch, NULL, ch, TO_CHAR);
+            act(AT_ACTION, "You follow $N.", fch, nullptr, ch, TO_CHAR);
             do_goto(fch, argument);
         }
     }
@@ -1008,7 +1008,7 @@ void do_makefree(CHAR_DATA* ch, char* argument)
 
     for (vnum = Start; vnum <= End; vnum++)
     {
-        if ((location = get_room_index(vnum)) != NULL)
+        if ((location = get_room_index(vnum)) != nullptr)
             continue;
 
         make_room(vnum, pArea);
@@ -1052,7 +1052,7 @@ void do_mset(CHAR_DATA* ch, char* argument)
         if (!ch->dest_buf)
         {
             send_to_char("Fatal error: report to Thoric.\n\r", ch);
-            bug("do_mset: sub_mob_desc: NULL ch->dest_buf", 0);
+            bug("do_mset: sub_mob_desc: nullptr ch->dest_buf", 0);
             ch->substate = SUB_NONE;
             return;
         }
@@ -1075,7 +1075,7 @@ void do_mset(CHAR_DATA* ch, char* argument)
         return;
     }
 
-    victim = NULL;
+    victim = nullptr;
     lockvictim = false;
     smash_tilde(argument);
 
@@ -1087,7 +1087,7 @@ void do_mset(CHAR_DATA* ch, char* argument)
         if (char_died(victim))
         {
             send_to_char("Your victim died!\n\r", ch);
-            victim = NULL;
+            victim = nullptr;
             victimDied = true;
         }
         if (!victimDied && (argument[0] == '\0' || !str_cmp(argument, " ") || !str_cmp(argument, "stat")))
@@ -1102,7 +1102,7 @@ void do_mset(CHAR_DATA* ch, char* argument)
         {
             send_to_char("Mset mode off.\n\r", ch);
             ch->substate = SUB_NONE;
-            ch->dest_buf = NULL;
+            ch->dest_buf = nullptr;
             if (ch->pcdata && ch->pcdata->subprompt)
                 STRFREE(ch->pcdata->subprompt);
             return;
@@ -1163,7 +1163,7 @@ void do_mset(CHAR_DATA* ch, char* argument)
 
     if (!victim && get_trust(ch) <= LEVEL_IMMORTAL)
     {
-        if ((victim = get_char_room(ch, arg1)) == NULL)
+        if ((victim = get_char_room(ch, arg1)) == nullptr)
         {
             send_to_char("They aren't here.\n\r", ch);
             return;
@@ -1171,7 +1171,7 @@ void do_mset(CHAR_DATA* ch, char* argument)
     }
     else if (!victim)
     {
-        if ((victim = get_char_world(ch, arg1)) == NULL)
+        if ((victim = get_char_world(ch, arg1)) == nullptr)
         {
             send_to_char("No one like that in all the realms.\n\r", ch);
             return;
@@ -1181,20 +1181,20 @@ void do_mset(CHAR_DATA* ch, char* argument)
     if (get_trust(ch) <= LEVEL_IMMORTAL && !IS_NPC(victim))
     {
         send_to_char("You can't do that!\n\r", ch);
-        ch->dest_buf = NULL;
+        ch->dest_buf = nullptr;
         return;
     }
     if (get_trust(ch) < get_trust(victim) && !IS_NPC(victim))
     {
         send_to_char("You can't do that!\n\r", ch);
-        ch->dest_buf = NULL;
+        ch->dest_buf = nullptr;
         return;
     }
     /* Player msetting restriction added by Tawnos */
     if (get_trust(ch) <= 34 && !IS_NPC(victim) && (str_cmp(arg2, "build") && str_cmp(arg2, "height")))
     {
         send_to_char("You must be level 35 or above to mset players.\n\r", ch);
-        ch->dest_buf = NULL;
+        ch->dest_buf = nullptr;
         return;
     }
     if (lockvictim)
@@ -1923,7 +1923,7 @@ void do_mset(CHAR_DATA* ch, char* argument)
 
         if (!arg3 || arg3[0] == '\0')
         {
-            if (victim->pcdata->clan == NULL)
+            if (victim->pcdata->clan == nullptr)
                 return;
 
             remove_member(victim->name, victim->pcdata->clan->shortname);
@@ -1931,7 +1931,7 @@ void do_mset(CHAR_DATA* ch, char* argument)
             save_clan(victim->pcdata->clan);
             STRFREE(victim->pcdata->clan_name);
             victim->pcdata->clan_name = STRALLOC("");
-            victim->pcdata->clan = NULL;
+            victim->pcdata->clan = nullptr;
             send_to_char("Removed from clan.\n\r", ch);
             return;
         }
@@ -2036,7 +2036,7 @@ void do_mset(CHAR_DATA* ch, char* argument)
 
         if (!str_cmp(arg3, "none"))
         {
-            victim->spec_fun = NULL;
+            victim->spec_fun = nullptr;
             send_to_char("Special function removed.\n\r", ch);
             if (IS_NPC(victim) && IS_SET(victim->act, ACT_PROTOTYPE))
                 victim->pIndexData->spec_fun = victim->spec_fun;
@@ -2065,7 +2065,7 @@ void do_mset(CHAR_DATA* ch, char* argument)
 
         if (!str_cmp(arg3, "none"))
         {
-            victim->spec_2 = NULL;
+            victim->spec_2 = nullptr;
             send_to_char("Special function removed.\n\r", ch);
             if (IS_NPC(victim) && IS_SET(victim->act, ACT_PROTOTYPE))
                 victim->pIndexData->spec_2 = victim->spec_2;
@@ -2892,7 +2892,7 @@ void do_oset(CHAR_DATA* ch, char* argument)
         if (!ch->dest_buf)
         {
             send_to_char("Fatal error: report to Thoric.\n\r", ch);
-            bug("do_oset: sub_obj_extra: NULL ch->dest_buf", 0);
+            bug("do_oset: sub_obj_extra: nullptr ch->dest_buf", 0);
             ch->substate = SUB_NONE;
             return;
         }
@@ -2915,7 +2915,7 @@ void do_oset(CHAR_DATA* ch, char* argument)
         if (!ch->dest_buf)
         {
             send_to_char("Fatal error: report to Thoric.\n\r", ch);
-            bug("do_oset: sub_obj_long: NULL ch->dest_buf", 0);
+            bug("do_oset: sub_obj_long: nullptr ch->dest_buf", 0);
             ch->substate = SUB_NONE;
             return;
         }
@@ -2940,7 +2940,7 @@ void do_oset(CHAR_DATA* ch, char* argument)
         return;
     }
 
-    obj = NULL;
+    obj = nullptr;
     smash_tilde(argument);
 
     if (ch->substate == SUB_REPEATCMD)
@@ -2951,7 +2951,7 @@ void do_oset(CHAR_DATA* ch, char* argument)
         if (obj && obj_extracted(obj))
         {
             send_to_char("Your object was extracted!\n\r", ch);
-            obj = NULL;
+            obj = nullptr;
             objectExtracted = true;
         }
         if (!objectExtracted && (argument[0] == '\0' || !str_cmp(argument, " ") || !str_cmp(argument, "stat")))
@@ -2966,7 +2966,7 @@ void do_oset(CHAR_DATA* ch, char* argument)
         {
             send_to_char("Oset mode off.\n\r", ch);
             ch->substate = SUB_NONE;
-            ch->dest_buf = NULL;
+            ch->dest_buf = nullptr;
             if (ch->pcdata && ch->pcdata->subprompt)
                 STRFREE(ch->pcdata->subprompt);
             return;
@@ -3033,7 +3033,7 @@ void do_oset(CHAR_DATA* ch, char* argument)
 
     if (!obj && get_trust(ch) <= LEVEL_IMMORTAL)
     {
-        if ((obj = get_obj_here(ch, arg1)) == NULL)
+        if ((obj = get_obj_here(ch, arg1)) == nullptr)
         {
             send_to_char("You can't find that here.\n\r", ch);
             return;
@@ -3041,7 +3041,7 @@ void do_oset(CHAR_DATA* ch, char* argument)
     }
     else if (!obj)
     {
-        if ((obj = get_obj_world(ch, arg1)) == NULL)
+        if ((obj = get_obj_world(ch, arg1)) == nullptr)
         {
             send_to_char("There is nothing like that in all the realms.\n\r", ch);
             return;
@@ -3050,7 +3050,7 @@ void do_oset(CHAR_DATA* ch, char* argument)
     if (lockobj)
         ch->dest_buf = obj;
     else
-        ch->dest_buf = NULL;
+        ch->dest_buf = nullptr;
 
     separate_obj(obj);
     value = atoi(arg3);
@@ -3362,7 +3362,7 @@ void do_oset(CHAR_DATA* ch, char* argument)
         if (lockobj)
             ch->spare_ptr = obj;
         else
-            ch->spare_ptr = NULL;
+            ch->spare_ptr = nullptr;
         ch->substate = SUB_OBJ_LONG;
         ch->dest_buf = obj;
         start_editing(ch, obj->description);
@@ -3428,7 +3428,7 @@ void do_oset(CHAR_DATA* ch, char* argument)
         paf->location = loc;
         paf->modifier = value;
         paf->bitvector = 0;
-        paf->next = NULL;
+        paf->next = nullptr;
         if (IS_OBJ_STAT(obj, ITEM_PROTOTYPE))
             LINK(paf, obj->pIndexData->first_affect, obj->pIndexData->last_affect, next, prev);
         else
@@ -3524,7 +3524,7 @@ void do_oset(CHAR_DATA* ch, char* argument)
         if (lockobj)
             ch->spare_ptr = obj;
         else
-            ch->spare_ptr = NULL;
+            ch->spare_ptr = nullptr;
         ch->substate = SUB_OBJ_EXTRA;
         ch->dest_buf = ed;
         start_editing(ch, ed->description);
@@ -3556,7 +3556,7 @@ void do_oset(CHAR_DATA* ch, char* argument)
         if (lockobj)
             ch->spare_ptr = obj;
         else
-            ch->spare_ptr = NULL;
+            ch->spare_ptr = nullptr;
         ch->substate = SUB_OBJ_EXTRA;
         ch->dest_buf = ed;
         start_editing(ch, ed->description);
@@ -3864,7 +3864,7 @@ void do_rset(CHAR_DATA* ch, char* argument)
         return;
     }
 
-    if ((location = find_location(ch, arg1)) == NULL)
+    if ((location = find_location(ch, arg1)) == nullptr)
     {
         send_to_char("No such location.\n\r", ch);
         return;
@@ -4034,7 +4034,7 @@ void do_redit(CHAR_DATA* ch, char* argument)
         location = reinterpret_cast<ROOM_INDEX_DATA*>(ch->dest_buf);
         if (!location)
         {
-            bug("redit: sub_room_desc: NULL ch->dest_buf", 0);
+            bug("redit: sub_room_desc: nullptr ch->dest_buf", 0);
             location = ch->in_room;
         }
         STRFREE(location->description);
@@ -4046,7 +4046,7 @@ void do_redit(CHAR_DATA* ch, char* argument)
         ed = reinterpret_cast<EXTRA_DESCR_DATA*>(ch->dest_buf);
         if (!ed)
         {
-            bug("redit: sub_room_extra: NULL ch->dest_buf", 0);
+            bug("redit: sub_room_extra: nullptr ch->dest_buf", 0);
             stop_editing(ch);
             return;
         }
@@ -4519,7 +4519,7 @@ void do_redit(CHAR_DATA* ch, char* argument)
             send_to_char("Bad exit flag. \n\r", ch);
             return;
         }
-        if ((xit = get_exit(location, edir)) == NULL)
+        if ((xit = get_exit(location, edir)) == nullptr)
         {
             sprintf_s(buf, "exit %c 1", dir);
             do_redit(ch, buf);
@@ -4566,12 +4566,12 @@ void do_redit(CHAR_DATA* ch, char* argument)
             send_to_char("Invalid room number.\n\r", ch);
             return;
         }
-        if ((tmp = get_room_index(evnum)) == NULL)
+        if ((tmp = get_room_index(evnum)) == nullptr)
         {
             send_to_char("Non-existant room.\n\r", ch);
             return;
         }
-        if ((xit = get_exit(location, edir)) == NULL)
+        if ((xit = get_exit(location, edir)) == nullptr)
         {
             sprintf_s(buf, "exit %c 1", dir);
             do_redit(ch, buf);
@@ -4612,7 +4612,7 @@ void do_redit(CHAR_DATA* ch, char* argument)
             edir = 0;
             break;
         }
-        if ((xit = get_exit(location, edir)) == NULL)
+        if ((xit = get_exit(location, edir)) == nullptr)
         {
             sprintf_s(buf, "exit %c 1", dir);
             do_redit(ch, buf);
@@ -4652,7 +4652,7 @@ void do_redit(CHAR_DATA* ch, char* argument)
             edir = 0;
             break;
         }
-        if ((xit = get_exit(location, edir)) == NULL)
+        if ((xit = get_exit(location, edir)) == nullptr)
         {
             sprintf_s(buf, "exit %c 1", dir);
             do_redit(ch, buf);
@@ -4692,11 +4692,11 @@ void do_redit(CHAR_DATA* ch, char* argument)
             edir = 0;
             break;
         }
-        if ((xit = get_exit(location, edir)) == NULL)
+        if ((xit = get_exit(location, edir)) == nullptr)
         {
             sprintf_s(buf, "exit %c 1", dir);
             do_redit(ch, buf);
-            if ((xit = get_exit(location, edir)) == NULL)
+            if ((xit = get_exit(location, edir)) == nullptr)
                 return;
         }
         sprintf_s(buf, "%s %s", xit->keyword, argument);
@@ -4738,7 +4738,7 @@ void do_redit(CHAR_DATA* ch, char* argument)
             evnum = atoi(arg3);
         if (numnotdir)
         {
-            if ((xit = get_exit_num(location, edir)) != NULL)
+            if ((xit = get_exit_num(location, edir)) != nullptr)
                 edir = xit->vdir;
         }
         else
@@ -4759,7 +4759,7 @@ void do_redit(CHAR_DATA* ch, char* argument)
             send_to_char("Invalid room number.\n\r", ch);
             return;
         }
-        if ((tmp = get_room_index(evnum)) == NULL)
+        if ((tmp = get_room_index(evnum)) == nullptr)
         {
             send_to_char("Non-existant room.\n\r", ch);
             return;
@@ -4786,10 +4786,10 @@ void do_redit(CHAR_DATA* ch, char* argument)
             xit->description = STRALLOC("");
             xit->key = -1;
             xit->exit_info = 0;
-            act(AT_IMMORT, "$n reveals a hidden passage!", ch, NULL, NULL, TO_ROOM);
+            act(AT_IMMORT, "$n reveals a hidden passage!", ch, nullptr, nullptr, TO_ROOM);
         }
         else
-            act(AT_IMMORT, "Something is different...", ch, NULL, NULL, TO_ROOM);
+            act(AT_IMMORT, "Something is different...", ch, nullptr, nullptr, TO_ROOM);
         if (xit->to_room != tmp)
         {
             xit->to_room = tmp;
@@ -4862,12 +4862,12 @@ void do_redit(CHAR_DATA* ch, char* argument)
         exnum = edir;
         if (numnotdir)
         {
-            if ((xit = get_exit_num(tmploc, edir)) != NULL)
+            if ((xit = get_exit_num(tmploc, edir)) != nullptr)
                 edir = xit->vdir;
         }
         else
             xit = get_exit(tmploc, edir);
-        rxit = NULL;
+        rxit = nullptr;
         vnum = 0;
         rvnum[0] = '\0';
         if (xit)
@@ -4878,7 +4878,7 @@ void do_redit(CHAR_DATA* ch, char* argument)
             if (xit->to_room)
                 rxit = get_exit(xit->to_room, rev_dir[edir]);
             else
-                rxit = NULL;
+                rxit = nullptr;
         }
         sprintf_s(tmpcmd, "exit %s %s %s", arg2, arg3, argument);
         do_redit(ch, tmpcmd);
@@ -4894,7 +4894,7 @@ void do_redit(CHAR_DATA* ch, char* argument)
             if (xit->to_room)
                 rxit = get_exit(xit->to_room, rev_dir[edir]);
             else
-                rxit = NULL;
+                rxit = nullptr;
         }
         if (vnum)
         {
@@ -5054,8 +5054,8 @@ void do_ocreate(CHAR_DATA* ch, char* argument)
     }
     obj = create_object(pObjIndex, get_trust(ch));
     obj_to_char(obj, ch);
-    act(AT_IMMORT, "$n makes some ancient arcane gestures, and opens $s hands to reveal $p!", ch, obj, NULL, TO_ROOM);
-    act(AT_IMMORT, "You make some ancient arcane gestures, and open your hands to reveal $p!", ch, obj, NULL, TO_CHAR);
+    act(AT_IMMORT, "$n makes some ancient arcane gestures, and opens $s hands to reveal $p!", ch, obj, nullptr, TO_ROOM);
+    act(AT_IMMORT, "You make some ancient arcane gestures, and open your hands to reveal $p!", ch, obj, nullptr, TO_CHAR);
 }
 
 void do_mcreate(CHAR_DATA* ch, char* argument)
@@ -5128,8 +5128,8 @@ void do_mcreate(CHAR_DATA* ch, char* argument)
     }
     mob = create_mobile(pMobIndex);
     char_to_room(mob, ch->in_room);
-    act(AT_IMMORT, "$n waves $s arms about, and $N appears at $s command!", ch, NULL, mob, TO_ROOM);
-    act(AT_IMMORT, "You wave your arms about, and $N appears at your command!", ch, NULL, mob, TO_CHAR);
+    act(AT_IMMORT, "$n waves $s arms about, and $N appears at $s command!", ch, nullptr, mob, TO_ROOM);
+    act(AT_IMMORT, "You wave your arms about, and $N appears at your command!", ch, nullptr, mob, TO_CHAR);
 }
 
 /*
@@ -5145,7 +5145,7 @@ void edit_buffer( CHAR_DATA *ch, char *argument )
     sh_int x, line, max_buf_lines;
     bool save;
 
-    if ( (d = ch->desc) == NULL )
+    if ( (d = ch->desc) == nullptr )
     {
     send_to_char( "You have no descriptor.\n\r", ch );
     return;
@@ -5235,7 +5235,7 @@ void edit_buffer( CHAR_DATA *ch, char *argument )
         for ( x = edit->on_line; x < edit->numlines; x++ )
         {
         lwptr = edit->line[x];
-        while ( (wptr = strstr( lwptr, word1 )) != NULL )
+        while ( (wptr = strstr( lwptr, word1 )) != nullptr )
         {
             sptr = lwptr;
             lwptr = wptr + wordln;
@@ -5527,7 +5527,7 @@ void assign_area(CHAR_DATA* ch)
             log_string_plus(buf, LOG_NORMAL, ch->top_level);
             CREATE(tarea, AREA_DATA, 1);
             LINK(tarea, first_build, last_build, next, prev);
-            tarea->first_room = tarea->last_room = NULL;
+            tarea->first_room = tarea->last_room = nullptr;
             sprintf_s(buf, "{PROTO} %s's area in progress", ch->name);
             tarea->name = str_dup(buf);
             tarea->filename = str_dup(taf);
@@ -5570,7 +5570,7 @@ void do_aassign(CHAR_DATA* ch, char* argument)
 
     if (!str_cmp("none", argument) || !str_cmp("null", argument) || !str_cmp("clear", argument))
     {
-        ch->pcdata->area = NULL;
+        ch->pcdata->area = nullptr;
         assign_area(ch);
         if (!ch->pcdata->area)
             send_to_char("Area pointer cleared.\n\r", ch);
@@ -5580,7 +5580,7 @@ void do_aassign(CHAR_DATA* ch, char* argument)
     }
 
     sprintf_s(buf, "%s", argument);
-    tarea = NULL;
+    tarea = nullptr;
 
     /*	if ( get_trust(ch) >= sysdata.level_modify_proto )   */
 
@@ -5764,7 +5764,7 @@ void fold_area(AREA_DATA* tarea, char* filename, bool install)
     sprintf_s(buf, "%s.bak", filename);
     rename(filename, buf);
     fpout = fopen(filename, "w");
-    if (fpout == NULL)
+    if (fpout == nullptr)
     {
         bug("fold_area: fopen", 0);
         perror(filename);
@@ -5791,7 +5791,7 @@ void fold_area(AREA_DATA* tarea, char* filename, bool install)
     fprintf(fpout, "#MOBILES\n");
     for (vnum = tarea->low_m_vnum; vnum <= tarea->hi_m_vnum; vnum++)
     {
-        if ((pMobIndex = get_mob_index(vnum)) == NULL)
+        if ((pMobIndex = get_mob_index(vnum)) == nullptr)
             continue;
         if (install)
             REMOVE_BIT(pMobIndex->act, ACT_PROTOTYPE);
@@ -5847,7 +5847,7 @@ void fold_area(AREA_DATA* tarea, char* filename, bool install)
     fprintf(fpout, "#OBJECTS\n");
     for (vnum = tarea->low_o_vnum; vnum <= tarea->hi_o_vnum; vnum++)
     {
-        if ((pObjIndex = get_obj_index(vnum)) == NULL)
+        if ((pObjIndex = get_obj_index(vnum)) == nullptr)
             continue;
         if (install)
             REMOVE_BIT(pObjIndex->extra_flags, ITEM_PROTOTYPE);
@@ -5926,7 +5926,7 @@ void fold_area(AREA_DATA* tarea, char* filename, bool install)
     fprintf(fpout, "#ROOMS\n");
     for (vnum = tarea->low_r_vnum; vnum <= tarea->hi_r_vnum; vnum++)
     {
-        if ((room = get_room_index(vnum)) == NULL)
+        if ((room = get_room_index(vnum)) == nullptr)
             continue;
         if (install)
         {
@@ -6077,9 +6077,9 @@ void fold_area(AREA_DATA* tarea, char* filename, bool install)
     fprintf(fpout, "#SHOPS\n");
     for (vnum = tarea->low_m_vnum; vnum <= tarea->hi_m_vnum; vnum++)
     {
-        if ((pMobIndex = get_mob_index(vnum)) == NULL)
+        if ((pMobIndex = get_mob_index(vnum)) == nullptr)
             continue;
-        if ((pShop = pMobIndex->pShop) == NULL)
+        if ((pShop = pMobIndex->pShop) == nullptr)
             continue;
         fprintf(fpout, " %d   %2d %2d %2d %2d %2d   %3d %3d", pShop->keeper, pShop->buy_type[0], pShop->buy_type[1],
                 pShop->buy_type[2], pShop->buy_type[3], pShop->buy_type[4], pShop->profit_buy, pShop->profit_sell);
@@ -6091,9 +6091,9 @@ void fold_area(AREA_DATA* tarea, char* filename, bool install)
     fprintf(fpout, "#REPAIRS\n");
     for (vnum = tarea->low_m_vnum; vnum <= tarea->hi_m_vnum; vnum++)
     {
-        if ((pMobIndex = get_mob_index(vnum)) == NULL)
+        if ((pMobIndex = get_mob_index(vnum)) == nullptr)
             continue;
-        if ((pRepair = pMobIndex->rShop) == NULL)
+        if ((pRepair = pMobIndex->rShop) == nullptr)
             continue;
         fprintf(fpout, " %d   %2d %2d %2d         %3d %3d", pRepair->keeper, pRepair->fix_type[0], pRepair->fix_type[1],
                 pRepair->fix_type[2], pRepair->profit_fix, pRepair->shop_type);
@@ -6105,7 +6105,7 @@ void fold_area(AREA_DATA* tarea, char* filename, bool install)
     fprintf(fpout, "#SPECIALS\n");
     for (vnum = tarea->low_m_vnum; vnum <= tarea->hi_m_vnum; vnum++)
     {
-        if ((pMobIndex = get_mob_index(vnum)) == NULL)
+        if ((pMobIndex = get_mob_index(vnum)) == nullptr)
             continue;
         if (pMobIndex->spec_fun)
             fprintf(fpout, "M  %d %s\n", pMobIndex->vnum, lookup_spec(pMobIndex->spec_fun));
@@ -6341,7 +6341,7 @@ void do_installarea(CHAR_DATA* ch, char* argument)
                 if (d->character && d->character->pcdata && d->character->pcdata->area == tarea)
                 {
                     /* remove area from author */
-                    d->character->pcdata->area = NULL;
+                    d->character->pcdata->area = nullptr;
                     /* clear out author vnums  */
                     d->character->pcdata->r_range_lo = 0;
                     d->character->pcdata->r_range_hi = 0;
@@ -6749,7 +6749,7 @@ void do_rlist(CHAR_DATA* ch, char* argument)
 
     for (vnum = lrange; vnum <= trange; vnum++)
     {
-        if ((room = get_room_index(vnum)) == NULL)
+        if ((room = get_room_index(vnum)) == nullptr)
             continue;
         ch_printf(ch, "%5d) %s\n\r", vnum, room->name);
     }
@@ -6804,7 +6804,7 @@ void do_olist(CHAR_DATA* ch, char* argument)
 
     for (vnum = lrange; vnum <= trange; vnum++)
     {
-        if ((obj = get_obj_index(vnum)) == NULL)
+        if ((obj = get_obj_index(vnum)) == nullptr)
             continue;
         ch_printf(ch, "%5d) %-20s (%s)\n\r", vnum, obj->name, obj->short_descr);
     }
@@ -6857,7 +6857,7 @@ void do_mlist(CHAR_DATA* ch, char* argument)
 
     for (vnum = lrange; vnum <= trange; vnum++)
     {
-        if ((mob = get_mob_index(vnum)) == NULL)
+        if ((mob = get_mob_index(vnum)) == nullptr)
             continue;
         ch_printf(ch, "%5d) %-20s '%s'\n\r", vnum, mob->player_name, mob->short_descr);
     }
@@ -6913,7 +6913,7 @@ void do_mpedit(CHAR_DATA* ch, char* argument)
         if (!ch->dest_buf)
         {
             send_to_char("Fatal error: report to Thoric.\n\r", ch);
-            bug("do_mpedit: sub_mprog_edit: NULL ch->dest_buf", 0);
+            bug("do_mpedit: sub_mprog_edit: nullptr ch->dest_buf", 0);
             ch->substate = SUB_NONE;
             return;
         }
@@ -6945,7 +6945,7 @@ void do_mpedit(CHAR_DATA* ch, char* argument)
 
     if (get_trust(ch) < LEVEL_GOD)
     {
-        if ((victim = get_char_room(ch, arg1)) == NULL)
+        if ((victim = get_char_room(ch, arg1)) == nullptr)
         {
             send_to_char("They aren't here.\n\r", ch);
             return;
@@ -6953,7 +6953,7 @@ void do_mpedit(CHAR_DATA* ch, char* argument)
     }
     else
     {
-        if ((victim = get_char_world(ch, arg1)) == NULL)
+        if ((victim = get_char_world(ch, arg1)) == nullptr)
         {
             send_to_char("No one like that in all the realms.\n\r", ch);
             return;
@@ -7145,7 +7145,7 @@ void do_mpedit(CHAR_DATA* ch, char* argument)
             send_to_char("Unknown program type.\n\r", ch);
             return;
         }
-        if (mprog != NULL)
+        if (mprog != nullptr)
             for (; mprog->next; mprog = mprog->next)
                 ;
         CREATE(mprg, MPROG_DATA, 1);
@@ -7155,7 +7155,7 @@ void do_mpedit(CHAR_DATA* ch, char* argument)
             victim->pIndexData->mudprogs = mprg;
         victim->pIndexData->progtypes |= (1 << mptype);
         mpedit(ch, mprg, mptype, argument);
-        mprg->next = NULL;
+        mprg->next = nullptr;
         return;
     }
 
@@ -7194,7 +7194,7 @@ void do_opedit(CHAR_DATA* ch, char* argument)
         if (!ch->dest_buf)
         {
             send_to_char("Fatal error: report to Thoric.\n\r", ch);
-            bug("do_opedit: sub_oprog_edit: NULL ch->dest_buf", 0);
+            bug("do_opedit: sub_oprog_edit: nullptr ch->dest_buf", 0);
             ch->substate = SUB_NONE;
             return;
         }
@@ -7229,7 +7229,7 @@ void do_opedit(CHAR_DATA* ch, char* argument)
 
     if (get_trust(ch) < LEVEL_GOD)
     {
-        if ((obj = get_obj_carry(ch, arg1)) == NULL)
+        if ((obj = get_obj_carry(ch, arg1)) == nullptr)
         {
             send_to_char("You aren't carrying that.\n\r", ch);
             return;
@@ -7237,7 +7237,7 @@ void do_opedit(CHAR_DATA* ch, char* argument)
     }
     else
     {
-        if ((obj = get_obj_world(ch, arg1)) == NULL)
+        if ((obj = get_obj_world(ch, arg1)) == nullptr)
         {
             send_to_char("Nothing like that in all the realms.\n\r", ch);
             return;
@@ -7423,7 +7423,7 @@ void do_opedit(CHAR_DATA* ch, char* argument)
             send_to_char("Unknown program type.\n\r", ch);
             return;
         }
-        if (mprog != NULL)
+        if (mprog != nullptr)
             for (; mprog->next; mprog = mprog->next)
                 ;
         CREATE(mprg, MPROG_DATA, 1);
@@ -7433,7 +7433,7 @@ void do_opedit(CHAR_DATA* ch, char* argument)
             obj->pIndexData->mudprogs = mprg;
         obj->pIndexData->progtypes |= (1 << mptype);
         mpedit(ch, mprg, mptype, argument);
-        mprg->next = NULL;
+        mprg->next = nullptr;
         return;
     }
 
@@ -7492,7 +7492,7 @@ void do_rpedit(CHAR_DATA* ch, char* argument)
         if (!ch->dest_buf)
         {
             send_to_char("Fatal error: report to Thoric.\n\r", ch);
-            bug("do_opedit: sub_oprog_edit: NULL ch->dest_buf", 0);
+            bug("do_opedit: sub_oprog_edit: nullptr ch->dest_buf", 0);
             ch->substate = SUB_NONE;
             return;
         }
@@ -7707,7 +7707,7 @@ void do_rpedit(CHAR_DATA* ch, char* argument)
             ch->in_room->mudprogs = mprg;
         ch->in_room->progtypes |= (1 << mptype);
         mpedit(ch, mprg, mptype, argument);
-        mprg->next = NULL;
+        mprg->next = nullptr;
         return;
     }
 
@@ -7731,7 +7731,7 @@ void do_rdelete(CHAR_DATA* ch, char* argument)
     }
 
     /* Find the room. */
-    if ((location = find_location(ch, arg)) == NULL)
+    if ((location = find_location(ch, arg)) == nullptr)
     {
         send_to_char("No such location.\n\r", ch);
         return;
@@ -7899,11 +7899,11 @@ void do_cleanroom(CHAR_DATA* ch, char* argument)
     for (exitnum = 0; exitnum < 11; exitnum++)
     {
         xit = get_exit(location, exitnum);
-        if (xit != NULL)
+        if (xit != nullptr)
             extract_exit(location, xit);
     }
-    location->first_extradesc = NULL;
-    location->last_extradesc = NULL;
+    location->first_extradesc = nullptr;
+    location->last_extradesc = nullptr;
     location->name = STRALLOC("Floating in a void");
     location->description = STRALLOC("");
     location->room_flags = ROOM_PROTOTYPE;

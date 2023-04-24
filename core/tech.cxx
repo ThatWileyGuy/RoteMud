@@ -135,7 +135,7 @@ void do_makemodule(CHAR_DATA* ch, char* argument)
         if (number_percent() < chance)
         {
             send_to_char("&GYou begin the long process of creating a module.\n\r", ch);
-            act(AT_PLAIN, "$n takes $s tools and begins to work.", ch, NULL, argument, TO_ROOM);
+            act(AT_PLAIN, "$n takes $s tools and begins to work.", ch, nullptr, argument, TO_ROOM);
             add_timer(ch, TIMER_DO_FUN, 10, do_makemodule, 1);
             ch->dest_buf = str_dup(arg);
             return;
@@ -162,7 +162,7 @@ void do_makemodule(CHAR_DATA* ch, char* argument)
 
     level = IS_NPC(ch) ? ch->top_level : (int)(ch->pcdata->learned[gsn_makemodule]);
 
-    if ((pObjIndex = get_obj_index(MODULE_VNUM)) == NULL)
+    if ((pObjIndex = get_obj_index(MODULE_VNUM)) == nullptr)
     {
         send_to_char("&RThe item you are trying to create is missing from the database.\n\rPlease inform the "
                      "administration of this error.\n\r",
@@ -337,7 +337,7 @@ void do_makemodule(CHAR_DATA* ch, char* argument)
     obj = obj_to_char(obj, ch);
 
     send_to_char("&GYou finish your work and hold up your newly created module.&w\n\r", ch);
-    act(AT_PLAIN, "$n finishes creating a new module.", ch, NULL, argument, TO_ROOM);
+    act(AT_PLAIN, "$n finishes creating a new module.", ch, nullptr, argument, TO_ROOM);
 
     {
         long xpgain;
@@ -361,7 +361,7 @@ void do_showmodules(CHAR_DATA* ch, char* argument)
 
     chance = IS_NPC(ch) ? ch->top_level : (int)(ch->pcdata->learned[gsn_showmodules]);
 
-    if ((ship = ship_from_engine(ch->in_room->vnum)) == NULL)
+    if ((ship = ship_from_engine(ch->in_room->vnum)) == nullptr)
     {
         send_to_char("You must be in the engine room of a ship.\n\r", ch);
         return;
@@ -437,7 +437,7 @@ void do_removemodule(CHAR_DATA* ch, char* argument)
     switch (ch->substate)
     {
     default:
-        if ((ship = ship_from_engine(ch->in_room->vnum)) != NULL)
+        if ((ship = ship_from_engine(ch->in_room->vnum)) != nullptr)
         {
             ship = ship_from_engine(ch->in_room->vnum);
         }
@@ -483,7 +483,7 @@ void do_removemodule(CHAR_DATA* ch, char* argument)
             ch->dest_buf = str_dup(arg);
             send_to_char("&GYou begin the long process of removing a module.\n\r", ch);
             sprintf_s(buf, "$n takes out $s toolkit and begins to work.\n\r");
-            act(AT_PLAIN, buf, ch, NULL, argument, TO_ROOM);
+            act(AT_PLAIN, buf, ch, nullptr, argument, TO_ROOM);
 
             add_timer(ch, TIMER_DO_FUN, 5, do_removemodule, 1);
             return;
@@ -616,7 +616,7 @@ void do_shipmaintenance(CHAR_DATA* ch, char* argument)
     switch (ch->substate)
     {
     default:
-        if ((ship = ship_from_engine(ch->in_room->vnum)) == NULL)
+        if ((ship = ship_from_engine(ch->in_room->vnum)) == nullptr)
         {
             send_to_char("&RYou must be in the engine room of a ship to do that!\n\r", ch);
             return;
@@ -626,7 +626,7 @@ void do_shipmaintenance(CHAR_DATA* ch, char* argument)
         if (number_percent() < chance)
         {
             send_to_char("&GYou start performing basic maintenance on your ship...\n\r", ch);
-            act(AT_PLAIN, "$n begins some basic ship maintenance.", ch, NULL, argument, TO_ROOM);
+            act(AT_PLAIN, "$n begins some basic ship maintenance.", ch, nullptr, argument, TO_ROOM);
             add_timer(ch, TIMER_DO_FUN, 15, do_shipmaintenance, 1);
             ch->dest_buf = str_dup(arg);
             return;
@@ -651,7 +651,7 @@ void do_shipmaintenance(CHAR_DATA* ch, char* argument)
 
     ch->substate = SUB_NONE;
 
-    if ((ship = ship_from_engine(ch->in_room->vnum)) == NULL)
+    if ((ship = ship_from_engine(ch->in_room->vnum)) == nullptr)
     {
         return;
     }
@@ -711,7 +711,7 @@ void do_shipmaintenance(CHAR_DATA* ch, char* argument)
     if (ship->bombs > oldbombs)
         ch_printf(ch, "&G%d bombs loaded into ship from inventory.\n\r", ship->bombs - oldbombs);
 
-    act(AT_PLAIN, "$n finishes patching the hull and restocking the ship.", ch, NULL, argument, TO_ROOM);
+    act(AT_PLAIN, "$n finishes patching the hull and restocking the ship.", ch, nullptr, argument, TO_ROOM);
 
     xp = get_ship_value(ship) / 100;
     ch_printf(ch, "&WYou gain %ld points of technician experience!\n\r", (get_ship_value(ship) / 100));
@@ -763,8 +763,8 @@ void do_scanbugs(CHAR_DATA* ch, char* argument)
         if (number_percent() - 20 < chance)
         {
             send_to_char("&w&GScanning...\n\r", ch);
-            act(AT_PLAIN, "$n takes a scanner and begins to scan $N.", ch, NULL, victim, TO_NOTVICT);
-            act(AT_PLAIN, "$n takes a scanner and begins to scan you for bugs.", ch, NULL, victim, TO_VICT);
+            act(AT_PLAIN, "$n takes a scanner and begins to scan $N.", ch, nullptr, victim, TO_NOTVICT);
+            act(AT_PLAIN, "$n takes a scanner and begins to scan you for bugs.", ch, nullptr, victim, TO_VICT);
             add_timer(ch, TIMER_DO_FUN, 10, do_scanbugs, 1);
             ch->dest_buf = str_dup(arg);
             return;
@@ -778,12 +778,12 @@ void do_scanbugs(CHAR_DATA* ch, char* argument)
             return;
         strcpy(arg, reinterpret_cast<const char*>(ch->dest_buf));
         DISPOSE(ch->dest_buf);
-        ch->dest_buf = NULL;
+        ch->dest_buf = nullptr;
         break;
 
     case SUB_TIMER_DO_ABORT:
         DISPOSE(ch->dest_buf);
-        ch->dest_buf = NULL;
+        ch->dest_buf = nullptr;
         ch->substate = SUB_NONE;
         send_to_char("&RYou are interupted and fail to finish scanning.\n\r", ch);
         return;
@@ -868,8 +868,8 @@ void do_removebug(CHAR_DATA* ch, char* argument)
         if (number_percent() < chance + 20)
         {
             send_to_char("&w&GYou begin to pick at a bug, trying to remove it without notifying the owner...\n\r", ch);
-            act(AT_PLAIN, "$n takes $s toolkit and begins removing a bug from $N.", ch, NULL, victim, TO_NOTVICT);
-            act(AT_PLAIN, "$n takes $s toolkit and begins removing a bug from you.", ch, NULL, victim, TO_VICT);
+            act(AT_PLAIN, "$n takes $s toolkit and begins removing a bug from $N.", ch, nullptr, victim, TO_NOTVICT);
+            act(AT_PLAIN, "$n takes $s toolkit and begins removing a bug from you.", ch, nullptr, victim, TO_VICT);
             add_timer(ch, TIMER_DO_FUN, 1, do_removebug, 1);
             ch->dest_buf = str_dup(arg);
             return;
@@ -883,12 +883,12 @@ void do_removebug(CHAR_DATA* ch, char* argument)
             return;
         strcpy(arg, reinterpret_cast<const char*>(ch->dest_buf));
         DISPOSE(ch->dest_buf);
-        ch->dest_buf = NULL;
+        ch->dest_buf = nullptr;
         break;
 
     case SUB_TIMER_DO_ABORT:
         DISPOSE(ch->dest_buf);
-        ch->dest_buf = NULL;
+        ch->dest_buf = nullptr;
         ch->substate = SUB_NONE;
         send_to_char("&RYou are interrupted and fail to finish removing the bug.\n\r", ch);
         return;
@@ -1014,7 +1014,7 @@ void do_makejetpack(CHAR_DATA* ch, char* argument)
         if (number_percent() < chance)
         {
             send_to_char("&GYou begin the long process of crafting a Jetpack\n\r", ch);
-            act(AT_PLAIN, "$n takes $s tools and begins to work on something.", ch, NULL, argument, TO_ROOM);
+            act(AT_PLAIN, "$n takes $s tools and begins to work on something.", ch, nullptr, argument, TO_ROOM);
             add_timer(ch, TIMER_DO_FUN, 15, do_makejetpack, 1);
             ch->dest_buf = str_dup(arg);
             return;
@@ -1042,7 +1042,7 @@ void do_makejetpack(CHAR_DATA* ch, char* argument)
     level = IS_NPC(ch) ? ch->top_level : (int)(ch->pcdata->learned[gsn_makejetpack]);
     vnum = 88;
 
-    if ((pObjIndex = get_obj_index(vnum)) == NULL)
+    if ((pObjIndex = get_obj_index(vnum)) == nullptr)
     {
         send_to_char("&RThe item you are trying to create is missing from the database.\n\rPlease inform the "
                      "administration of this error.\n\r",
@@ -1125,7 +1125,7 @@ void do_makejetpack(CHAR_DATA* ch, char* argument)
     obj = obj_to_char(obj, ch);
 
     send_to_char("&GYou finish your work and hold up your newly created Jetpack.&w\n\r", ch);
-    act(AT_PLAIN, "$n finishes making $s new Jetpack.", ch, NULL, argument, TO_ROOM);
+    act(AT_PLAIN, "$n finishes making $s new Jetpack.", ch, nullptr, argument, TO_ROOM);
 
     {
         long xpgain;

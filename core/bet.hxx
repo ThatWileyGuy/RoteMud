@@ -93,7 +93,7 @@ int advatoi(char* s)
     case '\0':
         break;
     default:
-        return 0; /* not k nor m nor NULL - return 0! */
+        return 0; /* not k nor m nor nullptr - return 0! */
     }
 
     /* if any digits follow k/m, add those too */
@@ -104,7 +104,7 @@ int advatoi(char* s)
         number = number + ((*s++ - '0') * multiplier);
     }
 
-    /* return 0 if non-digit character was found, other than NULL */
+    /* return 0 if non-digit character was found, other than nullptr */
     if (s[0] != '\0' && !isdigit(s[0]))
         return 0;
 

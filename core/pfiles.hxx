@@ -64,7 +64,7 @@
 #ifndef FCLOSE
 #define FCLOSE(fp)                                                                                                     \
     fclose(fp);                                                                                                        \
-    fp = NULL;
+    fp = nullptr;
 #endif
 
 #ifndef MSL

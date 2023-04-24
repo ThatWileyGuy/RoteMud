@@ -54,7 +54,7 @@ void do_plantbug(CHAR_DATA* ch, char* argument)
     if (IS_NPC(ch))
         return;
 
-    if ((victim = get_char_room(ch, argument)) == NULL)
+    if ((victim = get_char_room(ch, argument)) == nullptr)
     {
         send_to_char("They aren't here.\n\r", ch);
         return;
@@ -105,7 +105,7 @@ void do_plantbug(CHAR_DATA* ch, char* argument)
 
     if (chance < ch->pcdata->learned[gsn_plantbug])
     {
-        act(AT_WHITE, "You carefully reach into $N's pocket and place a bug.", ch, NULL, victim, TO_CHAR);
+        act(AT_WHITE, "You carefully reach into $N's pocket and place a bug.", ch, nullptr, victim, TO_CHAR);
         CREATE(bug, BUG_DATA, 1);
         bug->name = ch->name;
         LINK(bug, victim->first_bug, victim->last_bug, next_in_bug, prev_in_bug);
@@ -154,14 +154,14 @@ void do_showbugs(CHAR_DATA* ch, char* argument)
 
     for (auto d : g_descriptors)
     {
-        if ((d->connected == CON_PLAYING || d->connected == CON_EDITING) && (victim = d->character) != NULL)
+        if ((d->connected == CON_PLAYING || d->connected == CON_EDITING) && (victim = d->character) != nullptr)
         {
             for (bug = victim->first_bug; bug; bug = bug->next_in_bug)
                 if (!str_cmp(bug->name, ch->name))
                 {
                     if (victim->in_room->area && victim->in_room->area->planet)
                         sprintf_s(buf2, "%s", victim->in_room->area->planet->name);
-                    else if ((ship = ship_from_room(victim->in_room->vnum)) != NULL)
+                    else if ((ship = ship_from_room(victim->in_room->vnum)) != nullptr)
                         sprintf_s(buf2, "%s", ship->name);
                     else
                         sprintf_s(buf2, "Unknown");
@@ -188,7 +188,7 @@ void do_bind(CHAR_DATA* ch, char* argument)
         return;
     }
 
-    if ((victim = get_char_room(ch, argument)) == NULL)
+    if ((victim = get_char_room(ch, argument)) == nullptr)
     {
         send_to_char("They are not here.\n\r", ch);
         return;
@@ -238,9 +238,9 @@ void do_bind(CHAR_DATA* ch, char* argument)
         separate_obj(obj);
         obj_from_char(obj);
         obj_to_char(obj, victim);
-        act(AT_WHITE, "You quickly bind $N's wrists.", ch, NULL, victim, TO_CHAR);
-        act(AT_WHITE, "$n quickly binds your wrists.", ch, NULL, victim, TO_VICT);
-        act(AT_WHITE, "$n quickly binds $N's wrists.", ch, NULL, victim, TO_NOTVICT);
+        act(AT_WHITE, "You quickly bind $N's wrists.", ch, nullptr, victim, TO_CHAR);
+        act(AT_WHITE, "$n quickly binds your wrists.", ch, nullptr, victim, TO_VICT);
+        act(AT_WHITE, "$n quickly binds $N's wrists.", ch, nullptr, victim, TO_NOTVICT);
         tobj = get_eq_char(ch, WEAR_BOTH_WRISTS);
         if (tobj)
             unequip_char(ch, tobj);
@@ -277,7 +277,7 @@ void do_unbind(CHAR_DATA* ch, char* argument)
         return;
     }
 
-    if ((victim = get_char_room(ch, argument)) == NULL)
+    if ((victim = get_char_room(ch, argument)) == nullptr)
     {
         send_to_char("They aren't here.\n\r", ch);
         return;
@@ -335,9 +335,9 @@ void do_unbind(CHAR_DATA* ch, char* argument)
     separate_obj(obj);
     obj_from_char(obj);
     obj_to_char(obj, ch);
-    act(AT_WHITE, "You quickly unbind $N's wrists.", ch, NULL, victim, TO_CHAR);
-    act(AT_WHITE, "$n quickly unbinds your wrists.", ch, NULL, victim, TO_VICT);
-    act(AT_WHITE, "$n quickly unbinds $N's wrists.", ch, NULL, victim, TO_NOTVICT);
+    act(AT_WHITE, "You quickly unbind $N's wrists.", ch, nullptr, victim, TO_CHAR);
+    act(AT_WHITE, "$n quickly unbinds your wrists.", ch, nullptr, victim, TO_VICT);
+    act(AT_WHITE, "$n quickly unbinds $N's wrists.", ch, nullptr, victim, TO_NOTVICT);
     REMOVE_BIT(victim->pcdata->act2, ACT_BOUND);
 }
 
@@ -352,7 +352,7 @@ void do_gag(CHAR_DATA* ch, char* argument)
         return;
     }
 
-    if ((victim = get_char_room(ch, argument)) == NULL)
+    if ((victim = get_char_room(ch, argument)) == nullptr)
     {
         send_to_char("They are not here.\n\r", ch);
         return;
@@ -381,9 +381,9 @@ void do_gag(CHAR_DATA* ch, char* argument)
 
     if (number_percent() < chance)
     {
-        act(AT_WHITE, "You quickly place a gag over $N's mouth.", ch, NULL, victim, TO_CHAR);
-        act(AT_WHITE, "$n roughly puts a gag over your mouth.", ch, NULL, victim, TO_VICT);
-        act(AT_WHITE, "$n roughly places a gag on $N's mouth.", ch, NULL, victim, TO_NOTVICT);
+        act(AT_WHITE, "You quickly place a gag over $N's mouth.", ch, nullptr, victim, TO_CHAR);
+        act(AT_WHITE, "$n roughly puts a gag over your mouth.", ch, nullptr, victim, TO_VICT);
+        act(AT_WHITE, "$n roughly places a gag on $N's mouth.", ch, nullptr, victim, TO_NOTVICT);
         SET_BIT(victim->pcdata->act2, ACT_GAGGED);
         learn_from_success(ch, gsn_gag);
     }
@@ -406,7 +406,7 @@ void do_ungag(CHAR_DATA* ch, char* argument)
         return;
     }
 
-    if ((victim = get_char_room(ch, argument)) == NULL)
+    if ((victim = get_char_room(ch, argument)) == nullptr)
     {
         send_to_char("They aren't here.\n\r", ch);
         return;
@@ -432,14 +432,14 @@ void do_ungag(CHAR_DATA* ch, char* argument)
 
     if (victim != ch)
     {
-        act(AT_WHITE, "You quickly rip off $N's gag.", ch, NULL, victim, TO_CHAR);
-        act(AT_WHITE, "$n quickly rips off your gag.", ch, NULL, victim, TO_VICT);
-        act(AT_WHITE, "$n quickly rips off $N's gag.", ch, NULL, victim, TO_NOTVICT);
+        act(AT_WHITE, "You quickly rip off $N's gag.", ch, nullptr, victim, TO_CHAR);
+        act(AT_WHITE, "$n quickly rips off your gag.", ch, nullptr, victim, TO_VICT);
+        act(AT_WHITE, "$n quickly rips off $N's gag.", ch, nullptr, victim, TO_NOTVICT);
     }
     else
     {
-        act(AT_WHITE, "You quickly rip off your gag.", ch, NULL, victim, TO_CHAR);
-        act(AT_WHITE, "$n quickly rips off his gag.", ch, NULL, victim, TO_NOTVICT);
+        act(AT_WHITE, "You quickly rip off your gag.", ch, nullptr, victim, TO_CHAR);
+        act(AT_WHITE, "$n quickly rips off his gag.", ch, nullptr, victim, TO_NOTVICT);
     }
 
     REMOVE_BIT(victim->pcdata->act2, ACT_GAGGED);
@@ -462,7 +462,7 @@ void do_ambush(CHAR_DATA* ch, char* argument)
         return;
     }
 
-    if ((victim = get_char_room(ch, argument)) == NULL)
+    if ((victim = get_char_room(ch, argument)) == nullptr)
     {
         send_to_char("How can you ambush someone who's not even here.\n\r", ch);
         return;
@@ -507,9 +507,9 @@ void do_ambush(CHAR_DATA* ch, char* argument)
     if (ch->race != RACE_NOGHRI) /* Noghri has perm sneak */
         REMOVE_BIT(ch->affected_by, AFF_SNEAK);
 
-    act(AT_RED, "You jump out from behind $N and attack $M!", ch, NULL, victim, TO_CHAR);
-    act(AT_RED, "$n jumps out from behind you and attacks you!", ch, NULL, victim, TO_VICT);
-    act(AT_RED, "$n jumps out from behind $N and attacks $M!", ch, NULL, victim, TO_NOTVICT);
+    act(AT_RED, "You jump out from behind $N and attack $M!", ch, nullptr, victim, TO_CHAR);
+    act(AT_RED, "$n jumps out from behind you and attacks you!", ch, nullptr, victim, TO_VICT);
+    act(AT_RED, "$n jumps out from behind $N and attacks $M!", ch, nullptr, victim, TO_NOTVICT);
     if (!IS_AWAKE(victim) || percent < ch->pcdata->learned[gsn_ambush])
     {
         multi_hit(ch, victim, gsn_ambush);
@@ -547,13 +547,13 @@ void do_contract(CHAR_DATA* ch, char* argument)
         return;
     }
 
-    if ((victim = get_char_room(ch, arg1)) == NULL)
+    if ((victim = get_char_room(ch, arg1)) == nullptr)
     {
         send_to_char("They aren't here.\n\r", ch);
         return;
     }
 
-    if ((target = get_char_world_ooc(ch, arg2)) == NULL)
+    if ((target = get_char_world_ooc(ch, arg2)) == nullptr)
     {
         send_to_char("Your target is currently not online.\n\r", ch);
         return;
@@ -639,7 +639,7 @@ void do_showcontracts(CHAR_DATA* ch, char* argument)
 void do_remcontract(CHAR_DATA* ch, char* argument)
 {
     CONTRACT_DATA* contract;
-    CONTRACT_DATA* scontract = NULL;
+    CONTRACT_DATA* scontract = nullptr;
 
     if (argument[0] == '\0')
     {
@@ -656,7 +656,7 @@ void do_remcontract(CHAR_DATA* ch, char* argument)
         }
     }
 
-    if (!scontract || scontract == NULL)
+    if (!scontract || scontract == nullptr)
     {
         send_to_char("No such target.\n\r", ch);
         return;

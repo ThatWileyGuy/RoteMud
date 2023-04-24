@@ -92,7 +92,7 @@ BOUNTY_DATA* get_disintegration(char* target)
     for (bounty = first_disintegration; bounty; bounty = bounty->next)
         if (!str_cmp(target, bounty->target))
             return bounty;
-    return NULL;
+    return nullptr;
 }
 
 void load_bounties()
@@ -103,13 +103,13 @@ void load_bounties()
     BOUNTY_DATA* bounty;
     long int amount;
 
-    first_disintegration = NULL;
-    last_disintegration = NULL;
+    first_disintegration = nullptr;
+    last_disintegration = nullptr;
 
     log_string("Loading disintegrations...");
 
     sprintf_s(bountylist, "%s%s", SYSTEM_DIR, disintegration_LIST);
-    if ((fpList = fopen(bountylist, "r")) == NULL)
+    if ((fpList = fopen(bountylist, "r")) == nullptr)
     {
         perror(bountylist);
         exit(1);
@@ -299,7 +299,7 @@ void claim_disintegration(CHAR_DATA* ch, CHAR_DATA* victim)
 
     if (ch == victim)
     {
-        if (bounty != NULL)
+        if (bounty != nullptr)
             remove_disintegration(bounty);
         return;
     }
@@ -307,7 +307,7 @@ void claim_disintegration(CHAR_DATA* ch, CHAR_DATA* victim)
     if (bounty && !ch->pcdata)
     {
         remove_disintegration(bounty);
-        bounty = NULL;
+        bounty = nullptr;
     }
 
     /* Assassin Experience for Clan Leaders added by Tawnos */
@@ -336,7 +336,7 @@ void claim_disintegration(CHAR_DATA* ch, CHAR_DATA* victim)
         }
     }
 
-    if (bounty == NULL)
+    if (bounty == nullptr)
     {
         if (IS_SET(victim->act, PLR_KILLER) && !IS_NPC(ch))
         {

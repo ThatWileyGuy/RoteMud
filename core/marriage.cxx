@@ -62,14 +62,14 @@ void do_marry(CHAR_DATA* ch, char* argument)
         return;
     }
 
-    if ((vic1 = get_char_room(ch, arg1)) == NULL)
+    if ((vic1 = get_char_room(ch, arg1)) == nullptr)
     {
         sprintf_s(buf, "%s doesn't appear to be here.\n\r", arg1);
         send_to_char(buf, ch);
         return;
     }
 
-    if ((vic2 = get_char_room(ch, arg2)) == NULL)
+    if ((vic2 = get_char_room(ch, arg2)) == nullptr)
     {
         sprintf_s(buf, "%s doesn't appear to be here.\n\r", arg2);
         send_to_char(buf, ch);
@@ -90,7 +90,7 @@ void do_marry(CHAR_DATA* ch, char* argument)
         return;
     }
 
-    if (!vic1->pcdata->fiance || vic1->pcdata->fiance == NULL || vic1->pcdata->fiance != vic2->name)
+    if (!vic1->pcdata->fiance || vic1->pcdata->fiance == nullptr || vic1->pcdata->fiance != vic2->name)
     {
         sprintf_s(buf, "%s is not engaged to %s. Perhaps a proposal would be a good first step.\n\r", vic1->name,
                   vic2->name);
@@ -98,7 +98,7 @@ void do_marry(CHAR_DATA* ch, char* argument)
         return;
     }
 
-    if (!vic2->pcdata->fiance || vic2->pcdata->fiance == NULL || vic2->pcdata->fiance != vic1->name)
+    if (!vic2->pcdata->fiance || vic2->pcdata->fiance == nullptr || vic2->pcdata->fiance != vic1->name)
     {
         sprintf_s(buf, "%s is not engaged to %s. Perhaps a proposal would be a good first step.\n\r", vic2->name,
                   vic1->name);
@@ -123,22 +123,22 @@ void do_marry(CHAR_DATA* ch, char* argument)
         act(AT_WHITE,
             "Then by the power invested in me by the Republic I now pronounce you Husband and Husband. You may kiss "
             "your husband.",
-            ch, NULL, NULL, TO_ROOM);
+            ch, nullptr, nullptr, TO_ROOM);
     else if (vic1->sex == SEX_FEMALE && vic2->sex == SEX_FEMALE)
         act(AT_WHITE,
             "Then by the power invested in me by the Republic I now pronounce you Wife and Wife. You may kiss your "
             "wife.",
-            ch, NULL, NULL, TO_ROOM);
+            ch, nullptr, nullptr, TO_ROOM);
     else if (vic1->sex == SEX_MALE && vic2->sex == SEX_FEMALE)
         act(AT_WHITE,
             "Then by the power invested in me by the Republic I now pronounce you Husband and Wife. You may kiss your "
             "wife.",
-            ch, NULL, NULL, TO_ROOM);
+            ch, nullptr, nullptr, TO_ROOM);
     else
         act(AT_WHITE,
             "Then by the power invested in me by the Republic I now pronounce you Wife and Husband. You may kiss your "
             "husband.",
-            ch, NULL, NULL, TO_ROOM);
+            ch, nullptr, nullptr, TO_ROOM);
 
     vic1->pcdata->spouse = vic2->name;
     vic2->pcdata->spouse = vic1->name;
@@ -170,28 +170,28 @@ void do_divorce(CHAR_DATA* ch, char* argument)
         return;
     }
 
-    if ((vic1 = get_char_room(ch, arg1)) == NULL)
+    if ((vic1 = get_char_room(ch, arg1)) == nullptr)
     {
         sprintf_s(buf, "%s doesn't appear to be here. You should wait for them.\n\r", arg1);
         send_to_char(buf, ch);
         return;
     }
 
-    if ((vic2 = get_char_room(ch, arg2)) == NULL)
+    if ((vic2 = get_char_room(ch, arg2)) == nullptr)
     {
         sprintf_s(buf, "%s doesn't appear to be here. You should wait for then.\n\r", arg2);
         send_to_char(buf, ch);
         return;
     }
 
-    if (!vic1->pcdata->spouse || vic1->pcdata->spouse == NULL)
+    if (!vic1->pcdata->spouse || vic1->pcdata->spouse == nullptr)
     {
         sprintf_s(buf, "%s doesn't appear to be married.\n\r", vic1->name);
         send_to_char(buf, ch);
         return;
     }
 
-    if (!vic2->pcdata->spouse || vic2->pcdata->spouse == NULL)
+    if (!vic2->pcdata->spouse || vic2->pcdata->spouse == nullptr)
     {
         sprintf_s(buf, "%s doesn't appear to be married.\n\r", vic2->name);
         send_to_char(buf, ch);
@@ -205,8 +205,8 @@ void do_divorce(CHAR_DATA* ch, char* argument)
         return;
     }
 
-    vic1->pcdata->spouse = NULL;
-    vic2->pcdata->spouse = NULL;
+    vic1->pcdata->spouse = nullptr;
+    vic2->pcdata->spouse = nullptr;
     do_say(ch, MAKE_TEMP_STRING("500 credits each please."));
     do_say(ch, MAKE_TEMP_STRING("Thank you."));
     ch->gold += 1000;
@@ -230,7 +230,7 @@ void do_propose(CHAR_DATA* ch, char* argument)
         return;
     }
 
-    if ((victim = get_char_room(ch, arg)) == NULL)
+    if ((victim = get_char_room(ch, arg)) == nullptr)
     {
         send_to_char("They aren't here.\n\r", ch);
         return;
@@ -262,23 +262,23 @@ void do_propose(CHAR_DATA* ch, char* argument)
         return;
     }
 
-    if (victim->pcdata->fiance && victim->pcdata->fiance != NULL)
+    if (victim->pcdata->fiance && victim->pcdata->fiance != nullptr)
     {
         send_to_char("They are already engaged.\n\r", ch);
         return;
     }
 
-    if (victim->pcdata->spouse && victim->pcdata->spouse != NULL)
+    if (victim->pcdata->spouse && victim->pcdata->spouse != nullptr)
     {
         send_to_char("They are already married.\n\r", ch);
     }
-    if (victim->pcdata->proposed && victim->pcdata->proposed != NULL)
+    if (victim->pcdata->proposed && victim->pcdata->proposed != nullptr)
     {
         sprintf_s(buf, "They have already been proposed to by %s.\n\r", victim->pcdata->proposed);
         return;
     }
 
-    if (victim->pcdata->propose && victim->pcdata->propose != NULL)
+    if (victim->pcdata->propose && victim->pcdata->propose != nullptr)
     {
         sprintf_s(buf, "They have already been proposed to %s.\n\r", victim->pcdata->propose);
         return;
@@ -286,9 +286,9 @@ void do_propose(CHAR_DATA* ch, char* argument)
 
     ch->pcdata->propose = victim->name;
     victim->pcdata->proposed = ch->name;
-    act(AT_WHITE, "$n gets down on one knee and asks your hand in marriage.", ch, NULL, victim, TO_VICT);
-    act(AT_WHITE, "You get down on one knee and ask $N's hand in marriage.", ch, NULL, victim, TO_CHAR);
-    act(AT_WHITE, "$n gets down on one knee and asks for $N's hand in marriage.", ch, NULL, victim, TO_NOTVICT);
+    act(AT_WHITE, "$n gets down on one knee and asks your hand in marriage.", ch, nullptr, victim, TO_VICT);
+    act(AT_WHITE, "You get down on one knee and ask $N's hand in marriage.", ch, nullptr, victim, TO_CHAR);
+    act(AT_WHITE, "$n gets down on one knee and asks for $N's hand in marriage.", ch, nullptr, victim, TO_NOTVICT);
     return;
 }
 
@@ -307,7 +307,7 @@ void do_accept(CHAR_DATA* ch, char* argument)
         return;
     }
 
-    if ((victim = get_char_room(ch, arg)) == NULL)
+    if ((victim = get_char_room(ch, arg)) == nullptr)
     {
         send_to_char("They aren't here.\n\r", ch);
         return;
@@ -339,8 +339,8 @@ void do_accept(CHAR_DATA* ch, char* argument)
 
     sprintf_s(buf, "%s has accepted %s's hand in marriage. They will soon be wed.", ch->name, victim->name);
     echo_to_all(AT_WHITE, buf, ECHOTAR_ALL);
-    ch->pcdata->propose = NULL;
-    victim->pcdata->proposed = NULL;
+    ch->pcdata->propose = nullptr;
+    victim->pcdata->proposed = nullptr;
     ch->pcdata->fiance = victim->name;
     victim->pcdata->fiance = ch->name;
     return;
@@ -361,7 +361,7 @@ void do_decline(CHAR_DATA* ch, char* argument)
         return;
     }
 
-    if ((victim = get_char_room(ch, arg)) == NULL)
+    if ((victim = get_char_room(ch, arg)) == nullptr)
     {
         send_to_char("They aren't here.\n\r", ch);
         return;
@@ -393,8 +393,8 @@ void do_decline(CHAR_DATA* ch, char* argument)
 
     sprintf_s(buf, "%s has declined %s's hand in marriage.", ch->name, victim->name);
     echo_to_all(AT_WHITE, buf, ECHOTAR_ALL);
-    ch->pcdata->propose = NULL;
-    ch->pcdata->proposed = NULL;
+    ch->pcdata->propose = nullptr;
+    ch->pcdata->proposed = nullptr;
     return;
 }
 
@@ -433,7 +433,7 @@ void do_spousetalk(CHAR_DATA* ch, char* argument)
         return;
     }
 
-    if ((victim = get_char_world(ch, ch->pcdata->spouse)) == NULL)
+    if ((victim = get_char_world(ch, ch->pcdata->spouse)) == nullptr)
     {
         sprintf_s(buf, "%s is not connected.\n\r", ch->pcdata->spouse);
         send_to_char(buf, ch);

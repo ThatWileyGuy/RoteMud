@@ -138,7 +138,7 @@ void do_mpstat(CHAR_DATA* ch, char* argument)
         return;
     }
 
-    if ((victim = get_char_world(ch, arg)) == NULL)
+    if ((victim = get_char_world(ch, arg)) == nullptr)
     {
         send_to_char("They aren't here.\n\r", ch);
         return;
@@ -187,7 +187,7 @@ void do_opstat(CHAR_DATA* ch, char* argument)
         return;
     }
 
-    if ((obj = get_obj_world(ch, arg)) == NULL)
+    if ((obj = get_obj_world(ch, arg)) == nullptr)
     {
         send_to_char("You cannot find that.\n\r", ch);
         return;
@@ -264,7 +264,7 @@ void do_mpasound(CHAR_DATA* ch, char* argument)
         {
             ch->in_room = pexit->to_room;
             MOBtrigger = false;
-            act(AT_SAY, argument, ch, NULL, NULL, TO_ROOM);
+            act(AT_SAY, argument, ch, nullptr, nullptr, TO_ROOM);
         }
     }
     ch->act = actflags;
@@ -302,7 +302,7 @@ void do_mpkill(CHAR_DATA* ch, char* argument)
         return;
     }
 
-    if ((victim = get_char_room_mp(ch, arg)) == NULL)
+    if ((victim = get_char_room_mp(ch, arg)) == nullptr)
     {
         progbug("MpKill - Victim not in room", ch);
         return;
@@ -360,13 +360,13 @@ void do_mpjunk(CHAR_DATA* ch, char* argument)
 
     if (str_cmp(arg, "all") && str_prefix("all.", arg))
     {
-        if ((obj = get_obj_wear(ch, arg)) != NULL)
+        if ((obj = get_obj_wear(ch, arg)) != nullptr)
         {
             unequip_char(ch, obj);
             extract_obj(obj);
             return;
         }
-        if ((obj = get_obj_carry(ch, arg)) == NULL)
+        if ((obj = get_obj_carry(ch, arg)) == nullptr)
             return;
         extract_obj(obj);
     }
@@ -449,10 +449,10 @@ void do_mpechoaround(CHAR_DATA* ch, char* argument)
     if ((color = get_color(argument)))
     {
         argument = one_argument(argument, arg);
-        act(color, argument, ch, NULL, victim, TO_NOTVICT);
+        act(color, argument, ch, nullptr, victim, TO_NOTVICT);
     }
     else
-        act(AT_ACTION, argument, ch, NULL, victim, TO_NOTVICT);
+        act(AT_ACTION, argument, ch, nullptr, victim, TO_NOTVICT);
 
     ch->act = actflags;
 }
@@ -495,10 +495,10 @@ void do_mpechoat(CHAR_DATA* ch, char* argument)
     if ((color = get_color(argument)))
     {
         argument = one_argument(argument, arg);
-        act(color, argument, ch, NULL, victim, TO_VICT);
+        act(color, argument, ch, nullptr, victim, TO_VICT);
     }
     else
-        act(AT_ACTION, argument, ch, NULL, victim, TO_VICT);
+        act(AT_ACTION, argument, ch, nullptr, victim, TO_VICT);
 
     ch->act = actflags;
 }
@@ -532,10 +532,10 @@ void do_mpecho(CHAR_DATA* ch, char* argument)
     if ((color = get_color(argument)))
     {
         argument = one_argument(argument, arg1);
-        act(color, argument, ch, NULL, NULL, TO_ROOM);
+        act(color, argument, ch, nullptr, nullptr, TO_ROOM);
     }
     else
-        act(AT_ACTION, argument, ch, NULL, NULL, TO_ROOM);
+        act(AT_ACTION, argument, ch, nullptr, nullptr, TO_ROOM);
 
     ch->act = actflags;
 }
@@ -567,7 +567,7 @@ void do_mpmload(CHAR_DATA* ch, char* argument)
         return;
     }
 
-    if ((pMobIndex = get_mob_index(atoi(arg))) == NULL)
+    if ((pMobIndex = get_mob_index(atoi(arg))) == nullptr)
     {
         progbug("Mpmload - Bad mob vnum", ch);
         return;
@@ -635,7 +635,7 @@ void do_mpoload(CHAR_DATA* ch, char* argument)
         }
     }
 
-    if ((pObjIndex = get_obj_index(atoi(arg1))) == NULL)
+    if ((pObjIndex = get_obj_index(atoi(arg1))) == nullptr)
     {
         progbug("Mpoload - Bad vnum arg", ch);
         return;
@@ -690,9 +690,9 @@ void do_mppurge(CHAR_DATA* ch, char* argument)
         return;
     }
 
-    if ((victim = get_char_room(ch, arg)) == NULL)
+    if ((victim = get_char_room(ch, arg)) == nullptr)
     {
-        if ((obj = get_obj_here(ch, arg)) != NULL)
+        if ((obj = get_obj_here(ch, arg)) != nullptr)
             extract_obj(obj);
         else
             progbug("Mppurge - Bad argument", ch);
@@ -763,13 +763,13 @@ void do_mpinvis(CHAR_DATA* ch, char* argument)
     if (IS_SET(ch->act, ACT_MOBINVIS))
     {
         REMOVE_BIT(ch->act, ACT_MOBINVIS);
-        act(AT_IMMORT, "$n slowly fades into existence.", ch, NULL, NULL, TO_ROOM);
+        act(AT_IMMORT, "$n slowly fades into existence.", ch, nullptr, nullptr, TO_ROOM);
         send_to_char("You slowly fade back into existence.\n\r", ch);
     }
     else
     {
         SET_BIT(ch->act, ACT_MOBINVIS);
-        act(AT_IMMORT, "$n slowly fades into thin air.", ch, NULL, NULL, TO_ROOM);
+        act(AT_IMMORT, "$n slowly fades into thin air.", ch, nullptr, nullptr, TO_ROOM);
         send_to_char("You slowly vanish into thin air.\n\r", ch);
     }
     return;
@@ -798,7 +798,7 @@ void do_mpgoto(CHAR_DATA* ch, char* argument)
         return;
     }
 
-    if ((location = find_location(ch, arg)) == NULL)
+    if ((location = find_location(ch, arg)) == nullptr)
     {
         progbug("Mpgoto - No such location", ch);
         return;
@@ -811,7 +811,7 @@ void do_mpgoto(CHAR_DATA* ch, char* argument)
     char_to_room(ch, location);
     if (ch->on)
     {
-        ch->on = NULL;
+        ch->on = nullptr;
         ch->position = POS_STANDING;
     }
     if (ch->position != POS_STANDING)
@@ -847,7 +847,7 @@ void do_mpat(CHAR_DATA* ch, char* argument)
         return;
     }
 
-    if ((location = find_location(ch, arg)) == NULL)
+    if ((location = find_location(ch, arg)) == nullptr)
     {
         progbug("Mpat - No such location", ch);
         return;
@@ -898,7 +898,7 @@ void do_mpadvance(CHAR_DATA* ch, char* argument)
         return;
     }
 
-    if ((victim = get_char_room(ch, arg1)) == NULL)
+    if ((victim = get_char_room(ch, arg1)) == nullptr)
     {
         bug("[mpadvance - Missing victim]", 0);
         return;
@@ -966,7 +966,7 @@ void do_mptransfer(CHAR_DATA* ch, char* argument)
     }
     else
     {
-        if ((location = find_location(ch, arg2)) == NULL)
+        if ((location = find_location(ch, arg2)) == nullptr)
         {
             progbug("Mptransfer - No such location", ch);
             return;
@@ -979,7 +979,7 @@ void do_mptransfer(CHAR_DATA* ch, char* argument)
         }
     }
 
-    if ((victim = get_char_world(ch, arg1)) == NULL)
+    if ((victim = get_char_world(ch, arg1)) == nullptr)
     {
         progbug("Mptransfer - No such person", ch);
         return;
@@ -1010,7 +1010,7 @@ void do_mptransfer(CHAR_DATA* ch, char* argument)
     char_to_room(victim, location);
     if (victim->on)
     {
-        victim->on = NULL;
+        victim->on = nullptr;
         victim->position = POS_STANDING;
     }
     if (victim->position != POS_STANDING)
@@ -1057,7 +1057,7 @@ void do_mpforce(CHAR_DATA* ch, char* argument)
     {
         CHAR_DATA* victim;
 
-        if ((victim = get_char_room_mp(ch, arg)) == NULL)
+        if ((victim = get_char_room_mp(ch, arg)) == nullptr)
         {
             progbug("Mpforce - No such victim", ch);
             return;
@@ -1143,7 +1143,7 @@ void do_mp_damage(CHAR_DATA* ch, char* argument)
         return;
     }
 
-    if ((victim = get_char_room_mp(ch, arg1)) == NULL)
+    if ((victim = get_char_room_mp(ch, arg1)) == nullptr)
     {
         send_to_char("Victim must be in room.\n\r", ch);
         progbug("Mpdamage: victim not in room", ch);
@@ -1218,7 +1218,7 @@ void do_mp_restore(CHAR_DATA* ch, char* argument)
         return;
     }
 
-    if ((victim = get_char_room_mp(ch, arg1)) == NULL)
+    if ((victim = get_char_room_mp(ch, arg1)) == nullptr)
     {
         send_to_char("Victim must be in room.\n\r", ch);
         progbug("Mprestore: victim not in room", ch);
@@ -1279,7 +1279,7 @@ void do_mpgain(CHAR_DATA* ch, char* argument)
         return;
     }
 
-    if ((victim = get_char_room_mp(ch, arg1)) == NULL)
+    if ((victim = get_char_room_mp(ch, arg1)) == nullptr)
     {
         send_to_char("Victim must be in room.\n\r", ch);
         progbug("Mpgain: victim not in room", ch);
@@ -1352,7 +1352,7 @@ void do_mp_open_passage(CHAR_DATA* ch, char* argument)
     }
 
     fromRoomVnum = atoi(arg1);
-    if ((fromRoom = get_room_index(fromRoomVnum)) == NULL)
+    if ((fromRoom = get_room_index(fromRoomVnum)) == nullptr)
     {
         progbug("MpOpenPassage - Bad syntax", ch);
         return;
@@ -1365,7 +1365,7 @@ void do_mp_open_passage(CHAR_DATA* ch, char* argument)
     }
 
     targetRoomVnum = atoi(arg2);
-    if ((targetRoom = get_room_index(targetRoomVnum)) == NULL)
+    if ((targetRoom = get_room_index(targetRoomVnum)) == nullptr)
     {
         progbug("MpOpenPassage - Bad syntax", ch);
         return;
@@ -1384,7 +1384,7 @@ void do_mp_open_passage(CHAR_DATA* ch, char* argument)
         return;
     }
 
-    if ((pexit = get_exit(fromRoom, exit_num)) != NULL)
+    if ((pexit = get_exit(fromRoom, exit_num)) != nullptr)
     {
         if (!IS_SET(pexit->exit_info, EX_PASSAGE))
             return;
@@ -1398,8 +1398,8 @@ void do_mp_open_passage(CHAR_DATA* ch, char* argument)
     pexit->key = -1;
     pexit->exit_info = EX_PASSAGE;
 
-    /* act( AT_PLAIN, "A passage opens!", ch, NULL, NULL, TO_CHAR ); */
-    /* act( AT_PLAIN, "A passage opens!", ch, NULL, NULL, TO_ROOM ); */
+    /* act( AT_PLAIN, "A passage opens!", ch, nullptr, nullptr, TO_CHAR ); */
+    /* act( AT_PLAIN, "A passage opens!", ch, nullptr, nullptr, TO_ROOM ); */
 
     return;
 }
@@ -1446,7 +1446,7 @@ void do_mp_close_passage(CHAR_DATA* ch, char* argument)
     }
 
     fromRoomVnum = atoi(arg1);
-    if ((fromRoom = get_room_index(fromRoomVnum)) == NULL)
+    if ((fromRoom = get_room_index(fromRoomVnum)) == nullptr)
     {
         progbug("MpClosePassage - Bad syntax", ch);
         return;
@@ -1465,7 +1465,7 @@ void do_mp_close_passage(CHAR_DATA* ch, char* argument)
         return;
     }
 
-    if ((pexit = get_exit(fromRoom, exit_num)) == NULL)
+    if ((pexit = get_exit(fromRoom, exit_num)) == nullptr)
     {
         return; /* already closed, ignore...  so rand_progs */
                 /*                            can close without spam */
@@ -1479,8 +1479,8 @@ void do_mp_close_passage(CHAR_DATA* ch, char* argument)
 
     extract_exit(fromRoom, pexit);
 
-    /* act( AT_PLAIN, "A passage closes!", ch, NULL, NULL, TO_CHAR ); */
-    /* act( AT_PLAIN, "A passage closes!", ch, NULL, NULL, TO_ROOM ); */
+    /* act( AT_PLAIN, "A passage closes!", ch, nullptr, nullptr, TO_CHAR ); */
+    /* act( AT_PLAIN, "A passage closes!", ch, nullptr, nullptr, TO_ROOM ); */
 
     return;
 }
@@ -1522,7 +1522,7 @@ void do_mpdream(CHAR_DATA* ch, char* argument)
 
     argument = one_argument(argument, arg1);
 
-    if ((vict = get_char_world(ch, arg1)) == NULL)
+    if ((vict = get_char_world(ch, arg1)) == nullptr)
     {
         progbug("Mpdream: No such character", ch);
         return;
@@ -1555,7 +1555,7 @@ void do_mpapply(CHAR_DATA* ch, char* argument)
         return;
     }
 
-    if ((victim = get_char_room_mp(ch, argument)) == NULL)
+    if ((victim = get_char_room_mp(ch, argument)) == nullptr)
     {
         progbug("Mpapply - no such player in room.", ch);
         return;
@@ -1600,7 +1600,7 @@ void do_mpapplyb(CHAR_DATA* ch, char* argument)
         return;
     }
 
-    if ((victim = get_char_room_mp(ch, argument)) == NULL)
+    if ((victim = get_char_room_mp(ch, argument)) == nullptr)
     {
         progbug("Mpapplyb - no such player in room.", ch);
         return;
@@ -1628,7 +1628,7 @@ void do_mpapplyb(CHAR_DATA* ch, char* argument)
                   victim->desc->connection->getHostname().c_str(), race_table[victim->race].race_name);
         log_string(log_buf);
         to_channel(log_buf, CHANNEL_MONITOR, "Monitor", LEVEL_IMMORTAL);
-        add_timer(victim, TIMER_APPLIED, 10, NULL, 0);
+        add_timer(victim, TIMER_APPLIED, 10, nullptr, 0);
         victim->pcdata->auth_state = 1;
         break;
 
@@ -1636,7 +1636,7 @@ void do_mpapplyb(CHAR_DATA* ch, char* argument)
         send_to_char("Your name has been deemed unsuitable by the gods.  Please choose a more apropriate name with the "
                      "'name' command.\n\r",
                      victim);
-        add_timer(victim, TIMER_APPLIED, 10, NULL, 0);
+        add_timer(victim, TIMER_APPLIED, 10, nullptr, 0);
         break;
 
     case 3:
@@ -1646,7 +1646,7 @@ void do_mpapplyb(CHAR_DATA* ch, char* argument)
             stop_fighting(victim, true);
         char_from_room(victim);
         char_to_room(victim, get_room_index(ROOM_VNUM_SCHOOL));
-        act(AT_WHITE, "$n enters this world from within a column of blinding light!", victim, NULL, NULL, TO_ROOM);
+        act(AT_WHITE, "$n enters this world from within a column of blinding light!", victim, nullptr, nullptr, TO_ROOM);
         do_look(victim, MAKE_TEMP_STRING("auto"));
         break;
     }
@@ -1835,20 +1835,20 @@ ch_ret simple_damage(CHAR_DATA* ch, CHAR_DATA* victim, int dam, int dt)
     switch (victim->position)
     {
     case POS_MORTAL:
-        act(AT_DYING, "$n is mortally wounded, and will die soon, if not aided.", victim, NULL, NULL, TO_ROOM);
-        act(AT_DANGER, "You are mortally wounded, and will die soon, if not aided.", victim, NULL, NULL, TO_CHAR);
+        act(AT_DYING, "$n is mortally wounded, and will die soon, if not aided.", victim, nullptr, nullptr, TO_ROOM);
+        act(AT_DANGER, "You are mortally wounded, and will die soon, if not aided.", victim, nullptr, nullptr, TO_CHAR);
         break;
 
     case POS_INCAP:
-        act(AT_DYING, "$n is incapacitated and will slowly die, if not aided.", victim, NULL, NULL, TO_ROOM);
-        act(AT_DANGER, "You are incapacitated and will slowly die, if not aided.", victim, NULL, NULL, TO_CHAR);
+        act(AT_DYING, "$n is incapacitated and will slowly die, if not aided.", victim, nullptr, nullptr, TO_ROOM);
+        act(AT_DANGER, "You are incapacitated and will slowly die, if not aided.", victim, nullptr, nullptr, TO_CHAR);
         break;
 
     case POS_STUNNED:
         if (!IS_AFFECTED(victim, AFF_PARALYSIS))
         {
-            act(AT_ACTION, "$n is stunned, but will probably recover.", victim, NULL, NULL, TO_ROOM);
-            act(AT_HURT, "You are stunned, but will probably recover.", victim, NULL, NULL, TO_CHAR);
+            act(AT_ACTION, "$n is stunned, but will probably recover.", victim, nullptr, nullptr, TO_ROOM);
+            act(AT_HURT, "You are stunned, but will probably recover.", victim, nullptr, nullptr, TO_CHAR);
         }
         break;
 
@@ -1879,7 +1879,7 @@ ch_ret simple_damage(CHAR_DATA* ch, CHAR_DATA* victim, int dam, int dt)
         }
         set_cur_char(victim);
         raw_kill(ch, victim);
-        victim = NULL;
+        victim = nullptr;
 
         return rVICT_DIED;
     }
@@ -1948,7 +1948,7 @@ CHAR_DATA* get_char_room_mp(CHAR_DATA* ch, char* argument)
         }
 
     if (vnum != -1)
-        return NULL;
+        return nullptr;
     count = 0;
     for (rch = ch->in_room->first_person; rch; rch = rch->next_in_room)
     {
@@ -1960,5 +1960,5 @@ CHAR_DATA* get_char_room_mp(CHAR_DATA* ch, char* argument)
             return rch;
     }
 
-    return NULL;
+    return nullptr;
 }

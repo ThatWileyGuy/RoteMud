@@ -770,7 +770,7 @@ const char* color_str(sh_int AType, CHAR_DATA* ch)
 {
     if (!ch)
     {
-        bug("%s", "color_str: NULL ch!");
+        bug("%s", "color_str: nullptr ch!");
         return ("");
     }
 
@@ -1167,7 +1167,7 @@ void set_char_color(sh_int AType, CHAR_DATA* ch)
 
     if (!ch->desc)
     {
-        bug("set_char_color: NULL descriptor after WTB! CH: %s", ch->name ? ch->name : "Unknown?!?");
+        bug("set_char_color: nullptr descriptor after WTB! CH: %s", ch->name ? ch->name : "Unknown?!?");
         return;
     }
 
@@ -1185,7 +1185,7 @@ void set_pager_color(sh_int AType, CHAR_DATA* ch)
         write_to_pager(ch->desc, color_str(AType, ch), 0);
     if (!ch->desc)
     {
-        bug("set_pager_color: NULL descriptor after WTP! CH: %s", ch->name ? ch->name : "Unknown?!?");
+        bug("set_pager_color: nullptr descriptor after WTP! CH: %s", ch->name ? ch->name : "Unknown?!?");
         return;
     }
     ch->desc->pagecolor = ch->colors[AType];
@@ -1224,7 +1224,7 @@ void write_to_pager(DESCRIPTOR_DATA* d, const char* txt, size_t length)
         {
             bug("%s", "Pager overflow.  Ignoring.\n\r");
             d->pagetop = 0;
-            d->pagepoint = NULL;
+            d->pagepoint = nullptr;
             DISPOSE(d->pagebuf);
             d->pagesize = MAX_STRING_LENGTH;
             return;
@@ -1249,7 +1249,7 @@ void send_to_desc_color(const char* txt, DESCRIPTOR_DATA* d)
 
     if (!d)
     {
-        bug("%s", "send_to_desc_color: NULL *d");
+        bug("%s", "send_to_desc_color: nullptr *d");
         return;
     }
 
@@ -1258,9 +1258,9 @@ void send_to_desc_color(const char* txt, DESCRIPTOR_DATA* d)
         return;
 
 #ifdef OVERLANDCODE
-    while ((colstr = strpbrk(prevstr, "&")) != NULL)
+    while ((colstr = strpbrk(prevstr, "&")) != nullptr)
 #else
-    while ((colstr = strpbrk(prevstr, "&^")) != NULL)
+    while ((colstr = strpbrk(prevstr, "&^")) != nullptr)
 #endif
     {
         if (colstr > prevstr)
@@ -1295,16 +1295,16 @@ void send_to_char_color(const char* txt, CHAR_DATA* ch)
 
     if (!ch)
     {
-        bug("%s", "send_to_char_color: NULL ch!");
+        bug("%s", "send_to_char_color: nullptr ch!");
         return;
     }
 
     if (txt && ch->desc)
     {
 #ifdef OVERLANDCODE
-        while ((colstr = strpbrk(prevstr, "&")) != NULL)
+        while ((colstr = strpbrk(prevstr, "&")) != nullptr)
 #else
-        while ((colstr = strpbrk(prevstr, "&^")) != NULL)
+        while ((colstr = strpbrk(prevstr, "&^")) != nullptr)
 #endif
         {
             if (colstr > prevstr)
@@ -1334,7 +1334,7 @@ void send_to_pager_color(const char* txt, CHAR_DATA* ch)
 
     if (!ch)
     {
-        bug("%s", "send_to_pager_color: NULL ch!");
+        bug("%s", "send_to_pager_color: nullptr ch!");
         return;
     }
 
@@ -1349,9 +1349,9 @@ void send_to_pager_color(const char* txt, CHAR_DATA* ch)
             return;
         }
 #ifdef OVERLANDCODE
-        while ((colstr = strpbrk(prevstr, "&")) != NULL)
+        while ((colstr = strpbrk(prevstr, "&")) != nullptr)
 #else
-        while ((colstr = strpbrk(prevstr, "&^")) != NULL)
+        while ((colstr = strpbrk(prevstr, "&^")) != nullptr)
 #endif
         {
             if (colstr > prevstr)

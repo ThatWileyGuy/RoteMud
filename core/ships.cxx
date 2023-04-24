@@ -212,9 +212,9 @@ void do_buymobship(CHAR_DATA* ch, char* argument)
         return;
     }
 
-    if (arg == NULL || !arg || arg[0] == '\0')
+    if (arg == nullptr || !arg || arg[0] == '\0')
     {
-        do_shiplist(ch, NULL);
+        do_shiplist(ch, nullptr);
         return;
     }
 
@@ -229,7 +229,7 @@ void do_buymobship(CHAR_DATA* ch, char* argument)
     }
     if (!found_proto)
     {
-        do_shiplist(ch, NULL);
+        do_shiplist(ch, nullptr);
         return;
     }
     ship_type = x;
@@ -382,7 +382,7 @@ void do_buymobship(CHAR_DATA* ch, char* argument)
     extract_ship(ship);
     ship_to_starsystem(ship, system);
     ship->location = 0;
-    ship->inship = NULL;
+    ship->inship = nullptr;
     ship->type = MOB_SHIP;
     if (ship->home)
         STRFREE(ship->home);
@@ -393,7 +393,7 @@ void do_buymobship(CHAR_DATA* ch, char* argument)
     ship->vz = number_range(-3000, 3000);
     ship->autopilot = true;
     sprintf_s(buf, "%s enters the starsystem at %.0f %.0f %.0f", ship->name, ship->vx, ship->vy, ship->vz);
-    echo_to_system(AT_YELLOW, ship, buf, NULL);
+    echo_to_system(AT_YELLOW, ship, buf, nullptr);
     return;
 }
 
@@ -434,9 +434,9 @@ void do_orderclanship(CHAR_DATA* ch, char* argument)
         send_to_char("You can only purchase a ship at a shipyard.\r\n", ch);
         return;
     }
-    if (argument == NULL || !argument || argument[0] == '\0')
+    if (argument == nullptr || !argument || argument[0] == '\0')
     {
-        do_shiplist(ch, NULL);
+        do_shiplist(ch, nullptr);
         return;
     }
     argument = one_argument(argument, arg);
@@ -451,11 +451,11 @@ void do_orderclanship(CHAR_DATA* ch, char* argument)
     }
     if (!found_proto)
     {
-        do_shiplist(ch, NULL);
+        do_shiplist(ch, nullptr);
         return;
     }
     ship_type = x;
-    if (argument[0] == '\0' || argument == NULL || !argument)
+    if (argument[0] == '\0' || argument == nullptr || !argument)
     {
         send_to_char("What would you like to name your ship?\r\n", ch);
         return;
@@ -877,15 +877,15 @@ void do_ordership(CHAR_DATA* ch, char* argument)
     }
     if (!IS_SET(ch->in_room->room_flags2, ROOM_BLACKMARKET))
     {
-        if (argument == NULL || !argument || argument[0] == '\0')
+        if (argument == nullptr || !argument || argument[0] == '\0')
         {
-            do_shiplist(ch, NULL);
+            do_shiplist(ch, nullptr);
             return;
         }
     }
     else
     {
-        if (argument == NULL || !argument || argument[0] == '\0')
+        if (argument == nullptr || !argument || argument[0] == '\0')
         {
             ch_printf(ch, "&z+&W------------------------&z The Black Market &W--------------------------&z+\n\r");
             for (marketship = first_market_ship; marketship; marketship = marketship->next)
@@ -943,7 +943,7 @@ void do_ordership(CHAR_DATA* ch, char* argument)
     {
         if (!IS_SET(ch->in_room->room_flags2, ROOM_BLACKMARKET))
         {
-            do_shiplist(ch, NULL);
+            do_shiplist(ch, nullptr);
             return;
         }
         else
@@ -976,7 +976,7 @@ void do_ordership(CHAR_DATA* ch, char* argument)
     }
 
     ship_type = x;
-    if (argument[0] == '\0' || argument == NULL || !argument)
+    if (argument[0] == '\0' || argument == nullptr || !argument)
     {
         send_to_char("What do you want to name your ship?\r\n", ch);
         return;
@@ -1105,22 +1105,22 @@ SHIP_DATA* make_prototype_ship(int ship_type, int vnum, CHAR_DATA* ch, char* shi
     ship->type = PLAYER_SHIP;
     ship->clazz = ship_prototypes[ship_type].clazz;
     ship->cost = ship_prototypes[ship_type].cost;
-    ship->starsystem = NULL;
-    ship->in_room = NULL;
-    ship->next_in_room = NULL;
-    ship->prev_in_room = NULL;
-    ship->currjump = NULL;
-    ship->target0 = NULL;
-    ship->target1 = NULL;
-    ship->target2 = NULL;
-    ship->target3 = NULL;
-    ship->target4 = NULL;
-    ship->target5 = NULL;
-    ship->target6 = NULL;
-    ship->target7 = NULL;
-    ship->target8 = NULL;
-    ship->target9 = NULL;
-    ship->target10 = NULL;
+    ship->starsystem = nullptr;
+    ship->in_room = nullptr;
+    ship->next_in_room = nullptr;
+    ship->prev_in_room = nullptr;
+    ship->currjump = nullptr;
+    ship->target0 = nullptr;
+    ship->target1 = nullptr;
+    ship->target2 = nullptr;
+    ship->target3 = nullptr;
+    ship->target4 = nullptr;
+    ship->target5 = nullptr;
+    ship->target6 = nullptr;
+    ship->target7 = nullptr;
+    ship->target8 = nullptr;
+    ship->target9 = nullptr;
+    ship->target10 = nullptr;
     ship->password = number_range(1111, 9999);
     ;
     ship->maxmods = ship_prototypes[ship_type].mods;
@@ -1312,7 +1312,7 @@ int make_prototype_rooms(int ship_type, int vnum, AREA_DATA* tarea, char* Sname)
     {
         if (proom->what_prototype == ship_type)
         {
-            if ((newroom = get_room_index(vnum + proom->room_num - 1)) == NULL)
+            if ((newroom = get_room_index(vnum + proom->room_num - 1)) == nullptr)
             {
                 newroom = make_room(vnum + proom->room_num - 1, tarea);
                 if (!newroom)
@@ -1347,7 +1347,7 @@ int make_prototype_rooms(int ship_type, int vnum, AREA_DATA* tarea, char* Sname)
             }
             for (y = 0; y < 10; y++)
             {
-                if (proom->reset[y] != NULL && proom->reset[y][0] != '\0')
+                if (proom->reset[y] != nullptr && proom->reset[y][0] != '\0')
                 {
                     rarg = STRALLOC(proom->reset[y]);
                     rarg = one_argument(rarg, rtype);
@@ -1355,13 +1355,13 @@ int make_prototype_rooms(int ship_type, int vnum, AREA_DATA* tarea, char* Sname)
                     switch (UPPER(rtype[0]))
                     {
                     case 'O':
-                        if ((pObjIndex = get_obj_index(rvnum)) == NULL)
+                        if ((pObjIndex = get_obj_index(rvnum)) == nullptr)
                             break;
                         obj = create_object(pObjIndex, 60);
                         obj = obj_to_room(obj, newroom);
                         break;
                     case 'M':
-                        if ((pMobIndex = get_mob_index(rvnum)) == NULL)
+                        if ((pMobIndex = get_mob_index(rvnum)) == nullptr)
                             break;
                         victim = create_mobile(pMobIndex);
                         char_to_room(victim, newroom);
@@ -1419,8 +1419,8 @@ int find_vnum_block(int num_needed)
     trange = tarea->hi_r_vnum;
     for (vnum = lrange; vnum <= trange; vnum++)
     {
-        //        if ( (room = get_room_index( vnum )) == NULL || !strcmp(room->name,"VNUM_AVAILABLE\0"))
-        if ((room = get_room_index(vnum)) == NULL)
+        //        if ( (room = get_room_index( vnum )) == nullptr || !strcmp(room->name,"VNUM_AVAILABLE\0"))
+        if ((room = get_room_index(vnum)) == nullptr)
         {
             if (!counting)
             {
@@ -1494,7 +1494,7 @@ void make_rprogs(int ship_type, int vnum)
                     mprg->arglist = STRALLOC(arg2);
                 }
                 mprg->comlist = STRALLOC(argument);
-                mprg->next = NULL;
+                mprg->next = nullptr;
             }
         }
     }
@@ -1524,7 +1524,7 @@ void save_prototype(int prototype)
     char filename[MAX_STRING_LENGTH];
     int x;
     sprintf_s(filename, "%s%s.proto", SHIP_PROTOTYPE_DIR, ship_prototypes[prototype].sname);
-    if ((fpout = fopen(filename, "w")) == NULL)
+    if ((fpout = fopen(filename, "w")) == nullptr)
     {
         perror(filename);
         return;
@@ -1618,7 +1618,7 @@ void write_prototype_list()
     char filename[MAX_STRING_LENGTH];
     int x;
     sprintf_s(filename, "%sprototype.lst", SHIP_PROTOTYPE_DIR);
-    if ((fpout = fopen(filename, "w")) == NULL)
+    if ((fpout = fopen(filename, "w")) == nullptr)
     {
         perror(filename);
         return;
@@ -1859,7 +1859,7 @@ int load_prototype(const std::string& prototypefile, int prototype)
 
     sprintf_s(filename, "%s%s", SHIP_PROTOTYPE_DIR, prototypefile.c_str());
 
-    if ((fp = fopen(filename, "r")) != NULL)
+    if ((fp = fopen(filename, "r")) != nullptr)
     {
         found = true;
         prototype++;
@@ -1919,13 +1919,13 @@ void load_ship_prototypes()
     const char* filename;
     char prototypeslist[256];
     int prototype;
-    first_prototype_room = NULL;
-    last_prototype_room = NULL;
+    first_prototype_room = nullptr;
+    last_prototype_room = nullptr;
 
     log_string("Loading ship prototypes...");
 
     sprintf_s(prototypeslist, "%sprototype.lst", SHIP_PROTOTYPE_DIR);
-    if ((fpList = fopen(prototypeslist, "r")) == NULL)
+    if ((fpList = fopen(prototypeslist, "r")) == nullptr)
     {
         perror(prototypeslist);
         exit(1);
@@ -2002,7 +2002,7 @@ void do_makeprototypeship(CHAR_DATA* ch, char* argument)
         send_to_char("USAGE: makeprototypeship <ship name> <cost> <short name> <long name>\r\n", ch);
         return;
     }
-    if ((ship = get_ship(ship_name)) == NULL)
+    if ((ship = get_ship(ship_name)) == nullptr)
     {
         send_to_char("You must specify a valid ship name.\r\n", ch);
         send_to_char("USAGE: makeprototypeship <ship name> <short name> <long name> <cost>\r\n", ch);
@@ -2191,12 +2191,12 @@ void do_shipstat(CHAR_DATA* ch, char* argument)
         send_to_char("Invalid number.\n\r", ch);
         return;
     }
-    bool shiphasclan = (ship_prototypes[shiptype].clan != NULL && str_cmp(ship_prototypes[shiptype].clan, ""));
-    bool playerhasclan = (ch->pcdata->clan != NULL && str_cmp(ch->pcdata->clan->name, ""));
+    bool shiphasclan = (ship_prototypes[shiptype].clan != nullptr && str_cmp(ship_prototypes[shiptype].clan, ""));
+    bool playerhasclan = (ch->pcdata->clan != nullptr && str_cmp(ch->pcdata->clan->name, ""));
     bool playercanviewship =
         !(shiphasclan &&
           (!playerhasclan || !(!str_cmp(ch->pcdata->clan->name, ship_prototypes[shiptype].clan) ||
-                               (ch->pcdata->clan->mainclan != NULL &&
+                               (ch->pcdata->clan->mainclan != nullptr &&
                                 !str_cmp(ch->pcdata->clan->mainclan->name, ship_prototypes[shiptype].clan)))));
     if (!playercanviewship)
     {
@@ -2275,13 +2275,13 @@ void load_market_list()
     BMARKET_DATA* marketship;
     int quantity;
 
-    first_market_ship = NULL;
-    last_market_ship = NULL;
+    first_market_ship = nullptr;
+    last_market_ship = nullptr;
 
     log_string("Loading black market.");
 
     sprintf_s(list, "%s%s", SHIP_PROTOTYPE_DIR, "blackmarket.lst");
-    if ((fpList = fopen(list, "r")) == NULL)
+    if ((fpList = fopen(list, "r")) == nullptr)
     {
         perror(list);
         exit(1);
@@ -2611,7 +2611,7 @@ void do_installmodule(CHAR_DATA* ch, char* argument)
     switch (ch->substate)
     {
     default:
-        if ((ship = ship_from_engine(ch->in_room->vnum)) != NULL)
+        if ((ship = ship_from_engine(ch->in_room->vnum)) != nullptr)
         {
             ship = ship_from_engine(ch->in_room->vnum);
             strcpy_s(arg, ship->name);
@@ -2749,7 +2749,7 @@ void do_installmodule(CHAR_DATA* ch, char* argument)
             ch->dest_buf = str_dup(arg);
             send_to_char("&GYou begin the long process of installing a new module.\n\r", ch);
             sprintf_s(buf, "$n takes out $s toolkit and a module and begins to work.\n\r");
-            act(AT_PLAIN, buf, ch, NULL, argument, TO_ROOM);
+            act(AT_PLAIN, buf, ch, nullptr, argument, TO_ROOM);
             add_timer(ch, TIMER_DO_FUN, 5, do_installmodule, 1);
             return;
         }
@@ -2869,12 +2869,12 @@ void do_shiplist(CHAR_DATA* ch, char* argument)
 
     for (x = 0; x < NUM_PROTOTYPES; x++)
     {
-        bool shiphasclan = (ship_prototypes[x].clan != NULL && str_cmp(ship_prototypes[x].clan, ""));
-        bool playerhasclan = (ch->pcdata->clan != NULL && str_cmp(ch->pcdata->clan->name, ""));
+        bool shiphasclan = (ship_prototypes[x].clan != nullptr && str_cmp(ship_prototypes[x].clan, ""));
+        bool playerhasclan = (ch->pcdata->clan != nullptr && str_cmp(ch->pcdata->clan->name, ""));
         bool playercanviewship =
             !(shiphasclan &&
               (!playerhasclan || !(!str_cmp(ch->pcdata->clan->name, ship_prototypes[x].clan) ||
-                                   (ch->pcdata->clan->mainclan != NULL &&
+                                   (ch->pcdata->clan->mainclan != nullptr &&
                                     !str_cmp(ch->pcdata->clan->mainclan->name, ship_prototypes[x].clan)))));
         char type[255] = "Classified";
         if (playercanviewship)

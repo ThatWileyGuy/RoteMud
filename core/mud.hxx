@@ -3949,7 +3949,7 @@ extern sh_int gsn_droid;
             }                                                                                                          \
             else                                                                                                       \
                 free((point));                                                                                         \
-            (point) = NULL;                                                                                            \
+            (point) = nullptr;                                                                                            \
         }                                                                                                              \
     } while (0)
 
@@ -3969,7 +3969,7 @@ extern sh_int gsn_droid;
             }                                                                                                          \
             else if (str_free((point)) == -1)                                                                          \
                 bug("&RSTRFREEing bad pointer: %s, line %d", __FILE__, __LINE__);                                      \
-            (point) = NULL;                                                                                            \
+            (point) = nullptr;                                                                                            \
         }                                                                                                              \
     } while (0)
 #else
@@ -3991,9 +3991,9 @@ extern sh_int gsn_droid;
         }                                                                                                              \
         else                                                                                                           \
             (last)->next = (link);                                                                                     \
-        (link)->next = NULL;                                                                                           \
+        (link)->next = nullptr;                                                                                           \
         if ((first) == (link))                                                                                         \
-            (link)->prev = NULL;                                                                                       \
+            (link)->prev = nullptr;                                                                                       \
         else                                                                                                           \
             (link)->prev = (last);                                                                                     \
         (last) = (link);                                                                                               \
@@ -4018,7 +4018,7 @@ extern sh_int gsn_droid;
         {                                                                                                              \
             (first) = (link)->next;                                                                                    \
             if ((first))                                                                                               \
-                (first)->prev = NULL;                                                                                  \
+                (first)->prev = nullptr;                                                                                  \
         }                                                                                                              \
         else                                                                                                           \
         {                                                                                                              \
@@ -4028,7 +4028,7 @@ extern sh_int gsn_droid;
         {                                                                                                              \
             (last) = (link)->prev;                                                                                     \
             if ((last))                                                                                                \
-                (last)->next = NULL;                                                                                   \
+                (last)->next = nullptr;                                                                                   \
         }                                                                                                              \
         else                                                                                                           \
         {                                                                                                              \
@@ -4039,19 +4039,19 @@ extern sh_int gsn_droid;
 #define CHECK_LINKS(first, last, next, prev, type)                                                                     \
     do                                                                                                                 \
     {                                                                                                                  \
-        type *ptr, *pptr = NULL;                                                                                       \
+        type *ptr, *pptr = nullptr;                                                                                       \
         if (!(first) && !(last))                                                                                       \
             break;                                                                                                     \
         if (!(first))                                                                                                  \
         {                                                                                                              \
-            bug("CHECK_LINKS: last with NULL first!  %s.", __STRING(first));                                           \
+            bug("CHECK_LINKS: last with nullptr first!  %s.", __STRING(first));                                           \
             for (ptr = (last); ptr->prev; ptr = ptr->prev)                                                             \
                 ;                                                                                                      \
             (first) = ptr;                                                                                             \
         }                                                                                                              \
         else if (!(last))                                                                                              \
         {                                                                                                              \
-            bug("CHECK_LINKS: first with NULL last!  %s.", __STRING(first));                                           \
+            bug("CHECK_LINKS: first with nullptr last!  %s.", __STRING(first));                                           \
             for (ptr = (first); ptr->next; ptr = ptr->next)                                                            \
                 ;                                                                                                      \
             (last) = ptr;                                                                                              \
@@ -4072,7 +4072,7 @@ extern sh_int gsn_droid;
                 }                                                                                                      \
                 pptr = ptr;                                                                                            \
             }                                                                                                          \
-            pptr = NULL;                                                                                               \
+            pptr = nullptr;                                                                                               \
         }                                                                                                              \
         if ((last))                                                                                                    \
         {                                                                                                              \
@@ -4146,7 +4146,7 @@ extern sh_int gsn_droid;
 #define EXIT(ch, door) (get_exit((ch)->in_room, door))
 
 #define CAN_GO(ch, door)                                                                                               \
-    (EXIT((ch), (door)) && (EXIT((ch), (door))->to_room != NULL) && !IS_SET(EXIT((ch), (door))->exit_info, EX_CLOSED))
+    (EXIT((ch), (door)) && (EXIT((ch), (door))->to_room != nullptr) && !IS_SET(EXIT((ch), (door))->exit_info, EX_CLOSED))
 
 #define IS_VALID_SN(sn) ((sn) >= 0 && (sn) < MAX_SKILL && skill_table[(sn)] && skill_table[(sn)]->name)
 

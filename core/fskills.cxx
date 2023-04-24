@@ -52,26 +52,26 @@ void fskill_refresh(CHAR_DATA* ch, char* argument)
 {
     FORCE_SKILL* fskill;
     fskill = force_test_skill_use("meditate", ch, FORCE_NONCOMBAT);
-    if (fskill == NULL)
+    if (fskill == nullptr)
         return;
     switch (ch->substate)
     {
     default:
-        send_to_char(force_parse_string(ch, NULL, fskill->ch_effect[0]), ch);
-        force_send_to_room(ch, NULL, force_parse_string(ch, NULL, fskill->room_effect[0]));
+        send_to_char(force_parse_string(ch, nullptr, fskill->ch_effect[0]), ch);
+        force_send_to_room(ch, nullptr, force_parse_string(ch, nullptr, fskill->room_effect[0]));
         add_timer(ch, TIMER_DO_FUN, 5, fskill_refresh, 1);
         return;
     case 1:
         if (number_range(0, 4) != 0 && number_range(0, 100) > ch->force_skill[FORCE_SKILL_REFRESH])
         {
-            send_to_char(force_parse_string(ch, NULL, fskill->ch_effect[2]), ch);
-            force_send_to_room(ch, NULL, force_parse_string(ch, NULL, fskill->room_effect[2]));
+            send_to_char(force_parse_string(ch, nullptr, fskill->ch_effect[2]), ch);
+            force_send_to_room(ch, nullptr, force_parse_string(ch, nullptr, fskill->room_effect[2]));
             force_learn_from_failure(ch, fskill);
             ch->substate = SUB_NONE;
             return;
         }
-        send_to_char(force_parse_string(ch, NULL, fskill->ch_effect[1]), ch);
-        force_send_to_room(ch, NULL, force_parse_string(ch, NULL, fskill->room_effect[1]));
+        send_to_char(force_parse_string(ch, nullptr, fskill->ch_effect[1]), ch);
+        force_send_to_room(ch, nullptr, force_parse_string(ch, nullptr, fskill->room_effect[1]));
         ch->mana += number_range(10, ch->force_control * 40 / 100) * ch->force_level_status;
         if (ch->mana > ch->max_mana)
             ch->mana = ch->max_mana;
@@ -79,8 +79,8 @@ void fskill_refresh(CHAR_DATA* ch, char* argument)
         break;
 
     case SUB_TIMER_DO_ABORT:
-        send_to_char(force_parse_string(ch, NULL, fskill->ch_effect[2]), ch);
-        force_send_to_room(ch, NULL, force_parse_string(ch, NULL, fskill->room_effect[2]));
+        send_to_char(force_parse_string(ch, nullptr, fskill->ch_effect[2]), ch);
+        force_send_to_room(ch, nullptr, force_parse_string(ch, nullptr, fskill->room_effect[2]));
         break;
     }
     ch->substate = SUB_NONE;
@@ -93,7 +93,7 @@ void fskill_awareness(CHAR_DATA* ch, char* argument)
     AFFECT_DATA af;
 
     fskill = force_test_skill_use("awareness", ch, FORCE_NONCOMBAT);
-    if (fskill == NULL)
+    if (fskill == nullptr)
         return;
     if (IS_AFFECTED(ch, AFF_TRUESIGHT))
     {
@@ -105,21 +105,21 @@ void fskill_awareness(CHAR_DATA* ch, char* argument)
     default:
 
         send_to_char("You close your eyes, and focus on nothing.\n\r", ch);
-        act(AT_PLAIN, "$n closes $s eyes.", ch, NULL, NULL, TO_ROOM);
+        act(AT_PLAIN, "$n closes $s eyes.", ch, nullptr, nullptr, TO_ROOM);
         add_timer(ch, TIMER_DO_FUN, 3, fskill_awareness, 1);
         return;
     case 1:
         if (number_range(0, 4) != 0 && number_range(0, 100) > ch->force_skill[FORCE_SKILL_AWARENESS])
         {
             send_to_char("You open your eyes, but everything looks the same.\n\r", ch);
-            act(AT_PLAIN, "$n opens $s eyes.", ch, NULL, NULL, TO_ROOM);
+            act(AT_PLAIN, "$n opens $s eyes.", ch, nullptr, nullptr, TO_ROOM);
             force_learn_from_failure(ch, fskill);
             ch->substate = SUB_NONE;
             return;
         }
 
         send_to_char("You open your eyes with greater awareness of your surroundings.\n\r", ch);
-        act(AT_PLAIN, "$n opens $s eyes.", ch, NULL, NULL, TO_ROOM);
+        act(AT_PLAIN, "$n opens $s eyes.", ch, nullptr, nullptr, TO_ROOM);
         af.type = gsn_truesight;
         af.duration = 112 * ch->force_level_status;
         af.location = APPLY_NONE;
@@ -133,7 +133,7 @@ void fskill_awareness(CHAR_DATA* ch, char* argument)
 
     case SUB_TIMER_DO_ABORT:
         send_to_char("You open your eyes, but everything looks the same.\n\r", ch);
-        act(AT_PLAIN, "$n opens $s eyes.", ch, NULL, NULL, TO_ROOM);
+        act(AT_PLAIN, "$n opens $s eyes.", ch, nullptr, nullptr, TO_ROOM);
         break;
     }
     ch->substate = SUB_NONE;
@@ -145,11 +145,11 @@ void fskill_finfo(CHAR_DATA* ch, char* argument)
     FORCE_SKILL *fskill, *skill;
     int count;
     fskill = force_test_skill_use("finfo", ch, FORCE_NONCOMBAT);
-    if (fskill == NULL)
+    if (fskill == nullptr)
         return;
     if (number_range(0, 4) != 0 && number_range(0, 100) > ch->force_skill[FORCE_SKILL_FINFO])
     {
-        send_to_char(force_parse_string(ch, NULL, fskill->ch_effect[2]), ch);
+        send_to_char(force_parse_string(ch, nullptr, fskill->ch_effect[2]), ch);
         force_learn_from_failure(ch, fskill);
         return;
     }
@@ -164,8 +164,8 @@ void fskill_finfo(CHAR_DATA* ch, char* argument)
               ch->force_type == FORCE_JEDI ? "&b" : "&r", ch->force_type == FORCE_JEDI ? "&B" : "&R", ch->max_mana);
 
     ch_printf(ch, "%sLevel: %s\r\n", ch->force_type == FORCE_JEDI ? "&b" : "&r",
-              ch->force_type == FORCE_JEDI ? force_parse_string(ch, NULL, "&B$nfl")
-                                           : force_parse_string(ch, NULL, "&R$nfl"));
+              ch->force_type == FORCE_JEDI ? force_parse_string(ch, nullptr, "&B$nfl")
+                                           : force_parse_string(ch, nullptr, "&R$nfl"));
     draw_force_line_rev(ch, 69);
     ch_printf(ch, "\r\n\r\n");
     // Level 1 skills
@@ -358,7 +358,7 @@ void fskill_student(CHAR_DATA* ch, char* argument)
     FORCE_SKILL* fskill;
     CHAR_DATA* victim;
     fskill = force_test_skill_use("apprentice", ch, FORCE_NONCOMBAT);
-    if (fskill == NULL)
+    if (fskill == nullptr)
         return;
     victim = force_get_victim(ch, argument, FORCE_INROOM);
     if (!victim)
@@ -406,7 +406,7 @@ void fskill_master(CHAR_DATA* ch, char* argument)
     FORCE_SKILL* fskill;
     CHAR_DATA* victim;
     fskill = force_test_skill_use("master", ch, FORCE_NONCOMBAT);
-    if (fskill == NULL)
+    if (fskill == nullptr)
         return;
     victim = force_get_victim(ch, argument, FORCE_INROOM);
     if (!victim)
@@ -452,7 +452,7 @@ void fskill_identify(CHAR_DATA* ch, char* argument)
     if (argument[0] == '\0')
         argument = str_dup(reinterpret_cast<const char*>(ch->dest_buf));
     fskill = force_test_skill_use("sense", ch, FORCE_NONCOMBAT);
-    if (fskill == NULL)
+    if (fskill == nullptr)
         return;
     victim = force_get_victim(ch, argument, FORCE_INROOM);
     if (!victim)
@@ -557,7 +557,7 @@ void fskill_promote(CHAR_DATA* ch, char* argument)
     FORCE_SKILL* fskill;
     CHAR_DATA* victim;
     fskill = force_test_skill_use("promote", ch, FORCE_NONCOMBAT);
-    if (fskill == NULL)
+    if (fskill == nullptr)
         return;
     victim = force_get_victim(ch, argument, FORCE_INROOM);
     if (!victim)
@@ -619,7 +619,7 @@ void fskill_instruct(CHAR_DATA* ch, char* argument)
     bool SKILL_FOUND = false;
     char name[MAX_STRING_LENGTH];
     fskill = force_test_skill_use("instruct", ch, FORCE_NONCOMBAT);
-    if (fskill == NULL)
+    if (fskill == nullptr)
         return;
     victim = force_get_victim(ch, argument, FORCE_INROOM);
     if (!victim)
@@ -695,26 +695,26 @@ void fskill_heal(CHAR_DATA* ch, char* argument)
 {
     FORCE_SKILL* fskill;
     fskill = force_test_skill_use("heal", ch, FORCE_NONCOMBAT);
-    if (fskill == NULL)
+    if (fskill == nullptr)
         return;
     switch (ch->substate)
     {
     default:
-        send_to_char(force_parse_string(ch, NULL, fskill->ch_effect[0]), ch);
-        force_send_to_room(ch, NULL, force_parse_string(ch, NULL, fskill->room_effect[0]));
+        send_to_char(force_parse_string(ch, nullptr, fskill->ch_effect[0]), ch);
+        force_send_to_room(ch, nullptr, force_parse_string(ch, nullptr, fskill->room_effect[0]));
         add_timer(ch, TIMER_DO_FUN, 10, fskill_heal, 1);
         return;
     case 1:
         if (number_range(0, 4) != 0 && number_range(0, 100) > ch->force_skill[FORCE_SKILL_HEAL])
         {
-            send_to_char(force_parse_string(ch, NULL, fskill->ch_effect[2]), ch);
-            force_send_to_room(ch, NULL, force_parse_string(ch, NULL, fskill->room_effect[2]));
+            send_to_char(force_parse_string(ch, nullptr, fskill->ch_effect[2]), ch);
+            force_send_to_room(ch, nullptr, force_parse_string(ch, nullptr, fskill->room_effect[2]));
             force_learn_from_failure(ch, fskill);
             ch->substate = SUB_NONE;
             return;
         }
-        send_to_char(force_parse_string(ch, NULL, fskill->ch_effect[1]), ch);
-        force_send_to_room(ch, NULL, force_parse_string(ch, NULL, fskill->room_effect[1]));
+        send_to_char(force_parse_string(ch, nullptr, fskill->ch_effect[1]), ch);
+        force_send_to_room(ch, nullptr, force_parse_string(ch, nullptr, fskill->room_effect[1]));
         ch->hit += number_range(1, ch->force_control * 500 / 100);
         if (ch->hit > ch->max_hit)
             ch->hit = ch->max_hit;
@@ -722,8 +722,8 @@ void fskill_heal(CHAR_DATA* ch, char* argument)
         break;
 
     case SUB_TIMER_DO_ABORT:
-        send_to_char(force_parse_string(ch, NULL, fskill->ch_effect[2]), ch);
-        force_send_to_room(ch, NULL, force_parse_string(ch, NULL, fskill->room_effect[2]));
+        send_to_char(force_parse_string(ch, nullptr, fskill->ch_effect[2]), ch);
+        force_send_to_room(ch, nullptr, force_parse_string(ch, nullptr, fskill->room_effect[2]));
         break;
     }
     ch->substate = SUB_NONE;
@@ -738,7 +738,7 @@ void fskill_protect(CHAR_DATA* ch, char* argument)
     if (argument[0] == '\0')
         argument = str_dup(reinterpret_cast<const char*>(ch->dest_buf));
     fskill = force_test_skill_use("protect", ch, FORCE_NONCOMBAT);
-    if (fskill == NULL)
+    if (fskill == nullptr)
         return;
     victim = force_get_victim(ch, argument, FORCE_INROOM);
     if (!victim)
@@ -813,7 +813,7 @@ void fskill_fshield(CHAR_DATA* ch, char* argument)
     if (argument[0] == '\0')
         argument = str_dup(reinterpret_cast<const char*>(ch->dest_buf));
     fskill = force_test_skill_use("fshield", ch, FORCE_NONCOMBAT);
-    if (fskill == NULL)
+    if (fskill == nullptr)
         return;
     victim = ch;
     switch (ch->substate)
@@ -824,16 +824,16 @@ void fskill_fshield(CHAR_DATA* ch, char* argument)
             send_to_char("You already have a shield.\r\n", ch);
             return;
         }
-        send_to_char(force_parse_string(ch, NULL, fskill->ch_effect[0]), ch);
-        force_send_to_room(ch, NULL, force_parse_string(ch, NULL, fskill->room_effect[0]));
+        send_to_char(force_parse_string(ch, nullptr, fskill->ch_effect[0]), ch);
+        force_send_to_room(ch, nullptr, force_parse_string(ch, nullptr, fskill->room_effect[0]));
         ch->dest_buf = str_dup(argument);
         add_timer(ch, TIMER_DO_FUN, 5, fskill_fshield, 1);
         return;
     case 1:
         if (number_range(0, 4) != 0 && number_range(0, 100) > ch->force_skill[FORCE_SKILL_SHIELD])
         {
-            send_to_char(force_parse_string(ch, NULL, fskill->ch_effect[2]), ch);
-            force_send_to_room(ch, NULL, force_parse_string(ch, NULL, fskill->room_effect[2]));
+            send_to_char(force_parse_string(ch, nullptr, fskill->ch_effect[2]), ch);
+            force_send_to_room(ch, nullptr, force_parse_string(ch, nullptr, fskill->room_effect[2]));
             force_learn_from_failure(ch, fskill);
             victim->hit -= ch->force_alter * 25 / 100;
             ch->substate = SUB_NONE;
@@ -845,8 +845,8 @@ void fskill_fshield(CHAR_DATA* ch, char* argument)
         af.modifier = 0;
         af.bitvector = AFF_SANCTUARY;
         affect_to_char(victim, &af);
-        send_to_char(force_parse_string(ch, NULL, fskill->ch_effect[1]), ch);
-        force_send_to_room(ch, NULL, force_parse_string(ch, NULL, fskill->room_effect[1]));
+        send_to_char(force_parse_string(ch, nullptr, fskill->ch_effect[1]), ch);
+        force_send_to_room(ch, nullptr, force_parse_string(ch, nullptr, fskill->room_effect[1]));
         force_learn_from_success(ch, fskill);
         if (!ch->dest_buf)
             break;
@@ -854,8 +854,8 @@ void fskill_fshield(CHAR_DATA* ch, char* argument)
         break;
 
     case SUB_TIMER_DO_ABORT:
-        send_to_char(force_parse_string(ch, NULL, fskill->ch_effect[2]), ch);
-        force_send_to_room(ch, NULL, force_parse_string(ch, NULL, fskill->room_effect[2]));
+        send_to_char(force_parse_string(ch, nullptr, fskill->ch_effect[2]), ch);
+        force_send_to_room(ch, nullptr, force_parse_string(ch, nullptr, fskill->room_effect[2]));
         victim->hit -= ch->force_alter * 25 / 100;
         DISPOSE(ch->dest_buf);
         break;
@@ -871,13 +871,13 @@ void secondslash(CHAR_DATA* ch, CHAR_DATA* victim)
 
     ch_printf(ch, "You follow through with the other end of your saber.\n\r", PERS(victim, ch));
     ch_printf(victim, "%s follows through with the other end of their saber!\n\r", PERS(ch, victim));
-    act(AT_WHITE, "$n follows through with the other end of their saber!\n\r", ch, NULL, victim, TO_NOTVICT);
+    act(AT_WHITE, "$n follows through with the other end of their saber!\n\r", ch, nullptr, victim, TO_NOTVICT);
 
     if (number_range(0, 4) != 0 && number_range(0, 125) > URANGE(1, ch->force_skill[FORCE_SKILL_STRIKE], 75))
     {
         ch_printf(ch, "The slash barely misses them.\n\r");
         ch_printf(victim, "The other end of the saber cuts the air inches away from you.\n\r");
-        act(AT_WHITE, "$n's slash barely misses $N.", ch, NULL, victim, TO_NOTVICT);
+        act(AT_WHITE, "$n's slash barely misses $N.", ch, nullptr, victim, TO_NOTVICT);
         set_fighting(victim, ch);
         return;
     }
@@ -885,13 +885,13 @@ void secondslash(CHAR_DATA* ch, CHAR_DATA* victim)
     {
         ch_printf(ch, "%s quickly parries your attack.\n\r", PERS(victim, ch));
         ch_printf(ch, "You quickly parry the attack.\n\r", PERS(ch, victim));
-        act(AT_WHITE, "$N quickly parries $n's attack.", ch, NULL, victim, TO_NOTVICT);
+        act(AT_WHITE, "$N quickly parries $n's attack.", ch, nullptr, victim, TO_NOTVICT);
         set_fighting(victim, ch);
         return;
     }
     ch_printf(ch, "Your attack cleanly slices into them!\n\r");
     ch_printf(victim, "The other end of the saber slides along your torso!\n\r");
-    act(AT_WHITE, "$N grimaces as $n's lightsaber slices into them!", ch, NULL, victim, TO_NOTVICT);
+    act(AT_WHITE, "$N grimaces as $n's lightsaber slices into them!", ch, nullptr, victim, TO_NOTVICT);
 
     dam = URANGE(
         40,
@@ -910,21 +910,21 @@ void fskill_slash(CHAR_DATA* ch, char* argument)
     CHAR_DATA* victim;
     int dam;
     fskill = force_test_skill_use("slash", ch, FORCE_COMBAT);
-    if (fskill == NULL)
+    if (fskill == nullptr)
         return;
     if (!ch->fighting)
     {
-        if ((wield = get_eq_char(ch, WEAR_WIELD)) == NULL ||
+        if ((wield = get_eq_char(ch, WEAR_WIELD)) == nullptr ||
             ((wield->value[3] != WEAPON_LIGHTSABER) && (wield->value[3] != WEAPON_DUAL_LIGHTSABER)))
         {
-            if ((wield = get_eq_char(ch, WEAR_DUAL_WIELD)) == NULL ||
+            if ((wield = get_eq_char(ch, WEAR_DUAL_WIELD)) == nullptr ||
                 ((wield->value[3] != WEAPON_LIGHTSABER) && (wield->value[3] != WEAPON_DUAL_LIGHTSABER)))
             {
                 send_to_char("You must be wielding a lightsaber to use this skill.\r\n", ch);
                 return;
             }
         }
-        if ((victim = get_char_room(ch, argument)) == NULL)
+        if ((victim = get_char_room(ch, argument)) == nullptr)
         {
             send_to_char("They aren't here.\n\r", ch);
             return;
@@ -937,13 +937,13 @@ void fskill_slash(CHAR_DATA* ch, char* argument)
         }
         ch_printf(ch, "You swing your lightsaber at %s!\n\r", PERS(victim, ch));
         ch_printf(victim, "%s swings their lightsaber at you!\n\r", PERS(ch, victim));
-        act(AT_WHITE, "$n swings their lightsaber at $N!\n\r", ch, NULL, victim, TO_NOTVICT);
+        act(AT_WHITE, "$n swings their lightsaber at $N!\n\r", ch, nullptr, victim, TO_NOTVICT);
 
         if (number_range(0, 4) != 0 && number_range(0, 100) > URANGE(1, ch->force_skill[FORCE_SKILL_STRIKE], 75))
         {
             ch_printf(ch, "Your lightsaber cuts the air inches away from them.\n\r");
             ch_printf(victim, "Their lightsaber cuts the air inches away from your midsection.\n\r");
-            act(AT_WHITE, "$n's slash barely misses $N.", ch, NULL, victim, TO_NOTVICT);
+            act(AT_WHITE, "$n's slash barely misses $N.", ch, nullptr, victim, TO_NOTVICT);
             if (wield->value[3] == WEAPON_DUAL_LIGHTSABER)
                 secondslash(ch, victim);
             force_learn_from_failure(ch, fskill);
@@ -953,7 +953,7 @@ void fskill_slash(CHAR_DATA* ch, char* argument)
         {
             ch_printf(ch, "%s quickly parries your attack.\n\r", PERS(victim, ch));
             ch_printf(ch, "You quickly parry the attack.\n\r", PERS(ch, victim));
-            act(AT_WHITE, "$N quickly parries $n's attack.", ch, NULL, victim, TO_NOTVICT);
+            act(AT_WHITE, "$N quickly parries $n's attack.", ch, nullptr, victim, TO_NOTVICT);
             if (wield->value[3] == WEAPON_DUAL_LIGHTSABER)
                 secondslash(ch, victim);
             force_learn_from_failure(ch, fskill);
@@ -961,7 +961,7 @@ void fskill_slash(CHAR_DATA* ch, char* argument)
         }
         ch_printf(ch, "Your attack cleanly slices across their midsection!\n\r");
         ch_printf(victim, "Their attack cleanly slices across your midsection!\n\r");
-        act(AT_WHITE, "$N grimaces as $n's lightsaber slices into them!", ch, NULL, victim, TO_NOTVICT);
+        act(AT_WHITE, "$N grimaces as $n's lightsaber slices into them!", ch, nullptr, victim, TO_NOTVICT);
 
         dam = URANGE(40,
                      number_range(0, ch->force_skill[FORCE_SKILL_STRIKE] * ch->force_control /
@@ -978,10 +978,10 @@ void fskill_slash(CHAR_DATA* ch, char* argument)
     }
 
     victim = ch->fighting->who;
-    if ((wield = get_eq_char(ch, WEAR_WIELD)) == NULL ||
+    if ((wield = get_eq_char(ch, WEAR_WIELD)) == nullptr ||
         ((wield->value[3] != WEAPON_LIGHTSABER) && (wield->value[3] != WEAPON_DUAL_LIGHTSABER)))
     {
-        if ((wield = get_eq_char(ch, WEAR_DUAL_WIELD)) == NULL ||
+        if ((wield = get_eq_char(ch, WEAR_DUAL_WIELD)) == nullptr ||
             ((wield->value[3] != WEAPON_LIGHTSABER) && (wield->value[3] != WEAPON_DUAL_LIGHTSABER)))
         {
             send_to_char("You must be wielding a lightsaber to use this skill.\r\n", ch);
@@ -1035,12 +1035,12 @@ void fskill_whirlwind(CHAR_DATA* ch, char* argument)
     CHAR_DATA* victim;
     int dam;
     fskill = force_test_skill_use("whirlwind", ch, FORCE_COMBAT);
-    if (fskill == NULL)
+    if (fskill == nullptr)
         return;
     victim = ch->fighting->who;
-    if ((wield = get_eq_char(ch, WEAR_WIELD)) == NULL || (wield->value[3] != WEAPON_LIGHTSABER))
+    if ((wield = get_eq_char(ch, WEAR_WIELD)) == nullptr || (wield->value[3] != WEAPON_LIGHTSABER))
     {
-        if ((wield = get_eq_char(ch, WEAR_DUAL_WIELD)) == NULL ||
+        if ((wield = get_eq_char(ch, WEAR_DUAL_WIELD)) == nullptr ||
             ((wield->value[3] != WEAPON_LIGHTSABER) && (wield->value[3] != WEAPON_DUAL_LIGHTSABER)))
         {
             send_to_char("You must be wielding a lightsaber to use this skill.\r\n", ch);
@@ -1089,7 +1089,7 @@ void fskill_squeeze(CHAR_DATA* ch, char* argument)
     if (argument[0] == '\0')
         argument = str_dup(reinterpret_cast<const char*>(ch->dest_buf));
     fskill = force_test_skill_use("choke", ch, FORCE_NONCOMBAT);
-    if (fskill == NULL)
+    if (fskill == nullptr)
         return;
     victim = force_get_victim(ch, argument, FORCE_INROOM);
     if (!victim)
@@ -1164,7 +1164,7 @@ void fskill_force_lightning(CHAR_DATA* ch, char* argument)
     if (argument[0] == '\0')
         argument = str_dup(reinterpret_cast<const char*>(ch->dest_buf));
     fskill = force_test_skill_use("lightning", ch, FORCE_COMBAT);
-    if (fskill == NULL)
+    if (fskill == nullptr)
         return;
     victim = ch->fighting->who;
     if (!victim)
@@ -1178,7 +1178,7 @@ void fskill_force_lightning(CHAR_DATA* ch, char* argument)
         return;
     }
     victim = ch->fighting->who;
-    if ((wield = get_eq_char(ch, WEAR_WIELD)) != NULL || (wield = get_eq_char(ch, WEAR_DUAL_WIELD)) != NULL)
+    if ((wield = get_eq_char(ch, WEAR_WIELD)) != nullptr || (wield = get_eq_char(ch, WEAR_DUAL_WIELD)) != nullptr)
     {
         send_to_char("You cannot be wielding anything when you use this skill.\r\n", ch);
         return;
@@ -1230,7 +1230,7 @@ void fskill_fdisguise(CHAR_DATA* ch, char* argument)
 {
     FORCE_SKILL* fskill;
     fskill = force_test_skill_use("fdisguise", ch, FORCE_NONCOMBAT);
-    if (fskill == NULL)
+    if (fskill == nullptr)
         return;
     if (argument[0] == '\0' && !ch->dest_buf)
     {
@@ -1260,22 +1260,22 @@ void fskill_fdisguise(CHAR_DATA* ch, char* argument)
     {
     default:
         ch->dest_buf = str_dup(argument);
-        send_to_char(force_parse_string(ch, NULL, fskill->ch_effect[0]), ch);
-        force_send_to_room(ch, NULL, force_parse_string(ch, NULL, fskill->room_effect[0]));
+        send_to_char(force_parse_string(ch, nullptr, fskill->ch_effect[0]), ch);
+        force_send_to_room(ch, nullptr, force_parse_string(ch, nullptr, fskill->room_effect[0]));
         add_timer(ch, TIMER_DO_FUN, 5, fskill_fdisguise, 1);
         return;
     case 1:
         if (number_range(0, 4) != 0 && number_range(0, 100) > ch->force_skill[FORCE_SKILL_DISGUISE])
         {
-            send_to_char(force_parse_string(ch, NULL, fskill->ch_effect[2]), ch);
-            force_send_to_room(ch, NULL, force_parse_string(ch, NULL, fskill->room_effect[2]));
+            send_to_char(force_parse_string(ch, nullptr, fskill->ch_effect[2]), ch);
+            force_send_to_room(ch, nullptr, force_parse_string(ch, nullptr, fskill->room_effect[2]));
             force_learn_from_failure(ch, fskill);
             ch->substate = SUB_NONE;
             DISPOSE(ch->dest_buf);
             return;
         }
-        send_to_char(force_parse_string(ch, NULL, fskill->ch_effect[1]), ch);
-        force_send_to_room(ch, NULL, force_parse_string(ch, NULL, fskill->room_effect[1]));
+        send_to_char(force_parse_string(ch, nullptr, fskill->ch_effect[1]), ch);
+        force_send_to_room(ch, nullptr, force_parse_string(ch, nullptr, fskill->room_effect[1]));
         force_learn_from_success(ch, fskill);
         ch->pcdata->disguise = str_dup(argument);
         if (!ch->dest_buf)
@@ -1284,8 +1284,8 @@ void fskill_fdisguise(CHAR_DATA* ch, char* argument)
         break;
 
     case SUB_TIMER_DO_ABORT:
-        send_to_char(force_parse_string(ch, NULL, fskill->ch_effect[2]), ch);
-        force_send_to_room(ch, NULL, force_parse_string(ch, NULL, fskill->room_effect[2]));
+        send_to_char(force_parse_string(ch, nullptr, fskill->ch_effect[2]), ch);
+        force_send_to_room(ch, nullptr, force_parse_string(ch, nullptr, fskill->room_effect[2]));
         DISPOSE(ch->dest_buf);
         break;
     }
@@ -1347,7 +1347,7 @@ void fskill_makelightsaber(CHAR_DATA* ch, char* argument)
     AFFECT_DATA* paf2;
     FORCE_SKILL* fskill;
     fskill = force_test_skill_use("makelightsaber", ch, FORCE_NONCOMBAT);
-    if (fskill == NULL)
+    if (fskill == nullptr)
         return;
 
     strcpy_s(arg, argument);
@@ -1457,7 +1457,7 @@ void fskill_makelightsaber(CHAR_DATA* ch, char* argument)
         if (number_percent() < chance)
         {
             send_to_char("&GYou begin the long process of crafting a lightsaber.\n\r", ch);
-            act(AT_PLAIN, "$n takes $s tools and a small oven and begins to work on something.", ch, NULL, argument,
+            act(AT_PLAIN, "$n takes $s tools and a small oven and begins to work on something.", ch, nullptr, argument,
                 TO_ROOM);
             add_timer(ch, TIMER_DO_FUN, 25, fskill_makelightsaber, 1);
             ch->dest_buf = str_dup(arg);
@@ -1486,7 +1486,7 @@ void fskill_makelightsaber(CHAR_DATA* ch, char* argument)
     level = IS_NPC(ch) ? ch->top_level : (int)(ch->force_skill[FORCE_SKILL_MAKELIGHTSABER]);
     vnum = SABER_VNUM;
 
-    if ((pObjIndex = get_obj_index(vnum)) == NULL)
+    if ((pObjIndex = get_obj_index(vnum)) == nullptr)
     {
         send_to_char("&RThe item you are trying to create is missing from the database.\n\rPlease inform the "
                      "administration of this error.\n\r",
@@ -1627,7 +1627,7 @@ void fskill_makelightsaber(CHAR_DATA* ch, char* argument)
     paf->location = get_atype("hitroll");
     paf->modifier = URANGE(0, gems, level / 30);
     paf->bitvector = 0;
-    paf->next = NULL;
+    paf->next = nullptr;
     LINK(paf, obj->first_affect, obj->last_affect, next, prev);
     ++top_affect;
 
@@ -1637,7 +1637,7 @@ void fskill_makelightsaber(CHAR_DATA* ch, char* argument)
     paf2->location = get_atype("parry");
     paf2->modifier = (level / 3);
     paf2->bitvector = 0;
-    paf2->next = NULL;
+    paf2->next = nullptr;
     LINK(paf2, obj->first_affect, obj->last_affect, next, prev);
     ++top_affect;
 
@@ -1651,7 +1651,7 @@ void fskill_makelightsaber(CHAR_DATA* ch, char* argument)
     obj = obj_to_char(obj, ch);
 
     send_to_char("&GYou finish your work and hold up your newly created lightsaber.&w\n\r", ch);
-    act(AT_PLAIN, "$n finishes making $s new lightsaber.", ch, NULL, argument, TO_ROOM);
+    act(AT_PLAIN, "$n finishes making $s new lightsaber.", ch, nullptr, argument, TO_ROOM);
 
     {
         //         xpgain = UMIN( obj->cost/6.25 ,( exp_level(ch->skill_level[FORCE_ABILITY]+1) -
@@ -1674,7 +1674,7 @@ void fskill_makedualsaber(CHAR_DATA* ch, char* argument)
     AFFECT_DATA* paf;
     FORCE_SKILL* fskill;
     fskill = force_test_skill_use("makedualsaber", ch, FORCE_NONCOMBAT);
-    if (fskill == NULL)
+    if (fskill == nullptr)
         return;
 
     strcpy_s(arg, argument);
@@ -1784,7 +1784,7 @@ void fskill_makedualsaber(CHAR_DATA* ch, char* argument)
         if (number_percent() < chance)
         {
             send_to_char("&GYou begin the long process of crafting a dual-bladed lightsaber.\n\r", ch);
-            act(AT_PLAIN, "$n takes $s tools and a small oven and begins to work on something.", ch, NULL, argument,
+            act(AT_PLAIN, "$n takes $s tools and a small oven and begins to work on something.", ch, nullptr, argument,
                 TO_ROOM);
             add_timer(ch, TIMER_DO_FUN, 25, fskill_makedualsaber, 1);
             ch->dest_buf = str_dup(arg);
@@ -1813,7 +1813,7 @@ void fskill_makedualsaber(CHAR_DATA* ch, char* argument)
     level = IS_NPC(ch) ? ch->top_level : (int)(ch->force_skill[FORCE_SKILL_MAKEDUALSABER]);
     vnum = SABER_VNUM;
 
-    if ((pObjIndex = get_obj_index(vnum)) == NULL)
+    if ((pObjIndex = get_obj_index(vnum)) == nullptr)
     {
         send_to_char("&RThe item you are trying to create is missing from the database.\n\rPlease inform the "
                      "administration of this error.\n\r",
@@ -1954,7 +1954,7 @@ void fskill_makedualsaber(CHAR_DATA* ch, char* argument)
     paf->location = get_atype("hitroll");
     paf->modifier = URANGE(0, gems + 4, 8);
     paf->bitvector = 0;
-    paf->next = NULL;
+    paf->next = nullptr;
     LINK(paf, obj->first_affect, obj->last_affect, next, prev);
     ++top_affect;
 
@@ -1968,7 +1968,7 @@ void fskill_makedualsaber(CHAR_DATA* ch, char* argument)
     obj = obj_to_char(obj, ch);
 
     send_to_char("&GYou finish your work and hold up your newly created dual-bladed lightsaber.&w\n\r", ch);
-    act(AT_PLAIN, "$n finishes making $s new dual-bladed lightsaber.", ch, NULL, argument, TO_ROOM);
+    act(AT_PLAIN, "$n finishes making $s new dual-bladed lightsaber.", ch, nullptr, argument, TO_ROOM);
 
     {
         //         xpgain = UMIN( obj->cost/6.25 ,( exp_level(ch->skill_level[FORCE_ABILITY]+1) -
@@ -1987,13 +1987,13 @@ void fskill_finish(CHAR_DATA* ch, char* argument)
     char buf[MAX_STRING_LENGTH];
 
     fskill = force_test_skill_use("finish", ch, FORCE_COMBAT);
-    if (fskill == NULL)
+    if (fskill == nullptr)
         return;
     victim = ch->fighting->who;
-    if ((wield = get_eq_char(ch, WEAR_WIELD)) == NULL ||
+    if ((wield = get_eq_char(ch, WEAR_WIELD)) == nullptr ||
         ((wield->value[3] != WEAPON_LIGHTSABER) && wield->value[3] != WEAPON_DUAL_LIGHTSABER))
     {
-        if ((wield = get_eq_char(ch, WEAR_DUAL_WIELD)) == NULL || (wield->value[3] != WEAPON_LIGHTSABER))
+        if ((wield = get_eq_char(ch, WEAR_DUAL_WIELD)) == nullptr || (wield->value[3] != WEAPON_LIGHTSABER))
         {
             send_to_char("You must be wielding a lightsaber to use this skill.\r\n", ch);
             return;
@@ -2040,7 +2040,7 @@ void fskill_finish(CHAR_DATA* ch, char* argument)
           {
              char minibuf[MAX_STRING_LENGTH];
                          sprintf_s(minibuf,"&C[&B-&c=&b| &G&W$n is surrounded by a blue glow before $e is killed
-       &b|&c=&B-&C]&G&w\r\n"); act( AT_PLAIN, minibuf, victim, NULL, minibuf , TO_ROOM ); send_to_char("&C[&B-&c=&b|
+       &b|&c=&B-&C]&G&w\r\n"); act( AT_PLAIN, minibuf, victim, nullptr, minibuf , TO_ROOM ); send_to_char("&C[&B-&c=&b|
        &G&WYou are surrounded by a blue glow before you are killed &b|&c=&B-&C]&G&w\r\n",victim); stop_fighting( victim,
        true ); stop_fighting( ch, true ); victim->hit = victim->max_hit; victim->mana = victim->max_mana; victim->move =
        victim->max_move; ch->hit = ch->max_hit; ch->mana = ch->max_mana; ch->move = ch->max_move;
@@ -2073,7 +2073,7 @@ void fskill_fhelp(CHAR_DATA* ch, char* argument)
     bool match = false;
     int x, len;
     fskill = force_test_skill_use("fhelp", ch, FORCE_NONCOMBAT);
-    if (fskill == NULL)
+    if (fskill == nullptr)
         return;
     if (!argument || argument[0] == '\0')
         argument = STRALLOC("force");
@@ -2110,7 +2110,7 @@ void fskill_fhelp(CHAR_DATA* ch, char* argument)
     ch_printf(ch, "&G&W%s\r\n", capitalize(strrep(fhelp->name, "_", " ")).c_str());
     draw_force_line_rev(ch, 55);
     send_to_char("\r\n", ch);
-    send_to_char(force_parse_string(ch, NULL, fhelp->desc), ch);
+    send_to_char(force_parse_string(ch, nullptr, fhelp->desc), ch);
     return;
 }
 
@@ -2125,17 +2125,17 @@ bool check_reflect(CHAR_DATA* ch, CHAR_DATA* victim, int dam)
     if (!IS_NPC(victim) && victim->force_skill[FORCE_SKILL_REFLECT] < 1)
         return false;
 
-    if ((wield = get_eq_char(victim, WEAR_WIELD)) == NULL || (wield->value[3] != WEAPON_LIGHTSABER))
+    if ((wield = get_eq_char(victim, WEAR_WIELD)) == nullptr || (wield->value[3] != WEAPON_LIGHTSABER))
     {
-        if ((wield = get_eq_char(victim, WEAR_DUAL_WIELD)) == NULL || (wield->value[3] != WEAPON_LIGHTSABER))
+        if ((wield = get_eq_char(victim, WEAR_DUAL_WIELD)) == nullptr || (wield->value[3] != WEAPON_LIGHTSABER))
             return false;
     }
-    if (get_eq_char(ch, WEAR_WIELD) == NULL && get_eq_char(ch, WEAR_DUAL_WIELD) == NULL)
+    if (get_eq_char(ch, WEAR_WIELD) == nullptr && get_eq_char(ch, WEAR_DUAL_WIELD) == nullptr)
         return false;
-    if ((chwield = get_eq_char(ch, WEAR_WIELD)) == NULL ||
+    if ((chwield = get_eq_char(ch, WEAR_WIELD)) == nullptr ||
         (chwield->value[3] != WEAPON_BLASTER && chwield->value[3] != WEAPON_BOWCASTER))
     {
-        if ((chwield = get_eq_char(ch, WEAR_DUAL_WIELD)) == NULL ||
+        if ((chwield = get_eq_char(ch, WEAR_DUAL_WIELD)) == nullptr ||
             (chwield->value[3] != WEAPON_BLASTER && chwield->value[3] != WEAPON_BOWCASTER))
             return false;
     }
@@ -2155,14 +2155,14 @@ bool check_reflect(CHAR_DATA* ch, CHAR_DATA* victim, int dam)
             ch_printf(victim, "&G&YYou swing your lightsaber in an arc, reflecting %s's blast!&w\r\n", ch->short_descr);
             sprintf_s(roombuf, "&GY%s swings their lightsaber in an arc, reflecting %s's blast!&w\r\n", victim->name,
                       ch->short_descr);
-            force_send_to_room(victim, NULL, roombuf);
+            force_send_to_room(victim, nullptr, roombuf);
         }
         else
         {
             ch_printf(victim, "&G&YYou swing your lightsaber in an arc, reflecting %s's blast!&G&w\r\n", ch->name);
             sprintf_s(roombuf, "&G&Y%s swings their lightsaber in an arc, reflecting %s's blast!&w\r\n", victim->name,
                       ch->name);
-            force_send_to_room(victim, NULL, roombuf);
+            force_send_to_room(victim, nullptr, roombuf);
         }
     }
     if (number_range(1, 100) > chances)
@@ -2259,7 +2259,7 @@ void fskill_convert(CHAR_DATA* ch, char* argument)
     FORCE_SKILL* fskill;
     CHAR_DATA* victim;
     fskill = force_test_skill_use("convert", ch, FORCE_NONCOMBAT);
-    if (fskill == NULL)
+    if (fskill == nullptr)
         return;
     victim = force_get_victim(ch, argument, FORCE_INROOM);
     if (!victim)

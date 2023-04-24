@@ -63,7 +63,7 @@ int num_changes(void);
  */
 
 int maxChanges;
-#define NULLSTR(str) (str == NULL || str[0] == '\0')
+#define NULLSTR(str) (str == nullptr || str[0] == '\0')
 CHANGE_DATA* changes_table;
 
 void load_changes()

@@ -189,7 +189,7 @@ void do_comment(CHAR_DATA* ch, char* argument)
             send_to_char(buf, ch);
         }
 
-        /* act( AT_ACTION, "$n glances over the notes.", ch, NULL, NULL, TO_ROOM ); */
+        /* act( AT_ACTION, "$n glances over the notes.", ch, nullptr, nullptr, TO_ROOM ); */
         return;
     }
 
@@ -249,7 +249,7 @@ void do_comment(CHAR_DATA* ch, char* argument)
                           pnote->to_list);
                 send_to_char(buf, ch);
                 send_to_char(pnote->text, ch);
-                /* act( AT_ACTION, "$n reads a note.", ch, NULL, NULL, TO_ROOM ); */
+                /* act( AT_ACTION, "$n reads a note.", ch, nullptr, nullptr, TO_ROOM ); */
                 return;
             }
         }
@@ -296,7 +296,7 @@ void do_comment(CHAR_DATA* ch, char* argument)
             STRFREE(ch->pnote->sender);
             DISPOSE(ch->pnote);
         }
-        ch->pnote = NULL;
+        ch->pnote = nullptr;
 
         send_to_char("Ok.\n\r", ch);
         return;
@@ -346,7 +346,7 @@ void do_comment(CHAR_DATA* ch, char* argument)
             return;
         }
 
-        /* act( AT_ACTION, "$n posts a note.", ch, NULL, NULL, TO_ROOM ); */
+        /* act( AT_ACTION, "$n posts a note.", ch, nullptr, nullptr, TO_ROOM ); */
 
         strtime = ctime(&current_time);
         strtime[strlen(strtime) - 1] = '\0';
@@ -354,20 +354,20 @@ void do_comment(CHAR_DATA* ch, char* argument)
         ch->pnote->date = STRALLOC(strtime);
 
         pnote = ch->pnote;
-        ch->pnote = NULL;
+        ch->pnote = nullptr;
 
         /* LIFO to make life easier */
         pnote->next = victim->comments;
         if (victim->comments)
             victim->comments->prev = pnote;
-        pnote->prev = NULL;
+        pnote->prev = nullptr;
         victim->comments = pnote;
 
         save_char_obj(victim);
 
 #ifdef NOTDEFD
         sprintf_s(notefile, "%s/%s", BOARD_DIR, board->note_file);
-        if ((fp = fopen(notefile, "a")) == NULL)
+        if ((fp = fopen(notefile, "a")) == nullptr)
         {
             perror(notefile);
         }
@@ -422,7 +422,7 @@ void do_comment(CHAR_DATA* ch, char* argument)
             {
                 comment_remove(ch, victim, pnote);
                 send_to_char("Ok.\n\r", ch);
-                /* act( AT_ACTION, "$n removes a note.", ch, NULL, NULL, TO_ROOM ); */
+                /* act( AT_ACTION, "$n removes a note.", ch, nullptr, nullptr, TO_ROOM ); */
                 return;
             }
         }
@@ -496,7 +496,7 @@ void fread_comment(CHAR_DATA* ch, FILE* fp)
         pnote->text = fread_string(fp);
 
         pnote->next = ch->comments;
-        pnote->prev = NULL;
+        pnote->prev = nullptr;
         ch->comments = pnote;
         return;
     }

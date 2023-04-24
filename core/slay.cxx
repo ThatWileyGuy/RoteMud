@@ -94,7 +94,7 @@ SLAY_DATA* get_slay(char* name)
     for (slay = first_slay; slay; slay = slay->next)
         if (!str_cmp(name, slay->type))
             return slay;
-    return NULL;
+    return nullptr;
 }
 
 #if defined(KEY)
@@ -172,12 +172,12 @@ void load_slays(void)
     FILE* fp;
     int slaycount;
 
-    first_slay = NULL;
-    last_slay = NULL;
+    first_slay = nullptr;
+    last_slay = nullptr;
 
     sprintf_s(filename, "%s", SLAY_FILE);
 
-    if ((fp = fopen(filename, "r")) != NULL)
+    if ((fp = fopen(filename, "r")) != nullptr)
     {
         slaycount = 0;
         for (;;)
@@ -205,7 +205,7 @@ void load_slays(void)
                 {
                     bug("load_slays: more slaytypes than MAX_SLAY_TYPES %d", MAX_SLAY_TYPES);
                     fclose(fp);
-                    fp = NULL;
+                    fp = nullptr;
                     return;
                 }
                 CREATE(slay, SLAY_DATA, 1);
@@ -223,7 +223,7 @@ void load_slays(void)
             }
         }
         fclose(fp);
-        fp = NULL;
+        fp = nullptr;
     }
     return;
 }
@@ -237,7 +237,7 @@ void save_slays(void)
 
     snprintf(filename, 256, "%s%s", SYSTEM_DIR, SLAY_FILE);
 
-    if ((fp = fopen(filename, "w")) == NULL)
+    if ((fp = fopen(filename, "w")) == nullptr)
     {
         bug("%s", "save_slay: fopen");
         perror(filename);
@@ -257,7 +257,7 @@ void save_slays(void)
         }
         fprintf(fp, "%s", "#END\n");
         fclose(fp);
-        fp = NULL;
+        fp = nullptr;
     }
     return;
 }
@@ -291,7 +291,7 @@ void do_slay(CHAR_DATA* ch, char* argument)
     argument = one_argument(argument, who);
     argument = one_argument(argument, type);
 
-    if (!str_prefix(who, "list") || who == NULL)
+    if (!str_prefix(who, "list") || who == nullptr)
     {
         set_char_color(AT_GREEN, ch);
         send_to_char("Syntax: slay <victim> [type]\n\r", ch);
@@ -308,7 +308,7 @@ void do_slay(CHAR_DATA* ch, char* argument)
         return;
     }
 
-    if ((victim = get_char_room(ch, who)) == NULL)
+    if ((victim = get_char_room(ch, who)) == nullptr)
     {
         send_to_char("They aren't here.\n\r", ch);
         return;
@@ -328,9 +328,9 @@ void do_slay(CHAR_DATA* ch, char* argument)
 
     if (type[0] == '\0')
     {
-        act(AT_IMMORT, "You brutally slay $N!", ch, NULL, victim, TO_CHAR);
-        act(AT_IMMORT, "$n chops you up into little pieces!", ch, NULL, victim, TO_VICT);
-        act(AT_IMMORT, "$n brutally slays $N!", ch, NULL, victim, TO_NOTVICT);
+        act(AT_IMMORT, "You brutally slay $N!", ch, nullptr, victim, TO_CHAR);
+        act(AT_IMMORT, "$n chops you up into little pieces!", ch, nullptr, victim, TO_VICT);
+        act(AT_IMMORT, "$n brutally slays $N!", ch, nullptr, victim, TO_NOTVICT);
         set_cur_char(victim);
         raw_kill(ch, victim);
         return;
@@ -344,9 +344,9 @@ void do_slay(CHAR_DATA* ch, char* argument)
                 ((ch->top_level == LEVEL_IMPLEMENTOR) && !str_cmp(type, slay->type)))
             {
                 found = true;
-                act(slay->color, slay->cmsg, ch, NULL, victim, TO_CHAR);
-                act(slay->color, slay->vmsg, ch, NULL, victim, TO_VICT);
-                act(slay->color, slay->rmsg, ch, NULL, victim, TO_NOTVICT);
+                act(slay->color, slay->cmsg, ch, nullptr, victim, TO_CHAR);
+                act(slay->color, slay->vmsg, ch, nullptr, victim, TO_VICT);
+                act(slay->color, slay->rmsg, ch, nullptr, victim, TO_NOTVICT);
                 set_cur_char(victim);
                 raw_kill(ch, victim);
                 return;
@@ -380,7 +380,7 @@ void do_makeslay(CHAR_DATA* ch, char* argument)
     }
 
     /* Glaring oversight just noticed - Samson 7-5-99 */
-    if ((slay = get_slay(argument)) != NULL)
+    if ((slay = get_slay(argument)) != nullptr)
     {
         send_to_char("That slay type already exists.\n\r", ch);
         return;
@@ -466,7 +466,7 @@ void do_setslay(CHAR_DATA* ch, char* argument)
         return;
     }
 
-    if ((slay = get_slay(arg1)) == NULL)
+    if ((slay = get_slay(arg1)) == nullptr)
     {
         send_to_char("No such slaytype.\n\r", ch);
         return;
@@ -551,7 +551,7 @@ void do_showslay(CHAR_DATA* ch, char* argument)
         return;
     }
 
-    if ((slay = get_slay(argument)) == NULL)
+    if ((slay = get_slay(argument)) == nullptr)
     {
         send_to_char("No such slaytype.\n\r", ch);
         return;

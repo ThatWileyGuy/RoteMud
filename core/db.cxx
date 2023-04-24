@@ -433,7 +433,7 @@ void shutdown_mud(char const* reason)
 {
     FILE* fp;
 
-    if ((fp = fopen(SHUTDOWN_FILE, "a")) != NULL)
+    if ((fp = fopen(SHUTDOWN_FILE, "a")) != nullptr)
     {
         fprintf(fp, "%s\n", reason);
         fclose(fp);
@@ -525,40 +525,40 @@ void boot_db(bool fCopyOver)
     numobjsloaded = 0;
     physicalobjects = 0;
     sysdata.maxplayers = 0;
-    first_object = NULL;
-    last_object = NULL;
-    first_char = NULL;
-    last_char = NULL;
-    first_area = NULL;
-    last_area = NULL;
-    first_build = NULL;
-    last_area = NULL;
-    first_shop = NULL;
-    last_shop = NULL;
-    first_repair = NULL;
-    last_repair = NULL;
-    first_teleport = NULL;
-    last_teleport = NULL;
-    first_asort = NULL;
-    last_asort = NULL;
-    extracted_obj_queue = NULL;
-    extracted_char_queue = NULL;
+    first_object = nullptr;
+    last_object = nullptr;
+    first_char = nullptr;
+    last_char = nullptr;
+    first_area = nullptr;
+    last_area = nullptr;
+    first_build = nullptr;
+    last_area = nullptr;
+    first_shop = nullptr;
+    last_shop = nullptr;
+    first_repair = nullptr;
+    last_repair = nullptr;
+    first_teleport = nullptr;
+    last_teleport = nullptr;
+    first_asort = nullptr;
+    last_asort = nullptr;
+    extracted_obj_queue = nullptr;
+    extracted_char_queue = nullptr;
     cur_qobjs = 0;
     cur_qchars = 0;
-    cur_char = NULL;
+    cur_char = nullptr;
     cur_obj = 0;
     cur_obj_serial = 0;
     cur_char_died = false;
     cur_obj_extracted = false;
-    cur_room = NULL;
-    quitting_char = NULL;
-    loading_char = NULL;
-    saving_char = NULL;
+    cur_room = nullptr;
+    quitting_char = nullptr;
+    loading_char = nullptr;
+    saving_char = nullptr;
     CREATE(auction, AUCTION_DATA, 1);
-    auction->item = NULL;
+    auction->item = nullptr;
     for (wear = 0; wear < MAX_WEAR; wear++)
         for (x = 0; x < MAX_LAYERS; x++)
-            save_equipment[wear][x] = NULL;
+            save_equipment[wear][x] = nullptr;
 
     /*
      * Init random number generator.
@@ -819,7 +819,7 @@ void boot_db(bool fCopyOver)
         FILE* fpList;
 
         log_string("Reading in area files...");
-        if ((fpList = fopen(AREA_DIR AREA_LIST, "r")) == NULL)
+        if ((fpList = fopen(AREA_DIR AREA_LIST, "r")) == nullptr)
         {
             shutdown_mud("Unable to open area list");
             exit(1);
@@ -914,10 +914,10 @@ void load_area(FILE* fp)
     AREA_DATA* pArea;
 
     CREATE(pArea, AREA_DATA, 1);
-    pArea->first_room = pArea->last_room = NULL;
-    pArea->next_on_planet = NULL;
-    pArea->prev_on_planet = NULL;
-    pArea->planet = NULL;
+    pArea->first_room = pArea->last_room = nullptr;
+    pArea->next_on_planet = nullptr;
+    pArea->prev_on_planet = nullptr;
+    pArea->planet = nullptr;
     pArea->name = fread_string_nohash(fp);
     pArea->author = STRALLOC("unknown");
     pArea->filename = str_dup(strArea);
@@ -1210,8 +1210,8 @@ void load_mobiles(AREA_DATA* tarea, FILE* fp)
 
         pMobIndex->act = fread_number(fp) | ACT_IS_NPC;
         pMobIndex->affected_by = fread_number(fp);
-        pMobIndex->pShop = NULL;
-        pMobIndex->rShop = NULL;
+        pMobIndex->pShop = nullptr;
+        pMobIndex->rShop = nullptr;
         pMobIndex->alignment = fread_number(fp);
         letter = fread_letter(fp);
         pMobIndex->level = fread_number(fp);
@@ -1523,7 +1523,7 @@ void load_objects(AREA_DATA* tarea, FILE* fp)
  */
 void load_resets(AREA_DATA* tarea, FILE* fp)
 {
-    ROOM_INDEX_DATA* pRoomIndex = NULL;
+    ROOM_INDEX_DATA* pRoomIndex = nullptr;
     ROOM_INDEX_DATA* roomlist;
     bool not01 = false;
     int count = 0;
@@ -1589,21 +1589,21 @@ void load_resets(AREA_DATA* tarea, FILE* fp)
             return;
 
         case 'M':
-            if (get_mob_index(arg1) == NULL && fBootDb)
+            if (get_mob_index(arg1) == nullptr && fBootDb)
                 boot_log("%s: %s (%d) 'M': mobile %d doesn't exist.", __FUNCTION__, tarea->filename, count, arg1);
 
-            if ((pRoomIndex = get_room_index(arg3)) == NULL && fBootDb)
+            if ((pRoomIndex = get_room_index(arg3)) == nullptr && fBootDb)
                 boot_log("%s: %s (%d) 'M': room %d doesn't exist.", __FUNCTION__, tarea->filename, count, arg3);
             else
                 add_reset(pRoomIndex, letter, extra, arg1, arg2, arg3);
             break;
 
         case 'O':
-            if (get_obj_index(arg1) == NULL && fBootDb)
+            if (get_obj_index(arg1) == nullptr && fBootDb)
                 boot_log("%s: %s (%d) '%c': object %d doesn't exist.", __FUNCTION__, tarea->filename, count, letter,
                          arg1);
 
-            if ((pRoomIndex = get_room_index(arg3)) == NULL && fBootDb)
+            if ((pRoomIndex = get_room_index(arg3)) == nullptr && fBootDb)
                 boot_log("%s: %s (%d) '%c': room %d doesn't exist.", __FUNCTION__, tarea->filename, count, letter,
                          arg3);
             else
@@ -1616,12 +1616,12 @@ void load_resets(AREA_DATA* tarea, FILE* fp)
             break;
 
         case 'P':
-            if (get_obj_index(arg1) == NULL && fBootDb)
+            if (get_obj_index(arg1) == nullptr && fBootDb)
                 boot_log("%s: %s (%d) '%c': object %d doesn't exist.", __FUNCTION__, tarea->filename, count, letter,
                          arg1);
             if (arg3 > 0)
             {
-                if (get_obj_index(arg3) == NULL && fBootDb)
+                if (get_obj_index(arg3) == nullptr && fBootDb)
                     boot_log("%s: %s (%d) 'P': destination object %d doesn't exist.", __FUNCTION__, tarea->filename,
                              count, arg3);
                 if (extra > 1)
@@ -1639,7 +1639,7 @@ void load_resets(AREA_DATA* tarea, FILE* fp)
 
         case 'G':
         case 'E':
-            if (get_obj_index(arg1) == NULL && fBootDb)
+            if (get_obj_index(arg1) == nullptr && fBootDb)
                 boot_log("%s: %s (%d) '%c': object %d doesn't exist.", __FUNCTION__, tarea->filename, count, letter,
                          arg1);
             if (!pRoomIndex)
@@ -1746,24 +1746,24 @@ void load_room_reset(ROOM_INDEX_DATA* room, FILE* fp)
         return;
 
     case 'M':
-        if (get_mob_index(arg1) == NULL && fBootDb)
+        if (get_mob_index(arg1) == nullptr && fBootDb)
             boot_log("%s: %s (%d) 'M': mobile %d doesn't exist.", __FUNCTION__, room->area->filename, count, arg1);
         break;
 
     case 'O':
-        if (get_obj_index(arg1) == NULL && fBootDb)
+        if (get_obj_index(arg1) == nullptr && fBootDb)
             boot_log("%s: %s (%d) '%c': object %d doesn't exist.", __FUNCTION__, room->area->filename, count, letter,
                      arg1);
         break;
 
     case 'P':
-        if (get_obj_index(arg1) == NULL && fBootDb)
+        if (get_obj_index(arg1) == nullptr && fBootDb)
             boot_log("%s: %s (%d) '%c': object %d doesn't exist.", __FUNCTION__, room->area->filename, count, letter,
                      arg1);
 
         if (arg3 <= 0)
             arg3 = OBJ_VNUM_MONEY_ONE; // This may look stupid, but for some reason it works.
-        if (get_obj_index(arg3) == NULL && fBootDb)
+        if (get_obj_index(arg3) == nullptr && fBootDb)
             boot_log("%s: %s (%d) 'P': destination object %d doesn't exist.", __FUNCTION__, room->area->filename, count,
                      arg3);
         if (extra > 1)
@@ -1772,7 +1772,7 @@ void load_room_reset(ROOM_INDEX_DATA* room, FILE* fp)
 
     case 'G':
     case 'E':
-        if (get_obj_index(arg1) == NULL && fBootDb)
+        if (get_obj_index(arg1) == nullptr && fBootDb)
             boot_log("%s: %s (%d) '%c': object %d doesn't exist.", __FUNCTION__, room->area->filename, count, letter,
                      arg1);
         break;
@@ -1831,7 +1831,7 @@ void load_rooms(AREA_DATA* tarea, FILE* fp)
         exit(1);
     }
 
-    tarea->first_room = tarea->last_room = NULL;
+    tarea->first_room = tarea->last_room = nullptr;
 
     for (;;)
     {
@@ -1862,7 +1862,7 @@ void load_rooms(AREA_DATA* tarea, FILE* fp)
 
         tmpBootDb = fBootDb;
         fBootDb = false;
-        if (get_room_index(vnum) != NULL)
+        if (get_room_index(vnum) != nullptr)
         {
             if (tmpBootDb)
             {
@@ -1883,17 +1883,17 @@ void load_rooms(AREA_DATA* tarea, FILE* fp)
         {
             oldroom = false;
             CREATE(pRoomIndex, ROOM_INDEX_DATA, 1);
-            pRoomIndex->first_person = NULL;
-            pRoomIndex->last_person = NULL;
-            pRoomIndex->first_content = NULL;
-            pRoomIndex->last_content = NULL;
+            pRoomIndex->first_person = nullptr;
+            pRoomIndex->last_person = nullptr;
+            pRoomIndex->first_content = nullptr;
+            pRoomIndex->last_content = nullptr;
         }
 
         fBootDb = tmpBootDb;
         pRoomIndex->area = tarea;
         pRoomIndex->vnum = vnum;
-        pRoomIndex->first_extradesc = NULL;
-        pRoomIndex->last_extradesc = NULL;
+        pRoomIndex->first_extradesc = nullptr;
+        pRoomIndex->last_extradesc = nullptr;
 
         if (fBootDb)
         {
@@ -1922,8 +1922,8 @@ void load_rooms(AREA_DATA* tarea, FILE* fp)
             pRoomIndex->sector_type = 1;
         }
         pRoomIndex->light = 0;
-        pRoomIndex->first_exit = NULL;
-        pRoomIndex->last_exit = NULL;
+        pRoomIndex->first_exit = nullptr;
+        pRoomIndex->last_exit = nullptr;
 
         for (;;)
         {
@@ -1946,7 +1946,7 @@ void load_rooms(AREA_DATA* tarea, FILE* fp)
                 }
                 else
                 {
-                    pexit = make_exit(pRoomIndex, NULL, door);
+                    pexit = make_exit(pRoomIndex, nullptr, door);
                     pexit->description = fread_string(fp);
                     pexit->keyword = fread_string(fp);
                     pexit->exit_info = 0;
@@ -2043,7 +2043,7 @@ void load_shops(AREA_DATA* tarea, FILE* fp)
             first_shop = pShop;
         else
             last_shop->next = pShop;
-        pShop->next = NULL;
+        pShop->next = nullptr;
         pShop->prev = last_shop;
         last_shop = pShop;
         top_shop++;
@@ -2081,7 +2081,7 @@ void load_repairs(AREA_DATA* tarea, FILE* fp)
             first_repair = rShop;
         else
             last_repair->next = rShop;
-        rShop->next = NULL;
+        rShop->next = nullptr;
         rShop->prev = last_repair;
         last_repair = rShop;
         top_repair++;
@@ -2197,7 +2197,7 @@ void initialize_economy(void)
         gold = rng * rng * 10000;
         boost_economy(tarea, gold);
         for (idx = tarea->low_m_vnum; idx < tarea->hi_m_vnum; idx++)
-            if ((mob = get_mob_index(idx)) != NULL)
+            if ((mob = get_mob_index(idx)) != nullptr)
                 boost_economy(tarea, mob->gold * 10);
     }
 }
@@ -2222,7 +2222,7 @@ void fix_exits(void)
         {
             pexit_next = pexit->next;
             pexit->rvnum = pRoomIndex->vnum;
-            if (pexit->vnum <= 0 || (pexit->to_room = get_room_index(pexit->vnum)) == NULL)
+            if (pexit->vnum <= 0 || (pexit->to_room = get_room_index(pexit->vnum)) == nullptr)
             {
                 if (fBootDb)
                     boot_log("Fix_exits: room %d, exit %s leads to bad vnum (%d)", pRoomIndex->vnum,
@@ -2272,7 +2272,7 @@ EXIT_DATA* get_exit_number(ROOM_INDEX_DATA* room, int xit)
     for (pexit = room->first_exit; pexit; pexit = pexit->next)
         if (++count == xit)
             return pexit;
-    return NULL;
+    return nullptr;
 }
 
 /*
@@ -2316,12 +2316,12 @@ void sort_exits(ROOM_INDEX_DATA* room)
             exits[x]->prev = exits[x - 1];
         else
         {
-            exits[x]->prev = NULL;
+            exits[x]->prev = nullptr;
             room->first_exit = exits[x];
         }
         if (x >= (nexits - 1))
         {
-            exits[x]->next = NULL;
+            exits[x]->next = nullptr;
             room->last_exit = exits[x];
         }
         else
@@ -2411,7 +2411,7 @@ void area_update(void)
             else
                 pArea->age = number_range(0, reset_age / 5);
             pRoomIndex = get_room_index(ROOM_VNUM_SCHOOL);
-            if (pRoomIndex != NULL && pArea == pRoomIndex->area && pArea->reset_frequency == 0)
+            if (pRoomIndex != nullptr && pArea == pRoomIndex->area && pArea->reset_frequency == 0)
                 pArea->age = 15 - 3;
         }
     }
@@ -2427,7 +2427,7 @@ CHAR_DATA* create_mobile(MOB_INDEX_DATA* pMobIndex)
 
     if (!pMobIndex)
     {
-        bug("Create_mobile: NULL pMobIndex.");
+        bug("Create_mobile: nullptr pMobIndex.");
         exit(1);
     }
 
@@ -2435,7 +2435,7 @@ CHAR_DATA* create_mobile(MOB_INDEX_DATA* pMobIndex)
     clear_char(mob);
     mob->pIndexData = pMobIndex;
 
-    mob->editor = NULL;
+    mob->editor = nullptr;
     mob->name = QUICKLINK(pMobIndex->player_name);
     mob->short_descr = QUICKLINK(pMobIndex->short_descr);
     mob->long_descr = QUICKLINK(pMobIndex->long_descr);
@@ -2455,9 +2455,9 @@ CHAR_DATA* create_mobile(MOB_INDEX_DATA* pMobIndex)
     mob->sex = pMobIndex->sex;
     mob->main_ability = 0;
     mob->mob_clan = STRALLOC("");
-    mob->was_sentinel = NULL;
-    mob->plr_home = NULL;
-    mob->guard_data = NULL;
+    mob->was_sentinel = nullptr;
+    mob->plr_home = nullptr;
+    mob->guard_data = nullptr;
 
     if (pMobIndex->ac)
         mob->armor = pMobIndex->ac;
@@ -2526,14 +2526,14 @@ OBJ_DATA* create_object(OBJ_INDEX_DATA* pObjIndex, int level)
 
     if (!pObjIndex)
     {
-        bug("Create_object: NULL pObjIndex.");
+        bug("Create_object: nullptr pObjIndex.");
         exit(1);
     }
 
     CREATE(obj, OBJ_DATA, 1);
 
     obj->pIndexData = pObjIndex;
-    obj->in_room = NULL;
+    obj->in_room = nullptr;
     obj->level = level;
     obj->wear_loc = -1;
     obj->count = 1;
@@ -2729,30 +2729,30 @@ OBJ_DATA* create_object(OBJ_INDEX_DATA* pObjIndex, int level)
  */
 void clear_char(CHAR_DATA* ch)
 {
-    ch->editor = NULL;
-    ch->hunting = NULL;
-    ch->fearing = NULL;
-    ch->hating = NULL;
-    ch->name = NULL;
-    ch->short_descr = NULL;
-    ch->long_descr = NULL;
-    ch->description = NULL;
-    ch->next = NULL;
-    ch->prev = NULL;
-    ch->first_carrying = NULL;
-    ch->last_carrying = NULL;
-    ch->next_in_room = NULL;
-    ch->prev_in_room = NULL;
-    ch->fighting = NULL;
-    ch->switched = NULL;
-    ch->first_affect = NULL;
-    ch->last_affect = NULL;
-    ch->prev_cmd = NULL; /* maps */
-    ch->last_cmd = NULL;
-    ch->dest_buf = NULL;
-    ch->dest_buf_2 = NULL;
-    ch->spare_ptr = NULL;
-    ch->mount = NULL;
+    ch->editor = nullptr;
+    ch->hunting = nullptr;
+    ch->fearing = nullptr;
+    ch->hating = nullptr;
+    ch->name = nullptr;
+    ch->short_descr = nullptr;
+    ch->long_descr = nullptr;
+    ch->description = nullptr;
+    ch->next = nullptr;
+    ch->prev = nullptr;
+    ch->first_carrying = nullptr;
+    ch->last_carrying = nullptr;
+    ch->next_in_room = nullptr;
+    ch->prev_in_room = nullptr;
+    ch->fighting = nullptr;
+    ch->switched = nullptr;
+    ch->first_affect = nullptr;
+    ch->last_affect = nullptr;
+    ch->prev_cmd = nullptr; /* maps */
+    ch->last_cmd = nullptr;
+    ch->dest_buf = nullptr;
+    ch->dest_buf_2 = nullptr;
+    ch->spare_ptr = nullptr;
+    ch->mount = nullptr;
     ch->affected_by = 0;
     ch->logon = current_time;
     ch->armor = 100;
@@ -2790,10 +2790,10 @@ void clear_char(CHAR_DATA* ch)
     ch->pagelen = 24;               /* BUILD INTERFACE */
     ch->inter_page = NO_PAGE;       /* BUILD INTERFACE */
     ch->inter_type = NO_TYPE;       /* BUILD INTERFACE */
-    ch->inter_editing = NULL;       /* BUILD INTERFACE */
+    ch->inter_editing = nullptr;       /* BUILD INTERFACE */
     ch->inter_editing_vnum = -1;    /* BUILD INTERFACE */
     ch->inter_substate = SUB_NORTH; /* BUILD INTERFACE */
-    ch->plr_home = NULL;
+    ch->plr_home = nullptr;
     return;
 }
 
@@ -2820,28 +2820,28 @@ void free_char(CHAR_DATA* ch)
     if (ch->desc)
         bug("Free_char: char still has descriptor.");
 
-    while ((obj = ch->last_carrying) != NULL)
+    while ((obj = ch->last_carrying) != nullptr)
         extract_obj(obj);
 
-    while ((paf = ch->last_affect) != NULL)
+    while ((paf = ch->last_affect) != nullptr)
         affect_remove(ch, paf);
 
-    while ((timer = ch->first_timer) != NULL)
+    while ((timer = ch->first_timer) != nullptr)
         extract_timer(ch, timer);
 
-    while ((bugs = ch->first_bug) != NULL)
+    while ((bugs = ch->first_bug) != nullptr)
     {
         UNLINK(bugs, ch->first_bug, ch->last_bug, next_in_bug, prev_in_bug);
         DISPOSE(bugs);
     }
 
-    while ((contract = ch->first_contract) != NULL)
+    while ((contract = ch->first_contract) != nullptr)
     {
         UNLINK(contract, ch->first_contract, ch->last_contract, next_in_contract, prev_in_contract);
         DISPOSE(contract);
     }
 
-    while ((fellow = ch->first_fellow) != NULL)
+    while ((fellow = ch->first_fellow) != nullptr)
     {
         UNLINK(fellow, ch->first_fellow, ch->last_fellow, next, prev);
         DISPOSE(fellow);
@@ -2942,7 +2942,7 @@ char* get_extra_descr(const char* name, EXTRA_DESCR_DATA* ed)
         if (is_name(name, ed->keyword))
             return ed->description;
 
-    return NULL;
+    return nullptr;
 }
 
 /*
@@ -2966,7 +2966,7 @@ MOB_INDEX_DATA* get_mob_index(int vnum)
     if (fBootDb)
         bug("Get_mob_index: bad vnum %d.", vnum);
 
-    return NULL;
+    return nullptr;
 }
 
 /*
@@ -2990,7 +2990,7 @@ OBJ_INDEX_DATA* get_obj_index(int vnum)
     if (fBootDb)
         bug("Get_obj_index: bad vnum %d.", vnum);
 
-    return NULL;
+    return nullptr;
 }
 
 /*
@@ -3014,7 +3014,7 @@ ROOM_INDEX_DATA* get_room_index(int vnum)
     if (fBootDb)
         bug("Get_room_index: bad vnum %d.", vnum);
 
-    return NULL;
+    return nullptr;
 }
 
 /*
@@ -3125,7 +3125,7 @@ char* str_dup(char const* str)
     int len;
 
     if (!str)
-        return NULL;
+        return nullptr;
 
     len = strlen(str) + 1;
 
@@ -3842,7 +3842,7 @@ void append_file(CHAR_DATA* ch, const char* file, char* str)
     if (IS_NPC(ch) || str[0] == '\0')
         return;
 
-    if ((fp = fopen(file, "a")) == NULL)
+    if ((fp = fopen(file, "a")) == nullptr)
     {
         send_to_char("Could not open the file!\n\r", ch);
     }
@@ -3862,7 +3862,7 @@ void append_to_file(char const* file, char* str)
 {
     FILE* fp;
 
-    if ((fp = fopen(file, "a")) == NULL)
+    if ((fp = fopen(file, "a")) == nullptr)
     {
     }
     else
@@ -3900,7 +3900,7 @@ void bug(const char* str, ...)
     FILE* fp;
     struct stat fst;
 
-    if (fpArea != NULL)
+    if (fpArea != nullptr)
     {
         int iChar;
 
@@ -3927,7 +3927,7 @@ void bug(const char* str, ...)
 
         if (stat(SHUTDOWN_FILE, &fst) != -1) /* file exists */
         {
-            if ((fp = fopen(SHUTDOWN_FILE, "a")) != NULL)
+            if ((fp = fopen(SHUTDOWN_FILE, "a")) != nullptr)
             {
                 fprintf(fp, "[*****] %s\n", buf);
                 fclose(fp);
@@ -3945,7 +3945,7 @@ void bug(const char* str, ...)
     }
     log_string(buf);
 
-    if ((fp = fopen(BUG_FILE, "a")) != NULL)
+    if ((fp = fopen(BUG_FILE, "a")) != nullptr)
     {
         fprintf(fp, "%s\n", buf);
         fclose(fp);
@@ -3969,7 +3969,7 @@ void boot_log(const char* str, ...)
     va_end(param);
     log_string(buf);
 
-    if ((fp = fopen(BOOTLOG_FILE, "a")) != NULL)
+    if ((fp = fopen(BOOTLOG_FILE, "a")) != nullptr)
     {
         fprintf(fp, "%s\n", buf);
         fclose(fp);
@@ -3988,7 +3988,7 @@ void show_file(CHAR_DATA* ch, char const* filename)
     int c;
     int num = 0;
 
-    if ((fp = fopen(filename, "r")) != NULL)
+    if ((fp = fopen(filename, "r")) != nullptr)
     {
         while (!feof(fp))
         {
@@ -4130,8 +4130,8 @@ void add_to_wizlist(char const* name, int level)
 
     if (!first_wiz)
     {
-        wiz->last = NULL;
-        wiz->next = NULL;
+        wiz->last = nullptr;
+        wiz->next = nullptr;
         first_wiz = wiz;
         last_wiz = wiz;
         return;
@@ -4152,7 +4152,7 @@ void add_to_wizlist(char const* name, int level)
         }
 
     wiz->last = last_wiz;
-    wiz->next = NULL;
+    wiz->next = nullptr;
     last_wiz->next = wiz;
     last_wiz = wiz;
     return;
@@ -4170,8 +4170,8 @@ void make_wizlist()
     char buf[MAX_STRING_LENGTH];
     char mudnamebuf[MSL];
 
-    first_wiz = NULL;
-    last_wiz = NULL;
+    first_wiz = nullptr;
+    last_wiz = nullptr;
 
     ilevel = 0;
 
@@ -4280,8 +4280,8 @@ void make_wizlist()
         DISPOSE(wiz->name);
         DISPOSE(wiz);
     }
-    first_wiz = NULL;
-    last_wiz = NULL;
+    first_wiz = nullptr;
+    last_wiz = nullptr;
     towizfile("&C         | |                                                          | &C|", 0);
     towizfile("&C          \\ \\__________________________ &B _    _  ___   ____   ___&C ___/ /", 0);
     towizfile("&C           \\___________________________ &B| |  | |/ _ \\ |  _ \\ / __>&C ___/", 0);
@@ -4476,7 +4476,7 @@ void load_mudprogs(AREA_DATA* tarea, FILE* fp)
         case 'M':
         case 'm':
             value = fread_number(fp);
-            if ((iMob = get_mob_index(value)) == NULL)
+            if ((iMob = get_mob_index(value)) == nullptr)
             {
                 bug("Load_mudprogs: vnum %d doesnt exist", value);
                 exit(1);
@@ -4485,7 +4485,7 @@ void load_mudprogs(AREA_DATA* tarea, FILE* fp)
             /* Go to the end of the prog command list if other commands
            exist */
 
-            if ((original = iMob->mudprogs) != NULL)
+            if ((original = iMob->mudprogs) != nullptr)
                 for (; original->next; original = original->next)
                     ;
 
@@ -4495,7 +4495,7 @@ void load_mudprogs(AREA_DATA* tarea, FILE* fp)
             else
                 iMob->mudprogs = working;
             working = mprog_file_read(fread_word(fp), working, iMob);
-            working->next = NULL;
+            working->next = nullptr;
             fread_to_eol(fp);
             break;
         }
@@ -4539,7 +4539,7 @@ void mprog_read_programs(FILE* fp, MOB_INDEX_DATA* pMobIndex)
                 mprg = mprg->next;
                 break;
             case '|':
-                mprg->next = NULL;
+                mprg->next = nullptr;
                 fread_to_eol(fp);
                 done = true;
                 break;
@@ -4562,7 +4562,7 @@ void mprog_read_programs(FILE* fp, MOB_INDEX_DATA* pMobIndex)
                 mprg = mprg->next;
                 break;
             case '|':
-                mprg->next = NULL;
+                mprg->next = nullptr;
                 fread_to_eol(fp);
                 done = true;
                 break;
@@ -4686,7 +4686,7 @@ void load_objprogs(AREA_DATA* tarea, FILE* fp)
         case 'M':
         case 'm':
             value = fread_number(fp);
-            if ((iObj = get_obj_index(value)) == NULL)
+            if ((iObj = get_obj_index(value)) == nullptr)
             {
                 bug("Load_objprogs: vnum %d doesnt exist", value);
                 exit(1);
@@ -4695,7 +4695,7 @@ void load_objprogs(AREA_DATA* tarea, FILE* fp)
             /* Go to the end of the prog command list if other commands
            exist */
 
-            if ((original = iObj->mudprogs) != NULL)
+            if ((original = iObj->mudprogs) != nullptr)
                 for (; original->next; original = original->next)
                     ;
 
@@ -4705,7 +4705,7 @@ void load_objprogs(AREA_DATA* tarea, FILE* fp)
             else
                 iObj->mudprogs = working;
             working = oprog_file_read(fread_word(fp), working, iObj);
-            working->next = NULL;
+            working->next = nullptr;
             fread_to_eol(fp);
             break;
         }
@@ -4749,7 +4749,7 @@ void oprog_read_programs(FILE* fp, OBJ_INDEX_DATA* pObjIndex)
                 mprg = mprg->next;
                 break;
             case '|':
-                mprg->next = NULL;
+                mprg->next = nullptr;
                 fread_to_eol(fp);
                 done = true;
                 break;
@@ -4772,7 +4772,7 @@ void oprog_read_programs(FILE* fp, OBJ_INDEX_DATA* pObjIndex)
                 mprg = mprg->next;
                 break;
             case '|':
-                mprg->next = NULL;
+                mprg->next = nullptr;
                 fread_to_eol(fp);
                 done = true;
                 break;
@@ -4895,7 +4895,7 @@ void load_roomprogs(AREA_DATA* tarea, FILE* fp)
         case 'M':
         case 'm':
             value = fread_number(fp);
-            if ((iRoom = get_room_index(value)) == NULL)
+            if ((iRoom = get_room_index(value)) == nullptr)
             {
                 bug("Load_roomprogs: vnum %d doesnt exist", value);
                 exit(1);
@@ -4904,7 +4904,7 @@ void load_roomprogs(AREA_DATA* tarea, FILE* fp)
             /* Go to the end of the prog command list if other commands
            exist */
 
-            if ((original = iRoom->mudprogs) != NULL)
+            if ((original = iRoom->mudprogs) != nullptr)
                 for (; original->next; original = original->next)
                     ;
 
@@ -4914,7 +4914,7 @@ void load_roomprogs(AREA_DATA* tarea, FILE* fp)
             else
                 iRoom->mudprogs = working;
             working = rprog_file_read(fread_word(fp), working, iRoom);
-            working->next = NULL;
+            working->next = nullptr;
             fread_to_eol(fp);
             break;
         }
@@ -4958,7 +4958,7 @@ void rprog_read_programs(FILE* fp, ROOM_INDEX_DATA* pRoomIndex)
                 mprg = mprg->next;
                 break;
             case '|':
-                mprg->next = NULL;
+                mprg->next = nullptr;
                 fread_to_eol(fp);
                 done = true;
                 break;
@@ -4981,7 +4981,7 @@ void rprog_read_programs(FILE* fp, ROOM_INDEX_DATA* pRoomIndex)
                 mprg = mprg->next;
                 break;
             case '|':
-                mprg->next = NULL;
+                mprg->next = nullptr;
                 fread_to_eol(fp);
                 done = true;
                 break;
@@ -5015,7 +5015,7 @@ void delete_room(ROOM_INDEX_DATA* room)
 
     UNLINK(room, room->area->first_room, room->area->last_room, next_aroom, prev_aroom);
 
-    while ((ch = room->first_person) != NULL)
+    while ((ch = room->first_person) != nullptr)
     {
         if (!IS_NPC(ch))
         {
@@ -5025,13 +5025,13 @@ void delete_room(ROOM_INDEX_DATA* room)
         else
             extract_char(ch, true);
     }
-    while ((o = room->first_content) != NULL)
+    while ((o = room->first_content) != nullptr)
     {
         extract_obj(o);
         wipe_resets(room);
     }
 
-    while ((ed = room->first_extradesc) != NULL)
+    while ((ed = room->first_extradesc) != nullptr)
     {
         room->first_extradesc = ed->next;
         STRFREE(ed->keyword);
@@ -5039,15 +5039,15 @@ void delete_room(ROOM_INDEX_DATA* room)
         DISPOSE(ed);
         --top_ed;
     }
-    while ((ex = room->first_exit) != NULL)
+    while ((ex = room->first_exit) != nullptr)
         extract_exit(room, ex);
-    while ((mpact = room->mpact) != NULL)
+    while ((mpact = room->mpact) != nullptr)
     {
         room->mpact = mpact->next;
         DISPOSE(mpact->buf);
         DISPOSE(mpact);
     }
-    while ((mp = room->mudprogs) != NULL)
+    while ((mp = room->mudprogs) != nullptr)
     {
         room->mudprogs = mp->next;
         STRFREE(mp->arglist);
@@ -5083,7 +5083,7 @@ void delete_obj(OBJ_INDEX_DATA* obj)
         if (o->pIndexData == obj)
             extract_obj(o);
     }
-    while ((ed = obj->first_extradesc) != NULL)
+    while ((ed = obj->first_extradesc) != nullptr)
     {
         obj->first_extradesc = ed->next;
         STRFREE(ed->keyword);
@@ -5091,13 +5091,13 @@ void delete_obj(OBJ_INDEX_DATA* obj)
         DISPOSE(ed);
         --top_ed;
     }
-    while ((af = obj->first_affect) != NULL)
+    while ((af = obj->first_affect) != nullptr)
     {
         obj->first_affect = af->next;
         DISPOSE(af);
         --top_affect;
     }
-    while ((mp = obj->mudprogs) != NULL)
+    while ((mp = obj->mudprogs) != nullptr)
     {
         obj->mudprogs = mp->next;
         STRFREE(mp->arglist);
@@ -5131,7 +5131,7 @@ void delete_mob(MOB_INDEX_DATA* mob)
         if (ch->pIndexData == mob)
             extract_char(ch, true);
     }
-    while ((mp = mob->mudprogs) != NULL)
+    while ((mp = mob->mudprogs) != nullptr)
     {
         mob->mudprogs = mp->next;
         STRFREE(mp->arglist);
@@ -5175,15 +5175,15 @@ ROOM_INDEX_DATA* make_room(int vnum, AREA_DATA* area)
     ROOM_INDEX_DATA* pRoomIndex = nullptr;
 
     CREATE(pRoomIndex, ROOM_INDEX_DATA, 1);
-    pRoomIndex->first_person = NULL;
-    pRoomIndex->last_person = NULL;
-    pRoomIndex->first_content = NULL;
-    pRoomIndex->last_content = NULL;
-    pRoomIndex->first_reset = pRoomIndex->last_reset = NULL;
-    pRoomIndex->first_extradesc = NULL;
-    pRoomIndex->last_extradesc = NULL;
-    pRoomIndex->first_ship = NULL;
-    pRoomIndex->last_ship = NULL;
+    pRoomIndex->first_person = nullptr;
+    pRoomIndex->last_person = nullptr;
+    pRoomIndex->first_content = nullptr;
+    pRoomIndex->last_content = nullptr;
+    pRoomIndex->first_reset = pRoomIndex->last_reset = nullptr;
+    pRoomIndex->first_extradesc = nullptr;
+    pRoomIndex->last_extradesc = nullptr;
+    pRoomIndex->first_ship = nullptr;
+    pRoomIndex->last_ship = nullptr;
     pRoomIndex->area = area;
     pRoomIndex->vnum = vnum;
     pRoomIndex->name = STRALLOC("Floating in a void");
@@ -5191,8 +5191,8 @@ ROOM_INDEX_DATA* make_room(int vnum, AREA_DATA* area)
     pRoomIndex->room_flags = ROOM_PROTOTYPE;
     pRoomIndex->sector_type = 1;
     pRoomIndex->light = 0;
-    pRoomIndex->first_exit = NULL;
-    pRoomIndex->last_exit = NULL;
+    pRoomIndex->first_exit = nullptr;
+    pRoomIndex->last_exit = nullptr;
     LINK(pRoomIndex, area->first_room, area->last_room, next_aroom, prev_aroom);
 
     g_roomIndex.insert({vnum, pRoomIndex});
@@ -5212,14 +5212,14 @@ OBJ_INDEX_DATA* make_object(int vnum, int cvnum, char* name)
     if (cvnum > 0)
         cObjIndex = get_obj_index(cvnum);
     else
-        cObjIndex = NULL;
+        cObjIndex = nullptr;
     CREATE(pObjIndex, OBJ_INDEX_DATA, 1);
     pObjIndex->vnum = vnum;
     pObjIndex->name = STRALLOC(name);
-    pObjIndex->first_affect = NULL;
-    pObjIndex->last_affect = NULL;
-    pObjIndex->first_extradesc = NULL;
-    pObjIndex->last_extradesc = NULL;
+    pObjIndex->first_affect = nullptr;
+    pObjIndex->last_affect = nullptr;
+    pObjIndex->first_extradesc = nullptr;
+    pObjIndex->last_extradesc = nullptr;
     if (!cObjIndex)
     {
         sprintf_s(buf, "A %s", name);
@@ -5298,7 +5298,7 @@ MOB_INDEX_DATA* make_mobile(int vnum, int cvnum, char* name)
     if (cvnum > 0)
         cMobIndex = get_mob_index(cvnum);
     else
-        cMobIndex = NULL;
+        cMobIndex = nullptr;
     CREATE(pMobIndex, MOB_INDEX_DATA, 1);
     pMobIndex->vnum = vnum;
     pMobIndex->count = 0;
@@ -5316,11 +5316,11 @@ MOB_INDEX_DATA* make_mobile(int vnum, int cvnum, char* name)
         pMobIndex->description[0] = UPPER(pMobIndex->description[0]);
         pMobIndex->act = ACT_IS_NPC | ACT_PROTOTYPE;
         pMobIndex->affected_by = 0;
-        pMobIndex->pShop = NULL;
-        pMobIndex->rShop = NULL;
-        pMobIndex->spec_fun = NULL;
-        pMobIndex->spec_2 = NULL;
-        pMobIndex->mudprogs = NULL;
+        pMobIndex->pShop = nullptr;
+        pMobIndex->rShop = nullptr;
+        pMobIndex->spec_fun = nullptr;
+        pMobIndex->spec_2 = nullptr;
+        pMobIndex->mudprogs = nullptr;
         pMobIndex->progtypes = 0;
         pMobIndex->alignment = 0;
         pMobIndex->level = 1;
@@ -5360,11 +5360,11 @@ MOB_INDEX_DATA* make_mobile(int vnum, int cvnum, char* name)
         pMobIndex->description = QUICKLINK(cMobIndex->description);
         pMobIndex->act = cMobIndex->act | ACT_PROTOTYPE;
         pMobIndex->affected_by = cMobIndex->affected_by;
-        pMobIndex->pShop = NULL;
-        pMobIndex->rShop = NULL;
+        pMobIndex->pShop = nullptr;
+        pMobIndex->rShop = nullptr;
         pMobIndex->spec_fun = cMobIndex->spec_fun;
         pMobIndex->spec_2 = cMobIndex->spec_2;
-        pMobIndex->mudprogs = NULL;
+        pMobIndex->mudprogs = nullptr;
         pMobIndex->progtypes = 0;
         pMobIndex->alignment = cMobIndex->alignment;
         pMobIndex->level = cMobIndex->level;
@@ -5454,7 +5454,7 @@ EXIT_DATA* make_exit(ROOM_INDEX_DATA* pRoomIndex, ROOM_INDEX_DATA* to_room, sh_i
         }
         pRoomIndex->last_exit->next = pexit;
     }
-    pexit->next = NULL;
+    pexit->next = nullptr;
     pexit->prev = pRoomIndex->last_exit;
     pRoomIndex->last_exit = pexit;
     top_exit++;
@@ -5470,7 +5470,7 @@ void fix_area_exits(AREA_DATA* tarea)
 
     for (rnum = tarea->low_r_vnum; rnum <= tarea->hi_r_vnum; rnum++)
     {
-        if ((pRoomIndex = get_room_index(rnum)) == NULL)
+        if ((pRoomIndex = get_room_index(rnum)) == nullptr)
             continue;
 
         fexit = false;
@@ -5479,7 +5479,7 @@ void fix_area_exits(AREA_DATA* tarea)
             fexit = true;
             pexit->rvnum = pRoomIndex->vnum;
             if (pexit->vnum <= 0)
-                pexit->to_room = NULL;
+                pexit->to_room = nullptr;
             else
                 pexit->to_room = get_room_index(pexit->vnum);
         }
@@ -5489,7 +5489,7 @@ void fix_area_exits(AREA_DATA* tarea)
 
     for (rnum = tarea->low_r_vnum; rnum <= tarea->hi_r_vnum; rnum++)
     {
-        if ((pRoomIndex = get_room_index(rnum)) == NULL)
+        if ((pRoomIndex = get_room_index(rnum)) == nullptr)
             continue;
 
         for (pexit = pRoomIndex->first_exit; pexit; pexit = pexit->next)
@@ -5526,7 +5526,7 @@ void load_area_file(AREA_DATA* tarea, char* filename)
 
     std::string file_path = std::string(AREA_DIR) + filename;
 
-    if ((fpArea = fopen(file_path.c_str(), "r")) == NULL)
+    if ((fpArea = fopen(file_path.c_str(), "r")) == nullptr)
     {
         bug("load_area: error loading file (can't open): %s", file_path.c_str());
         return;
@@ -5720,7 +5720,7 @@ void load_buildlist(void)
                 pArea->hi_soft_range = -1;
                 pArea->low_hard_range = -1;
                 pArea->hi_hard_range = -1;
-                pArea->first_room = pArea->last_room = NULL;
+                pArea->first_room = pArea->last_room = nullptr;
                 LINK(pArea, first_build, last_build, next, prev);
                 fprintf(stderr,
                         "%-14s: Rooms: %5d - %-5d Objs: %5d - %-5d "
@@ -5738,13 +5738,13 @@ void load_buildlist(void)
  */
 void sort_area(AREA_DATA* pArea, bool proto)
 {
-    AREA_DATA* area = NULL;
+    AREA_DATA* area = nullptr;
     AREA_DATA *first_sort, *last_sort;
     bool found;
 
     if (!pArea)
     {
-        bug("Sort_area: NULL pArea");
+        bug("Sort_area: nullptr pArea");
         return;
     }
 
@@ -5760,13 +5760,13 @@ void sort_area(AREA_DATA* pArea, bool proto)
     }
 
     found = false;
-    pArea->next_sort = NULL;
-    pArea->prev_sort = NULL;
+    pArea->next_sort = nullptr;
+    pArea->prev_sort = nullptr;
 
     if (!first_sort)
     {
-        pArea->prev_sort = NULL;
-        pArea->next_sort = NULL;
+        pArea->prev_sort = nullptr;
+        pArea->next_sort = nullptr;
         first_sort = pArea;
         last_sort = pArea;
         found = true;
@@ -5789,7 +5789,7 @@ void sort_area(AREA_DATA* pArea, bool proto)
     if (!found)
     {
         pArea->prev_sort = last_sort;
-        pArea->next_sort = NULL;
+        pArea->next_sort = nullptr;
         last_sort->next_sort = pArea;
         last_sort = pArea;
     }
@@ -5927,7 +5927,7 @@ void save_sysdata(SYSTEM_DATA sys)
 
     sprintf_s(filename, "%ssysdata.dat", SYSTEM_DIR);
 
-    if ((fp = fopen(filename, "w")) == NULL)
+    if ((fp = fopen(filename, "w")) == nullptr)
     {
         bug("save_sysdata: fopen");
     }
@@ -5979,7 +5979,7 @@ void fread_sysdata(SYSTEM_DATA* sys, FILE* fp)
     const char* word;
     bool fMatch;
 
-    sys->time_of_max = NULL;
+    sys->time_of_max = nullptr;
     for (;;)
     {
         word = feof(fp) ? "End" : fread_word(fp);
@@ -6097,7 +6097,7 @@ bool load_systemdata(SYSTEM_DATA* sys)
     found = false;
     sprintf_s(filename, "%ssysdata.dat", SYSTEM_DIR);
 
-    if ((fp = fopen(filename, "r")) != NULL)
+    if ((fp = fopen(filename, "r")) != nullptr)
     {
 
         found = true;
