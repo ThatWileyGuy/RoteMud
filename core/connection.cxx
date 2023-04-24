@@ -10,8 +10,6 @@
 #include "connection.hxx"
 
 #include <boost/circular_buffer.hpp>
-#include <boost/bind.hpp>
-#include <boost/enable_shared_from_this.hpp>
 #include <libssh/callbacks.h>
 
 #define commlog(str, ...) log(str, LOG_COMM, sysdata.log_level, ##__VA_ARGS__)
