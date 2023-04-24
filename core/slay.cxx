@@ -77,12 +77,6 @@ Send any comments, flames, bug-reports, suggestions, requests, etc...
 to the above email address.
 ----------------------------------------------------------------------- */
 
-#include <math.h>
-#include <sys/types.h>
-#include <ctype.h>
-#include <stdio.h>
-#include <string.h>
-#include <time.h>
 #include "mud.hxx"
 
 SLAY_DATA* first_slay;

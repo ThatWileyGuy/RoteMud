@@ -36,12 +36,6 @@
  *                                                                                  *
  ***********************************************************************************/
 
-#include <math.h>
-#include <sys/types.h>
-#include <ctype.h>
-#include <stdio.h>
-#include <string.h>
-#include <time.h>
 #include "mud.hxx"
 
 void add_reinforcements(CHAR_DATA* ch);

@@ -36,16 +36,6 @@
  *                                                                                  *
  ***********************************************************************************/
 
-#include <time.h>
-#include <stdio.h>
-#include <ctype.h>
-#include <string.h>
-#include <stdexcept>
-
-#ifndef WIN32
-#include <dlfcn.h>
-#endif
-
 #include "mud.hxx"
 
 void shutdown_mud(char const* reason);

@@ -36,10 +36,6 @@
  *                                                                                  *
  ***********************************************************************************/
 
-#include <sys/types.h>
-#include <stdio.h>
-#include <string.h>
-#include <time.h>
 #include "mud.hxx"
 
 /* This is for the new technician class. The technicians are going to be totally in control of ship related

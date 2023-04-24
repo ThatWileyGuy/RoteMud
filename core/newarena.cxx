@@ -59,12 +59,6 @@
  * tdison@swetland.net - LrdElder 10/24/98
  */
 
-#include <sys/types.h>
-#include <ctype.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <time.h>
 #include "mud.hxx"
 
 #define PREP_START 42                    /* vnum of first prep room */

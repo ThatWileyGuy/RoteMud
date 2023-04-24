@@ -15,6 +15,7 @@ file(GLOB_RECURSE CORE_SOURCE_FILES core/*.cxx)
 add_library(rote_core OBJECT ${CORE_HEADER_FILES} ${CORE_SOURCE_FILES})
 target_include_directories(rote_core PRIVATE ${Boost_INCLUDE_DIRS})
 target_include_directories(rote_core PRIVATE ${libssh_INCLUDE_DIRS})
+target_precompile_headers(rote_core PRIVATE core/mud.hxx)
 
 # db
 file(GLOB_RECURSE DB_HEADER_FILES db/*.hxx)

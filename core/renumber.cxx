@@ -47,11 +47,8 @@
  *  If you modify this code and use/distribute modified versions
  *  you must give credit to the original author(s).
  */
-#include <stdio.h>
-#include <string.h>
-#include <ctype.h>
+
 #include "mud.hxx"
-#include "db.hxx"
 
 #define NOT_FOUND (-1)
 enum

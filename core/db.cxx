@@ -36,18 +36,7 @@
  *                                                                                  *
  ***********************************************************************************/
 
-#include <sys/types.h>
-#include <ctype.h>
-#include <stdio.h>
-#include <stdarg.h>
-#include <string.h>
-#include <time.h>
-#include <sys/stat.h>
-#include <math.h>
-#include <filesystem>
-#include <unordered_map>
 #include "mud.hxx"
-#include "db.hxx"
 
 extern int _filbuf(FILE*);
 

@@ -36,9 +36,6 @@
  *                                                                                  *
  ***********************************************************************************/
 
-#include <sys/types.h>
-#include <stdio.h>
-#include <time.h>
 #include "mud.hxx"
 
 /* undef these at EOF */

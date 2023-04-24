@@ -48,15 +48,30 @@
 #include <SDKDDKVer.h>
 #endif
 
+#include <optional>
+#include <algorithm>
 #include <limits>
 #include <cmath>
 #include <chrono>
 #include <memory>
 #include <vector>
 #include <algorithm>
+#include <fstream>
+#include <filesystem>
+#include <array>
+#include <unordered_map>
 #include <boost/asio/ip/tcp.hpp>
 #include <boost/circular_buffer.hpp>
+#include <boost/format.hpp>
 #include <stdarg.h>
+
+#ifdef WIN32
+#include <fcntl.h>
+#endif
+
+#ifndef WIN32
+#include <dlfcn.h>
+#endif
 
 typedef int ch_ret;
 typedef int obj_ret;
@@ -178,6 +193,9 @@ struct SKILL_TYPE;
 struct SHIP_DATA;
 struct SHIP_PROTOTYPE;
 struct SPACE_DATA;
+struct MOB_INDEX_DATA;
+struct OBJ_INDEX_DATA;
+struct ROOM_INDEX_DATA;
 
 /*
  * Class types.
@@ -4299,6 +4317,11 @@ extern char bname[MAX_STRING_LENGTH];
 /*
  * Global variables.
  */
+
+extern std::unordered_map<int, MOB_INDEX_DATA*> g_mobIndex;
+extern std::unordered_map<int, OBJ_INDEX_DATA*> g_objectIndex;
+extern std::unordered_map<int, ROOM_INDEX_DATA*> g_roomIndex;
+extern std::vector<ROOM_INDEX_DATA*> g_vrooms;
 
 extern MPSLEEP_DATA* first_mpwait;   /* Storing sleeping mud progs */
 extern MPSLEEP_DATA* last_mpwait;    /* - */

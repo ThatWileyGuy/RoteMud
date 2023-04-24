@@ -36,16 +36,7 @@
  *                                                                                  *
  ***********************************************************************************/
 
-#include <stdio.h>
-#include <string.h>
-#include <time.h>
-#include <ctype.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <errno.h>
-#include <filesystem>
 #include "mud.hxx"
-#include "db.hxx"
 #include "connection.hxx"
 
 #define RESTORE_INTERVAL 21600

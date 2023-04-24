@@ -38,12 +38,6 @@
 
 // 11.c. Tired of downloading huge files.
 
-#include <math.h>
-#include <sys/types.h>
-#include <ctype.h>
-#include <stdio.h>
-#include <string.h>
-#include <time.h>
 #include "mud.hxx"
 
 void explode_emissile(CHAR_DATA* ch, ROOM_INDEX_DATA* proom, int mindam, int maxdam, bool incendiary);

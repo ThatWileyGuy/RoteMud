@@ -96,9 +96,6 @@
  *     2.  Add the default color(s) to the end of the default_set array.
  */
 
-#include <string.h>
-#include <stdio.h>
-#include <stdarg.h>
 #include "mud.hxx"
 
 const char* pc_displays[MAX_COLORS] = {

@@ -36,10 +36,6 @@
  *                                                                                  *
  ***********************************************************************************/
 
-#include <sys/types.h>
-#include <stdio.h>
-#include <string.h>
-#include <time.h>
 #include "mud.hxx"
 
 void do_plantbug(CHAR_DATA* ch, char* argument)

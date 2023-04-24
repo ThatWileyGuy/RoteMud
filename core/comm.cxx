@@ -36,15 +36,6 @@
  *                                                                                  *
  ***********************************************************************************/
 
-#include <optional>
-#include <memory>
-#include <algorithm>
-#include <boost/format.hpp>
-
-#ifdef WIN32
-#include <fcntl.h>
-#endif
-
 #include "mud.hxx"
 #include "connection.hxx"
 

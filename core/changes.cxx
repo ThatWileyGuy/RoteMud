@@ -36,21 +36,7 @@
  *                                                                                  *
  ***********************************************************************************/
 
-#if defined(macintosh)
-#include <types.h>
-#else
-#include <sys/types.h>
-#endif
-
-#include <ctype.h>
-#include <errno.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <time.h>
-#include <stdarg.h>
 #include "mud.hxx"
-// #include "changes.h"
 
 /*
  * Globals

@@ -36,10 +36,6 @@
  *                                                                                  *
  ***********************************************************************************/
 
-#include <sys/types.h>
-#include <stdio.h>
-#include <string.h>
-#include <ctype.h>
 #include "mud.hxx"
 
 /* Defines by Narn for new mudprog parsing, used as

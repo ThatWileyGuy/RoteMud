@@ -88,8 +88,6 @@
             add:  if ( skill == do_playslots )     return "do_playslots";
 */
 
-#include <stdio.h>
-#include <string.h>
 #include "mud.hxx"
 
 // Constant multipliers types of winnings

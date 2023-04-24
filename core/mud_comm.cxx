@@ -36,9 +36,6 @@
  *                                                                                  *
  ***********************************************************************************/
 
-#include <sys/types.h>
-#include <stdio.h>
-#include <string.h>
 #include "mud.hxx"
 #include "connection.hxx"
 

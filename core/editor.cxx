@@ -47,13 +47,6 @@
  *  If you modify this code and use/distribute modified versions
  *  you must give credit to the original author(s).
  */
-#include <sys/types.h>
-#include <ctype.h>
-#include <stdio.h>
-#include <stdarg.h>
-#include <string.h>
-#include <time.h>
-#include <sys/stat.h>
 #include "mud.hxx"
 /****************************************************************************
  * Data types and other definitions

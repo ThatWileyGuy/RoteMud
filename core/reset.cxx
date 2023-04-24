@@ -45,8 +45,7 @@
  * pRoom->people, rch->carrying, obj->contains, and pArea->reset_first ..
  * pArea->reset_last.  -- Altrag
  */
-#include <string.h>
-#include <stdio.h>
+
 #include "mud.hxx"
 
 /* Externals */
