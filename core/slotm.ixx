@@ -95,10 +95,10 @@ module;
 #include <cstring>
 #include "mud.hxx"
 
-export module slotm;
+export module mud:slotm;
 
 
-import mud;
+import :decls;
 
 // Constant multipliers types of winnings
 #define matchingthreebars 5

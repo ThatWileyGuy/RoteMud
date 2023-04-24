@@ -49,12 +49,12 @@ extern int top_r_vnum;
 extern void write_area_list();
 extern void write_starsystem_list();
 
-export module planets;
+export module mud:planets;
 
 
-import mud;
-import hashstr;
-import swskills;
+import :decls;
+import :hashstr;
+import :swskills;
 
 /* local routines */
 void fread_planet(PLANET_DATA* planet, FILE* fp);

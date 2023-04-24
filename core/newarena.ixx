@@ -68,11 +68,10 @@ module;
 #include <algorithm>
 #include "mud.hxx"
 
-export module newarena;
+export module mud:newarena;
 
 
-import mud;
-import bet;
+import :decls;
 
 #define GET_BETTED_ON(ch) ((ch)->betted_on)
 #define GET_BET_AMT(ch) ((ch)->bet_amt)

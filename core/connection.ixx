@@ -15,10 +15,11 @@ module;
 
 #include "mud.hxx"
 
-export module connection;
+export module mud:connection;
 
-import mud;
+import :decls;
 
+#define commlog(str, ...) log(str, LOG_COMM, sysdata.log_level, ##__VA_ARGS__)
 // TODO how can new player creation over SSH work? Username "new" and password any?
 
 export struct Pubkey
@@ -62,13 +63,58 @@ export class IOManager
   protected:
     friend class Connection;
     friend class SshConnection;
-    void notifyGameUnauthenticatedUserConnected(Connection& connection);
-    void notifyGameAuthenticatedUserConnected(Connection& connection, const std::string& user);
-    void removeConnection(Connection* connection);
+    void notifyGameUnauthenticatedUserConnected(Connection& connection)
+    {
+        std::shared_ptr<Connection> sharedConn;
+
+        for (auto& listConn : m_connections)
+        {
+            if (listConn.get() == &connection)
+            {
+                sharedConn = listConn;
+                break;
+            }
+        }
+
+        assert(sharedConn.get() != nullptr);
+        m_callbacks.newUnauthenticatedConnection(sharedConn);
+    }
+
+    void notifyGameAuthenticatedUserConnected(Connection& connection, const std::string& user)
+    {
+        std::shared_ptr<Connection> sharedConn;
+
+        for (auto& listConn : m_connections)
+        {
+            if (listConn.get() == &connection)
+            {
+                sharedConn = listConn;
+                break;
+            }
+        }
+
+        assert(sharedConn.get() != nullptr);
+        m_callbacks.newAuthenticatedConnection(sharedConn, user);
+    }
+
+    void removeConnection(Connection* connection)
+    {
+        auto iter = std::find_if(m_connections.begin(), m_connections.end(),
+                                 [connection](std::shared_ptr<Connection> conn) { return conn.get() == connection; });
+
+        assert(iter != m_connections.end());
+
+        assert((*iter).use_count() == 1);
+
+        m_connections.erase(iter);
+    }
 
   public:
     IOManager(IOManagerCallbacks callbacks, uint16_t telnetPort, uint16_t sshPort);
-    void runUntil(std::chrono::steady_clock::time_point time);
+    void runUntil(std::chrono::steady_clock::time_point time)
+    {
+        m_ioContext.run_until(time);
+    }
 };
 
 export class Connection
@@ -131,13 +177,46 @@ export class Connection
 
   public:
     // send data to the client (via a buffer)
-    void write(std::string_view data);
-    // try to flush buffered data and then close the connection
-    boost::asio::awaitable<void> flushAndClose();
+    void write(std::string_view data)
+    {
+        if (m_state != State::Open)
+        {
+            commlog("write called on closing socket");
+            return;
+        }
 
-    const std::string& getHostname() const;
-    const std::string& getIpAddress() const;
-    int getPort() const;
+        if (m_outputBuffer.capacity() - m_outputBuffer.size() < data.size())
+        {
+            commlog("output buffer overflow");
+            close();
+            // notifyGameConnectionClosed();
+            return;
+        }
+
+        m_outputBuffer.insert(m_outputBuffer.end(), data.begin(), data.end());
+    }
+
+    // try to flush buffered data and then close the connection
+    boost::asio::awaitable<void> flushAndClose()
+    {
+        co_await flushOutput();
+        co_await close();
+    }
+
+    const std::string& getHostname() const
+    {
+        return m_hostname;
+    }
+
+    const std::string& getIpAddress() const
+    {
+        return m_address;
+    }
+
+    int getPort() const
+    {
+        return m_socket->remote_endpoint().port();
+    }
 
     virtual boost::asio::awaitable<std::string> readLine() = 0;
     virtual boost::asio::awaitable<void> flushOutput() = 0;
@@ -148,8 +227,6 @@ export class Connection
         return m_manager.m_ioContext;
     }
 };
-
-#define commlog(str, ...) log(str, LOG_COMM, sysdata.log_level, ##__VA_ARGS__)
 
 class TelnetConnection : public Connection
 {
@@ -819,95 +896,4 @@ void IOManager::handleNewSshConnection(const boost::system::error_code& error,
             this->handleNewSshConnection(error, std::move(socket));
         });
     }
-}
-
-void IOManager::notifyGameUnauthenticatedUserConnected(Connection& connection)
-{
-    std::shared_ptr<Connection> sharedConn;
-
-    for (auto& listConn : m_connections)
-    {
-        if (listConn.get() == &connection)
-        {
-            sharedConn = listConn;
-            break;
-        }
-    }
-
-    assert(sharedConn.get() != nullptr);
-    m_callbacks.newUnauthenticatedConnection(sharedConn);
-}
-
-void IOManager::notifyGameAuthenticatedUserConnected(Connection& connection, const std::string& user)
-{
-    std::shared_ptr<Connection> sharedConn;
-
-    for (auto& listConn : m_connections)
-    {
-        if (listConn.get() == &connection)
-        {
-            sharedConn = listConn;
-            break;
-        }
-    }
-
-    assert(sharedConn.get() != nullptr);
-    m_callbacks.newAuthenticatedConnection(sharedConn, user);
-}
-
-void IOManager::removeConnection(Connection* connection)
-{
-    auto iter = std::find_if(m_connections.begin(), m_connections.end(),
-                             [connection](std::shared_ptr<Connection> conn) { return conn.get() == connection; });
-
-    assert(iter != m_connections.end());
-
-    assert((*iter).use_count() == 1);
-
-    m_connections.erase(iter);
-}
-
-void IOManager::runUntil(std::chrono::steady_clock::time_point time)
-{
-    m_ioContext.run_until(time);
-}
-
-void Connection::write(std::string_view data)
-{
-    if (m_state != State::Open)
-    {
-        commlog("write called on closing socket");
-        return;
-    }
-
-    if (m_outputBuffer.capacity() - m_outputBuffer.size() < data.size())
-    {
-        commlog("output buffer overflow");
-        close();
-        // notifyGameConnectionClosed();
-        return;
-    }
-
-    m_outputBuffer.insert(m_outputBuffer.end(), data.begin(), data.end());
-}
-
-boost::asio::awaitable<void> Connection::flushAndClose()
-{
-    co_await flushOutput();
-    co_await close();
-}
-
-const std::string& Connection::getHostname() const
-{
-    return m_hostname;
-}
-
-const std::string& Connection::getIpAddress() const
-{
-    return m_address;
-}
-
-int Connection::getPort() const
-{
-    return m_socket->remote_endpoint().port();
 }

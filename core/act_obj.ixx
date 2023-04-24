@@ -44,14 +44,13 @@ module;
 #include <cstring>
 #include "mud.hxx"
 
-export module act_obj;
+export module mud:act_obj;
 
 
-import mud;
-import act_info;
-import bet;
-import save;
-import mud_prog;
+import :decls;
+import :act_info;
+import :save;
+import :mud_prog;
 
 /*double sqrt( double x );*/
 

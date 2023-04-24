@@ -43,10 +43,10 @@ module;
 #include <cstdlib>
 #include "mud.hxx"
 
-export module hashstr;
+export module mud:hashstr;
 
 
-import mud;
+import :decls;
 
 #define STR_HASH_SIZE 1024
 

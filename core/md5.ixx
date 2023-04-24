@@ -93,7 +93,7 @@ module;
 
 #include <string.h>
 
-export module md5;
+export module mud:md5;
 
 export typedef unsigned char md5_byte_t; /* 8-bit byte */
 export typedef unsigned int md5_word_t;  /* 32-bit word */

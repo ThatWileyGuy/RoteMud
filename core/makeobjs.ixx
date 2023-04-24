@@ -41,11 +41,11 @@ module;
 #include <cstdio>
 #include "mud.hxx"
 
-export module makeobjs;
+export module mud:makeobjs;
 
 
-import mud;
-import hashstr;
+import :decls;
+import :hashstr;
 
 /*
  * Make a fire.

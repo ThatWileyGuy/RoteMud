@@ -40,10 +40,10 @@ module;
 
 #include "mud.hxx"
 
-export module constants;
+export module mud:constants;
 
 
-import mud;
+import :decls;
 
 /* undef these at EOF */
 #define AM 95

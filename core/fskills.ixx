@@ -45,12 +45,12 @@ module;
 
 extern int top_affect;
 
-export module fskills;
+export module mud:fskills;
 
 
-import mud;
-import functions;
-import hashstr;
+import :decls;
+import :functions;
+import :hashstr;
 
 void fskill_refresh(CHAR_DATA* ch, char* argument)
 {

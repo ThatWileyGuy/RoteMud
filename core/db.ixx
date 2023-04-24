@@ -49,16 +49,16 @@ extern void renumber_put_resets(ROOM_INDEX_DATA* room);
 extern void wipe_resets(ROOM_INDEX_DATA* room);
 extern void init_supermob();
 
-export module db;
+export module mud:db;
 
-import mud;
-import act_move;
-import save;
-import slay;
-import mud_prog;
-import ships;
-import functions;
-import hashstr;
+import :decls;
+import :act_move;
+import :save;
+import :slay;
+import :mud_prog;
+import :ships;
+import :functions;
+import :hashstr;
 
 extern int _filbuf(FILE*);
 

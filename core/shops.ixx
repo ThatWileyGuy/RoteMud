@@ -43,12 +43,12 @@ module;
 #include <cstdlib>
 #include "mud.hxx"
 
-export module shops;
+export module mud:shops;
 
 
-import mud;
-import mud_prog;
-import hashstr;
+import :decls;
+import :mud_prog;
+import :hashstr;
 
 /*
  * Local functions

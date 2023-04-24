@@ -42,12 +42,12 @@ module;
 #include <filesystem>
 #include "mud.hxx"
 
-export module act_comm;
+export module mud:act_comm;
 
-import mud;
-import newarena;
-import mud_prog;
-import hashstr;
+import :decls;
+import :newarena;
+import :mud_prog;
+import :hashstr;
 
 /*
  *  Externals

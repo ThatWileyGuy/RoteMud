@@ -53,12 +53,12 @@ module;
 #include <boost/asio.hpp> // TODO why is this needed here?
 #include "mud.hxx"
 
-export module save;
+export module mud:save;
 
-import mud;
-import connection;
-import hashstr;
-import comments;
+import :decls;
+import :connection;
+import :hashstr;
+import :comments;
 
 /*
  * Increment with every major format change.

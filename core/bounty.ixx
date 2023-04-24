@@ -42,12 +42,12 @@ module;
 #include <cstdlib>
 #include "mud.hxx"
 
-export module bounty;
+export module mud:bounty;
 
 
-import mud;
-import hashstr;
-import fight;
+import :decls;
+import :hashstr;
+import :fight;
 
 BOUNTY_DATA* first_bounty;
 BOUNTY_DATA* last_bounty;

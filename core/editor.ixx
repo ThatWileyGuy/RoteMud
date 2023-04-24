@@ -60,11 +60,11 @@ module;
 extern char* strrep(const char* src, const char* sch, const char* rep);
 extern char* strlinwrp(char* src, int length);
 
-export module editor;
+export module mud:editor;
 
 
-import mud;
-import hashstr;
+import :decls;
+import :hashstr;
 
 /****************************************************************************
  * Data types and other definitions

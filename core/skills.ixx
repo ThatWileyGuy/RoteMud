@@ -41,14 +41,14 @@ module;
 #include <chrono>
 #include "mud.hxx"
 
-export module skills;
+export module mud:skills;
 
 
-import mud;
-import hashstr;
-import space;
-import fight;
-import magic;
+import :decls;
+import :hashstr;
+import :space;
+import :fight;
+import :magic;
 
 const char* spell_flag[] = {"water",   "earth",         "air",          "astral",       "area",        "distant",
                             "reverse", "save_half_dam", "save_negates", "accumulative", "recastable",  "noscribe",

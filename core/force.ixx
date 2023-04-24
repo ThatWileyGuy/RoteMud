@@ -47,12 +47,12 @@ extern void write_all_forceskills();
 extern void load_force_skills(void);
 extern void load_force_help(void);
 
-export module force;
+export module mud:force;
 
 
-import mud;
-import functions;
-import hashstr;
+import :decls;
+import :functions;
+import :hashstr;
 
 /* local defs */
 

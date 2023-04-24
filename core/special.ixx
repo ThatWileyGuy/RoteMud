@@ -44,11 +44,11 @@ module;
 
 // extern bool remove_obj(CHAR_DATA* ch, int iWear, bool fReplace);
 
-export module special;
+export module mud:special;
 
 
-import mud;
-import hashstr;
+import :decls;
+import :hashstr;
 
 /* jails for wanted flags */
 

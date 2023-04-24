@@ -42,10 +42,10 @@ module;
 #include <string>
 #include "mud.hxx"
 
-export module functions;
+export module mud:functions;
 
 
-import mud;
+import :decls;
 
 /*
    Original Code from SW:FotE 1.1

@@ -45,10 +45,10 @@ module;
 
 // void shutdown_mud(char const* reason);
 
-export module tables;
+export module mud:tables;
 
 
-import mud;
+import :decls;
 
 #if defined(KEY)
 #undef KEY

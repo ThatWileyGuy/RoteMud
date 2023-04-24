@@ -84,11 +84,11 @@ module;
 #include <cstdlib>
 #include "mud.hxx"
 
-export module slay;
+export module mud:slay;
 
 
-import mud;
-import hashstr;
+import :decls;
+import :hashstr;
 
 #define SLAY_FILE "system/slay.dat" /* Slay data file for online editing - Samson 8-3-98 */
 

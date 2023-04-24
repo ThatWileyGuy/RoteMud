@@ -42,11 +42,11 @@ module;
 #include <cstdlib>
 #include "mud.hxx"
 
-export module hunter;
+export module mud:hunter;
 
 
-import mud;
-import hashstr;
+import :decls;
+import :hashstr;
 
 void do_plantbug(CHAR_DATA* ch, char* argument)
 {

@@ -44,17 +44,17 @@ module;
 #include <cctype>
 #include "mud.hxx"
 
-export module fight;
+export module mud:fight;
 
 
-import mud;
-import newarena;
-import mud_prog;
-import hashstr;
-import interp;
-import update;
-import comm;
-import magic;
+import :decls;
+import :newarena;
+import :mud_prog;
+import :hashstr;
+import :interp;
+import :update;
+import :comm;
+import :magic;
 
 /*
  * Local functions.

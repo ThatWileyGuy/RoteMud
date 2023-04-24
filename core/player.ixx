@@ -44,12 +44,12 @@ module;
 #include <cstdlib>
 #include "mud.hxx"
 
-export module player;
+export module mud:player;
 
 
-import mud;
-import functions;
-import hashstr;
+import :decls;
+import :functions;
+import :hashstr;
 
 /*
  *  Locals

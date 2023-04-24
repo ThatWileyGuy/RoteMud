@@ -43,12 +43,12 @@ module;
 #include <cstring>
 #include "mud.hxx"
 
-export module clans;
+export module mud:clans;
 
 
-import mud;
-import mud_prog;
-import hashstr;
+import :decls;
+import :mud_prog;
+import :hashstr;
 
 #define MAX_NEST 100
 static OBJ_DATA* rgObjNest[MAX_NEST];

@@ -43,11 +43,11 @@ module;
 #include <cstdio>
 #include "mud.hxx"
 
-export module finfo;
+export module mud:finfo;
 
 
-import mud;
-import hashstr;
+import :decls;
+import :hashstr;
 
 #if defined(KEY)
 #undef KEY

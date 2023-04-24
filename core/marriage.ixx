@@ -41,10 +41,10 @@ module;
 #include <cstdio>
 #include "mud.hxx"
 
-export module marriage;
+export module mud:marriage;
 
 
-import mud;
+import :decls;
 
 void do_marry(CHAR_DATA* ch, char* argument)
 {

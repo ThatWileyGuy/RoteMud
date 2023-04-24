@@ -103,11 +103,11 @@ module;
 #include <cstdarg>
 #include "mud.hxx"
 
-export module color;
+export module mud:color;
 
 
-import mud;
-import hashstr;
+import :decls;
+import :hashstr;
 
 const char* pc_displays[MAX_COLORS] = {
     "black",    "dred",     "dgreen",   "orange",  "dblue",  "purple",  "cyan",    "grey",     "dgrey",

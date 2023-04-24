@@ -45,16 +45,16 @@ module;
 
 extern int top_affect;
 
-export module swskills;
+export module mud:swskills;
 
 
-import mud;
-import functions;
-import hashstr;
-import fight;
-import magic;
-import mud_comm;
-import shops;
+import :decls;
+import :functions;
+import :hashstr;
+import :fight;
+import :magic;
+import :mud_comm;
+import :shops;
 
 void add_reinforcements(CHAR_DATA* ch);
 

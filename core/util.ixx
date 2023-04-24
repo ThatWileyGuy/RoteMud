@@ -40,9 +40,9 @@ module;
 
 #include "mud.hxx"
 
-export module util;
+export module mud:util;
 
-import mud;
+import :decls;
 
 #ifndef WIN32
 int sprintf_s(char* dest, size_t dest_size, const char* format, ...)

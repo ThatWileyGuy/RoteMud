@@ -45,13 +45,12 @@ module;
 
 extern int top_affect;
 
-export module eleven;
+export module mud:eleven;
 
-
-import mud;
-import functions;
-import hashstr;
-import space;
+import :decls;
+import :functions;
+import :hashstr;
+import :space;
 
 void explode_emissile(CHAR_DATA* ch, ROOM_INDEX_DATA* proom, int mindam, int maxdam, bool incendiary);
 void do_makegoggles(CHAR_DATA* ch, char* argument);

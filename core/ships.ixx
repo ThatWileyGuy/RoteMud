@@ -41,12 +41,12 @@ module;
 #include <string>
 #include "mud.hxx"
 
-export module ships;
+export module mud:ships;
 
 
-import mud;
-import functions;
-import hashstr;
+import :decls;
+import :functions;
+import :hashstr;
 
 #if defined(KEY)
 #undef KEY

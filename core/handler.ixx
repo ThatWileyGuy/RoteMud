@@ -42,15 +42,15 @@ module;
 #include <string>
 #include "mud.hxx"
 
-export module handler;
+export module mud:handler;
 
 
-import mud;
-import mud_prog;
-import hashstr;
-import reset;
-import update;
-import db;
+import :decls;
+import :mud_prog;
+import :hashstr;
+import :reset;
+import :update;
+import :db;
 
 #define BFS_MARK BV01
 

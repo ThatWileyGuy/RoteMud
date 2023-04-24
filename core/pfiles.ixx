@@ -65,9 +65,9 @@ module;
 #include <filesystem>
 #include "mud.hxx"
 
-export module pfiles;
+export module mud:pfiles;
 
-import mud;
+import :decls;
 
 /* Globals */
 time_t pfile_time;

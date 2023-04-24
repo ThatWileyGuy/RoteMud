@@ -51,15 +51,15 @@ module;
 #include <boost/asio.hpp> // TODO why is this needed here?
 #include "mud.hxx"
 
-export module act_wiz;
+export module mud:act_wiz;
 
-import mud;
-import db;
-import mud_comm;
-import comm;
-import connection;
-import functions;
-import hashstr;
+import :decls;
+import :db;
+import :mud_comm;
+import :comm;
+import :connection;
+import :functions;
+import :hashstr;
 
 #define RESTORE_INTERVAL 21600
 

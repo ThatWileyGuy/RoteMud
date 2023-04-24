@@ -46,11 +46,11 @@ module;
 #include <sys/stat.h>
 #include "mud.hxx"
 
-export module boards;
+export module mud:boards;
 
 
-import mud;
-import hashstr;
+import :decls;
+import :hashstr;
 
 /* Defines for voting on notes. -- Narn */
 #define VOTE_NONE 0

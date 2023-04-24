@@ -43,12 +43,12 @@ module;
 
 extern int top_room;
 
-export module track;
+export module mud:track;
 
 
-import mud;
-import hashstr;
-import fight;
+import :decls;
+import :hashstr;
+import :fight;
 
 #define BFS_ERROR -1
 #define BFS_ALREADY_THERE -2

@@ -56,12 +56,12 @@ module;
 #include <vector>
 #include "mud.hxx"
 
-export module renumber;
+export module mud:renumber;
 
 
-import mud;
-import db;
-import hashstr;
+import :decls;
+import :db;
+import :hashstr;
 
 #define NOT_FOUND (-1)
 enum

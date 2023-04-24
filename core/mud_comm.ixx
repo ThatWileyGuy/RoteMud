@@ -48,14 +48,17 @@ module;
 #endif
 
 #include <boost/asio.hpp> // TODO why is this needed here?
+#include <cstring>
+#include <cstdlib>
+#include <cstdio>
 #include "mud.hxx"
 
-export module mud_comm;
+export module mud:mud_comm;
 
-import mud;
-import connection;
-import mud_prog;
-import hashstr;
+import :decls;
+import :connection;
+import :mud_prog;
+import :hashstr;
 
 export const char* mprog_type_to_name(int type);
 ch_ret simple_damage(CHAR_DATA* ch, CHAR_DATA* victim, int dam, int dt);

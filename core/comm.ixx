@@ -56,20 +56,20 @@ module;
 
 #include "mud.hxx"
 
-export module comm;
+export module mud:comm;
 
 
-import mud;
-import db;
-import act_info;
-import act_comm;
-import connection;
-import pfiles;
-import md5;
-import mud_prog;
-import functions;
-import hashstr;
-import boards;
+import :decls;
+import :db;
+import :act_info;
+import :act_comm;
+import :connection;
+import :pfiles;
+import :md5;
+import :mud_prog;
+import :functions;
+import :hashstr;
+import :boards;
 
 #ifdef ECHO
 #undef ECHO // TODO where does this come from on Linux?

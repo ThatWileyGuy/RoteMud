@@ -42,12 +42,12 @@ module;
 #include <chrono>
 #include "mud.hxx"
 
-export module interp;
+export module mud:interp;
 
 
-import mud;
-import mud_prog;
-import comm;
+import :decls;
+import :mud_prog;
+import :comm;
 
 export bool check_social(CHAR_DATA* ch, const char* command, const char* argument);
 

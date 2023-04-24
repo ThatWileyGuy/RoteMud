@@ -51,15 +51,15 @@ module;
 #include <boost/asio.hpp> // TODO why is this needed here?
 #include "mud.hxx"
 
-export module act_info;
+export module mud:act_info;
 
-import mud;
-import act_move;
-import connection;
-import pfiles;
-import mud_prog;
-import functions;
-import hashstr;
+import :decls;
+import :act_move;
+import :connection;
+import :pfiles;
+import :mud_prog;
+import :functions;
+import :hashstr;
 
 const char* where_name[] = {
     "&G&b[&wused as light    &b]&G&w ", "&G&b[&wworn on finger   &b]&G&w ", "&G&b[&wworn on finger   &b]&G&w ",

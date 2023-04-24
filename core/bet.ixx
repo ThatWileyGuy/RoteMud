@@ -43,10 +43,9 @@ module;
 #include <cctype>
 #include "mud.hxx"
 
-export module bet;
+export module mud:bet;
 
-
-import mud;
+import :decls;
 /*
   util function, converts an 'advanced' ASCII-number-string into a number.
   Used by parsebet() but could also be used by do_give or do_wimpy.

@@ -45,12 +45,12 @@ module;
 #include <chrono>
 #include "mud.hxx"
 
-export module magic;
+export module mud:magic;
 
 
-import mud;
-import player;
-import hashstr;
+import :decls;
+import :player;
+import :hashstr;
 
 /*
  * Local functions.

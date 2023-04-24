@@ -50,14 +50,14 @@ module;
 #include <boost/asio.hpp> // TODO why is this needed here?
 #include "mud.hxx"
 
-export module update;
+export module mud:update;
 
-import mud;
-import connection;
-import pfiles;
-import mud_prog;
-import hashstr;
-import newarena;
+import :decls;
+import :connection;
+import :pfiles;
+import :mud_prog;
+import :hashstr;
+import :newarena;
 
 /* From newarena.c -- Tawnos */
 

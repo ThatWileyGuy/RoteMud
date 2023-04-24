@@ -57,12 +57,12 @@ extern const char* wear_locs[];
 
 extern int get_trapflag(const char* flag);
 
-export module reset;
+export module mud:reset;
 
 
-import mud;
-import db;
-import hashstr;
+import :decls;
+import :db;
+import :hashstr;
 
 /*
  * Find some object with a given index data.

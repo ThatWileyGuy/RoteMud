@@ -46,12 +46,12 @@ module;
 #include <memory>
 #include "mud.hxx"
 
-export module slicers;
+export module mud:slicers;
 
 
-import mud;
-import hashstr;
-import space;
+import :decls;
+import :hashstr;
+import :space;
 
 /*Global Variables*/
 char title[MAX_INPUT_LENGTH];

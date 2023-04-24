@@ -46,12 +46,12 @@ module;
 
 extern int top_exit;
 
-export module misc;
+export module mud:misc;
 
 
-import mud;
-import mud_prog;
-import hashstr;
+import :decls;
+import :mud_prog;
+import :hashstr;
 
 void do_buyhome(CHAR_DATA* ch, char* argument)
 {

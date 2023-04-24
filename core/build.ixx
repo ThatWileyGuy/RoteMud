@@ -51,13 +51,13 @@ extern int top_area;
 
 extern void fix_exits(void);
 
-export module build;
+export module mud:build;
 
 
-import mud;
-import db;
-import hashstr;
-import reset;
+import :decls;
+import :db;
+import :hashstr;
+import :reset;
 
 int generate_hp(int level, int num, int size, int plus);
 

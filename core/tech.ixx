@@ -43,11 +43,11 @@ module;
 #include <cstdlib>
 #include "mud.hxx"
 
-export module tech;
+export module mud:tech;
 
 
-import mud;
-import hashstr;
+import :decls;
+import :hashstr;
 
 /* This is for the new technician class. The technicians are going to be totally in control of ship related
    abilities. These include, creation of, and use of ship modules. Ship Maintanance, Custom Ship Design, and

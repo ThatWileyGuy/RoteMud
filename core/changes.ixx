@@ -44,9 +44,9 @@ module;
 #include <cstring>
 #include "mud.hxx"
 
-export module changes;
+export module mud:changes;
 
-import mud;
+import :decls;
 
 /*
  * Globals

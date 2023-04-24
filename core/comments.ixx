@@ -45,12 +45,12 @@ module;
 #include <cctype>
 #include "mud.hxx"
 
-export module comments;
+export module mud:comments;
 
 
-import mud;
-import hashstr;
-import boards;
+import :decls;
+import :hashstr;
+import :boards;
 
 
 void comment_remove(CHAR_DATA* ch, CHAR_DATA* victim, NOTE_DATA* pnote)

@@ -44,11 +44,11 @@ module;
 #include <cstdlib>
 #include "mud.hxx"
 
-export module mud_prog;
+export module mud:mud_prog;
 
 
-import mud;
-import hashstr;
+import :decls;
+import :hashstr;
 
 export enum MudProgType
 {
