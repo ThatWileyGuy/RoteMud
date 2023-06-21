@@ -29,6 +29,8 @@ struct IOManagerCallbacks
     // Notification of a new authenticated connection, with authenticated username. Must return the desired context
     // pointer for future calls.
     void (*newAuthenticatedConnection)(std::shared_ptr<Connection> connection, const std::string& username);
+    // Retrieve the welcome page to show as a banner for a new connection
+    std::string (*getWelcomeBanner)();
 };
 
 class TelnetConnection;
@@ -56,6 +58,7 @@ class IOManager
     void notifyGameUnauthenticatedUserConnected(Connection& connection);
     void notifyGameAuthenticatedUserConnected(Connection& connection, const std::string& user);
     void removeConnection(Connection* connection);
+    std::string getBanner();
 
   public:
     IOManager(IOManagerCallbacks callbacks, uint16_t telnetPort, uint16_t sshPort);

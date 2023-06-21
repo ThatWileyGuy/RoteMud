@@ -121,6 +121,7 @@ void stop_idling(CHAR_DATA* ch);
 void display_prompt(std::shared_ptr<DESCRIPTOR_DATA> d);
 int make_color_sequence(const char* col, char* buf, DESCRIPTOR_DATA* d);
 int make_color_sequence_desc(const char* col, char* buf, DESCRIPTOR_DATA* d);
+int make_color_sequence_desc(const char* col, char* buf, unsigned char* prevColor);
 void handle_pager_input(std::shared_ptr<DESCRIPTOR_DATA> d, char* argument);
 void handle_new_unauthenticated_connection(std::shared_ptr<Connection> connection);
 bool authenticate_user(const std::string& username, const std::string& password);
@@ -133,6 +134,49 @@ void run_command_loop(std::shared_ptr<DESCRIPTOR_DATA> d);
 void mail_count(CHAR_DATA* ch);
 
 std::unique_ptr<boost::asio::ip::tcp::socket> new_socket;
+
+std::string colorize_text(const char* txt)
+{
+    const char* colstr = nullptr;
+    const char* prevstr = txt;
+    char colbuf[20] = {};
+    int ln = 0;
+
+    if (!txt)
+        return std::string();
+
+    std::ostringstream out;
+    unsigned char dummyCurrentColor = 0x07;
+
+    /* Clear out old color stuff */
+    while ((colstr = strpbrk(prevstr, "&^")) != nullptr)
+    {
+        if (colstr > prevstr)
+            out << std::string_view(prevstr, colstr - prevstr);
+        ln = make_color_sequence_desc(colstr, colbuf, &dummyCurrentColor);
+        if (ln < 0)
+        {
+            prevstr = colstr + 1;
+            break;
+        }
+        else if (ln > 0)
+            out << std::string_view(colbuf, (size_t)ln);
+        prevstr = colstr + 2;
+    }
+    if (*prevstr)
+        out << std::string_view(prevstr);
+
+    return out.str();
+}
+
+std::string get_welcome_banner()
+{
+    extern char* help_greeting;
+    if (help_greeting[0] == '.')
+        return colorize_text(help_greeting + 1);
+    else
+        return colorize_text(help_greeting);
+}
 
 int gamemain(int argc, char** argv)
 {
@@ -209,7 +253,8 @@ int gamemain(int argc, char** argv)
     if (!fCopyOver) /* We have already the port if copyover'ed */
     {
         IOManagerCallbacks callbacks = {&handle_new_unauthenticated_connection, &authenticate_user,
-                                        &get_public_keys_for_user, &handle_new_authenticated_connection};
+                                        &get_public_keys_for_user, &handle_new_authenticated_connection,
+                                        &get_welcome_banner};
 
         io_manager.emplace(callbacks, telnet_port, ssh_port);
         if (!io_manager.has_value())
@@ -2825,11 +2870,11 @@ void display_prompt(DESCRIPTOR_DATA* d)
     return;
 }
 
-int make_color_sequence_desc(const char* col, char* buf, DESCRIPTOR_DATA* d)
+int make_color_sequence_desc(const char* col, char* buf, unsigned char* prevcolor)
 {
-    int ln;
+    int ln = 0;
     const char* ctype = col;
-    unsigned char cl;
+    unsigned char cl = 0;
 
     col++;
     if (!*col)
@@ -2847,7 +2892,7 @@ int make_color_sequence_desc(const char* col, char* buf, DESCRIPTOR_DATA* d)
     }
     else
     {
-        cl = d->prevcolor;
+        cl = *prevcolor;
         switch (*ctype)
         {
         default:
@@ -2875,13 +2920,13 @@ int make_color_sequence_desc(const char* col, char* buf, DESCRIPTOR_DATA* d)
             else
                 cl = (cl & 0x0F) | (newcol << 4);
         }
-            if (cl == d->prevcolor)
+            if (cl == *prevcolor)
             {
                 ln = 0;
                 break;
             }
             strcpy(buf, "\033[");
-            if ((cl & 0x88) != (d->prevcolor & 0x88))
+            if ((cl & 0x88) != (*prevcolor & 0x88))
             {
                 if (cl == 0x07)
                 {
@@ -2896,18 +2941,18 @@ int make_color_sequence_desc(const char* col, char* buf, DESCRIPTOR_DATA* d)
                     if ((cl & 0x80))
                         strcat(buf, "5;");
                 }
-                d->prevcolor = 0x07 | (cl & 0x88);
+                *prevcolor = 0x07 | (cl & 0x88);
                 ln = strlen(buf);
             }
             else
                 ln = 2;
 
-            if ((cl & 0x07) != (d->prevcolor & 0x07))
+            if ((cl & 0x07) != (*prevcolor & 0x07))
             {
                 sprintf(buf + ln, "3%d;", cl & 0x07);
                 ln += 3;
             }
-            if ((cl & 0x70) != (d->prevcolor & 0x70))
+            if ((cl & 0x70) != (*prevcolor & 0x70))
             {
                 sprintf(buf + ln, "4%d;", (cl & 0x70) >> 4);
                 ln += 3;
@@ -2919,12 +2964,17 @@ int make_color_sequence_desc(const char* col, char* buf, DESCRIPTOR_DATA* d)
                 buf[ln++] = 'm';
                 buf[ln] = '\0';
             }
-            d->prevcolor = cl;
+            *prevcolor = cl;
         }
     }
     if (ln <= 0)
         *buf = '\0';
     return ln;
+}
+
+int make_color_sequence_desc(const char* col, char* buf, DESCRIPTOR_DATA* d)
+{
+    return make_color_sequence_desc(col, buf, &d->prevcolor);
 }
 
 void send_prompt(DESCRIPTOR_DATA* d)

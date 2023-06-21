@@ -239,6 +239,19 @@ class SshConnection : public Connection
         }
     }
 
+    int sendBanner()
+    {
+        ssh_set_auth_methods(m_session, SSH_AUTH_METHOD_PASSWORD | SSH_AUTH_METHOD_PUBLICKEY);
+
+        std::string banner = m_manager.getBanner();
+
+        ssh_string sshBanner = ssh_string_from_char(banner.c_str());
+        ssh_send_issue_banner(m_session, sshBanner);
+        ssh_string_free(sshBanner);
+
+        return SSH_AUTH_DENIED;
+    }
+
     int handlePasswordAuth(const char* user, const char* password)
     {
         if (requestPasswordAuth(user, password))
@@ -487,6 +500,10 @@ class SshConnection : public Connection
 
             m_callbacks.userdata = this;
 
+            m_callbacks.auth_none_function = [](ssh_session session, const char* user, void* userdata) {
+                return reinterpret_cast<SshConnection*>(userdata)->sendBanner();
+            };
+
             m_callbacks.auth_password_function = [](ssh_session session, const char* user, const char* password,
                                                     void* userdata) {
                 return reinterpret_cast<SshConnection*>(userdata)->handlePasswordAuth(user, password);
@@ -725,6 +742,11 @@ void IOManager::removeConnection(Connection* connection)
     assert((*iter).use_count() == 1);
 
     m_connections.erase(iter);
+}
+
+std::string IOManager::getBanner()
+{
+    return m_callbacks.getWelcomeBanner();
 }
 
 void IOManager::runUntil(std::chrono::steady_clock::time_point time)
