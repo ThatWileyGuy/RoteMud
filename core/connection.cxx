@@ -153,6 +153,8 @@ class SshConnection : public Connection
 
         m_waitingForIO = true;
 
+        co_await m_socket->async_wait(boost::asio::ip::tcp::socket::wait_write, boost::asio::use_awaitable);
+
         while (true)
         {
             co_await m_socket->async_wait(boost::asio::ip::tcp::socket::wait_read, boost::asio::use_awaitable);
