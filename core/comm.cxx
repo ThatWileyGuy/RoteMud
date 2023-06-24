@@ -1988,17 +1988,6 @@ void handle_new_authenticated_connection(std::shared_ptr<Connection> connection,
 
     g_descriptors.push_back(dnew);
 
-    /*
-     * Send the greeting. Forces new color function - Tawnos
-     */
-    {
-        extern char* help_greeting;
-        if (help_greeting[0] == '.')
-            send_to_desc_color2(help_greeting + 1, dnew);
-        else
-            send_to_desc_color2(help_greeting, dnew);
-    }
-
     char buf[MAX_STRING_LENGTH] = {};
 
     if (g_descriptors.size() > sysdata.maxplayers)
