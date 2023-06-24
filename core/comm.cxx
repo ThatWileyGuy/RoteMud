@@ -382,6 +382,12 @@ boost::asio::awaitable<void> command_loop(std::shared_ptr<DESCRIPTOR_DATA> d)
 
         handle_command(d, line);
 
+        if (d->character == nullptr)
+        {
+            co_await d->connection->flushOutput();
+            co_return;
+        }
+
         if (d->fcommand)
         {
             send_prompt(d.get());
