@@ -378,16 +378,55 @@ boost::asio::awaitable<void> command_loop(std::shared_ptr<DESCRIPTOR_DATA> d)
 
     while (true)
     {
-        auto line = co_await d->connection->readLine();
+        bool close = false;
+        bool flush = false;
 
-        handle_command(d, line);
+        std::string line;
+
+        try
+        {
+            line = co_await d->connection->readLine();
+        }
+        catch (std::exception& e)
+        {
+            log("caught exception reading from socket, disconnecting: %s", LOG_COMM, sysdata.log_level, e.what());
+
+            close = true;
+        }
+
+        if (!close)
+            handle_command(d, line);
 
         if (d->character == nullptr)
         {
-            assert(d->connection.use_count() == 2);
-            co_await d->connection->flushAndClose();
-            assert(d->connection.use_count() == 1);
+            close = true;
+            flush = true;
+        }
+
+        if (close)
+        {
+            if (d->character && (d->connected == CON_PLAYING || d->connected == CON_EDITING))
+                save_char_obj(d->character);
+
+            std::shared_ptr<Connection> connection = d->connection;
+            assert(connection.use_count() == 3);
             d->connection = nullptr;
+
+            assert(connection.use_count() == 2);
+            
+            try
+            {
+                if (flush)
+                    co_await connection->flushAndClose();
+                else
+                    co_await connection->close();
+            }
+            catch (...)
+            {
+                log("caught exception while closing socket due to error, ignoring", LOG_COMM, sysdata.log_level);
+            }
+
+            assert(connection.use_count() == 1);
             co_return;
         }
 

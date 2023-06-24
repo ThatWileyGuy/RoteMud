@@ -236,7 +236,8 @@ class SshConnection : public Connection
             commlog("SSH connection error: %s", ssh_get_error(m_session));
             commlog("SSH error code: %d", ssh_get_error_code(m_session));
             m_waitingForIO = false;
-            // TODO throw exception that the socket needs to close
+            // TODO tear down the socket
+            throw std::exception("IO error on SSH socket");
             co_return;
         }
     }
@@ -378,6 +379,8 @@ class SshConnection : public Connection
             assert(ret == SSH_OK);
             m_state = State::Closed;
         }
+
+        commlog("disconnecting SSH connection");
 
         ssh_disconnect(m_session);
         // this has the side effect of freeing the channel
