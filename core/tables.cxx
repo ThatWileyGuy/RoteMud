@@ -910,6 +910,7 @@ void load_commands()
     else
     {
         bug("Cannot open commands.dat", 0);
+        bug("running in: %s", std::filesystem::current_path().string().c_str());
         exit(0);
     }
 }
