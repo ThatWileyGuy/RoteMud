@@ -384,7 +384,10 @@ boost::asio::awaitable<void> command_loop(std::shared_ptr<DESCRIPTOR_DATA> d)
 
         if (d->character == nullptr)
         {
-            co_await d->connection->flushOutput();
+            assert(d->connection.use_count() == 2);
+            co_await d->connection->flushAndClose();
+            assert(d->connection.use_count() == 1);
+            d->connection = nullptr;
             co_return;
         }
 

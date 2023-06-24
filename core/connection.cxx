@@ -733,7 +733,8 @@ void IOManager::removeConnection(Connection* connection)
 
     assert(iter != m_connections.end());
 
-    assert((*iter).use_count() == 1);
+    // the game will still be holding a reference
+    assert((*iter).use_count() == 2);
 
     m_connections.erase(iter);
 }
