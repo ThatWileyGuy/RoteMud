@@ -406,14 +406,6 @@ class SshConnection : public Connection
 
         char* dataptr = reinterpret_cast<char*>(data);
 
-        for (char* printptr = dataptr; printptr != (dataptr + len); printptr++)
-        {
-            if (isprint(*printptr))
-                commlog("got %c", *printptr);
-            else
-                commlog("got 0x%x", (unsigned int)*printptr);
-        }
-
         m_inputBuffer.insert(m_inputBuffer.end(), dataptr, dataptr + len);
         // TODO overflow check
 
