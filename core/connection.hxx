@@ -63,6 +63,7 @@ class IOManager
   public:
     IOManager(IOManagerCallbacks callbacks, uint16_t telnetPort, uint16_t sshPort);
     void runUntil(std::chrono::steady_clock::time_point time);
+    boost::asio::awaitable<void> waitForPulse(std::chrono::steady_clock::time_point pulseTime);
 };
 
 class Connection

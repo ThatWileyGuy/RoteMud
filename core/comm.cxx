@@ -130,6 +130,7 @@ void handle_new_authenticated_connection(std::shared_ptr<Connection> connection,
 void close_socket(DESCRIPTOR_DATA* dclose, bool startedExternally, bool force);
 void send_prompt(DESCRIPTOR_DATA* d);
 void run_command_loop(std::shared_ptr<DESCRIPTOR_DATA> d);
+boost::asio::awaitable<void> wait_for_next_pulse();
 
 void mail_count(CHAR_DATA* ch);
 
@@ -432,12 +433,15 @@ boost::asio::awaitable<void> command_loop(std::shared_ptr<DESCRIPTOR_DATA> d)
         }
 
         if (d->fcommand)
-        {
             send_prompt(d.get());
-            d->fcommand = false;
-        }
 
         co_await d->connection->flushOutput();
+
+        if (d->fcommand)
+        {
+            co_await wait_for_next_pulse();
+            d->fcommand = false;
+        }
     }
 }
 
@@ -488,6 +492,8 @@ static void caught_alarm()
 }
 */
 
+std::chrono::steady_clock::time_point next_pulse_start;
+
 void game_loop()
 {
     DESCRIPTOR_DATA* d = nullptr;
@@ -506,6 +512,9 @@ void game_loop()
     while (!mud_down)
     {
         current_time = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
+
+        next_pulse_start =
+            last_time + std::chrono::steady_clock::duration(std::chrono::nanoseconds(1000000000 / PULSE_PER_SECOND));
 
         /*
          * Kick out idle descriptors then check for input.
@@ -542,9 +551,6 @@ void game_loop()
          * IO
          */
 
-        auto next_pulse_start =
-            last_time + std::chrono::steady_clock::duration(std::chrono::nanoseconds(1000000000 / PULSE_PER_SECOND));
-
         io_manager->runUntil(next_pulse_start);
         std::this_thread::sleep_until(next_pulse_start);
 
@@ -560,6 +566,14 @@ void game_loop()
     */
     }
     return;
+}
+
+boost::asio::awaitable<void> wait_for_next_pulse()
+{
+    // TODO this is a hack - ideally we would have some sort of coroutine-semaphore so the game loop could
+    // signal the start of the next tick. Until that's available, though, waiting for the time does solve the problem.
+    co_await io_manager->waitForPulse(next_pulse_start);
+    co_return;
 }
 
 /*  From Erwin  */

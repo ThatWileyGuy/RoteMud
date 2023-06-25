@@ -752,6 +752,15 @@ void IOManager::runUntil(std::chrono::steady_clock::time_point time)
     m_ioContext.run_until(time);
 }
 
+boost::asio::awaitable<void> IOManager::waitForPulse(std::chrono::steady_clock::time_point pulseTime)
+{
+    boost::asio::steady_timer timer(m_ioContext, pulseTime);
+
+    co_await timer.async_wait(boost::asio::use_awaitable);
+
+    co_return;
+}
+
 void Connection::write(std::string_view data)
 {
     if (m_state != State::Open)
