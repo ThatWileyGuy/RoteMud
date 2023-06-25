@@ -514,7 +514,7 @@ void fwrite_char(CHAR_DATA* ch, FILE* fp)
 
         fprintf(fp, "Condition    %d %d %d %d\n", ch->pcdata->condition[0], ch->pcdata->condition[1],
                 ch->pcdata->condition[2], ch->pcdata->condition[3]);
-        if (ch->desc && ch->desc->connection->getHostname().c_str())
+        if (ch->desc && ch->desc->connection && ch->desc->connection->getHostname().c_str())
             fprintf(fp, "Site         %s\n", ch->desc->connection->getHostname().c_str());
         else
             fprintf(fp, "Site         (Link-Dead)\n");
