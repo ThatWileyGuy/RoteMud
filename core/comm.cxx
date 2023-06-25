@@ -355,7 +355,8 @@ void handle_command(std::shared_ptr<DESCRIPTOR_DATA> d, const std::string& comma
             nanny(d, cmdline);
             break;
         case CON_PLAYING:
-            interpret(d->character, cmdline);
+            if (command.length() != 0)
+                interpret(d->character, cmdline);
             break;
         case CON_EDITING:
             edit_buffer(d->character, cmdline);
