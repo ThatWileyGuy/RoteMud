@@ -237,7 +237,7 @@ class SshConnection : public Connection
             commlog("SSH error code: %d", ssh_get_error_code(m_session));
             m_waitingForIO = false;
             // TODO tear down the socket
-            throw std::exception("IO error on SSH socket");
+            throw std::runtime_error("IO error on SSH socket");
             co_return;
         }
     }
