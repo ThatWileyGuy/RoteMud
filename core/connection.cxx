@@ -615,14 +615,10 @@ IOManager::IOManager(IOManagerCallbacks callbacks, uint16_t telnetPort, uint16_t
     assert(ret == SSH_OK);
     ret = ssh_bind_options_set(m_sshBind, SSH_BIND_OPTIONS_BINDPORT, &wideSshPort); // probably unnecessary
     assert(ret == SSH_OK);
-    ret = ssh_bind_options_set(m_sshBind, SSH_BIND_OPTIONS_BANNER, "This is a custom banner??????");
+    ret = ssh_bind_options_set(m_sshBind, SSH_BIND_OPTIONS_LOG_VERBOSITY_STR, "4");
     assert(ret == SSH_OK);
-    // ret = ssh_bind_options_set(m_sshBind, SSH_BIND_OPTIONS_LOG_VERBOSITY_STR, "4");
-    // assert(ret == SSH_OK);
-#ifdef WIN32
-    ssh_bind_options_set(m_sshBind, SSH_BIND_OPTIONS_MODULI, KEYS_DIR "moduli");
+    ret = ssh_bind_options_set(m_sshBind, SSH_BIND_OPTIONS_MODULI, KEYS_DIR "moduli");
     assert(ret == SSH_OK);
-#endif
 
     // notably, we do NOT call ssh_bind_listen because we want to own our own sockets
 
