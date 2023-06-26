@@ -159,16 +159,7 @@ class SshConnection : public Connection
         {
             co_await m_socket->async_wait(boost::asio::ip::tcp::socket::wait_read, boost::asio::use_awaitable);
 
-            // TODO error handling
-            /*
-            if (error)
-            {
-                std::string message = error.message();
-                commlog("SSH connection error during key exchange: %s", message.c_str());
-                startClosing();
-                return;
-            }
-            */
+            // TODO error handling - this could throw
 
             int ret = ssh_handle_key_exchange(m_session);
 
@@ -186,21 +177,34 @@ class SshConnection : public Connection
                 commlog("completed key exchange");
 
                 ssh_set_auth_methods(m_session, SSH_AUTH_METHOD_PASSWORD | SSH_AUTH_METHOD_PUBLICKEY);
-                ssh_event_add_session(m_loop, m_session);
+                ret = ssh_event_add_session(m_loop, m_session);
+                assert(ret == SSH_OK);
 
                 m_waitingForIO = false;
 
                 while (!m_shellRequested)
                 {
-                    co_await doIO(IOType::Read);
+                    int pollFlags = ssh_get_poll_flags(m_session);
+
+                    if (pollFlags & SSH_WRITE_PENDING)
+                    {
+                        co_await doIO(IOType::Write);
+                    }
+                    else
+                    {
+                        assert(pollFlags & SSH_READ_PENDING);
+                        co_await doIO(IOType::Read);
+                    }
                 }
+
+                commlog("client requested a shell - notifying the game");
 
                 notifyGameAuthenticatedUserConnected(m_authenticatedUsername);
                 co_return;
             }
             else
             {
-                assert(ret = SSH_ERROR);
+                assert(ret == SSH_ERROR);
                 commlog("SSH key exchange failed: %s", ssh_get_error(m_session));
                 commlog("SSH error code: %d", ssh_get_error_code(m_session));
                 close();
@@ -235,7 +239,6 @@ class SshConnection : public Connection
         {
             commlog("SSH connection error: %s", ssh_get_error(m_session));
             commlog("SSH error code: %d", ssh_get_error_code(m_session));
-            m_waitingForIO = false;
             // TODO tear down the socket
             throw std::runtime_error("IO error on SSH socket");
             co_return;
@@ -249,8 +252,9 @@ class SshConnection : public Connection
         std::string banner = m_manager.getBanner();
 
         ssh_string sshBanner = ssh_string_from_char(banner.c_str());
-        ssh_send_issue_banner(m_session, sshBanner);
+        int ret = ssh_send_issue_banner(m_session, sshBanner);
         ssh_string_free(sshBanner);
+        assert(ret == SSH_OK);
 
         return SSH_AUTH_DENIED;
     }
@@ -609,13 +613,13 @@ IOManager::IOManager(IOManagerCallbacks callbacks, uint16_t telnetPort, uint16_t
     m_sshBind = ssh_bind_new();
     int wideSshPort = sshPort;
 
-    int ret = ssh_bind_options_set(m_sshBind, SSH_BIND_OPTIONS_DSAKEY, KEYS_DIR "ssh_dsa_key");
-    assert(ret == SSH_OK);
+    int ret = SSH_OK;
+
+    // ret = ssh_bind_options_set(m_sshBind, SSH_BIND_OPTIONS_LOG_VERBOSITY_STR, "4");
+    // assert(ret == SSH_OK);
     ret = ssh_bind_options_set(m_sshBind, SSH_BIND_OPTIONS_RSAKEY, KEYS_DIR "ssh_rsa_key");
     assert(ret == SSH_OK);
     ret = ssh_bind_options_set(m_sshBind, SSH_BIND_OPTIONS_BINDPORT, &wideSshPort); // probably unnecessary
-    assert(ret == SSH_OK);
-    ret = ssh_bind_options_set(m_sshBind, SSH_BIND_OPTIONS_LOG_VERBOSITY_STR, "4");
     assert(ret == SSH_OK);
     ret = ssh_bind_options_set(m_sshBind, SSH_BIND_OPTIONS_MODULI, KEYS_DIR "moduli");
     assert(ret == SSH_OK);
