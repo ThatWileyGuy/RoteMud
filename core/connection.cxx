@@ -142,7 +142,6 @@ class SshConnection : public Connection
     ssh_event m_loop = nullptr;
     ssh_channel m_channel = nullptr;
     ssh_channel_callbacks_struct m_channelCallbacks = {};
-    size_t m_writableBytes = 0;
     std::array<char, MAX_OUTPUT_SIZE> m_writeBuffer;
     std::string m_authenticatedUsername;
     bool m_shellRequested = false;
@@ -360,6 +359,9 @@ class SshConnection : public Connection
 
         while (!m_outputBuffer.empty() && m_state != State::Closed)
         {
+            m_waitingForIO = true;
+            writeData();
+            m_waitingForIO = false;
             co_await doIO(IOType::Write);
         }
 
@@ -430,10 +432,8 @@ class SshConnection : public Connection
         assert(m_waitingForIO);
         assert(m_state != State::Closed);
 
-        // some gymnastics here - it turns out we only get this notification on the poll call after a write, so we have
-        // to store how many bytes we can write for next time
-        size_t bytesToWrite = std::min(m_writableBytes, m_outputBuffer.size());
-        const size_t leftoverWritableBytes = m_writableBytes - bytesToWrite;
+        size_t writableBytes = ssh_channel_window_size(m_channel);
+        size_t bytesToWrite = std::min(writableBytes, m_outputBuffer.size());
 
         while (bytesToWrite > m_writeBuffer.size())
         {
@@ -460,8 +460,6 @@ class SshConnection : public Connection
             bytesToWrite -= ret;
             m_outputBuffer.erase_begin(ret);
         }
-
-        m_writableBytes = leftoverWritableBytes;
     }
 
     boost::asio::awaitable<std::string> readLine() override
@@ -551,8 +549,7 @@ class SshConnection : public Connection
             m_channelCallbacks.channel_write_wontblock_function = [](ssh_session, ssh_channel, auto bytes,
                                                                      void* userdata) {
                 auto connection = reinterpret_cast<SshConnection*>(userdata);
-                connection->m_writableBytes = bytes;
-                reinterpret_cast<SshConnection*>(userdata)->writeData();
+                connection->writeData();
                 return 0;
             };
         }
