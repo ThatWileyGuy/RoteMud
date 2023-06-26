@@ -424,6 +424,8 @@ class SshConnection : public Connection
         else
             write(std::string_view(reinterpret_cast<char*>(data), len));
 
+        writeData();
+
         return len;
     }
 
