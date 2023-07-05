@@ -7,3 +7,5 @@
 /linux
 /out
 /CMakeSettings.json
+/vcpkg_installed
+/build
