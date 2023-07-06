@@ -414,9 +414,27 @@ class SshConnection : public Connection
         assert(m_waitingForIO);
 
         char* dataptr = reinterpret_cast<char*>(data);
+        
+        // TODO HACK - SSH seems to send DEL instead of backspace but expects to get backspace on the echo?
+        for (size_t i = 0; i < len; i++)
+        {
+            if (dataptr[i] == '\x7f')
+                dataptr[i] = '\b';
+        }
+
+        const size_t oldSize = m_inputBuffer.size();
 
         m_inputBuffer.insert(m_inputBuffer.end(), dataptr, dataptr + len);
         // TODO overflow check
+
+        for (size_t i = oldSize; i != m_inputBuffer.size(); i++)
+        {
+            if (i != 0 && m_inputBuffer[i] == '\b')
+            {
+                m_inputBuffer.erase(m_inputBuffer.begin() + (i - 1), m_inputBuffer.begin() + (i + 1));
+                i -= 2; // could cause negative underflow if i is 1, but it'll be okay when we increment
+            }
+        }
 
         // TODO we may not always be so lucky that the carriage return arrives on its own line
         if (len == 1 && *reinterpret_cast<char*>(data) == '\r')
@@ -472,12 +490,12 @@ class SshConnection : public Connection
         {
             if (!m_inputBuffer.empty())
             {
-                for (searchStart; searchStart < m_inputBuffer.size(); searchStart++)
+                for (auto iter = m_inputBuffer.begin(); iter != m_inputBuffer.end(); iter++)
                 {
-                    if (m_inputBuffer[searchStart] == '\r') // TODO do all SSH clients only use \r?
+                    if (*iter == '\r') // TODO do all SSH clients only use \r?
                     {
-                        std::string result{m_inputBuffer.begin(), m_inputBuffer.begin() + searchStart};
-                        m_inputBuffer.erase_begin(searchStart + 1);
+                        std::string result{m_inputBuffer.begin(), iter};
+                        m_inputBuffer.erase(m_inputBuffer.begin(), iter + 1);
                         co_return result;
                     }
                 }
