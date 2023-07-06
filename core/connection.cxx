@@ -21,9 +21,9 @@ class TelnetConnection : public Connection
     {
         std::array<char, MAX_INPUT_LENGTH> readBuffer;
         assert(m_state == State::Open);
-        assert(m_waitingForIO == false);
+        assert(m_waitingToRead == false);
 
-        m_waitingForIO = true;
+        m_waitingToRead = true;
 
         size_t bytesRead = co_await m_socket->async_read_some(boost::asio::buffer(&readBuffer[0], readBuffer.size()),
                                                               boost::asio::use_awaitable);
@@ -32,7 +32,7 @@ class TelnetConnection : public Connection
         // TODO what happens if we overflow m_inputBuffer
         m_inputBuffer.insert(m_inputBuffer.end(), &readBuffer[0], &readBuffer[bytesRead]);
 
-        m_waitingForIO = false;
+        m_waitingToRead = false;
     }
 
   public:
@@ -101,9 +101,14 @@ class TelnetConnection : public Connection
         std::array<char, MAX_OUTPUT_SIZE> writeBuffer;
 
         assert(m_state != State::Closed);
-        assert(m_waitingForIO == false);
+        assert(m_flushState != FlushState::Running);
 
-        m_waitingForIO = true;
+        m_flushState = FlushState::Running;
+
+        if (m_outputBuffer.empty())
+        {
+            bug("flushOutput triggered on connection with nothing to flush");
+        }
 
         while (!m_outputBuffer.empty())
         {
@@ -123,7 +128,7 @@ class TelnetConnection : public Connection
             m_outputBuffer.erase_begin(written);
         }
 
-        m_waitingForIO = false;
+        m_flushState = FlushState::Stopped;
     }
 
     boost::asio::awaitable<void> close() override
@@ -148,9 +153,10 @@ class SshConnection : public Connection
 
     boost::asio::awaitable<void> runKeyExchange()
     {
-        assert(!m_waitingForIO);
+        assert(!m_waitingToRead);
 
-        m_waitingForIO = true;
+        m_waitingToRead = true;
+        m_flushState = FlushState::Running;
 
         co_await m_socket->async_wait(boost::asio::ip::tcp::socket::wait_write, boost::asio::use_awaitable);
 
@@ -179,7 +185,8 @@ class SshConnection : public Connection
                 ret = ssh_event_add_session(m_loop, m_session);
                 assert(ret == SSH_OK);
 
-                m_waitingForIO = false;
+                m_waitingToRead = false;
+                m_flushState = FlushState::Stopped;
 
                 while (!m_shellRequested)
                 {
@@ -211,7 +218,8 @@ class SshConnection : public Connection
             }
         }
 
-        m_waitingForIO = false;
+        m_waitingToRead = false;
+        m_flushState = FlushState::Stopped;
     }
 
     enum class IOType
@@ -222,8 +230,11 @@ class SshConnection : public Connection
 
     boost::asio::awaitable<void> doIO(IOType loopType)
     {
-        assert(!m_waitingForIO);
-        m_waitingForIO = true;
+        if (loopType == IOType::Read)
+        {
+            assert(!m_waitingToRead);
+            m_waitingToRead = true;
+        }
 
         const auto waitType = (loopType == IOType::Read) ? boost::asio::ip::tcp::socket::wait_read
                                                          : boost::asio::ip::tcp::socket::wait_write;
@@ -232,7 +243,8 @@ class SshConnection : public Connection
 
         int ret = ssh_event_dopoll(m_loop, 0);
 
-        m_waitingForIO = false;
+        if (loopType == IOType::Read)
+            m_waitingToRead = false;
 
         if (ret == SSH_ERROR)
         {
@@ -356,14 +368,17 @@ class SshConnection : public Connection
     boost::asio::awaitable<void> flushOutput() override
     {
         assert(m_state != State::Closed);
+        assert(m_flushState != FlushState::Running);
+
+        m_flushState = FlushState::Running;
 
         while (!m_outputBuffer.empty() && m_state != State::Closed)
         {
-            m_waitingForIO = true;
             writeData();
-            m_waitingForIO = false;
             co_await doIO(IOType::Write);
         }
+
+        m_flushState = FlushState::Stopped;
 
         co_return;
     }
@@ -411,7 +426,7 @@ class SshConnection : public Connection
         assert(session == m_session);
         assert(channel == m_channel);
         assert(is_stderr == 0);
-        assert(m_waitingForIO);
+        assert(m_waitingToRead);
 
         char* dataptr = reinterpret_cast<char*>(data);
         
@@ -440,16 +455,14 @@ class SshConnection : public Connection
         if (len == 1 && *reinterpret_cast<char*>(data) == '\r')
             write("\r\n");
         else
-            write(std::string_view(reinterpret_cast<char*>(data), len));
-
-        writeData();
+            write(std::string_view(dataptr, len));
 
         return len;
     }
 
     void writeData()
     {
-        assert(m_waitingForIO);
+        assert(m_flushState == FlushState::Running);
         assert(m_state != State::Closed);
 
         size_t writableBytes = ssh_channel_window_size(m_channel);
@@ -795,6 +808,15 @@ void Connection::write(std::string_view data)
     }
 
     m_outputBuffer.insert(m_outputBuffer.end(), data.begin(), data.end());
+
+    if (m_flushState == FlushState::Stopped)
+    {
+        m_flushState = FlushState::Starting;
+
+        // TODO this should get wrapped in a call to boost::asio::defer so it happens after whatever call is triggering the write
+        // ... but that has some lifecycle issues I haven't sorted out yet
+        boost::asio::co_spawn(this->getIOContext(), this->flushOutput(), boost::asio::detached);
+    }
 }
 
 boost::asio::awaitable<void> Connection::flushAndClose()

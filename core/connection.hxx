@@ -85,7 +85,16 @@ class Connection
 
     std::string m_hostname;
     std::string m_address;
-    bool m_waitingForIO = false;
+    bool m_waitingToRead = false;
+
+    enum class FlushState
+    {
+        Stopped,
+        Starting,
+        Running
+    };
+
+    FlushState m_flushState = FlushState::Stopped;
 
     friend class IOManager;
 

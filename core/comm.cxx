@@ -376,8 +376,6 @@ void handle_command(std::shared_ptr<DESCRIPTOR_DATA> d, const std::string& comma
 
 boost::asio::awaitable<void> command_loop(std::shared_ptr<DESCRIPTOR_DATA> d)
 {
-    co_await d->connection->flushOutput();
-
     while (true)
     {
         bool close = false;
@@ -434,8 +432,6 @@ boost::asio::awaitable<void> command_loop(std::shared_ptr<DESCRIPTOR_DATA> d)
 
         if (d->fcommand)
             send_prompt(d.get());
-
-        co_await d->connection->flushOutput();
 
         if (d->fcommand)
         {
